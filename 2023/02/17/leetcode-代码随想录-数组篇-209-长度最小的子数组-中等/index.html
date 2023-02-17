@@ -6,18 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>leetcode-代码随想录-数组篇-209.长度最小的子数组-中等 | Dragon</title>
+  <title>209.长度最小的子数组（滑动窗口）-数组篇-代码随想录-leetcode-中等 | Dragon</title>
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="article">
-<meta property="og:title" content="leetcode-代码随想录-数组篇-209.长度最小的子数组-中等">
+  <meta name="description" content="代码随想录-数组篇leetCode -209.长度最小的子数组（滑动窗口）-中等链接：leetcode-master&#x2F;0209.长度最小的子数组.md at master · youngyangyang04&#x2F;leetcode-master (github.com) 题目：给定一个含有 n 个正整数的数组和一个正整数 target 。 找出该数组中满足其和 ≥ target 的长">
+<meta property="og:type" content="article">
+<meta property="og:title" content="209.长度最小的子数组（滑动窗口）-数组篇-代码随想录-leetcode-中等">
 <meta property="og:url" content="http://example.com/2023/02/17/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E6%95%B0%E7%BB%84%E7%AF%87-209-%E9%95%BF%E5%BA%A6%E6%9C%80%E5%B0%8F%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84-%E4%B8%AD%E7%AD%89/index.html">
 <meta property="og:site_name" content="Dragon">
+<meta property="og:description" content="代码随想录-数组篇leetCode -209.长度最小的子数组（滑动窗口）-中等链接：leetcode-master&#x2F;0209.长度最小的子数组.md at master · youngyangyang04&#x2F;leetcode-master (github.com) 题目：给定一个含有 n 个正整数的数组和一个正整数 target 。 找出该数组中满足其和 ≥ target 的长">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-02-17T07:40:21.000Z">
-<meta property="article:modified_time" content="2023-02-17T07:40:21.739Z">
+<meta property="article:modified_time" content="2023-02-17T07:47:28.341Z">
 <meta property="article:author" content="Dragon Huge">
+<meta property="article:tag" content="代码随想录-数组篇-209.有序数组的平方(滑动窗口)">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternative" href="/atom.xml" title="Dragon" type="application/atom+xml">
@@ -216,7 +219,7 @@
   
   
     <h1 class="article-title" itemprop="name">
-      leetcode-代码随想录-数组篇-209.长度最小的子数组-中等
+      209.长度最小的子数组（滑动窗口）-数组篇-代码随想录-leetcode-中等
     </h1>
   
 
@@ -242,7 +245,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">0字</span>
+      <span class="post-count">387字</span>
     </span>
   </span>
 
@@ -262,7 +265,19 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    
+    <h1 id="代码随想录-数组篇"><a href="#代码随想录-数组篇" class="headerlink" title="代码随想录-数组篇"></a>代码随想录-数组篇</h1><h2 id="leetCode-209-长度最小的子数组（滑动窗口）-中等"><a href="#leetCode-209-长度最小的子数组（滑动窗口）-中等" class="headerlink" title="leetCode -209.长度最小的子数组（滑动窗口）-中等"></a>leetCode -209.长度最小的子数组（滑动窗口）-中等</h2><p>链接：<a target="_blank" rel="noopener" href="https://github.com/youngyangyang04/leetcode-master/blob/master/problems/0209.%E9%95%BF%E5%BA%A6%E6%9C%80%E5%B0%8F%E7%9A%84%E5%AD%90%E6%95%B0%E7%BB%84.md">leetcode-master&#x2F;0209.长度最小的子数组.md at master · youngyangyang04&#x2F;leetcode-master (github.com)</a></p>
+<h3 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h3><p>给定一个含有 n 个正整数的数组和一个正整数 target 。</p>
+<p>找出该数组中满足<strong>其和 ≥ target</strong> 的长度最小的 连续子数组 [numsl, numsl+1, …, numsr-1, numsr] ，并返回其长度。如果不存在符合条件的子数组，返回 0 。</p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">示例 <span class="number">1</span>：</span><br><span class="line"></span><br><span class="line">输入：target = <span class="number">7</span>, nums = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">3</span>]</span><br><span class="line">输出：<span class="number">2</span></span><br><span class="line">解释：子数组 [<span class="number">4</span>,<span class="number">3</span>] 是该条件下的长度最小的子数组。</span><br><span class="line">示例 <span class="number">2</span>：</span><br><span class="line"></span><br><span class="line">输入：target = <span class="number">4</span>, nums = [<span class="number">1</span>,<span class="number">4</span>,<span class="number">4</span>]</span><br><span class="line">输出：<span class="number">1</span></span><br><span class="line">示例 <span class="number">3</span>：</span><br><span class="line"></span><br><span class="line">输入：target = <span class="number">11</span>, nums = [<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line">输出：<span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>细心一点，看清楚题目，本小龙就是把&gt;&#x3D;target理所当然地看成了&#x3D;&#x3D;target。以至于在while条件那里看了好久！</p>
+<h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minSubArrayLen</span><span class="params">(<span class="type">int</span> target, <span class="type">int</span>[] nums)</span> &#123;</span><br><span class="line">        <span class="comment">// 滑动窗口</span></span><br><span class="line">        <span class="comment">// 因为此时只需要计算出子串长度，因此不用定义窗口</span></span><br><span class="line">        <span class="type">int</span> l=<span class="number">0</span>; <span class="comment">// 窗口左边界下标</span></span><br><span class="line">        <span class="type">int</span> resultLength=Integer.MAX_VALUE; <span class="comment">//作为结果返回</span></span><br><span class="line">        <span class="type">int</span> singleSum=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> r=<span class="number">0</span>;r&lt;nums.length;r++)&#123;</span><br><span class="line">            singleSum+=nums[r];</span><br><span class="line">            <span class="keyword">while</span>(singleSum&gt;=target)&#123;</span><br><span class="line">                <span class="comment">// 如果&gt;=目标值，就要进行窗口的滑动操作</span></span><br><span class="line">                <span class="comment">// 别忘了记录此时的子数组长度</span></span><br><span class="line">                resultLength=Math.min(resultLength,r-l+<span class="number">1</span>);</span><br><span class="line">                <span class="comment">// 并且去掉窗口左边界值来减小窗口</span></span><br><span class="line">                singleSum-=nums[l++];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 最后返回即可</span></span><br><span class="line">         <span class="keyword">return</span> resultLength==Integer.MAX_VALUE?<span class="number">0</span>:resultLength;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
     
 
     
@@ -308,7 +323,7 @@
         </li>
         <li>
           <strong>本文链接：</strong>
-          <a href="http://example.com/2023/02/17/leetcode-代码随想录-数组篇-209-长度最小的子数组-中等/" title="leetcode-代码随想录-数组篇-209.长度最小的子数组-中等" target="_blank">http://example.com/2023/02/17/leetcode-代码随想录-数组篇-209-长度最小的子数组-中等/</a>
+          <a href="http://example.com/2023/02/17/leetcode-代码随想录-数组篇-209-长度最小的子数组-中等/" title="209.长度最小的子数组（滑动窗口）-数组篇-代码随想录-leetcode-中等" target="_blank">http://example.com/2023/02/17/leetcode-代码随想录-数组篇-209-长度最小的子数组-中等/</a>
         </li>
         
         <li>
@@ -325,6 +340,17 @@
   <div class="article-info article-info-index">
     
     
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">代码随想录-数组篇-209.有序数组的平方(滑动窗口)</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
     
 
     
@@ -390,9 +416,18 @@
 
 <nav id="article-nav">
   
+    <a href="/2023/02/17/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E6%95%B0%E7%BB%84%E7%AF%87-704-%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE-%E7%AE%80%E5%8D%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          leetcode-代码随想录-数组篇-704.二分查找-简单
+        
+      </div>
+    </a>
+  
   
     <a href="/2023/02/17/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E6%95%B0%E7%BB%84%E7%AF%87-977-%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E5%B9%B3%E6%96%B9/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">977.有序数组的平方(双指针)-数组篇-代码随想录-leetcode</div>
+      <div class="article-nav-title">977.有序数组的平方(双指针)-数组篇-代码随想录-leetcode-简单</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -599,6 +634,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">代码随想录-数组篇-977.有序数组的平方(双指针)</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">代码随想录-数组篇-209.有序数组的平方(滑动窗口)</a>
               </li>
             
             <div class="clearfix"></div>
