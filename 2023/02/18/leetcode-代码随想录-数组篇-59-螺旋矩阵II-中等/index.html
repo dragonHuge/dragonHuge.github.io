@@ -10,15 +10,21 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="article">
+  <meta name="description" content="代码随想录-数组篇leetCode -59.螺旋矩阵II（模拟转圈）-中等链接：leetcode-master&#x2F;0059.螺旋矩阵II.md at master · youngyangyang04&#x2F;leetcode-master (github.com) 题目：给你一个正整数 n ，生成一个包含 1 到 n*n 所有元素，且元素按顺时针顺序螺旋排列的 n * n 正方形矩阵 m">
+<meta property="og:type" content="article">
 <meta property="og:title" content="leetcode-代码随想录-数组篇-59.螺旋矩阵II-中等">
 <meta property="og:url" content="http://example.com/2023/02/18/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E6%95%B0%E7%BB%84%E7%AF%87-59-%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5II-%E4%B8%AD%E7%AD%89/index.html">
 <meta property="og:site_name" content="Dragon">
+<meta property="og:description" content="代码随想录-数组篇leetCode -59.螺旋矩阵II（模拟转圈）-中等链接：leetcode-master&#x2F;0059.螺旋矩阵II.md at master · youngyangyang04&#x2F;leetcode-master (github.com) 题目：给你一个正整数 n ，生成一个包含 1 到 n*n 所有元素，且元素按顺时针顺序螺旋排列的 n * n 正方形矩阵 m">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://assets.leetcode.com/uploads/2020/11/13/spiraln.jpg">
+<meta property="og:image" content="https://camo.githubusercontent.com/4ec0808d2c9a552eeaa4489d08cb595782d158d209ffb3c08e91847005376e52/68747470733a2f2f636f64652d7468696e6b696e672d313235333835353039332e66696c652e6d7971636c6f75642e636f6d2f706963732f32303232303932323130323233362e706e67">
 <meta property="article:published_time" content="2023-02-18T03:38:13.000Z">
-<meta property="article:modified_time" content="2023-02-18T03:38:13.255Z">
+<meta property="article:modified_time" content="2023-02-18T03:45:15.931Z">
 <meta property="article:author" content="Dragon Huge">
+<meta property="article:tag" content="代码随想录-数组篇-59.螺旋矩阵II（模拟转圈）">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://assets.leetcode.com/uploads/2020/11/13/spiraln.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Dragon" type="application/atom+xml">
   
@@ -242,7 +248,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">0字</span>
+      <span class="post-count">580字</span>
     </span>
   </span>
 
@@ -251,7 +257,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">2分</span>
     </span>
   </span>
 </div>
@@ -262,7 +268,28 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    
+    <h1 id="代码随想录-数组篇"><a href="#代码随想录-数组篇" class="headerlink" title="代码随想录-数组篇"></a>代码随想录-数组篇</h1><h2 id="leetCode-59-螺旋矩阵II（模拟转圈）-中等"><a href="#leetCode-59-螺旋矩阵II（模拟转圈）-中等" class="headerlink" title="leetCode -59.螺旋矩阵II（模拟转圈）-中等"></a>leetCode -59.螺旋矩阵II（模拟转圈）-中等</h2><p>链接：<a target="_blank" rel="noopener" href="https://github.com/youngyangyang04/leetcode-master/blob/master/problems/0059.%E8%9E%BA%E6%97%8B%E7%9F%A9%E9%98%B5II.md">leetcode-master&#x2F;0059.螺旋矩阵II.md at master · youngyangyang04&#x2F;leetcode-master (github.com)</a></p>
+<h3 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h3><p>给你一个正整数 n ，生成一个<strong>包含 1 到 n*n</strong> 所有元素，且元素按顺时针顺序螺旋排列的 n * n 正方形矩阵 matrix 。</p>
+<p> <img src="https://assets.leetcode.com/uploads/2020/11/13/spiraln.jpg" alt="img"></p>
+<span id="more"></span>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">示例 <span class="number">1</span>：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输入：n = <span class="number">3</span></span><br><span class="line">输出：[[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">8</span>,<span class="number">9</span>,<span class="number">4</span>],[<span class="number">7</span>,<span class="number">6</span>,<span class="number">5</span>]]</span><br><span class="line">示例 <span class="number">2</span>：</span><br><span class="line"></span><br><span class="line">输入：n = <span class="number">1</span></span><br><span class="line">输出：[[<span class="number">1</span>]]</span><br></pre></td></tr></table></figure>
+
+<h3 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h3><ul>
+<li><p>就是模拟转圈，从最外层到里层。</p>
+</li>
+<li><p>持续<strong>遵循一个原则</strong>：<strong>左闭右开</strong></p>
+</li>
+<li><p>要注意分别<strong>n为奇数、n为偶数</strong>时的不同情况。</p>
+</li>
+</ul>
+<p><strong>转圈示意图</strong>如下：</p>
+<p><img src="https://camo.githubusercontent.com/4ec0808d2c9a552eeaa4489d08cb595782d158d209ffb3c08e91847005376e52/68747470733a2f2f636f64652d7468696e6b696e672d313235333835353039332e66696c652e6d7971636c6f75642e636f6d2f706963732f32303232303932323130323233362e706e67" alt="img"></p>
+<ul>
+<li><p><strong>代码实现：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span>[][] generateMatrix(<span class="type">int</span> n) &#123;</span><br><span class="line">            <span class="comment">// 坚持左开右闭原则</span></span><br><span class="line">            <span class="comment">// 模拟转圈过程即可</span></span><br><span class="line">            <span class="type">int</span> [][]result=<span class="keyword">new</span> <span class="title class_">int</span>[n][n];</span><br><span class="line">            <span class="type">int</span> loopSum=n/<span class="number">2</span>; <span class="comment">// 转圈次数</span></span><br><span class="line">            <span class="type">int</span> count=<span class="number">1</span>;     <span class="comment">// 作为填充数(即[1,n*n])</span></span><br><span class="line">            <span class="type">int</span> <span class="variable">loopLength</span> <span class="operator">=</span> n-<span class="number">1</span>;  <span class="comment">// 一次循环中遍历的长度</span></span><br><span class="line">            <span class="type">int</span> startX=<span class="number">0</span>;    <span class="comment">// 每一次转圈的起始横坐标</span></span><br><span class="line">            <span class="type">int</span> startY=<span class="number">0</span>;    <span class="comment">// 每一次转圈的起始纵坐标</span></span><br><span class="line">            <span class="type">int</span> i=<span class="number">0</span>; </span><br><span class="line">            <span class="type">int</span> j=<span class="number">0</span>; </span><br><span class="line"></span><br><span class="line">            <span class="comment">// 接下来模拟一次转圈的过程</span></span><br><span class="line">            <span class="keyword">while</span>(loopSum-- &gt;=<span class="number">1</span>)&#123;</span><br><span class="line">                i=startX;</span><br><span class="line">                j=startY;</span><br><span class="line">                <span class="comment">// 1. 模拟填充上行从左到右(左闭右开):列数递增，行数不变（Y变X不变）</span></span><br><span class="line">                <span class="keyword">for</span>(j=startY;j&lt;loopLength;j++)&#123;</span><br><span class="line">                    result[startX][j]=count++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 2. 模拟填充右列从上到下(左闭右开):行数递增，列数不变（X变Y不变）</span></span><br><span class="line">                <span class="keyword">for</span>(i=startX;i&lt;loopLength;i++)&#123;</span><br><span class="line">                    result[i][j]=count++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//  3. 模拟填充下行从右到左(左闭右开):列数递减，行数不变（Y变X不变）</span></span><br><span class="line">                <span class="keyword">for</span>(;j&gt;startY;j--)&#123;</span><br><span class="line">                    result[i][j]=count++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">//  4. 模拟填充左列从下到上(左闭右开):行数递减，列数不变（X变Y不变）</span></span><br><span class="line">                <span class="comment">//     注意这里是i&gt;startX,即遍历回到当前圈的起始位置+1的地方</span></span><br><span class="line">                <span class="comment">//     上边的j&gt;startY同理</span></span><br><span class="line">                <span class="keyword">for</span>(;i&gt;startX;i--)&#123;</span><br><span class="line">                    result[i][j]=count++;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="comment">// 以上就是转完一圈了</span></span><br><span class="line">                <span class="comment">// 接着下一圈，因此要更新数据</span></span><br><span class="line">                startX++;</span><br><span class="line">                startY++;</span><br><span class="line">                <span class="comment">// 遍历内部的下一圈，因此X和Y均加1</span></span><br><span class="line">                loopLength--;</span><br><span class="line">                <span class="comment">// 同时遍历圈边的长度随之减1</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">// 如果n为奇数，那么中心是有一个数无法遍历到的，需要我们手动填充</span></span><br><span class="line">            <span class="keyword">if</span>(n%<span class="number">2</span>==<span class="number">1</span>)&#123;</span><br><span class="line">                result[n/<span class="number">2</span>][n/<span class="number">2</span>]=n*n;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+
     
 
     
@@ -325,6 +352,17 @@
   <div class="article-info article-info-index">
     
     
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">代码随想录-数组篇-59.螺旋矩阵II（模拟转圈）</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
     
 
     
@@ -389,6 +427,15 @@
 
 
 <nav id="article-nav">
+  
+    <a href="/2023/02/19/HNU-%E5%A4%A7%E4%B8%89%E4%B8%8A-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%AF%BE%E7%A8%8B%E7%9F%A5%E8%AF%86%E7%82%B9%E6%80%BB%E7%BB%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          HNU-大三上-计算机网络课程知识点总结
+        
+      </div>
+    </a>
   
   
     <a href="/2023/02/17/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E6%95%B0%E7%BB%84%E7%AF%87-27-%E7%A7%BB%E9%99%A4%E5%85%83%E7%B4%A0-%E7%AE%80%E5%8D%95/" id="article-nav-older" class="article-nav-link-wrap">
@@ -611,6 +658,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">代码随想录-数组篇-27.移除元素（快慢双指针or暴力）</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">代码随想录-数组篇-59.螺旋矩阵II（模拟转圈）</a>
               </li>
             
             <div class="clearfix"></div>
