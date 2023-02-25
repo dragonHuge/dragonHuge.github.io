@@ -10,15 +10,20 @@
   <meta name="generator" content="hexo-theme-yilia-plus">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta property="og:type" content="article">
+  <meta name="description" content="链接：leetcode-master&#x2F;0203.移除链表元素.md at master · youngyangyang04&#x2F;leetcode-master (github.com) 题目：给你一个链表的头节点 head 和一个整数 val ，请你删除链表中所有满足 Node.val &#x3D;&#x3D; val 的节点，并返回 新的头节点 。  12345678910111">
+<meta property="og:type" content="article">
 <meta property="og:title" content="leetcode-代码随想录-链表篇-203.移除链表元素-简单">
 <meta property="og:url" content="http://dragonhuge.github.io/2023/02/20/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E9%93%BE%E8%A1%A8%E7%AF%87-203-%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0-%E7%AE%80%E5%8D%95/index.html">
 <meta property="og:site_name" content="Dragon Blog">
+<meta property="og:description" content="链接：leetcode-master&#x2F;0203.移除链表元素.md at master · youngyangyang04&#x2F;leetcode-master (github.com) 题目：给你一个链表的头节点 head 和一个整数 val ，请你删除链表中所有满足 Node.val &#x3D;&#x3D; val 的节点，并返回 新的头节点 。  12345678910111">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://dragonhuge.github.io/2023/02/20/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E9%93%BE%E8%A1%A8%E7%AF%87-203-%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0-%E7%AE%80%E5%8D%95/image-20230220102949235.png">
 <meta property="article:published_time" content="2023-02-20T02:27:33.000Z">
-<meta property="article:modified_time" content="2023-02-20T02:27:33.865Z">
+<meta property="article:modified_time" content="2023-02-20T07:55:10.248Z">
 <meta property="article:author" content="Dragon Huge">
+<meta property="article:tag" content="leetcode-代码随想录-链表篇-203.移除链表元素-简单">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://dragonhuge.github.io/2023/02/20/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E9%93%BE%E8%A1%A8%E7%AF%87-203-%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0-%E7%AE%80%E5%8D%95/image-20230220102949235.png">
   
     <link rel="alternative" href="/atom.xml" title="Dragon Blog" type="application/atom+xml">
   
@@ -242,7 +247,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">0字</span>
+      <span class="post-count">239字</span>
     </span>
   </span>
 
@@ -262,7 +267,16 @@
   
   <div class="article-entry" itemprop="articleBody">
     
-    
+    <p>链接：<a target="_blank" rel="noopener" href="https://github.com/youngyangyang04/leetcode-master/blob/master/problems/0203.%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0.md">leetcode-master&#x2F;0203.移除链表元素.md at master · youngyangyang04&#x2F;leetcode-master (github.com)</a></p>
+<h2 id="题目："><a href="#题目：" class="headerlink" title="题目："></a>题目：</h2><p>给你一个链表的头节点 head 和一个整数 val ，请你删除链表中所有满足 Node.val &#x3D;&#x3D; val 的节点，并返回 新的头节点 。</p>
+<p><img src="/2023/02/20/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E9%93%BE%E8%A1%A8%E7%AF%87-203-%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0-%E7%AE%80%E5%8D%95/image-20230220102949235.png" alt="image-20230220102949235"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">示例 1：</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">输入：<span class="built_in">head</span> = [1,2,6,3,4,5,6], val = 6</span><br><span class="line">输出：[1,2,3,4,5]</span><br><span class="line">示例 2：</span><br><span class="line"></span><br><span class="line">输入：<span class="built_in">head</span> = [], val = 1</span><br><span class="line">输出：[]</span><br><span class="line">示例 3：</span><br><span class="line"></span><br><span class="line">输入：<span class="built_in">head</span> = [7,7,7,7], val = 7</span><br><span class="line">输出：[]</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="解答："><a href="#解答：" class="headerlink" title="解答："></a>解答：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * public class ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     ListNode next;</span></span><br><span class="line"><span class="comment"> *     ListNode() &#123;&#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val) &#123; this.val = val; &#125;</span></span><br><span class="line"><span class="comment"> *     ListNode(int val, ListNode next) &#123; this.val = val; this.next = next; &#125;</span></span><br><span class="line"><span class="comment"> * &#125;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> ListNode <span class="title function_">removeElements</span><span class="params">(ListNode head, <span class="type">int</span> val)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(head==<span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> head;</span><br><span class="line">        &#125;</span><br><span class="line">            ListNode virtualHead=<span class="keyword">new</span> <span class="title class_">ListNode</span>(-<span class="number">1</span>,head); <span class="comment">// 哨兵,它的next指向初始head</span></span><br><span class="line">            ListNode preNode=virtualHead;</span><br><span class="line">            <span class="keyword">while</span>(preNode.next != <span class="literal">null</span>)&#123;</span><br><span class="line">                    <span class="keyword">if</span>(preNode.next.val == val)&#123;</span><br><span class="line">                        <span class="comment">// 找到目标结点</span></span><br><span class="line">                        <span class="comment">// 删除当前节点</span></span><br><span class="line">                        preNode.next=preNode.next.next;</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        <span class="comment">// 否则就向下遍历</span></span><br><span class="line">                        preNode=preNode.next;</span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">    <span class="keyword">return</span> virtualHead.next;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
     
 
     
@@ -325,6 +339,17 @@
   <div class="article-info article-info-index">
     
     
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">leetcode-代码随想录-链表篇-203.移除链表元素-简单</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
     
 
     
@@ -389,6 +414,15 @@
 
 
 <nav id="article-nav">
+  
+    <a href="/2023/02/25/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E9%93%BE%E8%A1%A8%E7%AF%87-707-%E8%AE%BE%E8%AE%A1%E9%93%BE%E8%A1%A8-%E4%B8%AD%E7%AD%89/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          leetcode-代码随想录-链表篇-707.设计链表-中等
+        
+      </div>
+    </a>
   
   
     <a href="/2023/02/20/leetcode-%E4%BB%A3%E7%A0%81%E9%9A%8F%E6%83%B3%E5%BD%95-%E6%95%B0%E7%BB%84%E7%AF%87%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
@@ -623,6 +657,10 @@
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">leetcode-代码随想录-数组篇总结</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">leetcode-代码随想录-链表篇-203.移除链表元素-简单</a>
               </li>
             
             <div class="clearfix"></div>
