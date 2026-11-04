@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+    <a class="brand" href="../index.html">🐉 DragonHuge · 知识花园</a>
+    <nav class="topnav">
+      <a href="../index.html" class="">首页</a>
+      <a href="../daily/index.html" class="">日常知识库沉淀</a>
+      <a href="../tech/index.html" class="on">技术文章</a>
+    </nav>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar"><nav class="side-nav">
+<details class="mod"><summary>📒 日常知识库沉淀 <span class="cnt">21</span></summary>
+<div class="grp">灵感火花</div>
+<a class="art" href="../daily/d001.html">2026-10-24</a>
+<a class="art" href="../daily/d002.html">2026-10-17</a>
+<a class="art" href="../daily/d003.html">2026-09-27</a>
+<a class="art" href="../daily/d004.html">2026-09-19</a>
+<a class="art" href="../daily/d005.html">2026-09-12</a>
+<div class="grp">2026 · Q2 · 第7周(05.11-05.17)</div>
+<a class="art" href="../daily/d006.html">2026-05-15</a>
+<a class="art" href="../daily/d007.html">2026-05-13</a>
+<a class="art" href="../daily/d008.html">2026-05-12</a>
+<a class="art" href="../daily/d009.html">2026-05-11</a>
+<div class="grp">2026 · Q2 · 第6周(05.04-05.10)</div>
+<a class="art" href="../daily/d010.html">2026-05-09</a>
+<a class="art" href="../daily/d011.html">2026-05-08</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d012.html">2026-04-28</a>
+<a class="art" href="../daily/d013.html">2026-04-27</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d014.html">2026-04-26</a>
+<a class="art" href="../daily/d015.html">2026-04-25 周六无事</a>
+<div class="grp">2026 · Q2 · 第2周(04.06-04.12)</div>
+<a class="art" href="../daily/d016.html">2026-04-12 随记</a>
+<a class="art" href="../daily/d017.html">2026-04-07 随记</a>
+<a class="art" href="../daily/d018.html">2026-04-06</a>
+<div class="grp">2026 · Q2 · 第1周(03.30-04.05)</div>
+<a class="art" href="../daily/d019.html">2026-04-04</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d020.html">第5周(04.27-05.03) 周报</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d021.html">第4周(04.20-04.26) 周报</a>
+</details>
+<details class="mod" open><summary>💻 技术文章 <span class="cnt">22</span></summary>
+<details class="cat" open><summary>AI底层原理</summary>
+<a class="art" href="../tech/t001.html">AI 底层原理 — 资料来源</a>
+<a class="art" href="../tech/t002.html">AI 底层原理 — 感悟日志</a>
+<a class="art" href="../tech/t003.html">LLM Agent 工程原理 — 学习笔记</a>
+</details>
+<details class="cat" open><summary>Agent应用开发</summary>
+<a class="art" href="../tech/t004.html">DeepSeek dsh-superagent 技术方案分析（学习版）</a>
+<a class="art" href="../tech/t005.html">Agent 应用开发 — 知识点全景图</a>
+<a class="art" href="../tech/t006.html">Agent 应用开发 — 五阶段学习计划</a>
+</details>
+<details class="cat" open><summary>安全风控</summary>
+<a class="art" href="../tech/t007.html">H5 活动风控 · 技术学习问答笔记（龙老板提问 → 小墨答复）</a>
+<a class="art" href="../tech/t008.html">H5 活动风控完整技术调研（小白友好汇总版）：需求还原 · 核心概念 · 行业方案 · 落地路线</a>
+<a class="art" href="../tech/t009.html">H5 活动风控第二轮调研：业界设备指纹落地、WebAuthn 边界、黑产攻击面与落地方案</a>
+<a class="art" href="../tech/t010.html">JS 虚拟化保护（防守侧）第一轮调研：原理、实现与 ZCode 风控重叠度</a>
+</details>
+<details class="cat" open><summary>投资理财</summary>
+<a class="art" href="../tech/t011.html">投资理财 — 资料来源</a>
+<a class="art" href="../tech/t012.html">投资理财 — 知识库组织规范</a>
+<a class="art" href="../tech/t013.html">投资理财 — 四阶段学习路径</a>
+<div class="grp">实践记录</div>
+<a class="art" href="../tech/t014.html">决策日志</a>
+<a class="art" href="../tech/t015.html">定投记录</a>
+<div class="grp">知识卡/01-基础概念</div>
+<a class="art" href="../tech/t016.html">风险与收益</a>
+<a class="art" href="../tech/t017.html">通胀</a>
+<a class="art" href="../tech/t018.html">复利</a>
+<div class="grp">配置方案</div>
+<a class="art" href="../tech/t019.html">退休目标测算</a>
+<a class="art" href="../tech/t020.html">财务地基自查</a>
+</details>
+<details class="cat" open><summary>日常问答</summary>
+<a class="art" href="../tech/t021.html">日常问答沉淀 · 2026-09</a>
+</details>
+<details class="cat" open><summary>综合文章</summary>
+<a class="art active" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+</details>
+</details></nav></aside>
+  <div class="mask" id="mask"></div>
+  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">技术文章</a> / <a href="index.html">综合文章</a></div><article><h1>四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</h1><div class="meta">📅 2026-10-21 · 📄 20261010-四大多-Agent-架构详解四Handoff-之后下一轮到底由谁负责.md</div><div class="md"><h1>四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</h1>
+<blockquote><p>来源：微信公众号 归档日期：2026-10-10 抓取状态：成功 原文字符：6697｜配图：1 张</p></blockquote>
+<h2>摘要速览</h2>
+<ul><li>架构师（JiaGouX） 我们都是架构师！ 架构未来，你来不来？ 周一早上，一个用户打开公司的工作台。旧密码提示错误，他按页面指引完成了重置：邮件确认过了，短信验证码也收到了。可回到登录页，页面还是进不去。 他在客服窗口里写：“密码已经改了，还是登录不上。”</li></ul>
+<h2>核心内容</h2>
+<p>（待补充）</p>
+<h2>可执行启发</h2>
+<p>（待补充）</p>
+<h2>我的想法</h2>
+<p>（待补充）</p>
+<hr>
+<h2>原文沉淀</h2>
+<blockquote><p>来源：https://mp.weixin.qq.com/s/YApF633agE1PZFKLck_b4Q 平台：weixin｜作者：架构师 抓取方式：cdp｜字符数：7204｜图片：4</p></blockquote>
+<hr>
+<p>架构师（JiaGouX）</p>
+<p>我们都是架构师！ 架构未来，你来不来？</p>
+<p>周一早上，一个用户打开公司的工作台。旧密码提示错误，他按页面指引完成了重置：邮件确认过了，短信验证码也收到了。可回到登录页，页面还是进不去。</p>
+<p>他在客服窗口里写：“密码已经改了，还是登录不上。”</p>
+<p>分诊 Agent 先问他用的是企业账号还是个人账号，又让他确认登录入口。两轮之后，窗口提示“已为你转接技术支持”。技术支持接过来，问页面有没有错误码，请他再登录一次。</p>
+<p>用户切回浏览器。验证码能收到，密码也能提交，页面却弹出 403。等他回到客服窗口，已经过去七八分钟。</p>
+<p>他没有重讲前因后果，只补了一句：“还是不行，403。”</p>
+<p>如果是真人客服，技术支持大多能顺着上文继续排查。可系统一旦把这句话当成新一轮，又交给默认的分诊 Agent，接下来很可能还是那几个问题：什么账号、从哪里登录、页面提示了什么。</p>
+<p><strong>第一轮确实转接成功了。断掉的是下一轮：系统忘了这段会话已经由技术支持接手。</strong></p>
+<table><thead><tr><th>时点</th><th>用户看到的</th><th>系统需要留下的</th></tr></thead><tbody><tr><td>第一次求助</td><td>分诊 Agent 询问情况</td><td>会话身份、已确认的信息</td></tr><tr><td>转给技术支持</td><td>技术支持开始回复</td><td>当前负责人、交接原因</td></tr><tr><td>用户再次发消息</td><td>“还是不行，403”</td><td>把消息交回技术支持所需的状态</td></tr></tbody></table>
+<p>转接工具返回成功，页面也显示“已转接”，只能说明这一轮走到了新 Agent。等下一条消息进来，系统还能不能找到刚才的接手者，是另一件事。</p>
+<p>前面三篇里，Workflow 把路径写进代码，Supervisor 由中央 Agent 派工，Hierarchical 再把控制拆到不同层级。到了 Swarm/Handoff，固定主管可以退到后面，但“现在该谁回复”仍然要有答案。</p>
+<h2>谁接下一句</h2>
+<p>Handoff 容易和“请专家帮一次忙”混在一起。两者都可能表现成一次工具调用，责任却不同。</p>
+<p>主 Agent 只是请专家查一次退款规则，专家把结果交回来，主 Agent 整理后回复。后面的对话，仍由主 Agent 负责。</p>
+<p>如果用户已经进入退款处理，后面还要补订单、核验资格和确认方式，关系就不一样了：分诊 Agent 把会话交给退款 Agent，下一条消息也该回到退款 Agent 手里。</p>
+<p><img alt="请专家帮一次，还是把会话交出去" src="img-001-65ba7a36.gif"></p>
+<p>请专家帮一次，还是把会话交出去</p>
+<p>图：架构师（ID：JiaGouX）｜左边是一次委派，右边才是后续责任的转移。</p>
+<p>OpenAI Agents SDK 把这两种关系分别叫作 <code>agents as tools</code> 和 Handoff。落到使用体验上，差别很直接：<strong>专家回来汇报一次</strong>，还是<strong>从现在起接住用户的后续消息</strong>。</p>
+<p>本地 <code>aicode</code> 源码里也能看到，Handoff 并不总指同一件事。<code>pi</code> 的 <code>/handoff</code> 会从当前分支整理上下文，生成一份可编辑的提示词，再建立新会话。Claude Code 的 AgentTool 则是在子 Agent 做完后，把控制权交回主 Agent；<code>auto</code> 权限模式下，还会判断这次回交是否需要阻断。</p>
+<p>一个换了会话，一个回到协调者，都不等于“专业 Agent 接管了后续对话”。这两个例子也让我不太敢只看 Handoff 这个名字。我更关心的是：<strong>下一条用户消息，默认会送给谁？</strong></p>
+<h2>把责任留下</h2>
+<p>一次 run 里，Handoff 可以把 active agent 换成新 Agent，后半段由它继续处理。但 run 一结束，下一条消息会重新进入应用。系统得认出这段会话，也得知道刚才的<strong>当前负责人</strong>是谁。</p>
+<p><strong>这一轮换了 Agent，不等于下一轮还找得到它。</strong></p>
+<p>不同框架把“负责人”放在不同位置。OpenAI 的结果里会保留最后活跃的 Agent，供后续继续；LangChain 会更新 <code>active_agent</code>，跨轮保存还要依靠 checkpointer；Microsoft Agent Framework 用 checkpoint、稳定的参与者 ID 和上下文同步来恢复交接现场。</p>
+<p><img alt="责任怎样跨过两次请求" src="img-002-52e1b550.gif"></p>
+<p>责任怎样跨过两次请求</p>
+<p>图：架构师（ID：JiaGouX）｜上一轮写下负责人，下一轮先恢复 owner 和上下文，再把消息送回接手者。</p>
+<p>名词不一样，边界差不多：这是哪段会话，现在轮到谁，接手时应该从哪份上下文继续。如果这些信息只出现在模型当时看到的提示里，一次压缩或重启，就可能把“轮到谁”一起抹掉。</p>
+<table><thead><tr><th>场景</th><th>常见做法</th></tr></thead><tbody><tr><td>普通咨询</td><td>会话 ID、当前负责人、上下文引用</td></tr><tr><td>涉及资金、权限或 SLA</td><td>再记录交接已发起、已接受、已生效或失败</td></tr><tr><td>人工接管</td><td>记录接管人、时间、原因和恢复入口</td></tr></tbody></table>
+<p>状态不必一开始就做得很重。普通咨询能找回负责人，往往已经够用；失败代价高时，再把交接阶段和责任变化记细。<strong>状态记到多细，可以跟着失败代价一起长。</strong></p>
+<p>这也接上了今年几篇 JGX 文章一直在追的那条线：一轮结束以后，哪些状态还能继续，哪些事实仍然可信。Handoff 只是把问题落到了更具体的一刻——换人之后，这段对话能不能接着走。</p>
+<h2>带走什么</h2>
+<p>找回负责人以后，接手者还得知道刚才发生过什么。</p>
+<p>全部历史原样带过去最省事，却可能混进内部工具返回、无关分支和不该越过权限边界的数据。只留一句“用户登录失败”又太薄，403、已经试过的操作和用户刚做的选择都会丢掉。</p>
+<p>我更倾向于把交接分成两层：先给接手者一份短说明，写清转交原因、已确认事实和当前进度；原始对话与工具结果继续留在记录里，遇到疑点再回看。</p>
+<p><img alt="一份能接着处理的 Handoff 交接" src="img-003-235a9968.gif"></p>
+<p>一份能接着处理的 Handoff 交接</p>
+<p>图：架构师（ID：JiaGouX）｜接手者先读当前上下文和交接说明；原始记录保留下来，工具权限按新身份重新校验。</p>
+<p>这和上一篇 Hierarchical 里“摘要与证据分开”有点像。区别在于，分层架构向上汇总的是一份阶段结果，Handoff 交出去的是一段还没聊完的对话。接手者除了知道结论，还要知道用户已经试过什么，免得让人从头再来。</p>
+<p>上下文也不等于权限。技术支持 Agent 看到了订单号，不代表它就能退款；退款 Agent 接过会话，也不会因此跳过金额、账户和人工确认。交接内容可以延续，工具和数据权限仍要按新身份检查。</p>
+<h2>主管退场之后</h2>
+<p>把 Handoff 放进 Swarm，直觉上像一群 Agent 自己接力：当前 Agent 觉得谁更合适，就把对话交给谁，不必每次回到中央主管。</p>
+<p>这里我会把架构思路和旧框架分开看。OpenAI 的 <code>Swarm</code> 仓库是实验、教学项目，仓库说明建议生产场景迁移到 Agents SDK。它也写得很清楚：<code>run()</code> 返回消息、当前 Agent 和上下文，但不会替应用保存两次调用之间的状态。</p>
+<p>固定主管退场后，允许谁转给谁、目标 Agent 超时后由谁继续，这些问题仍然存在。系统可以先约定哪些 Agent 能互相转交；会话记住当前负责人；遇到超时或绕圈，也留一条退路。责任换过几次，事后还能查清楚。</p>
+<p>这些工作未必需要再交给一个会聊天的“总管 Agent”。<strong>Swarm 改变的是谁在对话中做决定，路由、状态和失败处理仍要有落点。</strong></p>
+<p>站在用户这边，背后用了几个 Agent 并不重要。他更在意刚说过的信息还在不在，上一位确认过的事还算不算数，转接失败以后有没有人继续处理。</p>
+<h2>四种架构</h2>
+<p>把四篇放在一起看，差别主要落在两件事上：下一步由谁决定，状态在哪里续上。</p>
+<table><thead><tr><th>架构</th><th>下一步由谁决定</th><th>谁负责回复或交付</th><th>跨过一轮后留什么</th></tr></thead><tbody><tr><td>Workflow</td><td>预先定义的代码流程</td><td>流程指定的出口</td><td>节点、检查点、重放位置</td></tr><tr><td>Supervisor</td><td>中央 Agent</td><td>中央 Agent</td><td>派工理由、结果、停止条件</td></tr><tr><td>Hierarchical</td><td>当前层级的控制节点</td><td>当前层级的负责人</td><td>跨层约束、证据、升级关系</td></tr><tr><td>Swarm/Handoff</td><td>当前 Agent 选择接手者，运行时完成切换</td><td>当前接手的 Agent</td><td>当前负责人、交接说明、路由记录</td></tr></tbody></table>
+<p>实际系统经常把几种方式放在一起。稳定环节用 Workflow，分诊由 Supervisor 处理；进入专业对话后，再 Handoff 给对应 Agent。任务变大时，中间还可能多一层 Hierarchical。</p>
+<p>几种架构可以混用，责任却不能含糊。原 Agent 以为自己已经结束，接手者没拿到状态，下一轮入口又从头分诊，对用户来说，就是一群互相不认识的客服。</p>
+<p>写完这篇，我对 Handoff 的理解变窄了一些。它未必比其他多 Agent 架构更先进，只是把一段没聊完的对话交给另一个 Agent 继续负责。</p>
+<p>等用户七八分钟后回来，只说一句“还是不行，403”，系统还能让技术支持接着查，而不是请他再讲一遍。对我来说，做到这一步，Handoff 才算跨过了下一轮。</p>
+<h2>往期相关推文</h2>
+<ul><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410507&amp;idx=1&amp;sn=fc45079800b95c28c7c02e1305b63041&amp;scene=21#wechat_redirect">四大多 Agent 架构详解（一）：Workflow 如何把固定流程变成可回放的系统</a>》</li></ul>
+<ul><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410517&amp;idx=1&amp;sn=5d54c69d20e75ea6b3a2dc5930f18f1c&amp;scene=21#wechat_redirect">四大多 Agent 架构详解（二）：Supervisor 如何动态派工，又为什么容易成为瓶颈</a>》</li></ul>
+<ul><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410628&amp;idx=1&amp;sn=1b32a1b0bbc705a1f8f6d2e06f19963f&amp;scene=21#wechat_redirect">四大多 Agent 架构详解（三）：Hierarchical 如何解决一个 Supervisor 管不过来的问题</a>》</li></ul>
+<ul><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409503&amp;idx=1&amp;sn=945c14c0d7edb60c29b6e43a6bd92677&amp;scene=21#wechat_redirect">Harness 之后：Agent 可靠性的关键，是状态边界和失败闭环</a>》</li></ul>
+<ul><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409948&amp;idx=1&amp;sn=cfe8a886980e4377bcf5dfaea6369ed2&amp;scene=21#wechat_redirect">Agent Loop 与 Graph Engineering：多 Agent 如何执行任务、共享可信事实</a>》</li></ul>
+<ul><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410581&amp;idx=1&amp;sn=901a554f673cb782cf89b550ec0da01a&amp;scene=21#wechat_redirect">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a>》</li></ul>
+<h2>参考资料</h2>
+<ul><li>OpenAI，Orchestration and handoffs（https://developers.openai.com/api/docs/guides/agents/orchestration）</li></ul>
+<ul><li>OpenAI Agents SDK，Agent orchestration（https://openai.github.io/openai-agents-python/multi_agent/）</li></ul>
+<ul><li>OpenAI Agents SDK，Handoffs（https://openai.github.io/openai-agents-python/handoffs/）</li></ul>
+<ul><li>Ilan Bigio，Orchestrating Agents: Routines and Handoffs（https://developers.openai.com/cookbook/examples/orchestrating_agents）</li></ul>
+<ul><li>OpenAI，Results and state（https://developers.openai.com/api/docs/guides/agents/results）</li></ul>
+<ul><li>LangChain，Handoffs（https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs）</li></ul>
+<ul><li>Microsoft Agent Framework，Handoff orchestration pattern（https://learn.microsoft.com/en-us/agent-framework/workflows/orchestrations/handoff）</li></ul>
+<ul><li>Erik Schluntz、Barry Zhang，Building Effective Agents（https://www.anthropic.com/engineering/building-effective-agents）</li></ul>
+<ul><li>Aaron Levie（Dharmesh 在 X 转发），Agent 架构要随模型能力拆换脚手架（https://x.com/dharmesh/status/2040085435821543459）</li></ul>
+<ul><li>OpenAI Swarm，GitHub repository（https://github.com/openai/swarm）</li></ul>
+<p>如喜欢本文，请点击右上角，把文章分享到朋友圈</p>
+<p>如有想了解学习的技术点，请留言给若飞安排分享</p>
+<p>因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</p>
+<p>·END·</p>
+<p><strong>相关阅读：</strong></p>
+<ul><li>Loop Engineering，应该赞成还是反对？</li><li>Claude 做方案，Codex 写代码：多模型协作怎么交接才稳</li><li>架构排熵：Loop Engineering 的持续清理系统</li><li>CLAUDE.md 拆解：Agent 进仓库前的上下文入口</li><li>Harness工程还没唱罢，Environment工程已然登场</li><li>设计 Self-Harness 架构：会自我改进的Harness</li></ul>
+<p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p>
+<p>架构师</p>
+<p>我们都是架构师！</p>
+<p><img alt="图片" src="img-004-4d68b9c4.png"></p>
+<p>关注架构师(JiaGouX)，添加“星标”</p>
+<p>获取每天技术干货，一起成为牛逼架构师</p>
+<p>技术群请加若飞：1321113940 进架构师群</p>
+<p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+</div>
+<script src="../assets/app.js"></script>
+</body>
+</html>
