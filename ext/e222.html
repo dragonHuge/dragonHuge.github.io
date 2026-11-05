@@ -395,23 +395,23 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</h1><div class="meta">📅 2026-09-10 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/6l9eoyAyADd4l4CgdbKFwQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260910-ETL-ELT-ETLT数据加工流程.md</div><div class="md"><h1>ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">33</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#ETL-ELT-ETLT到底有什么区别-一文讲透数据加工流程">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#ELT-ETLT-Reverse-ETL-实时ETL">ELT、ETLT、Reverse ETL、实时ETL……</a><a class="tl l3" href="#别先背ETL-先搞清楚E-T-L到底在干什么">别先背ETL，先搞清楚E、T、L到底在干什么</a><a class="tl l3" href="#第一步解决的是">第一步解决的是：</a><a class="tl l3" href="#ETL-先加工-再把-成品数据-送进数仓">ETL：先加工，再把“成品数据”送进数仓</a><a class="tl l3" href="#Extract-Transform-Load">Extract → Transform → Load</a><a class="tl l3" href="#第一-目标库只希望接收相对干净的数据">第一，目标库只希望接收相对干净的数据。</a><a class="tl l3" href="#第二-必须在进入目标系统之前处理敏感信息">第二，必须在进入目标系统之前处理敏感信息。</a><a class="tl l3" href="#第三-目标端计算能力有限">第三，目标端计算能力有限。</a><a class="tl l3" href="#ELT-先把原始数据存下来-再利用目标平台加工">ELT：先把原始数据存下来，再利用目标平台加工</a><a class="tl l3" href="#Extract-Load-Transform">Extract → Load → Transform</a><a class="tl l3" href="#ETLT-先做必要处理-落库以后再完成业务转换">ETLT：先做必要处理，落库以后再完成业务转换</a><a class="tl l3" href="#前置轻转换-原始数据落地-后置重转换">前置轻转换 + 原始数据落地 + 后置重转换</a><a class="tl l3" href="#ETL-ELT-ETLT-到底应该怎么选">ETL、ELT、ETLT，到底应该怎么选？</a><a class="tl l3" href="#我们到底应该选择ETL还是ELT">“我们到底应该选择ETL还是ELT？”</a><a class="tl l3" href="#1-这项转换能不能等到Load以后">1.这项转换能不能等到Load以后？</a><a class="tl l3" href="#2-这项逻辑以后会不会经常变化">2.这项逻辑以后会不会经常变化？</a><a class="tl l3" href="#3-原始数据有没有保留价值">3.原始数据有没有保留价值？</a><a class="tl l3" href="#历史回溯-模型训练-指标重算-问题排查-算法分析">历史回溯、模型训练、指标重算、问题排查、算法分析，</a><a class="tl l3" href="#4-计算应该放在哪里成本最低">4.计算应该放在哪里成本最低？</a><a class="tl l3" href="#5-数据到底要求多快">5.数据到底要求多快？</a><a class="tl l3" href="#真正困难的不是ETL-而是让整条数据链路长期稳定">真正困难的不是ETL，而是让整条数据链路长期稳定</a><a class="tl l3" href="#数据能不能跑通">数据能不能跑通？</a><a class="tl l3" href="#最后-用三个问题真正理解ETL-ELT和ETLT">最后，用三个问题真正理解ETL、ELT和ETLT</a><a class="tl l3" href="#第一-数据什么时候进入目标平台">第一，数据什么时候进入目标平台？</a><a class="tl l3" href="#第二-原始数据是否需要保留">第二，原始数据是否需要保留？</a><a class="tl l3" href="#第三-Transformation应该全部放在同一个地方吗">第三，Transformation应该全部放在同一个地方吗？</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</h1><div class="meta">📅 2026-09-10 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/6l9eoyAyADd4l4CgdbKFwQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260910-ETL-ELT-ETLT数据加工流程.md</div><div class="md"><h1 id="ETL-ELT-ETLT到底有什么区别-一文讲透数据加工流程">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-10 抓取状态：成功 原文字符：11544｜配图：31 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>ETL/ELT/ETLT 的本质分歧不是字母顺序，而是"数据应该在哪里加工"：进仓前清洗 vs 先存原始再用数仓算力加工</li><li>ELT 的崛起依托云数仓弹性算力：先 Load 原始数据保留全貌，转换按需进行， schema 变更成本更低</li><li>ETLT 是混合形态：重清洗在源头做（ETL），重聚合留到仓内做（ELT），按字段敏感度与计算特征分配位置</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li>核心判断维度：计算发生的位置（源端 / 目标端）× 数据形态（清洗后 / 原始）</li><li>ETL：传统方案，转换在中间引擎完成，进仓即"干净数据"；缺点是转换逻辑黑盒化、原始数据丢失、schema 变更需重跑管道</li><li>ELT：借助 Snowflake/BigQuery 等弹性数仓，先完整落地原始数据，用 SQL/dbt 在仓内建模转换；优点是可审计、可重放、敏捷度高</li><li>ETLT：现实工程中最常见——敏感数据脱敏、格式标准化在源头做，复杂聚合与业务口径在仓内做</li><li>延伸概念：Reverse ETL（仓内数据回流业务系统）、实时 ETL（流式加工），说明"加工位置"是一个可以自由组合的设计空间</li><li>选型建议：数据血缘与合规要求高 → 保留原始层（ELT 倾向）；源端算力/带宽受限或合规禁止原始落地 → 前置清洗（ETL 倾向）</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>评审数据管道方案时，先问"每一步转换发生在哪个位置、为什么"，而不是只看工具选型</li><li>自建知识库/数仓时保留原始数据层，转换全部可重放，避免"清洗后数据"成为唯一事实</li></ul>
 <p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#eltetltreverse-etl实时etl">ELT、ETLT、Reverse ETL、实时ETL……</a></li><li><a href="#别先背etl先搞清楚etl到底在干什么">别先背ETL，先搞清楚E、T、L到底在干什么</a></li><li><a href="#第一步解决的是">第一步解决的是：</a></li><li><a href="#etl先加工再把成品数据送进数仓">ETL：先加工，再把“成品数据”送进数仓</a></li><li><a href="#extract--transform--load">Extract → Transform → Load</a></li><li><a href="#第一目标库只希望接收相对干净的数据">第一，目标库只希望接收相对干净的数据。</a></li><li><a href="#第二必须在进入目标系统之前处理敏感信息">第二，必须在进入目标系统之前处理敏感信息。</a></li><li><a href="#第三目标端计算能力有限">第三，目标端计算能力有限。</a></li><li><a href="#elt先把原始数据存下来再利用目标平台加工">ELT：先把原始数据存下来，再利用目标平台加工</a></li><li><a href="#extract--load--transform">Extract → Load → Transform</a></li><li><a href="#etlt先做必要处理落库以后再完成业务转换">ETLT：先做必要处理，落库以后再完成业务转换</a></li><li><a href="#前置轻转换--原始数据落地--后置重转换">前置轻转换 + 原始数据落地 + 后置重转换</a></li><li><a href="#etleltetlt到底应该怎么选">ETL、ELT、ETLT，到底应该怎么选？</a></li><li><a href="#我们到底应该选择etl还是elt">“我们到底应该选择ETL还是ELT？”</a></li><li><a href="#1这项转换能不能等到load以后">1.这项转换能不能等到Load以后？</a></li><li><a href="#2这项逻辑以后会不会经常变化">2.这项逻辑以后会不会经常变化？</a></li><li><a href="#3原始数据有没有保留价值">3.原始数据有没有保留价值？</a></li><li><a href="#历史回溯模型训练指标重算问题排查算法分析">历史回溯、模型训练、指标重算、问题排查、算法分析，</a></li><li><a href="#4计算应该放在哪里成本最低">4.计算应该放在哪里成本最低？</a></li><li><a href="#5数据到底要求多快">5.数据到底要求多快？</a></li><li><a href="#真正困难的不是etl而是让整条数据链路长期稳定">真正困难的不是ETL，而是让整条数据链路长期稳定</a></li><li><a href="#数据能不能跑通">数据能不能跑通？</a></li><li><a href="#最后用三个问题真正理解etlelt和etlt">最后，用三个问题真正理解ETL、ELT和ETLT</a></li><li><a href="#第一数据什么时候进入目标平台">第一，数据什么时候进入目标平台？</a></li><li><a href="#第二原始数据是否需要保留">第二，原始数据是否需要保留？</a></li><li><a href="#第三transformation应该全部放在同一个地方吗">第三，Transformation应该全部放在同一个地方吗？</a></li></ul>
 <p>做数据平台时，ETL几乎是绕不开的一个词。</p>
 <p>但现在又经常看到：</p>
-<h3>ELT、ETLT、Reverse ETL、实时ETL……</h3>
+<h3 id="ELT-ETLT-Reverse-ETL-实时ETL">ELT、ETLT、Reverse ETL、实时ETL……</h3>
 <p>很多人记住了几个缩写，却没有真正理解它们之间到底差在哪里。</p>
 <p>其实ETL、ELT、ETLT讨论的根本不是三个字母怎么排列，而是一个非常核心的数据架构问题：</p>
 <ul><li>数据应该在哪里加工？</li></ul>
@@ -428,14 +428,14 @@
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-003-d3149b2b.png"></p>
 <hr>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-004-f62dfb21.png"></p>
-<h3>别先背ETL，先搞清楚E、T、L到底在干什么</h3>
+<h3 id="别先背ETL-先搞清楚E-T-L到底在干什么">别先背ETL，先搞清楚E、T、L到底在干什么</h3>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-005-c6751d12.gif"></p>
 <p>ETL其实只包含三个动作。</p>
 <p><strong>E：Extract，抽取。</strong></p>
 <p>从业务系统中把数据拿出来。</p>
 <p>企业里的数据来源可能非常复杂：</p>
 <p>ERP里的订单、CRM里的客户、MES里的生产数据、数据库日志、Excel文件、API接口，甚至Kafka里的实时消息。</p>
-<h3>第一步解决的是：</h3>
+<h3 id="第一步解决的是">第一步解决的是：</h3>
 <p><strong>数据从哪里来，以及怎样稳定地拿到。</strong></p>
 <p><strong>T：Transform，转换。</strong></p>
 <p>把原始数据变成可使用的数据。</p>
@@ -462,10 +462,10 @@
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-007-b4973e6b.png"></p>
 <hr>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-008-0aed9bc9.png"></p>
-<h3>ETL：先加工，再把“成品数据”送进数仓</h3>
+<h3 id="ETL-先加工-再把-成品数据-送进数仓">ETL：先加工，再把“成品数据”送进数仓</h3>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-009-304f1a64.gif"></p>
 <p>传统ETL的顺序是：</p>
-<h3>Extract → Transform → Load</h3>
+<h3 id="Extract-Transform-Load">Extract → Transform → Load</h3>
 <p>也就是：</p>
 <p>抽取 → 转换 → 装载。</p>
 <p>假设企业需要把ERP中的销售订单同步到数据仓库。</p>
@@ -478,11 +478,11 @@
 <p><strong>数据先变成“合格产品”，再进入目标系统。</strong></p>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-010-5bfba162.png"></p>
 <p>这种方式特别适合几类场景。</p>
-<h3>第一，目标库只希望接收相对干净的数据。</h3>
+<h3 id="第一-目标库只希望接收相对干净的数据">第一，目标库只希望接收相对干净的数据。</h3>
 <p>比如核心财务库、监管库或者经营主题库，不希望大量脏数据直接进入正式数据层。</p>
-<h3>第二，必须在进入目标系统之前处理敏感信息。</h3>
+<h3 id="第二-必须在进入目标系统之前处理敏感信息">第二，必须在进入目标系统之前处理敏感信息。</h3>
 <p>例如手机号、身份证号、银行卡号等字段，在跨环境流转前就需要进行脱敏或裁剪。</p>
-<h3>第三，目标端计算能力有限。</h3>
+<h3 id="第三-目标端计算能力有限">第三，目标端计算能力有限。</h3>
 <p>传统数据库如果既负责查询，又承担大量关联、清洗和聚合，很容易影响业务性能。</p>
 <p>所以早期数仓体系中，常常把计算放到独立ETL引擎。</p>
 <p>但ETL的问题也很明显：</p>
@@ -494,10 +494,10 @@
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-011-dd9bc25d.png"></p>
 <hr>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-012-98d05f34.png"></p>
-<h3>ELT：先把原始数据存下来，再利用目标平台加工</h3>
+<h3 id="ELT-先把原始数据存下来-再利用目标平台加工">ELT：先把原始数据存下来，再利用目标平台加工</h3>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-013-9f431515.gif"></p>
 <p>ELT的顺序变成：</p>
-<h3>Extract → Load → Transform</h3>
+<h3 id="Extract-Load-Transform">Extract → Load → Transform</h3>
 <p>也就是：</p>
 <p><strong>先拿数据，再存数据，最后处理数据。</strong></p>
 <p>这个变化看起来只是T和L换了位置，背后的数据架构思想却发生了很大变化。</p>
@@ -527,7 +527,7 @@
 <p>于是现实项目中，又逐渐形成了ETLT这种混合模式。</p>
 <hr>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-016-87e42c10.png"></p>
-<h3>ETLT：先做必要处理，落库以后再完成业务转换</h3>
+<h3 id="ETLT-先做必要处理-落库以后再完成业务转换">ETLT：先做必要处理，落库以后再完成业务转换</h3>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-017-abd68412.gif"></p>
 <p>ETLT可以理解为：</p>
 <p>Extract → Transform → Load → Transform</p>
@@ -563,37 +563,37 @@
 <p>需要注意的是：</p>
 <p><strong>ETLT不像ETL、ELT那样是一个严格统一的标准术语。</strong></p>
 <p>实际项目里，人们更多是用它描述一种：</p>
-<h3>前置轻转换 + 原始数据落地 + 后置重转换</h3>
+<h3 id="前置轻转换-原始数据落地-后置重转换">前置轻转换 + 原始数据落地 + 后置重转换</h3>
 <p>的混合数据加工模式。</p>
 <p>而这种模式，其实越来越符合现代企业的数据架构现实。</p>
 <hr>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-020-d209a394.png"></p>
-<h3>ETL、ELT、ETLT，到底应该怎么选？</h3>
+<h3 id="ETL-ELT-ETLT-到底应该怎么选">ETL、ELT、ETLT，到底应该怎么选？</h3>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-021-286a8f2a.gif"></p>
 <p>真正做项目时，不建议问：</p>
-<h3>“我们到底应该选择ETL还是ELT？”</h3>
+<h3 id="我们到底应该选择ETL还是ELT">“我们到底应该选择ETL还是ELT？”</h3>
 <p>因为一个企业完全可能同时存在三种模式。</p>
 <p>真正应该判断的是：</p>
-<h3>1.这项转换能不能等到Load以后？</h3>
+<h3 id="1-这项转换能不能等到Load以后">1.这项转换能不能等到Load以后？</h3>
 <p>如果不能，就必须前置。</p>
 <p>例如：</p>
 <p>敏感字段必须脱敏以后才能离开生产环境，那么这个T不能等。</p>
-<h3>2.这项逻辑以后会不会经常变化？</h3>
+<h3 id="2-这项逻辑以后会不会经常变化">2.这项逻辑以后会不会经常变化？</h3>
 <p>如果会，尽量后置。</p>
 <p>比如：</p>
 <p>客户等级、利润口径、渠道分类、有效订单规则。</p>
 <p>因为业务逻辑越容易变化，越不应该过早“写死”在采集链路里。</p>
-<h3>3.原始数据有没有保留价值？</h3>
+<h3 id="3-原始数据有没有保留价值">3.原始数据有没有保留价值？</h3>
 <p>如果未来需要：</p>
-<h3>历史回溯、模型训练、指标重算、问题排查、算法分析，</h3>
+<h3 id="历史回溯-模型训练-指标重算-问题排查-算法分析">历史回溯、模型训练、指标重算、问题排查、算法分析，</h3>
 <p>那就应该尽可能保留原始数据。</p>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-022-93d016df.png"></p>
-<h3>4.计算应该放在哪里成本最低？</h3>
+<h3 id="4-计算应该放在哪里成本最低">4.计算应该放在哪里成本最低？</h3>
 <p>这里说的成本不只是服务器成本。</p>
 <p>还包括：</p>
 <p>开发成本、维护成本、任务耦合、计算资源和链路延迟。</p>
 <p>如果目标数仓本身计算能力很强，那么大型Join和聚合未必需要放在ETL引擎。</p>
-<h3>5.数据到底要求多快？</h3>
+<h3 id="5-数据到底要求多快">5.数据到底要求多快？</h3>
 <p>T+1报表、小时级经营分析和秒级设备监控，根本不是一个问题。</p>
 <p>对实时链路来说，通常应该尽量保证：</p>
 <p><strong>采集路径短、转换动作少、同步过程稳定。</strong></p>
@@ -605,10 +605,10 @@
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-023-4fe38a5e.png"></p>
 <hr>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-024-851192d1.png"></p>
-<h3>真正困难的不是ETL，而是让整条数据链路长期稳定</h3>
+<h3 id="真正困难的不是ETL-而是让整条数据链路长期稳定">真正困难的不是ETL，而是让整条数据链路长期稳定</h3>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-025-e6fcb024.gif"></p>
 <p>很多企业第一次建设数据平台时，最关注的是：</p>
-<h3>数据能不能跑通？</h3>
+<h3 id="数据能不能跑通">数据能不能跑通？</h3>
 <p>但真正进入生产以后，问题会迅速变成：</p>
 <ul><li>它能不能一直跑？</li></ul>
 <ul><li>例如凌晨2点某个任务失败。</li></ul>
@@ -633,16 +633,16 @@
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-027-24a54b83.png"></p>
 <hr>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-028-ef9685cd.png"></p>
-<h3>最后，用三个问题真正理解ETL、ELT和ETLT</h3>
+<h3 id="最后-用三个问题真正理解ETL-ELT和ETLT">最后，用三个问题真正理解ETL、ELT和ETLT</h3>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-029-7e61b0f8.gif"></p>
 <p>如果以后再遇到ETL、ELT、ETLT，不需要死记三个缩写。</p>
 <p>只需要问三个问题。</p>
-<h3>第一，数据什么时候进入目标平台？</h3>
+<h3 id="第一-数据什么时候进入目标平台">第一，数据什么时候进入目标平台？</h3>
 <p>先加工完再进，是ETL。</p>
 <p>先进入平台再加工，是ELT。</p>
-<h3>第二，原始数据是否需要保留？</h3>
+<h3 id="第二-原始数据是否需要保留">第二，原始数据是否需要保留？</h3>
 <p>越强调原始数据沉淀、历史重算和灵活建模，架构通常越偏向ELT。</p>
-<h3>第三，Transformation应该全部放在同一个地方吗？</h3>
+<h3 id="第三-Transformation应该全部放在同一个地方吗">第三，Transformation应该全部放在同一个地方吗？</h3>
 <p>多数现代数据平台的答案其实是：</p>
 <p><strong>不应该。</strong></p>
 <p>安全、格式、协议、基础质量问题，可以前置。</p>
@@ -662,7 +662,7 @@
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-030-d3407aea.gif"></p>
 <p>**点击【阅读原文】，体验文中同款资料包 **</p>
 <p><img alt="图片" src="../../_assets/20260910-ETL-ELT-ETLT数据加工流程/img-031-c074f81a.gif"></p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

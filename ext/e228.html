@@ -395,26 +395,26 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</h1><div class="meta">📅 2026-05-19 · <span class="badge">飞书</span> · <a class="src-link" href="https://mi.feishu.cn/wiki/TLkUwSfMoi0YL3kUF75c7Iwin1f" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260519-MCP生产级开发踩坑全记录-写接口与部署级坑.md</div><div class="md"><h1>Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">59</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Guardians-MCP-写接口落地复盘-生产级-MCP-开发踩坑清单">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#一-背景-从读到写-一步之遥但雷区翻倍">一、背景：从读到写，一步之遥但雷区翻倍</a><a class="tl l2" href="#二-整体技术方案-在-Provider-层做协议适配">二、整体技术方案：在 Provider 层做协议适配</a><a class="tl l3" href="#1-桥接拓扑">1. 桥接拓扑</a><a class="tl l3" href="#2-核心设计决策-5-条-都直接对应踩坑点">2. 核心设计决策（5 条，都直接对应踩坑点）</a><a class="tl l2" href="#三-核心技术点-带源码定位">三、核心技术点（带源码定位）</a><a class="tl l3" href="#1-双注解扫描-RestController-McpTool">1. 双注解扫描（@RestController + @McpTool）</a><a class="tl l3" href="#2-映射注解集合白名单">2. 映射注解集合白名单</a><a class="tl l3" href="#3-JSON-Schema-自动生成-核心-DTO-字段展平">3. JSON Schema 自动生成（核心：DTO 字段展平）</a><a class="tl l3" href="#4-参数解析-双向转换">4. 参数解析（双向转换）</a><a class="tl l3" href="#5-Result-T-统一解包">5. Result&lt;T&gt; 统一解包</a><a class="tl l3" href="#6-审计日志-独立-logger-结构化-JSON">6. 审计日志：独立 logger + 结构化 JSON</a><a class="tl l3" href="#7-鉴权传递-ThreadLocal-模式">7. 鉴权传递（ThreadLocal 模式）</a><a class="tl l2" href="#四-生产级踩坑点-这一节是重点-看-commit-时间线就懂了">四、生产级踩坑点（这一节是重点，看 commit 时间线就懂了）</a><a class="tl l3" href="#坑-1-DTO-字段名-JSON-字段名-commit-7446300">坑 1：DTO 字段名 ≠ JSON 字段名（commit 7446300）</a><a class="tl l3" href="#坑-2-MCP-客户端把数组-对象当成-JSON-字符串传-commit-5201c29">坑 2：MCP 客户端把数组/对象当成 JSON 字符串传（commit 5201c29）</a><a class="tl l3" href="#坑-3-mapJavaTypeToJsonType-类型覆盖不全-同-commit-5201c29">坑 3：mapJavaTypeToJsonType 类型覆盖不全（同 commit 5201c29）</a><a class="tl l3" href="#坑-4-写接口爆炸暴露的红线">坑 4：写接口爆炸暴露的红线</a><a class="tl l3" href="#坑-5-反射调用绕过-Spring-MVC-全套机制">坑 5：反射调用绕过 Spring MVC 全套机制</a><a class="tl l3" href="#坑-6-审计日志的失败路径">坑 6：审计日志的失败路径</a><a class="tl l3" href="#坑-7-snakecase-工具名只-warn-不阻断">坑 7：snakecase 工具名只 warn 不阻断</a><a class="tl l3" href="#坑-8-工具描述-description-是-LLM-调用质量的关键">坑 8：工具描述（description）是 LLM 调用质量的关键</a><a class="tl l2" href="#五-改了哪些文件-按层次分组">五、改了哪些文件（按层次分组）</a><a class="tl l3" href="#协议适配层-核心扩展">协议适配层（核心扩展）</a><a class="tl l3" href="#Controller-标注-业务暴露层">Controller 标注（业务暴露层）</a><a class="tl l3" href="#测试层">测试层</a><a class="tl l3" href="#OpenSpec-流程产物">OpenSpec 流程产物</a><a class="tl l2" href="#六-给学习者的总结清单">六、给学习者的总结清单</a><a class="tl l3" href="#A-协议适配层">A. 协议适配层</a><a class="tl l3" href="#B-安全边界">B. 安全边界</a><a class="tl l3" href="#C-可观测性">C. 可观测性</a><a class="tl l3" href="#D-业务一致性">D. 业务一致性</a><a class="tl l3" href="#E-工具描述质量">E. 工具描述质量</a><a class="tl l3" href="#F-测试覆盖">F. 测试覆盖</a><a class="tl l2" href="#七-一句话回答最初的问题">七、一句话回答最初的问题</a><a class="tl l2" href="#附录-A-部署级踩坑-Streamable-HTTP-多副本下的握手-404">附录 A：部署级踩坑 —— Streamable HTTP 多副本下的握手 404</a><a class="tl l3" href="#1-现象-Symptom">1. 现象（Symptom）</a><a class="tl l3" href="#2-诊断证据">2. 诊断证据</a><a class="tl l3" href="#3-根因-Root-Cause">3. 根因（Root Cause）</a><a class="tl l3" href="#4-修复-Fix">4. 修复（Fix）</a><a class="tl l3" href="#5-取舍-Trade-offs">5. 取舍（Trade-offs）</a><a class="tl l3" href="#6-长期建议">6. 长期建议</a><a class="tl l3" href="#7-上线-checklist-沉淀">7. 上线 checklist 沉淀</a><a class="tl l3" href="#8-把这个坑映射回前面的-self-check">8. 把这个坑映射回前面的 self-check</a><a class="tl l2" href="#附录-B-MCP-Spec-2025-06-18-structuredContent-字段缺失导致新版客户端拿">附录 B：MCP Spec 2025-06-18 structuredContent 字段缺失导致新版客户端拿 {}</a><a class="tl l3" href="#1-现象-Symptom-1">1. 现象（Symptom）</a><a class="tl l3" href="#2-诊断证据-1">2. 诊断证据</a><a class="tl l3" href="#3-根因-Root-Cause-1">3. 根因（Root Cause）</a><a class="tl l3" href="#4-修复-Fix-1">4. 修复（Fix）</a><a class="tl l3" href="#5-取舍-Trade-offs-1">5. 取舍（Trade-offs）</a><a class="tl l3" href="#6-上线-checklist-沉淀">6. 上线 checklist 沉淀</a><a class="tl l3" href="#7-把这个坑映射回前面的-self-check">7. 把这个坑映射回前面的 self-check</a><a class="tl l3" href="#8-一句话回答">8. 一句话回答</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#Guardians-MCP-写接口落地复盘-生产级-MCP-开发踩坑清单-1">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</h1><div class="meta">📅 2026-05-19 · <span class="badge">飞书</span> · <a class="src-link" href="https://mi.feishu.cn/wiki/TLkUwSfMoi0YL3kUF75c7Iwin1f" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260519-MCP生产级开发踩坑全记录-写接口与部署级坑.md</div><div class="md"><h1 id="Guardians-MCP-写接口落地复盘-生产级-MCP-开发踩坑清单">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</h1>
 <blockquote><p>来源：飞书 归档日期：2026-05-19 抓取状态：成功 原文字符：224｜配图：0 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li><strong>背景</strong>：Guardians 风控 MCP 从只读（<code>@GetMapping + @RequestParam</code>）扩展到写接口（<code>@PostMapping/@PutMapping/@DeleteMapping + @RequestBody DTO</code>），让 LLM 能改风控配置但不能触发"放量到生产"</li><li><strong>5 大设计决策</strong>：显式 <code>@McpTool</code> 白名单暴露、扩展现有 Provider 而非新建 Controller、同时支持 RequestParam 和 RequestBody、工具名 snake_case + 动词前缀、复用 Service 事务边界（Provider 只做协议适配）</li><li><strong>坑 1</strong>：DTO 字段名 ≠ JSON 字段名 —— <code>@JsonProperty</code> 注解未被 schema 生成器尊重，导致 LLM 按错名传参</li><li><strong>坑 2</strong>：MCP 客户端把数组/对象当 JSON 字符串传 —— 需要 <code>preprocessListFields()</code> 预处理，用 <code>getGenericType()</code> 解泛型</li><li><strong>坑 3</strong>：<code>mapJavaTypeToJsonType</code> 类型覆盖不全 —— List/Set/Array 被 fallthrough 成 "string"，连锁引发坑 2</li><li><strong>坑 4-8</strong>：写接口爆炸暴露红线（必须白名单）、反射调用绕过 Spring MVC 校验链、审计日志失败路径丢失、snake_case 工具名只 warn 不阻断、工具 description 三段式（用途+参数+返回）决定 LLM 调用质量</li><li><strong>附录 A（部署级）</strong>：Streamable HTTP 多副本下握手 404 —— 根因是"应用层有状态 session + 基础设施层无粘性路由"的经典错配，<code>notifications/initialized</code> 路由到没有 session 的兄弟 Pod；修复为切换 STREAMABLE_STATELESS 模式</li><li><strong>附录 B（协议级）</strong>：MCP spec 2025-06-18 <code>structuredContent</code> 字段缺失导致 Claude Code 拿 <code>{}</code> —— 根因是 server 升级了 protocolVersion 声明但 ToolResult builder 没有双写新字段，新客户端优先读空的 structuredContent 不回退 content</li><li><strong>一句话结论</strong>：Demo 阶段接通协议看到一次成功就完了；生产阶段至少得回答清楚鉴权、审计、schema 类型转换、暴露边界、字符串预处理、异常路径审计、description 三段式这 7 个问题</li></ul>
 <hr>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>一、背景：从读到写，一步之遥但雷区翻倍</h2>
+<h2 id="一-背景-从读到写-一步之遥但雷区翻倍">一、背景：从读到写，一步之遥但雷区翻倍</h2>
 <p>读 MCP 已经跑通：</p>
 <p><code>McpSpringToolProvider</code> 扫 <code>@RestController</code> 里被 <code>@McpTool</code> 标注的方法，桥接成 Solon <code>FunctionTool</code>。</p>
 <p>但只支持 <code>@GetMapping + @RequestParam</code>，写接口（<code>@PostMapping/@PutMapping/@DeleteMapping</code> + <code>@RequestBody DTO</code>）会被直接跳过。</p>
 <p>业务方需要：通过 MCP 创建/更新/启停/删除 风控配置（规则、规则组、事件、字段、风险码、名单库、字典 …），但<strong>严格不暴露</strong> 规则上线 / 规则发布 / 上线审批 这类有副作用的接口。</p>
 <blockquote><p>一句话总结：让 LLM 能改风控配置，但改不了"放量到生产"这一步。</p></blockquote>
 <hr>
-<h2>二、整体技术方案：在 Provider 层做协议适配</h2>
-<h3>1. 桥接拓扑</h3>
+<h2 id="二-整体技术方案-在-Provider-层做协议适配">二、整体技术方案：在 Provider 层做协议适配</h2>
+<h3 id="1-桥接拓扑">1. 桥接拓扑</h3>
 <pre><code>LLM/Cursor/Claude ──MCP JSON-RPC──▶ Solon MCP Server
                                        │
                                        ▼
@@ -425,43 +425,43 @@
                                        │
                                        ▼
                                Service / Mapper / Holo / Redis（既有事务边界）</code></pre>
-<h3>2. 核心设计决策（5 条，都直接对应踩坑点）</h3>
+<h3 id="2-核心设计决策-5-条-都直接对应踩坑点">2. 核心设计决策（5 条，都直接对应踩坑点）</h3>
 <table><thead><tr><th>#</th><th>决策</th><th>否决方案</th><th>否决原因</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>1</td><td>显式 <code>@McpTool</code> 白名单暴露</td><td>自动暴露所有 POST/PUT/DELETE</td><td>写接口风险高，<strong>自动暴露 = 内部接口裸奔</strong></td></tr><tr><td>2</td><td>扩展现有 Provider，不新建 MCP 专用 Controller</td><td>新建一套 MCP 专用工具类</td><td>复制业务调用 → 长期与后台行为分叉</td></tr><tr><td>3</td><td>同时支持 <code>@RequestParam</code> 和 <code>@RequestBody</code></td><td>强制把请求体序列化成字符串</td><td>类型校验弱、调用体验差、复杂 DTO 无法表达</td></tr><tr><td>4</td><td>工具名 snake_case + 动词前缀（<code>create_/update_/delete_/enable_/disable_</code>）</td><td>复用 HTTP 路径</td><td>路径名可读性差、不符合 MCP 工具命名约定</td></tr><tr><td>5</td><td>复用 Service 事务/校验边界，Provider 只做协议适配</td><td>在 Provider 补业务校验</td><td>协议层变业务层 → 违反分层</td></tr></tbody></table>
 <hr>
-<h2>三、核心技术点（带源码定位）</h2>
-<h3>1. 双注解扫描（<code>@RestController</code> + <code>@McpTool</code>）</h3>
+<h2 id="三-核心技术点-带源码定位">三、核心技术点（带源码定位）</h2>
+<h3 id="1-双注解扫描-RestController-McpTool">1. 双注解扫描（<code>@RestController</code> + <code>@McpTool</code>）</h3>
 <ul><li><code>applicationContext.getBeansWithAnnotation(RestController.class)</code> 拿到所有 Controller bean</li><li>遍历 <code>clazz.getDeclaredMethods()</code>，只注册同时具备 <code>@McpTool</code><strong>和</strong>任一 Spring 映射注解的方法</li><li>关键文件：<code>McpSpringToolProvider.java:51-69</code></li></ul>
-<h3>2. 映射注解集合白名单</h3>
+<h3 id="2-映射注解集合白名单">2. 映射注解集合白名单</h3>
 <pre><code>private static final Class&lt;?&gt;[] MAPPING_ANNOTATIONS = {
     GetMapping.class, PostMapping.class, PutMapping.class, DeleteMapping.class, RequestMapping.class
 };</code></pre>
 <p>注意：<code>@RequestMapping</code> 也包含进来了 —— 因为类级 <code>@RequestMapping</code> 上仍可声明 method 级别的方法注解组合，老代码风格里有些写法走的是这个。</p>
-<h3>3. JSON Schema 自动生成（核心：DTO 字段展平）</h3>
+<h3 id="3-JSON-Schema-自动生成-核心-DTO-字段展平">3. JSON Schema 自动生成（核心：DTO 字段展平）</h3>
 <ul><li><code>@RequestParam</code> → 直接转 schema property</li><li><code>@RequestBody DTO</code> → <strong>反射 DTO <code>getDeclaredFields()</code> 把字段展平到顶层 properties</strong></li></ul>
 <blockquote><p>为什么展平？MCP 工具调用的入参是扁平 <code>Map&amp;lt;String, Object&amp;gt;</code>，没有嵌套对象的"标准做法"。展平之后 LLM 的 tool 调用形态最自然。</p></blockquote>
-<h3>4. 参数解析（双向转换）</h3>
+<h3 id="4-参数解析-双向转换">4. 参数解析（双向转换）</h3>
 <ul><li>简单类型：<code>convertType()</code> 走字符串 → 目标类型转换</li><li>请求体：<code>MAPPER.convertValue(args, dtoClass)</code> 把扁平 map 拼装成 DTO</li></ul>
-<h3>5. <code>Result&amp;lt;T&amp;gt;</code> 统一解包</h3>
+<h3 id="5-Result-T-统一解包">5. <code>Result&amp;lt;T&amp;gt;</code> 统一解包</h3>
 <pre><code>// Result.code == 0 返回 data，否则结构化错误
 unwrapResult(result) → success: 业务数据 / fail: {code, message}</code></pre>
 <p>读写一致，LLM 调用方不用关心业务返回壳。</p>
-<h3>6. 审计日志：独立 logger + 结构化 JSON</h3>
+<h3 id="6-审计日志-独立-logger-结构化-JSON">6. 审计日志：独立 logger + 结构化 JSON</h3>
 <pre><code>private static final Logger AUDIT_LOG = LoggerFactory.getLogger(&quot;MCP_AUDIT&quot;);
 // 字段：tool, caller, elapsedMs, success, error</code></pre>
 <ul><li>单独 logger 名 <code>MCP_AUDIT</code>，logback 里可单独输出文件，便于审计链路</li><li><strong>失败路径也走 finally 风格的 <code>logAudit(success=false)</code></strong> —— 不能因为业务异常就丢审计</li></ul>
-<h3>7. 鉴权传递（ThreadLocal 模式）</h3>
+<h3 id="7-鉴权传递-ThreadLocal-模式">7. 鉴权传递（ThreadLocal 模式）</h3>
 <ul><li><code>/mcp/*</code> 路径走独立 Bearer Token Filter（既有）</li><li>通过 <code>McpCallerHolder</code> ThreadLocal 把 caller 透传给 invoke 阶段</li><li>注意：反射调用 Controller 是同步的，ThreadLocal 安全；如果未来切到异步要单独处理</li></ul>
 <hr>
-<h2>四、生产级踩坑点（这一节是重点，看 commit 时间线就懂了）</h2>
+<h2 id="四-生产级踩坑点-这一节是重点-看-commit-时间线就懂了">四、生产级踩坑点（这一节是重点，看 commit 时间线就懂了）</h2>
 <p>主提交 13:12 落地 → 14:50 修复 → 15:48 又修复。三个小时连续两次 hotfix —— <strong>每一次都是真实环境跑起来才发现的</strong>。</p>
-<h3>坑 1：DTO 字段名 ≠ JSON 字段名（commit <code>7446300</code>）</h3>
+<h3 id="坑-1-DTO-字段名-JSON-字段名-commit-7446300">坑 1：DTO 字段名 ≠ JSON 字段名（commit <code>7446300</code>）</h3>
 <p><strong>症状</strong>：DTO 用了 <code>@JsonProperty(&quot;dict_table_id&quot;)</code> 把驼峰 <code>dictTableId</code> 映射成下划线，但 schema 生成时直接用了 <code>field.getName()</code> —— 结果 schema 里写的是 <code>dictTableId</code>，LLM 按 schema 传，反序列化时却找不到字段。</p>
 <p><strong>修复</strong>：</p>
 <pre><code>JsonProperty jp = field.getAnnotation(JsonProperty.class);
 String fieldName = (jp != null &amp;&amp; !jp.value().isEmpty()) ? jp.value() : field.getName();</code></pre>
 <p><strong>经验</strong>：</p>
 <ul><li>反射读字段名时<strong>永远要尊重 Jackson 注解</strong></li><li>风控后台老 DTO 大量用 snake_case，这个坑必踩</li><li>类似的还有 <code>@JsonAlias</code>、<code>@JsonNaming</code>，本次只覆盖了 <code>@JsonProperty</code>，但 Guardians 项目里够用</li></ul>
-<h3>坑 2：MCP 客户端把数组/对象当成 JSON 字符串传（commit <code>5201c29</code>）</h3>
+<h3 id="坑-2-MCP-客户端把数组-对象当成-JSON-字符串传-commit-5201c29">坑 2：MCP 客户端把数组/对象当成 JSON 字符串传（commit <code>5201c29</code>）</h3>
 <p><strong>症状</strong>：DTO 字段是 <code>List&amp;lt;Long&amp;gt; factors</code>，但很多 MCP 客户端（包括 Claude/Cursor）会把它<strong>序列化成字符串</strong><code>&quot;[1,2,3]&quot;</code> 塞进 JSON 顶层，因为它们对 schema 中嵌套类型的支持不一致。Jackson <code>convertValue(map, dtoClass)</code> 直接抛 <code>Cannot deserialize value of type List from String</code>。</p>
 <p><strong>修复</strong>：在 convertValue 之前加 <code>preprocessListFields()</code> —— 遍历 DTO 字段，遇到 <code>List/Set/Map</code> 类型且传入值是 <code>&quot;[&quot;</code> 或 <code>&quot;{&quot;</code> 开头的 String，先 <code>MAPPER.readValue</code> 解析成对象再放回。</p>
 <pre><code>boolean isList = List.class.isAssignableFrom(fieldClass) || Set.class.isAssignableFrom(fieldClass);
@@ -471,21 +471,21 @@ if (isMap &amp;&amp; !strValue.startsWith(&quot;{&quot;)) continue;
 Object parsed = MAPPER.readValue(strValue, javaType);  // javaType 来自 field.getGenericType()</code></pre>
 <p><strong>经验</strong>：</p>
 <ul><li>LLM 工具调用的入参是"扁平化、字符串友好"形态，永远要假设嵌套结构会以字符串形式到达</li><li>必须用 <code>field.getGenericType()</code> + <code>MAPPER.getTypeFactory().constructType(...)</code> 才能正确解出 <code>List&amp;lt;Long&amp;gt;</code> 这种带泛型的类型，光 <code>field.getType()</code> 拿到的是裸 <code>List</code></li></ul>
-<h3>坑 3：<code>mapJavaTypeToJsonType</code> 类型覆盖不全（同 commit <code>5201c29</code>）</h3>
+<h3 id="坑-3-mapJavaTypeToJsonType-类型覆盖不全-同-commit-5201c29">坑 3：<code>mapJavaTypeToJsonType</code> 类型覆盖不全（同 commit <code>5201c29</code>）</h3>
 <p>第一版只处理了 <code>Integer/Long/Double/Float/Boolean/String</code>，集合类全部 fallthrough 成 <code>&quot;string&quot;</code> —— 直接导致 LLM 看到 schema 把数组传成字符串（也就是坑 2 的诱因之一）。</p>
 <p><strong>修复</strong>：补 <code>Short/Byte</code>，补 <code>List/Set/Array → &quot;array&quot;</code>，补 <code>Map → &quot;object&quot;</code>。</p>
 <p><strong>经验</strong>：JSON Schema 生成器要把 Java 类型空间<strong>完整覆盖</strong>，schema 错一个字段，LLM 就会按错的形态传，踩坑成本是连锁的。</p>
-<h3>坑 4：写接口爆炸暴露的红线</h3>
+<h3 id="坑-4-写接口爆炸暴露的红线">坑 4：写接口爆炸暴露的红线</h3>
 <p>设计阶段最重要的<strong>否决案</strong>：不要"扫到 POST 就自动暴露"。否则风控后台一堆内部接口（如 <code>/import-from-excel</code>、<code>/sync-from-x</code>）会瞬间出现在 MCP 工具列表里。</p>
 <p>落地约束（tasks.md <code>2.1 / 2.7</code>）：</p>
 <ul><li>显式标注 <code>@McpTool</code> 才暴露</li><li><strong>手工 review 一遍规则上线/发布/审批接口，确认没标注</strong></li><li>code review 时把 <code>@McpTool</code> 当成"对外暴露权限"来审</li></ul>
 <p><code>RuleController.java:42-47</code> 里 <code>update_rule_status</code> 被注释掉了 —— 就是这个原则的实物：状态变更影响线上规则启停，先不开放。</p>
-<h3>坑 5：反射调用绕过 Spring MVC 全套机制</h3>
+<h3 id="坑-5-反射调用绕过-Spring-MVC-全套机制">坑 5：反射调用绕过 Spring MVC 全套机制</h3>
 <p>写接口反射调用时<strong>没有走</strong> Spring MVC 的：</p>
 <ul><li><code>HandlerMethodArgumentResolver</code>（参数解析器链）</li><li><code>@Valid</code> / JSR-303 校验</li><li><code>HandlerInterceptor</code>（拦截器链）</li><li><code>@ControllerAdvice</code> 全局异常处理</li></ul>
 <p>所以 design.md 明确：<strong>业务校验必须在 Service 保证</strong>，Controller 上的 <code>@Valid</code> 在 MCP 调用路径下不生效。</p>
 <p><strong>经验</strong>：反射桥接是协议层，要么 Provider 自己补一遍，要么把校验下沉到 Service。本次选了后者 —— 简单、和 HTTP 调用路径行为一致。</p>
-<h3>坑 6：审计日志的失败路径</h3>
+<h3 id="坑-6-审计日志的失败路径">坑 6：审计日志的失败路径</h3>
 <p>最容易写错的写法：</p>
 <pre><code>// ❌ 错误：抛异常时审计日志丢了
 Object r = method.invoke(...);
@@ -501,12 +501,12 @@ return r;</code></pre>
     throw e;  // 必须 rethrow，否则 MCP 客户端拿不到错误
 }</code></pre>
 <p><code>McpAuditLogTest.testAuditLog_WriteFail_ThrowsAndLogsError</code> 专门覆盖这条分支。</p>
-<h3>坑 7：snake_case 工具名只 warn 不阻断</h3>
+<h3 id="坑-7-snakecase-工具名只-warn-不阻断">坑 7：snake_case 工具名只 warn 不阻断</h3>
 <pre><code>if (!SNAKE_CASE.matcher(toolName).matches()) {
     log.warn(&quot;[MCP] 工具名不符合 snake_case 规范: {}&quot;, toolName);
 }</code></pre>
 <p>不抛异常 —— 因为做强校验意味着违规会启动失败。但 warn 也意味着没人盯启动日志就会漏。建议：CI 里加 grep <code>[MCP] 工具名不符合</code> 的扫描，或者直接 fail-fast。</p>
-<h3>坑 8：工具描述（description）是 LLM 调用质量的关键</h3>
+<h3 id="坑-8-工具描述-description-是-LLM-调用质量的关键">坑 8：工具描述（description）是 LLM 调用质量的关键</h3>
 <p>看 <code>RuleController.java:56-60</code> 的 <code>save_rule</code> 描述：</p>
 <pre><code>创建或更新主规则配置。通过RequestBody传入Rule对象，
 包含规则名称、逻辑表达式(logic)、因子列表(factors)、绑定规则组ID等字段。
@@ -515,10 +515,10 @@ return r;</code></pre>
 <ol><li><strong>用途</strong>（创建/更新/删除什么）</li><li><strong>关键参数</strong>（必填字段、字段语义）</li><li><strong>返回要点</strong>（成功返回什么/失败如何）</li></ol>
 <p>这是真正影响 LLM 工具调用准确率的地方 —— 字段名 LLM 能猜，但<strong>业务语义不写它就猜错</strong>（比如"id 存在表示更新"这种行业 convention）。</p>
 <hr>
-<h2>五、改了哪些文件（按层次分组）</h2>
-<h3>协议适配层（核心扩展）</h3>
+<h2 id="五-改了哪些文件-按层次分组">五、改了哪些文件（按层次分组）</h2>
+<h3 id="协议适配层-核心扩展">协议适配层（核心扩展）</h3>
 <table><thead><tr><th>文件</th><th>改动</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr><tr><td><code>McpSpringToolProvider.java</code></td><td>+59 行扩展 <code>@RequestBody</code> 支持、schema DTO 展平、JSON 字符串预处理、类型映射补全</td></tr><tr><td><code>annotation/McpTool.java</code></td><td>注释更新："仅 GET" → "支持 GET/POST/PUT/DELETE"</td></tr></tbody></table>
-<h3>Controller 标注（业务暴露层）</h3>
+<h3 id="Controller-标注-业务暴露层">Controller 标注（业务暴露层）</h3>
 <p>新增/补充 <code>@McpTool</code> 的 Controller（<code>b81ae0d</code> 一次性提交 14 个）：</p>
 <pre><code>配置类:
   RuleController          - save/validate（注：update_rule_status 注释掉了）
@@ -539,9 +539,9 @@ return r;</code></pre>
   RiskDictItemController  - 字典项</code></pre>
 <p>明确<strong>未开放</strong><code>@McpTool</code>：</p>
 <ul><li>规则上线 / 规则发布 / 上线审批 类接口（design.md 明确排除，tasks.md 2.7 验证）</li></ul>
-<h3>测试层</h3>
+<h3 id="测试层">测试层</h3>
 <table><thead><tr><th>文件</th><th>改动</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr><tr><td><code>McpSpringToolProviderTest.java</code></td><td>+130 行：写接口注册、未标注不注册、<code>@RequestBody</code> 转换、schema 含 DTO 字段、读写兼容性</td></tr><tr><td><code>McpAuditLogTest.java</code></td><td>+60 行：写成功审计、写失败审计（异常路径）</td></tr></tbody></table>
-<h3>OpenSpec 流程产物</h3>
+<h3 id="OpenSpec-流程产物">OpenSpec 流程产物</h3>
 <pre><code>openspec/changes/support-mcp-write-apis/
   proposal.md                              # Why / What
   design.md                                # 5 大决策 + Risks
@@ -551,58 +551,58 @@ openspec/specs/mcp-auth/spec.md            # 同步生成
 openspec/specs/mcp-server-core/spec.md
 openspec/specs/mcp-tool-registry/spec.md</code></pre>
 <hr>
-<h2>六、给学习者的总结清单</h2>
+<h2 id="六-给学习者的总结清单">六、给学习者的总结清单</h2>
 <p>如果你正在做生产级 MCP 开发，按下面这个清单 self-check：</p>
-<h3>A. 协议适配层</h3>
+<h3 id="A-协议适配层">A. 协议适配层</h3>
 <ul><li><input type="checkbox" disabled> schema 生成器是否覆盖了 Java 类型空间（含 List/Set/Map/Array/Short/Byte）</li></ul>
 <ul><li><input type="checkbox" disabled> DTO 字段名是否尊重 <code>@JsonProperty / @JsonAlias</code></li></ul>
 <ul><li><input type="checkbox" disabled> 是否处理了 List/Map 字段以 JSON 字符串到达的情况（核弹级常见）</li></ul>
 <ul><li><input type="checkbox" disabled> 泛型类型解析是否用了 <code>getGenericType</code> 而非 <code>getType</code></li></ul>
-<h3>B. 安全边界</h3>
+<h3 id="B-安全边界">B. 安全边界</h3>
 <ul><li><input type="checkbox" disabled> 暴露策略是 <strong>白名单（标注）</strong> 还是黑名单（路径过滤）—— 必须白名单</li></ul>
 <ul><li><input type="checkbox" disabled> 写接口是否有人工 review 流程</li></ul>
 <ul><li><input type="checkbox" disabled> 是否有"绝对不暴露"清单（上线、发布、审批、删库等）</li></ul>
 <ul><li><input type="checkbox" disabled> 鉴权是否走独立 Filter（不是 controller 层）</li></ul>
-<h3>C. 可观测性</h3>
+<h3 id="C-可观测性">C. 可观测性</h3>
 <ul><li><input type="checkbox" disabled> 审计日志是否独立 logger，便于切文件</li></ul>
 <ul><li><input type="checkbox" disabled> 失败路径（抛异常）是否仍记录审计</li></ul>
 <ul><li><input type="checkbox" disabled> 字段是否结构化 JSON，包含 tool/caller/elapsed/success/error</li></ul>
 <ul><li><input type="checkbox" disabled> caller 透传机制（ThreadLocal）是否在异常路径清理（<code>McpCallerHolder.remove()</code>）</li></ul>
-<h3>D. 业务一致性</h3>
+<h3 id="D-业务一致性">D. 业务一致性</h3>
 <ul><li><input type="checkbox" disabled> 反射调用是否绕过 Spring MVC（一定会绕过），校验是否下沉到 Service</li></ul>
 <ul><li><input type="checkbox" disabled> 是否复用既有 Controller→Service 路径，不直连 Mapper</li></ul>
 <ul><li><input type="checkbox" disabled> <code>Result&amp;lt;T&amp;gt;</code> 等统一返回壳是否在 Provider 解包</li></ul>
-<h3>E. 工具描述质量</h3>
+<h3 id="E-工具描述质量">E. 工具描述质量</h3>
 <ul><li><input type="checkbox" disabled> description 是否包含 用途 + 关键参数 + 返回要点</li></ul>
 <ul><li><input type="checkbox" disabled> 工具名是否 snake_case + 动词前缀（<code>create_/update_/delete_/list_/get_/enable_/disable_</code>）</li></ul>
 <ul><li><input type="checkbox" disabled> 业务 convention（如"id 存在表示更新"）是否在 description 里说明</li></ul>
-<h3>F. 测试覆盖</h3>
+<h3 id="F-测试覆盖">F. 测试覆盖</h3>
 <ul><li><input type="checkbox" disabled> 注册：标注 → 注册 / 未标注 → 不注册</li></ul>
 <ul><li><input type="checkbox" disabled> 参数：<code>@RequestParam</code> 简单类型 / <code>@RequestBody</code> DTO 转换</li></ul>
 <ul><li><input type="checkbox" disabled> schema：DTO 字段是否完整出现</li></ul>
 <ul><li><input type="checkbox" disabled> 兼容性：扩展写接口后读接口行为不变</li></ul>
 <ul><li><input type="checkbox" disabled> 审计：成功路径 / 异常路径 都覆盖</li></ul>
 <hr>
-<h2>七、一句话回答最初的问题</h2>
+<h2 id="七-一句话回答最初的问题">七、一句话回答最初的问题</h2>
 <blockquote><p>"做 MCP demo 和做生产级 MCP 的差别在哪？"</p></blockquote>
 <p><strong>Demo 阶段：</strong>接通协议、调通工具、看到一次成功的工具调用就完了。</p>
 <p><strong>生产阶段：</strong>至少得回答清楚 7 个问题 —— <strong>谁能调（鉴权）、调了什么（审计）、传错了怎么办（schema + 类型转换）、改错了能不能撤回（暴露边界）、客户端把字段当字符串传怎么办（预处理）、写接口出异常审计还能记上吗（异常路径）、LLM 看不懂业务约定怎么办（description 三段式）</strong>。</p>
 <p>本次 commit 时间线（13:12 主提交 → 14:50 hotfix → 15:48 hotfix）就是这些问题挨个被打脸的过程。</p>
 <hr>
-<h2>附录 A：部署级踩坑 —— Streamable HTTP 多副本下的握手 404</h2>
+<h2 id="附录-A-部署级踩坑-Streamable-HTTP-多副本下的握手-404">附录 A：部署级踩坑 —— Streamable HTTP 多副本下的握手 404</h2>
 <blockquote><p>这是代码层之外的另一类生产级坑：代码全对，curl 也能 200，但 MCP 客户端就是连不上。原因藏在"应用层有状态 + 基础设施层无粘性"的错配里。</p></blockquote>
-<h3>1. 现象（Symptom）</h3>
+<h3 id="1-现象-Symptom">1. 现象（Symptom）</h3>
 <pre><code>guardians-mcp: https://guardians.pt.xiaomi.com/mcp/guardians/mcp (HTTP) - ✗ Failed to connect</code></pre>
 <p>但是直接 <code>curl</code> 打 <code>initialize</code> 是 200，业务 token、网络、URL 都正常 —— 看起来"通了一半"。</p>
-<h3>2. 诊断证据</h3>
+<h3 id="2-诊断证据">2. 诊断证据</h3>
 <p>按 MCP Streamable HTTP spec 完整跑一遍三步握手：</p>
 <table><thead><tr><th>#</th><th>请求</th><th>结果</th><th>x-proxy-node（MonKing 网关返回的后端节点 ID）</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>1</td><td><code>initialize</code></td><td>200 ✓，下发 <code>Mcp-Session-Id: c53a446b...</code></td><td>F9E7E168E1157F1D</td></tr><tr><td>2</td><td><code>notifications/initialized</code>（带上面的 sessionId）</td><td><strong>404 ✗ Session not found: c53a446b...</strong></td><td>F96A40989A462E15</td></tr><tr><td>3</td><td><code>tools/list</code>（带 sessionId）</td><td>200 ✓（但跑到了又一个节点）</td><td>F96A40989A462E15</td></tr></tbody></table>
 <p><strong>关键观察：每次请求的 <code>x-proxy-node</code> 都不一样。</strong></p>
-<h3>3. 根因（Root Cause）</h3>
-<h4>3.1 MCP Streamable HTTP 的两种工作模式</h4>
+<h3 id="3-根因-Root-Cause">3. 根因（Root Cause）</h3>
+<h4 id="3-1-MCP-Streamable-HTTP-的两种工作模式">3.1 MCP Streamable HTTP 的两种工作模式</h4>
 <p>MCP 在 2025-03-26 spec 之后用 Streamable HTTP 替代了老的 SSE transport，服务端实现可以选两种模式：</p>
 <ul><li><strong>STREAMABLE（有状态）</strong>：服务端给每个客户端分配 <code>Mcp-Session-Id</code>，session 状态（initialize 协商结果、订阅、长任务、SSE 流）保存在该实例的内存里。后续所有请求<strong>必须回到同一个进程</strong>才能找到 session。</li><li><strong>STREAMABLE_STATELESS（无状态）</strong>：服务端不保存 session，每个请求都是独立、自包含的；客户端发的 <code>Mcp-Session-Id</code> 头被忽略或仅作为 trace。</li></ul>
-<h4>3.2 出问题时的部署形态</h4>
+<h4 id="3-2-出问题时的部署形态">3.2 出问题时的部署形态</h4>
 <p>guardians-mcp 服务端跑的是 <strong>有状态</strong> 模式，但前面挂的 MonKing 网关 + 多副本部署：</p>
 <pre><code>        Client (Claude Code)
                 |
@@ -615,26 +615,26 @@ openspec/specs/mcp-tool-registry/spec.md</code></pre>
 <p>握手流程：</p>
 <ol><li><code>initialize</code> → 网关随机路由到 <strong>Pod A</strong>，A 创建 session 存到自己内存里，把 <code>Mcp-Session-Id</code> 返给客户端。</li><li>客户端按 spec 立刻发 <code>notifications/initialized</code>，带上同一个 sessionId → 网关又随机路由到 <strong>Pod B</strong>，B 内存里没有这个 session → <strong>404 Session not found</strong>。</li><li>Claude Code 的 MCP 客户端把这一步的 404 当成致命握手失败 → 整个 MCP server 标记为 Failed to connect。</li></ol>
 <p>为什么 <code>tools/list</code> 反而能跑？因为该 endpoint 的实现没强校验 session 存在，走的是无状态分支 —— 所以 curl 看着部分能用，<strong>迷惑性很强</strong>。</p>
-<h4>3.3 一句话定性</h4>
+<h4 id="3-3-一句话定性">3.3 一句话定性</h4>
 <blockquote><p><strong>"应用层有状态 + 基础设施层无粘性"</strong> 的经典错配。Session 是 in-process 的，但负载均衡按请求级别打散了流量，导致除第一个请求外的所有 follow-up 都路由到没有 session 的兄弟实例。</p></blockquote>
-<h3>4. 修复（Fix）</h3>
+<h3 id="4-修复-Fix">4. 修复（Fix）</h3>
 <p><strong>切换到 <code>STREAMABLE_STATELESS</code> 模式。</strong></p>
-<h4>4.1 为什么这样能修</h4>
+<h4 id="4-1-为什么这样能修">4.1 为什么这样能修</h4>
 <p>无状态模式下，服务端根本不再依赖 sessionId 找上下文：</p>
 <ul><li>每个 JSON-RPC 请求都自带完整入参</li><li><code>initialize</code> 和后续 call 之间没有内存级关联</li><li>任何 pod 都能独立处理任何请求 → 网关怎么打散都不影响正确性</li></ul>
 <p><code>notifications/initialized</code> 在无状态模式下要么直接 200/204，要么被忽略，不会再因为"找不到 session"而 404，握手就能跑完。</p>
-<h4>4.2 修复链路对比</h4>
+<h4 id="4-2-修复链路对比">4.2 修复链路对比</h4>
 <table><thead><tr><th>层级</th><th>修复前</th><th>修复后</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>MCP 客户端</td><td>按 spec 发 sessionId</td><td>一样（无影响）</td></tr><tr><td>网关</td><td>无 sticky</td><td>无 sticky（<strong>没改</strong>）</td></tr><tr><td>服务端</td><td>有状态，session 在 pod 内存</td><td>无状态，不存 session</td></tr><tr><td>多副本一致性</td><td>❌ 失败</td><td>✅ 通过</td></tr></tbody></table>
 <p><strong>注意网关侧没动 —— 修的是应用层，把"对基础设施的隐式假设（粘性路由）"消除了。这是更稳的修法。</strong></p>
-<h3>5. 取舍（Trade-offs）</h3>
+<h3 id="5-取舍-Trade-offs">5. 取舍（Trade-offs）</h3>
 <p>切到 <code>STREAMABLE_STATELESS</code> 不是没代价：</p>
 <table><thead><tr><th>能力</th><th>有状态模式</th><th>无状态模式</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td><code>tools/list</code>、<code>tools/call</code> 等纯 RPC</td><td>✓</td><td>✓</td></tr><tr><td>服务器主动推送（<code>notifications/*</code> from server）</td><td>✓（通过持久 SSE 流）</td><td>✗ 或受限</td></tr><tr><td><code>resources/subscribe</code> 订阅资源变更</td><td>✓</td><td>✗</td></tr><tr><td>长任务的进度回调</td><td>✓</td><td>✗</td></tr><tr><td>LLM sampling 反向请求</td><td>✓</td><td>✗</td></tr><tr><td>需要跨调用记忆的工具状态</td><td>✓</td><td>必须落外部存储（Redis/DB）</td></tr></tbody></table>
 <p>幸运的是 guardians-mcp 暴露的是一批纯 CRUD 风格的工具（<code>list_*</code> / <code>get_*</code> / <code>save_*</code> / <code>query_*</code>），全部是请求-响应一次完事，没有用到订阅/推送，所以无状态化对功能 <strong>0 影响</strong>。</p>
-<h3>6. 长期建议</h3>
+<h3 id="6-长期建议">6. 长期建议</h3>
 <p>如果以后要恢复有状态能力（比如做 resource subscription），有几个选项：</p>
 <ol><li><strong>网关做 sticky</strong>：MonKing 按 <code>Mcp-Session-Id</code> header 做 consistent-hash 路由 —— 改基础设施，对应用透明，但跨节点重启时 session 会失效。</li><li><strong>session 状态外置</strong>：把 session 元数据（initialize 协商结果、订阅列表）写 Redis，pod 变成无状态，请求随便路由都能恢复 session —— 这是公认更稳的工业级做法。</li><li><strong>混合模式</strong>：纯 RPC 工具走 stateless 端点，需要订阅/推送的工具走带 sticky 的 stateful 端点。</li></ol>
 <p><strong>短期 stateless 是最优解，长期如果有订阅需求，推荐方案 2。</strong></p>
-<h3>7. 上线 checklist 沉淀</h3>
+<h3 id="7-上线-checklist-沉淀">7. 上线 checklist 沉淀</h3>
 <blockquote><p><strong>服务端从单实例升级到多副本时，一定要复测 MCP handshake 第二步 <code>notifications/initialized</code> —— 这是最容易"过 curl 测试但过不了真实客户端"的检测点。</strong></p></blockquote>
 <p>具体怎么测：</p>
 <ul><li><input type="checkbox" disabled> <strong>不要只测 initialize + tools/list</strong>：很多人这两步都能 200 就以为通了，但客户端真正的握手包含 <code>notifications/initialized</code>，curl 默认不发</li></ul>
@@ -643,28 +643,28 @@ openspec/specs/mcp-tool-registry/spec.md</code></pre>
 <ul><li><input type="checkbox" disabled> <strong>发布时灰度一台 pod 单独跑，先验证客户端连得上，再扩副本</strong> —— 避免"单实例时跑得好好的，扩到 3 副本就连不上"</li></ul>
 <ul><li><input type="checkbox" disabled> <strong>健康检查别只查 <code>/health</code></strong>：要把 <code>notifications/initialized</code> 这一步也纳入冒烟测试</li></ul>
 <ul><li><input type="checkbox" disabled> <strong>如选 stateless 模式，CI 加一条 case</strong>：模拟客户端把 <code>Mcp-Session-Id</code> 换成乱写的字符串，期待服务端依旧 200（验证不依赖 session）</li></ul>
-<h3>8. 把这个坑映射回前面的 self-check</h3>
+<h3 id="8-把这个坑映射回前面的-self-check">8. 把这个坑映射回前面的 self-check</h3>
 <p>第六节"给学习者的总结清单"补一类 <strong>G. 部署/传输层</strong>：</p>
 <ul><li><input type="checkbox" disabled> 是选 STREAMABLE 还是 STREAMABLE_STATELESS？理由是什么？</li></ul>
 <ul><li><input type="checkbox" disabled> 如果选 STREAMABLE，多副本部署下网关有没有 sticky？session 状态有没有外置？</li></ul>
 <ul><li><input type="checkbox" disabled> 如果选 STREAMABLE_STATELESS，是不是确认了不需要 server-initiated 推送（订阅、进度、sampling）？</li></ul>
 <ul><li><input type="checkbox" disabled> 上线前是否用真实 MCP 客户端而不是 curl 验证过完整三步握手？</li></ul>
 <ul><li><input type="checkbox" disabled> 监控里有没有把"<code>notifications/initialized</code> 失败率"作为单独指标？（这是判断本类故障最敏感的信号）</li></ul>
-<h2>附录 B：MCP Spec 2025-06-18 <code>structuredContent</code> 字段缺失导致新版客户端拿 <code>{}</code></h2>
+<h2 id="附录-B-MCP-Spec-2025-06-18-structuredContent-字段缺失导致新版客户端拿">附录 B：MCP Spec 2025-06-18 <code>structuredContent</code> 字段缺失导致新版客户端拿 <code>{}</code></h2>
 <blockquote><p>这是协议级 + 跨版本的另一类生产级坑：server <code>tools/list</code> 返回正常、<code>tools/call</code> HTTP 也 200、curl 看着完美，但部分新版 MCP 客户端拿到的工具结果<strong>永远是空对象 <code>{}</code></strong>。原因藏在"spec 升级了字段语义但 server 端只填半边"的语义错配里。</p></blockquote>
-<h3>1. 现象（Symptom）</h3>
+<h3 id="1-现象-Symptom-1">1. 现象（Symptom）</h3>
 <p>Claude Code 当前版本里：</p>
 <pre><code>mcp__guardians-mcp__list_events()        → {}
 mcp__guardians-mcp__list_apps()          → {}
 mcp__guardians-mcp__get_event_by_type()  → {}</code></pre>
 <p>但 <code>claude mcp list</code> 显示 <strong>✓ Connected</strong>，Python MCP SDK 直连 server 也能拿到完整数据。<strong>只有 Claude Code 这一类 client 看到空。</strong></p>
-<h3>2. 诊断证据</h3>
+<h3 id="2-诊断证据-1">2. 诊断证据</h3>
 <p>直接抓 ToolResult 的字段层（5 个不同性质工具一致）：</p>
 <table><thead><tr><th>调用</th><th>structuredContent</th><th>content[0].text 字节数</th><th>数据真实存在？</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>list_event_inner_fields</td><td>{} ❌</td><td>114</td><td>✅</td></tr><tr><td>list_apps</td><td>{} ❌</td><td>2354</td><td>✅</td></tr><tr><td>get_event_by_type</td><td>{} ❌</td><td>239</td><td>✅</td></tr><tr><td>list_event_fields</td><td>{} ❌</td><td>12234</td><td>✅</td></tr><tr><td>list_dict_tables</td><td>{} ❌</td><td>3844</td><td>✅</td></tr></tbody></table>
 <p>server <code>initialize</code> 响应：<code>protocolVersion = 2025-06-18</code>、<code>serverInfo.name = guardians_tools / version = 1.0.0</code></p>
 <p>→ server 已经<strong>声称</strong>支持 2025-06-18 spec，但实际只填了一半字段。</p>
-<h3>3. 根因（Root Cause）</h3>
-<h4>3.1 MCP spec 2025-06-18 关于 ToolResult 的关键变化</h4>
+<h3 id="3-根因-Root-Cause-1">3. 根因（Root Cause）</h3>
+<h4 id="3-1-MCP-spec-2025-06-18-关于-ToolResult-的关键变化">3.1 MCP spec 2025-06-18 关于 ToolResult 的关键变化</h4>
 <p>老 spec（2024-11-05）的 CallToolResult：</p>
 <pre><code>{ content: ContentBlock[], isError?: boolean }</code></pre>
 <p>LLM 友好但机器不友好——结果都塞在 <code>content[0].text</code> 里需要 client 二次 JSON.parse。</p>
@@ -675,20 +675,20 @@ mcp__guardians-mcp__get_event_by_type()  → {}</code></pre>
   isError?: boolean
 }</code></pre>
 <p>spec 推荐 server <strong>两边都填</strong>：<code>content[0].text = JSON.stringify(data)</code>，<code>structuredContent = data</code>。</p>
-<h4>3.2 部分新客户端的偏好读取</h4>
+<h4 id="3-2-部分新客户端的偏好读取">3.2 部分新客户端的偏好读取</h4>
 <p>Claude Code、某些 Cursor 版本、新版 mcp-inspector 等，<strong>优先读 structuredContent</strong>：</p>
 <ul><li>如果非空 → 直接当返回值用</li><li>如果是空 <code>{}</code> → 不再回退读 content，直接给上层返回 <code>{}</code></li></ul>
 <p>老客户端（mcp-inspector v1、早期 Cursor）只读 <code>content[0].text</code>，所以<strong>在新坑出现前完全感知不到</strong>。</p>
-<h4>3.3 guardians-mcp server 这一侧</h4>
+<h4 id="3-3-guardians-mcp-server-这一侧">3.3 guardians-mcp server 这一侧</h4>
 <p>按本文第三节第 5 条提到的 unwrapResult 流程：</p>
 <pre><code>// McpSpringToolProvider.java:211-229（推测）
 Object data = unwrapResult(result);
 return MAPPER.writeValueAsString(data);  // 只写成字符串</code></pre>
 <p>framework 把这个字符串塞进 <code>content[0].text</code>，<strong>但没有同时填 structuredContent</strong>。spec 2025-06-18 兼容性失败。</p>
-<h4>3.4 一句话定性</h4>
+<h4 id="3-4-一句话定性">3.4 一句话定性</h4>
 <blockquote><p><strong>"升级了 protocolVersion 但没升级 ToolResult builder"</strong> 的经典错配。声称我会说新版英语，但实际只填了老语法字段——curl 看不出，新客户端一开口就懵。跟附录 A "应用层有状态 + 基础设施层无粘性"是同一类错配，都是"我说我是 X，但行为还是 Y"。</p></blockquote>
-<h3>4. 修复（Fix）</h3>
-<h4>4.1 server 端双写（最优方案）</h4>
+<h3 id="4-修复-Fix-1">4. 修复（Fix）</h3>
+<h4 id="4-1-server-端双写-最优方案">4.1 server 端双写（最优方案）</h4>
 <p><code>McpSpringToolProvider.invoke()</code> 改：</p>
 <pre><code>try {
     Object result = method.invoke(bean, methodArgs);
@@ -706,7 +706,7 @@ return MAPPER.writeValueAsString(data);  // 只写成字符串</code></pre>
 }</code></pre>
 <p>注意点（按本文坑 6 那条精神）：</p>
 <ul><li><strong>failure 路径同样要符合新 spec</strong>：抛错走 <code>isError = true</code> + 双写 error message</li><li><strong>structuredContent 必须是 object</strong> 不是 array — spec 2025-06-18 限定 root 必须是 object/dict。如果业务数据是 list（<code>[{...}, {...}]</code>），要包一层：<code>structuredContent: { items: [...] }</code></li><li>关于 root-must-be-object 这点 spec 有明文，<code>list_events / list_rules</code> 这种返回是数组的工具，包 wrapper 比直接塞 list 更稳</li></ul>
-<h4>4.2 同步 outputSchema（spec 2025-06-18 配套字段）</h4>
+<h4 id="4-2-同步-outputSchema-spec-2025-06-18-配套字段">4.2 同步 outputSchema（spec 2025-06-18 配套字段）</h4>
 <p>spec 同步引入了 <code>Tool.outputSchema</code>：声明 structuredContent 的 JSON schema。让客户端能 typed 解析。</p>
 <pre><code>// 注册工具时同时声明输入 + 输出 schema
 @McpTool(
@@ -714,7 +714,7 @@ return MAPPER.writeValueAsString(data);  // 只写成字符串</code></pre>
     outputSchema = &quot;{type:&#x27;object&#x27;,properties:{items:{type:&#x27;array&#x27;,items:{...}}}}&quot;
 )</code></pre>
 <p>没有 outputSchema 客户端只能拿 raw object。短期不做也能跑，长期 LLM 调用质量更好。</p>
-<h4>4.3 测试层加一条 case（按本文第六节 F 的 self-check 风格）</h4>
+<h4 id="4-3-测试层加一条-case-按本文第六节-F-的-self-check-风格">4.3 测试层加一条 case（按本文第六节 F 的 self-check 风格）</h4>
 <pre><code>@Test
 void invoke_listEvents_StructuredContentNonEmpty() {
     CallToolResult r = provider.invoke(&quot;list_events&quot;, Map.of(), caller);
@@ -732,11 +732,11 @@ void invoke_listEvents_StructuredContentNonEmpty() {
     Object expected = MAPPER.readValue(contentText, Object.class);
     assertEquals(expected, r.getStructuredContent());
 }</code></pre>
-<h3>5. 取舍（Trade-offs）</h3>
+<h3 id="5-取舍-Trade-offs-1">5. 取舍（Trade-offs）</h3>
 <p>升级到双写不是没代价：</p>
 <table><thead><tr><th>维度</th><th>单写 content（现状）</th><th>双写 content + structuredContent</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>老客户端兼容（mcp-inspector v1 / 早期 Cursor）</td><td>✓</td><td>✓</td></tr><tr><td>新客户端兼容（Claude Code 当前版本）</td><td>✗（拿 <code>{}</code>）</td><td>✓</td></tr><tr><td>网络包体积</td><td>小</td><td>翻倍（数据冗余）</td></tr><tr><td>schema 定义工作量</td><td>0</td><td>每个工具加 outputSchema</td></tr><tr><td>spec 合规度</td><td>半合规</td><td>全合规</td></tr></tbody></table>
 <p>体积翻倍这一点对 list_event_fields（12KB）这类大返回有 latency 影响，但对 LLM 调用频率（每秒最多几次）完全可接受。</p>
-<h3>6. 上线 checklist 沉淀</h3>
+<h3 id="6-上线-checklist-沉淀">6. 上线 checklist 沉淀</h3>
 <blockquote><p><strong>每次升级 protocolVersion 声明值，必须同步审计 ToolResult / Tool / Notification 等所有 spec 类型的字段变化 —— 这是最容易"声称支持但实际半合规"的检测点。</strong></p></blockquote>
 <p>具体怎么做：</p>
 <ul><li><input type="checkbox" disabled> <strong>不要只跟着 framework 升 spec 版本号</strong>：framework（Solon MCP / Spring AI MCP）默认 builder 行为可能滞后于最新 spec，盲升 version 号不等于真合规</li></ul>
@@ -745,22 +745,22 @@ void invoke_listEvents_StructuredContentNonEmpty() {
 <ul><li><input type="checkbox" disabled> <strong>server 端 ToolResult 构造逐字段对照 spec</strong>，不依赖 framework 的"看起来对"</li></ul>
 <ul><li><input type="checkbox" disabled> <strong>监控 structuredContent 为空的工具调用比例</strong>：如果 &gt; 0 且 server 声称 protocolVersion ≥ 2025-06-18，就是合规漏洞信号</li></ul>
 <ul><li><input type="checkbox" disabled> <strong>观察用户反馈</strong>："server 显示 connected 但工具调用拿不到数据"是这类坑的高敏信号词，应触发立即排查</li></ul>
-<h3>7. 把这个坑映射回前面的 self-check</h3>
+<h3 id="7-把这个坑映射回前面的-self-check">7. 把这个坑映射回前面的 self-check</h3>
 <p>第六节"给学习者的总结清单"补一类 <strong>H. 协议版本兼容</strong>：</p>
 <ul><li><input type="checkbox" disabled> server 在 initialize 响应里声称的 protocolVersion 是哪个？（2024-11-05 / 2025-03-26 / 2025-06-18 / 更新）</li></ul>
 <ul><li><input type="checkbox" disabled> 是否每次 spec 升级都同步审计了 ToolResult / Tool / Notification 等类型的字段变化？</li></ul>
 <ul><li><input type="checkbox" disabled> 真用过 Claude Code / 最新 Cursor / 最新 mcp-inspector 三个不同客户端测过同一批工具？（仅一种客户端测试 = 协议版本兼容性盲区）</li></ul>
 <ul><li><input type="checkbox" disabled> CI 里是否覆盖了 "structuredContent 必须非空 + 与 content 数据一致" 的回归 case？</li></ul>
 <ul><li><input type="checkbox" disabled> server 端 ToolResult builder 是不是逐字段对照 spec 而不是依赖 framework 默认行为？（Solon MCP / Spring AI MCP 等 framework 的默认 builder 行为可能滞后于最新 spec）</li></ul>
-<h3>8. 一句话回答</h3>
+<h3 id="8-一句话回答">8. 一句话回答</h3>
 <blockquote><p>"为啥 server 一切 OK + curl 一切 OK + Python SDK 一切 OK，唯独 Claude Code 调用拿到 <code>{}</code>？"</p></blockquote>
 <p><strong>因为 spec 2025-06-18 把"机器可读的结构化数据"从 <code>content[0].text</code> 抽到了独立的 <code>structuredContent</code> 字段，server 升级了 protocolVersion 声明但没升级 ToolResult 构造，新版 client 看到空 structuredContent 不再回退读 content —— spec 字段错配。</strong></p>
 <blockquote><p>发现链路：2026-05-19 用 guardians-mcp 跑黑产挖掘 demo 时主对话拿 <code>{}</code> → 用 Python SDK 直连验证 server 真返回 ✅ → 抓 ToolResult 字段层定位到 structuredContent 空 → 复盘成文。</p></blockquote>
-<h2>原文沉淀</h2>
-<h3>Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="Guardians-MCP-写接口落地复盘-生产级-MCP-开发踩坑清单-1">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</h3>
 <blockquote><p>来源：<code>openspec/changes/archive/2026-05-18-support-mcp-write-apis/</code> 主提交：<code>b81ae0d feat(mcp): 支持 MCP 写接口</code> + <code>7446300</code> / <code>5201c29</code> 两次"修复入参解析" 受众：做过 MCP demo 但没做过生产级 MCP 的同学</p></blockquote>
 <hr>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

@@ -395,18 +395,18 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>内容审核控制台嵌入式 MCP Server 落地方案</h1><div class="meta">📅 2026-05-19 · <span class="badge">飞书</span> · <a class="src-link" href="https://mi.feishu.cn/wiki/VJg2w9zRXih3tpkuAKxcOQOQnch" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260519-MCP-Server嵌入式架构设计与技术选型-内容审核控制台落地方案.md</div><div class="md"><h1>内容审核控制台嵌入式 MCP Server 落地方案</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">31</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#内容审核控制台嵌入式-MCP-Server-落地方案">内容审核控制台嵌入式 MCP Server 落地方案</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#一-背景与价值">一、背景与价值</a><a class="tl l2" href="#二-整体架构">二、整体架构</a><a class="tl l2" href="#三-技术选型">三、技术选型</a><a class="tl l3" href="#3-1-为什么不用官方-MCP-SDK-Spring-AI">3.1 为什么不用官方 MCP SDK / Spring AI？</a><a class="tl l3" href="#3-2-Solon-内嵌模式">3.2 Solon 内嵌模式</a><a class="tl l3" href="#3-3-MCP-传输协议选型">3.3 MCP 传输协议选型</a><a class="tl l3" href="#3-4-落地方式">3.4 落地方式</a><a class="tl l2" href="#四-核心组件详解">四、核心组件详解</a><a class="tl l3" href="#4-1-McpTool-工具注册注解">4.1 @McpTool — 工具注册注解</a><a class="tl l3" href="#4-2-McpSpringToolProvider-自动-Schema-生成-动态调用">4.2 McpSpringToolProvider — 自动 Schema 生成 + 动态调用</a><a class="tl l3" href="#4-3-McpContextBuilder-上下文生命周期管理">4.3 McpContextBuilder — 上下文生命周期管理</a><a class="tl l3" href="#4-4-McpAuthFilter-Bearer-Token-鉴权">4.4 McpAuthFilter — Bearer Token 鉴权</a><a class="tl l3" href="#4-5-McpServerConfig-容器装配">4.5 McpServerConfig — 容器装配</a><a class="tl l2" href="#五-新增工具步骤-标准流程">五、新增工具步骤（标准流程）</a><a class="tl l3" href="#Step-1-在-Controller-方法上加-McpTool-注解">Step 1：在 Controller 方法上加 @McpTool 注解</a><a class="tl l3" href="#Step-2-确认-DTO-字段描述完整">Step 2：确认 DTO 字段描述完整</a><a class="tl l3" href="#Step-3-重启服务-验证工具已注册">Step 3：重启服务，验证工具已注册</a><a class="tl l2" href="#六-整体配置指南">六、整体配置指南</a><a class="tl l3" href="#Nacos-配置">Nacos 配置</a><a class="tl l3" href="#MCP-客户端配置-claude-json">MCP 客户端配置（\/.claude.json）</a><a class="tl l3" href="#MCP-Inspector-调试">MCP Inspector 调试</a><a class="tl l3" href="#审计日志">审计日志</a><a class="tl l3" href="#依赖引入">依赖引入</a><a class="tl l3" href="#适配其他-Spring-Boot-2-项目">适配其他 Spring Boot 2 项目</a><a class="tl l2" href="#七-常见问题">七、常见问题</a><a class="tl l2" href="#原文沉淀">原文沉淀</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>内容审核控制台嵌入式 MCP Server 落地方案</h1><div class="meta">📅 2026-05-19 · <span class="badge">飞书</span> · <a class="src-link" href="https://mi.feishu.cn/wiki/VJg2w9zRXih3tpkuAKxcOQOQnch" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260519-MCP-Server嵌入式架构设计与技术选型-内容审核控制台落地方案.md</div><div class="md"><h1 id="内容审核控制台嵌入式-MCP-Server-落地方案">内容审核控制台嵌入式 MCP Server 落地方案</h1>
 <blockquote><p>来源：飞书 归档日期：2026-05-19 抓取状态：待补充原文 原文字符：0｜配图：0 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li><strong>解决的问题</strong>：审核运营日常重复操作（查机审/人审日志、排查审核效果、核验配置）无法被 AI Agent 自动编排，需要标准化 AI 友好接口</li><li><strong>核心架构决策</strong>：MCP 嵌入现有控制台（而非独立服务或脚本封装），核心判断是"AI 只是控制台的另一类用户"，复用全部 Service/DAO 层，人机始终对齐，每次 bugfix/新增接口 AI 自动受益</li><li><strong>JDK 8 困境解法</strong>：官方 MCP SDK 和 Spring AI 都要 JDK 17+，ali-langengine-mcp-jdk8 是天坑（只有 interface 声明），最终选用 Solon <code>solon-ai-mcp 3.10.4-M1</code>（JDK 8 兼容），通过 <code>SolonServletFilter</code> 嵌入 Spring Boot Tomcat 不占额外端口</li><li><strong>传输协议选型</strong>：选 Streamable HTTP（MCP 2025-03-26 spec），单 POST 端点，短操作直接返回 JSON、长操作升级 SSE 流，无长连接，适合负载均衡；In-process 部署模式复用 Spring Boot Tomcat 线程池</li><li><strong>鉴权机制</strong>：McpAuthFilter(Order=0) → Bearer token 校验（Nacos 热刷新，无需重启）→ 跳过 SSO → Solon 兜底二次校验，审计日志记录 <code>mcp:&amp;lt;caller&amp;gt;</code> 可追溯每次 AI 调用</li><li><strong>工具注册</strong>：<code>@McpTool</code> 注解 + <code>McpSpringToolProvider</code> 自动扫描 <code>@RestController</code> 生成 JSON Schema，结合 <code>@ApiModelProperty</code>/<code>@ApiParam</code> 三层注解生成完整描述，已注册 15 个审核工具</li><li><strong>新增工具只需三步</strong>：在 Controller 方法加 <code>@McpTool</code> 注解 → 确认 DTO 字段 <code>@ApiModelProperty</code> 描述完整 → 重启验证</li><li><strong>适配其他项目</strong>：5 个通用文件可直接复制（McpAuthFilter/McpServerConfig/McpSpringToolProvider/McpTool/mcpserver.yml），替换 ConsoleContext/DynamicConfig/WebResponse 即可</li></ul>
 <hr>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>一、背景与价值</h2>
+<h2 id="一-背景与价值">一、背景与价值</h2>
 <p>内容审核中台处理海量多媒体内容，接入腾讯云、数美、易盾、图普等多家供应商。审核运营日常需要频繁登录控制台查询机审/人审日志、排查审核效果、核验配置——这些操作高度重复、耗时，且无法被 AI Agent 自动编排，亟需提效。</p>
 <table><thead><tr><th>痛点</th><th>AI 友好性基建 方案效果</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr><tr><td>审核运营查数据需登录 Console 手动操作</td><td>AI 助手直接调用工具，自然语言驱动查询</td></tr><tr><td>数据分析需反复切换页面、手动筛选</td><td>多工具组合调用，一次对话完成复合查询</td></tr><tr><td>接口能力无法被 AI Agent 编排</td><td>标准 AI落地 协议，兼容所有 AI客户端</td></tr></tbody></table>
 <p><strong>为什么不用脚本/Skills/CLI，不另起炉灶？</strong></p>
@@ -414,7 +414,7 @@
 <table><thead><tr><th>方案</th><th>代表形态</th><th>备注</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>脚本/Skills / CLI 封装</td><td>写一批 Shell/Python 脚本调 REST API，塞进 Claude Code skills</td><td>每个工具单独维护、无统一协议；接口变更需同步脚本；工具数一多，维护成本线性膨胀</td></tr><tr><td>独立 AI 专用控制台  &lt;br/&gt;(或MCP专用server）</td><td>另搭一套服务专门给 AI 调用</td><td>两套服务各自演化，容易出不一致的问题；人用控制台的演进无法自动惠及 AI</td></tr><tr><td><strong>MCP嵌入现有控制台（选用）</strong></td><td>在 console 服务内新增 <code>/mcp/**</code> 端点</td><td>复用全部 Service/DAO 层；鉴权、审计、监控共用；部署单元不增加；人机始终对齐</td></tr></tbody></table>
 <p>&lt;callout emoji="🔔"&gt; 核心判断： AI 只是控制台的另一类用户，需要的数据和权限与运营人员高度重合，差别仅在接口形式（自然语言 vs Web UI）。 把 MCP 嵌进现有服务，意味着每次 bugfix、每次新增接口，AI 自动受益，不引入第二套维护债。 *<strong>MCP</strong>**（Model Context Protocol）是 Anthropic 制定的开放协议，让 AI 模型能够以标准方式调用外部工具。接入后，Claude Desktop、Claude Code、Cursor 等客户端可以直接查询审核数据，无需任何 UI 操作。* &lt;/callout&gt;</p>
 <hr>
-<h2>二、整体架构</h2>
+<h2 id="二-整体架构">二、整体架构</h2>
 <pre><code>Claude / AI Client
        │  HTTP  Authorization: Bearer &lt;key&gt;
        │  POST /mcp/audition/mcp             ← JSON-RPC 2.0（Streamable HTTP）
@@ -446,10 +446,10 @@ middle-audition-core（Service / DAO 层）
 
 </code></pre>
 <hr>
-<h2>三、技术选型</h2>
-<h3>3.1 为什么不用官方 MCP SDK / Spring AI？</h3>
+<h2 id="三-技术选型">三、技术选型</h2>
+<h3 id="3-1-为什么不用官方-MCP-SDK-Spring-AI">3.1 为什么不用官方 MCP SDK / Spring AI？</h3>
 <table><thead><tr><th>方案</th><th>JDK 要求</th><th>结论</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td><code>io.modelcontextprotocol.sdk:mcp</code></td><td>17+</td><td>❌ 不兼容</td></tr><tr><td>Spring AI MCP Server</td><td>17 + Spring Boot 3</td><td>❌ 不兼容</td></tr><tr><td>com.alibaba:ali-langengine-mcp-jdk8</td><td>8</td><td>❌ 不可用，天坑  &lt;br/&gt;当时在设计文档里还把它列为"推荐"，后来实际拉代码构建私有maven包时才发现 MCP 相关接口只有 interface/约定抽象声明</td></tr><tr><td><code>greycode/MCP-Java-SDK-JDK8</code></td><td>8</td><td>❌ 已 archive 停更</td></tr><tr><td><strong><code>org.noear:solon-ai-mcp 3.10.4-M1</code></strong></td><td><strong>8+</strong></td><td>✅ 选用</td></tr></tbody></table>
-<h3>3.2 Solon 内嵌模式</h3>
+<h3 id="3-2-Solon-内嵌模式">3.2 Solon 内嵌模式</h3>
 <p>Solon 通过 <code>SolonServletFilter</code> <strong>嵌入 Spring Boot 的 Tomcat</strong>，不需要独立端口，不影响现有 Spring 能力。</p>
 <pre><code>Spring Boot Tomcat (8085)
   └─ SolonServletFilter → /mcp/*
@@ -464,7 +464,7 @@ solon.logging.logger:
   &quot;root&quot;:
     level: WARN</code></pre>
 <hr>
-<h3>3.3 MCP 传输协议选型</h3>
+<h3 id="3-3-MCP-传输协议选型">3.3 MCP 传输协议选型</h3>
 <p>MCP 协议在传输层提供 5 种选择，选型取决于部署方式、客户端生态和通信模型。</p>
 <table><thead><tr><th>传输方式</th><th>协议基础</th><th>通信模型</th><th>跨网络</th><th>多客户端</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>stdio</td><td>进程管道</td><td>stdin/stdout 全双工</td><td>❌</td><td>❌</td></tr><tr><td><strong>HTTP + SSE（2024-11-05）</strong></td><td>HTTP 1.1 + SSE</td><td>GET 建连 + POST 发消息</td><td>✅</td><td>✅</td></tr><tr><td><strong>Streamable HTTP（2025-03-26）</strong></td><td>HTTP 1.1</td><td>单 POST，响应可升级 SSE 流</td><td>✅</td><td>✅</td></tr><tr><td>WebSocket</td><td>RFC 6455</td><td>全双工长连接</td><td>✅</td><td>✅</td></tr><tr><td>In-process 嵌入式</td><td>JVM 内方法调用</td><td>无网络 IO</td><td>❌</td><td>❌</td></tr></tbody></table>
 <hr>
@@ -534,7 +534,7 @@ middle-audition-console REST API（零改动）</code></pre>
 <p>基于 RFC 6455，握手升级后客户端和服务端均可主动推送，天然支持双向实时通信。部分 MCP SDK（如 Python <code>mcp</code> 库）提供 WebSocket transport 支持。</p>
 <p>Solon AI MCP 3.10.4-M1 当前版本尚未提供开箱即用的 WebSocket transport，接入需自行实现适配层。<strong>本项目不适用</strong>：审核工具全为请求-响应模型，无服务端主动推送需求，引入 WebSocket 增加复杂度而无收益。</p>
 <hr>
-<h3>3.4 落地方式</h3>
+<h3 id="3-4-落地方式">3.4 落地方式</h3>
 <p><strong>In-process 嵌入式 + Streamable HTTP（本项目实际架构）</strong>MCP Server 与宿主服务运行在<strong>同一 JVM 进程</strong>内，通过 Solon 内嵌容器托管，不占用额外端口，不产生网络 IO。</p>
 <pre><code>Spring Boot Tomcat（8085）
   └─ SolonServletFilter → /mcp/*
@@ -547,8 +547,8 @@ middle-audition-console REST API（零改动）</code></pre>
 <p><strong>最终选型决策矩阵</strong></p>
 <table><thead><tr><th></th><th>stdio</th><th><strong>HTTP+SSE</strong></th><th>Streamable HTTP</th><th>WebSocket</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>主流客户端兼容</td><td>✅（本地）</td><td>✅</td><td>✅...✅</td><td></td></tr><tr><td>多客户端接入</td><td>❌</td><td>✅</td><td>✅</td><td>✅</td></tr><tr><td>独立端口</td><td>无</td><td>复用 8085</td><td>复用 8085</td><td>通常需要</td></tr><tr><td>JDK 8 + Spring Boot 2 落地难度</td><td>低</td><td>中</td><td>中</td><td>高</td></tr><tr><td>是否选用</td><td>❌</td><td>⚠️ 已弃用</td><td>✅ In-process部署模式</td><td>❌</td></tr></tbody></table>
 <hr>
-<h2>四、核心组件详解</h2>
-<h3>4.1 @McpTool — 工具注册注解</h3>
+<h2 id="四-核心组件详解">四、核心组件详解</h2>
+<h3 id="4-1-McpTool-工具注册注解">4.1 @McpTool — 工具注册注解</h3>
 <p>只需在已有 Controller 方法上加一行注解，无需编写任何额外代码：</p>
 <pre><code>@McpTool(value = &quot;search_machine_audit_logs&quot;, description = &quot;分页查询机审日志。&quot;)
 @GetMapping(&quot;list&quot;)
@@ -558,7 +558,7 @@ public WebResponse&lt;PagedResult&lt;MachineLogVO&gt;&gt; getLogList(
         @RequestParam(defaultValue = &quot;1&quot;) Integer page,
         @RequestParam(defaultValue = &quot;20&quot;) Integer limit) { ... }</code></pre>
 <p><strong>命名规范</strong>：<code>&amp;lt;动词&amp;gt;_&amp;lt;名词&amp;gt;</code>，全小写 snake_case。</p>
-<h3>4.2 McpSpringToolProvider — 自动 Schema 生成 + 动态调用</h3>
+<h3 id="4-2-McpSpringToolProvider-自动-Schema-生成-动态调用">4.2 McpSpringToolProvider — 自动 Schema 生成 + 动态调用</h3>
 <p><strong>职责</strong>：启动时扫描所有 <code>@RestController</code> Bean，找到 <code>@McpTool</code> 方法，自动构建工具描述和 JSON Schema。</p>
 <p><strong>注解 → Schema 映射示例</strong></p>
 <p>以 <code>search_machine_audit_logs</code> 为例，三层注解共同决定 AI 拿到的 inputSchema：</p>
@@ -604,7 +604,7 @@ public class MachineLogDTO {
   },
   &quot;required&quot;: [&quot;appGroupId&quot;, &quot;appId&quot;]
 }</code></pre>
-<h3>4.3 McpContextBuilder — 上下文生命周期管理</h3>
+<h3 id="4-3-McpContextBuilder-上下文生命周期管理">4.3 McpContextBuilder — 上下文生命周期管理</h3>
 <pre><code>McpAuthFilter 写入 CALLER ThreadLocal
       ↓
 McpContextBuilder.runTool()
@@ -617,7 +617,7 @@ audit log 写入
       ↓
 ConsoleContext.clear() + CALLER.clear()</code></pre>
 <p><code>createBy = &quot;mcp:&amp;lt;caller&amp;gt;&quot;</code> 写入操作日志，可追溯每次 AI 调用的发起方。</p>
-<h3>4.4 McpAuthFilter — Bearer Token 鉴权</h3>
+<h3 id="4-4-McpAuthFilter-Bearer-Token-鉴权">4.4 McpAuthFilter — Bearer Token 鉴权</h3>
 <p><strong>Nacos 配置（DynamicConfig，支持热刷新，无需重启）：</strong></p>
 <pre><code>mcp.auth.key.mcp_key_claude_ops=claude-ops-team
 mcp.auth.key.mcp_key_ai_bot=ai-assistant-bot
@@ -632,7 +632,7 @@ McpAuthFilter（Order=0）
 LoginFilter（检测 skipAuth=true → 跳过 SSO）
   ↓
 SolonServletFilter → Solon 兜底二次校验 → 工具执行</code></pre>
-<h3>4.5 McpServerConfig — 容器装配</h3>
+<h3 id="4-5-McpServerConfig-容器装配">4.5 McpServerConfig — 容器装配</h3>
 <pre><code>// Spring 启动后拉起 Solon 内嵌容器
 Solon.start(McpServerConfig.class, new String[]{&quot;--cfg=mcpserver.yml&quot;}, app -&gt; {
     app.enableScanning(false);
@@ -655,9 +655,9 @@ public void afterSingletonsInstantiated() {
 <hr>
 <table><thead><tr><th>工具名</th><th>对应接口</th><th>描述</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td><code>search_machine_audit_logs</code></td><td>GET /machinelog/list</td><td>分页查询机审日志</td></tr><tr><td><code>search_human_audit_logs</code></td><td>GET /auditorLog/list</td><td>分页查询人审日志</td></tr><tr><td><code>get_audit_trace</code></td><td>GET /audition/trace</td><td>按 reviewId 查完整审核轨迹</td></tr><tr><td><code>list_machine_audit_queues</code></td><td>GET /auditionQueueInfo/list</td><td>机审队列列表</td></tr><tr><td><code>get_machine_audit_queue</code></td><td>GET /auditionQueueInfo/get</td><td>机审队列详情</td></tr><tr><td><code>get_app_audit_config</code></td><td>GET /auditionQueueInfo/appConf</td><td>应用场景全局审核策略</td></tr><tr><td><code>list_human_audit_queues</code></td><td>GET /auditorQueueInfo/list</td><td>人审队列列表</td></tr><tr><td><code>list_human_audit_queue_names</code></td><td>GET /auditorQueueInfo/listQueueNames</td><td>可用人审队列名</td></tr><tr><td><code>list_app_scenarios</code></td><td>GET /appInfo/list</td><td>应用场景列表</td></tr><tr><td><code>get_app_scenario</code></td><td>GET /appInfo/get</td><td>应用场景详情</td></tr><tr><td><code>list_app_groups</code></td><td>GET /appGroupInfo/list</td><td>应用组列表</td></tr><tr><td><code>get_app_group</code></td><td>GET /appGroupInfo/get</td><td>应用组详情</td></tr><tr><td><code>get_app_group_tree</code></td><td>GET /appGroupInfo/cascade</td><td>应用-场景级联树</td></tr><tr><td><code>list_self_defined_labels</code></td><td>GET /auditResultLabel/selfDefinedLabelList</td><td>自定义审核结果标签列表</td></tr><tr><td><code>get_diversion_config</code></td><td>GET /auditionQueueInfo/getDiversionConfig</td><td>各供应商分流比例；diversionStrategyEnable=true 时使用，queueType 来自 list_machine_audit_queues</td></tr></tbody></table>
 <hr>
-<h2>五、新增工具步骤（标准流程）</h2>
+<h2 id="五-新增工具步骤-标准流程">五、新增工具步骤（标准流程）</h2>
 <p>只需三步，无需改动任何 MCP 框架代码。</p>
-<h3>Step 1：在 Controller 方法上加 @McpTool 注解</h3>
+<h3 id="Step-1-在-Controller-方法上加-McpTool-注解">Step 1：在 Controller 方法上加 @McpTool 注解</h3>
 <pre><code>@McpTool(value = &quot;get_whitelist_hits&quot;,
          description = &quot;查询内容命中白名单的记录，按时间范围过滤。&quot;)
 @GetMapping(&quot;hits&quot;)
@@ -668,7 +668,7 @@ public WebResponse&lt;PagedResult&lt;WhitelistHitVO&gt;&gt; getHits(
         @RequestParam(defaultValue = &quot;20&quot;) Integer limit) { ... }</code></pre>
 <p><strong>检查清单：</strong></p>
 <ul><li>方法签名中有 ConsoleContext ctx 参数</li><li>工具名唯一，snake_case 命名</li><li>description 清晰描述工具用途和参数含义</li><li>只注册只读接口（GET），写操作需审批评估</li></ul>
-<h3>Step 2：确认 DTO 字段描述完整</h3>
+<h3 id="Step-2-确认-DTO-字段描述完整">Step 2：确认 DTO 字段描述完整</h3>
 <pre><code>public class WhitelistQueryDTO {
     @ApiModelProperty(&quot;关键词，支持模糊匹配&quot;)
     private String keyword;
@@ -679,17 +679,17 @@ public WebResponse&lt;PagedResult&lt;WhitelistHitVO&gt;&gt; getHits(
     @ApiModelProperty(&quot;结束时间（毫秒时间戳）&quot;)
     private Long endTime;
 }</code></pre>
-<h3>Step 3：重启服务，验证工具已注册</h3>
+<h3 id="Step-3-重启服务-验证工具已注册">Step 3：重启服务，验证工具已注册</h3>
 <pre><code>[MCP] registered tool: get_whitelist_hits
 [MCP] tools registered, count=15</code></pre>
 <hr>
-<h2>六、整体配置指南</h2>
-<h3>Nacos 配置</h3>
+<h2 id="六-整体配置指南">六、整体配置指南</h2>
+<h3 id="Nacos-配置">Nacos 配置</h3>
 <pre><code># 格式：mcp.auth.key.&lt;token&gt;=&lt;调用方标识&gt;
 mcp.auth.key.mcp_key_claude_ops_abc123=claude-ops-team
 mcp.auth.key.mcp_key_ai_platform_xyz=ai-platform
 mcp.service.mi-account=12345678</code></pre>
-<h3>MCP 客户端配置（~/.claude.json）</h3>
+<h3 id="MCP-客户端配置-claude-json">MCP 客户端配置（~/.claude.json）</h3>
 <pre><code>{
   &quot;mcpServers&quot;: {
     &quot;audition-console&quot;: {
@@ -702,12 +702,12 @@ mcp.service.mi-account=12345678</code></pre>
   }
 }
 </code></pre>
-<h3>MCP Inspector 调试</h3>
+<h3 id="MCP-Inspector-调试">MCP Inspector 调试</h3>
 <pre><code>URL:    http://&lt;host&gt;:8085/mcp/audition/mcp
 Header: Authorization: Bearer mcp_key_xxxxx
 </code></pre>
 <hr>
-<h3>审计日志</h3>
+<h3 id="审计日志">审计日志</h3>
 <p>每次工具调用写入结构化日志（MCP_AUDIT logger）：</p>
 <pre><code>{
   &quot;tool&quot;: &quot;search_machine_audit_logs&quot;,
@@ -723,7 +723,7 @@ Header: Authorization: Bearer mcp_key_xxxxx
   &quot;error&quot;: &quot;IllegalArgumentException:查询时间范围超过30天，请缩短后重试。&quot;
 }</code></pre>
 <hr>
-<h3>依赖引入</h3>
+<h3 id="依赖引入">依赖引入</h3>
 <pre><code>&lt;!-- Solon AI MCP Server（JDK 8 兼容） --&gt;
 &lt;dependency&gt;
     &lt;groupId&gt;org.noear&lt;/groupId&gt;
@@ -737,12 +737,12 @@ Header: Authorization: Bearer mcp_key_xxxxx
     &lt;version&gt;3.10.4-M1&lt;/version&gt;
 &lt;/dependency&gt;</code></pre>
 <hr>
-<h3>适配其他 Spring Boot 2 项目</h3>
+<h3 id="适配其他-Spring-Boot-2-项目">适配其他 Spring Boot 2 项目</h3>
 <table><thead><tr><th>本项目</th><th>目标项目替换</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr><tr><td><code>ConsoleContext</code>（ThreadLocal 上下文）</td><td>替换为目标项目的 ThreadLocal 上下文对象</td></tr><tr><td><code>DynamicConfig</code>（Nacos 配置读取）</td><td>替换为目标项目的配置读取方式</td></tr><tr><td><code>mcp.service.mi-account</code>（内部账号）</td><td>替换为目标项目的内部服务账号字段</td></tr><tr><td><code>WebResponse</code>（响应体剥包）</td><td>替换为目标项目的统一响应体类型</td></tr><tr><td><code>/mcp/audition/mcp</code>（端点路径）</td><td>可按业务调整</td></tr></tbody></table>
 <p><strong>可直接复制的通用文件：</strong></p>
 <ul><li>McpAuthFilter.java — Bearer 鉴权</li><li>McpServerConfig.java — Solon 容器装配</li><li>McpSpringToolProvider.java — Schema 生成 + 动态调用核心</li><li>McpTool.java — 注解定义</li><li>mcpserver.yml — Solon 配置</li></ul>
 <hr>
-<h2>七、常见问题</h2>
+<h2 id="七-常见问题">七、常见问题</h2>
 <p><strong>Q：客户端连接返回 400？</strong>A：检查客户端配置。本项目使用 Streamable HTTP 协议，客户端必须配置 <code>type: &quot;http&quot;</code>，不能用 <code>type: &quot;sse&quot;</code>。旧版 SSE 客户端会发 GET 建连请求，而 Streamable HTTP 端点只接受 POST，因此返回 400。</p>
 <p><strong>Q：工具调用返回空数据？</strong> A：检查 Controller 方法是否有 ConsoleContext 参数。缺少该参数时 appGroupId=-1 导致查询空结果，启动日志会有对应 ERROR。</p>
 <p><strong>Q：新加的 Key 不生效？</strong> A：McpAuthFilter 监听 DynamicConfig，Nacos 推送后自动热刷新，无需重启。查看日志 [MCP] auth keys reloaded, count=N 确认。</p>
@@ -751,9 +751,9 @@ Header: Authorization: Bearer mcp_key_xxxxx
 <p>（图片未能落盘：飞书盘外链需登录态，待CDP补图）</p>
 <hr>
 <p><em>文档维护：fangdengfei | 最后更新：2026-04</em></p>
-<h2>原文沉淀</h2>
+<h2 id="原文沉淀">原文沉淀</h2>
 <p>（抓取失败，仅有摘要） 原因：来源为登录墙/无权限/错误页，正文不可用； 来源 URL：https://mi.feishu.cn/wiki/VJg2w9zRXih3tpkuAKxcOQOQnch</p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

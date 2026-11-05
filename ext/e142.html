@@ -395,30 +395,30 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</h1><div class="meta">📅 2026-09-15 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/baj-Fo_NbzrR-MtXGPlo4A" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260915-AI-Native-SDLC-Playbook.md</div><div class="md"><h1>Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">24</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Anthropic-AI-Native-SDLC-Playbook-AI-原生研发流程怎么改">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#1-代码写快以后-旧流程为什么卡住">1. 代码写快以后，旧流程为什么卡住</a><a class="tl l3" href="#2-AI-Native-改了什么-从流水线到-Loop">2. AI Native 改了什么：从流水线到 Loop</a><a class="tl l3" href="#3-六个阶段怎么跑">3. 六个阶段怎么跑</a><a class="tl l3" href="#4-落地顺序">4. 落地顺序</a><a class="tl l3" href="#5-最后的现实判断">5. 最后的现实判断</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#参考资料">参考资料</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#sec">────</a><a class="tl l3" href="#sec-1">────</a><a class="tl l3" href="#sec-2">────</a><a class="tl l3" href="#1-Plan-怎么把一个想法变成-intent-md">1. Plan，怎么把一个想法变成 intent.md？</a><a class="tl l3" href="#2-Design-怎么把意图变成-spec-md">2. Design，怎么把意图变成 spec.md？</a><a class="tl l3" href="#3-Build-为什么一定要先做计划">3. Build，为什么一定要先做计划？</a><a class="tl l3" href="#4-Test-怎么证明-AI-真的做完了">4. Test，怎么证明 AI 真的做完了？</a><a class="tl l3" href="#5-Deploy-AI-可以走到哪一步">5. Deploy，AI 可以走到哪一步？</a><a class="tl l3" href="#6-Maintain-怎么让线上问题回到开发流程">6. Maintain，怎么让线上问题回到开发流程？</a><a class="tl l3" href="#sec-3">────</a><a class="tl l3" href="#sec-4">────</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</h1><div class="meta">📅 2026-09-15 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/baj-Fo_NbzrR-MtXGPlo4A" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260915-AI-Native-SDLC-Playbook.md</div><div class="md"><h1 id="Anthropic-AI-Native-SDLC-Playbook-AI-原生研发流程怎么改">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-15 抓取状态：成功 原文字符：7328｜配图：10 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>Anthropic 内部约 80% 的合入代码由 Claude 编写，编码阶段被压缩到几小时，瓶颈转移到编码阶段两端（需求确认、Code Review、测试排期、发布窗口）。</li><li>解法是把单向流水线改成 Loop：每个阶段产出可版本化、人机共读的产物（intent.md → spec.md → plan.md → 代码与测试 → 带审查记录的 PR → 线上事故记录），用审核/合并/指标越界触发下一阶段。</li><li>六个阶段 Plan / Design / Build / Test / Deploy / Maintain 逐个按 AI 能力重设计，人留在需要判断与授权的关键节点。</li><li>落地不必一次配齐：第一层先做 intent.md、CLAUDE.md、测试反馈循环、Hook、Plan Mode 五件事，缺哪补哪。</li><li>新的瓶颈是人本身的审查带宽：让 AI 先过滤机械问题，人只判断方向、风险与是否上生产。</li></ul>
-<h2>核心内容</h2>
-<h3>1. 代码写快以后，旧流程为什么卡住</h3>
+<h2 id="核心内容">核心内容</h2>
+<h3 id="1-代码写快以后-旧流程为什么卡住">1. 代码写快以后，旧流程为什么卡住</h3>
 <p>传统流程的前提是"写代码最耗时也最贵"，各角色分段接力（需求→设计→开发→测试→发布）。AI 把 Build 阶段压到几小时后，规划、审查、部署仍按人的速度运行，瓶颈堵在编码两边：Reviewer 能逐行看人写的代码，但 Agent 一次生成几十个文件时，审查队列只会越积越长。结果要么代码排队等审查，要么未充分检查的代码上线——对有安全合规要求的公司两条路都走不通。</p>
-<h3>2. AI Native 改了什么：从流水线到 Loop</h3>
+<h3 id="2-AI-Native-改了什么-从流水线到-Loop">2. AI Native 改了什么：从流水线到 Loop</h3>
 <ul><li>每个阶段提交版本化产物，下一阶段直接读取该产物继续工作。</li><li>规划产出 intent.md，设计产出 spec.md，构建前产出 plan.md；后面是代码与测试、带审查记录的 PR、线上事故记录。</li><li>这些文件既给人看也让 AI 执行：通过审核的 intent.md 触发设计，获批的 spec.md 触发计划模式，合并的 PR 触发 CI/CD，线上指标越界又生成新的 intent.md。</li><li>起步阶段手动提示 Claude 每一步，流程跑顺后让前阶段产物自动触发后阶段；Git 提交历史兼作审计记录（谁提需求、Claude 生成了什么、谁批准的）。</li><li>人的位置：AI 推进流程，人集中审核需要判断力的决定。</li></ul>
-<h3>3. 六个阶段怎么跑</h3>
+<h3 id="3-六个阶段怎么跑">3. 六个阶段怎么跑</h3>
 <ul><li><strong>Plan</strong>：提出者用自己的话和 Claude 讨论（影响谁、要什么结果、有哪些限制、明确不做什么），Claude 按模板生成 intent.md，提出者纠正偏差、产品负责人确认后提交版本控制。价值在于原始意图直接留在文件里，不用几轮转述。</li><li><strong>Design</strong>：Claude 读 intent.md，加载团队的品牌/安全/合规/用户体验 Skills 生成 spec.md，写清功能怎么工作、数据怎么流动、影响哪些系统；产品负责人验收方案，疑点交安全/合规/技术负责人。目的是把安全合规问题提前到代码之前发现。</li><li><strong>Build</strong>：先进入 Plan Mode —— Claude 读代码库，列出改哪些文件、实现顺序、影响面、要跑哪些测试，工程师接受计划前不能改代码。工程师继续追问最容易出问题的步骤、有无其他方案、可能破坏什么。计划清楚后存为 plan.md 再开工。CLAUDE.md 记录构建/测试命令、目录职责、代码约定、Claude 常犯错误，建议控制在一页内。固定做法整理成 Skill，红线用 Hook 拦截。复杂任务拆给 Subagent，各任务独立 Git worktree。</li><li><strong>Test</strong>：代码生成只说明写完了文件，不证明功能能跑。给 Agent 建立完整反馈循环：自己跑测试与构建、读失败结果、改代码、再验证，直到满足计划约定的完成条件。最后另开一个未参与实现的会话做复核。建立 Evals（固定 Agent 评测任务），每次换模型或改 CLAUDE.md/Skill/Hook 都重跑，通过率下降说明退步；线上事故也加入 Evals 作为长期回归。</li><li><strong>Deploy</strong>：Claude 同时扮演 PR 作者与 Reviewer，按团队规则查逻辑与安全，对照 spec.md / plan.md 确认没跑偏。低风险改动走多层 Agent 审查，高风险与受监管代码交人复核。可进 CI/CD 完成构建、测试与各环境部署准备；生产环境保留最后一道闸门——Hook 拦住发布命令，等一位具名负责人批准。</li><li><strong>Maintain</strong>：上线是下一轮循环的起点。Agent 持续监控错误率、延迟等指标，越界后做只读诊断、整理原因与修复建议；回滚或生产修改只能用团队提前批准并演练过的方案。工程师确认后写成新的 intent.md 回到 Plan。</li></ul>
-<h3>4. 落地顺序</h3>
+<h3 id="4-落地顺序">4. 落地顺序</h3>
 <p>第一层（无复杂前置条件，可立即开始）：需求常走样→用 intent.md；Claude 重复犯错→维护 CLAUDE.md；拿不出证据→建测试反馈循环；担心高风险操作失控→加 Hook；一收到任务就改太多文件→先强制 Plan Mode。 之后再把成熟经验整理成 Skills、把重复任务交给 Subagent、用 Evals 检查配置与模型升级是否退步；再往后接入需求设计与 PR 审查、CI/CD；最后才是线上监控闭环。需求最慢就先改 Plan，审查队列最严重就先改 Deploy。</p>
-<h3>5. 最后的现实判断</h3>
+<h3 id="5-最后的现实判断">5. 最后的现实判断</h3>
 <p>多个 Agent 并行时，阻碍生产率的是人自己：能同时开五个 AI，却没法同时认真审完五份代码。Anthropic 的解法是让 AI 先过滤信息——代码生成前先审 intent.md / spec.md / plan.md，趁内容少时定方向；生成后由测试、固定评测和多层 Agent 审查过滤机械问题；人只判断需求是否跑偏、风险能否接受、能否进生产。</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>从最小一步开始：给项目写一份 CLAUDE.md，写清怎么构建、怎么测试、哪里不能碰，并把 AI 重复犯过的错逐条补进去。</li><li>把这个个人知识库的"收件箱→归档"流程当作 intent.md / spec.md 的类比：固定产物格式 + 状态机，才能让流程自动推进。</li><li>检查现有 Agent 流程中"人必须逐份审"的环节，把机械校验（格式、重复、互斥）交给程序，人只保留判断类节点。</li><li>高风险动作（对外发布、生产变更）统一走 Hook 式人工闸门，而不是靠提示词约束。</li></ul>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 <ul><li>Anthropic《The AI-Native SDLC Playbook》：https://claude.com/blog/the-ai-native-sdlc-playbook</li><li>Anthropic《How Anthropic secures its AI-native software development lifecycle》：https://claude.com/blog/how-anthropic-secures-its-ai-native-software-development-lifecycle</li></ul>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#">────</a></li><li><a href="#1-plan怎么把一个想法变成-intentmd">1. Plan，怎么把一个想法变成 intent.md？</a></li><li><a href="#2-design怎么把意图变成-specmd">2. Design，怎么把意图变成 spec.md？</a></li><li><a href="#3-build为什么一定要先做计划">3. Build，为什么一定要先做计划？</a></li><li><a href="#4-test怎么证明-ai-真的做完了">4. Test，怎么证明 AI 真的做完了？</a></li><li><a href="#5-deployai-可以走到哪一步">5. Deploy，AI 可以走到哪一步？</a></li><li><a href="#6-maintain怎么让线上问题回到开发流程">6. Maintain，怎么让线上问题回到开发流程？</a></li></ul>
 <p>大家好，我是小林。</p>
 <p>最近，Anthropic 发布了一篇博客《The AI-Native SDLC Playbook》，翻译过来就是「AI 原生软件开发生命周期手册」。</p>
@@ -429,7 +429,7 @@
 <p>AI 半天写完代码，接下来等一天需求确认、两天 Code Review、两天测试排期，最后再等发布窗口。代码生成速度上去了，产品交付并没有跟着快多少。</p>
 <p>你看，AI 只是把中间的编码阶段压缩了，前后那一大串流程并没有消失。</p>
 <p>Anthropic 认为，团队接下来得把规划、设计、构建、测试、部署和维护这六个阶段，都按照 AI 的能力重新设计，才能适应 AI 时代下的软件开发。</p>
-<h3>────</h3>
+<h3 id="sec">────</h3>
 <p>01｜代码写快以后，旧流程为什么卡住了？ ────</p>
 <p>那为什么代码一变快，原来的流程就开始卡住了？</p>
 <p>因为传统的软件开发流程，一直围绕一个前提设计，写代码最耗时间，也最贵。</p>
@@ -441,7 +441,7 @@
 <p><img alt="图片" src="../../_assets/20260915-AI-Native-SDLC-Playbook/img-002-4f84c7e6.png"></p>
 <p>接下来会发生什么？要么代码一直排队等审查，要么团队为了赶进度，让没有充分检查的代码上线。对有安全和合规要求的公司来说，这两条路都走不通。</p>
 <p>Anthropic 给出的方案，是让 AI 进入整个软件开发生命周期，并把人留在需要判断和授权的关键节点。</p>
-<h3>────</h3>
+<h3 id="sec-1">────</h3>
 <p>02｜AI Native 到底改了什么？ ────</p>
 <p>那 Anthropic 准备怎么改造这套软件开发流程？</p>
 <p>传统的软件开发生命周期像一条单向流水线。产品把需求交给设计，设计再交给开发，开发完成后交给测试和发布。</p>
@@ -453,10 +453,10 @@
 <p>刚开始时，团队还是手动提示 Claude 执行每一步。等流程跑顺以后，再让前一个阶段的产物自动触发下一个阶段。</p>
 <p>Git 提交历史也会成为审计记录。谁提出了需求，Claude 生成了什么，谁批准了方案，都能从版本记录里查回来。</p>
 <p>讲到这里，你大概能看出人的位置怎么变了。AI 负责把流程往下推进，人集中审核那些需要判断力的决定。</p>
-<h3>────</h3>
+<h3 id="sec-2">────</h3>
 <p>03｜六个阶段具体怎么跑？ ────</p>
 <p>Anthropic 把整套方法分成 Plan、Design、Build、Test、Deploy 和 Maintain 六个阶段。</p>
-<h3>1. Plan，怎么把一个想法变成 intent.md？</h3>
+<h3 id="1-Plan-怎么把一个想法变成-intent-md">1. Plan，怎么把一个想法变成 intent.md？</h3>
 <p>过去一个人有了产品想法，通常先写工单，再找产品经理开会补用户故事和验收标准。现在他可以先用自己的话和 Claude 讨论，不用一上来就憋一份格式完整的需求文档。</p>
 <p>Claude 会像分析师一样追问，问题影响谁、希望达到什么结果、有哪些限制、这次明确不做什么。提出者把自己知道的讲清楚，不确定的地方可以先留着。</p>
 <p>讨论清楚以后，Claude 按照团队模板生成一份 <code>intent.md</code>。提出者负责纠正理解偏差，产品负责人确认后，再把文件提交到版本控制里。</p>
@@ -464,13 +464,13 @@
 <p>官方给出的例子，是让保险客户在门户里查看理赔状态。<code>intent.md</code> 会写清当前问题、期望结果、受影响的系统、数据限制和待确认的问题。</p>
 <p>看到这里你可能会觉得，这不就是让 AI 帮忙写 PRD 吗？</p>
 <p>区别在于，最初提出问题的人把原始意图直接留在文件里，工程团队不用经过几轮转述，再去猜他一开始到底想解决什么。</p>
-<h3>2. Design，怎么把意图变成 spec.md？</h3>
+<h3 id="2-Design-怎么把意图变成-spec-md">2. Design，怎么把意图变成 spec.md？</h3>
 <p>有了 <code>intent.md</code>，能不能马上写代码？还不行。</p>
 <p>Claude 会读取前面的 <code>intent.md</code>，再加载团队已经整理好的品牌、安全、合规和用户体验 Skills，生成一份 <code>spec.md</code>。</p>
 <p>这份文件写清功能怎么工作、数据怎样流动、会影响哪些系统。产品负责人检查方案有没有解决原来的问题，再把疑点交给安全、合规或技术负责人处理。</p>
 <p><img alt="图片" src="../../_assets/20260915-AI-Native-SDLC-Playbook/img-005-71c09948.png"></p>
 <p>以前需求分析和技术设计由不同角色接力完成，安全、合规问题往往到了评审会上才被发现。Anthropic 想把这个时间点往前挪，能提前发现的问题，就别拖到代码写完以后再返工。</p>
-<h3>3. Build，为什么一定要先做计划？</h3>
+<h3 id="3-Build-为什么一定要先做计划">3. Build，为什么一定要先做计划？</h3>
 <p>到了 Build 阶段，Anthropic 的态度很明确，先别急着改代码。工程师把 <code>intent.md</code> 和 <code>spec.md</code> 交给 Claude Code，然后进入 Plan Mode。</p>
 <p>Claude 先读代码库，列出准备修改哪些文件、按什么顺序实现、可能影响什么，以及要运行哪些测试。在工程师接受计划之前，它不能直接修改代码。</p>
 <p>工程师还要接着追问，最容易出问题的是哪一步，有没有考虑其他方案，这次改动可能破坏哪些已有功能。计划改到足够清楚以后，再保存为 <code>plan.md</code> 并让 Claude 开工。</p>
@@ -478,7 +478,7 @@
 <p><code>CLAUDE.md</code> 记录构建和测试命令、目录职责、代码约定，以及 Claude 经常犯的错误。官方建议把它控制在一页以内，避免无关信息一直占用上下文。</p>
 <p>某类工作有固定做法，就整理成 Skill。需要强制执行的红线，比如禁止读取密钥或修改受保护文件，则交给 Hook 拦截。</p>
 <p>任务太复杂时，还可以继续拆给 Subagent。不同任务放进独立的 Git worktree，几个 Claude Code 会话就能同时工作，又不会挤在一起修改同一份文件。</p>
-<h3>4. Test，怎么证明 AI 真的做完了？</h3>
+<h3 id="4-Test-怎么证明-AI-真的做完了">4. Test，怎么证明 AI 真的做完了？</h3>
 <p>代码生成出来，只能说明 Claude 写完了文件，不能证明功能可以运行。</p>
 <p>我觉得 Test 阶段最容易踩的坑，就藏在 Claude 的一句话里，「已经完成」。</p>
 <p>Anthropic 的处理方式很直接，别听它怎么说，看它能不能拿出结果。</p>
@@ -487,7 +487,7 @@
 <p><img alt="图片" src="../../_assets/20260915-AI-Native-SDLC-Playbook/img-007-0c136669.png"></p>
 <p>只验证这一次还不够。Anthropic 还建议团队建立 Evals，也就是一套固定的 Agent 评测任务。</p>
 <p>每次更换模型，或者修改 <code>CLAUDE.md</code>、Skill 和 Hook，都重新运行这些任务。如果通过率下降，说明这次配置调整带来了退步。线上发生过的问题，也要加入 Evals，变成以后长期运行的回归测试。</p>
-<h3>5. Deploy，AI 可以走到哪一步？</h3>
+<h3 id="5-Deploy-AI-可以走到哪一步">5. Deploy，AI 可以走到哪一步？</h3>
 <p>测试都通过以后，能不能让 AI 一路自动发布到生产环境？</p>
 <p>Anthropic 的答案是，可以让它走到生产闸门前，但不能让它自己跨过去。</p>
 <p>到了 Deploy 阶段，Claude 会同时扮演 PR 作者和 Reviewer。它按照团队规则检查逻辑与安全问题，再对照 <code>spec.md</code> 和 <code>plan.md</code>，确认实现有没有跑偏。</p>
@@ -495,14 +495,14 @@
 <p><img alt="图片" src="../../_assets/20260915-AI-Native-SDLC-Playbook/img-008-b42351d6.png"></p>
 <p>PR 通过以后，Claude 可以进入 CI/CD，完成构建、测试和不同环境的部署准备。开发环境可以多放一些权限，到了生产环境，规则就得收紧。</p>
 <p>但生产环境必须保留最后一道闸门。Agent 可以完成上线之前的所有工作，真正执行发布时，Hook 会拦住命令，等待一位具名负责人批准。</p>
-<h3>6. Maintain，怎么让线上问题回到开发流程？</h3>
+<h3 id="6-Maintain-怎么让线上问题回到开发流程">6. Maintain，怎么让线上问题回到开发流程？</h3>
 <p>代码上线，流程就结束了吗？</p>
 <p>在 Anthropic 这套方法里，上线只是下一轮循环的起点。Agent 还会继续监控错误率、延迟和其他生产指标。</p>
 <p>指标超过预设阈值后，Agent 开始做只读诊断，整理可能的原因和修复建议。涉及回滚或生产修改的动作，只能使用团队提前批准和演练过的方案。</p>
 <p>工程师确认处理结果后，团队把这次线上问题写成新的 <code>intent.md</code>，重新回到 Plan 阶段。</p>
 <p><img alt="图片" src="../../_assets/20260915-AI-Native-SDLC-Playbook/img-009-db4e849e.png"></p>
 <p>到这里，一整套 Loop 才算闭合。Maintain 不是挂在末尾的一段运维工作，它会把线上发生的事情重新送回 Plan。</p>
-<h3>────</h3>
+<h3 id="sec-3">────</h3>
 <p>04｜这套流程该按什么顺序落地？ ────</p>
 <p>上面六个阶段是一个需求的执行顺序，但团队落地时不需要从 Plan 一路改到 Maintain。</p>
 <p>Anthropic 在博客里给了一张依赖关系图，告诉团队哪些做法可以直接开始，哪些需要先搭好前面的能力。</p>
@@ -514,7 +514,7 @@
 <p>等基础流程跑顺以后，团队再把成熟经验整理成 Skills，把重复任务交给 Subagent，并用 Evals 检查配置和模型升级有没有带来退步。</p>
 <p>下一步可以让 AI 接入需求设计和 PR 审查，再往后接入 CI/CD。最后才是线上监控，让生产异常自动进入下一轮开发。</p>
 <p>每个团队遇到的瓶颈不同，需求最慢就先改 Plan，审查队列最严重就先改 Deploy。坦白讲，我觉得这一点比完整的六阶段流程图更重要。AI Native 更像一张改造地图，告诉你眼前这个堵点可以从哪里下手。</p>
-<h3>────</h3>
+<h3 id="sec-4">────</h3>
 <p>最后 ────</p>
 <p>最近我同时用多个 AI 推进任务时，发现了一个挺残酷的事实。</p>
 <p>阻碍生产效率的，竟然开始变成我自己。</p>
@@ -531,7 +531,7 @@
 <p>参考资料：</p>
 <p>• Anthropic，《The AI-Native SDLC Playbook》：https://claude.com/blog/the-ai-native-sdlc-playbook</p>
 <p>• Anthropic，《How Anthropic secures its AI-native software development lifecycle》：https://claude.com/blog/how-anthropic-secures-its-ai-native-software-development-lifecycle</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

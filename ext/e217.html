@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</h1><div class="meta">📅 2026-09-12 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/INr-j63NxC1JKiBeasTreA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260912-DeepSeekV41Flash技术解读KV缓存压缩如何让Flash逼退Pro.md</div><div class="md"><h1>DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">11</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#DeepSeek-V4-1-Flash-技术解读-KV-缓存压缩如何让-Flash-逼退-Pro">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#观看更多">观看更多</a><a class="tl l3" href="#全屏">全屏</a><a class="tl l3" href="#观看更多-1">观看更多</a><a class="tl l3" href="#全屏-1">全屏</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</h1><div class="meta">📅 2026-09-12 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/INr-j63NxC1JKiBeasTreA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260912-DeepSeekV41Flash技术解读KV缓存压缩如何让Flash逼退Pro.md</div><div class="md"><h1 id="DeepSeek-V4-1-Flash-技术解读-KV-缓存压缩如何让-Flash-逼退-Pro">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-12 抓取状态：成功 原文字符：11130｜配图：15 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>报告标题《DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression》，几乎所有设计都指向同一目标：把 KV 缓存压下去。</li><li>全局 KV 缓存降至每 token 890 字节，约为 V4-Flash 的 1/4、DeepSeek-V1（389,120 字节）的 1/437；持久化 KV 缓存压到 V4-Flash 的约 1/8。</li><li>模型为 552B 主干 + 196B Engram 参数的多模态 MoE，原生支持 100 万 token 上下文，45T token 预训练，prefill 每 token 激活 8B、decode 激活 16B。</li><li>效果：上下文从 4K 拉到 1M（放大 256 倍），单 token decode FLOPs 只增加 1/4，用 552B 逼退 1.6T 的 V4 Pro。</li><li>评测：Artificial Analysis 给出 40 分指数，超过 V4 Pro；AutomationBench-AA 以 69% 并列第一（与 GPT-6 Astra 持平，略高于 Grok 4.6 的 67%）；每任务成本约 0.27 美元。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li><strong>瓶颈迁移</strong>：从 V3.2 的 DSA 到 V4 的 CSA，稀疏注意力已把长序列计算成本削得足够低。长程 agent 负载的痛点是 input-heavy——每次工具调用都产生新的 prefill，上下文只增不减。于是瓶颈从"算"转向"存"和"搬"，拆成三块：HBM 容量限制并发请求的全局 KV；SSD/主机内存容量限制前缀缓存留存与命中率；IO 与互联带宽限制缓存迁移加载速度。</li><li><strong>CED（Causal Encoder-Decoder）</strong>：语言主干 40 层切成两半——前 20 层因果编码器、后 20 层解码器，这正是不对称的"输入激活 8B、输出激活 16B"来源；解码器各层 KV 通过 Reindex/Reuse 等模式跨层复用，但每层保留自己的全局 Q 与 SWA KV。一把砍掉约一半 prefill 计算。</li><li><strong>精度</strong>：V4 已对索引器 Q/K 做 FP4 量化感知训练，V4.1-Flash 把 FP4 推进到 main KV 缓存，格式为 E2M1 配每 16 通道一个 E4M3 缩放因子（接近 NVFP4 但省掉二级全局缩放）。</li><li><strong>部署（SWA Bounded Replay）</strong>：SWA 依赖逐层累积，精确重建 L 层 SWA KV 需回放 L × n_win 个 token，代价过高，于是接受近似——只回放最近 n_win（=128）个 token。收益显著：V4 部署中 SWA KV 曾占持久化缓存近一半容量，且与长留存策略不匹配；V4.1-Flash 把 SWA KV 整个移出持久化缓存，改放进每台机器 10% 主机 DRAM 组成的分布式内存池（TTL 几分钟，靠高周转服务并发会话），全局 KV 留在 SSD 保证至少 72 小时生命周期。全局 KV 命中而 SWA KV 未命中时用 bounded replay 重算兜底，把灾难性缓存未命中变成廉价优雅降级。</li><li><strong>reasoning effort 设计</strong>：后训练把 1–100 的标量 effort 显式写进系统提示，同 effort 采样构成子组做组内奖励中心化，长度惩罚系数随 effort 指数衰减（每增加一个特征尺度乘 1/e），让同一份权重在成本-质量曲线上滑动；API 的 max/high/low 对应 b=100/75/50。effort 从 25 提到 100，八个推理密集型基准平均 Pass@1 从 67.1% 升到 76.3%，DeepSWE v1.1 从 66.0% 到 74.2%，Terminal-Bench 2.1 从 82.4% 到 90.6%，代价约 2.5 倍输出 token；60–80 档已能用不到一半 token 预算拿到接近满档准确率，80→100 会让 agent 轨迹再长 1.6–1.8 倍只换来边际提升。</li><li><strong>开源配套</strong>：deepseek-recipe（统一 API 请求/响应与 Conversation 格式的 Rust 库 + Python bindings）、DeepJIT（面向 CUDA 与昇腾 NPU 的轻量 header-only C++20 JIT 运行时）、DeepSelect（DSA TopK 内核与采样器高性能实现，较 torch.topk 加速 2–20 倍）。另已开始灰度语音交互。</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>部署长上下文 agent 时，先算清瓶颈在"算"还是"存/搬"；上下文超过数十万 token 后，成本大头通常是 KV 的存储与迁移而非 FLOPs。</li><li>分层缓存策略可借鉴：长生命周期、有长尾复用价值的全局 KV 留持久化存储（SSD），短窗口、会话级的 SWA KV 放高周转内存池并允许近似重算兜底。</li><li>调 API 时按任务难度选 reasoning effort：默认用中高档（相当于 b=60–80）可省约一半 token 预算且准确率接近满档，max 档只留给最难任务。</li></ul>
 <p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#观看更多">观看更多</a></li><li><a href="#全屏">全屏</a></li></ul>
 <p><img alt="图片" src="../../_assets/20260912-DeepSeekV41Flash技术解读KV缓存压缩如何让Flash逼退Pro/img-001-33cfaf50.png"></p>
 <p>编辑｜Panda</p>
@@ -455,7 +455,7 @@
 <p>**</p>
 <p>关注</p>
 <p><strong> 重播   </strong> 分享    ** 赞</p>
-<h3>观看更多</h3>
+<h3 id="观看更多">观看更多</h3>
 <p>**</p>
 <p>**</p>
 <p>**</p>
@@ -472,7 +472,7 @@
 <p>00:39</p>
 <p>00:39</p>
 <p>倍速</p>
-<h3>全屏</h3>
+<h3 id="全屏">全屏</h3>
 <p>** 倍速播放中</p>
 <p>0.5倍0.75倍1.0倍1.5倍2.0倍</p>
 <p>超清流畅</p>
@@ -555,7 +555,7 @@
 <p>**</p>
 <p>关注</p>
 <p><strong> 重播   </strong> 分享    ** 赞</p>
-<h3>观看更多</h3>
+<h3 id="观看更多-1">观看更多</h3>
 <p>**</p>
 <p>**</p>
 <p>**</p>
@@ -572,7 +572,7 @@
 <p>00:17</p>
 <p>00:17</p>
 <p>倍速</p>
-<h3>全屏</h3>
+<h3 id="全屏-1">全屏</h3>
 <p>** 倍速播放中</p>
 <p>0.5倍0.75倍1.0倍1.5倍2.0倍</p>
 <p>超清流畅</p>
@@ -592,7 +592,7 @@
 <p>© THE END</p>
 <p>转载请联系本公众号获得授权</p>
 <p>投稿或寻求报道：liyazhou@jiqizhixin.com</p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

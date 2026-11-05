@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</h1><div class="meta">📅 2026-09-18 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/JpDAPxDxt8HWdxwuVpOCGg" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260918-ReAct到Agent-Team信息流与责任边界.md</div><div class="md"><h1>从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">20</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#从-ReAct-到-Agent-Team-医疗系统研发任务里的信息流与责任边界">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#最近-24-小时-要先写成接口契约">“最近 24 小时”要先写成接口契约</a><a class="tl l3" href="#ReAct-先把一个循环跑通">ReAct 先把一个循环跑通</a><a class="tl l3" href="#先拆责任-再拆-Agent">先拆责任，再拆 Agent</a><a class="tl l3" href="#一致性落在三件具体的事上">一致性落在三件具体的事上</a><a class="tl l3" href="#信息流决定协作方式">信息流决定协作方式</a><a class="tl l3" href="#集成测试要检查业务含义">集成测试要检查业务含义</a><a class="tl l3" href="#失败时-先分清发生了什么">失败时，先分清发生了什么</a><a class="tl l3" href="#并行收益要和代价放在一起算">并行收益要和代价放在一起算</a><a class="tl l3" href="#先选能解释清楚的架构">先选能解释清楚的架构</a><a class="tl l3" href="#参考资料">参考资料</a><a class="tl l3" href="#Claude-Code-Agent-teams-https-code-claude-com-docs-en-agent-teams">Claude Code：Agent teams（https://code.claude.com/docs/en/agent-teams）</a><a class="tl l3" href="#HL7-FHIR-R4-Observation-https-hl7-org-fhir-R4-observation-html">HL7 FHIR R4：Observation（https://hl7.org/fhir/R4/observation.html）</a><a class="tl l3" href="#相关阅读">相关阅读：</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</h1><div class="meta">📅 2026-09-18 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/JpDAPxDxt8HWdxwuVpOCGg" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260918-ReAct到Agent-Team信息流与责任边界.md</div><div class="md"><h1 id="从-ReAct-到-Agent-Team-医疗系统研发任务里的信息流与责任边界">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-18 抓取状态：成功 原文字符：12050｜配图：4 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>以只读临床信息汇总服务为例讨论 Agent 协作的信息流与责任边界；核心判断标准：「是否值得增加一个 Agent，要看它有没有带来可核对的增量」。</li><li>反例：单测全绿但业务含义未对齐——10:00 才发布的报告不该出现在「截至 08:00 已知信息」中；医嘱有效≠已给药；「查询无记录」≠「患者无过敏」。</li><li>工程要点：先钉死接口契约再谈并行；字段需区分事件时间（effective_time）、结果可用时间（available_time）与拉取时间（fetched_at），保留 provenance 与 data_status。</li><li>责任边界：只读汇总服务不成为病历/医嘱的新写入入口；研发 Agent 使用脱敏合成数据与独立工作区；commit_sha、schema_version、测试报告须落在工程系统而非对话上下文。</li><li>ReAct 先把单循环跑通，再判断哪些工作值得并行拆给 Agent Team。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li>核心案例是「时间语义」陷阱：测试用例覆盖了字段却没覆盖业务时点，绿灯掩盖语义错误——评测必须测语义而非仅测接口。</li><li>三类信息各有时间戳：事件何时发生、结果何时可用、何时被拉取，混用会导致信息穿越。</li><li>Agent Team 拆分前提：接口契约稳定 + 每个产出可核对；否则并行只是放大混乱。</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>给多 Agent 数据流的每个字段标注 effective_time / available_time / fetched_at，杜绝「未来信息」泄漏。</li><li>设计 Agent 任务前先问：它带来什么可核对的增量？答不出就不加这一环。</li></ul>
 <p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#最近-24-小时要先写成接口契约">“最近 24 小时”要先写成接口契约</a></li><li><a href="#react-先把一个循环跑通">ReAct 先把一个循环跑通</a></li><li><a href="#先拆责任再拆-agent">先拆责任，再拆 Agent</a></li><li><a href="#一致性落在三件具体的事上">一致性落在三件具体的事上</a></li><li><a href="#信息流决定协作方式">信息流决定协作方式</a></li><li><a href="#集成测试要检查业务含义">集成测试要检查业务含义</a></li><li><a href="#失败时先分清发生了什么">失败时，先分清发生了什么</a></li><li><a href="#并行收益要和代价放在一起算">并行收益要和代价放在一起算</a></li><li><a href="#先选能解释清楚的架构">先选能解释清楚的架构</a></li><li><a href="#参考资料">参考资料</a></li><li><a href="#相关阅读">相关阅读：</a></li></ul>
 <p>架构师（JiaGouX）</p>
 <p>我们都是架构师！ 架构未来，你来不来？</p>
@@ -418,7 +418,7 @@
 <p>检验适配器的单测如果只检查数值、单位和报告时间，可能完全通过；生命体征适配器也能正确解析测量时间。可把它们合进“截至 08:00 已知的信息”，10:00 才发布的报告就不该出现。医嘱有效，也不能直接写成“已给药”。至于过敏接口的空列表，只能说明这次查询没有返回记录，不能顺手变成“患者无过敏”。</p>
 <p><strong>单测全绿，业务含义却没对齐。</strong>测试报告倒是挺喜庆，联调还得继续。</p>
 <p>这种错位，和《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410439&amp;idx=1&amp;sn=018783a6b86968da9fa7016f0d937e69&amp;scene=21#wechat_redirect">面试官：讲一讲多 Agent 协作如何保持一致性</a>》讨论的是同一个问题：协作者处理的任务、依据的事实、推进的状态，能不能对得上。医疗研发又多了一层要求：字段名称相同，业务含义也未必相同。所以先把接口语义钉住，再谈哪些工作值得并行。</p>
-<h3>“最近 24 小时”要先写成接口契约</h3>
+<h3 id="最近-24-小时-要先写成接口契约">“最近 24 小时”要先写成接口契约</h3>
 <p>架构设计先看数据流和写入边界，再决定 Agent 放在哪里。这个服务的读链路并不复杂，关键是每一层都知道自己能改什么、不能改什么。</p>
 <p><img alt="医疗信息汇总服务的只读链路" src="../../_assets/20260918-ReAct到Agent-Team信息流与责任边界/img-001-146ed75d.png"></p>
 <p>医疗信息汇总服务的只读链路</p>
@@ -436,7 +436,7 @@ data_status / provenance</code></pre>
 <p>字段只是示意，重点是把事件时间、结果可用时间和本次拉取时间分开保存。<code>provenance</code> 留下来源引用；<code>data_status</code> 区分有数据、查询无记录、上游不可用等情况。<strong>空返回只能说明“这次没有查到记录”，不能顺手写成“患者无过敏”。</strong>上游不提供记录版本时，保存响应快照与拉取信息，也能为后续核对留下依据。</p>
 <p>不同上游通常也没有跨系统的统一事务快照。某个来源晚到或不可用时，页面可以保留已获取的信息，同时标出更新时间与缺失项；是否允许展示这份不完整摘要，要在需求和验收条件里约定，不能留给模型临时猜。</p>
 <p>在传统研发流程里，这几步对应需求澄清、领域建模、接口设计、适配器实现、契约测试、集成测试和发布门禁。Agent 可以参与每一环，但 <code>commit_sha</code>、<code>schema_version</code>、测试报告和发布记录仍然要落在工程系统里，不能只存在对话上下文中。</p>
-<h3>ReAct 先把一个循环跑通</h3>
+<h3 id="ReAct-先把一个循环跑通">ReAct 先把一个循环跑通</h3>
 <p>ReAct（Reasoning and Acting）是一种把推理和行动交替进行的工作方式：根据目标判断下一步，调用工具，读取真实返回，再决定继续、修正还是停止。</p>
 <pre><code>目标与上下文
       ↓
@@ -453,13 +453,13 @@ data_status / provenance</code></pre>
 <p>不过，测试通过只证明现有断言通过。如果测试本身漏了报告可用时间，Agent 也可能一路顺利地把错误实现交回来。ReAct 提供了利用反馈的循环，反馈是否充分，仍取决于测试和工具怎么设计。</p>
 <p>研发环境的权限、允许修改的目录、网络访问和执行预算由运行时控制。Agent 可以在隔离分支修改适配器和测试，合并、迁移与发布仍走工程系统已有流程。提示词里的限制需要有工具权限配合。</p>
 <p>进入多 Agent 后，每个执行者都有自己的上下文。一个循环的结果要经过消息、任务记录或外部制品，才能被下一个循环使用。信息一旦只停留在某个 Agent 的对话里，后续协作者拿到的就只剩“我查过了”。</p>
-<h3>先拆责任，再拆 Agent</h3>
+<h3 id="先拆责任-再拆-Agent">先拆责任，再拆 Agent</h3>
 <p>契约定下来，拆分才有意义。检验和生命体征适配器可以基于同一版契约分别开发；接口契约尚未确定时，让实现和验收各猜一份定义，后面很容易返工。任务依赖要先于角色命名。</p>
 <table><thead><tr><th>研发工作</th><th>Agent 协助完成</th><th>交付物</th></tr></thead><tbody><tr><td>身份与查询契约</td><td>对照主索引、就诊映射和时间定义，列出待确认问题</td><td>字段映射、契约草案、边界样例</td></tr><tr><td>检验与生命体征适配</td><td>实现字段转换，补单位、时间和报告修订测试</td><td>代码变更、契约测试报告</td></tr><tr><td>用药与过敏适配</td><td>区分医嘱与执行记录，保留缺失和确认状态</td><td>状态映射、异常路径测试</td></tr><tr><td>集成与复核</td><td>用同一批数据回放，检查页面事实与来源记录</td><td>集成报告、可复现阻塞项</td></tr></tbody></table>
 <p>每个产物都要能回到代码、输入和验收依据。接口定义有疑问时，Agent 提交问题及证据，交给工程师和业务人员确认；不能为了继续执行，自己把一个待确认项改成默认规则。</p>
 <p>例如，检验适配器的交接报告可以带上字段映射、修改的提交、失败与通过的测试，以及尚未验证的上游行为。下游读摘要快速了解进度，需要核对时再打开原始报告。单独一句“检验模块已完成”，留给集成的人猜的事情太多。</p>
 <p>Anthropic 在多 Agent Research 的工程总结里给了一个很实用的做法：子 Agent 把报告、数据或代码写入外部制品系统，再把路径、摘要和状态交回协调者。上下文不需要整段复制，后续的人也能回到原始证据。</p>
-<h3>一致性落在三件具体的事上</h3>
+<h3 id="一致性落在三件具体的事上">一致性落在三件具体的事上</h3>
 <p>负责适配器的 Agent 和负责测试的 Agent，可以对实现提出不同意见。例如一方主张在适配层过滤晚到报告，另一方主张由汇总层统一过滤。讨论这类选择有价值，但至少要共同确认：</p>
 <ol><li>交付的是同一版需求，使用相同的患者与就诊映射规则；</li></ol>
 <ol><li>实现和测试依据相同的接口契约、回放数据及时间条件；</li></ol>
@@ -478,7 +478,7 @@ lease_until / result_ref</code></pre>
 <p>结果也需要有状态。候选、已验证、冲突、已否决至少要能区分；“测试命令执行成功”和“交付满足需求”不能共用一个字段。复核者发现 10:00 的报告进入 08:00 页面时，应提交可重放的失败样例，并退回时间过滤相关任务。</p>
 <p>消息还会延迟、重复和乱序。第一次测试调用超时，重试先回报成功，第一次迟到的失败消息又把状态改回去。任务记录要带 <code>attempt</code> 和 <code>version</code>，通过带条件的状态更新拒绝过期结果，旧消息不能覆盖新状态。</p>
 <p>传统 CI 已经很重视这件事：测试报告绑定提交，代码继续变化后，旧报告不能证明新代码可交付。Agent 协作沿用这条规则，才不会把一份过期的“通过”带到合并阶段。</p>
-<h3>信息流决定协作方式</h3>
+<h3 id="信息流决定协作方式">信息流决定协作方式</h3>
 <p>到了协作层，差别主要落在信息怎么走。</p>
 <p>一种是中心化汇总：协调 Agent 分派适配器、测试和来源核对任务，收回代码与报告，再安排集成。权限、预算和任务归属比较清楚；但成员发现接口问题时，要经过协调者转交，上下文可能在转述中丢失。</p>
 <p>另一种是成员直接通信：适配器 Agent 可以向测试 Agent 追问样例，前后端 Agent 可以直接讨论接口。Claude Code 的 Agent Teams 文档提供了共享任务列表和成员间直接通信，也提示了额外成本。它让沟通更方便，但共享任务列表不等于业务数据库或发布记录。</p>
@@ -488,7 +488,7 @@ lease_until / result_ref</code></pre>
 <p>能不能并行，可以沿依赖图检查：输入是否独立，产物是否独立，合并是否可以延后。Agent 数量本身不能说明并行收益。</p>
 <p><img alt="中心化协调与成员直接通信" src="../../_assets/20260918-ReAct到Agent-Team信息流与责任边界/img-003-2dd93ea8.png"></p>
 <p>中心化协调与成员直接通信</p>
-<h3>集成测试要检查业务含义</h3>
+<h3 id="集成测试要检查业务含义">集成测试要检查业务含义</h3>
 <p>沿用开头的样例，集成测试要检查的是最终页面是否遵守需求，不能只验证接口都返回了 200：</p>
 <pre><code>身份：patient_id、encounter_id 与授权范围一致
 时间：10:00 才发布的报告不进入截至 08:00 已知的信息
@@ -502,37 +502,37 @@ lease_until / result_ref</code></pre>
 <p>写实现的 Agent 可以自测，但不能只靠它的一句“通过”放行。CI 验证确定的断言，复核者回到原始输入检查遗漏，工程师确认有争议的业务规则。再加一个复核 Agent 也不能保证独立性：如果它照着实现逻辑生成预期结果，同一个误解就可能被确认两遍。</p>
 <p>发现空返回被写成“无过敏”，复核报告需要指出具体输入、断言和代码位置，退回状态映射或摘要渲染任务，并补上回归测试。这样改完之后，同一个问题才有机会被下一次构建自动拦住。</p>
 <p>报告修订、停用医嘱、跨就诊混入数据、单位缺失，也值得进入回归样例。每次修复都留下一个能重放的测试，比反复在提示词里写“请仔细检查”可靠得多。</p>
-<h3>失败时，先分清发生了什么</h3>
+<h3 id="失败时-先分清发生了什么">失败时，先分清发生了什么</h3>
 <p>研发阶段的工具调用同样会超时。读取文档或查询测试结果通常可以重试；创建合并请求、执行迁移或触发发布超时，调用方却不能据此断定远端没有执行。即便这些动作由工程流程而非 Agent 直接发起，协调系统也需要识别它们的真实状态。</p>
 <p>更稳的状态至少分成“未执行、执行中、已完成、失败、状态未知”。状态未知时先查询远端状态，只有确认可以安全重放，才重新发起动作。写操作使用幂等键，重复请求由数据库唯一约束或下游接口挡住第二次副作用。</p>
 <p>失败也应落在子任务层。两个适配器已通过验收，只有过敏接口测试因环境问题失败，可以先重跑这一项。不过，如果修复改变了共享契约，受影响的集成测试也要重新执行。局部重试以依赖没有变化为前提。</p>
 <p>调度器重启时还要处理任务认领。租约和心跳可以帮助判断是否接管，但租约过期不会让旧 Agent 自动停止。状态或制品接收端还需要检查执行代次，拒绝旧执行者的迟到写入；否则新旧两个 Agent 仍可能同时提交结果。对小规模研发协作，独立工作区、带版本的任务记录和 CI 就可以是起点，不必一开始另建完整的分布式调度平台。</p>
-<h3>并行收益要和代价放在一起算</h3>
+<h3 id="并行收益要和代价放在一起算">并行收益要和代价放在一起算</h3>
 <p>多 Agent 的收益有明确的适用条件。Anthropic 的内部研究评测中，以 Claude Opus 4 协调、Sonnet 4 执行子任务的系统，相对单 Agent Opus 4 提升了 90.2%。他们另一个成本观察是，多 Agent 系统通常消耗约为普通聊天 15 倍的 token。两组数字的比较对象不同，也都不能直接当成医疗研发指标。</p>
 <p>Google Research 对 180 种 Agent 配置的研究给出了另一组对照：在适合并行探索的 Finance-Agent 任务中，集中式多 Agent 相对单 Agent 基线提升了 80.9%；在严格顺序依赖的 PlanCraft 任务上，所测试的多 Agent 变体下降了 39% 到 70%。这个结果更适合用来检查任务拆分，不能据此承诺开发效率会提高多少。</p>
 <p>Cedric Chee 在网上分享 K2.5 Agent Swarm 接入 Kimi Code CLI 的尝试时，也认为天然并行、下载或产出量大的深度研究较适合；软件开发还需要细化子 Agent 提示、并行协调和工作流。他明确说仍在实验，这个边界比“多 Agent 更适合开发”的泛泛结论有用。</p>
 <p>放回这个研发任务，分别梳理多个上游接口、实现相互独立的适配器，确实有并行空间。反复修改同一份契约、等待业务人员确认字段、修复共享模型，则很容易卡在依赖上。我会比较同一批任务的交付时间、返工次数、有效缺陷发现数和总调用成本；代码产出量本身，很难说明这一轮是否更划算。</p>
-<h3>先选能解释清楚的架构</h3>
+<h3 id="先选能解释清楚的架构">先选能解释清楚的架构</h3>
 <p>把场景压缩成几种选择，已经足够支撑初始设计：</p>
 <table><thead><tr><th>任务特征</th><th>组织方式</th><th>适用理由</th></tr></thead><tbody><tr><td>单个适配器修改、反馈可验证</td><td>单 Agent 的 ReAct 循环</td><td>上下文集中，故障面小</td></tr><tr><td>步骤固定、依赖明确</td><td>固定工作流或状态图</td><td>控制流可读，容易重放</td></tr><tr><td>需要额外质量检查</td><td>生成与评估分开</td><td>复核能退回具体任务</td></tr><tr><td>多个适配器可独立开发</td><td>协调者与执行者分工</td><td>分支与产物能独立验证</td></tr><tr><td>成员需要持续追问</td><td>Agent Team</td><td>直接通信有明确收益</td></tr><tr><td>多人改同一制品、依赖密集</td><td>单 Agent 或串行协作</td><td>合并和同步成本更低</td></tr></tbody></table>
 <p>实际组合时，固定工作流可以编排多个任务，每个执行 Agent 内部仍跑 ReAct 循环；并行工具调用本身也未必需要增加 Agent。</p>
 <p>对这项医疗研发，我会先固定一版接口契约和回放样例，让一个协调入口安排独立适配器的开发，使用隔离分支交付，再由 CI 与工程师完成集成验收。若成员频繁需要互相补充字段和测试上下文，再试直接通信，并观察它是否确实减少了转述和返工。</p>
 <p><strong>是否值得增加一个 Agent，要看它有没有带来可核对的增量。</strong>比如，它有没有找到原来遗漏的“报告尚未可用”，有没有补出“医嘱有效但执行记录缺失”的测试，以及修复后是否通过同一组回归样例。如果只是多生成一份内容相近的报告，这个任务继续由单 Agent 配合工程师处理，也很合适。</p>
-<h3>参考资料</h3>
+<h3 id="参考资料">参考资料</h3>
 <ol><li>Yao 等：ReAct: Synergizing Reasoning and Acting in Language Models（https://arxiv.org/abs/2210.03629）</li></ol>
 <ol><li>Anthropic：How we built our multi-agent research system（https://www.anthropic.com/engineering/multi-agent-research-system）</li></ol>
 <ol><li>Google Research：Towards a science of scaling agent systems: When and why agent systems work（https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/）</li></ol>
-<h3>Claude Code：Agent teams（https://code.claude.com/docs/en/agent-teams）</h3>
+<h3 id="Claude-Code-Agent-teams-https-code-claude-com-docs-en-agent-teams">Claude Code：Agent teams（https://code.claude.com/docs/en/agent-teams）</h3>
 <ol><li>Akihiro Nakamura：关于 Codex Multi-Agents 与 Claude Code Agent Teams 信息流差异的 X 原帖（https://x.com/akihiro_genai/status/2026078844814586041）</li></ol>
 <ol><li>Cedric Chee：关于 K2.5 Agent Swarm 在 Kimi Code CLI 中适用边界的 X 原帖（https://x.com/cedric_chee/status/2016722086925053960）</li></ol>
-<h3>HL7 FHIR R4：Observation（https://hl7.org/fhir/R4/observation.html）</h3>
+<h3 id="HL7-FHIR-R4-Observation-https-hl7-org-fhir-R4-observation-html">HL7 FHIR R4：Observation（https://hl7.org/fhir/R4/observation.html）</h3>
 <ol><li>HL7 FHIR R4：MedicationAdministration（https://hl7.org/fhir/R4/medicationadministration.html）</li></ol>
 <ol><li>HL7 FHIR R4：AllergyIntolerance（https://hl7.org/fhir/R4/allergyintolerance.html）</li></ol>
 <p>如喜欢本文，请点击右上角，把文章分享到朋友圈</p>
 <p>如有想了解学习的技术点，请留言给若飞安排分享</p>
 <p>因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</p>
 <p>·END·</p>
-<h3>相关阅读：</h3>
+<h3 id="相关阅读">相关阅读：</h3>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409863&amp;idx=1&amp;sn=60e8324f09734e1f46d042c89fbb2e63&amp;scene=21#wechat_redirect">Loop Engineering，应该赞成还是反对？</a></li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409856&amp;idx=1&amp;sn=e363ec05a284ccf97fd0054633b84806&amp;scene=21#wechat_redirect">Claude 做方案，Codex 写代码：多模型协作怎么交接才稳</a></li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409667&amp;idx=1&amp;sn=96d1aa86386964bd2db67cef90fdb57c&amp;scene=21#wechat_redirect">架构排熵：Loop Engineering 的持续清理系统</a></li></ul>
@@ -556,7 +556,7 @@ lease_until / result_ref</code></pre>
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>
 <p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

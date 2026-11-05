@@ -395,45 +395,45 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</h1><div class="meta">📅 2026-04-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Sz2hzXiNCyf1YNzPbeUo5Q" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260424-MCP对比CLI与Anthropic官方回应Tool-Search解法.md</div><div class="md"><h1>MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">24</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#MCP-vs-CLI-路线之争-Anthropic-官方给出-Tool-Search-程序化调用两个解法-两者并存不对立">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文-AGI-Hunt">原文：AGI Hunt</a><a class="tl l3" href="#社区对-MCP-的三大批评">社区对 MCP 的三大批评</a><a class="tl l3" href="#Anthropic-的三条路框架">Anthropic 的三条路框架</a><a class="tl l3" href="#解法一-Tool-Search-按需加载">解法一：Tool Search（按需加载）</a><a class="tl l3" href="#解法二-程序化工具调用">解法二：程序化工具调用</a><a class="tl l3" href="#Cloudflare-代码编排案例">Cloudflare 代码编排案例</a><a class="tl l3" href="#MCP-Skills-官方认可">MCP + Skills 官方认可</a><a class="tl l3" href="#结论-最终图景">结论：最终图景</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#之前聊过什么">之前聊过什么</a><a class="tl l3" href="#Anthropic-的回应">Anthropic 的回应</a><a class="tl l3" href="#三条路对比-API-vs-CLI-vs-MCP">三条路对比：API vs CLI vs MCP</a><a class="tl l3" href="#Token-解法">Token 解法</a><a class="tl l3" href="#Cloudflare-的实践">Cloudflare 的实践</a><a class="tl l3" href="#Skills-转正">Skills 转正</a><a class="tl l3" href="#MCP-的地盘">MCP 的地盘</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</h1><div class="meta">📅 2026-04-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Sz2hzXiNCyf1YNzPbeUo5Q" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260424-MCP对比CLI与Anthropic官方回应Tool-Search解法.md</div><div class="md"><h1 id="MCP-vs-CLI-路线之争-Anthropic-官方给出-Tool-Search-程序化调用两个解法-两者并存不对立">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-04-24 抓取状态：成功 原文字符：7968｜配图：14 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>MCP 因为"token 贵/schema 臃肿/不可组合"三个问题被社区批评，CLI+Skills 被认为是更好的 Agent 接入方式——Anthropic 官方博客正面回应并给出具体解法。</p>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li><strong>MCP 三大原罪</strong>（社区批评）：GitHub MCP 43 个工具定义占 55,000 tokens；Perplexity CTO 称 72% 上下文被 MCP 占掉；CLI 操作同样任务 token 消耗是 MCP 的 1/32</li><li><strong>解法一：Tool Search（按需加载）</strong>：Agent 先描述意图，运行时只拉取匹配的几个工具，而非塞入全部工具定义 → 工具定义 token 减少 85%+，工具选择准确率不下降；工具要按意图分组，不按 API 分</li><li><strong>解法二：程序化工具调用</strong>：工具返回结果不直接塞回上下文，而是在代码执行沙箱里循环/过滤/聚合，只把最终结果返回 → 复杂多步工作流减少约 37% token</li><li><strong>Cloudflare 案例</strong>：2,500 个 API 端点，只暴露 2 个工具（search + execute），整个工具定义仅占约 1K tokens——把 CLI 的哲学搬进了 MCP 协议（"代码编排"模式）</li><li><strong>两者定位明确</strong>：本地开发环境 → CLI + Skills（轻量、快速、上下文干净）；云端生产环境（Managed Agents/移动端/Web 端，无文件系统）→ MCP + Skills（标准化、跨平台）；简单场景 → 直连 API</li><li><strong>MCP + Skills 打包</strong>：Anthropic 官方认可 Skills 的地位，MCP 管"能力"，Skills 管"编排"；部分第三方服务商已经开始同时发布 MCP server 和配套 Skills</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充——1. SXL 的 Skills 体系是否也存在"按 API 而非按意图分组"的问题，导致某些 Skill 调用时带入了太多不相关上下文？2. Cloudflare 的"2 个工具覆盖 2500 端点"模式，是否可以作为设计新 Skill 的参考范式？）</p>
 <hr>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <p>SXL 当前体系用 CLI + Skills，这篇明确了边界：本地场景继续 CLI，若未来有云端部署的 Agent（如 Managed Agents），MCP + Skills 是对应方案。Tool Search 的"按意图分组工具"思路，也可以用来优化 SXL 现有 Skills 的结构设计。</p>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li>适用：需要 Agent 连接外部系统的架构决策、云端 Agent 部署场景、优化现有 MCP server 的 token 消耗</li><li>不适用：完全本地环境（CLI + Skills 够用，不需要 MCP）</li></ul>
-<h2>原文：AGI Hunt</h2>
+<h2 id="原文-AGI-Hunt">原文：AGI Hunt</h2>
 <p>Anthropic 最新发了篇博客《Building agents that reach production systems with MCP》。</p>
-<h3>社区对 MCP 的三大批评</h3>
+<h3 id="社区对-MCP-的三大批评">社区对 MCP 的三大批评</h3>
 <ol><li><strong>token 贵</strong>：ScaleKit benchmark，GitHub MCP vs gh CLI 跑 75 轮，CLI 每月 3.2 美元 vs MCP 55.2 美元，差 17 倍；CLI 完成同一任务 1,365 tokens vs MCP 44,026 tokens，差 32 倍</li><li><strong>schema 臃肿</strong>：GitHub MCP 43 个工具定义全塞进上下文，一个工具定义就占 4,026 tokens；Perplexity CTO：72% 上下文窗口被 MCP 占掉</li><li><strong>不可组合</strong>：OpenClaw 之父 Peter：MCP 默认污染上下文，大部分 MCP 做得不好</li></ol>
-<h3>Anthropic 的三条路框架</h3>
+<h3 id="Anthropic-的三条路框架">Anthropic 的三条路框架</h3>
 <table><thead><tr><th>方式</th><th>适合场景</th></tr></thead><tbody><tr><td>直连 API</td><td>简单一对一场景</td></tr><tr><td>CLI</td><td>本地/沙箱环境，Agent 天生说命令行语言</td></tr><tr><td>MCP</td><td>云端生产环境（无本地文件系统），标准化远程服务器，一个 server 通吃所有客户端</td></tr></tbody></table>
-<h3>解法一：Tool Search（按需加载）</h3>
+<h3 id="解法一-Tool-Search-按需加载">解法一：Tool Search（按需加载）</h3>
 <ul><li>传统：43 个工具全塞进上下文，55,000 tokens，没开始干活就堆满说明书</li><li>Tool Search：Agent 描述意图 → 运行时搜索匹配工具 → 只拉取相关几个</li><li>效果：工具定义 token 减少 85%+；工具按意图分组（不按 API 分）</li></ul>
 <p>叠加 Tool Search 后，MCP 的 token 消耗从 CLI 的 32 倍差距缩小到约 7 倍（还是贵，但不是数量级差距了）。</p>
-<h3>解法二：程序化工具调用</h3>
+<h3 id="解法二-程序化工具调用">解法二：程序化工具调用</h3>
 <p>工具返回结果 → 代码执行沙箱里处理（循环/过滤/聚合）→ 只返回最终结果到上下文。</p>
 <p>效果：复杂多步工作流减少约 37% token 消耗。</p>
-<h3>Cloudflare 代码编排案例</h3>
+<h3 id="Cloudflare-代码编排案例">Cloudflare 代码编排案例</h3>
 <p>2,500 个 API 端点 → 只暴露 <code>search</code> 和 <code>execute</code> 两个工具：</p>
 <ol><li>Agent 用 <code>search</code> 找到需要的 API</li><li>写一段脚本通过 <code>execute</code> 在服务端沙箱里跑</li></ol>
 <p>整个工具定义仅约 1K tokens。这是"把 CLI 哲学搬进 MCP"。</p>
-<h3>MCP + Skills 官方认可</h3>
+<h3 id="MCP-Skills-官方认可">MCP + Skills 官方认可</h3>
 <p>Anthropic 官方博客把 Skills 写进了实践方案：</p>
 <ul><li>MCP：管"能力"（连接 Snowflake/Databricks/BigQuery 等）</li><li>Skills：管"编排"（告诉 Agent 怎么用这些连接完成具体任务）</li></ul>
 <p>Claude 数据插件案例：10 个 Skills + 8 个 MCP servers 打包，覆盖多个数据平台。</p>
-<h3>结论：最终图景</h3>
+<h3 id="结论-最终图景">结论：最终图景</h3>
 <ul><li><strong>本地开发环境</strong> → CLI + Skills，轻量、快速、上下文干净</li><li><strong>云端生产环境</strong> → MCP + Skills，标准化、跨平台、认证完备</li><li><strong>简单场景</strong> → 直连 API，别瞎折腾</li></ul>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#之前聊过什么">之前聊过什么</a></li><li><a href="#anthropic-的回应">Anthropic 的回应</a></li><li><a href="#三条路对比api-vs-cli-vs-mcp">三条路对比：API vs CLI vs MCP</a></li><li><a href="#token-解法">Token 解法</a></li><li><a href="#cloudflare-的实践">Cloudflare 的实践</a></li><li><a href="#skills-转正">Skills 转正</a></li><li><a href="#mcp-的地盘">MCP 的地盘</a></li></ul>
 <p>Anthropic 最新发了篇博客，标题叫《Building agents that reach production systems with MCP》，翻译过来是：《构建能触达生产系统的 Agent：MCP 实践指南》。</p>
 <p><img alt="图片" src="../../_assets/20260424-MCP对比CLI与Anthropic官方回应Tool-Search解法/img-001-433883d8.png"></p>
@@ -443,7 +443,7 @@
 <p>但今天，MCP 的亲爹 Anthropic 自己出来再一次为 MCP 说话了。</p>
 <p>它倒不是说「你们错了」，它说的是：「你们提的那些问题，我们有答案了。」</p>
 <p>01</p>
-<h3>之前聊过什么</h3>
+<h3 id="之前聊过什么">之前聊过什么</h3>
 <p>这里来补一下前情提要。</p>
 <p>过去一个多月，社区对 MCP 的批评集中在三件事上。</p>
 <p>ScaleKit 做了一组严格的 benchmark，拿 GitHub 官方 MCP 服务器和 <code>gh</code> CLI 做对照，跑了 75 轮实验。</p>
@@ -459,7 +459,7 @@
 <p>当时我们的结论是：<strong>MCP 倒是不会死，但它会退到它该待的地方。</strong></p>
 <p><strong>而 CLI，将成为 Agent 操作一切软件的默认界面。接下来，整个 SaaS 的 API surface，将全都暴露成 CLI。</strong></p>
 <p>02</p>
-<h3>Anthropic 的回应</h3>
+<h3 id="Anthropic-的回应">Anthropic 的回应</h3>
 <p>而今天的这篇博客，则是 Anthropic 在重新定义什么是 MCP「该待的地方」。</p>
 <p>博客开篇先摆了一个框架：Agent 连接外部系统有三条路，直连 API、CLI、MCP，<strong>各有各的适用场景</strong>。</p>
 <p><img alt="三条路" src="../../_assets/20260424-MCP对比CLI与Anthropic官方回应Tool-Search解法/img-003-ee49a15f.png"></p>
@@ -471,13 +471,13 @@
 <p>但博客里话锋一转：**生产级 Agent 越来越多的，正在跑在云上。</p>
 <p><img alt="三条路对比：API vs CLI vs MCP" src="../../_assets/20260424-MCP对比CLI与Anthropic官方回应Tool-Search解法/img-005-95addd87.png"></p>
 <p>**</p>
-<h3>三条路对比：API vs CLI vs MCP</h3>
+<h3 id="三条路对比-API-vs-CLI-vs-MCP">三条路对比：API vs CLI vs MCP</h3>
 <p>Claude Cowork、Claude Managed Agents、移动端、Web 端……这些环境里没有本地文件系统，跑不了 CLI。而 MCP 的定位，则恰恰就是为这个场景服务的：<strong>一个远程服务器，通吃所有客户端</strong>。</p>
 <p>Claude、ChatGPT、Cursor、VS Code，一个 MCP 服务器全覆盖。</p>
 <p>博客里给出的一个数据是：<strong>MCP SDK 的月下载量从年初的 1 亿涨到了 3 亿。</strong></p>
 <p>社区怎么争论是一回事，但事实上则是：用脚投票的人越来越多了。</p>
 <p>03</p>
-<h3>Token 解法</h3>
+<h3 id="Token-解法">Token 解法</h3>
 <p>这应该算是整篇博客中，最为关键的部分了。</p>
 <p>之前社区骂得最狠的就是 token 膨胀。Anthropic 这次则直接给了两个解法。</p>
 <p>第一个叫 <strong>Tool Search</strong>。</p>
@@ -504,7 +504,7 @@
 <p>博客里说这个方案，在复杂多步工作流上<strong>减少了约 37% 的 token 消耗</strong>。</p>
 <p>两个方案叠加起来，MCP 的 token 问题虽然没有彻底解决，但确实离 CLI 差的并不太多了。</p>
 <p>04</p>
-<h3>Cloudflare 的实践</h3>
+<h3 id="Cloudflare-的实践">Cloudflare 的实践</h3>
 <p>博客里有个关于 Cloudflare 的案例，我们可以来看一下。</p>
 <p>Cloudflare 的 MCP 服务器，覆盖了大约 <strong>2,500 个 API 端点</strong>。如果按传统方式，把这 2,500 个端点的工具定义全塞进上下文，那画面简直就是美到不忍直视了……</p>
 <p>而 Cloudflare 的做法是只暴露 <strong>2 个工具</strong>：search 和 execute。</p>
@@ -516,7 +516,7 @@
 <p>区别在于：它跑在云端，走的是 MCP 协议，而不是本地的命令行。</p>
 <p>所以，Anthropic 真正想说是：<strong>MCP 和 CLI 不是对立的，好的 MCP 服务器应该像 CLI 一样设计。</strong></p>
 <p>05</p>
-<h3>Skills 转正</h3>
+<h3 id="Skills-转正">Skills 转正</h3>
 <p>博客专门有一节讲 MCP 和 Skills 的关系。</p>
 <p>Anthropic 的说法是：MCP 管「能力」，Skills 管「编排」。</p>
 <p>MCP 让 Agent 能连上 Snowflake、Databricks、BigQuery 这些服务，Skills 告诉 Agent 该怎么用这些连接来完成具体任务。</p>
@@ -529,7 +529,7 @@
 <blockquote><p>“ MCP 推动了很多公司去做 API，这是好的。我现在可以看一个 MCP 然后把它做成 CLI。</p></blockquote>
 <p>而现在 Anthropic 的态度是：你说得对，Skills 确实不可或缺。但 MCP 不需要被替换掉，它可以和 Skills 一起发布、共存。</p>
 <p>06</p>
-<h3>MCP 的地盘</h3>
+<h3 id="MCP-的地盘">MCP 的地盘</h3>
 <p>把这篇博客和我们之前的文章一起来看，其实也并不矛盾。</p>
 <p>我们说 MCP 有三个问题：token 贵、schema 臃肿、不可组合。</p>
 <p>Anthropic 这篇博客给了三个对应的回答：Tool Search 解决 schema 臃肿（减 85%），程序化调用解决不可组合（让 Agent 写代码处理），代码编排模式解决 token 贵（Cloudflare 的 2 个工具覆盖 2500 端点）。</p>
@@ -547,7 +547,7 @@
 <p>◇ ◆ ◇</p>
 <p>相关链接：</p>
 <p>•  Anthropic 博客原文：https://claude.com/blog/building-agents-that-reach-production-systems-with-mcp</p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

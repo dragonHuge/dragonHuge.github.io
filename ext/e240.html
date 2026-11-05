@@ -395,37 +395,37 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</h1><div class="meta">📅 2026-04-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/v6iBuqep2ZCZ9wAwhnHLDA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260424-claude文件夹配置分层体系-CLAUDE-md到hooks到agents.md</div><div class="md"><h1>.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">50</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#claude-文件夹配置分层体系-规则-权限-动作-流程四层各归各位">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#具体步骤-建立-claude-配置的优先顺序">具体步骤（建立 .claude/ 配置的优先顺序）</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文-架构师">原文：架构师</a><a class="tl l3" href="#claude-是什么">.claude/ 是什么</a><a class="tl l3" href="#两个-claude-层级">两个 .claude/ 层级</a><a class="tl l3" href="#CLAUDE-md-写什么">CLAUDE.md 写什么</a><a class="tl l3" href="#settings-json-配置示例">settings.json 配置示例</a><a class="tl l3" href="#hooks-exit-code-关键细节">hooks exit code 关键细节</a><a class="tl l3" href="#hooks-其他用途">hooks 其他用途</a><a class="tl l3" href="#skills-和-agents-的定位">skills 和 agents 的定位</a><a class="tl l3" href="#核心链路">核心链路</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#太长不看版">太长不看版</a><a class="tl l3" href="#从哪些方面来下手">从哪些方面来下手？</a><a class="tl l3" href="#claude-到底是个什么东西">.claude/ 到底是个什么东西</a><a class="tl l3" href="#两个-claude-不是一个">两个 .claude/，不是一个</a><a class="tl l3" href="#1-CLAUDE-local-md-个人项目覆盖-gitignored">1. CLAUDE.local.md（个人项目覆盖，gitignored）</a><a class="tl l3" href="#2-CLAUDE-md-项目根目录-提交到-Git">2. ./CLAUDE.md（项目根目录，提交到 Git）</a><a class="tl l3" href="#3-claude-CLAUDE-md-用户全局偏好">3. /.claude/CLAUDE.md（用户全局偏好）</a><a class="tl l3" href="#4-组织级托管策略-企业部署的-IT-策略-不可覆盖">4. 组织级托管策略（企业部署的 IT 策略，不可覆盖）</a><a class="tl l3" href="#CLAUDE-md-放项目常识-不放百科全书">CLAUDE.md 放项目常识，不放百科全书</a><a class="tl l3" href="#关于-claude-rules-的真实情况">关于 .claude/rules/ 的真实情况</a><a class="tl l3" href="#不该放什么-临时状态-长文档-个人偏好">不该放什么：临时状态、长文档、个人偏好</a><a class="tl l3" href="#settings-json-放权限边界">settings.json 放权限边界</a><a class="tl l3" href="#hooks-放确定性动作">hooks 放确定性动作</a><a class="tl l3" href="#hooks-还能做什么">hooks 还能做什么</a><a class="tl l3" href="#第四层-commands-和-skills-放可复用流程">第四层：commands 和 skills 放可复用流程</a><a class="tl l3" href="#从-commands-到-skills-不只是更长的-prompt">从 commands 到 skills：不只是更长的 prompt</a><a class="tl l3" href="#第五层-agents-放隔离上下文-不是凑热闹">第五层：agents 放隔离上下文，不是凑热闹</a><a class="tl l3" href="#团队配置和个人配置-要分开">团队配置和个人配置，要分开</a><a class="tl l3" href="#完整的文件树">完整的文件树</a><a class="tl l3" href="#如果从零开始">如果从零开始</a><a class="tl l3" href="#第一步-先写一个短的-CLAUDE-md">第一步：先写一个短的 CLAUDE.md</a><a class="tl l3" href="#第二步-补一个保守的-settings-json">第二步：补一个保守的 settings.json</a><a class="tl l3" href="#第三步-加一两个-hooks">第三步：加一两个 hooks</a><a class="tl l3" href="#第四步-沉淀高频-commands-或-skills">第四步：沉淀高频 commands 或 skills</a><a class="tl l3" href="#第五步-等支线任务真的变重-再加-agents">第五步：等支线任务真的变重，再加 agents</a><a class="tl l3" href="#Agent系列">Agent系列</a><a class="tl l3" href="#写在最后">写在最后</a><a class="tl l3" href="#参考资料">参考资料</a><a class="tl l3" href="#因公众号更改推送规则-请点-在看-并加-星标-第一时间获取精彩技术分享">因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</a><a class="tl l3" href="#END">·END·</a><a class="tl l3" href="#架构师">架构师</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</h1><div class="meta">📅 2026-04-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/v6iBuqep2ZCZ9wAwhnHLDA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260424-claude文件夹配置分层体系-CLAUDE-md到hooks到agents.md</div><div class="md"><h1 id="claude-文件夹配置分层体系-规则-权限-动作-流程四层各归各位">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-04-24 抓取状态：成功 原文字符：24524｜配图：7 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>大多数人把 <code>.claude/</code> 当"提示词垃圾桶"，把所有东西塞进 CLAUDE.md，导致 Agent 行为不可控、缓存命中差、个人偏好污染团队配置——本文把四层责任切清楚。</p>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li><strong>四层分离原则</strong>：CLAUDE.md（规则/应该做什么）→ settings.json（权限/允许做什么）→ hooks（确定性动作/做了之后自动发生什么）→ commands/skills/agents（可复用流程/专家角色）</li><li><strong>CLAUDE.md 写什么</strong>：只放"每次都值得带上"的稳定常驻规则——启动命令、架构边界、目录职责、测试方式、危险区；控制在 100 行以内；动态内容/个人偏好/临时状态一律不放</li><li><strong>settings.json 写什么</strong>：硬性权限边界，deny 优先——<code>.env</code> 文件、破坏性命令（<code>rm -rf</code>）、生产部署必须明确 deny；CLAUDE.md 写"不要读 <code>.env</code>"只是软约束，settings.json 的 deny 才是真正的门</li><li><strong>hooks exit code 陷阱</strong>：<code>exit 1</code> 不阻止执行（非阻塞错误），只有 <code>exit 2</code> 才是真正的安全拦截门；大多数"安全 hook"因用错 exit code 形同虚设</li><li><strong>两个 .claude/ 层级</strong>：项目级 <code>&amp;lt;project-root&amp;gt;/.claude/</code>（团队共享，提交 Git）vs 用户级 <code>~/.claude/</code>（个人偏好，不提交）；CLAUDE.md 加载优先级：CLAUDE.local.md &gt; 项目 CLAUDE.md &gt; 用户 CLAUDE.md &gt; 组织托管策略</li><li><strong>能机器验证的别写进 CLAUDE.md</strong>：测试、lint、CI、hooks 能约束的规则，不要只靠模型自觉</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充——1. SXL 当前 CLAUDE.md 是否有"把动态状态塞进稳定前缀"的问题，是否影响了 Prompt Cache 命中率？2. 工作域的危险命令拦截（git push --force、DROP TABLE 等）是否已经用 exit 2 做了正确实现？）</p>
 <hr>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <p>SXL 当前 CLAUDE.md 承担了大量职责，理解这个分层可以把"模型自觉遵守的"和"系统强制执行的"分开——特别是 hooks exit 2 这个细节，对 SXL 工作域的危险命令拦截直接适用。</p>
-<h2>具体步骤（建立 .claude/ 配置的优先顺序）</h2>
+<h2 id="具体步骤-建立-claude-配置的优先顺序">具体步骤（建立 .claude/ 配置的优先顺序）</h2>
 <ol><li>先写 CLAUDE.md：启动命令、架构边界、危险区，100 行以内</li><li>配 settings.json deny 列表：<code>.env</code>、<code>rm -rf *</code>、生产部署命令</li><li>写安全 hook（PreToolUse + exit 2 拦截危险命令）</li><li>PostToolUse hook 自动格式化（Prettier/gofmt）</li><li>把重复工作流提取为 skills/commands</li><li>需要独立上下文的专家角色提取为 agents</li></ol>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li>适用：团队协作项目、生产级 Agent 配置、需要约束危险操作的场景</li><li>不适用：一次性脚本、个人实验性项目（过度配置反而拖慢速度）</li></ul>
-<h2>原文：架构师</h2>
+<h2 id="原文-架构师">原文：架构师</h2>
 <p>今天来聊一个大家可能天天见，但不一定真正用好的东西：CLAUDE.md 和 .claude/。</p>
-<h3>.claude/ 是什么</h3>
+<h3 id="claude-是什么">.claude/ 是什么</h3>
 <p>它更像一张给 Agent 的项目工作台——左边放稳定规则，中间放权限和工具边界，右边放可复用流程。</p>
 <p>不是让 Claude 变聪明，是让它别走错路。</p>
-<h3>两个 .claude/ 层级</h3>
+<h3 id="两个-claude-层级">两个 .claude/ 层级</h3>
 <table><thead><tr><th>层面</th><th>路径</th><th>作用</th></tr></thead><tbody><tr><td>项目级</td><td><code>&amp;lt;project-root&amp;gt;/.claude/</code></td><td>团队共享规则、权限、hooks、skills、agents，通常提交到 Git</td></tr><tr><td>用户级</td><td><code>~/.claude/</code></td><td>个人偏好、跨项目通用 CLAUDE.md、个人 skills/agents、会话历史</td></tr></tbody></table>
 <p>CLAUDE.md 加载优先级（高到低）：</p>
 <ol><li>CLAUDE.local.md（个人项目覆盖，gitignored）</li><li>./CLAUDE.md（项目根目录，提交到 Git）</li><li>~/.claude/CLAUDE.md（用户全局偏好）</li><li>组织级托管策略（企业部署，不可覆盖）</li></ol>
-<h3>CLAUDE.md 写什么</h3>
+<h3 id="CLAUDE-md-写什么">CLAUDE.md 写什么</h3>
 <p>控制在 100 行以内（超过后 Claude 对后面指令遵从度下降）。只放：</p>
 <ul><li>启动命令（<code>npm run dev</code>、<code>npm run test</code> 等）</li><li>架构边界（技术栈、目录职责）</li><li>代码规范（请求验证方式、日志库）</li><li>危险区（不要编辑 migrations、测试用本地 DB 不用 mock 等）</li></ul>
 <p><strong>不放</strong>：当前 issue 状态、时间戳随机 ID、完整接口文档、个人偏好、临时规则。</p>
-<h3>settings.json 配置示例</h3>
+<h3 id="settings-json-配置示例">settings.json 配置示例</h3>
 <pre><code>{
   &quot;$schema&quot;: &quot;https://json.schemastore.org/claude-code-settings.json&quot;,
   &quot;permissions&quot;: {
@@ -446,7 +446,7 @@
   }
 }</code></pre>
 <p>不在两个列表的命令：Claude 执行前先问用户（中间地带，有意设计）。</p>
-<h3>hooks exit code 关键细节</h3>
+<h3 id="hooks-exit-code-关键细节">hooks exit code 关键细节</h3>
 <table><thead><tr><th>Exit Code</th><th>含义</th><th>效果</th></tr></thead><tbody><tr><td>exit 0</td><td>成功</td><td>继续执行</td></tr><tr><td>exit 1</td><td>错误但不阻止</td><td>工作流继续（最常见的错误写法！）</td></tr><tr><td>exit 2</td><td>阻止</td><td>真正拦住执行，stderr 发回给 Claude 做自我修正</td></tr></tbody></table>
 <p>安全 hook 示例（PreToolUse + exit 2）：</p>
 <pre><code>#!/usr/bin/env bash
@@ -460,15 +460,15 @@ case &quot;$command&quot; in
     ;;
 esac
 exit 0</code></pre>
-<h3>hooks 其他用途</h3>
+<h3 id="hooks-其他用途">hooks 其他用途</h3>
 <ul><li><strong>PostToolUse 自动格式化</strong>：Write/Edit 后自动跑 Prettier/gofmt，不用在 CLAUDE.md 里千叮万嘱</li><li><strong>Stop hook 运行最小测试集</strong>：Claude 准备结束时自动跑测试，确保不留破坏</li></ul>
-<h3>skills 和 agents 的定位</h3>
+<h3 id="skills-和-agents-的定位">skills 和 agents 的定位</h3>
 <ul><li><strong>skills/commands</strong>：重复工作流（代码审查、修 issue、安全检查）——不要当提示词收藏夹</li><li><strong>agents</strong>：需要独立上下文的专家角色（代码审查、安全审计）——核心价值是"上下文隔离"，不是"凑多 Agent 团队"</li></ul>
-<h3>核心链路</h3>
+<h3 id="核心链路">核心链路</h3>
 <p>项目规则（CLAUDE.md）→ 权限配置（settings.json）→ 拦截验证（hooks）→ 工具调用 → 结果回到会话</p>
 <p>这是从"会聊天"走向"能在项目里干活"的差别。</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#太长不看版">太长不看版</a></li><li><a href="#从哪些方面来下手">从哪些方面来下手？</a></li><li><a href="#claude到底是个什么东西">.claude/ 到底是个什么东西</a></li><li><a href="#两个claude不是一个">两个 .claude/，不是一个</a></li><li><a href="#1-claudelocalmd个人项目覆盖gitignored">1. <code>CLAUDE.local.md</code>（个人项目覆盖，gitignored）</a></li><li><a href="#2-claudemd项目根目录提交到-git">2. <code>./CLAUDE.md</code>（项目根目录，提交到 Git）</a></li><li><a href="#3-claudeclaudemd用户全局偏好">3. <code>~/.claude/CLAUDE.md</code>（用户全局偏好）</a></li><li><a href="#4-组织级托管策略企业部署的-it-策略不可覆盖">4. 组织级托管策略（企业部署的 IT 策略，不可覆盖）</a></li><li><a href="#claudemd放项目常识不放百科全书">CLAUDE.md 放项目常识，不放百科全书</a></li><li><a href="#关于clauderules的真实情况">关于 .claude/rules/ 的真实情况</a></li><li><a href="#不该放什么临时状态长文档个人偏好">不该放什么：临时状态、长文档、个人偏好</a></li><li><a href="#settingsjson放权限边界">settings.json 放权限边界</a></li><li><a href="#hooks-放确定性动作">hooks 放确定性动作</a></li><li><a href="#hooks-还能做什么">hooks 还能做什么</a></li><li><a href="#第四层commands-和-skills-放可复用流程">第四层：commands 和 skills 放可复用流程</a></li><li><a href="#从-commands-到-skills不只是更长的-prompt">从 commands 到 skills：不只是更长的 prompt</a></li><li><a href="#第五层agents-放隔离上下文不是凑热闹">第五层：agents 放隔离上下文，不是凑热闹</a></li><li><a href="#团队配置和个人配置要分开">团队配置和个人配置，要分开</a></li><li><a href="#完整的文件树">完整的文件树</a></li><li><a href="#如果从零开始">如果从零开始</a></li><li><a href="#第一步先写一个短的claudemd">第一步：先写一个短的 CLAUDE.md</a></li><li><a href="#第二步补一个保守的settingsjson">第二步：补一个保守的 settings.json</a></li><li><a href="#第三步加一两个-hooks">第三步：加一两个 hooks</a></li><li><a href="#第四步沉淀高频-commands-或-skills">第四步：沉淀高频 commands 或 skills</a></li><li><a href="#第五步等支线任务真的变重再加-agents">第五步：等支线任务真的变重，再加 agents</a></li><li><a href="#agent系列">Agent系列</a></li><li><a href="#参考资料">参考资料</a></li><li><a href="#引用链接">引用链接</a></li><li><a href="#因公众号更改推送规则请点在看并加星标第一时间获取精彩技术分享">因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</a></li><li><a href="#end">·END·</a></li><li><a href="#架构师">架构师</a></li></ul>
 <p>#</p>
 <hr>
@@ -491,7 +491,7 @@ exit 0</code></pre>
 <p>它不该是第二个文档站，也不该是提示词垃圾桶。</p>
 <p>它更像一张给 Agent 的项目工作台——左边放稳定规则，中间放权限和工具边界，右边放可复用流程。</p>
 <hr>
-<h3>太长不看版</h3>
+<h3 id="太长不看版">太长不看版</h3>
 <ul><li>• <code>CLAUDE.md</code> 先放最稳定、最高频、最影响行为的项目规则：命令、架构边界、目录职责、测试方式、危险区。</li></ul>
 <ul><li>• <code>.claude/CLAUDE.md</code> 和 <code>.claude/rules/*.md</code> 在 2.1.88 源码里仍然是项目记忆加载路径；官方文档更强调 <code>CLAUDE.md</code>、导入和 <code>/memory</code> 视图。写生产配置时，以当前版本实际加载结果为准。</li></ul>
 <ul><li>• <code>.claude/settings.json</code> 放权限边界：哪些命令能跑，哪些文件不能读，哪些动作必须先拦住。</li></ul>
@@ -501,7 +501,7 @@ exit 0</code></pre>
 <ul><li>• 个人偏好放 <code>~/.claude/</code> 或本地配置，团队契约放项目仓库。别把自己的习惯提交成全队规则。</li></ul>
 <ul><li>• 还有一条我自己踩过坑才想明白的：能用测试、权限、hook 和 CI 约束的东西，别只写在 <code>CLAUDE.md</code> 里指望模型自觉。</li></ul>
 <hr>
-<h3>从哪些方面来下手？</h3>
+<h3 id="从哪些方面来下手">从哪些方面来下手？</h3>
 <p>整理的时候，Akshay Pachaar 那篇 <em>Anatomy of the <code>.claude/</code> folder</em> 我前后翻了好几遍。</p>
 <p>但光看文章总觉得还差一口气——知道目录里有什么文件，不等于知道自己项目里该先放什么、后放什么、哪些可以先不管。我更想搞清楚的是背后的分层逻辑。</p>
 <p>所以这次多花了点时间，重点看了三个方面：</p>
@@ -521,7 +521,7 @@ exit 0</code></pre>
 <p>我自己看这张图最大的感受是分层：规则归规则，权限归权限，动作归动作，流程归流程，个人偏好别混进团队契约。</p>
 <p>我自己一开始就是把这几层搅在一起，后来才慢慢拆清楚的。</p>
 <hr>
-<h3>.claude/ 到底是个什么东西</h3>
+<h3 id="claude-到底是个什么东西">.claude/ 到底是个什么东西</h3>
 <p>有人把 <code>.claude/</code> 叫"Claude 的大脑"，挺形象的。不过我自己用下来，觉得它没那么神秘。</p>
 <p><code>.claude/</code> 不会让模型变聪明。模型的推理能力不在这个目录里。</p>
 <p>我更愿意把它想成一个项目里的<strong>交接台</strong>。</p>
@@ -539,22 +539,22 @@ exit 0</code></pre>
 <p>它把"资深工程师心里默认知道的项目规则"，翻译成 Agent 每次进仓库都能读到、能调用、能被约束的工程资产。</p>
 <p>不是让 Claude 变聪明，是让它别走错路。</p>
 <hr>
-<h3>两个 .claude/，不是一个</h3>
+<h3 id="两个-claude-不是一个">两个 .claude/，不是一个</h3>
 <p>很多教程一上来就讲项目根目录的 <code>.claude/</code>，容易让人以为只有一个。</p>
 <p>实际上有两个层面：</p>
 <table><thead><tr><th>层面</th><th>路径</th><th>作用</th></tr></thead><tbody><tr><td>项目级</td><td><code>&amp;lt;project-root&amp;gt;/.claude/</code></td><td>团队共享的规则、权限、hooks、skills、agents，通常提交到 Git</td></tr><tr><td>用户级</td><td><code>~/.claude/</code></td><td>个人偏好、跨项目通用的 CLAUDE.md、个人 skills/agents、会话历史</td></tr></tbody></table>
 <p><img alt="图片" src="../../_assets/20260424-claude文件夹配置分层体系-CLAUDE-md到hooks到agents/img-002-b0390fe1.png"></p>
 <p>图：CLAUDE.md 加载优先级</p>
 <p>这张图画得很清楚。Claude Code 启动时，会从多个层级合并配置，优先级从高到低大致是：</p>
-<h3>1. <code>CLAUDE.local.md</code>（个人项目覆盖，gitignored）</h3>
-<h3>2. <code>./CLAUDE.md</code>（项目根目录，提交到 Git）</h3>
-<h3>3. <code>~/.claude/CLAUDE.md</code>（用户全局偏好）</h3>
-<h3>4. 组织级托管策略（企业部署的 IT 策略，不可覆盖）</h3>
+<h3 id="1-CLAUDE-local-md-个人项目覆盖-gitignored">1. <code>CLAUDE.local.md</code>（个人项目覆盖，gitignored）</h3>
+<h3 id="2-CLAUDE-md-项目根目录-提交到-Git">2. <code>./CLAUDE.md</code>（项目根目录，提交到 Git）</h3>
+<h3 id="3-claude-CLAUDE-md-用户全局偏好">3. <code>~/.claude/CLAUDE.md</code>（用户全局偏好）</h3>
+<h3 id="4-组织级托管策略-企业部署的-IT-策略-不可覆盖">4. 组织级托管策略（企业部署的 IT 策略，不可覆盖）</h3>
 <p>最后合并成一份系统提示词进入会话。</p>
 <p>这个加载顺序本身不复杂，但知道以后能省很多排查时间。比如我有一次在 <code>~/.claude/CLAUDE.md</code> 里写了"默认用中文回复"，结果发现在某个英文项目里 Claude 也开始说中文了——后来才反应过来，项目级的 <code>CLAUDE.md</code> 优先级更高，但如果它没有明确覆盖语言偏好，用户级的就会漏进来。</p>
 <p>搞清楚这个分层，后面很多配置决策就顺了。</p>
 <hr>
-<h3>CLAUDE.md 放项目常识，不放百科全书</h3>
+<h3 id="CLAUDE-md-放项目常识-不放百科全书">CLAUDE.md 放项目常识，不放百科全书</h3>
 <p>如果只做一件事，我会先做 <code>CLAUDE.md</code>。</p>
 <p>它是最高杠杆文件。原文作者 Akshay 说的那句"Highest-leverage file"，我自己用下来也是这个感受。</p>
 <p>但这里最容易写坏。</p>
@@ -599,7 +599,7 @@ exit 0</code></pre>
 @docs/architecture.md
 @docs/testing.md
 @docs/security.md</code></pre>
-<h3>关于 .claude/rules/ 的真实情况</h3>
+<h3 id="关于-claude-rules-的真实情况">关于 .claude/rules/ 的真实情况</h3>
 <p>这里要补一个我在核对时特别花了时间的边界。</p>
 <p>社区里流传较广的一个说法是：<code>.claude/rules/</code> 目录下的 <code>.md</code> 文件会自动加载，而且支持 YAML frontmatter 里的 <code>paths</code> 字段做路径限定——只有当 Claude 编辑匹配路径的文件时才生效。</p>
 <p>这个说法不是完全没依据。我在 2.1.88 源码的 <code>src/utils/claudemd.ts</code> 里确实看到了 <code>.claude/rules/*.md</code> 的读取逻辑，<code>claudeMdExcludes</code> 的示例里也出现了 <code>.claude/rules/**</code>。Akshay 原文也详细描述了这个特性。</p>
@@ -607,7 +607,7 @@ exit 0</code></pre>
 <p>所以如果团队要把规则模块化，用规则文件或导入文件都可以，但我自己会用 <code>/memory</code> 或调试日志确认一下当前版本真的加载到了。之前就遇到过一次，写了 rules 文件，结果 Claude 根本没读到，白忙半天。</p>
 <p>做 Agent 配置这种事，"我在某篇教程里看过"不太够用。真正要进仓库的规则，还是得能被团队确认、能被版本管理、能被回滚。</p>
 <hr>
-<h3>不该放什么：临时状态、长文档、个人偏好</h3>
+<h3 id="不该放什么-临时状态-长文档-个人偏好">不该放什么：临时状态、长文档、个人偏好</h3>
 <p><code>CLAUDE.md</code> 该放什么，反过来看更清楚。</p>
 <p>我自己踩过几次坑以后，一般不往里放这些：</p>
 <ul><li>• 今天正在做哪个 issue；</li></ul>
@@ -634,7 +634,7 @@ exit 0</code></pre>
 <p>而是这条链路：项目规则进入上下文，权限配置参与裁决，hooks 参与拦截和验证，最后工具结果再回到会话里。</p>
 <p>说直白点，这就是从"会聊天"走向"能在项目里干活"的差别。</p>
 <hr>
-<h3>settings.json 放权限边界</h3>
+<h3 id="settings-json-放权限边界">settings.json 放权限边界</h3>
 <p><code>CLAUDE.md</code> 解决"应该怎么做"。</p>
 <p><code>settings.json</code> 解决"允许做什么"。</p>
 <p>这两件事不能混。</p>
@@ -668,7 +668,7 @@ exit 0</code></pre>
 <p>权限配置就是这个感受在项目里的落点。</p>
 <p>团队连测试和回滚都没补好的时候，就先给 Agent 开很大的权限，短期确实爽，长期就容易变成"自动制造技术债"。</p>
 <hr>
-<h3>hooks 放确定性动作</h3>
+<h3 id="hooks-放确定性动作">hooks 放确定性动作</h3>
 <p>到这一步开始有意思了。</p>
 <p><code>CLAUDE.md</code> 是软约束——"你应该这样做"，但模型有时候会忘。<code>settings.json</code> 是权限边界——"你不能做那个"，硬卡。</p>
 <p>hooks 再往前走一步，管的不是"能不能做"，而是"做了以后自动发生什么"。</p>
@@ -700,7 +700,7 @@ exit 0</code></pre>
 <p>这里真正重要的不是这几条规则，而是职责拆开了：</p>
 <p>模型提出动作。 系统独立裁决。 危险动作被确定性拦截。</p>
 <p>这和我们前面写 Harness 时的判断一致：生产级 Agent 的差距，很多时候不在模型会不会说，而在动作能不能被看见、被约束、被验证。</p>
-<h3>hooks 还能做什么</h3>
+<h3 id="hooks-还能做什么">hooks 还能做什么</h3>
 <p>除了安全拦截，hooks 还有几个实用场景：</p>
 <p><strong>PostToolUse 自动格式化</strong>：Claude 改完文件后自动跑 Prettier 或 gofmt。不用在 CLAUDE.md 里千叮万嘱"请遵守代码风格"了，系统自动帮你收拾。</p>
 <pre><code>{
@@ -729,7 +729,7 @@ exit 0</code></pre>
 <ul><li>• <code>Stop</code>：只做最小质量门禁。</li></ul>
 <p>复杂测试、完整安全扫描，还是交给明确命令或 CI。</p>
 <hr>
-<h3>第四层：commands 和 skills 放可复用流程</h3>
+<h3 id="第四层-commands-和-skills-放可复用流程">第四层：commands 和 skills 放可复用流程</h3>
 <p>很多人把 commands 当"提示词收藏夹"用。</p>
 <p>我一开始也是这样，后来才发现这个定位低了。</p>
 <p>它其实更适合做团队流程入口。</p>
@@ -772,7 +772,7 @@ Look up issue #$ARGUMENTS in this repo.
 
 Understand the bug, trace to root cause, fix it, and write a test that catches it.</code></pre>
 <p>跑 <code>/project:fix-issue 234</code> 就会自动拉取 issue 234 的内容注入到提示里。</p>
-<h3>从 commands 到 skills：不只是更长的 prompt</h3>
+<h3 id="从-commands-到-skills-不只是更长的-prompt">从 commands 到 skills：不只是更长的 prompt</h3>
 <p>现在官方口径里，custom commands 已经向 skills 体系收敛。老的 <code>.claude/commands/</code> 仍然可用，但 skills 可以带目录、模板、脚本和参考文件，也能在相关场景下被自动加载。</p>
 <p>这是什么意思？commands 你得手动输入 <code>/project:review</code> 才会触发。skills 不一样，Claude 可以根据对话上下文自动识别"当前任务匹配这个 skill"，然后主动调用。</p>
 <p>一个 skill 的结构是这样的：</p>
@@ -808,7 +808,7 @@ Reference @DETAILED_GUIDE.md for our security standards.</code></pre>
 <p><code>/project:review</code> 可以是 command。 <code>security-review</code> 更适合做 skill，因为它可能需要检查清单、威胁模型、报告模板和参考资料。</p>
 <p>这也接上了之前写 Hermes 和 OpenClaw 时的那条线：skill 不只是"更长的 prompt"，它更像团队经验的 SOP。关键不在文件长不长，而在它有没有生命周期，能不能被更新、验证、删除。</p>
 <hr>
-<h3>第五层：agents 放隔离上下文，不是凑热闹</h3>
+<h3 id="第五层-agents-放隔离上下文-不是凑热闹">第五层：agents 放隔离上下文，不是凑热闹</h3>
 <p><code>.claude/agents/</code> 很容易被讲成"多 Agent 团队"。</p>
 <p>之前写多 Agent 那篇的时候我就有一个感受：多 Agent 的难点不在给模型分几个角色，而在上下文边界怎么切、信息怎么流、系统什么时候停。</p>
 <p>Subagent 也是同一个逻辑。说白了就是：把某些支线任务丢到独立上下文里做，主线程只拿结果。</p>
@@ -840,7 +840,7 @@ When reviewing code:
 <p><code>model</code> 字段也挺实用。只读型 subagent 可以用更便宜更快的模型（比如 Haiku），把 Sonnet 和 Opus 留给真正需要推理深度的主任务。跑过几次就能感觉到成本差距。</p>
 <p>我自己越来越觉得，agents 最有价值的地方不是让系统看起来像一家公司，而是让上下文更干净、权限更窄、职责更清楚。</p>
 <hr>
-<h3>团队配置和个人配置，要分开</h3>
+<h3 id="团队配置和个人配置-要分开">团队配置和个人配置，要分开</h3>
 <p>再补一个很容易被忽略的边界：项目级 <code>.claude/</code> 和用户级 <code>~/.claude/</code>。</p>
 <p>简单表格看一下：</p>
 <table><thead><tr><th>位置</th><th>放什么</th><th>是否提交</th></tr></thead><tbody><tr><td><code>CLAUDE.md</code></td><td>团队共享的项目规则</td><td>通常提交</td></tr><tr><td><code>CLAUDE.local.md</code></td><td>个人项目级覆盖</td><td>不提交（auto-gitignored）</td></tr><tr><td><code>.claude/CLAUDE.md</code>   / <code>.claude/rules/*.md</code></td><td>项目级补充规则或模块化规则</td><td>先确认版本加载行为</td></tr><tr><td><code>.claude/settings.json</code></td><td>团队共享的权限和 hooks 配置</td><td>视团队策略提交</td></tr><tr><td><code>.claude/settings.local.json</code></td><td>本地权限覆盖</td><td>不提交（auto-gitignored）</td></tr><tr><td><code>.claude/commands/</code></td><td>项目工作流入口</td><td>通常提交</td></tr><tr><td><code>.claude/skills/</code></td><td>项目技能包</td><td>视情况提交</td></tr><tr><td><code>.claude/agents/</code></td><td>项目专用子代理</td><td>视情况提交</td></tr><tr><td><code>~/.claude/CLAUDE.md</code></td><td>个人跨项目偏好</td><td>不提交</td></tr><tr><td><code>~/.claude/skills/</code>   / <code>~/.claude/agents/</code></td><td>个人通用技能和代理</td><td>不提交</td></tr><tr><td><code>~/.claude/projects/</code></td><td>会话历史和自动记忆</td><td>不提交</td></tr></tbody></table>
@@ -851,7 +851,7 @@ When reviewing code:
 <p>关于 <code>~/.claude/projects/</code> 还有一个小知识：Claude Code 会在工作过程中自动给自己记笔记——它发现的命令、观察到的模式、架构洞察。这些笔记跨会话持久化。如果你发现 Claude 似乎"记住"了你从未告诉过它的事情，大概率就是自动记忆在起作用。你可以用 <code>/memory</code> 浏览和编辑它们。</p>
 <p>这个边界做好了，团队协作会轻很多。</p>
 <hr>
-<h3>完整的文件树</h3>
+<h3 id="完整的文件树">完整的文件树</h3>
 <p>把前面聊的全部放到一棵树里：</p>
 <pre><code>your-project/
 ├── CLAUDE.md                  # 团队指令（提交到 git）
@@ -897,10 +897,10 @@ When reviewing code:
 └── projects/                  # 会话历史 + 自动记忆</code></pre>
 <p>不需要一上来就配满。大部分项目用不到这里面的一半。</p>
 <hr>
-<h3>如果从零开始</h3>
+<h3 id="如果从零开始">如果从零开始</h3>
 <p>如果一个项目今天刚开始用 Claude Code，我不会一上来就把 <code>.claude/</code> 全家桶配满。</p>
 <p>我会按五步走。</p>
-<h3>第一步：先写一个短的 CLAUDE.md</h3>
+<h3 id="第一步-先写一个短的-CLAUDE-md">第一步：先写一个短的 CLAUDE.md</h3>
 <p>只写最影响行为的内容：</p>
 <ul><li>• 安装、启动、测试、构建命令；</li></ul>
 <ul><li>• 主要目录职责；</li></ul>
@@ -910,23 +910,23 @@ When reviewing code:
 <ul><li>• 改完以后怎么验证。</li></ul>
 <p>第一版别超过 100 行。</p>
 <p>也可以用 <code>/init</code> 让 Claude Code 自动生成一个起始版本，然后自己删减到最精简。自动生成的往往太啰嗦，我每次都要砍掉一大半。</p>
-<h3>第二步：补一个保守的 settings.json</h3>
+<h3 id="第二步-补一个保守的-settings-json">第二步：补一个保守的 settings.json</h3>
 <p>先允许读、搜索、diff、测试。</p>
 <p>再根据项目成熟度开放写文件、跑项目脚本。</p>
 <p>高风险动作先 deny。至少拦住 <code>.env</code> 读取和破坏性命令。</p>
-<h3>第三步：加一两个 hooks</h3>
+<h3 id="第三步-加一两个-hooks">第三步：加一两个 hooks</h3>
 <p>最值得先做的是 Bash 防火墙和 Stop 门禁。</p>
 <p>前者拦危险命令。 后者避免 Claude 说"完成了"，但测试根本没跑。</p>
-<h3>第四步：沉淀高频 commands 或 skills</h3>
+<h3 id="第四步-沉淀高频-commands-或-skills">第四步：沉淀高频 commands 或 skills</h3>
 <p>先从团队每天都做的流程开始，比如 review、fix issue、release notes。</p>
 <p>别把所有灵感都做成命令。命令越多维护成本越高。我自己的体会是，一个项目里有 3~5 个高频命令就够了。剩下的要么是临时的（不值得做成命令），要么是复杂的（应该做成 skill）。</p>
-<h3>第五步：等支线任务真的变重，再加 agents</h3>
+<h3 id="第五步-等支线任务真的变重-再加-agents">第五步：等支线任务真的变重，再加 agents</h3>
 <p>如果某类任务经常读很多文件、产生很多中间态，又只需要窄权限，那就适合抽 agent。</p>
 <p>比如代码审查、安全审计、性能排查。</p>
 <p>普通小改动，不需要上 agent。</p>
 <p>说实话，95% 的项目前三步就够了。Skills 和 agents 是等真的遇到重复性复杂工作流时才需要的。别为了配置而配置。</p>
 <hr>
-<h3>Agent系列</h3>
+<h3 id="Agent系列">Agent系列</h3>
 <p>最近这组文章，其实一直在讲同一件事，只是切口不同。</p>
 <p>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409091&amp;idx=1&amp;sn=3c40343aefdf11fdb208588a44033e14&amp;scene=21#wechat_redirect">Agent 最小闭环</a>》讲的是：Agent 起步靠 loop，模型看上下文、选工具、拿观察、继续下一轮。</p>
 <p>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409084&amp;idx=1&amp;sn=b8db9f9925f5dba578cfc7044981f25a&amp;scene=21#wechat_redirect">Agent Harness 综述</a>》讲的是：同一个模型为什么结果差很多，因为模型外面那套系统决定它怎么运行、怎么停、怎么恢复、怎么验证。</p>
@@ -945,7 +945,7 @@ When reviewing code:
 <p>这几层放对了，Claude Code 才不只是一个"会写代码的聊天框"，而更像一个能进入项目、遵守规则、接受约束、持续改进的工程工具。</p>
 <p>写到这里回头看，其实一直在聊同一件事：prompt 当然重要，但比 prompt 更持久的，是项目里那些可维护、可审计、可回滚的工程资产。</p>
 <hr>
-<h3>写在最后</h3>
+<h3 id="写在最后">写在最后</h3>
 <p>第一次配 <code>.claude/</code> 的时候，最容易想复杂。</p>
 <p>其实不用一开始就完整。先写短的 <code>CLAUDE.md</code>，再收住权限，再给关键动作加 hooks，再把重复流程做成 command 或 skill，最后才考虑 agents。</p>
 <p>这条路听起来慢，但更稳。</p>
@@ -956,7 +956,7 @@ When reviewing code:
 <p>末了，如果有兴趣或者正在手搓 Agent的话，可以看看这个《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409091&amp;idx=1&amp;sn=3c40343aefdf11fdb208588a44033e14&amp;scene=21#wechat_redirect">30分钟手搓 Agent：LLM + Tools + Loop + Memory 跑通最小闭环</a>》或者购买这个课程《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409115&amp;idx=1&amp;sn=4dd35acccc98b8e800a46283ee19d9b0&amp;scene=21#wechat_redirect">为什么你的Agent总是"不听话"？</a>》</p>
 <p><img alt="图片" src="../../_assets/20260424-claude文件夹配置分层体系-CLAUDE-md到hooks到agents/img-006-387e5bea.png"></p>
 <hr>
-<h3>参考资料</h3>
+<h3 id="参考资料">参考资料</h3>
 <ul><li>• Akshay Pachaar：Anatomy of the <code>.claude/</code> folder[1]</li></ul>
 <ul><li>• Anthropic Docs：Claude Code memory and <code>CLAUDE.md</code>[2]</li></ul>
 <ul><li>• Anthropic Docs：Claude Code settings[3]</li></ul>
@@ -964,12 +964,12 @@ When reviewing code:
 <ul><li>• Anthropic Docs：Claude Code slash commands[5]</li></ul>
 <ul><li>• Anthropic Docs：Claude Code subagents[6]</li></ul>
 <ul><li>• Claude Code Docs：Claude Code skills[7]</li></ul>
-<h4>引用链接</h4>
+<h4 id="引用链接">引用链接</h4>
 <p><code>[1]</code> Anatomy of the <code>.claude/</code> folder: <em>https://x.com/akshay_pachaar/status/2035341800739877091</em> <code>[2]</code> Claude Code memory and <code>CLAUDE.md</code>: <em>https://docs.anthropic.com/en/docs/claude-code/memory</em> <code>[3]</code> Claude Code settings: <em>https://docs.anthropic.com/en/docs/claude-code/settings</em> <code>[4]</code> Claude Code hooks: <em>https://docs.anthropic.com/en/docs/claude-code/hooks</em> <code>[5]</code> Claude Code slash commands: <em>https://docs.anthropic.com/en/docs/claude-code/slash-commands</em> <code>[6]</code> Claude Code subagents: <em>https://docs.anthropic.com/en/docs/claude-code/sub-agents</em> <code>[7]</code> Claude Code skills: <em>https://code.claude.com/docs/en/skills</em></p>
 <p>如喜欢本文，请点击右上角，把文章分享到朋友圈</p>
 <p>如有想了解学习的技术点，请留言给若飞安排分享</p>
-<h3>因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</h3>
-<h3>·END·</h3>
+<h3 id="因公众号更改推送规则-请点-在看-并加-星标-第一时间获取精彩技术分享">因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</h3>
+<h3 id="END">·END·</h3>
 <pre><code>相关阅读：
 
 刚刚，Claude Code“代码泄露”背后：如何重新看 Agent Harness
@@ -1006,10 +1006,10 @@ Anthropic官方万字长文：AI Agent评估的系统化方法论
 Claude Code创始人亲授13条使用技巧
 Claude Code 内部工具开源 code-simplifier：终结 AI 屎山代码的终极方案</code></pre>
 <blockquote><p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p></blockquote>
-<h3>架构师</h3>
+<h3 id="架构师">架构师</h3>
 <p>我们都是架构师！</p>
 <p><img alt="图片" src="../../_assets/20260424-claude文件夹配置分层体系-CLAUDE-md到hooks到agents/img-007-5ae8c7ba.webp"></p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

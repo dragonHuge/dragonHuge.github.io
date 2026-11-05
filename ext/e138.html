@@ -395,31 +395,31 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</h1><div class="meta">📅 2026-09-16 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/WkQXscLAkpdo_ygqaNnuYw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260916-多Agent三种拓扑怎么选.md</div><div class="md"><h1>多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">13</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#多-Agent-三种拓扑怎么选-Network-Supervisor-Hierarchical-讲透">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#1-为什么要把单-Agent-拆成多-Agent">1. 为什么要把单 Agent 拆成多 Agent</a><a class="tl l3" href="#2-Network-网络拓扑">2. Network（网络拓扑）</a><a class="tl l3" href="#3-Supervisor-主管拓扑">3. Supervisor（主管拓扑）</a><a class="tl l3" href="#4-Hierarchical-层级拓扑">4. Hierarchical（层级拓扑）</a><a class="tl l3" href="#5-常见误解">5. 常见误解</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#关联">关联</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#这几个-Agent-之间-到底该怎么连">这几个 Agent 之间，到底该怎么连？</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</h1><div class="meta">📅 2026-09-16 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/WkQXscLAkpdo_ygqaNnuYw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260916-多Agent三种拓扑怎么选.md</div><div class="md"><h1 id="多-Agent-三种拓扑怎么选-Network-Supervisor-Hierarchical-讲透">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-16 抓取状态：成功 原文字符：6314｜配图：3 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>什么时候才该拆多 Agent：工具太多导致单 Agent 决策质量下降、上下文过于复杂、任务需要多个专业领域；收益是模块化、专业化、可控性。</li><li>三种拓扑按控制集中度排列：Network（任意互转，最灵活最难控）、Supervisor（都经由主管调度）、Hierarchical（主管之上再套主管）。</li><li>Network 靠 handoff（目的地 + 载荷）通信，适合无层级、无固定顺序的问题（客服分流、多轮对话）。</li><li>Network 的代价是可预测性低：必须设 handoff 次数上限（建议不超过 10 次）并配转人工兜底。</li><li>常见误解澄清：Network 与 Swarm 不是同一回事。</li></ul>
-<h2>核心内容</h2>
-<h3>1. 为什么要把单 Agent 拆成多 Agent</h3>
+<h2 id="核心内容">核心内容</h2>
+<h3 id="1-为什么要把单-Agent-拆成多-Agent">1. 为什么要把单 Agent 拆成多 Agent</h3>
 <p>三个拆分动因：</p>
 <ul><li>工具太多：单个 Agent 挂上十几二十个工具后，选错工具的概率显著上升，决策质量下降。</li><li>上下文过于复杂：不同子任务需要的知识、规则、历史混在一个上下文里，互相干扰。</li><li>需要多个专业领域：一个通用 Agent 很难同时是财务专家、法律专家和运维专家。</li></ul>
 <p>拆分带来的三个收益：<strong>模块化</strong>（每个 Agent 可独立开发测试）、<strong>专业化</strong>（提示词与工具围绕单一职责收敛）、<strong>可控性</strong>（每段行为可单独观测与约束）。</p>
-<h3>2. Network（网络拓扑）</h3>
+<h3 id="2-Network-网络拓扑">2. Network（网络拓扑）</h3>
 <ul><li>结构：Agent 之间多对多连接，任意一个 Agent 都可以把控制权移交给任意另一个 Agent。</li><li>通信机制：靠 handoff——一小段结构化消息，包含<strong>目的地</strong>（交接给谁）和<strong>载荷</strong>（交接什么状态/上下文）。</li><li>适用：没有明显层级、也没有固定先后顺序的问题，例如客服分流、多轮对话中的话题切换。</li><li>代价：可预测性低。路径不固定意味着可能出现来回踢皮球、无限循环、成本失控。</li><li>必须配套的护栏：设置 handoff 次数上限（文章中建议不超过 10 次），超限直接转人工兜底。</li></ul>
-<h3>3. Supervisor（主管拓扑）</h3>
+<h3 id="3-Supervisor-主管拓扑">3. Supervisor（主管拓扑）</h3>
 <ul><li>结构：每个 Agent 只与主管通信，不直接互相移交；由主管决定下一步调用谁。</li><li>适用：流程相对可控的分工，主管实际上承担了路由与状态机的角色。</li><li>对比 Network：控制权集中，调试与审计更容易，但主管会成为瓶颈与单点。</li></ul>
-<h3>4. Hierarchical（层级拓扑）</h3>
+<h3 id="4-Hierarchical-层级拓扑">4. Hierarchical（层级拓扑）</h3>
 <ul><li>结构：主管之上再套主管，形成多层级调度树。</li><li>适用：大规模、多团队的复杂系统，需要把不同域拆给不同子主管管理。</li></ul>
-<h3>5. 常见误解</h3>
+<h3 id="5-常见误解">5. 常见误解</h3>
 <p>文章澄清了"Network 与 Swarm 是不是同一回事"这一常见混淆。</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>先判断是否真的需要多 Agent：只有工具过载、上下文互扰、需要多专业领域三者之一成立时才拆，否则单 Agent + 更好的提示词更划算。</li><li>选型默认从 Supervisor 起步——它是最容易观测和调试的拓扑；只有在问题本身没有固定顺序时才考虑 Network。</li><li>上 Network 前先把护栏配好：handoff 次数上限 + 超限转人工，否则线上一定出现循环与成本失控。</li><li>把 handoff 载荷定义成显式的结构化状态，而不是"把聊天记录一起传过去"，否则上下文会越滚越大。</li></ul>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>关联</h2>
+<h2 id="关联">关联</h2>
 <ul><li>基于 LangGraph 官方文档整理。</li></ul>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<h2>原文沉淀</h2>
+<h2 id="原文沉淀">原文沉淀</h2>
 <p>📮 摘要 拆成多 Agent 只是开始，<strong>怎么连才是真正决定系统上限的地方</strong>。本文基于 LangGraph 官方文档，讲清 Network / Supervisor / Hierarchical 三种拓扑的准确定义、通信方式与适合场景，并厘清一个常见误解 —— Network 和 Swarm 到底是不是一回事。</p>
 <p>从「一个 Agent 挂 20 个工具」说起</p>
 <p>你给一个 Agent 挂了 20 个工具，然后发现它开始乱调了。</p>
@@ -433,7 +433,7 @@
 <p>•<strong>专业化</strong>（每个 Agent 专注一个领域）</p>
 <p>•<strong>可控性</strong>（你能明确控制 Agent 之间怎么通信，而不是全靠函数调用去猜）</p>
 <p>但拆完紧接着是第二个问题，也是真正决定系统上限的问题：</p>
-<h3>这几个 Agent 之间，到底该怎么连？</h3>
+<h3 id="这几个-Agent-之间-到底该怎么连">这几个 Agent 之间，到底该怎么连？</h3>
 <p>拓扑一：Network（网络）</p>
 <p>它长什么样</p>
 <p>官方文档的定义很简洁：<strong>每个智能体都可以与其他任何智能体通信</strong>（多对多连接），并且<strong>任何智能体都可以决定下一步调用哪个其他智能体</strong>。</p>
@@ -544,7 +544,7 @@
 <p>如果本文对你有帮助，<strong>点个赞 + 在看</strong>，是对我最大的鼓励 ❤️</p>
 <p>关注我，每日学AI，每天进步一点点</p>
 <p>这里有 <strong>AI 前沿 · 开源一线 · 实战教程</strong></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

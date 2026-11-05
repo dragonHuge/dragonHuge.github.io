@@ -59,7 +59,7 @@ a:hover { text-decoration: underline; }
   overflow-y: auto;
 }
 .content { flex: 1; min-width: 0; padding: 28px 36px 80px; }
-.content > * { max-width: 880px; }
+.content > * { max-width: 880px; margin-left: auto; margin-right: auto; }
 
 /* ---- 侧栏目录 ---- */
 .side-nav details { margin-bottom: 4px; }
@@ -295,4 +295,56 @@ article h1 { margin: 0 0 8px; font-size: 25px; line-height: 1.35; }
   .topnav a { padding: 5px 8px; font-size: 12.5px; }
   .big-search { height: 46px; font-size: 16px; }
   .art-list li { gap: 6px; }
+}
+
+/* ---- 文章排版：正文列居中 + 左侧本篇目录（调研落地：66ch 行宽 / sticky TOC / scrollspy） ---- */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+.content.art-page > * { max-width: 760px; }
+.md h1[id], .md h2[id], .md h3[id] { scroll-margin-top: 76px; outline-offset: 4px; }
+
+.toc-wrap { display: none; }
+.toc {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 12px; padding: 10px 12px;
+}
+.toc summary {
+  cursor: pointer; font-weight: 600; font-size: 13.5px;
+  user-select: none; list-style: none; color: var(--text);
+}
+.toc summary::-webkit-details-marker { display: none; }
+.toc summary::after { content: " ▾"; color: var(--muted); font-size: 11px; }
+.toc:not([open]) summary::after { content: " ▸"; }
+.toc-n {
+  font-size: 11px; background: var(--line); color: var(--muted);
+  border-radius: 10px; padding: 1px 7px; margin-left: 6px; font-weight: 500;
+}
+.toc-list {
+  display: flex; flex-direction: column; margin-top: 8px;
+  max-height: calc(100vh - var(--topbar-h) - 150px);
+  overflow-y: auto;
+}
+.toc-list a {
+  display: block; padding: 4px 8px; font-size: 12.5px; color: #4b5563;
+  border-left: 2px solid transparent; border-radius: 0 6px 6px 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.toc-list a:hover { color: var(--accent); background: var(--accent-soft); text-decoration: none; }
+.toc-list a.l2 { padding-left: 20px; }
+.toc-list a.l3 { padding-left: 32px; font-size: 12px; }
+.toc-list a.on { color: var(--accent); font-weight: 700; border-left-color: var(--accent); background: var(--accent-soft); }
+
+@media (min-width: 1260px) {
+  .toc-wrap {
+    display: block;
+    position: sticky; top: calc(var(--topbar-h) + 18px);
+    align-self: start;
+  }
+  .content.art-page.with-toc {
+    display: grid;
+    grid-template-columns: 196px minmax(0, 720px);
+    justify-content: center; align-items: start; gap: 24px;
+    padding-left: 24px; padding-right: 24px;
+  }
+  .content.art-page.with-toc > * { max-width: none; margin-left: 0; margin-right: 0; }
 }

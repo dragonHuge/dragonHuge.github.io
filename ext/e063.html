@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</h1><div class="meta">📅 2026-10-01 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Ahefqqn9Q6znv5gnKIL4DQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261001-Pi与DeepSeek-Harness架构对比AgentLoop收口与恢复.md</div><div class="md"><h1>Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">23</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Pi-与-DeepSeek-Harness-架构对比-Agent-Loop-如何处理继续-收口与恢复">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l2" href="#两条路线-控制面不在同一层">两条路线，控制面不在同一层</a><a class="tl l2" href="#四个层级-不能混成一个-completed">四个层级，不能混成一个 completed</a><a class="tl l2" href="#Pi-把短循环做小-把边界留成插口">Pi：把短循环做小，把边界留成插口</a><a class="tl l3" href="#输入归属-steering-和-follow-up-分工">输入归属：steering 和 follow-up 分工</a><a class="tl l3" href="#工具批次-一个结果不能替全批次收口">工具批次：一个结果不能替全批次收口</a><a class="tl l3" href="#截断和生命周期-宁可留下失败结果">截断和生命周期：宁可留下失败结果</a><a class="tl l3" href="#Pi-Durable-基础-Loop-之上的持久运行时">Pi Durable：基础 Loop 之上的持久运行时</a><a class="tl l2" href="#DSH-让每次继续都留下可重建的状态">DSH：让每次继续都留下可重建的状态</a><a class="tl l3" href="#inbox-把当前步骤和下一轮分开">inbox：把当前步骤和下一轮分开</a><a class="tl l3" href="#收口-工具只能提出建议-队列仍有否决权">收口：工具只能提出建议，队列仍有否决权</a><a class="tl l3" href="#工具调度-并行执行-按调用顺序提交">工具调度：并行执行，按调用顺序提交</a><a class="tl l2" href="#同一任务-两个-Loop-怎样走">同一任务，两个 Loop 怎样走</a><a class="tl l2" href="#四个控制点的逐项对比">四个控制点的逐项对比</a><a class="tl l2" href="#复杂度放在哪里">复杂度放在哪里</a><a class="tl l2" href="#选型时-我会看四个问题">选型时，我会看四个问题</a><a class="tl l2" href="#参考资料">参考资料</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</h1><div class="meta">📅 2026-10-01 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Ahefqqn9Q6znv5gnKIL4DQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261001-Pi与DeepSeek-Harness架构对比AgentLoop收口与恢复.md</div><div class="md"><h1 id="Pi-与-DeepSeek-Harness-架构对比-Agent-Loop-如何处理继续-收口与恢复">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-10-01 抓取状态：成功 原文字符：6655｜配图：4 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>架构师（JiaGouX） 我们都是架构师！ 架构未来，你来不来？ 一个 Agent 正在改代码，用户又发来一句：“配置文件不要动。”同一时间，两个工具还在运行。此时系统要回答的不是“循环要不要再跑一次”这么简单的问题：这条输入归哪一轮？已经完成的工具结果还欠不欠一次模型回访？谁能结束当前任务？进程重启后，系统能不能说清楚哪些动作发生过？</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#输入归属：steering 和 follow-up 分工">输入归属：steering 和 follow-up 分工</a></li><li><a href="#工具批次：一个结果不能替全批次收口">工具批次：一个结果不能替全批次收口</a></li><li><a href="#截断和生命周期：宁可留下失败结果">截断和生命周期：宁可留下失败结果</a></li><li><a href="#Pi Durable：基础 Loop 之上的持久运行时">Pi Durable：基础 Loop 之上的持久运行时</a></li><li><a href="#inbox：把当前步骤和下一轮分开">inbox：把当前步骤和下一轮分开</a></li><li><a href="#收口：工具只能提出建议，队列仍有否决权">收口：工具只能提出建议，队列仍有否决权</a></li><li><a href="#工具调度：并行执行，按调用顺序提交">工具调度：并行执行，按调用顺序提交</a></li></ul>
 <blockquote><p>来源：https://mp.weixin.qq.com/s/Ahefqqn9Q6znv5gnKIL4DQ 平台：weixin｜作者：架构师 抓取方式：cdp｜字符数：7205｜图片：4</p></blockquote>
 <hr>
@@ -416,12 +416,12 @@
 <p>一个 Agent 正在改代码，用户又发来一句：“配置文件不要动。”同一时间，两个工具还在运行。此时系统要回答的不是“循环要不要再跑一次”这么简单的问题：这条输入归哪一轮？已经完成的工具结果还欠不欠一次模型回访？谁能结束当前任务？进程重启后，系统能不能说清楚哪些动作发生过？</p>
 <p>我用同一个任务来比较：模型读取文件，调用两个工具，用户在工具运行中追加约束，任务最后因为完成、取消或达到 token 上限而收口。两套实现都围绕 Agent Loop，控制点却不在同一层。Pi 把短循环和扩展插口放在核心，Pi Durable 再补上持久运行时；DSH 把 inbox、事件和恢复语义放进循环。</p>
 <p>这里不数 API，关注四个架构问题：<strong>输入归属、工具调度、收口权限、持久证据</strong>。这四件事决定 Agent 在正常路径和失败路径上留下什么状态。</p>
-<h2>两条路线，控制面不在同一层</h2>
+<h2 id="两条路线-控制面不在同一层">两条路线，控制面不在同一层</h2>
 <p><img alt="图 1：两套 Agent Loop 的控制面" src="img-001-66d64a7e.png"></p>
 <p>图 1：两套 Agent Loop 的控制面</p>
 <p>图 1：两套 Agent Loop 的控制面</p>
 <p>两边都有循环，差别在循环之外保存了什么。Pi 基础包由调用方通过回调和队列安排输入、生命周期；DSH 把输入投影、事件边界和调度结果写进运行时。Pi Durable 不改基础 Loop 的写法，在外面增加会话、任务和恢复的持久模型。</p>
-<h2>四个层级，不能混成一个 completed</h2>
+<h2 id="四个层级-不能混成一个-completed">四个层级，不能混成一个 completed</h2>
 <p>一次模型请求结束，不等于一次 Agent 任务结束。下面把运行拆成四层：</p>
 <ul><li><strong>request</strong></li></ul>
 <p>一次 provider 调用，从发出到流结束；</p>
@@ -433,12 +433,12 @@
 <p>当前 Agent 是否还有运行中的工作，是否已经回到可接收新任务的状态。</p>
 <p>一个 step 完成时，turn 可能还有 <code>next-step</code> 消息；一个 turn 结束时，工具进程、事件监听器或清理任务可能还没有结束。Pi 的 <code>agent_end</code>、DSH 的 <code>turn/end</code> 和 <code>whenIdle()</code> 关注的层级不同，名字相似，承诺并不相同。</p>
 <p>后面的比较都围绕这四层：输入落在哪一层，工具结果欠哪一次回访，谁能批准收口，恢复从哪一层接着走。</p>
-<h2>Pi：把短循环做小，把边界留成插口</h2>
+<h2 id="Pi-把短循环做小-把边界留成插口">Pi：把短循环做小，把边界留成插口</h2>
 <p>Pi 的基础 Agent Loop 结构很紧凑：准备上下文，请求模型；模型返回工具调用，就执行工具，把结果放回上下文，再请求模型。工具批次结束且没有 steering 消息时，内层循环可以退出；外层再检查 follow-up，决定是否开启下一轮。</p>
-<h3>输入归属：steering 和 follow-up 分工</h3>
+<h3 id="输入归属-steering-和-follow-up-分工">输入归属：steering 和 follow-up 分工</h3>
 <p><code>steering</code> 属于当前工作。模型正在处理一组文件时，用户说“不要修改配置文件”，消息会在当前工具批次完成后进入下一次模型请求。已经启动的工具不会被撤销，模型的下一次回访会看到新约束。</p>
 <p><code>follow-up</code> 属于后续轮次。它排在当前工作之后，等当前 turn 自然结束才交付。两条队列把“当前请求的纠偏”和“下一轮任务”分开，调用方不必靠回调顺序猜这条消息归哪一轮。</p>
-<h3>工具批次：一个结果不能替全批次收口</h3>
+<h3 id="工具批次-一个结果不能替全批次收口">工具批次：一个结果不能替全批次收口</h3>
 <p>Pi 只有在这一批已完成的工具结果全部带有 <code>terminate: true</code> 时，才把工具批次视为可以提前结束。并行工具里的一个结果不能替另一个结果决定整批行为。搜索工具可以返回数据，提交事务的工具才可能表达“这轮不用再问模型了”。</p>
 <p>当前版本增加了 <code>finishTurn</code>。它在 assistant 消息和工具结果处理完、发出 <code>turn_end</code> 前运行：</p>
 <ul><li><code>{ action: &quot;end&quot; }</code></li></ul>
@@ -448,17 +448,17 @@
 <ul><li>工具结果、steering 或 follow-up 已经安排请求时，不重复发送；</li></ul>
 <ul><li>error 和 aborted 仍然是硬退出。</li></ul>
 <p>“没有工具调用就结束”在这里不再成立。<code>finishTurn</code> 要和已有输入、工具结果调度一起决定下一步，不能额外发出一次请求。</p>
-<h3>截断和生命周期：宁可留下失败结果</h3>
+<h3 id="截断和生命周期-宁可留下失败结果">截断和生命周期：宁可留下失败结果</h3>
 <p>模型输出达到 token 上限时，Pi 即使已经看见工具调用，也不会执行真实工具，而是为每个调用补一条失败结果，让下一次请求重发完整参数。半截 JSON 偶尔能解析，不等于它表达了完整意图；写文件、发请求或修改数据库时，拒绝执行更可控。</p>
 <p><code>agent_end</code> 也不等于所有异步工作已经收干净。订阅者对 <code>agent_end</code> 的异步处理完成后，Agent 才进入空闲状态。资源回收、编排任务和 <code>whenIdle()</code> 都要遵守这个生命周期边界。</p>
-<h3>Pi Durable：基础 Loop 之上的持久运行时</h3>
+<h3 id="Pi-Durable-基础-Loop-之上的持久运行时">Pi Durable：基础 Loop 之上的持久运行时</h3>
 <p><code>@earendil-works/pi-durable</code> 已提供 durable session、task checkpoint、会话 inbox、工具 replay 策略，以及进程重启后的恢复。把 Pi 概括成“只保存会话历史，恢复靠宿主”已经不准确。基础包处理短循环和扩展点，durable harness 在另一层运行时保存会话、任务和恢复事实。</p>
-<h2>DSH：让每次继续都留下可重建的状态</h2>
+<h2 id="DSH-让每次继续都留下可重建的状态">DSH：让每次继续都留下可重建的状态</h2>
 <p>在 DSH 里，turn、step 和 inbox 的变化都伴随事件。一个 turn 开始时记录 <code>turn/start</code>，每个模型调用前后记录 <code>step/start</code> 和 <code>step/end</code>，最后用 <code>turn/end</code> 写下结束原因。输入不只存在内存数组里，session 事件会投影出 inbox。</p>
-<h3>inbox：把当前步骤和下一轮分开</h3>
+<h3 id="inbox-把当前步骤和下一轮分开">inbox：把当前步骤和下一轮分开</h3>
 <p>inbox 有 <code>next-step</code> 和 <code>next-turn</code> 两个入口。领取一个 step 时，系统会消费全部 <code>next-step</code>；如果这是新 turn，再取出一个 <code>next-turn</code>。工具上下文、插件消息和用户下一轮输入不会因为回调顺序不同而混到一起。</p>
 <p>插入、替换、删除和取消会写成 <code>agent/inbox/spliced</code> 事件。进程重启后，系统从这些事件重新投影待处理消息。这里保存的不是“有没有调用过某个函数”，而是模型下一次请求必须看到的输入状态。</p>
-<h3>收口：工具只能提出建议，队列仍有否决权</h3>
+<h3 id="收口-工具只能提出建议-队列仍有否决权">收口：工具只能提出建议，队列仍有否决权</h3>
 <p>读这组规则，我会把它拆成两笔账：</p>
 <ul><li><strong>模型债务</strong></li></ul>
 <p>：工具已经执行，模型是否还欠一次回访；</p>
@@ -466,16 +466,16 @@
 <p>：<code>next-step</code> 是否还有 steering、工具上下文或插件追加的消息。</p>
 <p>工具结果的 <code>concludesTurn</code> 可以免掉默认的模型回访，减少模型债务；如果 <code>next-step</code> 已经有消息，循环仍会再跑一个 step。工具可以表示“这次结果足够结束”，不能抹掉已经排队的输入。</p>
 <p><code>agent/turn-stopping</code> 只在 turn 已经有结束候选、且 <code>next-step</code> 为空时触发。插件如果要继续，就向 inbox 写入一条可消费消息，循环随后重新检查队列。继续执行有事件和消息作为证据，不靠一个回调返回值留下模糊状态。</p>
-<h3>工具调度：并行执行，按调用顺序提交</h3>
+<h3 id="工具调度-并行执行-按调用顺序提交">工具调度：并行执行，按调用顺序提交</h3>
 <p>DSH 按工具声明区分可并行调用和 exclusive barrier。调度器允许安全的调用重叠，但结果按模型调用顺序提交，模型看到的上下文顺序保持稳定。</p>
 <p>取消发生时，已启动的调用会被排空，尚未启动的调用补上 <code>ABORTED_BEFORE_DISPATCH</code> 结果。调度器失败，或 step 在结果提交前异常退出时，未得到结果的调用会记录 <code>TOOL_OUTCOME_UNKNOWN</code> 一类的恢复结果。下一次请求看到的是成对的调用和结果，而不是无法判断是否执行过的半截记录。</p>
 <p>输出达到 <code>max-tokens</code> 时，DSH 把本轮标成 <code>max-tokens</code>，后续 step 即使正常完成，也不会把它改写成普通 <code>completed</code>。状态保留了截断信号，外部策略才有机会决定重试、人工检查或结束任务。</p>
-<h2>同一任务，两个 Loop 怎样走</h2>
+<h2 id="同一任务-两个-Loop-怎样走">同一任务，两个 Loop 怎样走</h2>
 <p><img alt="图 2：用户追加约束时的收口流程" src="img-002-b745fd52.png"></p>
 <p>图 2：用户追加约束时的收口流程</p>
 <p>图 2：用户追加约束时的收口流程</p>
 <p>同一任务走到收口时，Pi 依靠 <code>steering</code>、<code>follow-up</code> 和 <code>finishTurn</code> 协调输入与请求；DSH 依靠 <code>next-step</code>、<code>next-turn</code>、<code>concludesTurn</code> 和 <code>turn-stopping</code> 协调队列与事件。Pi 把决策点交给调用方，DSH 把决策过程写进持久状态。</p>
-<h2>四个控制点的逐项对比</h2>
+<h2 id="四个控制点的逐项对比">四个控制点的逐项对比</h2>
 <p><img alt="图 3：控制点放在哪里，决定故障后的答案" src="img-003-4d72101a.png"></p>
 <p>图 3：控制点放在哪里，决定故障后的答案</p>
 <p>图 3：控制点放在哪里，决定故障后的答案</p>
@@ -488,11 +488,11 @@
 <ul><li><strong>恢复证据</strong></li></ul>
 <p>Pi 基础包不承诺完整持久恢复；Pi Durable 保存 session、checkpoint、inbox 和 replay 状态；DSH 保存 turn/step 事件、inbox splice 和未知结果状态。</p>
 <p>短任务正常完成时，两套 Loop 看起来差不多。工具有副作用、进程会重启或任务要排队，差别会落到恢复证据和运维成本上。</p>
-<h2>复杂度放在哪里</h2>
+<h2 id="复杂度放在哪里">复杂度放在哪里</h2>
 <p>Pi 基础循环的优点是边界少、改工作流快。调用方可以自己决定权限、沙箱、重试和外部任务怎么接入。代价是：扩展创建的进程、连接、队列和副作用，默认由宿主负责；要做持久恢复，就采用 Pi Durable 或另一套运行时。</p>
 <p>DSH 把更多控制点固定在核心：inbox 有持久投影，turn 和 step 有事件边界，调度器处理并发与取消，失败结果也有可重放表示。长任务、多插件和恢复审计更容易建立一致语义，插件作者也必须理解 <code>next-step</code>、<code>next-turn</code>、wakeup、事件投影和取消后的结果状态。</p>
 <p><strong>Pi 把复杂度留给集成方，DSH 把复杂度集中到运行时契约。</strong> Pi Durable 则在基础循环外增加一层持久化边界。</p>
-<h2>选型时，我会看四个问题</h2>
+<h2 id="选型时-我会看四个问题">选型时，我会看四个问题</h2>
 <p>落到自己的 Agent 设计时，我会问四件事：</p>
 <p><strong>1. 输入归属</strong>：消息到达时属于当前 step、当前 turn 的下一步，还是下一次 turn？</p>
 <p><strong>2. 模型债务</strong>：工具结果什么时候必须回到模型？结束信号能跳过哪一次请求？token 截断时哪些调用绝不能执行？</p>
@@ -500,7 +500,7 @@
 <p><strong>4. 持久证据</strong>：进程崩溃后，能不能重建模型看到的消息、工具调用和结果、取消原因、未完成任务？不可逆副作用能否区分“没启动”“执行中断”和“结果未知”？</p>
 <p>如果这四个问题没有答案，继续增加重试、插件或规划步骤，只会把不确定性推迟到更难排查的位置。</p>
 <p>设计 Agent Loop 时，“继续”和“结束”都要落成状态转换。Pi 让集成方决定哪些状态需要持久化，DSH 把更多状态写进运行时。短任务看 Loop 是否容易改，长任务看失败后能不能还原现场；两层差异最后会落到维护成本。</p>
-<h2>参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 <ul><li>DeepSeek Harness 官方仓库（https://github.com/deepseek-ai/deepseek-harness）</li></ul>
 <ul><li>DeepSeek Harness Agent Loop 文档（https://github.com/deepseek-ai/deepseek-harness/tree/main/packages/core/agent-loop）</li></ul>
 <ul><li>Pi 官方仓库（https://github.com/earendil-works/pi）</li></ul>
@@ -524,7 +524,7 @@
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>
 <p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

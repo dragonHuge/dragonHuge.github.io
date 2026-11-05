@@ -395,22 +395,22 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</h1><div class="meta">📅 2026-04-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/NAqk-Hwpb0kf0ZggDs4TLQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260424-Hermes模型横评选型-GLM5-GPT5-K2-生产Agent实测排序.md</div><div class="md"><h1>Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">14</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Hermes-生产-Agent-模型横评-价格倒序约等于质量榜-GLM-5-1-执行欲最强但有限频硬伤">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文-孟健AI编程">原文：孟健AI编程</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#先给排序-贵-很多时候不是乱贵">先给排序：贵，很多时候不是乱贵</a><a class="tl l3" href="#为什么我现在把-GLM-5-1-放在最前面">为什么我现在把 GLM-5.1 放在最前面</a><a class="tl l3" href="#其他几个模型-我的真实评价">其他几个模型，我的真实评价</a><a class="tl l3" href="#Hermes-里真正值得做的-不是赌一个模型">Hermes 里真正值得做的，不是赌一个模型</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</h1><div class="meta">📅 2026-04-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/NAqk-Hwpb0kf0ZggDs4TLQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260424-Hermes模型横评选型-GLM5-GPT5-K2-生产Agent实测排序.md</div><div class="md"><h1 id="Hermes-生产-Agent-模型横评-价格倒序约等于质量榜-GLM-5-1-执行欲最强但有限频硬伤">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-04-24 抓取状态：成功 原文字符：5735｜配图：6 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>在 Hermes 生产环境中（多 Agent、长流程、代码任务），不同模型的真实表现与 benchmark 排名差异显著——本文给出一手生产体感排序和选型逻辑。</p>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li><strong>选型核心三问</strong>：能不能把活干完 / 干得稳不稳 / 废话多不多（不是单轮聊天，不是刷榜）</li><li><strong>隐形成本三笔账</strong>：返工成本（幻觉导致整轮重跑）+ 吞吐成本（废话放大到几十个 session）+ 调度成本（限频/卡顿/上下文松动拖慢链路）</li><li><strong>生产体感排序</strong>：GLM-5.1（第一） &gt; GPT-5.4 / Gemini-3.1 Pro &gt; K2.6 &gt; Qwen &gt; MiniMax（工具型补位）</li><li><strong>GLM-5.1 优势</strong>：执行欲强（给任务直接动手，不铺垫）、中文工程语境稳（路径/配置/环境变量吃得好）、长流程不松（推进感强）；<strong>硬伤</strong>：限频，多 Agent 并发时 429 切碎节奏</li><li><strong>GPT-5.4 问题</strong>：太啰嗦，每次复述任务 + 总结，多 session 吞吐成本高</li><li><strong>K2.6 问题</strong>：慢 + 轻微幻觉（替你做没被授权的假设），自动链路里会变成返工</li><li><strong>模型编队思路</strong>：主模型追上限 / Fallback 追稳定 / 辅助位（OCR/标题生成/Web Extract 等）用性价比高的；不是 all in 一家，而是把 Hermes 当模型调度层</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充——1. SXL 当前框架用的主力模型是什么，是否遇到过"废话成本"或"限频"问题？2. 模型编队思路（主力/Fallback/辅助）对 SXL 的 Agent 体系有没有借鉴价值？）</p>
 <hr>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <p>SXL 的 chairman/novel-master 等 Agent 若未来接入 Hermes 或类似框架，GLM-5.1 的"执行欲强+中文语境稳"特性直接对口；限频硬伤需要为多 Agent 并发场景预留 Fallback。</p>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li>适用：Hermes 生产框架下的主力模型选型、多 Agent 编排的模型分层配置</li><li>不适用：单轮聊天体验评测（结论不适用）、非中文工程场景（GLM 优势不明显）</li></ul>
-<h2>原文：孟健AI编程</h2>
+<h2 id="原文-孟健AI编程">原文：孟健AI编程</h2>
 <p>这几周我在 Hermes 里来回切了很多模型。真跑下来，我越来越确认一件事：模型的水平，很多时候早就写在价格里了。</p>
 <p><strong>主观体感排序（生产 Agent 任务）</strong>：</p>
 <ul><li>第一梯队：GLM-5.1</li><li>第二梯队：GPT-5.4、Gemini-3.1 Pro</li><li>再往后：K2.6、Qwen</li><li>工具型补位：MiniMax</li></ul>
@@ -424,8 +424,8 @@
 <p><strong>模型编队思路</strong>：</p>
 <ul><li>主模型：谁最能干活用谁</li><li>Fallback：谁更稳用谁兜底</li><li>辅助模型（Web Extract/标题生成/OCR）：谁便宜够用用谁填坑</li></ul>
 <p>结论：今天的模型市场，价格体系已经比很多榜单更诚实。把性价比榜倒过来看，基本就知道谁做主力、谁当备胎、谁干杂活。</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#先给排序贵很多时候不是乱贵">先给排序：贵，很多时候不是乱贵</a></li><li><a href="#为什么我现在把-glm-51-放在最前面">为什么我现在把 GLM-5.1 放在最前面</a></li><li><a href="#其他几个模型我的真实评价">其他几个模型，我的真实评价</a></li><li><a href="#hermes-里真正值得做的不是赌一个模型">Hermes 里真正值得做的，不是赌一个模型</a></li></ul>
 <p>大家好，我是孟健。</p>
 <p>这几周我在 Hermes 里来回切了很多模型。真跑下来，我越来越确认一件事：<strong>模型的水平，很多时候早就写在价格里了。把性价比榜倒过来看，八九不离十就是质量排行。</strong></p>
@@ -433,7 +433,7 @@
 <p>是我把 Hermes 当生产底座，拿它去跑多 Agent、长流程、代码任务、资料整理之后，交出来的体感排序。</p>
 <p><img alt="价格表倒过来，几乎就是质量榜" src="../../_assets/20260424-Hermes模型横评选型-GLM5-GPT5-K2-生产Agent实测排序/img-001-d925381e.png"></p>
 <p><img alt="Hermes 模型选型一览：主模型、Fallback、Vision、辅助模型分层配置" src="../../_assets/20260424-Hermes模型横评选型-GLM5-GPT5-K2-生产Agent实测排序/img-002-b5b25226.jpg"></p>
-<h3>先给排序：贵，很多时候不是乱贵</h3>
+<h3 id="先给排序-贵-很多时候不是乱贵">先给排序：贵，很多时候不是乱贵</h3>
 <p>先看这张图。</p>
 <p><img alt="模型性价比排行榜：按价格维度排序，越便宜越靠前" src="../../_assets/20260424-Hermes模型横评选型-GLM5-GPT5-K2-生产Agent实测排序/img-003-023efbf0.jpg"></p>
 <p>图里是按价格排的：便宜的在前，贵的在后。</p>
@@ -454,7 +454,7 @@
 <p><img alt="便宜模型的隐藏成本：返工、等待、限频会拖慢整条 Agent pipeline" src="../../_assets/20260424-Hermes模型横评选型-GLM5-GPT5-K2-生产Agent实测排序/img-004-7e94fa8f.png"></p>
 <p>只要你真的拿它跑 terminal、browser、文件系统、长上下文、多轮追踪，排序会和很多宣传页很不一样。</p>
 <p><strong>便宜，不代表划算。真正贵的是便宜模型把你一天节奏拖烂。</strong></p>
-<h3>为什么我现在把 GLM-5.1 放在最前面</h3>
+<h3 id="为什么我现在把-GLM-5-1-放在最前面">为什么我现在把 GLM-5.1 放在最前面</h3>
 <p>这轮测试里，GLM-5.1 给我的评价是最高的。</p>
 <p>不是因为它最便宜。恰恰相反，按图里的综合成本，它并不便宜。</p>
 <p>我把它排到最前，原因只有一个：<strong>它在真实 Agent 任务里，表现比价格更强。</strong></p>
@@ -470,7 +470,7 @@
 <p><strong>GLM-5.1 最大的问题，不是能力，是限频。</strong></p>
 <p>单 Agent 跑还好。</p>
 <p>一旦多 Agent 并发，429 和等待就会把节奏切碎。你明明感觉它脑子够用，但系统吞吐上不去。这也是它今天唯一一个会让我犹豫的点。</p>
-<h3>其他几个模型，我的真实评价</h3>
+<h3 id="其他几个模型-我的真实评价">其他几个模型，我的真实评价</h3>
 <p>GPT 5.4：强，但太啰嗦</p>
 <p>GPT 5.4 的问题不是不聪明。</p>
 <p>是<strong>太爱解释自己</strong>。</p>
@@ -490,7 +490,7 @@
 <p>Qwen 的问题不是差。</p>
 <p>是<strong>太普通</strong>。</p>
 <p>你很难说它哪里明显翻车，但也很难说它在哪个关键维度把人打穿。放在 Hermes 这种要长期跑、多模型编排的系统里，它更像一个“可用选项”，不是“必须选项”。</p>
-<h3>Hermes 里真正值得做的，不是赌一个模型</h3>
+<h3 id="Hermes-里真正值得做的-不是赌一个模型">Hermes 里真正值得做的，不是赌一个模型</h3>
 <p>我现在更认同的思路，不是 all in 某一家。</p>
 <p>是把 Hermes 当成一个<strong>模型调度层</strong>。</p>
 <p><img alt="Hermes 多模型编队：主模型、Fallback、Vision、OCR、标题生成分层调度" src="../../_assets/20260424-Hermes模型横评选型-GLM5-GPT5-K2-生产Agent实测排序/img-005-e7456732.png"></p>
@@ -523,7 +523,7 @@
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzk0ODM5NTEyNA==&amp;mid=2247505792&amp;idx=1&amp;sn=4407c0832c215940fc01d582167ae5d5&amp;scene=21#wechat_redirect">一行代码没手写，OpenClaw 前端 Agent 100 分钟做完一个站</a></li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzk0ODM5NTEyNA==&amp;mid=2247505785&amp;idx=1&amp;sn=8e964c1e13fd09a198316e9083325840&amp;scene=21#wechat_redirect">GLM-5.1 来了：开源模型第一次在长程任务上断档领先</a></li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzk0ODM5NTEyNA==&amp;mid=2247505784&amp;idx=1&amp;sn=f6947f43eaa342136be5abf65e17bec7&amp;scene=21#wechat_redirect">Claude Code 源码泄露后，我反而更确定：终端 Agent 只该接 3 类活</a></li></ul>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

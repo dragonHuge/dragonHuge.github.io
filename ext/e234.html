@@ -395,11 +395,11 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</h1><div class="meta">📅 2026-04-26 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260426-浏览器自动化技术栈全景-CDP到browsermcp.md</div><div class="md"><h1>浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">10</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#浏览器自动化技术栈全景-Chromium-CDP-Playwright-browser-use-Midscene-browsermcp-分层拆解">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#具体步骤-按场景选型">具体步骤（按场景选型）</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文-逆向OneByOne-微信公众号">原文：逆向OneByOne（微信公众号）</a><a class="tl l2" href="#原文沉淀">原文沉淀</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</h1><div class="meta">📅 2026-04-26 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260426-浏览器自动化技术栈全景-CDP到browsermcp.md</div><div class="md"><h1 id="浏览器自动化技术栈全景-Chromium-CDP-Playwright-browser-use-Midscene-browsermcp-分层拆解">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-04-26 抓取状态：成功 原文字符：5181｜配图：10 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>做 AI 操控浏览器类任务（多平台自动发布、后台抓取、网页操作 Agent）时，一堆工具名词混在一起分不清关系——到底该选 Playwright 还是 browser-use？遇到 shadow dom 为什么都失灵？browsermcp 和前面这些又是什么关系？这张卡把整条技术链从底到顶串清楚，给出每层的定位、代价和选型场景。</p>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p><strong>1. 技术栈是逐层封装，不是谁替代谁</strong></p>
 <pre><code>Chromium（浏览器底座：Chrome/Edge/Brave 都基于它）
   └─ CDP（Chrome DevTools Protocol，浏览器对外的远程控制协议）
@@ -416,21 +416,21 @@
 <p>Midscene 的代价：慢（多一层视觉理解）、有模型成本、稳定性来自视觉理解而非精确 DOM 选择器。<strong>强在跨结构理解，弱在精确定义和低成本重复执行</strong>，是复杂页面里的补位方案，不是主力。</p>
 <p><strong>7. browsermcp 的定位</strong>：官方 MCP，直接把你<strong>当前正在使用的浏览器</strong>的页面内容、DOM、操作能力暴露给 AI——不重新拉起浏览器，不重跑流程，AI 直接看到你此刻浏览器里的状态继续往下。适合日常写代码、排查问题、调试前端页面。当前短板：<strong>文件选择这类动作还不行</strong>。</p>
 <p><strong>8. 底层趋势</strong>：以前浏览器能力是给人点的、给开发者调试的；现在越来越多的能力<strong>直接为 AI 准备</strong>，或至少在快速变得更适合 AI 使用。</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <p>思考方向提示：</p>
 <ol><li><strong>本空间的 web-access skill 对标哪一层？</strong> 现有 web-access 基于 CDP Proxy + curl API 调度用户日常 Chrome，等价于"browsermcp 路线 + 部分 browser-use 能力"——但文件上传是通过 <code>/setFiles</code> 直接写 file input 解决的，比 browsermcp 的"文件选择还不行"要完整。这张卡其实反向证明了我们自建 skill 的技术路线选对了。</li><li><strong>Midscene 能否补位 web-access 的 shadow dom 短板？</strong> web-access 在 <code>/eval</code> 的递归遍历里已经处理了 Shadow DOM / iframe，但遇到 wujie 这种嵌套 shadow dom 时是否真能穿透？如果遇到视频号这类场景需要做 POC，Midscene 作为"视觉兜底层"值得试。</li><li><strong>profile 克隆 vs Proxy 直连的账号安全权衡</strong>：browser-use 的 profile 克隆相当于"用你的身份开新进程"，web-access 是"直接在你原 Chrome 里开后台 tab"。前者可能更不容易被识别为自动化（独立进程+独立 user-data-dir），后者风控风险更高但免去数据同步成本。后续若要做矩阵发布这种高频动作，可能要走 profile 克隆路线。</li></ol>
 <hr>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <p>之前本空间已有 <code>20260407-dev-browser与web-access浏览器Skill对比</code> 卡（讨论 Claude Code 内两个 Skill 的取舍），那张是"Claude Code 生态内"视角；这张是"整个浏览器自动化技术栈"的上游全景，<strong>两张卡互补</strong>。</p>
 <p>对你做多平台视频/内容同步发布、Hermes/Generic Agent 类自研 Agent 接入浏览器、web-access skill 迭代时的选型评估有直接指导价值——不用每次遇到 shadow dom / 登录态 / 当前浏览器接管问题再重新查一遍这些名词的关系。</p>
-<h2>具体步骤（按场景选型）</h2>
+<h2 id="具体步骤-按场景选型">具体步骤（按场景选型）</h2>
 <table><thead><tr><th>场景</th><th>推荐方案</th><th>原因</th></tr></thead><tbody><tr><td>常规后台上传（小红书/抖音）</td><td><strong>browser-use</strong> + profile 克隆</td><td>AI 友好的 CLI 动作，登录态自带</td></tr><tr><td>shadow dom / wujie / 非常规结构（视频号）</td><td><strong>Midscene</strong> 视觉驱动</td><td>绕开 DOM 选择器问题</td></tr><tr><td>接管当前浏览器上下文（调试/排查）</td><td><strong>browsermcp</strong></td><td>看到你此刻页面状态</td></tr><tr><td>从零搭稳定自动化项目（非 AI）</td><td><strong>Playwright</strong></td><td>等待机制/多上下文最完整</td></tr><tr><td>需要极致精细控制/性能</td><td><strong>cdp-use</strong> 或直接 CDP</td><td>心智负担高，但最灵活</td></tr></tbody></table>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li><strong>适用</strong>：选型浏览器自动化方案、做 AI 操控浏览器类 Skill、解释这几个名词的关系给别人听、遇到 shadow dom 类问题时决定升级到视觉路线</li><li><strong>不适用</strong>：想要每个工具的详细 API 教程（这张只讲定位和关系，不讲怎么用 API）</li></ul>
-<h2>原文：逆向OneByOne（微信公众号）</h2>
+<h2 id="原文-逆向OneByOne-微信公众号">原文：逆向OneByOne（微信公众号）</h2>
 <blockquote><p>编者荐语： "浏览器自动化技术栈基于Chromium/CDP逐层封装：Playwright处理常规DOM操作，browser-use适配AI工作流，Midscene攻克复杂页面，browsermcp连接当前上下文。它们共同构成应对不同场景的互补方案。"</p></blockquote>
 <p>cdp到底是什么？browser-use和Playwright到底是什么关系？browsermcp又是干吗的？如果我想让AI来操作我的浏览器，比如自动发布视频至各大平台，过程中遇到登录态怎么办？页面结构中遇到shadow dom，也就是影子dom，这种普通自动化工具抓不到、点不动的页面结构，该怎么解决？</p>
 <p>最近正好在做一个多平台同步发布视频的自动化skill，小红书和抖音整体还算顺，把发布流程拆清楚之后，让它用browser-use去执行，基本就能跑起来。真正卡住的，是视频号。</p>
@@ -452,7 +452,7 @@
 <p>当然，browsermcp现在也不是完美的。它的核心优势是更贴近你当前正在使用的浏览器，对当前上下文更友好，对DOM结构的理解和操作也更自然。但它现在的能力还没有强到覆盖所有场景，比如像文件选择这类动作，现在还不行。</p>
 <p>所以把这些东西全串起来之后，你会发现，它们不是谁替代谁的关系，而是一条逐层往上长出来的技术链。最底层，是Chromium这样的浏览器底座；它对外暴露的核心控制能力，是cdp；围绕cdp，又有了像cdp-use这样的底层工程化封装；再往上，才是Puppeteer和Playwright这种更适合开发者写自动化逻辑的框架；再往上，才轮到browser-use这种面向智能体工作流的封装；而当DOM这条路不够用了，又会分出Midscene这种视觉路线，或者browsermcp这种更贴近当前浏览器上下文的路线，去补不同方向的短板。</p>
 <p>以前很多浏览器能力，是给人点的，是给开发者调试的。现在越来越多的能力，开始直接为AI准备，或者至少在快速变得更适合AI使用。</p>
-<h2>原文沉淀</h2>
+<h2 id="原文沉淀">原文沉淀</h2>
 <p><img alt="图片" src="../../_assets/20260426-浏览器自动化技术栈全景-CDP到browsermcp/img-001-94214b6b.png"></p>
 <p>cdp到底是什么？browser-use和Playwright到底是什么关系？browsermcp又是干吗的？如果我想让AI来操作我的浏览器，比如自动发布视频至各大平台，过程中遇到登录态怎么办？页面结构中遇到shadow dom，也就是影子dom，这种普通自动化工具抓不到、点不动的页面结构，该怎么解决？</p>
 <p>最近正好在做一个多平台同步发布视频的自动化skill，小红书和抖音整体还算顺，把发布流程拆清楚之后，让它用browser-use去执行，基本就能跑起来。真正卡住的，是视频号。</p>
@@ -483,7 +483,7 @@
 <p>所以把这些东西全串起来之后，你会发现，它们不是谁替代谁的关系，而是一条逐层往上长出来的技术链。最底层，是Chromium这样的浏览器底座；它对外暴露的核心控制能力，是cdp；围绕cdp，又有了像cdp-use这样的底层工程化封装；再往上，才是Puppeteer和Playwright这种更适合开发者写自动化逻辑的框架；再往上，才轮到browser-use这种面向智能体工作流的封装；而当DOM这条路不够用了，又会分出Midscene这种视觉路线，或者browsermcp这种更贴近当前浏览器上下文的路线，去补不同方向的短板。</p>
 <p><img alt="图片" src="../../_assets/20260426-浏览器自动化技术栈全景-CDP到browsermcp/img-010-f735d4a3.png"></p>
 <p>以前很多浏览器能力，是给人点的，是给开发者调试的。现在越来越多的能力，开始直接为AI准备，或者至少在快速变得更适合AI使用。</p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

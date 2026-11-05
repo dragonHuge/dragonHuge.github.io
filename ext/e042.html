@@ -395,23 +395,23 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</h1><div class="meta">📅 2026-10-15 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/hsRucmrbY8h98di-rXVzww" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261015-Agent-缺的不是记忆是教训causal-memory-的设计与实战.md</div><div class="md"><h1>Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">26</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Agent-缺的不是记忆-是-教训-causal-memory-的设计与实战">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l2" href="#一-Agent-的记忆有四个结构性缺陷">一、Agent 的记忆有四个结构性缺陷</a><a class="tl l2" href="#二-相关方向的现状">二、相关方向的现状</a><a class="tl l2" href="#三-核心设计">三、核心设计</a><a class="tl l3" href="#3-1-七种边类型-先给因果关系分型">3.1 七种边类型：先给因果关系分型</a><a class="tl l3" href="#3-2-海马体引擎-把脑科学翻译成工程组件">3.2 海马体引擎：把脑科学翻译成工程组件</a><a class="tl l3" href="#3-3-因果三层-顺着-Pearl-的阶梯往上爬">3.3 因果三层：顺着 Pearl 的阶梯往上爬</a><a class="tl l3" href="#3-4-记忆归账-结果怎么回流成-下次排前面">3.4 记忆归账：结果怎么回流成&quot;下次排前面&quot;</a><a class="tl l3" href="#3-5-写入门控-噪声不进场-检索才干净">3.5 写入门控：噪声不进场，检索才干净</a><a class="tl l3" href="#3-6-检索-每查询临时建索引的反直觉选择">3.6 检索：每查询临时建索引的反直觉选择</a><a class="tl l2" href="#四-记忆治理-入库之后-谁保证它是对的">四、记忆治理：入库之后，谁保证它是对的</a><a class="tl l3" href="#4-1-五道-refuter-给每条因果边做置信度体检">4.1 五道 refuter：给每条因果边做置信度体检</a><a class="tl l3" href="#4-2-BiasAudit-给记忆库做统计体检">4.2 BiasAudit：给记忆库做统计体检</a><a class="tl l3" href="#4-3-矛盾主动检索-检索结果里的-反方辩友">4.3 矛盾主动检索：检索结果里的&quot;反方辩友&quot;</a><a class="tl l2" href="#五-评测-自己出一份考卷">五、评测：自己出一份考卷</a><a class="tl l2" href="#六-实战-一个真实记忆库的两个多月">六、实战：一个真实记忆库的两个多月</a><a class="tl l2" href="#七-工程化-一个人也能维护的记忆层">七、工程化：一个人也能维护的记忆层</a><a class="tl l2" href="#八-一个延伸视角-自我改进的地基是记忆">八、一个延伸视角：自我改进的地基是记忆</a><a class="tl l2" href="#九-局限与展望">九、局限与展望</a><a class="tl l2" href="#参考与链接">参考与链接</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</h1><div class="meta">📅 2026-10-15 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/hsRucmrbY8h98di-rXVzww" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261015-Agent-缺的不是记忆是教训causal-memory-的设计与实战.md</div><div class="md"><h1 id="Agent-缺的不是记忆-是-教训-causal-memory-的设计与实战">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-10-15 抓取状态：成功 原文字符：12577｜配图：8 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>用过 AI 编程助手的人对这些场面不陌生：昨天刚踩过的坑，今天换个会话再踩一遍；上周评审否决过的方案，这周原样又提了回来。前两个问题是「忘」，后两个问题是「错」——记错比忘记更麻烦。 <strong>缺陷一：上下文压缩会吃掉"当初为什么"。</strong>长任务跑到一半，Agent 开始用同样的错误方法反复修同一个 bug。它不是忘了做过什么，是忘了当初为什么那么做、后果是什么。这不是感觉，可以实测：把一段包含因果细节的对话用生产级压缩算法反复压缩，每轮测两类</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#3.1 七种边类型：先给因果关系分型">3.1 七种边类型：先给因果关系分型</a></li><li><a href="#3.2 海马体引擎：把脑科学翻译成工程组件">3.2 海马体引擎：把脑科学翻译成工程组件</a></li><li><a href="#3.3 因果三层：顺着 Pearl 的阶梯往上爬">3.3 因果三层：顺着 Pearl 的阶梯往上爬</a></li><li><a href="#3.4 记忆归账：结果怎么回流成"下次排前面"">3.4 记忆归账：结果怎么回流成"下次排前面"</a></li><li><a href="#3.5 写入门控：噪声不进场，检索才干净">3.5 写入门控：噪声不进场，检索才干净</a></li><li><a href="#3.6 检索：每查询临时建索引的反直觉选择">3.6 检索：每查询临时建索引的反直觉选择</a></li><li><a href="#4.1 五道 refuter：给每条因果边做置信度体检">4.1 五道 refuter：给每条因果边做置信度体检</a></li><li><a href="#4.2 BiasAudit：给记忆库做统计体检">4.2 BiasAudit：给记忆库做统计体检</a></li><li><a href="#4.3 矛盾主动检索：检索结果里的"反方辩友"">4.3 矛盾主动检索：检索结果里的"反方辩友"</a></li></ul>
 <blockquote><p>来源：https://mp.weixin.qq.com/s/hsRucmrbY8h98di-rXVzww 平台：weixin｜作者：滴滴技术 抓取方式：cdp｜字符数：13772｜图片：8</p></blockquote>
 <hr>
-<h2>一、Agent 的记忆有四个结构性缺陷</h2>
+<h2 id="一-Agent-的记忆有四个结构性缺陷">一、Agent 的记忆有四个结构性缺陷</h2>
 <p>用过 AI 编程助手的人对这些场面不陌生：昨天刚踩过的坑，今天换个会话再踩一遍；上周评审否决过的方案，这周原样又提了回来。前两个问题是「忘」，后两个问题是「错」——记错比忘记更麻烦。</p>
 <p><strong>缺陷一：上下文压缩会吃掉"当初为什么"。</strong>长任务跑到一半，Agent 开始用同样的错误方法反复修同一个 bug。它不是忘了做过什么，是忘了当初为什么那么做、后果是什么。这不是感觉，可以实测：把一段包含因果细节的对话用生产级压缩算法反复压缩，每轮测两类记忆的召回率</p>
 <p><img alt="图片" src="img-001-869ecf77.png"></p>
@@ -420,15 +420,15 @@
 <p><strong>缺陷三：记忆困在一台机器、一个进程里。</strong>Agent 的"经验"存在某个本地目录，换台电脑、换个同事接手，全部归零。团队里"那个坑我踩过"靠口口相传。</p>
 <p><strong>缺陷四：记忆自己会劣化，而且没人发现。</strong>把"相关"记成"因果"、同一个决策反复记录同一种结局形成回声、失败案例压根没被写下来、互相矛盾的记忆同时排在检索前排——记忆入了库，不等于记忆是对的。这是四个里最难的一个，也是本文后半段的重点。</p>
 <p>目前常见的记忆方案主要在解决前三个缺陷。causal-memory 想把四个一起解掉：给 Agent 建一层以「决策 → 结果」因果边为核心、住在上下文窗口之外、并且持续接受体检的记忆系统。</p>
-<h2>二、相关方向的现状</h2>
+<h2 id="二-相关方向的现状">二、相关方向的现状</h2>
 <p>2025–2026 年，Agent 记忆成了热门方向，学术界和工业界都有不少探索。几条主要路线：</p>
 <table><thead><tr><th>方案</th><th>路线</th><th>核心机制</th></tr></thead><tbody><tr><td>mem0（arXiv:2504.19413）</td><td>事实抽取</td><td>从对话动态抽取/整合/检索事实，Mem0g 增加图表示；2026 年转向单遍 ADD-only 抽取</td></tr><tr><td>Zep / Graphiti（arXiv:2501.13956）</td><td>时序知识图谱</td><td>episode → 实体/事实（带双时态有效期）→ 社区摘要三层结构</td></tr><tr><td>Letta / MemGPT（arXiv:2310.08560）</td><td>OS 式内存管理</td><td>LLM 自主管理 core/archival 两级内存，函数调用换入换出</td></tr><tr><td>腾讯 TencentDB Agent Memory（2026-05 开源）</td><td>分层记忆</td><td>L0 原始对话 → L1 原子事实 → L2 场景 → L3 画像逐层蒸馏；符号化短期记忆使 Token 消耗最高降约 61%</td></tr><tr><td>Anthropic memory tool + Dreaming（2026-05 发布）</td><td>上下文外存储 + 后台巩固</td><td>文件系统式记忆 + 定时"做梦"进程重组记忆库；Harvey 报告任务完成量提升 6 倍</td></tr></tbody></table>
 <p>这些路线的重心大多在事实的抽取与召回上，主流基准（LoCoMo、LongMemEval）考的也主要是事实召回——用户的偏好是什么、第几周说过什么。</p>
 <p>评测口径的争议也一直存在：Zep 官方曾发文逐条质疑 mem0 的 LoCoMo 成绩（数据集只有 16k–26k token、不测知识更新、评测实现有 role 混淆）；社区里也有"benchmark theatre"的说法，各家自报的分数因裁判模型和检索协议不同而难以直接对比。对读者来说，看分数之前先问评测协议，总是没错的。</p>
 <p>比分数更要紧的是：这些基准不考"Agent 有没有从失败里学到东西"。学术界更早开始关注这个问题——CLIN（ICLR 2024）让 Agent 从 action→observation→reward 里提炼因果抽象；MemRL（arXiv:2601.03192）指出被动语义匹配容易检索到噪声，解法是给记忆挂 Q-value 做效用排序；HeLa-Mem（ACL 2026）引入 Hebbian 学习，让一起激活的记忆互相增强。</p>
 <p>causal-memory 和 HeLa-Mem 的关系顺便说清：HeLa-Mem 做了记忆的「兴奋侧」，causal-memory 补上了「抑制侧」。完整的记忆既要知道"什么导致了什么"，也要知道"什么阻止了什么再次发生"。</p>
-<h2>三、核心设计</h2>
-<h3>3.1 七种边类型：先给因果关系分型</h3>
+<h2 id="三-核心设计">三、核心设计</h2>
+<h3 id="3-1-七种边类型-先给因果关系分型">3.1 七种边类型：先给因果关系分型</h3>
 <p>causal-memory 把所有记忆统一成一张图上的七种边，每种边在扩散激活时有不同的传播系数（<code>hippocampus/types.rs</code> 的 <code>spread_coeff</code>）：</p>
 <p><img alt="图片" src="img-002-022e5302.png"></p>
 <p><em>图 2 ｜ 七种边的扩散系数。</em></p>
@@ -438,7 +438,7 @@
 <ul><li><strong>绝对值最大合并</strong>。节点激活的合并规则是 abs-max 而不是有符号 max——signed-max 下 −0.126 &gt; 0.0 不成立，负激活永远写不进去。abs-max 让同一节点上 caused（正）和 prevented（负）谁强谁赢。</li></ul>
 <ul><li><strong>扇出豁免</strong>。经典的 Collins &amp; Loftus 扩散模型要求激活按扇出度分流，但这里只对联想通道（fact / co_occurrence）除扇出，因果家族边不除——否则一条“此操作曾阻止生产事故”的边，仅仅因为节点连接多，警告信号就被稀释掉了。</li></ul>
 <ul><li><strong>消融可验证</strong>。引擎留了 <code>disable_inhibition()</code> 开关，测试证明：有抑制时“零停机发布”节点以负激活出现（预警生效）；关掉抑制后这个节点彻底消失。预警能力确实来自负扩散，不是别的机制顺带实现的。</li></ul>
-<h3>3.2 海马体引擎：把脑科学翻译成工程组件</h3>
+<h3 id="3-2-海马体引擎-把脑科学翻译成工程组件">3.2 海马体引擎：把脑科学翻译成工程组件</h3>
 <p>引擎不是工程堆叠，是脑科学 × 因果推断 × 系统工程的交叉。人脑海马体不是硬盘，它有精细分工，代码里逐一有对应实现（<code>hippocampus/mod.rs</code>，模块头注释就是映射表）：</p>
 <p><img alt="图片" src="img-003-5fbf41e2.png"></p>
 <p><em>图 3 ｜ 整体架构：写入门控保证检索池干净，海马体引擎负责扩散激活与离线巩固，SQLite 持久层位于上下文窗外</em></p>
@@ -446,7 +446,7 @@
 <ul><li><strong>CA3 → K-hop 扩散激活</strong>：正向 CSR 图（decision→outcome）加反向 CSR 图（归因追溯用），默认衰减 0.7、最深 5 跳；种子激活按 Q 值加权（0.5 + 0.5·Q），被验证好用的经验天然先被点亮。图存储是 CSR + SoA 布局，扩散系数建图时预乘进权重数组；新写入的边走 patch overlay，下次重建时并入。</li></ul>
 <ul><li><strong>CA1 → 新颖度检测</strong>：新记忆写入前先对 decision 文本做内部扩散得到“预测结果”，再和实际 outcome 比相似度，surprise 超过阈值才值得记——<strong>意外才是最有价值的经验</strong>。混合门控模式下，只有落在边界带的样本才付费调 LLM 做语义级判断。</li></ul>
 <ul><li><strong>SWR（尖波涟漪）→ 离线巩固</strong>：对齐 Anthropic Dreams 的不可变模式——所有变更（LTP 强化 ×1.05 封顶 2.0、LTD 衰减、三重标准 GC：弱且零重放且 30 天休眠）先算成 delta 应用到 clone 上，原图绝不动，附完整审计日志。</li></ul>
-<h3>3.3 因果三层：顺着 Pearl 的阶梯往上爬</h3>
+<h3 id="3-3-因果三层-顺着-Pearl-的阶梯往上爬">3.3 因果三层：顺着 Pearl 的阶梯往上爬</h3>
 <p>Pearl 的因果阶梯把智能分三级：<strong>观察</strong>（我看到了 X）、<strong>干预</strong>（如果做 X 会怎样）、<strong>反事实</strong>（当时换个做法会怎样）。事实的存取对应第一级，causal-memory 的工具按三级阶梯补齐：</p>
 <table><thead><tr><th>层级</th><th>工具</th><th>实际在算什么</th></tr></thead><tbody><tr><td>R1 关联</td><td><code>search_causal</code></td><td>从已记录的边算 P(outcome｜相似决策）</td></tr><tr><td>R2 干预</td><td><code>intervention_query</code></td><td>经验式 do-效应：沿相似历史动作的前向链推演，按 task_tag 分层，带Simpson 悖论警告</td></tr><tr><td>R3 反事实</td><td><code>counterfactual_query</code></td><td>对比式 A/B：两个候选方案各自的实际结局分布</td></tr></tbody></table>
 <p><img alt="图片" src="img-004-fcd1e15a.png"></p>
@@ -463,7 +463,7 @@
 <p><img alt="图片" src="img-005-108eed32.png"></p>
 <p><em>图 5 ｜ 一次干预预警的完整链路：危险动作触发前向仿真，命中 prevented 负扩散边，输出 DANGER 并引用当初记录的事故教训</em></p>
 <p>这道安检经过了带 ground-truth 的合成世界校准：真危险、真安全、被阻止三类场景 100% 判准；而"被混杂伪装"类在修复前 100% 虚报 DANGER——Agent 会因为一条假因果不敢做正确的事。修复就是把机制不明的观察全部降级为 co_occurrence 并在前向链 SQL 里排除，修复后这类虚警降到 0%，写死为回归守卫。</p>
-<h3>3.4 记忆归账：结果怎么回流成"下次排前面"</h3>
+<h3 id="3-4-记忆归账-结果怎么回流成-下次排前面">3.4 记忆归账：结果怎么回流成"下次排前面"</h3>
 <p>记住了"决策→结果"只是第一步。更难的问题是归账（credit assignment）：一堆决策和结果混在一起，谁该为哪个结果负责？被验证有用的经验，下次凭什么排在前面？causal-memory 里有四条归账链路。</p>
 <p><strong>第一条，Q-value 贝尔曼回传。</strong>睡眠巩固时，被重放验证过的边给两端节点发奖励 r=1.0，跑标准贝尔曼更新 <code>Q ← Q + α·(r + γ·max_Q(邻居) − Q)</code>（α=0.1，γ=0.9）。关键在 γ·max_Q 那一项：结果端的高 Q 会沿因果链回流到父决策——一个决策通向了好结果，它自己的分数也涨。Q 值写回 SQLite 持久化，下次检索时种子激活就是 0.5 + 0.5·Q。一句话：<strong>有用的经验下次自动排前，不用人调</strong>。</p>
 <p><img alt="图片" src="img-006-6a42ee02.png"></p>
@@ -471,32 +471,32 @@
 <p><strong>第二条，失败显著性。</strong>巩固阶段给边打重放分数时，结局明确失败的加 0.5 分、用户反馈来源的加 0.3、别处出现矛盾结局的加 0.2。代码注释里管这个叫 emotional salience——和人脑一样，<strong>疼过的记忆更牢</strong>。</p>
 <p><strong>第三条，影响面归账。</strong>每条新决策可以记录 <code>influenced_by</code>——"这个决定受了哪些已有记忆的影响"。等到某条记忆被证伪作废时，系统反查它影响过的所有后续决策，浮出水面供人复查。错误记忆的影响半径是显式的，不是猜的。</p>
 <p><strong>第四条，来源分层的时间账。</strong>每条边记录发现来源（用户反馈 / LLM 推断 / 时间邻近 / 规则），来源直接决定半衰期档位：用户确认过的经验 90 天半衰期且永不被 GC，LLM 推断的 90 天，纯时间邻近的只剩 7 天。谁说的，决定了这话能活多久。</p>
-<h3>3.5 写入门控：噪声不进场，检索才干净</h3>
+<h3 id="3-5-写入门控-噪声不进场-检索才干净">3.5 写入门控：噪声不进场，检索才干净</h3>
 <p>很多记忆系统精度不行，锅不在检索，在写入太脏。写入路径有三道闸：原始对话轮次只进审计表 session_logs，永不进检索池；规则过滤分三级——失败必记（40+ 个 error/panic/timeout 标记）、状态变更工具必记、只读工具显式排除，早期版本"每个工具调用都记"曾产出大量 <code>ran cargo build → exit 0</code> 式噪声；最后 LLM 用 130 行的 V3 prompt 提炼五类条目（fact / preference / lesson / event / causal），其中 causal 类用对照 few-shot 严防 caused 和 prevented 混淆——"加了重试之后超时消失"是 PREVENTED 不是 CAUSED。</p>
-<h3>3.6 检索：每查询临时建索引的反直觉选择</h3>
+<h3 id="3-6-检索-每查询临时建索引的反直觉选择">3.6 检索：每查询临时建索引的反直觉选择</h3>
 <p>检索是 BM25（k1=1.2, b=0.75）与语义向量（本地 ONNX bge-small，或 HTTP 嵌入，没配置就优雅降级纯 BM25）经 RRF 融合。一个反直觉的选择：<strong>每查询临时重建 BM25 索引</strong>，不维护全局索引。候选集通常数百到数千条，重建只要微秒，换来的是按 task_tag 过滤后的子语料上 IDF 统计精确——过滤完再算词频，和不过滤直接查全局索引，结果可能完全不同。</p>
-<h2>四、记忆治理：入库之后，谁保证它是对的</h2>
+<h2 id="四-记忆治理-入库之后-谁保证它是对的">四、记忆治理：入库之后，谁保证它是对的</h2>
 <p>回到开头的缺陷四。记忆入库 ≠ 记忆是对的。提炼模型会犯几种系统性错误：看到"改了 A 之后 B 也变了"就记一条 A→B（可能背后有共同原因 C，这是伪因果）；同一个决策反复记录、结局永远相同（记忆在回声，不在跟踪世界）；某类任务记下来的几乎全是好结果（失败根本没被写下来）；互相矛盾的记忆同时排在检索前排，谁也不提醒谁的存在。</p>
 <p>causal-memory 的做法是给引擎加一条治理横切面，核心原则一句话：<strong>系统只标注、不静默裁决</strong>——所有可疑结构标出来给人审查，记忆库永远不替人删历史。</p>
-<h3>4.1 五道 refuter：给每条因果边做置信度体检</h3>
+<h3 id="4-1-五道-refuter-给每条因果边做置信度体检">4.1 五道 refuter：给每条因果边做置信度体检</h3>
 <p>借鉴 DoWhy 的反证框架，但 Agent 记忆图上跑不了统计检验，于是全部换成图结构检验。每条有效边过 5 道测试，综合打 A–F 级：</p>
 <table><thead><tr><th>#</th><th>Refuter</th><th>检验逻辑</th><th>抓什么</th></tr></thead><tbody><tr><td>1</td><td>confounder</td><td>两端邻居集合的 Jaccard 重叠</td><td>真因果边共享上下文；零重叠 = 疑似伪相关</td></tr><tr><td>2</td><td>corroboration</td><td>去掉该边后的替代路径计数</td><td>真关系有冗余证据；孤立单边可疑</td></tr><tr><td>3</td><td>placebo</td><td>随机节点替换源点做可达性测试</td><td>真边有激活特异性；随便换个节点也能到 = 不特异</td></tr><tr><td>4</td><td>backdoor</td><td>公共祖先能否绕过该边到达终点（底层是精确 d-分离判定）</td><td>"A→B"其实被共同原因 C 完全解释</td></tr><tr><td>5</td><td>temporal</td><td>因的 event_time 必须早于果</td><td>果先于因 = 时序上不可能，伪边铁证</td></tr></tbody></table>
 <p>这些阈值不是拍脑袋的，是校准出来的——每个阈值背后都有一次"合成 ground-truth 世界"实验。举两个校准期的真实战例：corroboration 里"无替代路径即判伪"这一支被直接砍掉，因为最小 DAG 链本来就不可冗余，它曾误杀 38% 的真边；backdoor 坚持绝对计数阈值而不是密度归一化，因为稠密图里祖先路径几乎连通所有节点，归一化版本同样误杀 38% 真边。temporal 是唯一近乎零误杀的信号，加入后伪边标记率从 35.7% 提到 64.3%，真边保留率纹丝不动。</p>
-<h3>4.2 BiasAudit：给记忆库做统计体检</h3>
+<h3 id="4-2-BiasAudit-给记忆库做统计体检">4.2 BiasAudit：给记忆库做统计体检</h3>
 <p>睡眠巩固的第五个阶段是三个纯观测检测器：</p>
 <ul><li><strong>极性偏斜</strong>：某个领域已知结局 ≥90% 是同一方向（至少 5 个样本）就盖章。13 个样本只有 1 个反对，在公平过程下是约 0.2% 的小概率事件——要么这个领域真的顺，要么失败根本没被记录。</li></ul>
 <ul><li><strong>零方差重复</strong>：同一决策记录 ≥3 次、结局极性次次相同，自我强化嫌疑。</li></ul>
 <ul><li><strong>置信度漂移</strong>：最近 20 条边的平均置信度和历史均值偏移 ≥0.15，只报告不盖章——没有单条边该负责，这是提炼模型最近的系统性偏差。</li></ul>
 <p>被盖章的边进人类审查队列。检索、衰减、GC 全部刻意忽略这个标记——它和软作废是同一个哲学：系统只标注，不裁决。</p>
-<h3>4.3 矛盾主动检索：检索结果里的"反方辩友"</h3>
+<h3 id="4-3-矛盾主动检索-检索结果里的-反方辩友">4.3 矛盾主动检索：检索结果里的"反方辩友"</h3>
 <p><code>search_causal</code> 带 <code>explain=true</code> 时，检索完正信之后主动追加一段矛盾历史：取候选池里排位最高的带极性条目当"当前信念"，把极性相反的历史条目以 <code>[contradiction]</code> 标签附上。同一个问题的两面同时摆上台面，"记忆自相矛盾"从沉默风险变成显式信息。</p>
-<h2>五、评测：自己出一份考卷</h2>
+<h2 id="五-评测-自己出一份考卷">五、评测：自己出一份考卷</h2>
 <p>公开基准考不了因果能力，所以项目自带了一份考卷 <strong>CausalEval</strong>：因果图即答案键。先确定性生成类型化 DAG，再由 LLM 把图叙事化成对话，标准答案直接从图结构推导，零人工标注。结果如下图，灰色是同一协议下不带因果结构的事实记忆基线：</p>
 <p><img alt="图片" src="img-007-2253b5f7.png"></p>
 <p><em>图 7 ｜ CausalEval v13 七个维度的自评结果（项目内部基准，仅供参考）。C2 干预、C4 抑制、C7 更新是相对基线提升最多的维度；C6 跨任务迁移是目前最弱的维度</em></p>
 <p>公开的事实召回基准（LoCoMo、LongMemEval-S）我们也跑了对照实验，能到可用水平，但那不是这套系统的主攻方向，具体数据以仓库评测页为准。另外提醒一句：各家基准的裁判模型和检索协议差异很大，这类分数建议都当"自报数据"看待——包括我们自己。</p>
 <p>两组更贴近实际价值的实验：压缩存活（图 1 的数据来源，5 次压缩后文本 45%、因果表 100%）；trap-world 重复犯错率 33% vs 无记忆对照组 67%。</p>
-<h2>六、实战：一个真实记忆库的两个多月</h2>
+<h2 id="六-实战-一个真实记忆库的两个多月">六、实战：一个真实记忆库的两个多月</h2>
 <p>评测之外，我自己日常研发的 Agent 一直挂着 causal-memory。下面是这个真实数据库（2026-07-27 至 2026-10-03，只读统计）的全貌：</p>
 <p>426 条因果边、817 个记忆节点、2901 条事实、56 条跨任务 meta 边。边的分布：caused 303（71%）、enabled 69（16%）、prevented 52（12%）。有个分布细节值得注意：<strong>prevented 类的平均置信度最高（0.815）</strong>——"避免事故"的教训被记得最牢，写入时系统也最有把握。</p>
 <p><img alt="图片" src="img-008-cedfa72a.png"></p>
@@ -507,25 +507,25 @@
 <blockquote><p>“  "没查记忆，多花 20 分钟"（元教训 · negative）    一次 GitHub 443 端口完全不通，Agent 没有先查因果记忆，手写脚本走 REST API 绕推，多花约 20 分钟；事后发现代理方案在记忆里已经被验证过两次，一行命令就能解决。这条边让我们定下一条纪律：网络/部署类操作前，先 search_causal。</p></blockquote>
 <p>意外也被如实记录过。distill 链路曾经整体失效，查下来是上游模型静默升级，V3 prompt 在新模型上陷入重复循环。这条边以 0.4 的低置信度入库，如实标注"这是负面意外结果"，后来直接促成了一条工程纪律：prompt 必须按当前模型重新校准。</p>
 <p>也得说实话：这个库同样暴露了短板。写时门控的 session_logs 没启用，Hebbian 共现边只积累了 6 条且权重从没涨过，召回审计功能 9 月才上线、只有 12 条记录，决策分叉表还是空的。机制都落地了，但有几个能力还没攒够有统计意义的实战样本。</p>
-<h2>七、工程化：一个人也能维护的记忆层</h2>
+<h2 id="七-工程化-一个人也能维护的记忆层">七、工程化：一个人也能维护的记忆层</h2>
 <p>整个系统是 Rust 写的单二进制：MCP server（stdio + Streamable HTTP）、离线 session 提取 CLI（extract / judge / reasoning / distill 四档成本可选）、睡眠巩固、基准 harness，全在一个文件里。几个工程决策值得单独说：</p>
 <ul><li><strong>git 式快照同步，语义完全自实现</strong>。commit 是内容寻址的 sha256 对象，换机器 <code>clone</code> 一次恢复完整上下文，<code>checkout</code> 回滚任意快照；单写者假设下不需要 merge 算法。第一目标不是团队共享，是上下文灾备——Agent 跑到哪，记忆跟到哪。团队共享是自然延伸：多台 AI 工具挂同一个共享远端，纠错状态随 pull 全员对齐，新人一次 clone 继承全组历史。</li></ul>
 <ul><li><strong>多租户 HTTP</strong>：token 映射租户，每租户独立 SQLite 惰性打开，配置热重载、损坏时 fail-closed。团队级共享记忆中心的部署形态。</li></ul>
 <ul><li><strong>可观测性</strong>：Prometheus /metrics，<code>/debug/recall</code> 返回每次召回的完整 trace（种子、逐跳摘要、逐结果溯源）。记忆系统的召回过程本身必须可调试。</li></ul>
 <ul><li><strong>生态接入</strong>：Claude Code / Cursor / Kimi Code / Codex 走 MCP + skill；PyO3 Python 绑定与 17 个 MCP 工具一一对应；另有 Hermes 和 DeepSeek Harness 的原生插件。</li></ul>
 <ul><li><strong>测试</strong>：HEAD 实测 460+ 个测试，覆盖 16 个设计层的端到端验证；校准 harness（合成 ground-truth 世界）全部开源在仓库里。</li></ul>
-<h2>八、一个延伸视角：自我改进的地基是记忆</h2>
+<h2 id="八-一个延伸视角-自我改进的地基是记忆">八、一个延伸视角：自我改进的地基是记忆</h2>
 <p>最近 RSI（Recursive Self-Improvement，递归自我改进）的讨论不少：ICLR 2026 开了相关 workshop，工业界和开源社区都有项目在探索让 Agent 越用越强。有个定义比较干净：<strong>系统改变自身的持久组件，评估这个改变，再用改进后的流程跑下一轮</strong>。</p>
 <p>拆开看是三个环节：改持久组件、评估、循环。每个环节都值得问一句。</p>
 <p><strong>改哪个组件？</strong>按风险和成本排：改权重最贵最险，改自身代码次之，改 prompt、工具策略便宜一些，而改记忆是成本最低、今天就能做的一层——不动模型、不动代码，只让"下次调用时的经验排序"变得更好。causal-memory 的睡眠巩固加 Q 值归账，本质上就是一个记忆层的最小闭环：行动 → 记录结局 → 归账更新排序 → 下次行动用到新排序 → 再记录。循环已经跑起来了，只是改的东西是记忆而不是权重。</p>
 <p><strong>评估信号从哪来？</strong>每个自改进循环，本质上都在声称"某种评估信号可以替代人类判断"，这个信号不能凭空来。causal-memory 里有三样东西在造它：结局极性判定（这次成了还是败了）、Q 值贝尔曼回传（好结果沿因果链给决策加分）、预测账本（反事实判断自动结算准确率）。没有这层归账，"改进"就只是"变化"——系统变了，但没人知道是变好了还是变坏了。</p>
 <p><strong>循环怎么不退化？</strong>这是最少人提的一点。没有持久记忆的自我改进会原地打转：上一轮改了什么、效果如何，下一轮全忘了，同样的错误改法反复出现；更糟的是回声式劣化——自己产生的记录不断强化自己。第四章的治理机制放在这个语境下再看就有新含义：BiasAudit 的零方差重复检测，防的是"自我改进变成自我重复"；置信度漂移检测，防的是"评估信号本身悄悄变质"。</p>
 <p>所以 causal-memory 在这件事上的位置，我们放得比较低：它不承诺让 Agent 自己变成更强的模型，只是让 Agent 的每一次"改"都有据可查、有账可算、有坑可避。</p>
-<h2>九、局限与展望</h2>
+<h2 id="九-局限与展望">九、局限与展望</h2>
 <p>系统目前还是 alpha（v0.9.3），未竟之事写明白：C6 跨任务迁移只有 20%，跨领域的经验类比还是最难的开放问题；干预查询的准确率基准设计好了还没跑完；缺 7×24 生产环境的长周期验证；Hebbian 共现、决策分叉在真实流量下还没形成规模。</p>
 <p>后续有几个明确的方向：把 session 级的快照与恢复补上，让上下文灾备形成闭环（换机器、换工具都能带走完整记忆）；从反复成功的决策模式里蒸馏可复用的 skill 文件，从 prevented 边里沉淀"禁止事项"；做更主动的记忆保鲜——过期轮换和陈旧度检测，让"这条经验还新吗"成为可查询的属性。企业场景里也有自然的落地处：运维 Agent 的故障复盘记忆（每次处置的 decision→outcome 自动沉淀，同类故障不二次踩坑）、研发团队的共享记忆中心、客服运营里"什么动作曾引发客诉"的抑制性预警。</p>
 <blockquote><p>“  记忆这件事，目标不是让 AI 记住所有事，是让人不必重复所有坑。</p></blockquote>
-<h2>参考与链接</h2>
+<h2 id="参考与链接">参考与链接</h2>
 <ul><li>项目仓库（Apache-2.0）：github.com/JingxuanC/causal-memory</li></ul>
 <ul><li>mem0：arXiv:2504.19413</li></ul>
 <ul><li>Zep / Graphiti：arXiv:2501.13956；Zep 对 LoCoMo 评测的质疑：getzep.com/blog（2025-05）</li></ul>
@@ -538,7 +538,7 @@
 <ul><li>腾讯 TencentDB Agent Memory：github.com/TencentCloud/TencentDB-Agent-Memory（2026-05 开源）</li></ul>
 <ul><li>Anthropic：Effective context engineering for AI agents（anthropic.com/engineering）；Dreaming（Code with Claude, 2026-05）</li></ul>
 <ul><li>LoCoMo（ACL 2024）、LongMemEval：arXiv:2410.10813（ICLR 2025）</li></ul>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

@@ -395,17 +395,17 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>面试官：讲一讲多 Agent 协作如何保持一致性</h1><div class="meta">📅 2026-09-14 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/XnSQdFpG-MdbctvLtHiMMA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260914-多Agent协作一致性四问.md</div><div class="md"><h1>面试官：讲一讲多 Agent 协作如何保持一致性</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">19</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#面试官-讲一讲多-Agent-协作如何保持一致性">面试官：讲一讲多 Agent 协作如何保持一致性</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#第一问-任务为什么要拆成多个-Agent">第一问：任务为什么要拆成多个 Agent？</a><a class="tl l3" href="#第二问-上一个-Agent-到底交给下一个-Agent-什么">第二问：上一个 Agent 到底交给下一个 Agent 什么？</a><a class="tl l3" href="#第三问-两个-Agent-结论不一样-谁来拍板">第三问：两个 Agent 结论不一样，谁来拍板？</a><a class="tl l3" href="#第四问-Agent-说-完成了-系统为什么相信它">第四问：Agent 说「完成了」，系统为什么相信它？</a><a class="tl l3" href="#放回传统架构">放回传统架构</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#第一问-这个任务为什么要拆成多个-Agent">第一问：这个任务为什么要拆成多个 Agent？</a><a class="tl l3" href="#第二问-第一个-Agent-到底交给下一个-Agent-什么">第二问：第一个 Agent 到底交给下一个 Agent 什么？</a><a class="tl l3" href="#第三问-两个-Agent-的结论不一样-谁来拍板">第三问：两个 Agent 的结论不一样，谁来拍板？</a><a class="tl l3" href="#第四问-Agent-说-完成了-系统为什么相信它-1">第四问：Agent 说“完成了”，系统为什么相信它？</a><a class="tl l3" href="#把-Agent-放回传统架构里">把 Agent 放回传统架构里</a><a class="tl l3" href="#参考资料">参考资料</a><a class="tl l3" href="#相关阅读">相关阅读：</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>面试官：讲一讲多 Agent 协作如何保持一致性</h1><div class="meta">📅 2026-09-14 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/XnSQdFpG-MdbctvLtHiMMA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260914-多Agent协作一致性四问.md</div><div class="md"><h1 id="面试官-讲一讲多-Agent-协作如何保持一致性">面试官：讲一讲多 Agent 协作如何保持一致性</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-14 抓取状态：成功 原文字符：9563｜配图：4 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>多 Agent 最危险的不是意见不同，而是每个 Agent 都在自己的世界里正确。</li><li>真正要对齐的是三件事：是否处理同一任务、依据同一份事实、推进同一套状态——推理可以有分歧，协议不能含糊。</li><li>多 Agent 没有绕开分布式系统的老问题，只是把执行者从服务和线程换成了会自主判断的 Agent。</li><li>任务结构比 Agent 数量更重要：可并行的金融分析任务集中式多 Agent 比单 Agent 提升 80.9%，严格顺序的 PlanCraft 反而下降 39%~70%（Google Research 实验口径）。</li><li>模型负责判断下一步做什么，运行时负责证明这一步确实发生过。</li><li>完成是状态机里的一个状态，不是 Agent 回复里的一个句号；状态未知不等于失败。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>作者以一次真实面试切入：候选人简历写了 Planner / Researcher / Executor / Reviewer 的多 Agent 系统，但追问「哪一版代码」「哪段日志」「这是事实还是判断」「Reviewer 测的还是这一版吗」后，架构里的空白立即暴露。</p>
-<h3>第一问：任务为什么要拆成多个 Agent？</h3>
+<h3 id="第一问-任务为什么要拆成多个-Agent">第一问：任务为什么要拆成多个 Agent？</h3>
 <p>要区分两个问题：任务本身能不能并行，以及系统是不是一开始就把并行关系固定死。任务无强依赖时可静态拆分子任务，但执行中不断产生新线索时，编排必须支持动态收回、合并、补派。</p>
 <p>子任务粒度太粗会重叠（三个 Agent 都去读同一批日志、都把「数据库变慢」当自己的结论），太细又会让 Agent 一直等别人补上下文。<strong>并行不是把任务复制几份同时发出去，而是先说清每个子任务的边界和输入。</strong></p>
 <p>防重复认领：给全局任务和子任务分配稳定身份，用带条件的认领、租约和唯一约束，把「不重复」变成数据库和状态服务可检查的事实，而不是在调度器里多写一个 if。同时并行收益必须覆盖通信、上下文复制、等待、重试与汇总成本。</p>
-<h3>第二问：上一个 Agent 到底交给下一个 Agent 什么？</h3>
+<h3 id="第二问-上一个-Agent-到底交给下一个-Agent-什么">第二问：上一个 Agent 到底交给下一个 Agent 什么？</h3>
 <p>Researcher 说「慢在数据库」只能算线索，不能直接交给 Executor 改代码。下游需要的是可继续执行的工作状态，而不是更长的聊天记录：</p>
 <pre><code>Task
 ├─ 基于哪一版：snapshot / commit
@@ -416,23 +416,23 @@
 └─ 怎样算完成：acceptance</code></pre>
 <p>要区分三件事：聊天记录是历史，摘要是当前工作集的一部分，代码库/测试系统/部署平台/业务数据库才是某类事实的权威来源。摘要能让下游快速进入状态，但不能替代事实出处。</p>
 <p>任务状态也不能只放消息里，至少要有 <code>agent_task</code> 执行记录：global_task_id / sub_task_id / agent_id / input_snapshot / status / version / attempt / lease_until / result_ref。version 用来拒绝过期更新，lease_until 表示认领何时失效——通信消息会延迟、重复、乱序，旧消息不能覆盖新状态。</p>
-<h3>第三问：两个 Agent 结论不一样，谁来拍板？</h3>
+<h3 id="第三问-两个-Agent-结论不一样-谁来拍板">第三问：两个 Agent 结论不一样，谁来拍板？</h3>
 <p>不一样不一定是问题。只要证据、假设、时间范围写清楚，分歧反而有价值。真正麻烦的是它们基于不同的现实，却被当成同一份现实来汇总（一个基于 commit-a 一个基于 commit-b；一个引用 14:00 日志一个引用 16:00 指标）。</p>
 <p>数据汇总不能只做文本拼接，结果要能回到输入快照、来源、证据和产物，并先标注「候选/已验证/冲突/已否决」。异构 Agent 需定义版本化的结果契约，或在接入层加适配器。</p>
 <p>Agent 产出不宜一生成就写进共享记忆，更合适的顺序是：先作为带来源的候选主张保存，经过实体、关系、时间和来源检查后再进入可复用事实层。Reviewer 要有权让任务退回重查、换路线、缩小范围或请求人工确认——<strong>审查只有改变了后续动作，才算进入系统，而不只是多了一段评论。</strong></p>
-<h3>第四问：Agent 说「完成了」，系统为什么相信它？</h3>
+<h3 id="第四问-Agent-说-完成了-系统为什么相信它">第四问：Agent 说「完成了」，系统为什么相信它？</h3>
 <p>「代码已经写入」只证明文件变了，不证明问题解决了。验收至少要知道：测的是哪个 commit、执行了什么命令、退出码多少、报告在哪、有没有 blocker、测试后工作区有没有继续变化。完成应由验收条件定义，由运行时留下证据。</p>
 <p>工具超时同理：查日志超时可以重试，但发消息、发布代码、改数据库、发起退款的超时，调用方没拿到结果却不能断定外部动作没发生。写操作先带幂等键，超时后查询远端状态，再按「未执行/已执行/状态未知」分支处理；无法确认就保留人工确认或补偿入口。</p>
 <p>失败状态应落在子任务层，而非只在全局记一个失败。子任务至少区分「未执行/执行中/已完成/失败/状态未知」，重试优先针对失败的子任务。调度器重启后不能把所有未结束任务重新派发——任务认领需要租约和心跳，接管前还要结合执行记录确认。</p>
-<h3>放回传统架构</h3>
+<h3 id="放回传统架构">放回传统架构</h3>
 <p>任务边界像服务边界，交接对象像 API 契约或领域事件，权威事实像主数据，状态推进像工作流，超时恢复像幂等命令和补偿事务。生产环境要持续看：任务重复率、状态冲突率、补偿成功率、调度可用性、状态未知积压量。</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>给多 Agent 系统定义一份统一的「交接对象」结构：版本快照 / 已确认证据 / 待验证假设 / 权限边界 / 产物引用 / 验收条件，禁止把六类信息混成一段自然语言。</li><li>建立 <code>agent_task</code> 执行记录表，含 global_task_id、sub_task_id、attempt、version、lease_until，用 version 拒绝过期更新。</li><li>拆分前先问两件事：任务本身能否并行、编排是否被写死；并行方案必须算清通信与汇总成本。</li><li>对写操作统一加幂等键（global_task_id + sub_task_id + 业务动作），超时后先查远端状态再决定是否重放。</li><li>让 Reviewer 的输出具备改变状态的能力（退回/换路线/缩范围/转人工），否则它只是评论。</li><li>监控四个指标：任务重复率、状态冲突率、补偿成功率、状态未知积压量。</li></ul>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#第一问这个任务为什么要拆成多个-agent">第一问：这个任务为什么要拆成多个 Agent？</a></li><li><a href="#第二问第一个-agent-到底交给下一个-agent-什么">第二问：第一个 Agent 到底交给下一个 Agent 什么？</a></li><li><a href="#第三问两个-agent-的结论不一样谁来拍板">第三问：两个 Agent 的结论不一样，谁来拍板？</a></li><li><a href="#第四问agent-说完成了系统为什么相信它">第四问：Agent 说“完成了”，系统为什么相信它？</a></li><li><a href="#把-agent-放回传统架构里">把 Agent 放回传统架构里</a></li><li><a href="#参考资料">参考资料</a></li><li><a href="#相关阅读">相关阅读：</a></li></ul>
 <p>架构师（JiaGouX）</p>
 <p>我们都是架构师！ 架构未来，你来不来？</p>
@@ -454,7 +454,7 @@
 <p>真正需要对齐的是三件事：它们处理的是不是同一个任务，依据的是不是同一份事实，推进的是不是同一套状态。</p>
 <p><strong>推理可以有分歧，协议不能含糊。</strong></p>
 <hr>
-<h3>第一问：这个任务为什么要拆成多个 Agent？</h3>
+<h3 id="第一问-这个任务为什么要拆成多个-Agent">第一问：这个任务为什么要拆成多个 Agent？</h3>
 <p>如果只看表面，<code>user-service</code> 变慢确实适合分工：有人看监控和日志，有人查代码和配置，有人验证修改结果。</p>
 <p>但这三个动作真的可以同时做吗？</p>
 <p>查监控和查资料，也许可以并行。可如果 Executor 不知道 Researcher 基于哪个版本查出来的，Reviewer 也不知道 Executor 改的是哪一份代码，所谓并行只是把几个不完整的任务同时推了出去。</p>
@@ -470,7 +470,7 @@
 <p>假设两个调度器同时读到一个 <code>pending</code> 任务。如果系统只是先读再写，两个 Agent 都可能认为自己已经拿到了任务。解决这个问题，不能只在调度器里多写一个 <code>if</code>。更稳的做法是给全局任务和子任务分配稳定的身份，再用带条件的认领、租约和唯一约束，把“不重复”变成数据库和状态服务可以检查的事实。</p>
 <p>任务拆分带来的收益，也要覆盖通信、上下文复制、等待、重试和汇总的成本。这个账算不清楚，Agent 越多，协调工作越容易超过实际工作。</p>
 <hr>
-<h3>第二问：第一个 Agent 到底交给下一个 Agent 什么？</h3>
+<h3 id="第二问-第一个-Agent-到底交给下一个-Agent-什么">第二问：第一个 Agent 到底交给下一个 Agent 什么？</h3>
 <p>Researcher 说：“慢在数据库。”</p>
 <p>这句话可以作为线索，但还不能直接交给 Executor 改代码。Executor 至少要知道问题发生在哪个时间段，对应哪条 SQL，引用的是哪一版日志，当前代码和配置是什么版本，哪些方向已经排除，以及改完以后怎样验收。</p>
 <p>否则下游拿到的不是任务，只是一句传闻。</p>
@@ -502,7 +502,7 @@
 <p>这就是通信状态不同步。状态更新如果只按消息到达顺序处理，旧消息就可能覆盖新状态。<code>attempt</code>、<code>version</code> 或带时间条件的更新，至少要让系统识别这是一条过期消息。</p>
 <p>如果全局状态和子任务记录在同一个数据库里，可以在同一事务中更新。跨服务时就不能默认有这个事务边界，通常要用事件记录、Outbox 或补偿流程来把两边重新对齐。Outbox 的意思很简单：先把待发送事件和本地状态写进同一个事务，再由后台任务异步投递，避免数据库已经变更、消息却没有留下来的情况。</p>
 <hr>
-<h3>第三问：两个 Agent 的结论不一样，谁来拍板？</h3>
+<h3 id="第三问-两个-Agent-的结论不一样-谁来拍板">第三问：两个 Agent 的结论不一样，谁来拍板？</h3>
 <p>不一样不一定是问题。</p>
 <p>一个 Researcher 认为瓶颈在数据库，另一个认为连接池才是主因。只要它们的证据、假设和时间范围写清楚，这种分歧反而有价值。多 Agent 的独立探索，本来就不是为了让大家从第一句话开始保持一致。</p>
 <p>真正麻烦的是，它们基于不同的现实，却被系统当成同一份现实来汇总：</p>
@@ -517,7 +517,7 @@
 <p>Reviewer 也不只是再生成一段意见。它要能回到原始证据，明确什么情况需要否决，并且有权让任务退回重查、换一条路线、缩小范围或请求人工确认。<strong>如果审查结果不能改变后续状态，那它更像一条评论，不像系统的一部分。</strong></p>
 <p>Google Antigravity 的 Teamwork 值得参考的地方，正是把候选生成、压力测试、综合和迭代放进一个循环。被否定的路线和反对意见还能影响下一轮综合。审查只有改变了后续动作，才算进入了系统，而不是多了一段评论。</p>
 <hr>
-<h3>第四问：Agent 说“完成了”，系统为什么相信它？</h3>
+<h3 id="第四问-Agent-说-完成了-系统为什么相信它-1">第四问：Agent 说“完成了”，系统为什么相信它？</h3>
 <p>“代码已经写入”，只能证明文件发生了变化，不能证明问题解决了。</p>
 <p>“测试通过了”，也不能只看 Agent 回复里的这一句话。至少要知道测的是哪个 commit，执行了什么命令，退出码是多少，报告在哪里，Reviewer 有没有留下 blocker，测试之后工作区有没有继续变化。</p>
 <p>所以，“完成”应该由验收条件定义，并由运行时留下证据。</p>
@@ -535,13 +535,13 @@
 <p>到了生产环境，我会继续看任务重复率、状态冲突率、补偿成功率、调度可用性和状态未知的积压量。历史任务归档前，要确认没有活动租约、重试或补偿；具体保留多久，应由业务和审计要求决定。</p>
 <p>Agent 说发生了什么，不等于系统能证明发生了什么。版本、工具结果、副作用和验收证据，最后都要回到运行时记录里。</p>
 <hr>
-<h3>把 Agent 放回传统架构里</h3>
+<h3 id="把-Agent-放回传统架构里">把 Agent 放回传统架构里</h3>
 <p>这些问题放回传统架构，其实都能找到对应物：任务边界像服务边界，交接对象像 API 契约或领域事件，权威事实像主数据，状态推进像工作流，超时恢复像幂等命令和补偿事务。换个说法，多 Agent 并没有绕开分布式系统那些老问题，只是把执行者从服务和线程换成了会自主判断的 Agent。</p>
 <p>Agent 只是把问题放大了。同一个输入不一定得到同一个输出，上下文会变化，工具调用还可能产生真实副作用。模型可以负责判断下一步做什么，但不能独自定义事实、状态和完成条件。<strong>模型负责判断下一步，运行时负责证明这一步确实发生过。</strong></p>
 <p>这也是 Harness 需要承担的部分：给 Agent 正确的工作集，限制它能做的动作，记录真实发生的结果，并在失败以后把任务带回可以继续处理的状态。</p>
 <p>回到最开始的面试，我真正想听的不是一串架构名词，而是能不能围绕 <code>user-service</code> 把这条链讲完整：为什么拆，交什么，依据哪一版，冲突怎么处理，失败从哪里恢复，凭什么算完成。</p>
 <p>技术选型可以不同，边界不能空着。</p>
-<h3>参考资料</h3>
+<h3 id="参考资料">参考资料</h3>
 <ul><li>Anthropic：How we built our multi-agent research system（https://www.anthropic.com/engineering/multi-agent-research-system）</li></ul>
 <ul><li>Google Research：Towards a science of scaling agent systems: When and why agent systems work（https://research.google/blog/towards-a-science-of-scaling-agent-systems-when-and-why-agent-systems-work/）</li></ul>
 <ul><li>Google Antigravity：Teamwork: When AI Becomes a Research Partner（https://www.antigravity.google/blog/teamwork-when-ai-becomes-a-research-partner）</li></ul>
@@ -556,7 +556,7 @@
 <p>如有想了解学习的技术点，请留言给若飞安排分享</p>
 <p>因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</p>
 <p>·END·</p>
-<h3>相关阅读：</h3>
+<h3 id="相关阅读">相关阅读：</h3>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410429&amp;idx=1&amp;sn=bf254373b3539b0ff3d813e1cddda07d&amp;scene=21#wechat_redirect">来自 Google 的多智能体最佳实践</a>架构排熵：Loop Engineering 的持续清理系统</li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410413&amp;idx=1&amp;sn=c57ed4ab77e32c661e1cb70d1adfcbe6&amp;scene=21#wechat_redirect">DeepSeek Harness 底层原理深度解析</a></li><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410403&amp;idx=1&amp;sn=91bf76e251325e12cf81f9a8c416eebf&amp;scene=21#wechat_redirect">从 Pi 看 Agent Harness：少做功能，怎样换来更可控的运行时</a>CLAUDE.md 拆解：Agent 进仓库前的上下文入口</li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410378&amp;idx=1&amp;sn=809a16369c222b6e584dd6139562b00d&amp;scene=21#wechat_redirect">聊一聊 GPT-6 Astra 背后的 Loop 技术</a></li><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410373&amp;idx=1&amp;sn=a6f594734d896842794a1495364808ff&amp;scene=21#wechat_redirect">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a></li><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410344&amp;idx=1&amp;sn=2e0b3316386c259b7b654b0ac211bac6&amp;scene=21#wechat_redirect">Harness 到底是什么：为什么同一个模型，换个 Coding Agent 结果会不一样？</a></li><li><a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410359&amp;idx=1&amp;sn=0052caf3151e0afb62ae11438c1d77b9&amp;scene=21#wechat_redirect">Codex 的“记忆”大改？上下文管理架构拆解</a></li></ul>
@@ -568,7 +568,7 @@
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>
 <p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

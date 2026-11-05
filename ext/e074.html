@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</h1><div class="meta">📅 2026-09-28 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/aPWGu38sAz-pQXOvis1I0g" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260928-AI时代每秒10W并发无锁缓存spec怎么写7-100.md</div><div class="md"><h1>AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">21</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#AI时代-每秒10W并发无锁缓存-spec怎么写-7-100">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#大量修改司机信息">大量修改司机信息：</a><a class="tl l3" href="#相对少量查询司机信息">相对少量查询司机信息：</a><a class="tl l3" href="#对这个kv缓存并发访问-有什么注意事项">对这个kv缓存并发访问，有什么注意事项？</a><a class="tl l3" href="#吞吐量很高时-会有什么问题">吞吐量很高时，会有什么问题？</a><a class="tl l3" href="#如何降低锁冲突">如何降低锁冲突？</a><a class="tl l3" href="#锁粒度-还能再细吗">锁粒度，还能再细吗？</a><a class="tl l3" href="#还有没有办法-进一步降低锁冲突">还有没有办法，进一步降低锁冲突？</a><a class="tl l3" href="#脏数据-是如何产生的">脏数据，是如何产生的？</a><a class="tl l3" href="#脏数据问题-怎么解决">脏数据问题，怎么解决？</a><a class="tl l3" href="#加入签名之后-读写流程要如何升级">加入签名之后，读写流程要如何升级？</a><a class="tl l3" href="#那么问题来了-到了AI时代-这套无锁-签名的方案-spec该怎么写">那么问题来了，到了AI时代，这套无锁+签名的方案，spec该怎么写？</a><a class="tl l3" href="#一份无锁缓存的spec-至少写清四件事">一份无锁缓存的spec，至少写清四件事：</a><a class="tl l3" href="#spec示例-md格式-可以直接复制">spec示例（md格式），可以直接复制：</a><a class="tl l3" href="#总结">总结</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</h1><div class="meta">📅 2026-09-28 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/aPWGu38sAz-pQXOvis1I0g" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260928-AI时代每秒10W并发无锁缓存spec怎么写7-100.md</div><div class="md"><h1 id="AI时代-每秒10W并发无锁缓存-spec怎么写-7-100">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-28 抓取状态：成功 原文字符：5045｜配图：3 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>《AI时代的架构设计100讲》第7讲：超高并发、写多读少场景（如快狗打车司机信息读写）下缓存自身的访问性能——无锁缓存这种带权衡的代码怎么让 AI 写对；先讲清方案本身（无锁缓存设计与适用场景），再讲 spec 怎么写，承接前两讲的 Cache Aside 与 binlog 二次淘汰。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#大量修改司机信息">大量修改司机信息：</a></li><li><a href="#相对少量查询司机信息">相对少量查询司机信息：</a></li><li><a href="#对这个kv缓存并发访问有什么注意事项">对这个kv缓存并发访问，有什么注意事项？</a></li><li><a href="#吞吐量很高时会有什么问题">吞吐量很高时，会有什么问题？</a></li><li><a href="#如何降低锁冲突">如何降低锁冲突？</a></li><li><a href="#锁粒度还能再细吗">锁粒度，还能再细吗？</a></li><li><a href="#还有没有办法进一步降低锁冲突">还有没有办法，进一步降低锁冲突？</a></li><li><a href="#脏数据是如何产生的">脏数据，是如何产生的？</a></li><li><a href="#脏数据问题怎么解决">脏数据问题，怎么解决？</a></li><li><a href="#加入签名之后读写流程要如何升级">加入签名之后，读写流程要如何升级？</a></li><li><a href="#那么问题来了到了ai时代这套无锁签名的方案spec该怎么写">那么问题来了，到了AI时代，这套无锁+签名的方案，spec该怎么写？</a></li><li><a href="#一份无锁缓存的spec至少写清四件事">一份无锁缓存的spec，至少写清四件事：</a></li><li><a href="#spec示例md格式可以直接复制">spec示例（md格式），可以直接复制：</a></li><li><a href="#总结">总结</a></li></ul>
 <blockquote><p>《AI时代的架构设计100讲》    第7讲：无锁缓存</p></blockquote>
 <p>AI时代，架构设计变了吗？架构师的职责变了吗？准备新起一个AI时代的架构设计系列，初定100讲，每周更新2-3讲，这是第7讲。</p>
@@ -417,15 +417,15 @@
 <p>举个栗子，快狗打车的司机信息读写：</p>
 <ol><li>司机地理位置随时变化，可能每几秒就要修改一次；</li><li>用户打车时查看司机位置，查询频率相对较低。</li></ol>
 <p>这里用到两个接口：</p>
-<h3>大量修改司机信息：</h3>
+<h3 id="大量修改司机信息">大量修改司机信息：</h3>
 <p>void SetDriverInfo(long driver_id, DriverInfo info)；</p>
-<h3>相对少量查询司机信息：</h3>
+<h3 id="相对少量查询司机信息">相对少量查询司机信息：</h3>
 <p>DriverInfo GetDriverInfo(long driver_id)。</p>
 <p>这一类业务，底层实现往往是一个Map内存缓存：</p>
 <ol><li>查询key定长，例如司机ID；</li><li>返回value也定长，例如司机实体序列化后的二进制串。</li></ol>
 <p>也就是类似这样的一个kv缓存结构：</p>
 <p>Map&lt;driver_id, DriverInfo&gt;。</p>
-<h3>对这个kv缓存并发访问，有什么注意事项？</h3>
+<h3 id="对这个kv缓存并发访问-有什么注意事项">对这个kv缓存并发访问，有什么注意事项？</h3>
 <p>这个kv内存缓存是一个临界资源。临界资源的并发访问，要注意加读写锁，实施互斥。</p>
 <p>加锁写入的伪代码：</p>
 <pre><code>void SetDriverInfo(long driver_id, DriverInfo info){
@@ -442,11 +442,11 @@ t = Map&lt;driver_id&gt;;
 UnReadLock(m_lock);
 return t;
 }</code></pre>
-<h3>吞吐量很高时，会有什么问题？</h3>
+<h3 id="吞吐量很高时-会有什么问题">吞吐量很高时，会有什么问题？</h3>
 <p>假设快狗打车有100w司机同时在线，每个司机每5秒更新一次经纬度，那么每秒就有20w次写并发。</p>
 <p>假设日订单1000w个，平均每秒大概300个下单，对应到查询，大概是每秒1000级别的并发读。</p>
 <p>在这样的吞吐量下（每秒20w写、1k读），锁m_lock会成为潜在瓶颈，导致Map访问效率极低。</p>
-<h3>如何降低锁冲突？</h3>
+<h3 id="如何降低锁冲突">如何降低锁冲突？</h3>
 <p>锁冲突之所以严重，是因为整个Map共用一把锁，粒度太粗。</p>
 <p>画外音：可以认为是一个数据库的"库级别锁"。</p>
 <p>可以水平拆分，把1个Map切分成N个Map：</p>
@@ -460,7 +460,7 @@ UnWriteLock(m_lock[i]); // 解锁第i把锁
 <p>如此优化，能否提高性能？</p>
 <ol><li>一个Map变成N个Map，每个Map的并发量变成1/N；</li><li>同时，每个Map的数据量也变成1/N。</li></ol>
 <p>理论上，锁冲突会呈平方级降低，性能提升。</p>
-<h3>锁粒度，还能再细吗？</h3>
+<h3 id="锁粒度-还能再细吗">锁粒度，还能再细吗？</h3>
 <p>能。一个元素一把锁。</p>
 <p>画外音：相当于从"库级别锁"，优化为"行级别锁"。</p>
 <p>不妨设driver_id是递增生成的，并且假设内存足够大。此时可以把Map优化成Array，锁粒度细化到最细——每个司机信息一把锁：</p>
@@ -473,40 +473,40 @@ UnWriteLock(m_lock[index]); // 解锁行锁
 <p><img alt="图片" src="../../_assets/AI时代每秒10W并发无锁缓存spec怎么写7-100/img-001-faa2a955.png"></p>
 <p>这个方案锁冲突降到最低，但锁资源大增。数据量非常大时，内存往往装不下。</p>
 <p>画外音：数据量比较小的时候，可以一个元素一把锁。典型的是连接池，每个连接一把锁，表示连接是否可用。</p>
-<h3>还有没有办法，进一步降低锁冲突？</h3>
+<h3 id="还有没有办法-进一步降低锁冲突">还有没有办法，进一步降低锁冲突？</h3>
 <p>写多读少的业务，还有一种方案：无锁缓存，把锁冲突降到零。</p>
 <p>无锁缓存，可能存在什么问题？</p>
 <p>缓存不加锁，读写吞吐量可以达到极限。但是，多线程对缓存中同一块定长数据并发写时，可能出现不一致的脏数据。这个方案为了提高性能，牺牲了一致性。</p>
 <p>读取时获取到错误的数据，是不能接受的。</p>
 <p>画外音：作为缓存，允许cache miss，却不允许读脏数据。</p>
-<h3>脏数据，是如何产生的？</h3>
+<h3 id="脏数据-是如何产生的">脏数据，是如何产生的？</h3>
 <p>不加锁，多线程并发写时，可能出现这种情况：</p>
 <p><img alt="图片" src="../../_assets/AI时代每秒10W并发无锁缓存spec怎么写7-100/img-002-5ebfa14c.png"></p>
 <ol><li>线程1对缓存操作，对key想写入value1；</li><li>线程2对缓存操作，对key想写入value2；</li><li>不加锁，两个线程对同一个定长区域并发写，可能各写成功一半——最终结果既不是value1也不是value2，而是一个乱七八糟、不符合预期的value-unexpected。</li></ol>
-<h3>脏数据问题，怎么解决？</h3>
+<h3 id="脏数据问题-怎么解决">脏数据问题，怎么解决？</h3>
 <p>本质上，这是一个数据完整性问题。并发写入的分别是value1和value2，读出的是value-unexpected。数据被篡改了，本质是数据完整性问题。</p>
 <p>通常，如何保证数据完整性？</p>
 <p>例如：运维如何保证，从中控机分发到上线机的二进制没有被篡改？md5。</p>
 <p>又例如：即时通讯中，如何保证接收方收到的消息，就是发送方发出的消息？发送方除了发送消息本身，还要发送消息的签名；接收方收到后校验签名，确保消息完整、未被篡改。</p>
 <p>"签名"，是常见的保证数据完整性的方案。</p>
-<h3>加入签名之后，读写流程要如何升级？</h3>
+<h3 id="加入签名之后-读写流程要如何升级">加入签名之后，读写流程要如何升级？</h3>
 <p><img alt="图片" src="../../_assets/AI时代每秒10W并发无锁缓存spec怎么写7-100/img-003-2c0ac9ae.png"></p>
 <p>加上签名之后，缓存不但写入定长value本身，还要写入定长签名（例如16bit CRC校验）：</p>
 <ol><li>线程1对key想写入value1，写入签名v1-sign；</li><li>线程2对key想写入value2，写入签名v2-sign；</li><li>不加锁并发写，可能各写成功一半，结果仍是value-unexpected——但签名，一定是v1-sign或v2-sign中的一个；</li><li>读取时，不但取出value，还要像消息接收方一样校验签名。签名不一致，缓存返回NULL，即cache miss。</li></ol>
 <p>画外音：16bit/32bit的写，可以保证原子性。</p>
 <p>当然，对应到司机地理位置，除了内存缓存，还需要timer对缓存数据定期落盘、写入数据库。cache miss时，从数据库读取。</p>
-<h3>那么问题来了，到了AI时代，这套无锁+签名的方案，spec该怎么写？</h3>
+<h3 id="那么问题来了-到了AI时代-这套无锁-签名的方案-spec该怎么写">那么问题来了，到了AI时代，这套无锁+签名的方案，spec该怎么写？</h3>
 <p>先说结论：思路没变，执行者变了。</p>
 <p><strong>没变的部分：签名是无锁方案的前提——省掉签名，就会读到脏数据。这不是性能优化空间，是正确性底线。这个判断，和是不是AI写代码，没有关系。</strong></p>
 <p>** **</p>
 <p><strong>变了的部分：并发与权衡的实现细节，我们不再逐行写了。我们干的活，是把设计约束写成spec，让AI按spec去实现。前两讲聊过spec的四件事，不重复论证，今天直接给一份能用的。</strong></p>
 <p>** **</p>
-<h3>一份无锁缓存的spec，至少写清四件事：</h3>
+<h3 id="一份无锁缓存的spec-至少写清四件事">一份无锁缓存的spec，至少写清四件事：</h3>
 <ol><li>模式声明；</li><li>红线约束；</li><li>异常与降级；</li><li>验收标准；</li></ol>
-<h3>spec示例（md格式），可以直接复制：</h3>
+<h3 id="spec示例-md格式-可以直接复制">spec示例（md格式），可以直接复制：</h3>
 <blockquote><p># 无锁缓存实现spec         ## 模式声明    无锁缓存+签名完整性校验。    1. 写：写入定长value + 定长签名16bit CRC；    2. 读：取出value和签名，校验通过返回value.    不一致返回NULL（cache miss，正常语义，不是错误）。         ## 红线约束    1. 禁止省略签名校验流程；    2. 签名必须定长，位宽16bit CRC，保证原子写；    3. 校验不一致只返回NULL，禁止抛异常。         ## 异常与降级    1. cache miss时，回源数据库读取；    2. 后台timer定期将缓存数据落盘到数据库；    3. 签名不一致率纳入监控，突增时告警。         ## 验收标准    1. 并发写压测下，读到的要么是某个完整写入值，要么是NULL；    2. 写多读少场景（20w写/1k读）吞吐达标；    3. 签名不一致有计数日志，可查询、可统计。</p></blockquote>
 <p>这四件事写清楚，AI输出的无锁缓存代码，大概率是靠谱的。</p>
-<h3>总结</h3>
+<h3 id="总结">总结</h3>
 <p>业务场景：超高并发、写多读少、定长value。提升吞吐量的思路：</p>
 <ol><li>水平拆分降低锁冲突：单库变多库；</li><li>Map转Array最小化锁冲突：库锁变行锁；</li><li>无锁最大化并发：行锁变无锁——完整性与性能的折衷；</li><li>签名保证数据完整性：写时写签名，读时校验签名；</li><li>AI时代，方案写成spec：红线防AI把签名"优化"掉。</li></ol>
 <p>知其然，知其所以然。</p>
@@ -516,7 +516,7 @@ UnWriteLock(m_lock[index]); // 解锁行锁
 <p>《<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651981668&amp;idx=1&amp;sn=8b96fb9bb927400395b84f9e1c2389d4&amp;scene=21#wechat_redirect">解决缓存不一致，spec要怎么写（6/100）</a>》</p>
 <p>交流讨论：</p>
 <p>AI时代，你们的缓存spec，是怎么写的？</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

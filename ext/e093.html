@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</h1><div class="meta">📅 2026-09-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/uJr6Bb8OrNMDySXs3m7CpQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260924-Agent记忆有了Jev新方案登上HuggingFace趋势榜.md</div><div class="md"><h1>Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">11</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Agent记忆有了Jev新方案-登上Hugging-Face趋势榜">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#01-Agent记忆太贵-Jev-Mem换了种做法">01 Agent记忆太贵，Jev-Mem换了种做法</a><a class="tl l3" href="#02-Jev到底管什么-Jev-Mem并不是简单地给Agent增加一个向量数据库">02 Jev到底管什么？Jev-Mem并不是简单地给Agent增加一个向量数据库。</a><a class="tl l3" href="#03-效果怎么样">03 效果怎么样？</a><a class="tl l3" href="#04-总结">04 总结</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</h1><div class="meta">📅 2026-09-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/uJr6Bb8OrNMDySXs3m7CpQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260924-Agent记忆有了Jev新方案登上HuggingFace趋势榜.md</div><div class="md"><h1 id="Agent记忆有了Jev新方案-登上Hugging-Face趋势榜">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</h1>
 <blockquote><p>来源：<a href="https://mp.weixin.qq.com/s/uJr6Bb8OrNMDySXs3m7CpQ">微信公众号·智猩猩AI</a> 归档日期：2026-09-24 抓取状态：成功（CDP 抓取） 原文字符：2054｜配图：0 张（源站图片未抓到）</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>9月21日 UT Dallas 研究者开源智能体记忆新架构 <strong>Jev-Mem</strong>，次日登上 Hugging Face Papers 趋势榜。</li><li>核心思路：把「记忆管理」与「复杂推理」拆开——轻量级 Jev 负责高频有界决策（记忆分类/关系判断/查询路由/候选打分/停止判断），大模型只做复杂推理与答案合成。</li><li>架构三平面：System-One 控制平面 + 多关系记忆平面（语义/时间/因果/实体四种关系）+ System-Two 推理平面。</li><li>LoCoMo 长期记忆测试：LLM-as-a-Judge <strong>0.777</strong>，比最强基线 MAGMA（0.700）提升 11.0%；多跳问答 0.623、开放域 0.618、对抗性干扰题 0.962。</li><li>效率：记忆构建 <strong>158 秒</strong>（比最快竞争方法 1044 秒降 84.9%，6.6× 加速）；平均查询延迟 <strong>0.93 秒</strong>（比 MAGMA 1.47 秒低 36.7%）。</li><li>论文：<em>Jev-Mem: System-One-Controlled Agentic Memory for Efficient AI Agents</em>。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li>问题：记忆分类、关系判断、查询路由、候选评分、停止判断这类高频操作输出的是有界结果（标签/概率/分数），用自回归 LLM 逐 token 生成再解析太贵。</li><li>分工：System-One 处理高频结构化轻量决策；System-Two 只在复杂推理和答案合成时调用——「能快速判断的事情，不让大模型反复生成」。</li><li>记忆组织：不是简单加向量数据库，而是多关系记忆空间——同一条记忆可同时拥有语义、时间、因果、实体关系。</li><li>写入链路：观察 → 类型判断 → 候选记忆 → 关系构建 → 更新记忆。</li><li>查询链路：路由 → 检索 → 评估 → 扩展 → 再评估（动态检索预算），替代传统固定 Top-K；筛出的高质量证据才交给 System-Two 作答。</li><li>定位：不追求「记得更多」，而是回答「Agent 应该如何更高效地管理自己的记忆」。</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>高频有界决策（分类/打分/路由/停止判断）别上大模型生成，用轻量 Jev/小模型直接出结构化结果，成本和延迟都降一个量级。</li><li>检索从固定 Top-K 改为「评估-扩展-停止」的动态预算，多跳/去噪类问题收益最明显（对抗干扰题 0.742→0.962）。</li><li>记忆建模补上时间/因果/实体关系，比单一向量相似度更能支撑多跳问答。</li></ul>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充——思考方向：Jev-Mem 的三平面拆分与集团知识库的「成卡/检索」分工是否有可借鉴处；动态检索预算能否用在归档查重。）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#01 Agent记忆太贵，Jev-Mem换了种做法">01 Agent记忆太贵，Jev-Mem换了种做法</a></li><li><a href="#02 Jev到底管什么？Jev-Mem并不是简单地给Agent增加一个向量数据库。">02 Jev到底管什么？Jev-Mem并不是简单地给Agent增加一个向量数据库。</a></li><li><a href="#03 效果怎么样？">03 效果怎么样？</a></li><li><a href="#04 总结">04 总结</a></li></ul>
 <p>Agent记忆有了Jev新方案，登上Hugging Face趋势榜！ 关注AI开源 智猩猩AI 2026年9月24日 10:30 北京 标题已修改</p>
 <p>智猩猩AI整理</p>
@@ -419,7 +419,7 @@
 <p>那么，Jev-Mem到底做了什么？</p>
 <p>论文题目：</p>
 <p>Jev-Mem: System-One-Controlled Agentic Memory for Efficient AI Agents</p>
-<h3>01 Agent记忆太贵，Jev-Mem换了种做法</h3>
+<h3 id="01-Agent记忆太贵-Jev-Mem换了种做法">01 Agent记忆太贵，Jev-Mem换了种做法</h3>
 <p>Jev-Mem的思路很简单：把“记忆管理”和“复杂推理”拆开。</p>
 <p>记忆分类、关系判断、查询路由、候选评分、停止判断，这些操作输出的都是有界结果，一个标签、一个概率、一个分数，而不是自由文本。用自回归 LLM 逐 token 生成再解析，对这类高频决策来说太贵了。</p>
 <p>团队因此引入 System-One / System-Two 的分工，System One 负责高频、结构化的轻量决策；System Two 只在复杂推理和答案合成时才被调用。</p>
@@ -427,7 +427,7 @@
 <p>Jev负责高频、结构化的决策，例如记忆分类、关系判断、查询路由、候选打分和是否继续检索。</p>
 <p>真正需要开放式生成和复杂推理时，再交给System Two。</p>
 <p>也就是说能快速判断的事情，不让大模型反复生成。</p>
-<h3>02 Jev到底管什么？Jev-Mem并不是简单地给Agent增加一个向量数据库。</h3>
+<h3 id="02-Jev到底管什么-Jev-Mem并不是简单地给Agent增加一个向量数据库">02 Jev到底管什么？Jev-Mem并不是简单地给Agent增加一个向量数据库。</h3>
 <p>它把记忆组织成一个多关系记忆空间。同一条记忆可以同时拥有不同类型的关系，包括：语义关系、时间关系、因果关系和实体关系。</p>
 <p>例如，Agent过去记录了一次项目经历。</p>
 <p>Jev首先判断这条信息属于什么类型，然后寻找可能相关的历史记忆，再判断它们之间是否存在语义、时间、因果或实体关系。</p>
@@ -436,7 +436,7 @@
 <p>如果不够，就继续扩展；如果已经足够，直接停止检索。</p>
 <p>整个过程变成路由 → 检索 → 评估 → 扩展 → 再评估，而不是传统的固定Top-K搜索。</p>
 <p>最后，筛选出的高质量证据才交给System Two进行最终回答。</p>
-<h3>03 效果怎么样？</h3>
+<h3 id="03-效果怎么样">03 效果怎么样？</h3>
 <p>Jev-Mem在LoCoMo上进行了长期记忆测试，最终整体 LLM-as-a-Judge达到0.777，最强基线 MAGMA 为 0.700，相对提升 11.0%。</p>
 <p>增益在需要多步检索和去噪的题目上最明显：多跳问答 0.623（基线最高 0.569）、开放域 0.618（基线最高 0.517）、对抗性干扰题 0.962（基线最高 0.742）。</p>
 <p>效率侧的差距同样直接。</p>
@@ -445,14 +445,14 @@
 <p>作为对照，MemoryOS 单次查询要 32.68 秒，这正是"把复杂处理留在检索路径上"要付出的代价。</p>
 <p>也就是说，Jev-Mem并不是单纯追求“记得更多”。</p>
 <p>它试图解决的是另一个问题：Agent应该如何更高效地管理自己的记忆？</p>
-<h3>04 总结</h3>
+<h3 id="04-总结">04 总结</h3>
 <p>过去的Agent记忆，重点更多放在“存什么、怎么存、怎么检索”。</p>
 <p>Jev-Mem则进一步把问题变成了，“谁来控制这些记忆操作？”</p>
 <p>它用Jev承担高频、轻量的System-One决策，把复杂的开放式推理留给System Two。</p>
 <p>最终在保持较高回答质量的同时，显著降低了记忆构建和查询的计算开销。</p>
 <p>对于正在走向长程任务的AI Agent来说，未来需要优化的可能不只是模型本身有多强，还包括Agent如何更高效地调用自己的记忆。</p>
 <p>END</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

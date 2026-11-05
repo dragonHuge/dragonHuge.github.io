@@ -395,25 +395,25 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</h1><div class="meta">📅 2026-09-10 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Vy2HpOyr7wVmPTVWa3mGig" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260910-Agent长程任务断点续传.md</div><div class="md"><h1>Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">42</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Agent-长程任务断点续传-从框架-Checkpoint-到跨进程恢复的完整实践">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#背景">背景</a><a class="tl l3" href="#1-1-业务场景">▐ 1.1 业务场景</a><a class="tl l3" href="#整体架构">整体架构</a><a class="tl l3" href="#图-1-断点续传整体架构-上层调度负责任务状态追踪与恢复协调">图 1：断点续传整体架构。上层调度负责任务状态追踪与恢复协调，</a><a class="tl l3" href="#框架层-Checkpoint-机制深度利用">框架层：Checkpoint 机制深度利用</a><a class="tl l3" href="#3-1-框架-Checkpoint-机制分析">▐ 3.1 框架 Checkpoint 机制分析</a><a class="tl l3" href="#图-2-框架-Checkpoint-保存时序-每个节点正常执行完毕后都会自动保存-Checkpoint-唯一不保存的是-END-节点和异常场景">图 2：框架 Checkpoint 保存时序。每个节点正常执行完毕后都会自动保存 Checkpoint，唯一不保存的是 END 节点和异常场景。</a><a class="tl l3" href="#应用执行下线脚本-会调用到应用的下线脚本文件">应用执行下线脚本，会调用到应用的下线脚本文件</a><a class="tl l3" href="#下线脚本在执行应用停止前-通过-HTTP-请求调用应用内的关机信号接口-如-check-shutdown-signal">下线脚本在执行应用停止前，通过 HTTP 请求调用应用内的关机信号接口（如 /check/shutdown/signal）</a><a class="tl l3" href="#应用接收到该请求后-将内存中的共享变量置为下线状态">应用接收到该请求后，将内存中的共享变量置为下线状态</a><a class="tl l3" href="#GraphEnvironmentMonitor-isShutdownSignalDetected-检测到该变量被设置-返回-true">GraphEnvironmentMonitor.isShutdownSignalDetected() 检测到该变量被设置，返回 true</a><a class="tl l3" href="#3-4-恢复时消息顺序问题-已修复">▐ 3.4 恢复时消息顺序问题（已修复）</a><a class="tl l3" href="#3-5-多工具调用的-Checkpoint-限制">▐ 3.5 多工具调用的 Checkpoint 限制</a><a class="tl l3" href="#图-3-多工具调用场景的-Checkpoint-保存时机">图 3：多工具调用场景的 Checkpoint 保存时机。</a><a class="tl l3" href="#图-4-Tool-Mock返回与Checkpoint配合">图 4：Tool Mock返回与Checkpoint配合</a><a class="tl l3" href="#调用-agentInterruptManager-interrupt-设置中断标记">调用 agentInterruptManager.interrupt() 设置中断标记</a><a class="tl l3" href="#通过-SSE-发送中断通知-对话框弹窗或表单页面">通过 SSE 发送中断通知（对话框弹窗或表单页面）</a><a class="tl l3" href="#返回-mock-的工具响应-status-error">返回 mock 的工具响应（status=&quot;error&quot;）</a><a class="tl l3" href="#3-7-子图会话-ID-后缀问题">▐ 3.7 子图会话 ID 后缀问题</a><a class="tl l3" href="#上层调度-跨进程的任务恢复">上层调度：跨进程的任务恢复</a><a class="tl l3" href="#4-1-任务表设计">▐ 4.1 任务表设计</a><a class="tl l3" href="#4-2-MQ-摘流-防止关机机器消费新消息">▐ 4.2 MQ 摘流：防止关机机器消费新消息</a><a class="tl l3" href="#应用收到下线信号后-offline-函数被调用">应用收到下线信号后，offline() 函数被调用</a><a class="tl l3" href="#先调用-offlinemq-通过调用-MQ-客户端的-allConsumersOffline-接口">先调用 offlinemq()，通过调用 MQ 客户端的 allConsumersOffline 接口</a><a class="tl l3" href="#MQ-Broker-会将该消费者从消费组中移除-后续消息不会再分发到这台机器">MQ Broker 会将该消费者从消费组中移除，后续消息不会再分发到这台机器</a><a class="tl l3" href="#摘流成功后-再执行后续的应用停止逻辑">摘流成功后，再执行后续的应用停止逻辑</a><a class="tl l3" href="#4-3-恢复流程">▐ 4.3 恢复流程</a><a class="tl l3" href="#图-5-恢复执行流程-核心思路-读-DB-状态">图 5：恢复执行流程。核心思路：读 DB 状态 →</a><a class="tl l3" href="#思考与规划">思考与规划</a><a class="tl l3" href="#5-1-关键设计决策与可复用模式">▐ 5.1 关键设计决策与可复用模式</a><a class="tl l3" href="#5-2-遇到的问题与解决方案">▐ 5.2 遇到的问题与解决方案</a><a class="tl l3" href="#5-3-后续">▐ 5.3 后续</a><a class="tl l3" href="#参考资料">参考资料</a><a class="tl l3" href="#团队介绍">团队介绍</a><a class="tl l3" href="#拓展阅读">¤ 拓展阅读 ¤</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</h1><div class="meta">📅 2026-09-10 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Vy2HpOyr7wVmPTVWa3mGig" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260910-Agent长程任务断点续传.md</div><div class="md"><h1 id="Agent-长程任务断点续传-从框架-Checkpoint-到跨进程恢复的完整实践">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-10 抓取状态：成功 原文字符：12637｜配图：10 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>生产环境 Agent 中断分三类：用户主动中断、工具执行中断（协作式，Hook 拦截保存 Checkpoint）、系统级中断（非协作式，需上层调度 + MQ 协调恢复）</li><li>两层恢复架构：框架层 Checkpoint 覆盖单任务，调度层用任务表 + 消息队列协调跨进程恢复</li><li>覆盖场景：人机协作（等人工确认后继续）、多 Agent 协同（系统自动恢复）、系统重启</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li>三类长程任务对恢复的需求不同：长程业务流程（执行时间不可控）、A2A 协同（无法依赖人工干预）、Human-in-the-loop（暂停等确认，要求安全可靠的中断）</li><li>协作式中断：框架通过 Hook 在节点执行前后检测并保存 Checkpoint，恢复时能明确"已完成与待重试的边界"</li><li>非协作式中断（如机器关机）：上层调度通过 MQ 摘流，防止已关机机器继续消费新消息；结合任务表对账恢复</li><li>稳定中断是前提：若未在合适的拦截点稳定中断，状态不一致会让恢复时无法判断该从哪继续</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>自建 24 小时 Agent（如 OpenClaw cron 任务）时，为每个定时任务定义明确的检查点与幂等重试语义</li><li>中断恢复设计先分类：哪些可以简单重试，哪些必须断点续传，哪些要人工确认后恢复</li></ul>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#背景">背景</a></li><li><a href="#11业务场景">▐  1.1 业务场景</a></li><li><a href="#整体架构">整体架构</a></li><li><a href="#图-1断点续传整体架构上层调度负责任务状态追踪与恢复协调">图 1：断点续传整体架构。上层调度负责任务状态追踪与恢复协调，</a></li><li><a href="#框架层checkpoint-机制深度利用">框架层：Checkpoint 机制深度利用</a></li><li><a href="#31-框架-checkpoint-机制分析">▐  3.1 框架 Checkpoint 机制分析</a></li><li><a href="#应用执行下线脚本会调用到应用的下线脚本文件">应用执行下线脚本，会调用到应用的下线脚本文件</a></li><li><a href="#应用接收到该请求后将内存中的共享变量置为下线状态">应用接收到该请求后，将内存中的共享变量置为下线状态</a></li><li><a href="#34-恢复时消息顺序问题已修复">▐  3.4 恢复时消息顺序问题（已修复）</a></li><li><a href="#35-多工具调用的-checkpoint-限制">▐  3.5 多工具调用的 Checkpoint 限制</a></li><li><a href="#图-3多工具调用场景的-checkpoint-保存时机">图 3：多工具调用场景的 Checkpoint 保存时机。</a></li><li><a href="#图-4tool-mock返回与checkpoint配合">图 4：Tool Mock返回与Checkpoint配合</a></li><li><a href="#通过-sse-发送中断通知对话框弹窗或表单页面">通过 SSE 发送中断通知（对话框弹窗或表单页面）</a></li><li><a href="#返回-mock-的工具响应statuserror">返回 mock 的工具响应（status="error"）</a></li><li><a href="#37-子图会话-id-后缀问题">▐  3.7 子图会话 ID 后缀问题</a></li><li><a href="#上层调度跨进程的任务恢复">上层调度：跨进程的任务恢复</a></li><li><a href="#41-任务表设计">▐  4.1 任务表设计</a></li><li><a href="#42-mq-摘流防止关机机器消费新消息">▐  4.2 MQ 摘流：防止关机机器消费新消息</a></li><li><a href="#应用收到下线信号后offline-函数被调用">应用收到下线信号后，<code>offline()</code> 函数被调用</a></li><li><a href="#mq-broker-会将该消费者从消费组中移除后续消息不会再分发到这台机器">MQ Broker 会将该消费者从消费组中移除，后续消息不会再分发到这台机器</a></li><li><a href="#摘流成功后再执行后续的应用停止逻辑">摘流成功后，再执行后续的应用停止逻辑</a></li><li><a href="#43-恢复流程">▐  4.3 恢复流程</a></li><li><a href="#图-5恢复执行流程核心思路读-db-状态">图 5：恢复执行流程。核心思路：读 DB 状态 →</a></li><li><a href="#思考与规划">思考与规划</a></li><li><a href="#51-关键设计决策与可复用模式">▐  5.1 关键设计决策与可复用模式</a></li><li><a href="#52-遇到的问题与解决方案">▐  5.2 遇到的问题与解决方案</a></li><li><a href="#53-后续">▐  5.3 后续</a></li><li><a href="#参考资料">参考资料</a></li><li><a href="#团队介绍">团队介绍</a></li><li><a href="#拓展阅读">¤ 拓展阅读 ¤</a></li></ul>
 <p><img alt="图片" src="../../_assets/20260910-Agent长程任务断点续传/img-001-bf9f3706.gif"></p>
 <p>本文介绍了针对 Agent 长程任务中断恢复需求的完整实践方案，旨在解决用户主动、工具执行及系统级中断带来的稳定性问题。该方案采用“框架层 Checkpoint + 上层任务调度”的两层架构，在不修改 Spring AI Alibaba 框架源码的前提下，通过扩展 InterruptableAction、利用 Hook 机制注入自定义逻辑（如关机信号检测、消息顺序修正、多工具调用 Mock 返回及子图会话 ID 记录）来实现进程内的状态保存与恢复；同时，上层调度通过 MQ 摘流防止关机机器消费新消息，并结合任务表与 MQ 消息队列协调跨进程的任务恢复，有效覆盖了包括人机协作、多 Agent 协同及系统重启在内的多种复杂中断场景，保障了 Agent 系统的稳定长期运行。</p>
 <p><img alt="图片" src="../../_assets/20260910-Agent长程任务断点续传/img-002-f37fdf1e.webp"></p>
-<h3>背景</h3>
-<h3>▐  1.1 业务场景</h3>
+<h3 id="背景">背景</h3>
+<h3 id="1-1-业务场景">▐  1.1 业务场景</h3>
 <p>对于 Agent 系统而言，确保任务稳定可靠地执行是核心诉求。在Agent的 ReAct 循环执行过程中，不同任务对中断恢复能力有着差异化的需求：</p>
 <ul><li>长程任务：例如在实际生产项目中，一次完整的业务流程涉及多个步骤，执行时间不可控，需要从中断点恢复</li></ul>
 <ul><li>A2A 协同任务：多 Agent 协同编排，偏向系统自治，是长程任务中的关键环节。这类任务中断后无法依赖用户手动干预，同样需要中断恢复能力</li></ul>
@@ -432,28 +432,28 @@
 <ul><li>长程任务执行时间不可控，发布周期受限、旧机器可能需要长时间保持运行，资源成本较高</li></ul>
 <ul><li>对于非发布场景的中断可能无法覆盖</li></ul>
 <p>因此本方案选择从应用层面实现断点续传，通过框架层 Checkpoint + 上层任务调度的两层架构，以更低的成本覆盖更多中断场景。</p>
-<h3>整体架构</h3>
+<h3 id="整体架构">整体架构</h3>
 <p><img alt="图片" src="../../_assets/20260910-Agent长程任务断点续传/img-004-357b7a26.png"></p>
-<h3>图 1：断点续传整体架构。上层调度负责任务状态追踪与恢复协调，</h3>
+<h3 id="图-1-断点续传整体架构-上层调度负责任务状态追踪与恢复协调">图 1：断点续传整体架构。上层调度负责任务状态追踪与恢复协调，</h3>
 <p>框架层负责 Checkpoint 的保存与恢复。</p>
-<h3>框架层：Checkpoint 机制深度利用</h3>
+<h3 id="框架层-Checkpoint-机制深度利用">框架层：Checkpoint 机制深度利用</h3>
 <p>##</p>
-<h3>▐  3.1 框架 Checkpoint 机制分析</h3>
+<h3 id="3-1-框架-Checkpoint-机制分析">▐  3.1 框架 Checkpoint 机制分析</h3>
 <p>Spring AI Alibaba 框架（以下简称 SAA，当前使用版本 1.1.2.0）的 Checkpoint 机制的保存时机如下：</p>
 <p><img alt="图片" src="../../_assets/20260910-Agent长程任务断点续传/img-005-c6a2fb63.png"></p>
-<h3>图 2：框架 Checkpoint 保存时序。每个节点正常执行完毕后都会自动保存 Checkpoint，唯一不保存的是  __END__ 节点和异常场景。</h3>
+<h3 id="图-2-框架-Checkpoint-保存时序-每个节点正常执行完毕后都会自动保存-Checkpoint-唯一不保存的是-END-节点和异常场景">图 2：框架 Checkpoint 保存时序。每个节点正常执行完毕后都会自动保存 Checkpoint，唯一不保存的是  __END__ 节点和异常场景。</h3>
 <p>▐ 3.2 关键设计决策：不改框架源码</p>
 <p>方案的核心约束是完全基于框架已有能力实现断点续传，不修改任何框架源码。框架是公共依赖，修改源码意味着维护私有 fork，后续升级成本极高。方案利用的框架能力：</p>
 <p><img alt="图片" src="../../_assets/20260910-Agent长程任务断点续传/img-006-52d7b9aa.png"></p>
 <p>▐ 3.3 关机信号检测：GraphEnvironmentMonitor</p>
 <p>新增轻量级工具类 <code>GraphEnvironmentMonitor</code>，用于检测应用内的关机信号共享变量是否被设置。</p>
 <p>关机信号的触发链路如下：</p>
-<h3>应用执行下线脚本，会调用到应用的下线脚本文件</h3>
-<h3>下线脚本在执行应用停止前，通过 HTTP 请求调用应用内的关机信号接口（如 <code>/check/shutdown/signal</code>）</h3>
-<h3>应用接收到该请求后，将内存中的共享变量置为下线状态</h3>
-<h3><code>GraphEnvironmentMonitor.isShutdownSignalDetected()</code> 检测到该变量被设置，返回 true</h3>
+<h3 id="应用执行下线脚本-会调用到应用的下线脚本文件">应用执行下线脚本，会调用到应用的下线脚本文件</h3>
+<h3 id="下线脚本在执行应用停止前-通过-HTTP-请求调用应用内的关机信号接口-如-check-shutdown-signal">下线脚本在执行应用停止前，通过 HTTP 请求调用应用内的关机信号接口（如 <code>/check/shutdown/signal</code>）</h3>
+<h3 id="应用接收到该请求后-将内存中的共享变量置为下线状态">应用接收到该请求后，将内存中的共享变量置为下线状态</h3>
+<h3 id="GraphEnvironmentMonitor-isShutdownSignalDetected-检测到该变量被设置-返回-true"><code>GraphEnvironmentMonitor.isShutdownSignalDetected()</code> 检测到该变量被设置，返回 true</h3>
 <p>正在执行的 Agent 任务会在当前节点完成后检测到关机信号，触发中断并保存 Checkpoint。</p>
-<h3>▐  3.4 恢复时消息顺序问题（已修复）</h3>
+<h3 id="3-4-恢复时消息顺序问题-已修复">▐  3.4 恢复时消息顺序问题（已修复）</h3>
 <p>断点续传场景中存在一个问题：恢复执行时，用户新发的消息可能被插入到消息列表的第一条而不是最后一条，导致模型上下文错乱。这是框架的一个 bug（提的issue: https://github.com/alibaba/spring-ai-alibaba/issues/4662 ）。</p>
 <p>该问题已在社区修复。 对于使用旧版本的场景，可以通过 <code>ResumeMessageOrderHook</code> 在 <code>BEFORE_MODEL</code> 阶段拦截来实现：</p>
 <p>- - - - - - - - - - - - - - - - - - - - -</p>
@@ -479,23 +479,23 @@ public class ResumeMessageOrderHook extends MessagesModelHook {
     }
 }</code></pre>
 <blockquote><p>建议：优先升级框架版本，避免引入额外的 Hook 组件。</p></blockquote>
-<h3>▐  3.5 多工具调用的 Checkpoint 限制</h3>
+<h3 id="3-5-多工具调用的-Checkpoint-限制">▐  3.5 多工具调用的 Checkpoint 限制</h3>
 <p>当模型返回多个工具调用（如 toolA、toolB、toolC）时，框架在一个 for 循环中顺序执行所有工具，中间不保存 Checkpoint。</p>
 <p><img alt="图片" src="../../_assets/20260910-Agent长程任务断点续传/img-007-4adefaa9.jpg"></p>
-<h3>图 3：多工具调用场景的 Checkpoint 保存时机。</h3>
+<h3 id="图-3-多工具调用场景的-Checkpoint-保存时机">图 3：多工具调用场景的 Checkpoint 保存时机。</h3>
 <p>如果 toolA 执行完、toolB 执行中崩溃，恢复时三个工具全部重新执行。</p>
 <p>框架在 <code>AgentToolNode</code> 中已内置部分工具恢复能力——它会检测哪些工具已经执行过，只执行剩余的。但由于无法在 for 循环中间保存 Checkpoint，这个能力暂时无法被利用。</p>
 <p>Tool Mock 返回与 Checkpoint 的配合</p>
 <p>多工具调用中间无法保存 Checkpoint，但在中断场景下，通过 <code>ToolRecordInterceptor</code> 实现了折中方案：当检测到任务被中断时，未执行的工具返回 mock 响应（status="error"），该 mock 响应通过 Checkpoint 机制保存到状态中。</p>
 <p><img alt="图片" src="../../_assets/20260910-Agent长程任务断点续传/img-008-0bd859a8.png"></p>
-<h3>图 4：Tool Mock返回与Checkpoint配合</h3>
+<h3 id="图-4-Tool-Mock返回与Checkpoint配合">图 4：Tool Mock返回与Checkpoint配合</h3>
 <p>效果：任务重新拉起时，框架能够识别哪些工具已有结果（包括 mock 响应），哪些需要重试。已完成的工具不会重复执行，mock 的工具会在恢复时重新执行。这在多工具场景下显著减少了重复工作。</p>
 <p>工具执行循环的中断跳过机制</p>
 <p>在中断场景下，如何让一次模型推理产生的多个工具调用链快速跳过？本方案借助异常机制 <code>HumanInterventionException</code> 配合 <code>ToolInterceptor</code> 实现。</p>
 <p>当某个工具执行过程中需要中断（如权限校验失败、Human-in-the-loop 需要人工确认），<code>ToolInterceptor</code> 会抛出 <code>HumanInterventionException</code>。<code>ObservationInterceptor</code> 捕获该异常后执行以下操作：</p>
-<h3>调用 <code>agentInterruptManager.interrupt()</code> 设置中断标记</h3>
-<h3>通过 SSE 发送中断通知（对话框弹窗或表单页面）</h3>
-<h3>返回 mock 的工具响应（status="error"）</h3>
+<h3 id="调用-agentInterruptManager-interrupt-设置中断标记">调用 <code>agentInterruptManager.interrupt()</code> 设置中断标记</h3>
+<h3 id="通过-SSE-发送中断通知-对话框弹窗或表单页面">通过 SSE 发送中断通知（对话框弹窗或表单页面）</h3>
+<h3 id="返回-mock-的工具响应-status-error">返回 mock 的工具响应（status="error"）</h3>
 <p>中断标记设置后，后续工具的 <code>ToolRecordInterceptor</code> 在执行前会检测到该标记，直接跳过工具执行并返回 mock 响应。这样，一次模型推理产生的多个工具调用链就被快速跳过，无需等待每个工具逐一执行。</p>
 <p><code>HumanInterventionException</code> 支持多种中断场景：</p>
 <ul><li>权限不足：抛出异常并携带权限申请链接</li></ul>
@@ -515,7 +515,7 @@ public class ResumeMessageOrderHook extends MessagesModelHook {
   │     │         └── 设置 resumeFrom = checkpoint.getNodeId()
   │     └── 否 → initializeFromStart()</code></pre>
 <p>恢复时通过 <code>RunnableConfig.threadId</code> 关联 Checkpoint，无需额外传递 Checkpoint ID。框架会根据 threadId 从 <code>BaseCheckpointSaver</code> 中查询最新的 Checkpoint 记录，自动恢复完整的执行上下文（包括 state、消息历史、当前节点 ID 和下一节点 ID），从中断点继续执行。</p>
-<h3>▐  3.7 子图会话 ID 后缀问题</h3>
+<h3 id="3-7-子图会话-ID-后缀问题">▐  3.7 子图会话 ID 后缀问题</h3>
 <p>在多 Agent 嵌套编排场景下，当父 Agent 内部调用子 Agent（以嵌套子图形式）时，子图中的 <code>RunnableConfig.threadId()</code> 会被框架自动拼接后缀，导致中断恢复和状态查询时出现不一致。</p>
 <p>问题现象：</p>
 <p>原始 threadId：</p>
@@ -563,11 +563,11 @@ staticOptional&lt;String&gt; getActualThreadId(RunnableConfig config) {
     return config.metadata(AgentConstants.ACTUAL_THREAD_ID).map(String::valueOf);
 }</code></pre>
 <p>优先级链路：<code>ACTUAL_THREAD_ID</code> → 请求对象中的 <code>conversationId</code> 。通过统一封装，避免各处重复实现，同时加 try-catch 兜底，避免因获取失败导致中断等功能异常。</p>
-<h3>上层调度：跨进程的任务恢复</h3>
+<h3 id="上层调度-跨进程的任务恢复">上层调度：跨进程的任务恢复</h3>
 <p>框架层的 Checkpoint 解决了进程内状态保存的问题，但无法处理应用重启、机器下线等导致 Agent 被强制终止的场景。上层调度负责管理任务的跨进程状态——记录被中断的任务，并协调恢复流程。</p>
-<h3>▐  4.1 任务表设计</h3>
+<h3 id="4-1-任务表设计">▐  4.1 任务表设计</h3>
 <p>对于复杂的长程任务（如 A2A 多 Agent 协同场景），通过任务表（如<code>agent_task</code>）记录任务的关键请求信息（如 Agent 类型、业务关联键、会话 ID 等），以及过程中的关键用户侧数据，便于任务中断后恢复执行。简单的单轮 Agent 交互无需引入此表，直接依赖框架层 Checkpoint 即可。</p>
-<h3>▐  4.2 MQ 摘流：防止关机机器消费新消息</h3>
+<h3 id="4-2-MQ-摘流-防止关机机器消费新消息">▐  4.2 MQ 摘流：防止关机机器消费新消息</h3>
 <p>上层调度通过 MQ 消息队列分发恢复任务。需要解决的关键问题是：如何保证即将关机的机器不会消费到新的 MQ 消息？ 如果正在下线的机器消费了恢复任务但未执行就关机，任务会再次成为"孤儿"。</p>
 <p>解决方案是在应用回调的下线脚本中，先摘流 MQ，再停止应用。核心逻辑如下：</p>
 <p>- - - - - - - - - - - - - - - - - - - - - - - -</p>
@@ -596,36 +596,36 @@ echo&quot;INFO: ${APP_NAME} offline success&quot;
 return $?
 }</code></pre>
 <p>工作原理：</p>
-<h3>应用收到下线信号后，<code>offline()</code> 函数被调用</h3>
-<h3>先调用 <code>offline_mq()</code>，通过调用 MQ 客户端的 <code>allConsumersOffline</code> 接口</h3>
-<h3>MQ Broker 会将该消费者从消费组中移除，后续消息不会再分发到这台机器</h3>
-<h3>摘流成功后，再执行后续的应用停止逻辑</h3>
+<h3 id="应用收到下线信号后-offline-函数被调用">应用收到下线信号后，<code>offline()</code> 函数被调用</h3>
+<h3 id="先调用-offlinemq-通过调用-MQ-客户端的-allConsumersOffline-接口">先调用 <code>offline_mq()</code>，通过调用 MQ 客户端的 <code>allConsumersOffline</code> 接口</h3>
+<h3 id="MQ-Broker-会将该消费者从消费组中移除-后续消息不会再分发到这台机器">MQ Broker 会将该消费者从消费组中移除，后续消息不会再分发到这台机器</h3>
+<h3 id="摘流成功后-再执行后续的应用停止逻辑">摘流成功后，再执行后续的应用停止逻辑</h3>
 <p>效果：即将关机的机器不再消费新消息，这些消息会被消费组中的其他健康机器消费。对于摘流后、关机前已消费但未来得及执行的消息，由于任务状态仍为 <code>WORKING</code>，新实例启动后会通过 MQ 重新消费该任务消息，触发恢复流程。</p>
-<h3>▐  4.3 恢复流程</h3>
+<h3 id="4-3-恢复流程">▐  4.3 恢复流程</h3>
 <p>恢复由外部MQ消息队列触发：</p>
 <p><img alt="图片" src="../../_assets/20260910-Agent长程任务断点续传/img-010-1b5e6665.png"></p>
-<h3>图 5：恢复执行流程。核心思路：读 DB 状态 →</h3>
+<h3 id="图-5-恢复执行流程-核心思路-读-DB-状态">图 5：恢复执行流程。核心思路：读 DB 状态 →</h3>
 <p>从 Checkpoint 恢复框架状态 → 从中断节点继续执行。</p>
-<h3>思考与规划</h3>
-<h3>▐  5.1 关键设计决策与可复用模式</h3>
+<h3 id="思考与规划">思考与规划</h3>
+<h3 id="5-1-关键设计决策与可复用模式">▐  5.1 关键设计决策与可复用模式</h3>
 <p>方案在多个关键决策点上做出了选择：不改框架源码以避免维护私有 fork，升级成本可控；对于基于SAA框架的React Agent友好，可与原工作graph工作机制兼容，这些设计模式具有较高通用性。</p>
-<h3>▐  5.2 遇到的问题与解决方案</h3>
+<h3 id="5-2-遇到的问题与解决方案">▐  5.2 遇到的问题与解决方案</h3>
 <p>问题 1：恢复时消息顺序错乱（框架 bug，已修复）。 Checkpoint 恢复后，用户新消息被插入到列表第一条而不是最后一条，导致模型上下文完全错乱。这是 Spring AI Alibaba 框架的 bug（issue: https://github.com/alibaba/spring-ai-alibaba/issues/4662 ）。社区已在新版本中修复此问题，建议优先升级框架版本。如暂时无法升级，可通过 <code>ResumeMessageOrderHook</code> 在 <code>BEFORE_MODEL</code> 阶段拦截来 workaround（详见 3.4 节）。</p>
 <p>问题 2：多工具调用中间无法保存 Checkpoint。 模型返回 3 个工具调用，执行到第 2 个时崩溃，恢复后 3 个全部重跑。目前通过 <code>ToolRecordInterceptor</code> 在工具执行前检查中断标记来缓解（已执行的工具结果保留，未执行的跳过），彻底解决需要框架侧改动。</p>
 <p>问题 3：子图会话 ID 后缀导致中断失效。 在多 Agent 嵌套编排时，框架会自动给子图的 threadId 拼接 <code>_subgraph_{agentName}</code> 后缀，导致用原始 conversationId 查询中断状态时找不到记录。解法是通过 Hook 在子图执行前将原始 threadId 记录到 metadata，后续统一从 metadata 获取（详见 3.6 节）。</p>
-<h3>▐  5.3 后续</h3>
+<h3 id="5-3-后续">▐  5.3 后续</h3>
 <p>跟进框架侧多工具调用中间的 Checkpoint 保存问题，实现工具级粒度的断点续传（可能与Agent scope结合）。此外，框架层面存在优化空间，例如 Human-in-the-loop（HITL）扩展机制的完善（issue: https://github.com/alibaba/spring-ai-alibaba/issues/4091 ），这类问题的修复将进一步提升断点续传场景下的支持能力。</p>
-<h3>参考资料</h3>
+<h3 id="参考资料">参考资料</h3>
 <ul><li>Spring AI Alibaba 框架源码：https://github.com/alibaba/spring-ai-alibaba</li></ul>
 <ul><li>Spring AI Alibaba 社区文档：https://java2ai.com/</li></ul>
 <ul><li>Spring AI Alibaba 框架消息顺序 bug issue：https://github.com/alibaba/spring-ai-alibaba/issues/4662</li></ul>
 <ul><li>Spring AI Alibaba HITL 扩展机制 issue：https://github.com/alibaba/spring-ai-alibaba/issues/4091</li></ul>
-<h3>团队介绍</h3>
+<h3 id="团队介绍">团队介绍</h3>
 <p>本文作者绍清，来自淘天集团-直播技术团队。团队专注于用技术连接直播内容与商业价值，以 AI 深度发掘直播业务的场景价值。围绕直播运营智能体、直播数字人等方向，团队构建起覆盖供需匹配、内容组织、运营决策到数字人自主开播的完整链路，并在业务与研发实践中持续沉淀 AI Native 的系统能力，为直播经营提质提效，助力商家与主播释放直播势能。</p>
-<h3>¤ 拓展阅读 ¤</h3>
+<h3 id="拓展阅读">¤ 拓展阅读 ¤</h3>
 <p>3DXR技术 | 终端技术 | 音视频技术</p>
 <p>服务端技术 | 技术质量 | 数据算法</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

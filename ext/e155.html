@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</h1><div class="meta">📅 2026-09-10 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/JpDdN21Qe_pN8mhpqWlm9w" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260910-从Pi看Agent-Harness设计取舍.md</div><div class="md"><h1>从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">13</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#从Pi看Agent-Harness-少做功能-怎样换来更可控的运行时">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#因公众号更改推送规则-请点-在看-并加-星标-第一时间获取精彩技术分享">因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</a><a class="tl l3" href="#END">·END·</a><a class="tl l3" href="#架构师">架构师</a><a class="tl l3" href="#关注架构师-JiaGouX-添加-星标">关注架构师(JiaGouX)，添加“星标”</a><a class="tl l3" href="#获取每天技术干货-一起成为牛逼架构师">获取每天技术干货，一起成为牛逼架构师</a><a class="tl l3" href="#技术群请加若飞-1321113940-进架构师群">技术群请加若飞：1321113940 进架构师群</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</h1><div class="meta">📅 2026-09-10 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/JpDdN21Qe_pN8mhpqWlm9w" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260910-从Pi看Agent-Harness设计取舍.md</div><div class="md"><h1 id="从Pi看Agent-Harness-少做功能-怎样换来更可控的运行时">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-10 抓取状态：成功 原文字符：8425｜配图：6 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>Agent Harness 的核心权衡：系统替用户保存/决定多少状态 vs 留给使用者自己组合多少</li><li>四条路线光谱：Claude Code（成品化工作台，功能进默认产品）→ Codex（稳定运行过程）→ DSH（可替换组件化）→ Pi（极简内核，默认只有 read/write/edit/bash 四个工具）</li><li>Pi 最值得学的不是"只有四个工具"，而是有意把产品工作流与 Agent 基础运行拆开——与 Claude Code 方向几乎相反</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li>Claude Code：循环、工具、权限、上下文、常用工作流都组织在产品里，用户少做装配，代价是运行时替用户做更多决定</li><li>Codex：关注稳定运行过程，模型/Thread/Turn/工具执行/审批/事件归属明确；上下文管理实验把 notes、history、主动切窗、预算控制放一起，让长任务换窗继续</li><li>DSH：把可替换性推到底——模型、文件、进程、Session 甚至 Agent Loop 都有正式能力位置，由插件与运行时组装；代价是启动、停止、状态交接、回滚都需要明确规定</li><li>Pi：MCP、子 Agent、计划模式、后台 Bash、权限弹窗全部不进默认主路径，需要时用 Extension/Skills/CLI/项目文件/外部沙箱补上</li><li>关键检查问题：新增功能是在解决运行时必须解决的问题，还是把某一种使用方式写死进了核心？</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>为自己搭 Agent 体系（如 OpenClaw）时优先学 Pi：极简主链路 + 显式扩展点，避免核心被工作流绑架</li><li>每加一个 skill/工具前问一句：这是运行时必需，还是把我的使用习惯写死？</li></ul>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#因公众号更改推送规则请点在看并加星标第一时间获取精彩技术分享">因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</a></li><li><a href="#end">·END·</a></li><li><a href="#架构师">架构师</a></li><li><a href="#关注架构师jiagoux添加星标">关注架构师(JiaGouX)，添加“星标”</a></li><li><a href="#获取每天技术干货一起成为牛逼架构师">获取每天技术干货，一起成为牛逼架构师</a></li><li><a href="#技术群请加若飞1321113940-进架构师群">技术群请加若飞：1321113940 进架构师群</a></li></ul>
 <p>架构师（JiaGouX）</p>
 <p>我们都是架构师！ 架构未来，你来不来？</p>
@@ -490,8 +490,8 @@
 <ul><li>Pi 开源会话数据集：https://huggingface.co/datasets/badlogicgames/pi-mono</li></ul>
 <p>如喜欢本文，请点击右上角，把文章分享到朋友圈</p>
 <p>如有想了解学习的技术点，请留言给若飞安排分享</p>
-<h3>因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</h3>
-<h3>·END·</h3>
+<h3 id="因公众号更改推送规则-请点-在看-并加-星标-第一时间获取精彩技术分享">因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</h3>
+<h3 id="END">·END·</h3>
 <pre><code>相关阅读：
 
 Loop Engineering，应该赞成还是反对？
@@ -525,14 +525,14 @@ Fable 5 的信号：Agent 开始拼 Runtime
 Anthropic工程师：我们日常如何使用Claude Code
 </code></pre>
 <blockquote><p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p></blockquote>
-<h3>架构师</h3>
+<h3 id="架构师">架构师</h3>
 <p>我们都是架构师！</p>
 <p><img alt="图片" src="../../_assets/20260910-从Pi看Agent-Harness设计取舍/img-006-e42ccfbe.webp"></p>
-<h3>关注架构师(JiaGouX)，添加“星标”</h3>
-<h3>获取每天技术干货，一起成为牛逼架构师</h3>
-<h3>技术群请加若飞：1321113940 进架构师群</h3>
+<h3 id="关注架构师-JiaGouX-添加-星标">关注架构师(JiaGouX)，添加“星标”</h3>
+<h3 id="获取每天技术干货-一起成为牛逼架构师">获取每天技术干货，一起成为牛逼架构师</h3>
+<h3 id="技术群请加若飞-1321113940-进架构师群">技术群请加若飞：1321113940 进架构师群</h3>
 <p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

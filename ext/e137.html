@@ -395,42 +395,42 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent 自我进化三大技术路线：存技能、训技能、零数据自训</h1><div class="meta">📅 2026-09-16 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/fsVJiorPBN4ylGjUYBcIPw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260916-Agent自我进化三大技术路线.md</div><div class="md"><h1>Agent 自我进化三大技术路线：存技能、训技能、零数据自训</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">28</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Agent-自我进化三大技术路线-存技能-训技能-零数据自训">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#1-为什么要自进化">1. 为什么要自进化</a><a class="tl l3" href="#2-三个能力目标">2. 三个能力目标</a><a class="tl l3" href="#3-三类技术路线">3. 三类技术路线</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#01-自进化-Agent-介绍">01 自进化 Agent 介绍</a><a class="tl l3" href="#02-第一类-经验-Skill-存储型-不更新模型权重">02 第一类：经验/Skill 存储型（不更新模型权重）</a><a class="tl l3" href="#核心点-1-看似不训练-其实仍要训练数据">核心点 1. 看似不训练，其实仍要训练数据</a><a class="tl l3" href="#核心点-2-核心是-存下经验-Skill">核心点 2. 核心是&quot;存下经验/Skill&quot;</a><a class="tl l3" href="#核心点-3-总结这一步-被严重低估">核心点 3. 总结这一步，被严重低估</a><a class="tl l3" href="#核心点-4-横向-vs-纵向总结">核心点 4. 横向 vs 纵向总结</a><a class="tl l3" href="#03-第二类-基于-RL-的训练型自进化-这是重点">03 第二类：基于 RL 的训练型自进化（这是重点）</a><a class="tl l3" href="#探索-高温-LLM-广度优先-Nb-步-深度优先探索环境">探索：高温 LLM 广度优先（Nb 步）+ 深度优先探索环境</a><a class="tl l3" href="#合成-从探索轨迹蒸馏-用户偏好约束-生成任务-g-与参考解">合成：从探索轨迹蒸馏 + 用户偏好约束 → 生成任务 g 与参考解</a><a class="tl l3" href="#筛选-词法去重-语义相似度-可行性验证">筛选：词法去重 + 语义相似度 + 可行性验证</a><a class="tl l3" href="#混合-可选">混合（可选）：</a><a class="tl l3" href="#04-第三类-0-数据自学型">04 第三类：0 数据自学型</a><a class="tl l3" href="#核心点-1-全靠出题的-Agent-自己">核心点 1. 全靠出题的 Agent 自己</a><a class="tl l3" href="#05-横向对比-四篇代表工作的-三角色-视角">05 横向对比：四篇代表工作的&quot;三角色&quot;视角</a><a class="tl l3" href="#06-关键洞察-被忽视的-总结者">06 关键洞察：被忽视的&quot;总结者&quot;</a><a class="tl l3" href="#07-写在最后">07 写在最后</a><a class="tl l3" href="#附录-A-论文索引">附录 A：论文索引</a><a class="tl l3" href="#附录-B-评估数据集索引">附录 B：评估数据集索引</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent 自我进化三大技术路线：存技能、训技能、零数据自训</h1><div class="meta">📅 2026-09-16 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/fsVJiorPBN4ylGjUYBcIPw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260916-Agent自我进化三大技术路线.md</div><div class="md"><h1 id="Agent-自我进化三大技术路线-存技能-训技能-零数据自训">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-16 抓取状态：成功 原文字符：24113｜配图：26 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>自进化 Agent（Self-Evolving Agent）的核心诉求是三个能力：<strong>能存</strong>（沉淀成功模式、失败教训、可迁移技能）、<strong>能用</strong>（新任务时检索调用并内化）、<strong>能进化</strong>（经验可更新、合并、淘汰）。</li><li>动因来自四个老大难问题：大模型静态知识、上下文有限、重复犯错、训练昂贵。</li><li>按两个维度分成三类路线：①是否更新模型权重；②是否依赖人工数据。</li><li>路线一 经验/Skill 存储型：不更新权重、依赖人工，代表 AutoSkill、EvoSkill、MemSkill、CoEvoSkills、SE-Agent、Hermes——相当于给 Agent 配一本工作笔记。</li><li>路线二 RL 训练型：更新权重、依赖人工，代表 EvolveR、SAGE、SkillRL、SKILL0、SkillOS、AgentEvolver——把经验通过强化学习写进权重。</li><li>路线三 0 数据自学型：更新权重、不依赖人工，代表 Agent0、Tool-R0、Absolute Zero——让 Agent 之间互相出题、互相考试。</li></ul>
-<h2>核心内容</h2>
-<h3>1. 为什么要自进化</h3>
+<h2 id="核心内容">核心内容</h2>
+<h3 id="1-为什么要自进化">1. 为什么要自进化</h3>
 <p>大模型的四个结构性限制：</p>
 <ul><li><strong>静态知识</strong>：权重训练完成后不再变化，新经验进不去。</li><li><strong>上下文有限</strong>：一次任务里学到的东西，会话结束就丢。</li><li><strong>重复犯错</strong>：同样的坑反复踩，没有机制把教训固化下来。</li><li><strong>训练昂贵</strong>：为每个新领域重新训练或微调不现实。</li></ul>
-<h3>2. 三个能力目标</h3>
+<h3 id="2-三个能力目标">2. 三个能力目标</h3>
 <ul><li><strong>能存</strong>：把成功模式、失败教训、可迁移技能沉淀成外部可检索的资产。</li><li><strong>能用</strong>：新任务来了能检索到相关经验，并把它内化进当前决策。</li><li><strong>能进化</strong>：经验库本身可以更新、合并、淘汰，避免无限膨胀与过时污染。</li></ul>
-<h3>3. 三类技术路线</h3>
+<h3 id="3-三类技术路线">3. 三类技术路线</h3>
 <p><strong>路线一：经验 / Skill 存储型（不更新权重、依赖人工）</strong> 代表工作：AutoSkill、EvoSkill、MemSkill、CoEvoSkills、SE-Agent、Hermes。 本质上是给 Agent 配一本工作笔记：不改模型，只在外部维护技能与经验，让 Agent 在新任务里检索取用。优势是可控、可审计、成本低；局限是经验质量依赖人工整理，Agent 自身不会变得更"聪明"。</p>
 <p><strong>路线二：RL 训练型（更新权重、依赖人工）</strong> 代表工作：EvolveR、SAGE、SkillRL、SKILL0、SkillOS、AgentEvolver。 把交互中积累的经验通过强化学习真正写进模型权重。优势是能力内化、推理时无额外检索开销；代价是训练成本高、需要人工构造奖励与数据。</p>
 <p><strong>路线三：0 数据自学型（更新权重、不依赖人工）</strong> 代表工作：Agent0、Tool-R0、Absolute Zero。 让 Agent 之间互相出题、互相考试，用自生成的任务与反馈代替人工标注。这是自动化程度最高也最难稳定的一类。</p>
 <p>文章还包含代表工作的详解、横向对比表格与关键洞察。</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>选路线先问两个问题：是否必须让能力内化进权重？是否有预算和人力做数据与奖励设计？两个都否，就停在路线一。</li><li>大多数个人与团队场景的性价比最优解是路线一：把经验做成可检索的 Skill / 记忆库，先解决"重复犯错"再谈"变强"。</li><li>设计经验库时把"存、用、进化"当成三个独立接口来建设：存要有结构化字段，用要有检索策略，进化要有合并与淘汰规则。</li><li>谨慎对待路线三：自生成任务的分布漂移风险高，缺少人工锚点容易越练越偏。</li></ul>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#01-自进化-agent-介绍">01 自进化 Agent 介绍</a></li><li><a href="#11-什么是自进化-agent">1.1 什么是自进化 Agent？</a></li><li><a href="#12-为什么这件事现在被重视起来了">1.2 为什么这件事现在被重视起来了？</a></li><li><a href="#13-三大技术路线一览">1.3 三大技术路线一览</a></li><li><a href="#02-第一类经验skill-存储型不更新模型权重">02 第一类：经验/Skill 存储型（不更新模型权重）</a></li><li><a href="#21-autoskillarxiv-260301145">2.1 AutoSkill（arXiv: 2603.01145）</a></li><li><a href="#22-evoskillarxiv-260302766">2.2 EvoSkill（arXiv: 2603.02766）</a></li><li><a href="#23-memskillarxiv-260202474">2.3 MemSkill（arXiv: 2602.02474）</a></li><li><a href="#24-coevoskillsarxiv-260401687v2">2.4 CoEvoSkills（arXiv: 2604.01687v2）</a></li><li><a href="#25-se-agentarxiv-250802085">2.5 SE-Agent（arXiv: 2508.02085）</a></li><li><a href="#26-第一类总结还是要训练数据的">2.6 第一类总结：还是要训练数据的</a></li><li><a href="#核心点-1-看似不训练其实仍要训练数据">核心点 1. 看似不训练，其实仍要训练数据</a></li><li><a href="#核心点-2-核心是存下经验skill">核心点 2. 核心是"存下经验/Skill"</a></li><li><a href="#核心点-3-总结这一步被严重低估">核心点 3. 总结这一步，被严重低估</a></li><li><a href="#核心点-4-横向-vs-纵向总结">核心点 4. 横向 vs 纵向总结</a></li><li><a href="#03-第二类基于-rl-的训练型自进化这是重点">03 第二类：基于 RL 的训练型自进化（这是重点）</a></li><li><a href="#31-evolverarxiv-251016079">3.1 EvolveR（arXiv: 2510.16079）</a></li><li><a href="#32-sagearxiv-251217102">3.2 SAGE（arXiv: 2512.17102）</a></li><li><a href="#33-skillrlarxiv-260208234">3.3 SkillRL（arXiv: 2602.08234）⭐</a></li><li><a href="#34-skill0arxiv-260402268">3.4 SKILL0（arXiv: 2604.02268）⭐</a></li><li><a href="#35-skillosarxiv-260506614">3.5 SkillOS（arXiv: 2605.06614）⭐⭐</a></li><li><a href="#36-agentevolverarxiv-251110395">3.6 AgentEvolver（arXiv: 2511.10395）⭐</a></li><li><a href="#探索高温-llm-广度优先n_b-步-深度优先探索环境">探索：高温 LLM 广度优先（N_b 步）+ 深度优先探索环境</a></li><li><a href="#合成从探索轨迹蒸馏--用户偏好约束--生成任务-g-与参考解">合成：从探索轨迹蒸馏 + 用户偏好约束 → 生成任务 g 与参考解</a></li><li><a href="#筛选词法去重--语义相似度--可行性验证">筛选：词法去重 + 语义相似度 + 可行性验证</a></li><li><a href="#混合可选">混合（可选）：</a></li><li><a href="#37-第二类总结">3.7 第二类总结</a></li><li><a href="#04-第三类0-数据自学型">04 第三类：0 数据自学型</a></li><li><a href="#41-agent0arxiv-251116043">4.1 Agent0（arXiv: 2511.16043）</a></li><li><a href="#42-tool-r0arxiv-260221320">4.2 Tool-R0（arXiv: 2602.21320）</a></li><li><a href="#43-absolute-zeroarxiv-250503335">4.3 Absolute Zero（arXiv: 2505.03335）</a></li><li><a href="#44-第三类总结真不需要训练数据">4.4 第三类总结：真·不需要训练数据</a></li><li><a href="#核心点-1-全靠出题的-agent-自己">核心点 1. 全靠出题的 Agent 自己</a></li><li><a href="#05-横向对比四篇代表工作的三角色视角">05 横向对比：四篇代表工作的"三角色"视角</a></li><li><a href="#51-核心对比表">5.1 核心对比表</a></li><li><a href="#52-一行式速记">5.2 一行式速记</a></li><li><a href="#53-强模型依赖程度">5.3 强模型依赖程度</a></li><li><a href="#54-数据依赖程度">5.4 数据依赖程度</a></li><li><a href="#55-范式演进脉络">5.5 范式演进脉络</a></li><li><a href="#06-关键洞察被忽视的总结者">06 关键洞察：被忽视的"总结者"</a></li><li><a href="#61-总结者是被严重低估的关键模块">6.1 总结者，是被严重低估的关键模块</a></li><li><a href="#62-自主性--总结质量的二维空间">6.2 自主性 × 总结质量的二维空间</a></li><li><a href="#63-横向-vs-纵向总结的融合空间">6.3 横向 vs 纵向总结的融合空间</a></li><li><a href="#07-写在最后">07 写在最后</a></li><li><a href="#附录-a论文索引">附录 A：论文索引</a></li><li><a href="#附录-b评估数据集索引">附录 B：评估数据集索引</a></li><li><a href="#腾讯pcg大数据平台部">腾讯PCG大数据平台部</a></li><li><a href="#新一代全链路数据ai助手dola">⭐️⭐️ 新一代全链路数据AI助手——Dola ⭐️⭐️</a></li></ul>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-ext-001.png"></p>
 <p>作者：horacebao、ashexie</p>
 <blockquote><p>当 Agent 自己会出题、自己会答题、还能把答错的经验沉淀成下一次的"技能包"——一个永远在长大的 Agent，到底能走多远？    十几篇论文反复啃读，从"存技能"到"训技能"，再到"零数据自训"，我们终于摸清了自进化 Agent 这条赛道的脉络。本文将带你深入 Agent 的"经验大脑"——从把经验写进文件，到把经验训进权重，再到完全无人工数据的自我循环，一步步拆解研究路径。</p></blockquote>
 <p>一个完全自主、越用越强的 Agent，有可能实现吗？本文聚合了现有的前沿探索工作，向大家展现这一方向上的最新成果。话不多说，现就开启学习之旅吧——本次文章覆盖自进化 Agent 的三大技术路线、代表工作详解、横向对比、关键洞察等话题。</p>
-<h3>01 自进化 Agent 介绍</h3>
-<h4>1.1 什么是自进化 Agent？</h4>
+<h3 id="01-自进化-Agent-介绍">01 自进化 Agent 介绍</h3>
+<h4 id="1-1-什么是自进化-Agent">1.1 什么是自进化 Agent？</h4>
 <p><strong>自进化 Agent</strong>（Self-Evolving Agent）指的是一类能够在与环境/用户交互过程中<strong>自动积累经验、提炼能力、并在后续任务中复用与提升</strong>的智能体。简单来讲：让 Agent 自己越用越聪明，而不是每次都靠人工去喂数据、调提示词、改模型。</p>
 <p>它的核心诉求可以拆成三件事：</p>
 <ul><li><strong>能存</strong>：把交互过程中沉淀下来的有价值的东西（成功模式、失败教训、可迁移技能）存下来；</li></ul>
 <ul><li><strong>能用</strong>：在新任务中能把之前存下来的东西检索/调用/内化进自己的决策；</li></ul>
 <ul><li><strong>能进化</strong>：经验本身是动态的，能更新、能合并、能淘汰，避免越攒越乱。</li></ul>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-002-0050c28c.png"></p>
-<h4>1.2 为什么这件事现在被重视起来了？</h4>
+<h4 id="1-2-为什么这件事现在被重视起来了">1.2 为什么这件事现在被重视起来了？</h4>
 <p>回到大模型本身的几个老大难问题：</p>
 <ul><li><strong>静态知识</strong>：训练完成那一刻起，模型对世界的认知就被冻结了；</li></ul>
 <ul><li><strong>上下文有限</strong>：再长的上下文窗口也总有边界，多轮交互终究"断片"；</li></ul>
@@ -440,7 +440,7 @@
 <ul><li>LLM 本身具备总结归纳的能力（自己能给自己写笔记了）；</li></ul>
 <ul><li>Agent 形态的产品越来越多，长程交互场景终于有了真实需求；</li></ul>
 <ul><li>高质量人工标注数据越来越贵，社区开始探索"少人工 / 无人工"路线。</li></ul>
-<h4>1.3 三大技术路线一览</h4>
+<h4 id="1-3-三大技术路线一览">1.3 三大技术路线一览</h4>
 <p>我们把目前调研到的工作按"<strong>是否更新模型权重</strong>"和"<strong>是否依赖人工数据</strong>"两个维度划成了三类：</p>
 <table><thead><tr><th>路线</th><th>是否更新模型权重</th><th>是否依赖人工数据</th><th>代表工作</th></tr></thead><tbody><tr><td><strong>第一类：经验/Skill 存储型</strong></td><td>❌ 不更新</td><td>❌ 依赖</td><td>AutoSkill、EvoSkill、MemSkill、CoEvoSkills、SE-Agent、Hermes</td></tr><tr><td><strong>第二类：RL 训练型</strong></td><td>✅ 更新</td><td>❌ 依赖</td><td>EvolveR、SAGE、SkillRL、SKILL0、SkillOS、AgentEvolver</td></tr><tr><td><strong>第三类：0 数据自学型</strong></td><td>✅ 更新</td><td>✅ 不依赖</td><td>Agent0、Tool-R0、Absolute Zero</td></tr></tbody></table>
 <p>简单一句话来理解三类工作的差异：</p>
@@ -449,10 +449,10 @@
 <ul><li><strong>第三类</strong>更激进——干脆连"老师"都不要了，让 Agent 之间互相出题互相考试，自己跟自己打。</li></ul>
 <p>下面分别展开。</p>
 <hr>
-<h3>02 第一类：经验/Skill 存储型（不更新模型权重）</h3>
+<h3 id="02-第一类-经验-Skill-存储型-不更新模型权重">02 第一类：经验/Skill 存储型（不更新模型权重）</h3>
 <p><strong>特征</strong>：不训练、跨会话保留上下文、文件式存储；核心是把经验沉淀为可检索/可复用的"技能（Skill）"。</p>
 <p>类比来看，这类工作就像是给 Agent 配了一个"外挂大脑"，本体（base LLM）保持冻结，所有的"成长"都发生在外挂里。</p>
-<h4>2.1 AutoSkill（arXiv: 2603.01145）</h4>
+<h4 id="2-1-AutoSkill-arXiv-2603-01145">2.1 AutoSkill（arXiv: 2603.01145）</h4>
 <p><strong>TLDR</strong>：基础款，动态增删改查 Skill 来防止 Skill 库爆棚。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-003-8f08aa65.png"></p>
 <p>整体设计是一个非常经典的<strong>双环结构</strong>：</p>
@@ -467,7 +467,7 @@
 <ul><li>版本化合并：语义并集更新，保留技能身份并更新版本号</li></ul>
 <p>评估数据集是 WildChat-1M，但<strong>没有具体性能指标</strong>——论文里只看了抽出来的 skill 数量。这其实是这一类工作最大的痛点：评估缺位。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-005-b8b41a0d.png"></p>
-<h4>2.2 EvoSkill（arXiv: 2603.02766）</h4>
+<h4 id="2-2-EvoSkill-arXiv-2603-02766">2.2 EvoSkill（arXiv: 2603.02766）</h4>
 <p><strong>TLDR</strong>：让多个 Agent 分工协作——一个执行、一个反思、一个落地——把"失败"变成"新 Skill"，并用 Pareto 前沿机制保证 Skill 库永远精而不滥。</p>
 <p>EvoSkill 来自 Sentient 和弗吉尼亚理工的合作工作，主张是把传统 Agent "失败即重试" 的笨办法改造成 <strong>"失败即学习"</strong> 的进化闭环。它的最大特点是把 Skill 当作<strong>一等公民</strong>来升级，而不是只在 prompt / code 层面做文字游戏。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-006-19aaf5ae.png"></p>
@@ -483,7 +483,7 @@
 <ul><li><em>Quantitative analysis with checkpoints</em> —— 在金融数值计算环节强制加入校验点。</li></ul>
 <ul><li><strong>跨任务迁移</strong>：在 SealQA 上学到的 <em>search persistence protocol</em>（搜索坚持协议）直接挪到 BrowseComp 任务上，<strong>无需重新训练</strong>就带来 +5.3pp 的提升——这点跟后面 CoEvoSkills 的"transfer 不如自己 self-evo"结论形成有趣对比，说明<strong>只要 Skill 抽象得足够通用，是可以跨任务迁移的</strong>，但前提是抽象层级要选对。</li></ul>
 <blockquote><p>PS：虽然叫"训练集"，但训练集只用来总结，不更新任何模型。    评论：在第一类工作里，EvoSkill 是"工程化程度"的中间档——比 AutoSkill 多了精英池筛选机制，但比 Hermes 那种带 GEPA 反向进化的还差一截。它的真正价值在于<strong>把"失败"明确写进了进化闭环</strong>，这也成了后续很多工作（包括 SkillRL 的 failure trajectory distillation）的直接灵感来源。</p></blockquote>
-<h4>2.3 MemSkill（arXiv: 2602.02474）</h4>
+<h4 id="2-3-MemSkill-arXiv-2602-02474">2.3 MemSkill（arXiv: 2602.02474）</h4>
 <p><strong>TLDR</strong>：之前两个工作针对用户指令；MemSkill 只针对<strong>操作 Memory 的 Skill</strong> 做自进化。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-007-237b3f41.png"></p>
 <p>这个工作有意思的地方在于它把组件拆得很细：</p>
@@ -498,7 +498,7 @@
 <ul><li>在 LoCoMo 上训练所得 Controller &amp; Skill 迁移到 LongMemEval 上<strong>仍然有效</strong>。</li></ul>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-008-bf2d2654.png"></p>
 <p>由于 Base LLM 不动，仍归为"无训练"类。但 MemSkill 给前面两篇工作（AutoSkill / Hermes Agent 没有性能评估）提供了一条参考思路：<strong>在训练集上构建 Skill，在测试集/其他数据集的测试集上评估</strong>。当然，这种做法下"喂给 Agent 的样本顺序"就变得很重要。</p>
-<h4>2.4 CoEvoSkills（arXiv: 2604.01687v2）</h4>
+<h4 id="2-4-CoEvoSkills-arXiv-2604-01687v2">2.4 CoEvoSkills（arXiv: 2604.01687v2）</h4>
 <p><strong>TLDR</strong>：给每条新总结的 Skill 配一个"考官"（Verifier），生成的 Skill 必须先通过考试才能进库；通不过就带反馈打回，让 Generator 重写——这是把软件工程的"单元测试"理念搬到了 Skill 进化里。</p>
 <p>CoEvoSkills 想解决的是前面几篇工作的一个老大难问题：<strong>Skill 总结出来到底靠不靠谱？</strong> AutoSkill / EvoSkill 都是"生成完了直接入库"，质量基本靠 LLM 自觉。CoEvoSkills 的回答是：<strong>不能靠自觉，得有验证闭环。</strong></p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-009-968e232d.png"></p>
@@ -516,7 +516,7 @@
 <ul><li><strong>cross-model transfer</strong>：把 Opus 4.6 的 Skill 给到弱模型，提升从 +35.4 到 +44.1 不等，但<strong>绝对值都明显低于让模型自己 self-evo</strong>（如 Mistral Large 3 才到 43.1%）。</li></ul>
 <p>这个观察的含义是：<strong>Skill 跟模型本身的"风格"是耦合的</strong>——强模型生成的 Skill 在强模型自己上效果最好；强迁到弱模型上，弱模型未必能完整地"读懂并执行"那些精巧的步骤。这点对工程界的启示很大：与其花大钱让 GPT-5 / Claude 4.6 给你的产品蒸馏 Skill，不如让产品自己用的小模型来 self-evo——前者贵且效果未必更好。</p>
 <blockquote><p>PS：虽然有"信号"，但实际上不涉及训练，仅仅是驳回 Generator 创建的 Skill。    评论：CoEvoSkills 的"测试驱动 Skill 进化"思路在第一类里独树一帜，本质上是把 Verifier 当成 "便宜的 reward model" 用——这跟第二类工作里训练 Curator 的逻辑已经很接近了，只差最后一步：把 Verifier 也训起来。</p></blockquote>
-<h4>2.5 SE-Agent（arXiv: 2508.02085）</h4>
+<h4 id="2-5-SE-Agent-arXiv-2508-02085">2.5 SE-Agent（arXiv: 2508.02085）</h4>
 <p><strong>TLDR</strong>：与其反复"自我反思"在同一条轨迹上小修小补，不如一次跑出多条轨迹，<strong>让它们之间互相借鉴、互相打磨</strong>——SE-Agent 把 Agent 自进化从"单线程深度修补"切到了"多线程横向融合"。</p>
 <p>SE-Agent 来自 OPPO 的 OpenSearch-AGI 团队和复旦大学等机构，被收录于 NeurIPS 2025。它瞄准的是前面所有 self-refine / ReAct 类工作的共同短板——<strong>单轨迹反思的视野太窄</strong>。当一条轨迹整体走偏的时候（例如一开始就选错了策略），无论怎么 reflection 都救不回来；只有跳出当前轨迹，从多条不同策略的轨迹里学习，才能突破"局部最优"。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-011-4b1609e4.png"></p>
@@ -539,34 +539,34 @@
 <ul><li>主战场是 <strong>SWE-Bench Verified</strong>（GitHub 真实代码修复任务）。SE-Agent 让多个底层 LLM 都拿到了显著提升，最高一档实现了 <strong>+55% 相对改善</strong>——在这个领域属于很扎实的提升。</li></ul>
 <ul><li>跟 Claude Code 等工业级 Coding Agent 也做了对比，验证了"轨迹级进化"是一个<strong>与底层模型选择正交</strong>的优化维度。</li></ul>
 <blockquote><p>评论：SE-Agent 是第一类里思路最"野"的——它没有 Skill 库这种长期记忆机制，但用"一次性多采样 + 跨轨迹融合"的办法做到了类似的效果。某种意义上它跟第二类的 SAGE（Sequential Rollout）是<strong>镜像关系</strong>：SE-Agent 是横向<strong>采</strong>，SAGE 是横向<strong>用</strong>；前者不训模型，后者用 RL 让模型学会自己横向沉淀。</p></blockquote>
-<h4>2.6 第一类总结：还是要训练数据的</h4>
+<h4 id="2-6-第一类总结-还是要训练数据的">2.6 第一类总结：还是要训练数据的</h4>
 <p>写到这里，其实第一类工作有几个统一的特征值得提一下：</p>
-<h3>核心点 1. 看似不训练，其实仍要训练数据</h3>
+<h3 id="核心点-1-看似不训练-其实仍要训练数据">核心点 1. 看似不训练，其实仍要训练数据</h3>
 <p>不管是人为交互提供反馈，还是训练集提供反馈，本质都是训练数据，没有真的做到"零数据"。</p>
-<h3>核心点 2. 核心是"存下经验/Skill"</h3>
+<h3 id="核心点-2-核心是-存下经验-Skill">核心点 2. 核心是"存下经验/Skill"</h3>
 <p>这一类工作的灵魂在于把交互的副产物沉淀下来，做成可检索的资产。</p>
-<h3>核心点 3. 总结这一步，被严重低估</h3>
+<h3 id="核心点-3-总结这一步-被严重低估">核心点 3. 总结这一步，被严重低估</h3>
 <p>几乎所有工作都默契地把 Skill 总结这一步交给了"冻结的 base 或独立的 LLM"——按理说这是整条 pipeline 最关键的环节，但<strong>针对总结去优化的工作几乎没有</strong>。这是一个值得深挖的空白。</p>
-<h3>核心点 4. 横向 vs 纵向总结</h3>
+<h3 id="核心点-4-横向-vs-纵向总结">核心点 4. 横向 vs 纵向总结</h3>
 <ul><li><strong>纵向总结</strong>（其他工作）：根据历史对话/单条轨迹总结；</li></ul>
 <ul><li><strong>横向总结</strong>（SE-Agent）：根据多次采样的多条轨迹总结。</li></ul>
 <p>二者都是"存 skill"的不同侧面。</p>
 <hr>
-<h3>03 第二类：基于 RL 的训练型自进化（这是重点）</h3>
+<h3 id="03-第二类-基于-RL-的训练型自进化-这是重点">03 第二类：基于 RL 的训练型自进化（这是重点）</h3>
 <p><strong>特征</strong>：通过 RL 训练直接更新模型权重，让模型从根本上变强。这一类是当前学术界与工业界的主流方向，本报告的重点也在这里。</p>
-<h4>3.1 EvolveR（arXiv: 2510.16079）</h4>
+<h4 id="3-1-EvolveR-arXiv-2510-16079">3.1 EvolveR（arXiv: 2510.16079）</h4>
 <p><strong>TLDR</strong>：算是这一类的基础型，分两阶段。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-012-3dfa93dd.png"></p>
 <ul><li><strong>离线阶段</strong>：Agent 跑完一批任务后，对所有轨迹做提炼，把具体的交互步骤抽象成更通用的"策略原则"，存入原则库（策略原则可以视作一种 Skill）。</li></ul>
 <ul><li><strong>在线阶段</strong>：Agent 在新任务里实时检索这些原则，指导自己的行动，同时又产生新轨迹反哺下一轮蒸馏训练。</li></ul>
 <p><strong>Reward 设计</strong>：最终结果 + 格式 reward <strong>评估</strong>：Natural Questions、HotpotQA、TriviaQA、PopQA</p>
 <blockquote><p>PS：看起来很像"RL by talking"，但是仍然要靠标注数据集 Ground Truth 去训练的。也就是 talking 的数据只用来蒸馏经验/skill，<strong>不用来当训练标签</strong>。</p></blockquote>
-<h4>3.2 SAGE（arXiv: 2512.17102）</h4>
+<h4 id="3-2-SAGE-arXiv-2512-17102">3.2 SAGE（arXiv: 2512.17102）</h4>
 <p><strong>TLDR</strong>：提出 <strong>Sequential Rollout</strong> —— RL rollout 时序列化地跑一系列相似任务，后序任务训练时就可以使用前序生成的 skill。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-013-bce95939.png"></p>
 <p>这个思路很巧妙：每次 rollout 不是跑一个任务，而是让 Agent 依次跑一串相似的任务。跑早期任务时积累下来的技能，在同一个 rollout 里的后续任务里就能直接用。这意味着在训练过程中，<strong>模型就被迫学会"生成技能"和"复用技能"</strong>，不只是会完成任务。</p>
 <p>除了任务完成的结果奖励，SAGE 还设计了 <strong>Skill-integrated Reward</strong>——额外的信号专门激励技能的生成和调用。评估数据集是 AppWorld（APP 交互数据集）。</p>
-<h4>3.3 SkillRL（arXiv: 2602.08234）⭐</h4>
+<h4 id="3-3-SkillRL-arXiv-2602-08234">3.3 SkillRL（arXiv: 2602.08234）⭐</h4>
 <p>来到本文重点关注的四篇工作之一。</p>
 <p><strong>核心主张</strong>：用强模型（o3）蒸馏 Skill，再通过 RL 训练弱模型学会使用，并递归进化技能库。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-014-232947f1.png"></p>
@@ -582,7 +582,7 @@
 <p>Skill 库增长：55 → 100 条（通用 12→20，任务专属 43→80）。</p>
 <p><strong>核心设计哲学</strong>：强模型提炼知识，弱模型通过 RL 学会使用知识。</p>
 <blockquote><p>评论：我们倾向于把这种归类于<strong>蒸馏</strong>，而非真正的<strong>进化</strong>。</p></blockquote>
-<h4>3.4 SKILL0（arXiv: 2604.02268）⭐</h4>
+<h4 id="3-4-SKILL0-arXiv-2604-02268">3.4 SKILL0（arXiv: 2604.02268）⭐</h4>
 <p><strong>核心主张</strong>：将 Skill 从推理时的"外挂上下文"内化到模型参数，实现零样本执行（每步 &lt; 0.5K tokens）。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-015-fae4dc9d.png"></p>
 <table><thead><tr><th>角色</th><th>配置</th></tr></thead><tbody><tr><td>训练题目来源</td><td>直接继承 SkillRL 的 SkillBank（ALFWorld WebShop Search-QA 官方训练集）</td></tr><tr><td>出题者</td><td>无</td></tr><tr><td><strong>解题者</strong></td><td><strong>Qwen2.5-VL-3B/7B-Instruct ✅ 训练</strong>  （三阶段渐进课程）</td></tr><tr><td><strong>Skill 总结者</strong></td><td>继承 SkillRL 的 o3，❌ 不训练</td></tr></tbody></table>
@@ -590,7 +590,7 @@
 <table><thead><tr><th>阶段</th><th>Skill 数量</th><th>目标</th></tr></thead><tbody><tr><td>Stage 1</td><td>6 条</td><td>学会调用</td></tr><tr><td>Stage 2</td><td>3 条</td><td>减少依赖</td></tr><tr><td>Stage 3</td><td>0 条</td><td>完全内化</td></tr></tbody></table>
 <p><strong>核心设计哲学</strong>：从"使用技能"到"内化技能"的范式转变 —— 消除推理时的检索成本、Token 开销和噪声，把知识真正固化进模型权重。</p>
 <blockquote><p>SKILL0 不关心 Skill 从哪里来，只关心如何内化。它本质上是 SkillRL 的"下游消费者"。</p></blockquote>
-<h4>3.5 SkillOS（arXiv: 2605.06614）⭐⭐</h4>
+<h4 id="3-5-SkillOS-arXiv-2605-06614">3.5 SkillOS（arXiv: 2605.06614）⭐⭐</h4>
 <p>这是四篇里我们认为<strong>最有启发性</strong>的一篇。</p>
 <p><strong>核心主张</strong>：训练一个专门的 <strong>Curator</strong>，通过 RL 学会如何<strong>增 改 删 SkillRepo</strong>，而不是直接学如何使用 Skill。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-016-a5d3d182.png"></p>
@@ -600,24 +600,24 @@
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-017-5e625af3.png"></p>
 <blockquote><p><strong>结论 1：训练过的小模型总结者 &gt; 冻结的大模型总结者</strong>    在 SkillOS 的实验里，RL 训练过的 Qwen3-8B 作为 Curator，效果<strong>超过</strong>直接用冻结的 Gemini-2.5-Pro 作为 Curator。这说明"如何管理 skill"本身是一项<strong>可被训练</strong>的能力，而且小模型经过专门训练后能压过大模型直接使用。</p></blockquote>
 <blockquote><p><strong>结论 2：不动解题者，性能也能涨</strong>    在 ALFWorld 上，仅训练 Curator、解题者完全冻结的情况下，整体性能仍能取得长足进步。这意味着"换 Curator"是一条比"换 Executor"更轻量的优化路径。</p></blockquote>
-<h4>3.6 AgentEvolver（arXiv: 2511.10395）⭐</h4>
+<h4 id="3-6-AgentEvolver-arXiv-2511-10395">3.6 AgentEvolver（arXiv: 2511.10395）⭐</h4>
 <p><strong>核心主张</strong>：完全自主的三环自演化框架 —— <strong>自出题、自解题、自总结</strong>经验，全链路无需人工标注。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-018-f9cc4c01.png"></p>
 <table><thead><tr><th>角色</th><th>配置</th></tr></thead><tbody><tr><td><strong>训练题目来源</strong></td><td><strong>环境探索生成（Self-Questioning）</strong>  ，全自动</td></tr><tr><td><strong>出题者</strong></td><td><strong>LLM 自身（与解题者同一模型）</strong>   ✅</td></tr><tr><td><strong>解题者</strong></td><td><strong>Qwen2.5-7B/14B-Instruct ✅ 训练</strong></td></tr><tr><td><strong>Experience 总结者</strong></td><td><strong>Experience Manager ❌ 不训练</strong>  （论文中没明说是什么模型，扒代码发现是调 Qwen-MAX API；本质上是阿里 Reme 记忆管理机制）</td></tr></tbody></table>
 <p><strong>Self-Questioning 四步流程</strong>：</p>
-<h3>探索：高温 LLM 广度优先（N_b 步）+ 深度优先探索环境</h3>
-<h3>合成：从探索轨迹蒸馏 + 用户偏好约束 → 生成任务 g 与参考解</h3>
-<h3>筛选：词法去重 + 语义相似度 + 可行性验证</h3>
-<h3>混合（可选）：</h3>
+<h3 id="探索-高温-LLM-广度优先-Nb-步-深度优先探索环境">探索：高温 LLM 广度优先（N_b 步）+ 深度优先探索环境</h3>
+<h3 id="合成-从探索轨迹蒸馏-用户偏好约束-生成任务-g-与参考解">合成：从探索轨迹蒸馏 + 用户偏好约束 → 生成任务 g 与参考解</h3>
+<h3 id="筛选-词法去重-语义相似度-可行性验证">筛选：词法去重 + 语义相似度 + 可行性验证</h3>
+<h3 id="混合-可选">混合（可选）：</h3>
 <p><strong>特点</strong>：出题与解题使用同一个 Qwen2.5-7B/14B，RL 训练后形成<strong>出题质量与解题能力的双重提升</strong>。</p>
-<h4>3.7 第二类总结</h4>
+<h4 id="3-7-第二类总结">3.7 第二类总结</h4>
 <p>第二类工作走得比第一类更远——把经验从"外挂"变成了"权重"。但仔细看仍能拎出几条共性：</p>
 <p><strong>核心点 1. 仍然依赖训练集反馈</strong>（除 AgentEvolver 外） <strong>核心点 2. 核心是 RL rollout 时继承/更新之前的 skill</strong><strong>核心点 3. 不算严格意义的"RL by talking"</strong> —— 因为反馈仍来自任务结果或人工标签，而不是交互对话本身</p>
 <hr>
-<h3>04 第三类：0 数据自学型</h3>
+<h3 id="04-第三类-0-数据自学型">04 第三类：0 数据自学型</h3>
 <p><strong>特征</strong>：完全不要人工标注的数据，靠 Agent 之间互相出题/解题闭环。</p>
 <p>这一类的精神更激进：连数据集都不要，Agent 自己出题自己考自己。</p>
-<h4>4.1 Agent0（arXiv: 2511.16043）</h4>
+<h4 id="4-1-Agent0-arXiv-2511-16043">4.1 Agent0（arXiv: 2511.16043）</h4>
 <p><strong>TLDR</strong>：学习工具使用，一个 Agent 负责出题，一个 Agent 负责解题。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-019-ee0fdb1e.png"></p>
 <p><strong>组件</strong>：</p>
@@ -628,7 +628,7 @@
 <ol><li>出题 Agent 冻住，给答题 Agent 出题做 RL 训练。</li></ol>
 <blockquote><p>PS：在解题成功率 reward 上有一个比较大的问题——题目的答案是 Curriculum Agent 自己<strong>多采样投票</strong>选出来的 sliver answer。</p></blockquote>
 <p><strong>评估集</strong>：数学类为主（GSM8K、AIME 等）。</p>
-<h4>4.2 Tool-R0（arXiv: 2602.21320）</h4>
+<h4 id="4-2-Tool-R0-arXiv-2602-21320">4.2 Tool-R0（arXiv: 2602.21320）</h4>
 <p><strong>TLDR</strong>：类似 Agent0，但做的是 general tool 而不是纯数学。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-020-48cb6836.png"></p>
 <p><strong>Reward 设计</strong>：</p>
@@ -636,7 +636,7 @@
 <ul><li>Solver Agent：格式 reward + 准确性 reward</li></ul>
 <blockquote><p>PS：答案仍然是 Generator Agent 自己生成的 sliver answer。</p></blockquote>
 <p><strong>评估集</strong>：ToolAlpaca、SealTool、NexusRaven。</p>
-<h4>4.3 Absolute Zero（arXiv: 2505.03335）</h4>
+<h4 id="4-3-Absolute-Zero-arXiv-2505-03335">4.3 Absolute Zero（arXiv: 2505.03335）</h4>
 <p><strong>TLDR</strong>：单个模型同时扮演出题人和解题人，用代码执行器作为唯一的验证来源，完全不碰任何外部数据。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-021-26c13532.png"></p>
 <p><strong>组件</strong>：</p>
@@ -647,33 +647,33 @@
 <p><strong>评估集</strong>：</p>
 <ul><li>代码：HumanEval、MBPP、LCB</li></ul>
 <ul><li>数学：AIME24、AIME25、AMC、MATH-500、Minerva、Olympiad</li></ul>
-<h4>4.4 第三类总结：真·不需要训练数据</h4>
+<h4 id="4-4-第三类总结-真-不需要训练数据">4.4 第三类总结：真·不需要训练数据</h4>
 <p><strong>通用流程</strong>：</p>
 <pre><code>出题 Agent 训练 → 出题构造数据集 → 解题 Agent 训练 → 出题 Agent 训练 …</code></pre>
-<h3>核心点 1. 全靠出题的 Agent 自己</h3>
+<h3 id="核心点-1-全靠出题的-Agent-自己">核心点 1. 全靠出题的 Agent 自己</h3>
 <p><strong>核心点 2. 准确率判断大多靠对照出题 Agent 自己给出的答案</strong>——这是个隐患，sliver answer 的可靠性需要打问号</p>
 <p><strong>核心点 3. 最好要有自动化的判断标准</strong>——比如 Absolute Zero 用的代码执行器</p>
 <p><strong>核心点 4. 出题难度很重要</strong>——太难学不懂，太简单学不到，这个 reward shaping 是核心难点</p>
 <p><strong>核心点 5. 评估很混乱</strong>——只有数学类的 benchmark 勉强出现了多次，其余几乎完全没有重叠，可比性差</p>
 <hr>
-<h3>05 横向对比：四篇代表工作的"三角色"视角</h3>
+<h3 id="05-横向对比-四篇代表工作的-三角色-视角">05 横向对比：四篇代表工作的"三角色"视角</h3>
 <p>第二类里 SkillRL → SKILL0 → SkillOS → AgentEvolver 这四篇我们想专门拎出来横向对比，因为它们最能反映长程 Agent 自进化的范式演进。</p>
-<h4>5.1 核心对比表</h4>
+<h4 id="5-1-核心对比表">5.1 核心对比表</h4>
 <table><thead><tr><th>论文</th><th>训练题目来源</th><th>出题者</th><th>解题者（训练？）</th><th>Skill/Experience 总结者（训练？）</th></tr></thead><tbody><tr><td>SkillRL</td><td>官方数据集训练集</td><td>—</td><td>Qwen2.5-7B ✅ 训练</td><td>OpenAI o3 ❌</td></tr><tr><td>SKILL0</td><td>官方数据集训练集</td><td>—</td><td>Qwen2.5-VL-3B/7B ✅ 训练</td><td>OpenAI o3（继承）❌</td></tr><tr><td>SkillOS</td><td>官方数据集训练集</td><td>Gemini-2.5-Pro（仅离线分组，❌）</td><td>Executor 冻结 ❌</td><td><strong>Qwen3-8B Curator ✅</strong></td></tr><tr><td>AgentEvolver</td><td>完全自动生成</td><td>LLM 自身（与解题者同一模型）</td><td>Qwen2.5-7B/14B ✅</td><td>Qwen-MAX API ❌</td></tr></tbody></table>
-<h4>5.2 一行式速记</h4>
+<h4 id="5-2-一行式速记">5.2 一行式速记</h4>
 <pre><code>SkillRL：       [训练集❌] [解题者 ✅] [总结者 ❌]
 SKILL0：        [训练集❌] [解题者 ✅] [总结者 ❌]
 SkillOS：       [训练集❌] [解题者 ❌] [总结者 ✅]   ← 唯一训练总结者的工作
 AgentEvolver：  [出题者✅] [解题者 ✅] [总结者 ❌]</code></pre>
-<h4>5.3 强模型依赖程度</h4>
+<h4 id="5-3-强模型依赖程度">5.3 强模型依赖程度</h4>
 <table><thead><tr><th>方法</th><th>依赖的强模型</th><th>用途</th></tr></thead><tbody><tr><td>SkillRL</td><td>OpenAI o3</td><td>Skill 总结（核心）</td></tr><tr><td>SKILL0</td><td>OpenAI o3（继承）</td><td>Skill 总结（核心）</td></tr><tr><td>SkillOS</td><td>Gemini-2.5-Pro（辅助）+ Qwen3-32B（Judge）</td><td>标注分组 + 质量评估</td></tr><tr><td>AgentEvolver</td><td>Qwen-MAX</td><td>Experience 提取 + 总结</td></tr></tbody></table>
 <p>可以看到：<strong>总结这一步，几乎所有人都默契地外包给了大模型 / 闭源 API</strong>，这跟我们前面在第一类总结里观察到的现象高度吻合。</p>
-<h4>5.4 数据依赖程度</h4>
+<h4 id="5-4-数据依赖程度">5.4 数据依赖程度</h4>
 <pre><code>高依赖外部数据 ←─────────────────────────────────────────→ 完全自主
        │                                                      │
    SkillRL              SKILL0           SkillOS         AgentEvolver
 （官方数据集）        （复用 SkillRL）   （官方+分组）    （完全自生成）</code></pre>
-<h4>5.5 范式演进脉络</h4>
+<h4 id="5-5-范式演进脉络">5.5 范式演进脉络</h4>
 <pre><code>SkillRL (2602.08234)
   强模型提炼知识 → 弱模型 RL 学会使用 → 递归演化技能库
        ↓
@@ -686,13 +686,13 @@ SkillOS (2605.06614)
 AgentEvolver (2511.10395)
   全链路自主 → 自出题 + 自解题 + 自总结 → 步骤级信用分配</code></pre>
 <hr>
-<h3>06 关键洞察：被忽视的"总结者"</h3>
-<h4>6.1 总结者，是被严重低估的关键模块</h4>
+<h3 id="06-关键洞察-被忽视的-总结者">06 关键洞察：被忽视的"总结者"</h3>
+<h4 id="6-1-总结者-是被严重低估的关键模块">6.1 总结者，是被严重低估的关键模块</h4>
 <p>把一三两类 + 四篇代表工作的"是否训练总结者"列在一起：</p>
 <table><thead><tr><th>工作</th><th>Skill 总结者是否训练</th></tr></thead><tbody><tr><td>AutoSkill</td><td>❌</td></tr><tr><td>EvoSkill</td><td>❌（Claude Code w/ Opus 4.5）</td></tr><tr><td>MemSkill</td><td>❌</td></tr><tr><td>CoEvoSkills</td><td>❌（Claude Code）</td></tr><tr><td>SE-Agent</td><td>❌</td></tr><tr><td>EvolveR</td><td>❌（Qwen2.5）</td></tr><tr><td>SAGE</td><td>✅（序列 rollout 中带 reward 总结）</td></tr><tr><td>SkillRL</td><td>❌（OpenAI o3）</td></tr><tr><td>SKILL0</td><td>❌（继承）</td></tr><tr><td><strong>SkillOS</strong></td><td><strong>✅（唯一专门训练）</strong></td></tr><tr><td>AgentEvolver</td><td>❌（Qwen-MAX API）</td></tr></tbody></table>
 <p>可以看到，<strong>针对总结者本身做训练的工作屈指可数</strong>——SAGE 算半个（在 RL 过程中有 skill reward），SkillOS 才是真正完整地把 Curator 当成主训练对象。</p>
 <p>而 SkillOS 给出的实验结论——<strong>训练后的 8B Curator 优于冻结的 Gemini-2.5-Pro Curator</strong>——恰好印证了这件事的价值。</p>
-<h4>6.2 自主性 × 总结质量的二维空间</h4>
+<h4 id="6-2-自主性-总结质量的二维空间">6.2 自主性 × 总结质量的二维空间</h4>
 <p>把四篇代表性工作放到两个维度上看：</p>
 <pre><code>        总结者训练
            ▲
@@ -704,22 +704,22 @@ AgentEvolver (2511.10395)
 SkillRL/   │ AgentEvolver
 SKILL0     │</code></pre>
 <p><strong>右上方那个空白象限</strong>——既自动生成题目、又训练总结者——目前<strong>没有一篇工作覆盖</strong>。这是当前最显眼的研究空白。</p>
-<h4>6.3 横向 vs 纵向总结的融合空间</h4>
+<h4 id="6-3-横向-vs-纵向总结的融合空间">6.3 横向 vs 纵向总结的融合空间</h4>
 <p>第一类工作里的 SE-Agent 是横向（多次采样）总结，其他都是纵向（历史对话）总结。这两者在第二类工作里基本没有融合——SkillRL/SKILL0/SkillOS 仍以纵向为主。<strong>横向 + 纵向的融合</strong>会不会带来更稳健的 Skill 库？是一个开放问题。</p>
 <hr>
-<h3>07 写在最后</h3>
+<h3 id="07-写在最后">07 写在最后</h3>
 <p>这一年多自进化 Agent 的研究节奏其实非常快，从"存技能"到"训技能"、从"依赖人工数据"到"零数据自训"，几乎每个月都能看到新工作冒出来。但仔细啃完之后会发现，<strong>还有大片研究空白没人去碰</strong>——尤其是"总结者本身的训练"和"完全自主 + 训总结者"这条交叉路径。</p>
 <p>回过头看，这条赛道的本质问题其实只有一个：</p>
 <blockquote><p><strong>如何让 Agent 在没有人工干预的情况下，把交互的副产物转化为下一次更强的能力？</strong></p></blockquote>
 <p>无论是把经验存进文件、训进权重，还是让 Agent 之间互相出题，所有路径都在回答这一个问题的不同侧面。</p>
-<h3>附录 A：论文索引</h3>
+<h3 id="附录-A-论文索引">附录 A：论文索引</h3>
 <table><thead><tr><th>简称</th><th>arXiv</th><th>类别</th></tr></thead><tbody><tr><td>AutoSkill</td><td>2603.01145</td><td>第一类</td></tr><tr><td>EvoSkill</td><td>2603.02766</td><td>第一类</td></tr><tr><td>MemSkill</td><td>2602.02474</td><td>第一类</td></tr><tr><td>CoEvoSkills</td><td>2604.01687v2</td><td>第一类</td></tr><tr><td>SE-Agent</td><td>2508.02085</td><td>第一类</td></tr><tr><td>EvolveR</td><td>2510.16079</td><td>第二类</td></tr><tr><td>SAGE</td><td>2512.17102</td><td>第二类</td></tr><tr><td>SkillRL</td><td>2602.08234</td><td>第二类</td></tr><tr><td>SKILL0</td><td>2604.02268</td><td>第二类</td></tr><tr><td>SkillOS</td><td>2605.06614</td><td>第二类</td></tr><tr><td>AgentEvolver</td><td>2511.10395</td><td>第二类</td></tr><tr><td>Agent0</td><td>2511.16043</td><td>第三类</td></tr><tr><td>Tool-R0</td><td>2602.21320</td><td>第三类</td></tr><tr><td>Absolute Zero</td><td>2505.03335</td><td>第三类</td></tr></tbody></table>
-<h3>附录 B：评估数据集索引</h3>
+<h3 id="附录-B-评估数据集索引">附录 B：评估数据集索引</h3>
 <table><thead><tr><th>数据集</th><th>使用工作</th><th>类型</th></tr></thead><tbody><tr><td>WildChat-1M</td><td>AutoSkill</td><td>用户对话</td></tr><tr><td>OfficeQA</td><td>EvoSkill</td><td>办公图表</td></tr><tr><td>LoCoMo / LongMemEval</td><td>MemSkill</td><td>长程对话记忆</td></tr><tr><td>SkillBench</td><td>CoEvoSkills</td><td>技能</td></tr><tr><td>ALFWorld</td><td>SkillRL SKILL0 SkillOS</td><td>具身/Agentic</td></tr><tr><td>WebShop</td><td>SkillRL SKILL0 SkillOS</td><td>网页购物</td></tr><tr><td>Search-QA</td><td>SkillRL / SKILL0</td><td>检索问答</td></tr><tr><td>AppWorld</td><td>SAGE</td><td>APP 交互</td></tr><tr><td>NQ HotpotQA TriviaQA / PopQA</td><td>EvolveR</td><td>检索问答</td></tr><tr><td>DeepMath-103k</td><td>SkillOS</td><td>数学推理</td></tr><tr><td>GSM8K / AIME</td><td>Agent0</td><td>数学</td></tr><tr><td>ToolAlpaca SealTool NexusRaven</td><td>Tool-R0</td><td>工具使用</td></tr><tr><td>HumanEval MBPP LCB</td><td>Absolute Zero</td><td>代码</td></tr></tbody></table>
 <p>####</p>
 <p>####</p>
-<h4>腾讯PCG大数据平台部</h4>
-<h4>⭐️⭐️ 新一代全链路数据AI助手——Dola ⭐️⭐️</h4>
+<h4 id="腾讯PCG大数据平台部">腾讯PCG大数据平台部</h4>
+<h4 id="新一代全链路数据AI助手-Dola">⭐️⭐️ 新一代全链路数据AI助手——Dola ⭐️⭐️</h4>
 <p>Dola是一款基于Agentic AI能力开发的全链路数据助手：用户只需要引入个人的数据表，就能得到一枚专属的AI分析师</p>
 <p>它不仅能够完成日常的取数、跑数等基础任务，还能自主规划并执行复杂场景的数据分析，例如异动归因、画像对比分析、股票基金回测、房价预测等。Dola可以自行编写SQL、纠正SQL错误、执行查询、使用Python进行数据处理与可视化，并最终生成一份完整的分析报告。全程无需编写一行代码，只需通过自然语言对话，你就能拥有一个全自动工作的“数据小黑工”。</p>
 <p>这里以1个股票回测的例子看看dola的效果：</p>
@@ -733,7 +733,7 @@ SKILL0     │</code></pre>
 <p>这里只是以股票回测这样一个比较复杂的案例场景展开，大家应该可以想象到，在工作场景中，Dola对于日常数据分析工作的提效程度是显而易见的。</p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-026-32139917.gif"></p>
 <p><img alt="图片" src="../../_assets/20260916-Agent自我进化三大技术路线/img-027-7231f6f7.png"></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

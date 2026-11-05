@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</h1><div class="meta">📅 2026-09-21 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/D1La4jMoVZ5Ip_RrVY1kPw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来.md</div><div class="md"><h1>一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">25</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#一万字Jev-工程实践长文-把-Agent-的-判断题-从大模型里拆出来">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#一-Jev-是什么-把生成问题改成判断问题">一、Jev 是什么：把生成问题改成判断问题</a><a class="tl l3" href="#二-为什么-Agent-需要一个快判断层">二、为什么 Agent 需要一个快判断层</a><a class="tl l3" href="#第一层-生成成本和判断需求不匹配">第一层：生成成本和判断需求不匹配</a><a class="tl l3" href="#第二层-摘要会破坏可复核性">第二层：摘要会破坏可复核性</a><a class="tl l3" href="#第三层-置信度没有进入代码分支">第三层：置信度没有进入代码分支</a><a class="tl l3" href="#三-fast-jev-compaction-不做摘要-只做保留决策">三、fast-jev-compaction：不做摘要，只做保留决策</a><a class="tl l3" href="#四-Demo-实现拆解-从历史消息到压缩决策">四、Demo 实现拆解：从历史消息到压缩决策</a><a class="tl l3" href="#4-1-工具调用配对-先把-tooluse-和-toolresult-绑定">4.1 工具调用配对：先把 tooluse 和 toolresult 绑定</a><a class="tl l3" href="#4-2-state-构造-只给-Jev-判断所需信息">4.2 state 构造：只给 Jev 判断所需信息</a><a class="tl l3" href="#4-3-fitState-预算不够时逐级降级">4.3 fitState：预算不够时逐级降级</a><a class="tl l3" href="#4-4-两个-Noul-拆出三种压缩动作">4.4 两个 Noul：拆出三种压缩动作</a><a class="tl l3" href="#这个工具调用本身是否还重要">这个工具调用本身是否还重要？</a><a class="tl l3" href="#这个工具结果全文是否还需要保留">这个工具结果全文是否还需要保留？</a><a class="tl l3" href="#4-5-分批请求与失败回退">4.5 分批请求与失败回退</a><a class="tl l3" href="#五-Demo-跑出来了什么">五、Demo 跑出来了什么</a><a class="tl l3" href="#六-怎么选型-Jev-Structured-Output-和传统分类器">六、怎么选型：Jev、Structured Output 和传统分类器</a><a class="tl l3" href="#七-从项目-Demo-到工程模式">七、从项目 Demo 到工程模式</a><a class="tl l3" href="#八-结语">八、结语</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</h1><div class="meta">📅 2026-09-21 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/D1La4jMoVZ5Ip_RrVY1kPw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来.md</div><div class="md"><h1 id="一万字Jev-工程实践长文-把-Agent-的-判断题-从大模型里拆出来">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-21 抓取状态：成功 原文字符：16964｜配图：12 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>Jev 工程实践长文：Agent 里很多模型调用不是为了生成答案，而是为了替代码做一次判断；文章讲如何把这类“判断题”从大模型调用中拆出来，改为结构化决策。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li>原文已完整抓取，按章节分层；细节以「原文沉淀」为准。</li><li>配图 12 张已本地化到 <code>_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/</code>。</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>按原文目录定位相关章节精读。</li><li>引用数据/步骤时打开对应小节，避免只看摘要。</li></ul>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#一jev-是什么把生成问题改成判断问题">一、Jev 是什么：把生成问题改成判断问题</a></li><li><a href="#二为什么-agent-需要一个快判断层">二、为什么 Agent 需要一个快判断层</a></li><li><a href="#第一层生成成本和判断需求不匹配">第一层：生成成本和判断需求不匹配</a></li><li><a href="#第二层摘要会破坏可复核性">第二层：摘要会破坏可复核性</a></li><li><a href="#第三层置信度没有进入代码分支">第三层：置信度没有进入代码分支</a></li><li><a href="#三fast-jev-compaction不做摘要只做保留决策">三、fast-jev-compaction：不做摘要，只做保留决策</a></li><li><a href="#四demo-实现拆解从历史消息到压缩决策">四、Demo 实现拆解：从历史消息到压缩决策</a></li><li><a href="#41-工具调用配对先把tool_use和tool_result绑定">4.1 工具调用配对：先把 tool_use 和 tool_result 绑定</a></li><li><a href="#42-state-构造只给-jev-判断所需信息">4.2 state 构造：只给 Jev 判断所需信息</a></li><li><a href="#43-fitstate预算不够时逐级降级">4.3 fitState：预算不够时逐级降级</a></li><li><a href="#44-两个-noul拆出三种压缩动作">4.4 两个 Noul：拆出三种压缩动作</a></li><li><a href="#这个工具调用本身是否还重要">这个工具调用本身是否还重要？</a></li><li><a href="#这个工具结果全文是否还需要保留">这个工具结果全文是否还需要保留？</a></li><li><a href="#45-分批请求与失败回退">4.5 分批请求与失败回退</a></li><li><a href="#五demo-跑出来了什么">五、Demo 跑出来了什么</a></li><li><a href="#六怎么选型jevstructured-output-和传统分类器">六、怎么选型：Jev、Structured Output 和传统分类器</a></li><li><a href="#七从项目-demo-到工程模式">七、从项目 Demo 到工程模式</a></li><li><a href="#八结语">八、结语</a></li></ul>
 <p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-001-d910c04f.gif"></p>
 <p>作者：daryl，高级前端开发</p>
@@ -418,7 +418,7 @@
 <p>Agent 里很多模型调用不是为了生成答案，而是为了替代码做一次判断。</p>
 <p>这句话如果成立，Jev 就不是“更便宜的 GPT”。它更像 Agent 系统里缺了很久的一个零件：快判断层。</p>
 <p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-002-a7f3b30b.png"></p>
-<h3>一、Jev 是什么：把生成问题改成判断问题</h3>
+<h3 id="一-Jev-是什么-把生成问题改成判断问题">一、Jev 是什么：把生成问题改成判断问题</h3>
 <p>Jev 是 TypeSafe AI 发布的 System One Model。它和我们熟悉的聊天模型不太一样：聊天模型擅长生成文本，Jev 则刻意放弃文本生成，只返回类型化的概率决策。</p>
 <p>换句话说，它不是让模型“说一段话”，而是让模型回答一个程序能直接使用的问题：选哪个、打几分、是不是。</p>
 <p>它的输入可以比较杂：用户目标、页面状态、工具结果摘要、业务字段、候选动作。它的输出必须很窄：选择哪个、打几分、某个命题成立的概率是多少。</p>
@@ -448,7 +448,7 @@
 <table><thead><tr><th>层次</th><th>职责</th><th>典型组件</th></tr></thead><tbody><tr><td>慢思考层</td><td>规划、解释、生成、复杂推理</td><td>GPT / Claude / Gemini</td></tr><tr><td>快判断层</td><td>路由、筛选、评分、门禁</td><td>Jev / Jev-like 模型</td></tr><tr><td>确定性层</td><td>权限、状态、副作用、回滚</td><td>普通代码</td></tr><tr><td>兜底层</td><td>高风险或低置信度处理</td><td>人工 / 更强模型</td></tr></tbody></table>
 <p>需要注意的是，Jev 不是“更便宜的 GPT”。它不适合写文章、解释复杂代码，也不适合做长链路规划。它更适合放在 Agent 内部，处理那些输出空间固定、调用频率高、又需要语义理解的小判断。</p>
 <p>Jev 最适合的位置，不是 Agent 的大脑，而是 Agent 的反射神经。</p>
-<h3>二、为什么 Agent 需要一个快判断层</h3>
+<h3 id="二-为什么-Agent-需要一个快判断层">二、为什么 Agent 需要一个快判断层</h3>
 <p>现在写 coding agent，最容易遇到的瓶颈不是“模型不会说话”，而是上下文越来越长。</p>
 <p>一个稍微真实一点的修 Bug 过程，通常会经历这些步骤：</p>
 <ol><li>用户描述问题；</li></ol>
@@ -485,22 +485,22 @@ Expected authorization header to be preserved.</code></pre>
 <p>上下文压缩最怕的不是删掉废话，而是把关键事实改写成一句“差不多”。</p>
 <p>我们当然可以继续用通用大模型做上下文压缩。比如让模型读完整历史，然后输出一段总结。</p>
 <p>这条路能用，但在高频 Agent 里会遇到三层断裂。</p>
-<h3>第一层：生成成本和判断需求不匹配</h3>
+<h3 id="第一层-生成成本和判断需求不匹配">第一层：生成成本和判断需求不匹配</h3>
 <p>很多时候，系统不是想让模型“写一段总结”，而是想知道某个工具结果还值不值得留。</p>
 <p>这是一个判断题，不是作文题。</p>
 <p>如果为了回答“这段日志还要不要留”，调用一次大模型，让它读完整上下文、生成一段解释、再被代码解析，这个链路太重。</p>
 <table><thead><tr><th>任务</th><th>真正需要的输出</th><th>用通用 LLM 的浪费点</th></tr></thead><tbody><tr><td>是否保留工具结果</td><td>0 ~ 1 概率</td><td>生成解释文本</td></tr><tr><td>该调哪个工具</td><td>枚举选项</td><td>生成 reasoning + action</td></tr><tr><td>搜索结果是否相关</td><td>分数</td><td>输出自然语言评价</td></tr><tr><td>是否转人工</td><td>布尔概率</td><td>写判断理由</td></tr></tbody></table>
-<h3>第二层：摘要会破坏可复核性</h3>
+<h3 id="第二层-摘要会破坏可复核性">第二层：摘要会破坏可复核性</h3>
 <p>工具结果常常是后续定位问题的证据。文件路径、错误码、栈信息、命令参数，都是精确内容。摘要会把这些精确内容变成“含义相近”的描述。</p>
 <p>对文章、会议纪要来说，这种改写可以接受。对代码修复来说，风险更高。</p>
 <p>因为 Agent 下一步不是“理解大意”，而是要继续执行动作。</p>
-<h3>第三层：置信度没有进入代码分支</h3>
+<h3 id="第三层-置信度没有进入代码分支">第三层：置信度没有进入代码分支</h3>
 <p>通用大模型也可以说“我有 80% 把握”。但这通常只是文本里的自我描述，不一定是经过校准的概率。</p>
 <p>Jev 的设计目标是把概率变成接口返回值，让代码可以用阈值控制行为：</p>
 <table><thead><tr><th>概率区间</th><th>系统动作</th><th>说明</th></tr></thead><tbody><tr><td>&gt;= 0.8</td><td>自动执行</td><td>适合低风险、高重复场景</td></tr><tr><td>0.5 ~ 0.8</td><td>保守处理</td><td>截断、保留摘要、请求补充信息</td></tr><tr><td>&lt; 0.5</td><td>删除或回退</td><td>低价值内容可清理，高风险场景转人工</td></tr></tbody></table>
 <p>当然，这里要非常谨慎。概率不是安全证明，必须用自己的数据做校准和 shadow mode 验证。</p>
 <p>通用模型的问题不是不聪明，而是它把“判断”包装成了“生成”。</p>
-<h3>三、fast-jev-compaction：不做摘要，只做保留决策</h3>
+<h3 id="三-fast-jev-compaction-不做摘要-只做保留决策">三、fast-jev-compaction：不做摘要，只做保留决策</h3>
 <p><code>fast-jev-compaction</code> 是 GitHub 上一个很有代表性的 Jev 项目。它的目标不是让 Jev 写代码，也不是让 Jev 接管 Agent，而是处理一个更具体的问题：Claude Code / coding agent 的历史上下文越来越大，哪些工具调用和工具结果可以删？</p>
 <p>它的策略很克制：</p>
 <ul><li>用户文本不改写；</li></ul>
@@ -523,7 +523,7 @@ keepResult：这个工具结果全文还需要保留吗？</code></pre>
 <p>它的设计可以拆成三层：</p>
 <table><thead><tr><th>层次</th><th>做什么</th><th>为什么重要</th></tr></thead><tbody><tr><td>对象层</td><td>把 tool_use 和 tool_result 配成一组</td><td>避免留下孤立调用或孤立结果</td></tr><tr><td>判断层</td><td>为每组工具历史生成 keepCall / keepResult 两个问题</td><td>把复合压缩任务拆成两个窄判断</td></tr><tr><td>执行层</td><td>根据阈值执行 keep / drop_result / drop_call</td><td>让压缩动作可测试、可回退、可统计</td></tr></tbody></table>
 <p>这个项目很适合用来理解 Jev，因为它把 Jev 的优势落到了一个真实问题上：高频、封闭、可回退、需要概率，但不需要生成。</p>
-<h3>四、Demo 实现拆解：从历史消息到压缩决策</h3>
+<h3 id="四-Demo-实现拆解-从历史消息到压缩决策">四、Demo 实现拆解：从历史消息到压缩决策</h3>
 <p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-008-7dc25fee.png"></p>
 <p>它的主流程可以拆成 6 步：</p>
 <ol><li>收集历史里的 <code>tool_use</code> 和 <code>tool_result</code>；</li></ol>
@@ -551,7 +551,7 @@ keepResult：这个工具结果全文还需要保留吗？</code></pre>
 <p>这段代码里有几个关键词：</p>
 <ul><li><code>collectToolCalls：先把工具调用和结果配成一组；</code></li><li><code>fitState：把状态压到 Jev 能接受的预算里；</code></li><li><code>batchCalls：问题太多时分批；</code></li><li><code>Promise.all：多个 batch 可以并发问；</code></li><li><code>answers：最后收集概率，进入决策阶段。</code></li></ul>
 <p>这就是 Jev 在 Agent 里的正确姿势：不要让它做全局规划，只让它对一批明确对象做窄判断。</p>
-<h3>4.1 工具调用配对：先把 tool_use 和 tool_result 绑定</h3>
+<h3 id="4-1-工具调用配对-先把-tooluse-和-toolresult-绑定">4.1 工具调用配对：先把 tool_use 和 tool_result 绑定</h3>
 <p>上下文里，工具调用和工具结果通常不在同一条消息里。</p>
 <p>assistant 发起：</p>
 <pre><code>{
@@ -589,7 +589,7 @@ keepResult：这个工具结果全文还需要保留吗？</code></pre>
 <p>这一步做完后，每个工具调用会变成一个统一对象：</p>
 <table><thead><tr><th>字段</th><th>含义</th></tr></thead><tbody><tr><td>id</td><td>内部短 ID，例如 t1、t2</td></tr><tr><td>toolUseId</td><td>原始工具调用 ID</td></tr><tr><td>tool</td><td>工具名</td></tr><tr><td>input</td><td>工具输入</td></tr><tr><td>callIndex</td><td>调用所在消息位置</td></tr><tr><td>resultIndex</td><td>结果所在消息位置</td></tr><tr><td>resultChars</td><td>结果字符数</td></tr><tr><td>isError</td><td>是否失败</td></tr><tr><td>pinned</td><td>是否固定保留</td></tr></tbody></table>
 <p><code>pinned</code> 是一个很实用的工程保护。首条消息和最近 N 条消息不参与删除，避免刚发生的上下文被过早裁掉。</p>
-<h3>4.2 state 构造：只给 Jev 判断所需信息</h3>
+<h3 id="4-2-state-构造-只给-Jev-判断所需信息">4.2 state 构造：只给 Jev 判断所需信息</h3>
 <p>这是 <code>fast-jev-compaction</code> 里最值得学习的设计。</p>
 <p>它不会把完整工具结果发给 Jev。它只把工具结果变成一个短说明：</p>
 <pre><code>ok, 4213 chars (omitted)
@@ -622,7 +622,7 @@ error, 830 chars (omitted)</code></pre>
 <table><thead><tr><th>原始内容</th><th>进入 state 后</th></tr></thead><tbody><tr><td>完整文件内容</td><td>不进入，只保留工具名和输入</td></tr><tr><td>完整测试日志</td><td>不进入，只保留 error, N chars</td></tr><tr><td>工具输入参数</td><td>截断后保留</td></tr><tr><td>用户文本</td><td>保留，但长文本可能 abridge</td></tr><tr><td>最近消息</td><td>优先保留</td></tr></tbody></table>
 <p>这一步很关键。Jev 不是来重新理解所有上下文的，它只是判断某个工具结果还有没有保留价值。</p>
 <p>压缩器不需要读完整历史，它只需要知道哪些历史值得继续被读到。</p>
-<h3>4.3 fitState：预算不够时逐级降级</h3>
+<h3 id="4-3-fitState-预算不够时逐级降级">4.3 fitState：预算不够时逐级降级</h3>
 <p>如果 state 还是太大怎么办？</p>
 <p>粗暴做法是删消息。<code>fast-jev-compaction</code> 没有这么做，它先做降级。</p>
 <p>Demo 的 <code>fitState</code> 也保留了这个顺序：</p>
@@ -647,14 +647,14 @@ error, 830 chars (omitted)</code></pre>
 stateStage: full
 requests: 1</code></pre>
 <p>如果线上发现某类会话经常落到 <code>old messages left out</code>，说明不是 Jev 判断问题，而是 state 预算本身已经太紧，需要调整策略。</p>
-<h3>4.4 两个 Noul：拆出三种压缩动作</h3>
+<h3 id="4-4-两个-Noul-拆出三种压缩动作">4.4 两个 Noul：拆出三种压缩动作</h3>
 <p>Jev 的一个核心使用原则是：一个问题只做一个判断。</p>
 <p>不要问：</p>
 <pre><code>这个工具调用和工具结果是否还重要？如果重要请决定是否截断。</code></pre>
 <p>这个问题混了多个判断。</p>
 <p>更好的做法是拆成两个 <code>Noul</code>：</p>
-<h3>这个工具调用本身是否还重要？</h3>
-<h3>这个工具结果全文是否还需要保留？</h3>
+<h3 id="这个工具调用本身是否还重要">这个工具调用本身是否还重要？</h3>
+<h3 id="这个工具结果全文是否还需要保留">这个工具结果全文是否还需要保留？</h3>
 <p>Demo 里的问题构造是这样：</p>
 <p>📍 来源：src/jev.js 第 100-113 行</p>
 <pre><code>export function questionsFor(call) {
@@ -683,7 +683,7 @@ requests: 1</code></pre>
 <p>最终只有三种动作：</p>
 <table><thead><tr><th>动作</th><th>条件</th><th>处理方式</th></tr></thead><tbody><tr><td>keep</td><td>keepResult &gt;= threshold</td><td>调用和结果都完整保留</td></tr><tr><td>drop_result</td><td>keepResult &lt; threshold 且 keepCall &gt;= threshold</td><td>保留调用，截断结果</td></tr><tr><td>drop_call</td><td>两者都低</td><td>调用和结果一起删除</td></tr></tbody></table>
 <p>这个三分法很适合上下文压缩。它不像 summary 那样改写事实，而是在“留多少”上做选择。</p>
-<h3>4.5 分批请求与失败回退</h3>
+<h3 id="4-5-分批请求与失败回退">4.5 分批请求与失败回退</h3>
 <p>当工具调用很多时，一次 Jev 请求不一定放得下所有问题。<code>fast-jev-compaction</code> 的策略是每个请求都带相同 state，然后把工具调用问题拆批。</p>
 <p>Demo 里的 <code>batchCalls</code> 逻辑如下：</p>
 <p>📍 来源：src/compact.js 第 86-114 行</p>
@@ -715,7 +715,7 @@ requests: 1</code></pre>
     : createHeuristicAsker();</code></pre>
 <p>这也是我建议大家试 Jev 时采用的方式：先把接口抽象出来，真实模型只是一个 <code>asker</code>。这样后面想换官方 Jev、本地复现模型、普通 LLM 适配器，都不需要改主流程。</p>
 <p>模型可以替换，决策协议要稳定。</p>
-<h3>五、Demo 跑出来了什么</h3>
+<h3 id="五-Demo-跑出来了什么">五、Demo 跑出来了什么</h3>
 <p>Demo 的样本是一个修复订单导出超时的会话。</p>
 <p>📍 来源：src/sampleTranscript.js 第 1-141 行</p>
 <p>里面包含四个工具调用：</p>
@@ -747,7 +747,7 @@ t4  read_file        drop_call     0.47      0.00</code></pre>
 <p>和当前任务无关，删除。</p>
 <p>这个 Demo 不证明 Jev 比大模型聪明，但它证明了一个工程模式：</p>
 <p><strong>上下文压缩可以从“总结旧历史”改成“判断保留价值”。</strong></p>
-<h3>六、怎么选型：Jev、Structured Output 和传统分类器</h3>
+<h3 id="六-怎么选型-Jev-Structured-Output-和传统分类器">六、怎么选型：Jev、Structured Output 和传统分类器</h3>
 <p>很多开发者第一反应是：现在 OpenAI / Claude 都支持 structured output，我为什么不用 JSON schema？</p>
 <p>我的判断是，不要把它们看成互斥关系。它们适合不同位置。</p>
 <table><thead><tr><th>方案</th><th>优点</th><th>缺点</th><th>适合位置</th></tr></thead><tbody><tr><td>LLM + JSON Schema</td><td>表达能力强，能解释复杂理由</td><td>仍然逐 token 生成，成本和延迟高</td><td>低频复杂判断</td></tr><tr><td>Tool Calling</td><td>能和工具系统集成</td><td>决策仍依赖生成式模型</td><td>Agent 主流程动作</td></tr><tr><td>传统分类器</td><td>便宜、可本地部署</td><td>标签变化不灵活，语义泛化弱</td><td>稳定标签、大量数据</td></tr><tr><td>Jev</td><td>输出封闭，概率可用，适合高频</td><td>不能生成，复杂推理弱</td><td>高频局部判断</td></tr></tbody></table>
@@ -770,7 +770,7 @@ t4  read_file        drop_call     0.47      0.00</code></pre>
 <ol><li>对高风险场景保守处理。</li></ol>
 <table><thead><tr><th>等级</th><th>动作类型</th><th>建议策略</th></tr></thead><tbody><tr><td>L1 只读</td><td>搜索、读取、分类、重排</td><td>可以自动执行</td></tr><tr><td>L2 可逆</td><td>截断上下文、创建临时记录</td><td>低置信度保守保留</td></tr><tr><td>L3 不可逆</td><td>删除数据、扣款、关闭权限</td><td>不让 Jev 单独决定</td></tr></tbody></table>
 <p>概率能帮代码分流，但不能替业务背锅。</p>
-<h3>七、从项目 Demo 到工程模式</h3>
+<h3 id="七-从项目-Demo-到工程模式">七、从项目 Demo 到工程模式</h3>
 <p>如果只看宣传，很容易把 Jev 理解成一个“概念模型”。但 GitHub 上的社区项目说明，大家真正拿它做的是 Agent 内部组件。</p>
 <table><thead><tr><th>方向</th><th>代表项目</th><th>核心思路</th></tr></thead><tbody><tr><td>浏览器自动化</td><td>browser-use/jev-ultrafast</td><td>页面元素编号后，Jev 选择下一步操作和目标元素</td></tr><tr><td>Agent 框架</td><td>vercel/eve</td><td>在 Agent 框架里使用 Jev 做评估和路由</td></tr><tr><td>上下文剪枝</td><td>fast-jev-compaction</td><td>判断工具调用和结果是否还需要留在 context 中</td></tr><tr><td>代码审查</td><td>jev-review</td><td>把代码 review 拆成一组是非判断和风险评分</td></tr><tr><td>本地复现</td><td>SemIf、kev、laya</td><td>用开源小模型复刻 Jev-like 接口</td></tr><tr><td>数据库扩展</td><td>pg-jev</td><td>在 SQL 里写语义判断条件</td></tr><tr><td>游戏仿真</td><td>Doom、Mario、Snake</td><td>每回合或每 tick 选择动作</td></tr></tbody></table>
 <p>游戏 Demo 很容易传播，但对开发者来说，<code>fast-jev-compaction</code> 更有参考价值。</p>
@@ -781,7 +781,7 @@ t4  read_file        drop_call     0.47      0.00</code></pre>
 <table><thead><tr><th>变化</th><th>具体含义</th></tr></thead><tbody><tr><td>效率变化</td><td>不再为每个小判断启动一次完整生成链路</td></tr><tr><td>能力变化</td><td>路由、筛选、评分、门禁可以沉淀成统一接口</td></tr><tr><td>模式变化</td><td>Agent 从“全靠大模型思考”变成“生成、判断、执行分层协作”</td></tr></tbody></table>
 <p>生成负责表达，判断负责分流，代码负责执行。</p>
 <p>这个分工一旦成立，Jev 就不只是一个新模型，而是一种新的 Agent 组件设计方式。</p>
-<h3>八、结语</h3>
+<h3 id="八-结语">八、结语</h3>
 <p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-011-ad10af27.png"></p>
 <p>Jev 不神秘。它的很多技术零件以前就有：分类、约束输出、logits 打分、概率校准、判别式路线。</p>
 <p>但它把这些东西组合成了一个清晰的开发者接口。这个接口真正有价值的地方，是提醒我们重新拆分 Agent：哪些地方需要生成，哪些地方只是判断，哪些地方应该交给确定性代码。</p>
@@ -792,7 +792,7 @@ t4  read_file        drop_call     0.47      0.00</code></pre>
 <p>一分钟视频速递！</p>
 <p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-012-4966ce0d.gif"></p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

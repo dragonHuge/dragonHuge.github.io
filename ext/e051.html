@@ -395,18 +395,18 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</h1><div class="meta">📅 2026-10-06 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/vOiidxV8rURYXoDP1ZmWng" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261006-Codex-Harness-源码拆解Agent-控制面如何嵌进业务系统.md</div><div class="md"><h1>Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">16</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Codex-Harness-源码拆解-Agent-控制面如何嵌进业务系统">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l2" href="#三层关系放在一起看">三层关系放在一起看</a><a class="tl l2" href="#Thread-Turn-Step-Item-放在一条时间线里">Thread、Turn、Step、Item 放在一条时间线里</a><a class="tl l2" href="#runturn-做的不是-再问一次模型">runturn 做的不是“再问一次模型”</a><a class="tl l2" href="#App-Server-接的是运行现场">App Server 接的是运行现场</a><a class="tl l2" href="#业务状态和运行状态分开看">业务状态和运行状态分开看</a><a class="tl l2" href="#三种入口-对应三种任务寿命">三种入口，对应三种任务寿命</a><a class="tl l2" href="#为什么-Harness-变得重要">为什么 Harness 变得重要</a><a class="tl l2" href="#放回产品里看">放回产品里看</a><a class="tl l2" href="#最后">最后</a><a class="tl l2" href="#参考资料">参考资料</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</h1><div class="meta">📅 2026-10-06 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/vOiidxV8rURYXoDP1ZmWng" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261006-Codex-Harness-源码拆解Agent-控制面如何嵌进业务系统.md</div><div class="md"><h1 id="Codex-Harness-源码拆解-Agent-控制面如何嵌进业务系统">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-10-06 抓取状态：成功 原文字符：12644｜配图：5 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>架构师（JiaGouX） 我们都是架构师！ 架构未来，你来不来？ 国庆这几天，正好把最近对 Harness 和 Agent 运行时的一些学习，陆续整理成几篇文章。 昨天先把总的运行链捋了一遍：Goal 进来以后，Context 怎么装配，模型怎么决定下一步，工具怎么执行，结果又怎么被观察、验证和留下来。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
+<h2 id="原文沉淀">原文沉淀</h2>
 <blockquote><p>来源：https://mp.weixin.qq.com/s/vOiidxV8rURYXoDP1ZmWng 平台：weixin｜作者：架构师 抓取方式：cdp｜字符数：13351｜图片：5</p></blockquote>
 <hr>
 <p>架构师（JiaGouX）</p>
@@ -419,7 +419,7 @@
 <p>只做一次模型调用时，这个问题不明显。用户发一句话，模型回一段文本，调用就结束了。</p>
 <p>但 Agent 一旦进入业务系统，事情就没这么干净了。任务跑到一半，用户可能补一句约束；工具已经开始执行，某个动作还要等人确认；前端断开以后，任务也许还要继续。最后系统还得说清楚：Agent 看过什么、调过什么、哪一步被批准了，业务记录有没有真的改。</p>
 <p>所以今天不打算把源码文件逐个铺开讲。我更想抓住一条线：<strong>模型说“下一步可以这么做”之后，系统怎样让这一步受控地发生，并且留下以后还能复盘的痕迹。</strong></p>
-<h2>三层关系放在一起看</h2>
+<h2 id="三层关系放在一起看">三层关系放在一起看</h2>
 <p>看 Codex Harness，先把 Model、Harness、Host 三层放在一起，后面很多对象关系会更容易对上。</p>
 <p>Model 负责在当前上下文里给出下一步。它可以生成文字，也可以输出结构化的工具调用意图。</p>
 <p>Harness 负责把这一步放进运行时。上下文、工具路由、审批、沙箱、事件和恢复，大多在这一层组织起来。</p>
@@ -434,7 +434,7 @@
 <p>Harness 保存的是运行现场。当前任务属于哪个 Thread，这一轮 Turn 走到哪里，哪些 Item 已经产生，哪些工具还在执行，是否在等审批，上下文是不是快满了，这些状态都由它记着。</p>
 <p>OpenAI 在平台文章和 App Server 文章里给出的分工，大体也是这条线：应用拥有界面、上下文、工具和操作边界；Harness 处理 agent loop、状态、流式事件、工具交互和审批请求。</p>
 <p>这个分工写在图上像概念，落到系统里就会变成具体日志和状态。任务哪天出问题，能不能复盘，看的还是这些状态有没有落下来。</p>
-<h2>Thread、Turn、Step、Item 放在一条时间线里</h2>
+<h2 id="Thread-Turn-Step-Item-放在一条时间线里">Thread、Turn、Step、Item 放在一条时间线里</h2>
 <p>9 月 25 日我们讲过，从一次 LLM 调用到完整 Harness，中间多出来的不是几段提示词，而是上下文、权限、状态和验证。</p>
 <p>昨天那篇 Agent 架构文章里，我们又把它放进一条运行链里看：Goal 进入系统，运行时装配 Context，模型决定下一步，工具执行，结果被观察、验证、记录，再进入下一轮。</p>
 <p>再看 Codex，抽象链路就落到了源码对象上。它没有把所有东西塞进一个 loop，而是把运行过程拆成了几种时间尺度。</p>
@@ -450,7 +450,7 @@
 <p>图 2：Thread、Turn、Step、Item 不是名词堆叠，而是在不同时间尺度上保存运行事实。</p>
 <p>普通接口调用只关心请求什么时候返回。Agent 任务要多看几步：它先读什么，工具返回什么，用户有没有中途插话，审批卡在哪里，失败以后从哪里继续。</p>
 <p>如果这些过程最后只剩一条回答，系统就少了很多证据：Agent 到底看到了什么、做了什么、在哪一步等人、哪一步可以重试。</p>
-<h2>run_turn 做的不是“再问一次模型”</h2>
+<h2 id="runturn-做的不是-再问一次模型">run_turn 做的不是“再问一次模型”</h2>
 <p>从源码入口看，<code>run_turn</code> 很容易被简化成一句话：模型给出工具调用，Harness 执行工具，再把结果交回模型。</p>
 <p>这句话没错，但只说了最小循环。</p>
 <p>实际跑起来时，<code>run_turn</code> 还要处理上下文捕获、模型采样、工具结果回填、输入队列、自动压缩和取消。模型流、工具 future、用户追加输入和审批结果，都会汇到同一条运行链里。</p>
@@ -469,7 +469,7 @@
 <p><img alt="一次 Turn 的控制回路" src="img-003-7f55f6d7.png"></p>
 <p>一次 Turn 的控制回路</p>
 <p>图 3：一次 Turn 里，输入、采样、工具、审批和事件会不断汇合，再决定继续还是结束。</p>
-<h2>App Server 接的是运行现场</h2>
+<h2 id="App-Server-接的是运行现场">App Server 接的是运行现场</h2>
 <p>Codex App Server 表面上是一组 JSON-RPC 方法和 WebSocket 通道。放到产品架构里看，它接的正是这个运行现场。</p>
 <p>产品可以创建 Thread、恢复 Thread、启动 Turn，也可以追加 steer、中断 Turn、接收流式事件、处理审批请求。运营台、IDE、内部工具或桌面应用，不必自己重写一套 agent loop，就能订阅同一条任务时间线。</p>
 <p>官方的 Relay 示例也很典型：产品侧保留业务面板、MCP 工具和人工审批，Harness 负责 loop、状态、流式事件和工具交互。用户看到的是业务产品里的按钮、记录和控制项，不是一个裸露的模型接口。</p>
@@ -479,7 +479,7 @@
 <p><code>TurnSteerParams</code> 里还带着 <code>expected_turn_id</code>，协议注释把它定义为必需的前置条件。中途插话不能只是往会话里塞一句文本，它还带着自己要影响的 active turn。核心侧收到 steer 会先比对当前活跃 Turn 的 id，对不上就按 mismatch 拒绝。前端慢了一拍、用户切了任务，这句补充不会落进任何一段运行过程，而是变成一次调用方看得见的失败。</p>
 <p>第二，app-server 的方法安全等级并不一样。文档里提到的 <code>thread/shellCommand</code> 会在 sandbox 之外运行，拥有完整访问能力。也就是说，“接了 app-server”不等于所有动作都天然落在同一层安全模型里。展示、审批、工具执行和业务写入，仍然要分开看。</p>
 <p>官方文档也给了边界：<code>codex app-server</code> 命令和 WebSocket transport 都标着 experimental，不支持 production workloads。这个限制不影响我们理解它的架构思路，但会影响真实接入时的判断。</p>
-<h2>业务状态和运行状态分开看</h2>
+<h2 id="业务状态和运行状态分开看">业务状态和运行状态分开看</h2>
 <p>app-server 可以管理 Thread 生命周期、事件订阅、审批请求和运行状态。业务系统里的订单、退款、发布、告警关闭，还是要回到业务后端。</p>
 <p>Agent 的状态和业务状态不是一回事。</p>
 <p>前面聊业务语义时，也反复碰到这个边界：对话状态、业务状态和执行状态，不能塞进一个字段。放到 Codex 里也是一样，Thread 和 Item 能说明 Agent 运行到哪里，订单、退款、发布这些事实仍要回到业务系统确认。</p>
@@ -492,21 +492,21 @@
 <p>图 4：Harness 保存运行证据，业务系统保存权威事实，两者要关联，但不能混成一层。</p>
 <p>两边会互相传递信息，但一混在一起，问题反而会变多。业务系统把 Agent 的 <code>completed</code> 当成业务完成，后面很容易说不清事务是否真的提交。反过来，如果要求 Harness 理解所有业务事务细节，它又会变成一个不清不楚的业务后端。</p>
 <p>Codex 平台化让我觉得耐看的地方也在这里。它没有要求业务系统把自己改造成聊天应用，而是在已有事实模型旁边，接入一条受控的行动链。</p>
-<h2>三种入口，对应三种任务寿命</h2>
+<h2 id="三种入口-对应三种任务寿命">三种入口，对应三种任务寿命</h2>
 <p>回到接入方式，OpenAI 把 Codex 分成了三类入口：<code>codex exec</code>、Codex SDK 和 Codex app-server。三个入口背后是三种任务寿命。</p>
 <p><code>codex exec</code> 适合一次性任务。比如在 CI 里分析一次失败、批量检查某类代码问题、对固定输入生成结果。进程启动，任务执行，结果返回，生命周期跟流水线绑定。</p>
 <p>SDK 适合把 Codex 放进服务端工作流。应用可以启动或恢复 Thread，流式读取事件，把 Codex 当成一个可编排的执行节点。它比 exec 更灵活，但仍然可以被宿主流程包住。</p>
 <p>app-server 适合产品内的长生命周期任务。它强调持续会话、流式事件、审批处理、恢复和 UI 呈现。只要用户会在任务中途继续追问、补充材料、改约束，或者需要多人看同一条任务进度，这个场景就靠近 app-server 的位置。</p>
 <p>所以看这三种入口，未必先按“哪个 API 更高级”来分。更贴近系统设计的分法是：这项任务跑完就散，还是要在产品里继续活着？</p>
 <p>任务跑完就散，用长生命周期控制面会显得重。任务需要被订阅、暂停、审批、恢复和审计，却只用一次性调用硬撑，状态很容易散落到业务代码里。</p>
-<h2>为什么 Harness 变得重要</h2>
+<h2 id="为什么-Harness-变得重要">为什么 Harness 变得重要</h2>
 <p>看完这条线，再回头看几条外部讨论，会发现大家关注点也在往这一层靠。</p>
 <p>Karpathy 在 2025 年关于 context engineering 的讨论里，把生产级 LLM 应用的问题从“写提示词”推到了上下文装配。任务说明、示例、RAG、工具、状态、历史和压缩，都要在下一步推理之前放到合适的位置。他后面还提到，完整 LLM 应用要管的不止这些：控制流、模型选择、验证、安全、评测，都在名单里。</p>
 <p>Addy Osmani 在 Agent Harness Engineering 里的说法更偏工程：coding agent 不是模型本身，而是模型加上 prompts、tools、context policies、hooks、sandboxes、feedback loops 和 recovery paths。他引用的“Agent = Model + Harness”，讲的也是这个方向。</p>
 <p>这些观点不是 Codex 实现细节的证据，只能算旁证。但方向接近：不少讨论已经不再把 Agent 只当成“更会聊天的模型”，而是把它看成一层正在变厚的软件系统。</p>
 <p>Codex Harness 的平台化，落点也是这里。它把上下文、工具、审批、沙箱、事件和恢复集中到一条运行时协议里，让 CLI、SDK、app-server 和不同产品复用。</p>
 <p>这里也要留一个边界。OpenAI 说的是 open-source Codex harness / components，不等于 Codex 产品、模型服务和云端能力全部开源。官方文章里的 ARC-AGI-3 分数提升、税务试点 7,000 份 returns 和准备时间下降，也都是特定实验或试点，不能直接外推成所有业务的收益承诺。</p>
-<h2>放回产品里看</h2>
+<h2 id="放回产品里看">放回产品里看</h2>
 <p>把 Codex Harness 放到业务系统旁边，有几个连接处会很快露出来。</p>
 <p>先看用户中途补充的信息怎么进入运行时。</p>
 <p>用户在任务中途补一句话，是当前 Turn 的 steer，还是下一轮任务？如果工具已经启动，这句话能不能影响正在跑的动作？表面看是交互问题，往下就是约束何时进入运行时。</p>
@@ -519,7 +519,7 @@
 <p>工具失败、连接断开、上下文压缩、用户中断、审批拒绝，恢复点都不一样。Agent 平台不必假装自己不会失败，更有用的是说清楚已经发生了什么，下一步适合回到哪里。</p>
 <p>前面看 Claude.dev 的改进流程时，有一个问题很直接：工单关掉以后，系统究竟留下了什么。这里也能接上。Thread、Turn、Item 保存的不是给界面看的流水账，而是后面复盘、评测、规则修补和回滚要用的运行事实。</p>
 <p>这些连接处越清楚，后面再扩 MCP 工具或多 Agent，代价就越可控。工具越多，状态和权限越需要有自己的落点。</p>
-<h2>最后</h2>
+<h2 id="最后">最后</h2>
 <p>只看功能，Codex Harness 像是把工具调用、沙箱、审批、上下文压缩、事件流和会话恢复放在一起。</p>
 <p>从架构上看，我更愿意把它理解成 OpenAI 把 Agent 控制面做成了产品。</p>
 <p>控制面这个词听起来有点重，落到系统里并不玄。系统不只执行动作，还要管理动作怎样开始、怎样被看见、怎样暂停、怎样审批、怎样恢复、怎样结束。</p>
@@ -529,7 +529,7 @@
 <p>边界还要保留。正文里的源码论断，本轮逐条核对到 10 月 6 日的 main 分支（c0c230e673），StepContext、输入准入、preempt、审批通道在这一版都能定位。但仓库变动很快：8 月固定分析基线里 run_turn 在 turn.rs 的第 139 行，同一个函数现在在第 164 行，文件已经三千二百多行。<code>codex app-server</code> 命令和 WebSocket transport 也还带着实验性说明。我们可以借鉴它的分层和协议思路，但按行号引用会过期，“已经能接”和“生产形态已经稳定”也还不是一回事。</p>
 <p>Codex Harness 这次有启发的地方，也许不是某个 Rust 文件怎么写，而是它把 Agent 接入业务系统时最容易混在一起的几件事拆开了：采样一致性、输入归属、事件事实、业务权力边界。</p>
 <p>Agent 进入业务系统以后，模型和工具当然都重要。难的地方，也许就在这里：把不确定的模型输出，放进一条可观察、可审批、可恢复、可回滚的运行链路里。</p>
-<h2>参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 <ol><li>OpenAI，Codex as a platform: build on the open agent harness（https://developers.openai.com/blog/codex-as-a-platform）</li></ol>
 <ol><li>OpenAI Engineering，Unlocking the Codex harness: how we built the App Server（https://openai.com/index/unlocking-the-codex-harness/）</li></ol>
 <ol><li>OpenAI Engineering，Unrolling the Codex agent loop（https://openai.com/index/unrolling-the-codex-agent-loop/）</li></ol>
@@ -559,7 +559,7 @@
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>
 <p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

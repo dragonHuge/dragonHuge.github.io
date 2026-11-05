@@ -395,42 +395,42 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</h1><div class="meta">📅 2026-04-07 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/EPCkbXD0KMB-jnOZC4CamQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260407-Claude-Code记忆系统拆解与memsearch方案.md</div><div class="md"><h1>Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">29</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Claude-Code-记忆系统四层拆解-memsearch-跨-Agent-永久记忆方案">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#Claude-Code-记忆四层结构-源码泄露分析">Claude Code 记忆四层结构（源码泄露分析）</a><a class="tl l3" href="#Claude-Code-记忆天花板">Claude Code 记忆天花板</a><a class="tl l3" href="#memsearch-方案-Zilliz-开源">memsearch 方案（Zilliz 开源）</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#具体步骤">具体步骤</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#01-Claude-Code-记忆拆解">01 Claude Code 记忆拆解</a><a class="tl l3" href="#第一层-CLAUDE-md-用户写给-agent-的规矩">第一层：CLAUDE.md，用户写给 agent 的规矩</a><a class="tl l3" href="#第二层-Auto-Memory-agent-自己记笔记">第二层：Auto Memory，agent 自己记笔记</a><a class="tl l3" href="#第三层-Auto-Dream-让-agent-做梦整理记忆">第三层：Auto Dream，让 agent 做梦整理记忆</a><a class="tl l3" href="#第四层-KAIROS-泄露代码里还没上线的野心">第四层：KAIROS，泄露代码里还没上线的野心</a><a class="tl l3" href="#02-这套体系的天花板在哪">02 这套体系的天花板在哪？</a><a class="tl l3" href="#03-memsearch-记忆应该比任何一个-agent-都活得更长">03 memsearch：记忆应该比任何一个 agent 都活得更长</a><a class="tl l3" href="#安装-两条命令搞定">安装：两条命令搞定</a><a class="tl l3" href="#自动记忆-全量记忆-按需回忆">自动记忆，全量记忆，按需回忆</a><a class="tl l3" href="#检索-不只是向量搜索">检索：不只是向量搜索</a><a class="tl l3" href="#L1-语义搜索">L1：语义搜索</a><a class="tl l3" href="#L2-上下文展开">L2：上下文展开</a><a class="tl l3" href="#L3-原始对话">L3：原始对话</a><a class="tl l3" href="#跨-agent-共享-真正的永久记忆">跨 agent 共享：真正的永久记忆</a><a class="tl l3" href="#给开发者的接口">给开发者的接口</a><a class="tl l3" href="#尾声">尾声</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</h1><div class="meta">📅 2026-04-07 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/EPCkbXD0KMB-jnOZC4CamQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260407-Claude-Code记忆系统拆解与memsearch方案.md</div><div class="md"><h1 id="Claude-Code-记忆系统四层拆解-memsearch-跨-Agent-永久记忆方案">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-04-07 抓取状态：成功 原文字符：11583｜配图：9 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>AI 编码 Agent 的记忆要么太短（会话结束就没了），要么锁死在单一工具里（换个 Agent 从零开始）。如何让记忆跨 Agent、跨工具、长期存活？</p>
-<h2>核心内容</h2>
-<h3>Claude Code 记忆四层结构（源码泄露分析）</h3>
+<h2 id="核心内容">核心内容</h2>
+<h3 id="Claude-Code-记忆四层结构-源码泄露分析">Claude Code 记忆四层结构（源码泄露分析）</h3>
 <ul><li><strong>第一层 CLAUDE.md</strong>：用户手写的规矩文件，每次会话完整加载进 context。支持项目级/个人级/组织级三个作用域。越短遵守得越好</li><li><strong>第二层 Auto Memory</strong>：Agent 自己在对话中判断哪些值得记，写入 <code>~/.claude/projects/&amp;lt;路径&amp;gt;/memory/</code> 目录。分 user/feedback/project/reference 四类，索引文件 MEMORY.md 每行不超 150 字符只存指针，前 200 行注入 context。关键设计：Agent 被要求不信任自己的记忆，行动前先读真实文件核实</li><li><strong>第三层 Auto Dream</strong>：模拟睡眠整理记忆——把相对时间换绝对日期、合并矛盾条目、剔除过时内容，控制 MEMORY.md 在 200 行以内。触发条件：距上次整合超 24 小时 + 累积 5 次以上新会话。跑在后台子 agent 不阻塞主会话</li><li><strong>第四层 KAIROS（未上线）</strong>：后台守护进程，把 Agent 从被动响应变成主动观察的自治体。维护 append-only 日志，固定间隔收 tick 信号自决行动。15 秒阻塞预算——超时的操作推迟执行</li></ul>
-<h3>Claude Code 记忆天花板</h3>
+<h3 id="Claude-Code-记忆天花板">Claude Code 记忆天花板</h3>
 <ul><li>MEMORY.md 硬上限 200 行 / 25KB，几个月后记忆互相挤占</li><li>只有 grep 检索，没有语义理解（描述换个说法就搜不到）</li><li>Auto Memory 粒度粗，具体代码片段和调试过程大部分丢掉</li><li>每一层都在补上一层的问题，越叠越复杂但根本限制没变</li><li>记忆锁在 Claude Code 一个工具里，跨工具不通用</li></ul>
-<h3>memsearch 方案（Zilliz 开源）</h3>
+<h3 id="memsearch-方案-Zilliz-开源">memsearch 方案（Zilliz 开源）</h3>
 <ul><li><strong>核心思路</strong>：把记忆从 Agent 里抽出来放到独立持久层，Agent 来来去去记忆一直在</li><li><strong>存储</strong>：一天一个 Markdown 文件是 source of truth，Milvus 向量索引只是缓存层。索引丢了随时重建</li><li><strong>检索</strong>：混合搜索——语义向量抓相近内容 + BM25 抓精确关键词 + RRF 融合排序</li><li><strong>三层下探</strong>：L1 语义搜索返回摘要 → L2 用 chunk_hash 展开完整段落 → L3 拉原始对话记录。子 agent 自行判断需要下探到哪层</li><li><strong>跨 Agent 共享</strong>：支持 Claude Code / OpenClaw / OpenCode / Codex CLI 四个平台，共享同一套 Markdown 记忆和 Milvus collection</li><li><strong>零 token 开销</strong>：记忆召回跑在 fork 出来的子 agent 里，不往主会话塞工具定义</li><li><strong>项目地址</strong>：https://github.com/zilliztech/memsearch</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <ul><li>我们的知识库本身就是"记忆的持久层"，和 memsearch 的理念一致。能否把 memsearch 接入 OpenCode，让 Agent 在处理知识卡时自动积累项目记忆？</li><li>Claude Code 的"不信任自己记忆"原则，可以写进我们 Agent 的 System Prompt 里——先查文件再回答，减少幻觉</li></ul>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <ul><li>我们的 OpenCode Agent 体系目前没有跨会话记忆机制，这篇把 Claude Code 的记忆设计和局限讲得很透，可以作为我们设计记忆层的参考</li><li>memsearch 直接支持 OpenCode，两条命令就能装，值得尝试接入</li><li>"不信任自己的记忆"这个设计原则很实用——记忆只是提示，行动前先核实真实文件</li></ul>
-<h2>具体步骤</h2>
+<h2 id="具体步骤">具体步骤</h2>
 <ol><li>Claude Code 用户：<code>/plugin marketplace add zilliztech/memsearch</code> 然后 <code>plugin install memsearch</code></li><li>Python API：<code>uv tool install &quot;memsearch[onnx]&quot;</code></li><li>CLI 使用：<code>memsearch index ./memory</code> → <code>memsearch search &quot;关键词&quot;</code> → <code>memsearch expand &amp;lt;hash&amp;gt;</code></li><li>云端协作：Milvus 后端指向 Zilliz Cloud，多人多 Agent 共享项目记忆</li></ol>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li>适用：长期迭代的项目需要跨会话记忆、多人协作需要共享项目上下文、使用多个编码 Agent 需要记忆互通</li><li>不适用：短期一次性任务不需要记忆持久化、对数据隐私有严格要求不愿用向量数据库的场景</li></ul>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#01-claude-code-记忆拆解">01 Claude Code 记忆拆解</a></li><li><a href="#第一层claudemd用户写给-agent-的规矩">第一层：CLAUDE.md，用户写给 agent 的规矩</a></li><li><a href="#第二层auto-memoryagent-自己记笔记">第二层：Auto Memory，agent 自己记笔记</a></li><li><a href="#第三层auto-dream让-agent-做梦整理记忆">第三层：Auto Dream，让 agent 做梦整理记忆</a></li><li><a href="#第四层kairos泄露代码里还没上线的野心">第四层：KAIROS，泄露代码里还没上线的野心</a></li><li><a href="#02-这套体系的天花板在哪">02 这套体系的天花板在哪？</a></li><li><a href="#03-memsearch记忆应该比任何一个-agent-都活得更长">03 memsearch：记忆应该比任何一个 agent 都活得更长</a></li><li><a href="#安装两条命令搞定">安装：两条命令搞定</a></li><li><a href="#自动记忆全量记忆按需回忆">自动记忆，全量记忆，按需回忆</a></li><li><a href="#检索不只是向量搜索">检索：不只是向量搜索</a></li><li><a href="#l1语义搜索">L1：语义搜索</a></li><li><a href="#l2上下文展开">L2：上下文展开</a></li><li><a href="#l3原始对话">L3：原始对话</a></li><li><a href="#跨-agent-共享真正的永久记忆">跨 agent 共享：真正的永久记忆</a></li><li><a href="#给开发者的接口">给开发者的接口</a></li><li><a href="#尾声">尾声</a></li></ul>
 <p><img alt="图片" src="../../_assets/20260407-Claude-Code记忆系统拆解与memsearch方案/img-001-23d1ca9c.webp"></p>
 <p>Claude Code 源码泄露的事，大家应该都知道了。npm 包里多带了一个 <code>.map</code> 文件，512,000 行 TypeScript 就这么公开了。</p>
 <p>研究完他的源码后，我们的结论是：Claude Code 的记忆系统，比想象中初级。</p>
 <p>它确实做了不少工作，分了好几层，甚至搞了一个让 agent做梦的机制来整理记忆。听起来很高级。但扒开来看，本质上还是在一个 agent 的沙盒里打转，记忆出不去，也活不长。</p>
 <p>下面一层一层拆开来说。</p>
-<h3>01 Claude Code 记忆拆解</h3>
-<h3>第一层：CLAUDE.md，用户写给 agent 的规矩</h3>
+<h3 id="01-Claude-Code-记忆拆解">01 Claude Code 记忆拆解</h3>
+<h3 id="第一层-CLAUDE-md-用户写给-agent-的规矩">第一层：CLAUDE.md，用户写给 agent 的规矩</h3>
 <p><code>CLAUDE.md</code> 是一个 Markdown 文件，用户自己写，放在项目根目录下。内容可以是任何你想让 Claude 记住的规矩：代码风格约定、项目架构说明、测试命令、部署流程。这个大家用过的应该都比较熟悉了。</p>
 <p>每次会话开始时，Claude Code 会把这个文件完整加载进 context。文件越短，Claude 遵守得越好。</p>
 <p>它支持三个作用域：项目级的 <code>CLAUDE.md</code> 放在项目根目录，个人级的放在 <code>~/.claude/CLAUDE.md</code>，组织级的放在企业配置里。</p>
-<h3>第二层：Auto Memory，agent 自己记笔记</h3>
+<h3 id="第二层-Auto-Memory-agent-自己记笔记">第二层：Auto Memory，agent 自己记笔记</h3>
 <p>CLAUDE.md 解决了用户主动告诉 agent 的问题，但很多有价值的信息是在对话过程中冒出来的，用户不会专门去写。</p>
 <p>Auto Memory 就是干这个的：Claude 在工作中自己判断哪些信息值得记下来，写进一个独立的记忆目录里。</p>
 <p>Claude 会把值得记住的东西分成四类：user 类型记录用户的角色和偏好，feedback 类型记录用户的纠正和确认，project 类型记录项目相关的决策和背景，reference 类型记录外部资源的位置。</p>
@@ -450,20 +450,20 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 - [Auth rewrite](project_auth_rewrite.md) — 合规驱动，非技术债
 - [Bug tracker](reference_linear.md) — pipeline bug 看 Linear INGEST</code></pre>
 <p>这里有一个设计细节值得注意：Claude 被明确要求不要信任自己的记忆。泄露的系统提示词里写得很直白，大意是「记忆只是提示，行动前先去读真实文件做核实」。在模型幻觉率还在两位数的阶段，这种怀疑自己的策略反而很实用。</p>
-<h3>第三层：Auto Dream，让 agent 做梦整理记忆</h3>
+<h3 id="第三层-Auto-Dream-让-agent-做梦整理记忆">第三层：Auto Dream，让 agent 做梦整理记忆</h3>
 <p>记忆写入的问题解决了，但跑了几十次会话之后，<code>MEMORY.md</code> 越来越乱。</p>
 <p>矛盾的条目堆积起来就会出现：“昨天的bug”类似这样的表述写进记忆后，过一周就没人知道是哪天了。于是，已经被重构掉的函数还留在记忆里，文件越来越长，越来越脏。</p>
 <p>Auto Dream 模拟的是人脑在睡眠中做的事：整理和巩固记忆。</p>
 <p>它扫描现有记忆文件，翻阅历史会话记录，找到用户的反馈和反复提到的话题，然后做整合：把相对时间换成绝对日期，合并矛盾条目，剔除过时内容，最终把 <code>MEMORY.md</code> 控制在 200 行以内。</p>
 <p>触发条件两个同时满足：距离上次整合超过 24 小时，且积累了 5 次以上新会话。也可以手动输入“dream”触发。整个过程跑在后台的子 agent 里，不阻塞主会话。</p>
 <p><img alt="图片" src="../../_assets/20260407-Claude-Code记忆系统拆解与memsearch方案/img-002-20317afb.jpg"></p>
-<h3>第四层：KAIROS，泄露代码里还没上线的野心</h3>
+<h3 id="第四层-KAIROS-泄露代码里还没上线的野心">第四层：KAIROS，泄露代码里还没上线的野心</h3>
 <p>前面三个都是已经上线或正在灰度的功能。泄露的代码里还藏着一个更大的东西。</p>
 <p>KAIROS 在源码中出现了超过 150 次。这是一个后台守护进程模式，想把 Claude Code 从被动响应的工具变成主动观察的自治体。</p>
 <p>KAIROS 维护 append-only 的日志文件，持续记录观察、决策和行动。它在固定间隔收到 <code>&amp;lt;tick&amp;gt;</code> 信号，自行决定是该主动做点什么，还是保持安静。设计里有一个 15 秒的阻塞预算，任何会打断用户工作超过 15 秒的操作都会被推迟。</p>
 <p>KAIROS 内部整合了 <code>autoDream</code>，但走得更远。它不只在会话间隙做记忆整理，而是把整个观察-思考-行动的循环搬到了后台。代码里可以看到它的系统提示词开头：“# Dream: Memory Consolidation — You are performing a dream, a reflective pass over your memory files.”</p>
 <p>不过 KAIROS 目前被一个编译时 feature flag 控制，没有出现在任何公开版本里。更像是 Anthropic 对下一步方向的探索。</p>
-<h3>02 这套体系的天花板在哪？</h3>
+<h3 id="02-这套体系的天花板在哪">02 这套体系的天花板在哪？</h3>
 <p>回头看这四层，用过一段时间就会发现几个绕不过去的问题：</p>
 <ul><li><strong>200 行硬上限</strong>。<code>MEMORY.md</code> 最多 200 行，25KB。项目跑几个月，记忆就开始互相挤占，老的被新的顶掉。</li></ul>
 <ul><li><strong>只有 grep 检索</strong>。记忆的查找靠 grep 关键词匹配，没有语义理解。你记得讨论过“部署时端口冲突的问题”，但记忆里写的是“修改 docker-compose 的 port mapping”，grep 搜不到。</li></ul>
@@ -473,7 +473,7 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 <ul><li><strong>终究是短期记忆</strong>。不管做不做梦，本质还是会话粒度的东西。「上周讨论的 Redis 配置最后怎么处理的」「三个月前的 auth 重构到哪一步了」，这类长跨度的回溯基本无望。</li></ul>
 <p><img alt="图片" src="../../_assets/20260407-Claude-Code记忆系统拆解与memsearch方案/img-003-1c8b371d.jpg"></p>
 <p>这不是 Claude Code 的设计失误。单 agent、会话粒度、本地存储，架构走到这里，天花板就在这。</p>
-<h3>03 memsearch：记忆应该比任何一个 agent 都活得更长</h3>
+<h3 id="03-memsearch-记忆应该比任何一个-agent-都活得更长">03 memsearch：记忆应该比任何一个 agent 都活得更长</h3>
 <p>这是我们做 memsearch 的核心想法。</p>
 <p><img alt="图片" src="../../_assets/20260407-Claude-Code记忆系统拆解与memsearch方案/img-004-c8e1379c.png"></p>
 <p>agent 会换，工具会换，但你在项目里积累的知识不应该跟着消失。memsearch 把记忆从 agent 里抽出来，放到一个独立的持久层。agent 来来去去，记忆一直在。</p>
@@ -499,14 +499,14 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 └─────────────────────────────────────────┘</code></pre>
 <p>最上面是四个主流 agent 平台【Claude Code · OpenClaw · OpenCode · Codex】的插件，负责自动捕获对话。中间是 CLI 和 Python API，给开发者做自定义集成。底下是 Milvus 向量索引加 Markdown 持久存储。</p>
 <p>四个平台各自接入，但往下走都是同一套 core。</p>
-<h3>安装：两条命令搞定</h3>
+<h3 id="安装-两条命令搞定">安装：两条命令搞定</h3>
 <p>Claude Code 用户在 marketplace 里装就行：</p>
 <pre><code>/plugin marketplace add zilliztech/memsearch
 /plugin install memsearch</code></pre>
 <p>全程不需要配置任何东西。</p>
 <p>其他平台也一样简单。OpenClaw 一条命令：<code>openclaw plugins install clawhub:memsearch</code>。Python API 用 uv 或 pip：</p>
 <pre><code>uv tool install &quot;memsearch[onnx]&quot;</code></pre>
-<h3>自动记忆，全量记忆，按需回忆</h3>
+<h3 id="自动记忆-全量记忆-按需回忆">自动记忆，全量记忆，按需回忆</h3>
 <p>装好之后，memsearch 通过 shell hook 接入 agent 的生命周期。</p>
 <p><strong>自动记忆，全量记忆。</strong> 每轮对话结束时，对话被 Haiku 模型自动总结要点，被追加到当天的记忆Markdown文件，再异步向量化进索引。后台完成，用户无感。且不会漏任何对话轮次，历史所有操作都有记忆，永不遗忘。</p>
 <p><strong>记忆召回通过 skill 机制触发。</strong> memsearch 注册了一个 <code>memory-recall</code> skill，Claude 可以主动调用，也可以在判断用户问题需要历史上下文时被动触发。skill 跑在 fork 出来的子 agent 里（<code>context: fork</code>），不会把搜索工具的定义塞进主会话的 context，零 token 开销。</p>
@@ -520,12 +520,12 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
     └── 2026-04-01.md</code></pre>
 <p>一天一个 Markdown 文件。打开就能读，编辑器能直接改。想迁移？复制文件夹。想版本管理？git 跟踪。</p>
 <p>向量索引只是缓存层，Markdown 才是 source of truth。索引丢了随时重建。数据不会锁死在某个工具里。</p>
-<h3>检索：不只是向量搜索</h3>
+<h3 id="检索-不只是向量搜索">检索：不只是向量搜索</h3>
 <p>Claude Code 的记忆检索靠 grep。记忆少的时候够用，多了就不行了。</p>
 <p>memsearch 走混合搜索。语义向量抓相近的内容，BM25 抓精确关键词，RRF 做融合排序。</p>
 <p>你问「上周那个 Redis 超时怎么解决的」，语义搜索能理解意图。你说「搜一下 handleTimeout」，BM25 精确命中函数名。两条路互补。</p>
 <p>recall 被触发后，子 agent 内部会从 L1 往 L3 逐层下探。Claude 在每一层看到的东西大概是这样：</p>
-<h3>L1：语义搜索</h3>
+<h3 id="L1-语义搜索">L1：语义搜索</h3>
 <p>子 agent 先跑 <code>memsearch search</code>，从 Milvus 里召回最相关的结果：</p>
 <pre><code>┌─ L1 搜索结果 ─────────────────────────────────┐
 │                                                │
@@ -543,7 +543,7 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 │                                                │
 └────────────────────────────────────────────────┘</code></pre>
 <p>每条结果带 chunk_hash、相关性分数、来源文件，内容截断到 200 字。大多数时候到这一层就够了。</p>
-<h3>L2：上下文展开</h3>
+<h3 id="L2-上下文展开">L2：上下文展开</h3>
 <p>如果 L1 的预览不够用，子 agent 拿 chunk_hash 跑 <code>memsearch expand a3f8c1</code>，拉出完整段落：</p>
 <pre><code>┌─ L2 展开结果 ─────────────────────────────────┐
 │                                                │
@@ -561,7 +561,7 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 │  [source: memory/2026-03-28.md  lines: 42-55]  │
 └────────────────────────────────────────────────┘</code></pre>
 <p>不用截断，完整上下文，所有细节都在。</p>
-<h3>L3：原始对话</h3>
+<h3 id="L3-原始对话">L3：原始对话</h3>
 <p>极少数情况下需要看当时到底聊了什么。子 agent 跑 <code>memsearch transcript &amp;lt;path&amp;gt; --turn &amp;lt;uuid&amp;gt;</code>，拉出原始对话记录：</p>
 <pre><code>┌─ L3 原始对话 ─────────────────────────────────┐
 │                                                │
@@ -581,7 +581,7 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 └────────────────────────────────────────────────┘</code></pre>
 <p>用户的提问、agent 的回复、调用了哪些工具，一个不漏。</p>
 <p>三层从轻到重，子 agent 自己判断需要下探到哪一层，最后把整理好的结果返回主会话。省 token，不丢信息。</p>
-<h3>跨 agent 共享：真正的永久记忆</h3>
+<h3 id="跨-agent-共享-真正的永久记忆">跨 agent 共享：真正的永久记忆</h3>
 <p>这是 memsearch 和 Claude Code 记忆最本质的区别。</p>
 <p>Claude Code 的记忆锁在自己一个工具里。你用 OpenCode、OpenClaw、Codex CLI，得各自从零开始。<code>MEMORY.md</code> 存在本地，绑定单个用户、单个 agent，天然就是一座孤岛。</p>
 <p>memsearch 目前支持四个主流 coding agent：Claude Code、OpenClaw、OpenCode、Codex CLI。它们共享同一套 Markdown 记忆格式，和同一个Milvus collection。</p>
@@ -591,7 +591,7 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 <p>第一个：你在 Claude Code 里花了一下午搞清楚项目的部署流程，踩了几个坑。对话被自动总结、索引。第二天切到 OpenCode 继续开发，问「昨天部署时那个端口冲突怎么解决的」。OpenCode 直接搜到昨天在 Claude Code 里的记忆，给你正确答案。</p>
 <p>第二个：团队协作。把 Milvus 后端指向 Zilliz Cloud，多个开发者在不同机器上、用不同 agent，读写同一份项目记忆。新人加入，不用翻几个月的 Slack 和文档，agent 自己就知道项目的历史上下文。</p>
 <p>这些事情，Claude Code 的记忆体系做不到。</p>
-<h3>给开发者的接口</h3>
+<h3 id="给开发者的接口">给开发者的接口</h3>
 <p>如果你不只是用现成的 agent 插件，而是自己搭 agent 工具，memsearch 提供了 CLI 和 Python API 两种方式。</p>
 <p>CLI 可以直接在终端操作记忆：</p>
 <pre><code># 索引 markdown 文件
@@ -614,7 +614,7 @@ await mem.compact()                        # 压缩老记忆
 await mem.watch()                          # 文件变动自动索引</code></pre>
 <p>底层用 Milvus 做向量数据库。本地跑用 Milvus Lite，零配置。云端协作接 Zilliz Cloud，有免费层。自托管 Docker 也行。</p>
 <p>嵌入模型默认用 ONNX，CPU 跑，不用 GPU 不用调 API。想换 OpenAI 或 Ollama 随时切。</p>
-<h3>尾声</h3>
+<h3 id="尾声">尾声</h3>
 <p>Claude Code 的记忆设计有它的价值。KAIROS 和 autoDream 的思路也值得关注。</p>
 <p>但单 agent 内部的记忆优化，走到头也就是这样了。记忆应该比任何一个 agent 都活得更长。</p>
 <p>项目地址：https://github.com/zilliztech/memsearch</p>
@@ -632,7 +632,7 @@ Zilliz Algorithm Engineer
 养虾实战教程：我用OpenClaw做了个能盯盘，也能深度复盘的投资agent</code></pre>
 <p><img alt="图片" src="../../_assets/20260407-Claude-Code记忆系统拆解与memsearch方案/img-008-fb1f94a0.webp"></p>
 <p><img alt="图片" src="../../_assets/20260407-Claude-Code记忆系统拆解与memsearch方案/img-009-db83ade0.webp"></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

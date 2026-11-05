@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Anthropic：子Agent拆多了，为什么反而更慢</h1><div class="meta">📅 2026-11-02 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Y9wCwP24aFWN1jRs1rhJXQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261102-Anthropic子Agent拆多了为什么反而更慢.md</div><div class="md"><h1>Anthropic：子Agent拆多了，为什么反而更慢</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">14</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Anthropic-子Agent拆多了-为什么反而更慢">Anthropic：子Agent拆多了，为什么反而更慢</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#交接的代价">交接的代价</a><a class="tl l3" href="#主循环接手">主循环接手</a><a class="tl l3" href="#独立上下文">独立上下文</a><a class="tl l3" href="#并行与协调">并行与协调</a><a class="tl l3" href="#合并后的遗漏">合并后的遗漏</a><a class="tl l3" href="#参考资料">参考资料</a><a class="tl l3" href="#相关阅读">相关阅读：</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Anthropic：子Agent拆多了，为什么反而更慢</h1><div class="meta">📅 2026-11-02 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Y9wCwP24aFWN1jRs1rhJXQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261102-Anthropic子Agent拆多了为什么反而更慢.md</div><div class="md"><h1 id="Anthropic-子Agent拆多了-为什么反而更慢">Anthropic：子Agent拆多了，为什么反而更慢</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-11-02 抓取状态：成功 原文字符：9253｜配图：3 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>架构师（JiaGouX）解读 Anthropic 10-22 文章的企业案例：客服系统放十来个专家子 Agent，用户等待变长、回答口吻难统一；Applied AI 团队发现原交子 Agent 的工作改由一个配 Skills 的主 Agent 完成后，质量提高、单次任务成本与延迟常有下降。为什么拆完反而更慢——根因在交接代价（各团队各做 Agent、平台再加编排层，每个请求都要跨团队交接）；Anthropic 的做法：部分子 Agent 并回主循环，业务步骤与规则改由 Skills 承载、数据查询与操作交给工具，省下交接成本。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#交接的代价">交接的代价</a></li><li><a href="#主循环接手">主循环接手</a></li><li><a href="#独立上下文">独立上下文</a></li><li><a href="#并行与协调">并行与协调</a></li><li><a href="#合并后的遗漏">合并后的遗漏</a></li><li><a href="#参考资料">参考资料</a></li><li><a href="#相关阅读">相关阅读：</a></li></ul>
 <p>架构师（JiaGouX）</p>
 <p>我们都是架构师！ 架构未来，你来不来？</p>
@@ -416,7 +416,7 @@
 <p>这是 Anthropic 在 10 月 22 日文章中提到的企业案例。它的 Applied AI 团队在多个企业部署中发现，一些原来交给子 Agent 的工作，改由一个配备 Skills 的主 Agent 完成后，回答质量提高了，单次任务的成本和延迟也常有下降。</p>
 <p>按业务拆分，本来是为了让每个 Agent 专心处理一类问题。为什么拆完以后，反而要花更多时间，才能把一件事做完？</p>
 <p>Anthropic 给出的做法，是把部分子 Agent 并回主循环，原来的业务步骤和规则改由 Skills 承载，数据查询和操作交给工具。这样省下了交接，但专家原来做的工作，主 Agent 还得接着做。</p>
-<h3>交接的代价</h3>
+<h3 id="交接的代价">交接的代价</h3>
 <p>不同团队各自维护一项业务，各做一个 Agent，再由平台团队加一层编排，接到同一个用户入口。这是 Anthropic 在企业里见到的一种做法。</p>
 <p>每个团队都能维护自己的提示词和工具。但一个用户请求进来以后，可能要经过好几个团队的 Agent。</p>
 <p>主 Agent 先读用户的问题，再把任务交给专家。专家有另一份上下文，并不自动知道前面聊过什么：用户加了哪些条件，已经查到哪些数据，哪些办法试过但没用，都需要主 Agent 在委派时说明。</p>
@@ -430,7 +430,7 @@
 <p><img alt="按职责拆分与按上下文拆分的区别" src="../../_assets/Anthropic子Agent拆多了为什么反而更慢/img-001-21204471.png"></p>
 <p>按职责拆分与按上下文拆分的区别</p>
 <p>图 1｜上半图把写功能、写测试、审查分给三个 Agent；下半图让同一个 Agent 写功能和测试，再交给验证器运行测试。写测试需要理解实现，运行测试可以只返回结果。来源：Anthropic 原文。</p>
-<h3>主循环接手</h3>
+<h3 id="主循环接手">主循环接手</h3>
 <p>两个专家可以合成一个。如果继续把专家并回主 Agent，它原来掌握的业务流程又该放在哪里？</p>
 <p>Anthropic 的做法是，把原来写在专家提示词里的<strong>步骤、规则和判断方法整理成 Skill</strong>，把查询数据、调用 API、执行操作的部分交给工具。工具包把这一步叫作 <code>fold</code>。</p>
 <p>原来是主 Agent 找专家，专家读自己的提示词、调用工具，再交回答案。改完以后，主 Agent 读取对应 Skill，按其中的业务步骤调用工具。业务团队继续维护这些步骤和规则，无须为每一项业务再运行一个模型循环。</p>
@@ -443,7 +443,7 @@
 <p>权限检查则留在工具内部。这是 Anthropic 建议保留的一层程序约束。以查询订单为例，模型选中查询工具后，工具核对当前用户能否访问这笔订单；没有权限就返回拒绝说明。同一个 Agent 因而可以服务权限不同的用户。</p>
 <p>包括之前的 <a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409948&amp;idx=1&amp;sn=cfe8a886980e4377bcf5dfaea6369ed2&amp;scene=21#wechat_redirect">Graph</a> 、<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410721&amp;idx=1&amp;sn=3383bfdac19b842f78da869479d8bd7b&amp;scene=21#wechat_redirect">Harness</a> 讨论，讨论过另一层分工：稳定的流程依赖可以写进 Graph，模型在 Loop 中根据查询结果决定下一步，Harness 负责执行工具、记录结果，并控制预算和写操作。</p>
 <p>即便客服业务只用一个 Agent，也可以由程序规定：授权通过后才查询订单，查询超时后重试，超过次数就返回失败。<strong>减少 Agent，不等于取消业务流程和程序检查。</strong></p>
-<h3>独立上下文</h3>
+<h3 id="独立上下文">独立上下文</h3>
 <p>按需读取解决了会话开始时加载多少的问题。任务开始以后，仍然可能读进来一大批资料。</p>
 <p>用户询问 Claude Code 的配置或功能时，Claude Code Guide 子 Agent 会搜索相关文档，再把答案交给主 Agent。Guide 翻过的页面、检索中的中间结果，留在自己的上下文里。主 Agent 拿到答案后继续对话，无须在后续每一轮都带上整批文档。</p>
 <p>Anthropic 把这种调用方式称为 <code>as-tool</code>。主 Agent 交代任务，子 Agent 用自己的上下文完成工作，再返回结果；<strong>与用户持续对话、判断下一步和组织最终答复的，仍然是主 Agent。</strong></p>
@@ -457,7 +457,7 @@
 <p>同一份专业知识写成 Skill 后，既能由主 Agent 读取，也能交给子 Agent。频繁依赖当前对话，会增加交接的负担；<strong>任务能单独说清，又需要读取大量资料，独立上下文就有了用处。</strong></p>
 <p>还有些子 Agent 必须直接向用户提问，并根据回答继续处理。Anthropic 在这种情况下建议完整交接，也就是 <code>handoff</code>，由子 Agent 接管这一段对话。OpenAI Agents SDK 也区分了两种方式：作为工具调用时，结果交回主 Agent；完整交接后，接下来的对话由接手的 Agent 处理。</p>
 <p>工具包将必须自行与用户多轮对话，以及由外部机构控制、团队无法改造的子 Agent 列为 <code>keep</code>，继续保留。</p>
-<h3>并行与协调</h3>
+<h3 id="并行与协调">并行与协调</h3>
 <p>保留子 Agent 还有一个理由：把几项工作分出去，同时做，能不能让用户少等一会儿？</p>
 <p>Anthropic 的 Research 系统就是这样工作。主 Agent 拆解研究问题，多个子 Agent 沿不同方向搜索，最后汇总。在它公布的评测中，多 Agent 系统的研究任务表现相对单 Agent 提升了 90.2%，衡量的是完成研究的质量，速度收益还要另外看。</p>
 <p>Anthropic 还报告，多 Agent 系统的 token 使用量约为普通聊天的 15 倍。这里的消耗以普通聊天为基准，与前面的单 Agent 质量对比口径不同。</p>
@@ -467,7 +467,7 @@
 <p><strong>同时开工省下的时间，可能又花在了等待、合并冲突和重新验证上。</strong></p>
 <p>Cognition 在软件工程 Agent 上采用较多的一种做法，是让一个主 Agent 修改代码，其他 Agent 审查并提供建议。审查用的 Agent 在新的上下文里找问题，修改则由主 Agent 完成，减少多个 Agent 同时写入造成的冲突。</p>
 <p>搜索结果可以最后汇总，互相影响的代码修改却需要边做边协调。并行能省多少时间，也取决于后续要花多少时间处理这些相互影响。</p>
-<h3>合并后的遗漏</h3>
+<h3 id="合并后的遗漏">合并后的遗漏</h3>
 <p>除了企业中的观察，Anthropic 还用一个客服示例测试了合并的效果。把一个子 Agent 并入另一个之后，回复变快了，一个原本能通过的流程却失败了。</p>
 <p>主 Agent 拿着订单查询工具，自己给出了答复，没有再向配送专家确认送达日期。用户需要知道何时送达，<strong>系统却跳过了查日期这一步。</strong></p>
 <p>这个问题在两次运行中只出现了一次。只跑一遍，或者只看平均延迟，都可能看不到它。</p>
@@ -476,7 +476,7 @@
 <p>假如继续把配送专家改成 Skill 和工具，执行记录里的对应步骤就变了：过去是主 Agent 找到配送专家，之后是主 Agent 读取配送规则、调用工具，拿到送达日期。最终都可能生成一句答复，执行记录能进一步说明，中间有没有完成这些工作。</p>
 <p>这也解释了 Anthropic 为什么建议分开维护两类评测。业务团队维护各自的 Skills、工具和测试，一个小团队负责系统提示词和端到端评测。订单工具查得到数据，配送工具也能返回日期，只能说明各自能工作。端到端评测覆盖从接到请求到给出答复的过程，能查出工具各自正常、整条调用却漏了一步的情况。</p>
 <p>对那个客服请求来说，合并前后都需要一个经过确认的送达日期。交接可以少一次，查日期这一步还得完成。</p>
-<h3>参考资料</h3>
+<h3 id="参考资料">参考资料</h3>
 <ol><li>Anthropic，Building agents: When to fold subagents into your main agent loop（https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop）</li></ol>
 <ol><li>Anthropic，Building multi-agent systems: When and how to use them（https://claude.com/resources/articles/building-multi-agent-systems-when-and-how-to-use-them）</li></ol>
 <ol><li>Anthropic，Single Agent Loop Kit（https://github.com/anthropics/single-agent-loop-kit）</li></ol>
@@ -496,7 +496,7 @@
 <p>如有想了解学习的技术点，请留言给若飞安排分享</p>
 <p>因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</p>
 <p>·END·</p>
-<h3>相关阅读：</h3>
+<h3 id="相关阅读">相关阅读：</h3>
 <ul><li>AI Agent 核心架构详解</li><li>Pi 的三个“动态发现”：工具搜索、Skill、MCP 各自怎么找到</li><li>从一次 LLM 调用到完整 Harness：系统理解 Agent 如何工作</li><li>Uber 的合同审阅 Agent 工程实践和拆解</li><li>Agent、Harness、Loop 到底怎么分？一条运行链看清楚</li><li>输出结果不等于完成任务：Agent 最容易忽略的一环</li></ul>
 <p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p>
 <p>架构师</p>
@@ -506,7 +506,7 @@
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>
 <p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

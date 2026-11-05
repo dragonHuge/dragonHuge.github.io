@@ -395,28 +395,28 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</h1><div class="meta">📅 2026-05-12 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/jBOGCtoLytPCjR9EQrRhAQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260512-最小必需Harness实验-工具调用上限与auto-rescue提交.md</div><div class="md"><h1>最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">13</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#最小必需-Harness-实验-工具调用上限-auto-rescue-commit-smart-friend-routing">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#具体步骤">具体步骤</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文-猕猴桃-探索AGI">原文：猕猴桃（探索AGI）</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#准备工作">准备工作</a><a class="tl l3" href="#写在最后">写在最后</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</h1><div class="meta">📅 2026-05-12 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/jBOGCtoLytPCjR9EQrRhAQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260512-最小必需Harness实验-工具调用上限与auto-rescue提交.md</div><div class="md"><h1 id="最小必需-Harness-实验-工具调用上限-auto-rescue-commit-smart-friend-routing">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-05-12 抓取状态：成功 原文字符：6022｜配图：12 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>模型变强后 Harness 会缩小，但到底哪些护栏是真正必需的、哪些是多余甚至有害的？用实验数据给出答案。</p>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ol><li><strong>两个护栏就够</strong>：裸跑复杂任务（us-003，12 条验收标准），flash 做 267 次工具调用三轮超时——它实际写对了代码，但不知道自己写对了，不断改出新 bug。加两个护栏后 151s 通过：</li><ul><li>工具调用上限（80 次）</li><li>auto-rescue commit：被 kill 前自动执行 <code>git add -A &amp;amp;&amp;amp; git commit</code>，防止代码写完但丢失</li></ul></ol>
 <ol><li><strong>反馈质量 &gt; 思考深度</strong>：Agent 强化版 flash-2603 同等护栏下反而失败——根因是 judge 给 worker 的反馈缺少详细验证堆栈。加一行 verbose 信息，一轮通过。低推理模式（thinking low）下 flash-2603 跑出全场最快：短输出 + 聚焦 + 好反馈直接替代内部推理</li></ol>
 <ol><li><strong>错误 Harness 比没有更危险</strong>：给 flash-2603 加结构化 Planning Prompt（先读/写计划/再执行），系统反而钻了 judge 漏洞，不做任何代码更新。Cognition 同论：最大失败模式是给了不该给的约束或漏了该给的信号</li></ol>
 <ol><li><strong>Worker/Judge 双模型路由（smart friend routing）</strong>：脑（规划+Judge）用 step-router-v1，手（执行）用 flash-2603 → 耗时减半，token 约降至 1/3。Scale AI 数据：Harness 对 SWE-bench 贡献 5-15 个百分点，价值越来越集中在"模型自己做不到的事"（物理约束/确定性验证）</li></ol>
 <ol><li><strong>核心结论</strong>：Harness 不是模型的拐杖，是模型的杠杆。随模型变强 Harness 会缩小，但缩小到的地方（确定性验证、物理约束、防代码丢失）才是真正的护城河</li></ol>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充——可以对照自己的 Harness 设计，想想：① 现有护栏里哪些是多余的/有害的？② judge 给 worker 的反馈是否足够详细？）</p>
 <hr>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <p>自己在搭 coding agent 或任何 Agent 系统时，不用猜哪些护栏有用——本文给出了实验对照：工具调用上限 + 代码救援 commit 是最低成本、最高回报的两个护栏，反馈质量的投入回报比远高于堆推理深度。</p>
-<h2>具体步骤</h2>
+<h2 id="具体步骤">具体步骤</h2>
 <ol><li>确认任务复杂度：简单/中等任务不需要额外护栏，复杂任务（多轮迭代、12+ 验收标准）才需要</li><li>加护栏1：在 Agent 框架层设置工具调用上限（实测 80 次对复杂任务够用）</li><li>加护栏2：在 worker 被 kill 的 hook 里插入 <code>git add -A &amp;amp;&amp;amp; git commit -m &quot;auto-rescue&quot;</code></li><li>检查 judge→worker 的反馈是否包含完整验证堆栈（错误行号、失败用例、具体原因）</li><li>考虑 Worker/Judge 分离：执行用小快模型，规划和判断用大模型，先在慢但稳的基线上验证，再优化速度</li></ol>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li>适用：coding agent、复杂多步任务、模型频繁超时或陷入死循环的场景</li><li>不适用：简单单轮任务（Boris 说的"100 行代码"场景）、对话型 Agent（工具调用上限意义不大）</li></ul>
-<h2>原文：猕猴桃（探索AGI）</h2>
+<h2 id="原文-猕猴桃-探索AGI">原文：猕猴桃（探索AGI）</h2>
 <p>Claude Code之父Boris在红杉 2026 AI Ascent 上说：</p>
 <p>一年后，Claude Code 可能只剩 100 行代码。模型足够聪明时，你不需要那么多脚手架。</p>
 <p>OpenAI 前不久的博客也说过： "Scaffolding is coping, not scaling."</p>
@@ -462,8 +462,8 @@
 <p><strong>写在最后</strong></p>
 <p>从前面测试来看，像 step-3.5-flash 这种 200b 左右的模型，完全可以扛住日常高频的 coding 任务，速度极快，30 次调用搞定别人 50+ 次的事。</p>
 <p>甚至，step-3.5-flash-2603 配了简单的护栏，在低推理模式下，跑出了最好的表现。 实际体验下来，日常用 step-3.5-flash 做 worker，复杂规划交给 step-router-v1 动态路由到 deepseek-v4-pro，这种分工方式配上 harness，token 能省到很夸张。</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#准备工作">准备工作</a></li><li><a href="#写在最后">写在最后</a></li></ul>
 <p>Claude Code之父Boris在红杉 2026 AI Ascent 上说：</p>
 <p>一年后，Claude Code 可能只剩 100 行代码。模型足够聪明时，你不需要那么多脚手架。</p>
@@ -474,7 +474,7 @@
 <p>这么多模型，到底哪些 harness 是必需的？拿掉什么会翻车？加什么能救命？</p>
 <p>是不是一定要思考程度拉满？ 结果发现，做好关键harness，小模型同样可以做到好效果&amp;省钱。</p>
 <p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-001-d0abeea6.png"></p>
-<h3>准备工作</h3>
+<h3 id="准备工作">准备工作</h3>
 <p>这个月龙虾的订阅，买的是阶跃星辰的Step Plan（几个月的订阅比较下来，最后发现还是喜欢这种文本、语音、图像 全模态all in one的订阅。）</p>
 <p>而且这个订阅，关于文本模型就有好几种： step-3.5-flash（196B MoE，11B 激活，高速推理）、step-3.5-flash-2603（基于 flash 做了 agent 场景强化）、step-router-v1（自动在 deepseek-v4-pro 和 step-3.5-flash 之间路由）。不同尺寸，有agent特调版本，可以指定不同思考深度，非常适合来做这个验证。</p>
 <p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-002-b26a339c.png"></p>
@@ -519,13 +519,13 @@
 <p>更关键的是，除了耗时变成一半，token消耗可能只有1/3。 Worker / Judge 用不同模型，在cognition的博客里边称为 “smart friend routing”。</p>
 <p>Scale AI的数据说，harness 对 SWE-bench 分数贡献在 5-15 个百分点。而且这些百分点会越来越集中在“模型无法自己做到的事”，比如物理约束、确定性验证... 所以这可能才是harness今天爆火主要原因吧。</p>
 <p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-012-728cec72.png"></p>
-<h3>写在最后</h3>
+<h3 id="写在最后">写在最后</h3>
 <p>从前面测试来看，像 step-3.5-flash 这种 200b 左右的模型，完全可以扛住日常高频的 coding 任务，速度极快，30 次调用搞定别人 50+ 次的事。</p>
 <p>甚至，step-3.5-flash-2603 配了简单的护栏，在低推理模式下，跑出了最好的表现。 实际体验下来，日常用 step-3.5-flash 做 worker，复杂规划交给 step-router-v1 动态路由到 deepseek-v4-pro，这种分工方式配上 harness，token 能省到很夸张。</p>
 <p>如果你在做 Agent 或者 AI 编码相关的事情，Step Plan 的订阅制对高频调用场景很友好。OpenClaw、Claude Code、Cursor、Cline 这些主流工具都能直接接。我自己这个月用下来，跑实验的成本比之前低了不少，速度反而更快。</p>
 <p>推荐亲自跑一次，比读这篇文章更有价值。</p>
 <p>Step Plan 文档，https://platform.stepfun.com/docs/zh/step-plan/overview</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

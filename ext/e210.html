@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</h1><div class="meta">📅 2026-09-17 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/IG1lcRRtIhRePZfLrLZl_g" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260917-Google-Agentic-Skill综述六元组九阶段.md</div><div class="md"><h1>来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">16</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#来自-Google-的-Agentic-Skill-综述-Skill-六元组与九阶段生命周期">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#综述先把边界划清楚了">综述先把边界划清楚了</a><a class="tl l3" href="#Google-的工程实践-Skill-是一份要持续维护的过程资产">Google 的工程实践：Skill 是一份要持续维护的过程资产</a><a class="tl l3" href="#九阶段生命周期-一条还没完全闭合的链路">九阶段生命周期：一条还没完全闭合的链路</a><a class="tl l3" href="#综述里几个容易被忽略的细节">综述里几个容易被忽略的细节</a><a class="tl l3" href="#WikiSkill-和-SKILL-state-补全生命周期的两块拼图">WikiSkill 和 SKILL.state：补全生命周期的两块拼图</a><a class="tl l3" href="#带回项目里的六个问题">带回项目里的六个问题</a><a class="tl l3" href="#以后再画架构图">以后再画架构图</a><a class="tl l3" href="#参考资料">参考资料</a><a class="tl l3" href="#相关阅读">相关阅读：</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</h1><div class="meta">📅 2026-09-17 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/IG1lcRRtIhRePZfLrLZl_g" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260917-Google-Agentic-Skill综述六元组九阶段.md</div><div class="md"><h1 id="来自-Google-的-Agentic-Skill-综述-Skill-六元组与九阶段生命周期">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-17 抓取状态：成功 原文字符：7454｜配图：4 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>综述给出 Skill 形式化定义六元组：激活条件(A)、过程指令(I)、适用约束(C)、工具接口(T)、执行策略(π)、预期效果(E)，可直接当检查清单用。</li><li>三条判定标准：封装模块化（可独立编写、版本化、验证、更新，不改模型权重）、晚绑定动态加载（按需加载而非常驻上下文）、过程性状态转换（编码怎么做，含错误处理与控制流）。</li><li>只有说明缺触发与效果更像 Prompt，只有接口缺过程更像 Tool，只存历史缺执行逻辑更像 Memory。</li><li>安全约束形式化：Skill 激活当且仅当其声明工具集是当前上下文允许工具集的子集，否则即权限提升。</li><li>Google 工程实践：Skill 是有统一目录、自动检查、提交时评测、每周质量检查并有人长期负责的过程资产；评测用准确率与效率 2×2 矩阵，兼顾 Token 与耗时。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ol><li><strong>形式化定义（六元组）</strong>：A 激活条件 / I 过程指令 / C 适用约束 / T 工具接口 / π 执行策略 / E 预期效果——缺哪块就落入 Prompt、Tool、Memory 的近似物。</li><li><strong>判定标准</strong>：模块化封装、晚绑定加载、过程性状态转换，三者齐备才构成真正的 Skill。</li><li><strong>安全边界</strong>：激活 ⇔ 声明工具集 ⊆ 当前允许工具集，把 Skill 权限问题变成可判定的集合包含关系。</li><li><strong>组织实践</strong>：Repo Maintainer 维护共同规则，Skill Owner 随产品/API/评测变化维护单份 Skill；架构原则优先引用远程 MCP 工具，CLI 与 API 只作兜底；发布前内部构建验证，达标后自动脱敏导出到 GitHub。</li><li><strong>生命周期</strong>：九阶段覆盖经验提炼、知识长期保存、Skill 路由、状态推进、权限收口、结果验证与失败恢复。</li></ol>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>写/审自有 Skill 时按六元组逐项自检，尤其补齐激活条件与预期效果，避免退化成 Prompt。</li><li>给 Skill 加评测时采用"准确率 × 效率"二维矩阵，同时盯 Token 与耗时，防止单指标对抗性优化。</li></ul>
 <p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#综述先把边界划清楚了">综述先把边界划清楚了</a></li><li><a href="#google-的工程实践skill-是一份要持续维护的过程资产">Google 的工程实践：Skill 是一份要持续维护的过程资产</a></li><li><a href="#九阶段生命周期一条还没完全闭合的链路">九阶段生命周期：一条还没完全闭合的链路</a></li><li><a href="#综述里几个容易被忽略的细节">综述里几个容易被忽略的细节</a></li><li><a href="#wikiskill-和-skillstate补全生命周期的两块拼图">WikiSkill 和 SKILL.state：补全生命周期的两块拼图</a></li><li><a href="#带回项目里的六个问题">带回项目里的六个问题</a></li><li><a href="#以后再画架构图">以后再画架构图</a></li><li><a href="#参考资料">参考资料</a></li><li><a href="#相关阅读">相关阅读：</a></li></ul>
 <p>架构师（JiaGouX）</p>
 <p>我们都是架构师！ 架构未来，你来不来？</p>
@@ -416,7 +416,7 @@
 <p>Google 最近公开的 Agent Skills 生产流程，和一篇由 Google 团队参与完成的 Agentic Skill 系统综述，恰好从两个方向回应了这个落差。一份是工程复盘，讲 Skill 怎么生产、测试和维护；一份是学术框架，把 Skill 拆成六元组和九阶段生命周期，试着把发现、路由、执行、评估和安全放进同一张图里。</p>
 <p>一份来自工程线，一份来自研究线。放在同一个问题下看，它们其实都在回答：<strong>一份做事方法，怎样才算真正进入了 Agent 的运行时。</strong></p>
 <hr>
-<h3>综述先把边界划清楚了</h3>
+<h3 id="综述先把边界划清楚了">综述先把边界划清楚了</h3>
 <p>这篇综述做的第一件事，是给 Skill 一个形式化定义。</p>
 <p>六元组：激活条件（A）、过程指令（I）、适用约束（C）、工具接口（T）、执行策略（π）和预期效果（E）。这个形式未必需要原样搬进每个项目，但它提供了一个检查清单：只有说明、没有触发和效果，更接近 Prompt；只有接口、没有过程，更接近 Tool；只保存历史、没有执行逻辑，则更接近 Memory。</p>
 <p>这篇综述给了三条判定标准：</p>
@@ -429,7 +429,7 @@
 <p>用这三条标准去过滤，很多模糊地带就清楚了。一段全局 JSON 格式指令不是 Skill，因为它没有模块化和按需加载；一个搜索 API 不是 Skill，因为它没有过程编排；但一个附带超时重试、缓存降级和 DOM 解析逻辑的 API 封装，就是综述所说的"工具执行技能"。一段对话记录也不是 Skill，因为它不包含执行逻辑。</p>
 <p>综述还给出了安全约束的形式化表述：Skill 激活当且仅当其声明的工具集是当前上下文允许工具集的子集，否则即为权限提升。这个定义把"Skill 能不能用某个工具"从口头约定变成了可检查的条件。</p>
 <hr>
-<h3>Google 的工程实践：Skill 是一份要持续维护的过程资产</h3>
+<h3 id="Google-的工程实践-Skill-是一份要持续维护的过程资产">Google 的工程实践：Skill 是一份要持续维护的过程资产</h3>
 <p>综述回答了"到底是什么"，Google 的工程实践则展示了"怎么做"。</p>
 <p>Google 的 Skill 不是谁写完谁提交的孤立文档。它有统一目录、自动检查、提交时评测和每周质量检查，还要有人长期负责。Repo Maintainer 维护仓库的共同规则，Skill Owner 负责某一份 Skill 随产品、API 和评测结果一起变化。</p>
 <p>这件事听起来像常规软件工程，但对 Skill 尤其重要。普通文档过期，最多让人多查几页；过期的 Skill 可能让 Agent 直接走错工具、漏掉一个前置条件，甚至执行一个已经不适用的流程。</p>
@@ -438,7 +438,7 @@
 <p>评测不只看答案对不对。完成任务用了多少 Token、花了多长时间、这种收益在不同运行环境里是否成立，都在考察范围内。Google 用准确率和效率两个维度打出 2×2 矩阵来判断一个 Skill 到底有没有带来提升。一个 Skill 如果让结果看起来更完整，却让调用成本和失败重试一起上升，未必是改进。</p>
 <p>从工程角度看，<strong>Skill 更像一份需要持续维护的过程资产，而不是一次性提示词。</strong> Owner、版本、测试样例和淘汰机制，都是这个判断的自然推论。</p>
 <hr>
-<h3>九阶段生命周期：一条还没完全闭合的链路</h3>
+<h3 id="九阶段生命周期-一条还没完全闭合的链路">九阶段生命周期：一条还没完全闭合的链路</h3>
 <p>综述把 Skill 的完整生命分成九个阶段：自主发现、编写与表示、记忆存储、动态检索与路由、组合与编排、执行与修复、终身适应、经验评估、安全治理。</p>
 <p>Google 的工程实践覆盖了其中的大部分环节，但在"安全治理"和"终身适应"上还在演进。把它们压缩成运行时视角，这条链路可以写成：</p>
 <blockquote><p>发现与路由 → 按需加载 → 受限执行 → 状态更新 → 结果验证 → 版本治理</p></blockquote>
@@ -449,13 +449,13 @@
 <p>Karpathy 谈 context engineering 时也说过类似的话：工业级 LLM 应用的难点不只是写一个 prompt，而是把任务描述、资料、工具、状态、历史和压缩结果，恰当地装进下一步的上下文。Simon Willison 在讨论 Claude Skills 时补了一句：Skills 的意义不在于给模型更多文本，而在于把"什么时候需要什么"从临时判断变成了可复用的配置。</p>
 <p><strong>Skill 是 Context Engineering 的一个可版本化载体，但它不能替代 Context System，也不能替代 Harness。</strong> 这也解释了为什么最近反复看到两条看似相反的路线：一条强调 Markdown、文件和按需检索，另一条强调结构化状态、事件流和严格的执行协议。它们并不是在争论"文本好还是结构好"，而是在处理不同生命周期的信息。经验需要人能读、能改、能审查；当前状态需要机器能校验、能合并、能恢复；执行证据需要留档，临时推理可以过期。</p>
 <hr>
-<h3>综述里几个容易被忽略的细节</h3>
+<h3 id="综述里几个容易被忽略的细节">综述里几个容易被忽略的细节</h3>
 <p>这份综述里还有几处容易被略过的内容，这里挑三个。</p>
 <p><strong>安全不是附加章节，而是贯穿全生命周期的问题。</strong> 综述指出，自然语言指令本身就是容易被注入的入口。恶意 Skill 可以携带后门、窃取凭证、绕过护栏，而且风险会穿过多个生命周期阶段。防御体系对应三层：准入前静态审计、运行时护栏、市场治理（加密溯源签名）。现实是，Skill 在调用前无法被完全验证，这正是安全问题难以一次解决的原因。</p>
 <p><strong>Skill 库也会产生技术债。</strong> 综述提到了 SkillOps 的五维健康度治理：剪除低价值 Skill、偿还"技能技术债"。触发描述冲突、重复流程、过期链接、失效脚本、无人维护的 Owner、越来越长的参考目录，这些问题和代码仓库的技术债没有本质区别。数量增长本身不是能力增长，能不能找到、能不能执行、能不能证明有效，才是更接近真实的指标。</p>
 <p><strong>Skill 的收益是有条件的。</strong> 综述引用了一项负面结果：程序性技能在网络安全 CTF 任务上零增益。论文提出了"环境反馈带宽假说"来解释：当环境本身能提供丰富诊断信息时，外置技能的边际收益递减。Skill 更适合那些环境反馈稀疏、试错成本高、领域约束强的任务，而不是所有任务都值得写成 Skill。</p>
 <hr>
-<h3>WikiSkill 和 SKILL.state：补全生命周期的两块拼图</h3>
+<h3 id="WikiSkill-和-SKILL-state-补全生命周期的两块拼图">WikiSkill 和 SKILL.state：补全生命周期的两块拼图</h3>
 <p>综述给出了完整框架，同一天发表的两篇论文则分别填补了"终身适应"和"执行与修复"两个阶段。</p>
 <p>WikiSkill 处理的是 Skill 的生产端。它在执行轨迹和可执行 Skill 之间插入了一层持久 Wiki：</p>
 <blockquote><p>执行轨迹 → 经验模式 → Skill 提案 → 验证闸门 → 新版本 Skill</p></blockquote>
@@ -465,7 +465,7 @@
 <p>这条边界很重要，但也不能推得太远。论文讨论的前提是结构化状态足以支持下一步决策。如果任务需要回看完整轨迹来审计，或者早期的一条观察直到很久以后才被发现重要，直接丢弃历史就可能损失信息。</p>
 <p><strong>状态机不是“历史都不重要”，而是要求系统提前说清楚：什么是未来执行真正需要的最小充分状态。</strong></p>
 <hr>
-<h3>带回项目里的六个问题</h3>
+<h3 id="带回项目里的六个问题">带回项目里的六个问题</h3>
 <p>比起先看一份 Skill 写了多少页，现在更常问的是六个问题：</p>
 <ol><li>它在什么条件下被触发，误触发和漏触发分别会带来什么代价。</li></ol>
 <ol><li>输入和输出是什么，哪些信息还要回到权威系统确认，而不是直接相信上下文记忆。</li></ol>
@@ -476,14 +476,14 @@
 <p>这不是一张写作清单，更像是把 Skill 放回软件系统以后，几个绕不过去的责任问题。不同团队的答案当然会不同，但只要其中几项始终说不清，Skill 大概率还停留在"写给模型看的说明"这一步。</p>
 <p>高重复、边界明确、结果可验证的流程，适合沉淀成 Skill。一次性探索、事实变化很快、验收标准本身还没有形成的任务，硬写成 Skill 反而可能把临时判断固化成错误规则。Aaron Levie 在公开讨论里提到过类似判断：随着模型越来越能处理原先由工程脚手架承担的事情，架构需要持续删改，而不是只做叠加。</p>
 <hr>
-<h3>以后再画架构图</h3>
+<h3 id="以后再画架构图">以后再画架构图</h3>
 <p>Google 的实践和这篇综述，一份来自生产线，一份来自学术梳理，但它们指向的方向是一致的。</p>
 <p><strong>以后再画 Agent 架构图，Skill 大概不会再被画成一个孤立的文件图标。它更适合被画在那条不断查找、加载、执行、验证和更新的运行循环里。</strong></p>
 <p><img alt="Skill 进入 Agent Runtime 的闭环" src="../../_assets/20260917-Google-Agentic-Skill综述六元组九阶段/img-003-e822ec75.png"></p>
 <p>Skill 进入 Agent Runtime 的闭环</p>
 <p>图 3：Skill 提供过程，Tool 执行动作，Memory 保存经验，Harness 把它们接成可恢复的运行时闭环。自制图。</p>
 <p>经验怎样被提炼，知识怎样长期保存，Skill 怎样被路由，状态怎样推进，权限怎样收口，结果怎样验证，失败怎样恢复。这些问题只要缺一块，Skill 就很容易退化成一份"看起来很懂"的提示词。边界接起来以后，Skill 才有机会成为一种真正可复用的工程资产：它能被加载，也能被替换；能带来经验复利，也能在验证失败时回滚；能帮助模型做事，但不会把权限、事实和完成标准一起交给模型决定。</p>
-<h3>参考资料</h3>
+<h3 id="参考资料">参考资料</h3>
 <ul><li>Google Cloud：Behind the scenes: How we build, test, and scale Google Agent Skills（https://cloud.google.com/blog/topics/developers-practitioners/behind-the-scenes-how-we-build-test-and-scale-google-agent-skills/）</li></ul>
 <ul><li>Google Skills GitHub 仓库（https://github.com/google/skills）</li></ul>
 <ul><li>Towards a Systems Foundation for Agentic Skills: Architecture, Lifecycle, and Security（https://arxiv.org/abs/2608.29596）</li></ul>
@@ -496,7 +496,7 @@
 <p>如有想了解学习的技术点，请留言给若飞安排分享</p>
 <p>因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</p>
 <p>·END·</p>
-<h3>相关阅读：</h3>
+<h3 id="相关阅读">相关阅读：</h3>
 <ul><li>Loop Engineering，应该赞成还是反对？</li><li>Claude 做方案，Codex 写代码：多模型协作怎么交接才稳</li><li>架构排熵：Loop Engineering 的持续清理系统</li><li>CLAUDE.md 拆解：Agent 进仓库前的上下文入口</li><li>Harness工程还没唱罢，Environment工程已然登场</li><li>设计 Self-Harness 架构：会自我改进的Harness</li></ul>
 <p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p>
 <p>架构师</p>
@@ -506,7 +506,7 @@
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>
 <p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

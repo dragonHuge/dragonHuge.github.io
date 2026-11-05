@@ -395,20 +395,20 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</h1><div class="meta">📅 2026-09-18 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/jgwZE6nflPIRkJkrwfz40w" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260918-Agent-Harness综述换Harness比换模型管用.md</div><div class="md"><h1>换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">34</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#换一套-Harness-比换两代模型还管用-腾讯云开发者-Agent-Harness-综述">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#楔子-瓶颈已经不在模型那一侧">楔子：瓶颈已经不在模型那一侧</a><a class="tl l3" href="#四个最容易混淆的词-Agent-Harness-Framework-Runtime">四个最容易混淆的词：Agent Harness Framework / Runtime</a><a class="tl l3" href="#三个从一开始就要建立的直觉">三个从一开始就要建立的直觉</a><a class="tl l3" href="#01">01</a><a class="tl l3" href="#1-1-Harness-的本质-就是一个循环">1.1 Harness 的本质，就是一个循环</a><a class="tl l3" href="#1-2-简单的循环-与让它达到生产级的边界处理">1.2 简单的循环，与让它达到生产级的边界处理</a><a class="tl l3" href="#1-3-上手写一个-把四块拼起来就是个-Harness">1.3 上手写一个：把四块拼起来就是个 Harness</a><a class="tl l3" href="#02">02</a><a class="tl l3" href="#2-1-子系统-1-Tool-系统-Agent-的双手">2.1 子系统 1：Tool 系统——Agent 的双手</a><a class="tl l3" href="#2-2-子系统-2-Memory-与-Context-杠杆最高的地方">2.2 子系统 2：Memory 与 Context——杠杆最高的地方</a><a class="tl l3" href="#2-3-子系统-3-Guardrails-模型和真实世界之间的裁决者">2.3 子系统 3：Guardrails——模型和真实世界之间的裁决者</a><a class="tl l3" href="#2-4-Skill-系统-薄-Harness-厚-Skill">2.4 Skill 系统——薄 Harness + 厚 Skill</a><a class="tl l3" href="#03">03</a><a class="tl l3" href="#3-1-错误处理-失败也是一种观察">3.1 错误处理：失败也是一种观察</a><a class="tl l3" href="#3-2-Sandbox-把影响范围圈死">3.2 Sandbox：把影响范围圈死</a><a class="tl l3" href="#3-3-多-Agent-编排-单-Agent-的三面墙">3.3 多 Agent 编排：单 Agent 的三面墙</a><a class="tl l3" href="#3-4-定时任务与自动化-从-叫它才动-到-自己会动">3.4 定时任务与自动化：从「叫它才动」到「自己会动」</a><a class="tl l3" href="#04">04</a><a class="tl l3" href="#4-1-长时运行-Harness-失败是隐蔽的">4.1 长时运行 Harness：失败是隐蔽的</a><a class="tl l3" href="#4-2-托管式架构-把判断-执行-记录三者拆开">4.2 托管式架构：把判断、执行、记录三者拆开</a><a class="tl l3" href="#4-3-Initializer-Coding-Agent-多天项目的两阶段模式">4.3 Initializer + Coding Agent：多天项目的两阶段模式</a><a class="tl l3" href="#05">05</a><a class="tl l3" href="#5-1-基础设施噪声-多给一个核-排行榜就换了名次">5.1 基础设施噪声：多给一个核，排行榜就换了名次</a><a class="tl l3" href="#5-2-被测觉察-Agent-察觉到这是考场之后">5.2 被测觉察：Agent 察觉到这是考场之后</a><a class="tl l3" href="#5-3-用模型来审批-从-每次都问人-到-机器先过一遍">5.3 用模型来审批：从「每次都问人」到「机器先过一遍」</a><a class="tl l3" href="#06">06</a><a class="tl l3" href="#参考来源">参考来源</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</h1><div class="meta">📅 2026-09-18 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/jgwZE6nflPIRkJkrwfz40w" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260918-Agent-Harness综述换Harness比换模型管用.md</div><div class="md"><h1 id="换一套-Harness-比换两代模型还管用-腾讯云开发者-Agent-Harness-综述">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-18 抓取状态：成功 原文字符：55845｜配图：22 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>真正决定 Agent 高下的是模型之外的 Harness 层——这一轮让模型看到什么、工具怎么暴露与执行、失败怎么回喂、任务断了怎么接上、凭什么算做完。</li><li>同一模型同一套题，换 Harness 完成率差十几二十个百分点，常比两代模型差距还大。</li><li>全文结构：一个循环→四个子系统→生产化→长时运行→评测→选型，可作为判断市面 Agent 产品含金量的选型清单。</li><li>厘清 Agent/Harness/Framework/Runtime 四词层次：模型定上限，Harness 定实际拿到多少。</li><li>给出三条入门直觉与可照着改的代码骨架。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>原文正文抓取失败，基于收件箱摘要归档，待补充原文。</p>
 <ul><li>层次模型：模型（上限）→ Harness（实际发挥）→ Framework（组织方式）→ Runtime（执行环境）。</li><li>Harness 四子系统对应五个关键问题：上下文供给、工具暴露与执行、失败回喂、断点续跑、完成判定。</li><li>选型视角：评估 Agent 产品时对比 Harness 工程而非只看底座模型名。</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>先审计自家 Agent 的 Harness（上下文/工具/回喂/续跑/完成判定五项），再考虑换模型。</li><li>对比两个产品时把「同模型下完成率差异」作为 Harness 质量的直接度量。</li></ul>
 <p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#楔子瓶颈已经不在模型那一侧">楔子：瓶颈已经不在模型那一侧</a></li><li><a href="#三个从一开始就要建立的直觉">三个从一开始就要建立的直觉</a></li><li><a href="#01">01</a></li><li><a href="#11-harness-的本质就是一个循环">1.1 Harness 的本质，就是一个循环</a></li><li><a href="#12-简单的循环与让它达到生产级的边界处理">1.2 简单的循环，与让它达到生产级的边界处理</a></li><li><a href="#13-上手写一个把四块拼起来就是个-harness">1.3 上手写一个：把四块拼起来就是个 Harness</a></li><li><a href="#02">02</a></li><li><a href="#21-子系统-1tool-系统agent-的双手">2.1 子系统 1：Tool 系统——Agent 的双手</a></li><li><a href="#22-子系统-2memory-与-context杠杆最高的地方">2.2 子系统 2：Memory 与 Context——杠杆最高的地方</a></li><li><a href="#组装一个带优先级的装箱问题">组装：一个带优先级的装箱问题</a></li><li><a href="#压缩空间不够时按什么顺序让位">压缩：空间不够时，按什么顺序让位</a></li><li><a href="#memory两级结构">Memory：两级结构</a></li><li><a href="#23-子系统-3guardrails模型和真实世界之间的裁决者">2.3 子系统 3：Guardrails——模型和真实世界之间的裁决者</a></li><li><a href="#24-skill-系统薄-harness--厚-skill">2.4 Skill 系统——薄 Harness + 厚 Skill</a></li><li><a href="#03">03</a></li><li><a href="#31-错误处理失败也是一种观察">3.1 错误处理：失败也是一种观察</a></li><li><a href="#32-sandbox把影响范围圈死">3.2 Sandbox：把影响范围圈死</a></li><li><a href="#33-多-agent-编排单-agent-的三面墙">3.3 多 Agent 编排：单 Agent 的三面墙</a></li><li><a href="#34-定时任务与自动化从叫它才动到自己会动">3.4 定时任务与自动化：从「叫它才动」到「自己会动」</a></li><li><a href="#04">04</a></li><li><a href="#41-长时运行-harness失败是隐蔽的">4.1 长时运行 Harness：失败是隐蔽的</a></li><li><a href="#42-托管式架构把判断执行记录三者拆开">4.2 托管式架构：把判断、执行、记录三者拆开</a></li><li><a href="#05">05</a></li><li><a href="#51-基础设施噪声多给一个核排行榜就换了名次">5.1 基础设施噪声：多给一个核，排行榜就换了名次</a></li><li><a href="#52-被测觉察agent-察觉到这是考场之后">5.2 被测觉察：Agent 察觉到这是考场之后</a></li><li><a href="#53-用模型来审批从每次都问人到机器先过一遍">5.3 用模型来审批：从「每次都问人」到「机器先过一遍」</a></li><li><a href="#双层防御入口和出口各设一道">双层防御：入口和出口各设一道</a></li><li><a href="#成本问题绝大多数动作不该走到审核模型">成本问题：绝大多数动作不该走到审核模型</a></li><li><a href="#最关键的一个设计不让它看-agent-的推理">最关键的一个设计：不让它看 Agent 的推理</a></li><li><a href="#06">06</a></li><li><a href="#参考来源">参考来源</a></li></ul>
 <p>关注腾讯云开发者，一手技术干货提前解锁👇</p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-001-6e14d255.png"></p>
@@ -418,28 +418,28 @@
 <p>扫码加入获取更多一手教程、科技前沿报告</p>
 <blockquote><p>一匹马能跑多快是天生的，但这份马力能不能用在该用的方向上、该收的时候收住，靠的是那副马具。harness 本义就是马具——套在马身上、把马力传导到车上的那整套装备。放到 Agent 上，它指的是模型之外那一层代码：这一轮让模型看到什么、它提出的操作准不准执行、失败怎么回喂、任务断了怎么接上、最后凭什么说事情做完了。         全文按「一个循环 → 四个子系统 → 生产化 → 长时运行 → 评测 → 选型」展开。读完你大概能看出市面上多数 Agent 产品里，哪些部分是模型给的，哪些部分是有人一行行写出来的。</p></blockquote>
 <blockquote><p>关于本文的性质： 这是一篇综述。近一两年，关于「怎么把一个大模型工程化成真能干活的 Agent」，好东西散落在各处——模型厂商的工程博客、几份系统化的中文教程、把 Agent 当循环来工程化的系列文章，以及大量开源 Harness 项目自己的文档。本文做的事是把这些来源里反复被验证的判断抽出来、去掉重复、串成一条主线，用统一的语言和例子重讲一遍，并补上可以照着改的代码骨架。它不隶属于任何单一来源；观点有取舍时，以「工程上是否站得住」为准。具体出处见文末「参考来源」。</p></blockquote>
-<h3>楔子：瓶颈已经不在模型那一侧</h3>
+<h3 id="楔子-瓶颈已经不在模型那一侧">楔子：瓶颈已经不在模型那一侧</h3>
 <p>主流模型在编码、办公、检索类 benchmark 上大多已经能拿到不错的分数，单看模型，各家的差距在收窄——今天某家领先半个身位，过一阵就被追平。于是真正分出高下的地方发生了转移：不再是「你接了哪家模型」，而是「你把这份能力组织成了什么」。</p>
 <p>这件事在评测里看得最直观。同一个模型、同一套题，换一套 Harness 去跑，完成率能差出十几二十个百分点，而这个差值常常比两代模型之间的差距还大。原因也不神秘：换 Harness 等于换了一整套隐藏配置——步数上限给多少、工具怎么暴露、超长的工具返回是截断还是摘要、上下文满了先牺牲谁。这些没有一项属于模型能力，但每一项都在改分数。</p>
 <p>所以这篇文章讲的不是模型，而是模型外面那层工程：怎么组装上下文、怎么管记忆、怎么设计工具、怎么守住执行边界、怎么让一个任务稳定跑完几小时甚至几天。</p>
 <p>顺便厘清一个概念的漂移。前两年说「Agent」，多数时候指的是模型接了个工具——挂一个搜索接口就敢这么叫。而现在讨论的 Agent 要做的事是另一个量级：自己摸索一个陌生代码库、跨文件定位问题、改完跑测试验证、最后把结果和证据一起交出来。这两者的差距，几乎全部落在模型之外：</p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-004-30413a4b.png"></p>
 <p>一句话：<strong>模型决定这套系统的上限，Harness 决定你实际能拿到多少。</strong></p>
-<h3>四个最容易混淆的词：Agent Harness Framework / Runtime</h3>
+<h3 id="四个最容易混淆的词-Agent-Harness-Framework-Runtime">四个最容易混淆的词：Agent Harness Framework / Runtime</h3>
 <p>###</p>
 <p>这几个词经常被混着用，但它们处在不同层次，分清楚能省掉后面很多困惑：</p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-005-5db0c547.png"></p>
 <p>Agent 是那个成品，另外三个是它的组成与支撑：<strong>Framework 帮你造 Harness，Runtime 托管 Harness，Harness 决定 Agent 的行为，而 Agent 是用户最终看到的整体。</strong> Runtime 决定它物理上能不能读某个文件、能不能联网，Harness 决定它会不会去读、会不会去联。</p>
 <p>顺带说一句用词习惯：后文讲「Agent 读到了什么」「Agent 不该独自验收自己」时，主语仍写 Agent——那是从外部看这个系统的说法；但每一次真正要落地的决定，都发生在 Harness 这一层。</p>
-<h3>三个从一开始就要建立的直觉</h3>
+<h3 id="三个从一开始就要建立的直觉">三个从一开始就要建立的直觉</h3>
 <p>###</p>
 <p>在深入之前，先记住三条贯穿全文的常识，它们能帮你避开相当多的弯路：</p>
 <ul><li><strong>把模型问题误判成 Harness 问题（或反过来）。</strong> Agent 出错时，绝大多数时候不是模型"变笨了"，而是 Context 出了问题（加载了错误的文件、缺了关键指令）或 Tool 出了问题（Schema 写错、静默报错）。先怀疑管道，再怀疑模型。</li></ul>
 <ul><li><strong>一上手就想把架子搭全。</strong> 合理的顺序是倒过来的：先跑通最小循环，出现跨任务复用需求再引入 Memory，工具膨胀到模型挑不清了再引入 Skill，真要对外承担后果了再补 Guardrails 和 Sandbox。提前铺开一堆基础设施，等于在为还没出现的问题写代码。</li></ul>
 <ul><li><strong>默认 Context 装得下。</strong> 模型的判断只建立在这一轮实际收到的内容上——磁盘里有、上一轮说过、数据库里存着，都不代表它这一轮看得见。这条会贯穿全文反复出现。</li></ul>
-<h3>01</h3>
+<h3 id="01">01</h3>
 <p>第一部分 · 一切的起点：Agentic Loop</p>
-<h3>1.1 Harness 的本质，就是一个循环</h3>
+<h3 id="1-1-Harness-的本质-就是一个循环">1.1 Harness 的本质，就是一个循环</h3>
 <p>一个 Harness 无论最后长到多大——几十行的实验脚本也好，一个成熟的编码 Agent 也好——剥到最里面都是同一段结构：模型判断下一步要什么，程序执行获准的操作，把结果写回上下文，模型再判断。这个「边想边做」的模式一般追溯到 <strong>ReAct（Reason + Act，推理 + 行动）</strong>：推理决定下一个动作，动作带回的观察又修正后续推理，如此往复，直到不再需要工具或者被外部条件叫停。</p>
 <p>- - - - - - - - - - - - - - - - - - - - -</p>
 <pre><code>             ┌──────────────┐
@@ -485,7 +485,7 @@
 
     raise TurnBudgetExhausted(f&quot;{turn_budget} 轮内未收敛&quot;)</code></pre>
 <p><strong>思考 → 执行 → 观察 → 重复。</strong> 就这么简单。判断一个系统是不是真的在跑循环，标准不在于有没有接工具，而在于<strong>工具返回的结果会不会改变它后面的动作</strong>。接一次搜索、拿到结果直接作答，那还是问答；看完结果决定再打开某个页面、核对来源、换个关键词重查，然后才组织答案——这才是循环。</p>
-<h3>1.2 简单的循环，与让它达到生产级的边界处理</h3>
+<h3 id="1-2-简单的循环-与让它达到生产级的边界处理">1.2 简单的循环，与让它达到生产级的边界处理</h3>
 <p>循环骨架很简单，真正把它推到生产级的，是围绕它的一堆边界处理。下面几条每一条都对应着一类线上事故：</p>
 <p>** **</p>
 <p><strong>① 轮次上限绝对不能省。</strong> 这是最常见的一类事故源头。没有上限，一个陷入混乱的模型会一直转下去——同一个工具反复调、同样的错误反复撞，Token 和钱一起烧。它是最简单、也最不该缺席的那道闸。</p>
@@ -513,7 +513,7 @@ def is_spinning(history: list) -&gt; bool:
 <p><strong>⑥ 流式输出。</strong> 循环转起来之后，模型的响应最好逐 Token 推给前端。这不只是体验问题——长任务里，能看见它当前在做什么，用户才有判断「要不要打断」的依据；一片空白的等待里，人唯一能做的选择只有关掉。</p>
 <p>退出条件也不止"没有工具调用"这一种，一张表说清：</p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-006-46ff4bc3.png"></p>
-<h3>1.3 上手写一个：把四块拼起来就是个 Harness</h3>
+<h3 id="1-3-上手写一个-把四块拼起来就是个-Harness">1.3 上手写一个：把四块拼起来就是个 Harness</h3>
 <p>理解循环最好的方式是亲手写一个。下面用一个"便签助手"作例子——两个工具 <code>save_note</code>（存便签）和 <code>find_notes</code>（关键词检索）。去掉注释和示例数据，核心逻辑不过几十行。它由四块构成：</p>
 <p>- - - - - - - - -</p>
 <pre><code>┌────────────────────────────────┐
@@ -633,7 +633,7 @@ for block in reply.content:
 <ul><li><strong>结果类型没转。</strong> 工具结果要以字符串形态回填，返回 dict 得先 <code>json.dumps()</code>；直接塞 Python 对象过去会直接报错。</li></ul>
 <ul><li><strong>没有迭代上限。</strong> 见上面的 <code>TURN_LIMIT</code>。</li></ul>
 <p>从这个 50 行脚本到生产级 Harness，缺的东西是：Memory（无状态 → MEMORY.md + 每日日志）、Context 管理（完整历史 → 优先级窗口化）、错误恢复（基础 try/catch → 重试 + 升级）、安全（无 → Sandbox）、Tool 加载（一次性全加载 → 按需 Skill）。这些正是后面几部分的主题。</p>
-<h3>02</h3>
+<h3 id="02">02</h3>
 <p>第二部分 · 四大子系统</p>
 <p>不论怎么实现，一个 Harness 都由四个子系统拼成。Agentic Loop 是第一个（上面讲透了），剩下三个是 Tool 系统、Memory &amp; Context、Guardrails，再加上一个把它们优雅组织起来的 Skill 系统。</p>
 <p>- - - - - - - - - -</p>
@@ -647,7 +647,7 @@ for block in reply.content:
 │  │              Guardrails                │  │
 │  └────────────────────────────────────────┘  │
 └──────────────────────────────────────────────┘</code></pre>
-<h3>2.1 子系统 1：Tool 系统——Agent 的双手</h3>
+<h3 id="2-1-子系统-1-Tool-系统-Agent-的双手">2.1 子系统 1：Tool 系统——Agent 的双手</h3>
 <p>模型负责推理（大脑），Tool 负责执行（双手）。这里有个根本性的分离：<strong>模型看到的是 Schema（名字、描述、参数类型），Harness 负责执行（真正调用函数、返回结果）。模型永远看不到、也不执行实现代码。</strong></p>
 <p>- - - - - - - - - - - - - - -</p>
 <pre><code># 模型看到的（tool schema）
@@ -713,12 +713,12 @@ class ToolRegistry:
 <p><strong>③ 组合优于复杂单体。</strong> 复杂能力来自简单 Tool 的组合，而非一个巨型 Tool。顺序（<code>read → edit → run_tests</code>）、扇出（并行读 5 个文件再综合）、条件分支、迭代（<code>test → edit → test</code> 直到通过）——这些模式模型会通过循环自然发现，你只要提供正确的原子 Tool。</p>
 <p><strong>④ MCP（Model Context Protocol）</strong> 是一个开放标准，通过 stdio / HTTP SSE 等传输层向 Agent 暴露工具，把工具实现与 Harness 解耦。为一个 Harness 写的工具，能在任何兼容 MCP 的 Harness（Claude Desktop、Cursor、各类 Agent CLI…）里复用，解决了 N×M 的集成问题。</p>
 <p>四个高频坑：同时加载太多工具、静默失败（返回空串让模型瞎猜）、缺失 Tool 结果（忘了追加导致 API 调用失败）、返回类型不一致（时而内容时而 error dict，模型无法可靠解析）。</p>
-<h3>2.2 子系统 2：Memory 与 Context——杠杆最高的地方</h3>
+<h3 id="2-2-子系统-2-Memory-与-Context-杠杆最高的地方">2.2 子系统 2：Memory 与 Context——杠杆最高的地方</h3>
 <p>先把三个天天被混淆的概念钉死：</p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-007-46769d77.png"></p>
 <p>三者的分工可以这样记：Context 是模型此刻的工作台，Session 是这趟任务的完整流水，Memory 是任务散场后还值得留下的那部分。</p>
 <p><strong>Context 工程是整个 Harness Engineering 里杠杆最高的活</strong>——比选模型、调 Prompt、设计 Tool 都重要。原因就是那条铁律：<strong>模型不知道你没告诉它的事。</strong> 关键信息没组装进 prompt，对模型来说就不存在。Context 工程有三大支柱：<strong>组装</strong>（放什么进去）、<strong>压缩</strong>（缩减什么）、<strong>预算</strong>（如何分配容量）。</p>
-<h4>组装：一个带优先级的装箱问题</h4>
+<h4 id="组装-一个带优先级的装箱问题">组装：一个带优先级的装箱问题</h4>
 <p>####</p>
 <p>128K Token 听起来很大，但一个大文件吃掉 10K、二十个 Tool Schema 吃掉 3K、对话历史每轮线性增长，一个复杂任务跑十几轮就开始做艰难取舍了。优先级系统决定空间紧张时谁能存活（数字越小优先级越高）：</p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-008-d61db795.png"></p>
@@ -765,19 +765,19 @@ def assemble_context(blocks: list[ContextBlock],
     # 组装时按逻辑顺序（system 在前），而非按优先级
     return &quot;\n\n&quot;.join(b.content for b in sorted(selected, key=lambda b: b.priority))</code></pre>
 <p>这里有两个容易忽视但至关重要的点。一是 <code>reserve</code> 参数——你得给模型的回复留出空间（比如 4K），否则 Context 塞到 100%，模型就没地方回话了。二是 <strong>Context 必须每一轮都重新组装</strong>（每轮调用 <code>assemble_context</code>），一次性组装后不更新，意味着第一次工具调用后模型就在用过时信息推理。</p>
-<h4>压缩：空间不够时，按什么顺序让位</h4>
+<h4 id="压缩-空间不够时-按什么顺序让位">压缩：空间不够时，按什么顺序让位</h4>
 <p>####</p>
 <p>对任何非平凡的 Session，压缩都不是可选项。算一笔账：128K 窗口，扣掉回复预留 4K、System Prompt 500、12 个 Tool Schema 2.4K、MEMORY.md 1.2K、AGENTS.md 0.8K，剩约 11.9 万给对话；而一个 50 轮含 Tool 结果的编码 Session 约 6 万 Token——不压缩的话大约第 35 轮就撞墙。三道防线：</p>
 <ol><li><strong>自动衰减</strong>：只保留系统提示 + 最近 N 轮，丢弃窗口外的旧消息。最简单。</li></ol>
 <ol><li><strong>阈值压缩</strong>：总 Token 超过预算 70% 时触发，把较早的对话轮用一个便宜快模型摘要掉，同时保留最近几轮原文。</li></ol>
 <ol><li><strong>主动摘要</strong>：超长任务定期让模型打 Checkpoint——总结关键决策、改了哪些文件、跑了什么测试、遇到什么错误、当前计划，控制在 500 词内。</li></ol>
 <p>生产环境最实用的是<strong>滑动窗口</strong>：最近几轮保持完整，窗口边界之前的全部折叠进一个滚动摘要。</p>
-<h4>Memory：两级结构</h4>
+<h4 id="Memory-两级结构">Memory：两级结构</h4>
 <p>经过验证的 Memory 架构分两级：</p>
 <ul><li><strong>第一级 · 每日日志</strong>（<code>memory/2026-04-15.md</code>）：原始的、按时间顺序的事件记录，Session 中随手追加，不做精选。写起来成本极低。</li></ul>
 <ul><li><strong>第二级 · 长期 Memory</strong>（<code>MEMORY.md</code>）：精选、提炼过的知识——用户偏好、项目知识、经验教训。定期更新（不是每个 Session），需要判断力（什么值得保留）。</li></ul>
 <p>Session 启动时读 Memory（长期 + 今天/昨天的日志），运行中随手写日志，定期整理 MEMORY.md。还有一个相关但不同的文件 <strong>AGENTS.md</strong>：它定义 Agent 应该<em>如何行为</em>（声明式：用 pytest、遵循 Google docstring、不改 /config），而 MEMORY.md 记录<em>发生了什么</em>（经验式）。两者都在 Session 启动注入，用途不同。四个坑：把 Context 当无限、从不裁剪历史、写 Memory 太频繁（产生噪音稀释有用信息）、启动时忘了读 Memory（Agent 就成了失忆症）。</p>
-<h3>2.3 子系统 3：Guardrails——模型和真实世界之间的裁决者</h3>
+<h3 id="2-3-子系统-3-Guardrails-模型和真实世界之间的裁决者">2.3 子系统 3：Guardrails——模型和真实世界之间的裁决者</h3>
 <blockquote><p>缺了 Guardrails 的 Agent，risk 全押在「它不会乱来」这个假设上。而模型是照着指令办事的——问题在于，它读到的网页、issue、日志里也可能夹着指令。</p></blockquote>
 <p>逻辑链条是这样的：模型生成文本 → 文本里包含 Tool 调用 → Harness 执行这些调用。这意味着<strong>任何能影响模型输出的东西，都能影响 Harness 的行为</strong>——包括文件、网页、用户消息里的恶意内容。这就是 <strong>prompt 注入</strong>：攻击者把指令藏进 Agent 会读到的数据里，模型把它当成任务去执行——删文件（<code>rm -rf /</code>）、偷环境变量里的 API key、在宿主机执行任意代码、以用户身份发未授权消息。</p>
 <p><strong>最关键的认知：在 prompt 里写"不要删文件"不是 Guardrail，那只是一句建议</strong>，一次 prompt 注入就能覆盖它。真正的 Guardrail 在代码里执行，是一层拦在模型和执行环境之间的权限层。它拦截每个 Tool 调用，在执行前做四选一：</p>
@@ -835,7 +835,7 @@ def guarded_dispatch(registry, tool_name: str, args: dict) -&gt; str:
     return registry.dispatch(tool_name, args)</code></pre>
 <p>权限模型有三档：<strong>白名单</strong>（最严，只放行明确许可的）、<strong>黑名单</strong>（最松，只拦明确封禁的模式如上面的 <code>rm -rf /</code>、<code>curl | sh</code>）、<strong>分级审批</strong>（读文件自动过 → 写文件自动过 + 记日志 → Shell/网络需人工 → 删除/<code>git push</code>/发消息始终要明确批准，即上面 <code>ASK</code> 那条）。</p>
 <p>除了 Tool 级检查，还要对<strong>输入消毒</strong>：来自外部源（网页、上传文件、API 响应）的内容要截断超长部分、用 <code>&amp;lt;tool_result&amp;gt;</code> 标记包裹，让模型能区分"这是指令"和"这是不可信数据"。四个坑：完全没有 Guardrails（本地开发没事，上生产是灾难）、只把规则放 prompt 里、权限过严（啥也干不了没人用）、不记录被拒操作（无法调试和改进）。</p>
-<h3>2.4 Skill 系统——薄 Harness + 厚 Skill</h3>
+<h3 id="2-4-Skill-系统-薄-Harness-厚-Skill">2.4 Skill 系统——薄 Harness + 厚 Skill</h3>
 <p>Tool 是模型可调用的单个函数，<strong>Skill 是一个打包的能力单元</strong>：一组相关 Tool + 一份 SKILL.md（何时用、怎么用、有什么约束、给示例）+ 行为规则。比如一个 <code>git</code> Skill，不是暴露一个 <code>git</code> 工具，而是打包 <code>git_status</code>、<code>git_diff</code>、<code>git_commit</code>、<code>git_push</code>、<code>git_log</code>，并在 SKILL.md 里写清 commit 规范、分支命名、何时需要确认。</p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-009-bd28fae4.png"></p>
 <p>它解决的核心是 Token 经济。一个 8 Skill / 约 60 Tool 的系统：</p>
@@ -879,10 +879,10 @@ Skill 菜单 + 加载 2 个:     ~150 + ~2,400 = ~2,550
         return schemas</code></pre>
 <p>每轮组装 Context 时，Tool Schema 那一层调 <code>active_schemas()</code> 而非全量——这就是前面 78% 节省的来源。</p>
 <p>由此引出整份指南最重要的架构哲学——<strong>薄 Harness + 厚 Skill</strong>：Harness 本身最小化，只保留 Agentic Loop、Context 组装、Skill 注册表这些通用引擎；所有领域知识都放进 Skill。好处是 Skill 可移植（换 Harness 照用）、可测试（独立测）、可组合（模型自然发现如何组合）、Harness 保持简单（<strong>加能力靠加 Skill，而不是改核心</strong>）。几个坑：启动时全加载（违背初衷）、巨型 Skill（30 个 Tool 只是换皮的全量加载，保持每个 3–8 个）、缺 SKILL.md（SKILL.md 是 Skill 的大脑）、没有 <code>unload_skill</code>（Context 会填满）、Skill 名和 Tool 名撞车。</p>
-<h3>03</h3>
+<h3 id="03">03</h3>
 <p>第三部分 · 生产化：错误、沙箱、编排、调度</p>
 <p>四大子系统搭好，你有了一个能跑的 Harness。但"能跑"和"敢上生产"之间，还隔着错误处理、安全隔离、多 Agent 编排和主动调度这四道工序。</p>
-<h3>3.1 错误处理：失败也是一种观察</h3>
+<h3 id="3-1-错误处理-失败也是一种观察">3.1 错误处理：失败也是一种观察</h3>
 <p>传统程序里，没接住的异常会让进程停下；而在这个循环里，情况反过来了——<strong>只要错误被清楚地送回去，模型自己就能换条路走。</strong> 路径不对它会重新搜，参数不合法它会改参数，权限被拒它会申请或绕行。所以这一层真正的工作不是「把错误藏好」，而是分类、给出可行动的反馈，并且只在自动恢复确实走不通时才交给人。</p>
 <p>反过来说，最糟的处理方式是把异常吞在函数里、返回一个空值。模型看到的不是「失败了」，而是「查无此项」——它会据此往下推理，而且推得很自洽。<strong>吞掉错误，等于对模型撒谎。</strong></p>
 <p>** **</p>
@@ -928,7 +928,7 @@ Skill 菜单 + 加载 2 个:     ~150 + ~2,400 = ~2,550
     return decorator</code></pre>
 <p><code>base_delay=2.0</code> 时，重试大约在 2s、5s、9s 后发生，抖动打散了同步。</p>
 <p>黄金原则贯穿全篇：<strong>永远把错误作为 Tool 结果返回，绝不在 Agentic Loop 里抛异常</strong>——被吞掉的异常会导致静默失败或幻觉成功。配套三件事：<strong>优雅降级</strong>（<code>web_search</code> 失败退到 <code>web_fetch</code>，<code>git_push</code> 失败退到 <code>git_diff</code>），把 fallback 链和最终错误一起交给模型；<strong>人在回路升级</strong>四档（AUTO 全自动 INFORM 自动恢复但通知 CONFIRM 执行前确认 / BLOCK 停下等人）；<strong>长任务 Checkpoint</strong>（每 3–5 轮存一次消息历史和轮次，用"写 <code>.tmp</code> → <code>rename</code>"的原子写入防止进程半路崩溃损坏 Checkpoint，恢复时从上次断点续跑）。五个坑：重试永久错误（重试 3 次"文件不存在"没用）、静默吞错、退避没抖动、每轮都 Checkpoint（增加 I/O）、升级太积极（每个瞬时错误都找人会毁掉信任）。</p>
-<h3>3.2 Sandbox：把影响范围圈死</h3>
+<h3 id="3-2-Sandbox-把影响范围圈死">3.2 Sandbox：把影响范围圈死</h3>
 <blockquote><p>一个拿到 Shell 的 Agent，理论上什么命令都敢敲——包括那条把根目录清空的。沙盒要做的不是让它变乖，而是让它敲错了也伤不到外面。给模型的观感应当是「随便试」，给执行环境的设定必须是「处处设限」。</p></blockquote>
 <p>三类要防的事：<strong>数据外流</strong>（读到凭证再发出去）、<strong>破坏性写入</strong>（删文件、写坏数据）、<strong>越界访问</strong>（从受限环境跑出去碰宿主）。可选的隔离手段是一条光谱，<strong>隔得越干净，启动越慢</strong>：</p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-011-a4ec2ba3.png"></p>
@@ -946,7 +946,7 @@ Skill 菜单 + 加载 2 个:     ~150 + ~2,400 = ~2,550
     &quot;--network&quot;, &quot;none&quot;,                  # 默认禁网，无法外传数据
 ]</code></pre>
 <p>需要联网时（如 <code>pip install</code>）用 <strong>iptables 白名单</strong>只放行 pypi、API 端点，其余 DROP。多租户场景（多个不可信用户共享宿主机）Docker 的进程级隔离不够——一次容器逃逸影响所有租户，要上 Firecracker microVM（约 125ms 启动、KVM 虚拟化边界，VM 内的内核漏洞碰不到宿主机）。核心原则：<strong>Agent 的代码执行永远不该访问宿主的文件系统、网络和进程空间</strong>。四大坑：以 root 运行、忘了 <code>--network none</code>、持久化容器（会被埋后门/cron）、盲信被挂载的文件（<code>cat /etc/passwd</code> 若挂载了照样返回真数据，所以只挂需要的且只读）。</p>
-<h3>3.3 多 Agent 编排：单 Agent 的三面墙</h3>
+<h3 id="3-3-多-Agent-编排-单-Agent-的三面墙">3.3 多 Agent 编排：单 Agent 的三面墙</h3>
 <p>单 Agent 跑单个循环是默认做法，能覆盖大多数任务。但迟早撞上三面墙：<strong>Context Window 上限</strong>（80 个文件的重构撑爆窗口）、<strong>无法专业化</strong>（一个通用 Agent 什么都做但都平庸）、<strong>串行执行</strong>（5 个独立任务只能一个个来）。突破需要多 Agent，但它有实打实的成本（延迟、Token、调试复杂度），不是默认选项。</p>
 <p>先从最简单的 <strong>Sub-Agent（Leader-Worker）</strong> 起步——Leader 拆任务，spawn 多个 Worker，每个在隔离 Context 里跑，最后合并：</p>
 <p>- - - - - -</p>
@@ -1013,7 +1013,7 @@ def claim_task(task_id: str, worker_id: str) -&gt; bool:
              │Agent C │
              └────────┘</code></pre>
 <p>在 Harness 里靠四个机制实现：Sub-Agent 生成、<strong>Context 隔离</strong>（子 Agent 完全独立的窗口，从干净的 200K 起步，看不到父 Agent 的历史）、<strong>父读子结果</strong>（严格模式：子 Agent 不向父 Agent 内存写入，父 Agent 是唯一真相来源）、超时处理。通信最好是 <strong>push-based</strong>（子完成自动上报，消除"完成了吗？"的轮询——这是最常见的多 Agent bug）。反模式：共享可变状态（两 Agent 写同一文件必冲突）、无界扇出（50 种语言开 50 个 Agent 压垮系统，要分批）、无超时/断路器、过度分解（30 秒任务拆 5 个 Agent，加上生成开销反而 75 秒）。落到产品上，你能在多个开源多 Agent 项目里看到这些模式的影子——有的做成看板式、由 Issue 驱动委派，有的把多个 Agent 摆在同一界面、默认并行，有的把"生成子会话"做成一等原语并配上完成推送、标签追踪和递归深度限制。</p>
-<h3>3.4 定时任务与自动化：从「叫它才动」到「自己会动」</h3>
+<h3 id="3-4-定时任务与自动化-从-叫它才动-到-自己会动">3.4 定时任务与自动化：从「叫它才动」到「自己会动」</h3>
 <blockquote><p>有人叫它才动的 Agent，本质还是个问答窗口；到点自己动、有事自己动的，才算进了生产系统。</p></blockquote>
 <p>对比就懂了：被动式是"帮我总结未读邮件"→Agent 回复；定时式是每天 8:00 Agent 自动读收件箱、按紧急度过滤、格式化日报、推到你的群，<strong>你醒来时看到一份从没请求过的简报</strong>。后者会复利——一个任务每天省你五分钟，十个任务重塑你的工作方式。四种调度原语：</p>
 <ul><li><strong>One-Shot Timer</strong>：单次延迟（"20 分钟后提醒我"），一个时间戳 + 一个载荷。</li></ul>
@@ -1046,10 +1046,10 @@ def tick(scheduler, now: datetime):
         scheduler.reschedule(task, task.next_run(now))</code></pre>
 <p>四要点即上面的字段：<strong>调度定义</strong>（<code>cron</code>，铁律是<strong>存储 UTC、显示本地时间</strong>，用户说"每天早上 8 点"要先问哪个时区，存 UTC 等价值、用本地时间确认，还能正确处理夏令时）；<strong>Session 目标</strong>（<code>session_mode</code>——隔离：全新 Context、不污染主对话、可并行、可按任务选模型；主：有对话上下文但会膨胀窗口，慎用）；<strong>载荷类型</strong>（<code>payload_type</code>——<code>agentTurn</code> 触发完整执行、能调所有工具 vs <code>systemEvent</code> 只丢张便条、不立即行动）；<strong>交付</strong>（<code>delivery</code>）。<strong>监控类 Cron 要"异常才告警"</strong>——每 15 分钟推"一切正常"是噪音，保持沉默直到出问题才是信号。</p>
 <p>Heartbeat vs Cron 怎么选：多个轻量检查、需对话上下文、时间不精确 → 把它们放进 HEARTBEAT.md（一个 Heartbeat 搞定，别开 5 个 Cron）；精确时间、隔离环境、按任务选模型、定向交付 → Cron。四个反模式：<code>while True: sleep(60)</code> 轮询死循环（占用持久进程、绕过 Harness 调度，改用 1 分钟 Cron）、主 Session 污染（频繁注入 systemEvent 撑爆窗口）、无超时、重复交付（Harness announce + Agent 自己也发 = 用户收到两遍）。</p>
-<h3>04</h3>
+<h3 id="04">04</h3>
 <p>第四部分 · 进阶架构与长时运行</p>
 <p>短任务和长时运行任务是两个物种。前者的失败是显式的（完成或超时），后者的失败是隐蔽的——这一部分讲的都是"跑几小时到几天"才会遇到的问题。</p>
-<h3>4.1 长时运行 Harness：失败是隐蔽的</h3>
+<h3 id="4-1-长时运行-Harness-失败是隐蔽的">4.1 长时运行 Harness：失败是隐蔽的</h3>
 <p>短任务 Agent 在单个 Context Window 里生死，要么完成要么可见地失败。长时运行 Agent 运行数小时甚至数天，面临三个短任务从没遇到的问题：<strong>上下文不断累积</strong>（每次工具调用、每个中间结果都加 Token，200K 填满得比你想的快）、<strong>质量悄然退化</strong>（不崩溃，只是回答越来越含糊、指令被遗忘、早期上下文被挤出）、<strong>自我评估在撒谎</strong>（问 Agent"你干得好吗"，它永远说"好"）。两大隐形杀手值得单独命名：</p>
 <p><strong>① 上下文焦虑。</strong> 当窗口快满时，模型会开始"赶工"——过早收尾、偷工减料、在活儿没干完时就宣布"完成"。表现为：跳过通常会做的步骤、产出更短的输出、以"我已涵盖要点"过早宣告完成、避免会增加上下文的工具调用。这是模型对"即将用尽空间"的隐性感知。<strong>更大的窗口只是推迟问题，不能解决</strong>——解法在架构层面：显式管理上下文的生命周期。</p>
 <p><strong>② 自我评估偏差。</strong> 让生成者评价自己的输出，它会持续给自己打 8/10 或更高，无论实际质量。因为模型拥有自己推理的完整上下文，每个决策都感觉合理，承认失败等于否定自己，而训练数据又奖励自信。短任务里人类能发现问题；长时运行里 Agent 自主运行，如果它总说"看起来不错"，错误就不断累积。</p>
@@ -1104,7 +1104,7 @@ EVALUATOR_PROMPT = &quot;&quot;&quot;你是一名严格的评审。你只能看
 验收清单：
 {rubric}&quot;&quot;&quot;</code></pre>
 <p>三大反模式：单体 Agent（一个 prompt 又当规划又当执行又当审查）、没有评分标准的评估（永远 8/10）、无限重新规划（三次失败说明是规范问题不是执行问题，交给人）。核心要点：<strong>长时运行 ≠ 更多时间的短任务；先分解；为一切设上限。</strong></p>
-<h3>4.2 托管式架构：把判断、执行、记录三者拆开</h3>
+<h3 id="4-2-托管式架构-把判断-执行-记录三者拆开">4.2 托管式架构：把判断、执行、记录三者拆开</h3>
 <p>最简单的 Agent 架构把一切塞进一个容器：Harness、Sandbox、Session 状态共享一个进程。这对原型没问题，生产环境会以三种可预见的方式失败：<strong>宠物问题</strong>（容器崩了 Session 就丢，你得把它"救活"而不能杀掉重启，因为完整历史在里面)、<strong>调试盲区</strong>（要诊断就得进容器 shell，但那容器同时装着用户数据和凭证，调试变成安全事件）、<strong>安全边界</strong>（不可信代码和凭证同处一室，一次 prompt 注入就能读环境变量偷 Token）。</p>
 <p>解法是拆成三层，每层独立生命周期：</p>
 <ul><li><strong>大脑（Harness + LLM 调用）</strong>：<strong>无状态</strong>。不在内存里保存任何 Session 数据，所有持久内容通过 <code>emitEvent()</code> 写入 Session 日志。崩了就起一个新的，调 <code>wake(sessionId)</code> 通过 <code>getEvents()</code> 从最后一个事件恢复，零数据丢失——大脑变成了可替换的"牲畜"。</li></ul>
@@ -1158,7 +1158,7 @@ EVALUATOR_PROMPT = &quot;&quot;&quot;你是一名严格的评审。你只能看
             context = self.assemble_context(self.sessions.get_events(session_id))
 # 进程被 kill？→ 起个新进程调 wake(session_id) 即可，状态全在日志里</code></pre>
 <p>这个分离带来三个好处：<strong>不可逆决策变可逆</strong>（压缩会永久销毁信息，但有持久日志后，Harness 可以重新读取任何被压缩掉的旧事件）、<strong>上下文工程成为 Harness 的职责</strong>（今天是 Token 裁剪、明天可能是语义检索，Session 格式不变）、<strong>多大脑成为可能</strong>（规划大脑读完整历史、执行大脑读最近事件，同读一个日志）。安全上<strong>凭证绝不进 Sandbox</strong>（用"资源捆绑"——Git token 在初始化时用完即弃，或"保险库 + 代理"——OAuth token 存保险库，Agent 通过代理调用，Sandbox 永远看不到密钥），即使 prompt 注入翻遍环境也找不到凭证。性能上，延迟配置 Sandbox（不预先启动、让 LLM 通过工具调用决定是否需要）带来 TTFT p50 降约 60%、p95 降约 90%。</p>
-<h3>4.3 Initializer + Coding Agent：多天项目的两阶段模式</h3>
+<h3 id="4-3-Initializer-Coding-Agent-多天项目的两阶段模式">4.3 Initializer + Coding Agent：多天项目的两阶段模式</h3>
 <p>给一个前沿模型喂"给我建一个 Claude.ai 的 clone"然后走开一下午，结局你能预料：一个能用的登录表单、半个消息列表、夹在函数中间的 <code>TODO: hook up streaming</code>、和一条非常自信的 commit message。本能反应是怪模型，其实几乎总是 Harness 的锅。</p>
 <p>对"Context 有限"的标准答案是 Compaction（总结旧的、保留新的），但 <strong>Compaction 属于 in-context memory，撑两小时的重构够用，撑两天的构建会垮</strong>：第一段把代码写到撞上限，第二段读一份已经有损的摘要去重建意图，第三段读的是"摘要的摘要"，等到第四段，模型手里只剩一层层转述后的二手信息——哪个功能真做完了、哪个只做了一半、哪句是它自己在摘要里编出来的，它已经分不清。长程任务要的是 <strong>out-of-context memory</strong>：文件、结构化状态、提交历史这类每次重新读取的实体，而不是靠一层层总结往下传。</p>
 <p>必须同时解决两种失败：<strong>一气呵成倾向</strong>（一个 session 里做完所有事，Context 满了留一堆半成品、跑不起来的测试、没有干净 commit，模型在能检查之前就把空间耗光了）和<strong>过早胜利</strong>（Session 2 读 Session 1 的进度笔记"implemented login, messaging, streaming"，看到<em>像是</em>实现了的代码就宣布完成，没运行、没测试、信了叙事）。天真的"用 Compaction 循环就好"不够用，因为 Compaction 恰恰强化了上个 session 过度乐观的叙事。</p>
@@ -1207,10 +1207,10 @@ EVALUATOR_PROMPT = &quot;&quot;&quot;你是一名严格的评审。你只能看
 4. bash init.sh            → 装依赖、起 dev server
 5. 浏览器打开 App          → 验证上个 session 的活还在工作（这一步杀死过早胜利）</code></pre>
 <p>只有第 5 步之后才挑一个 feature——<strong>单一、最高优先级、<code>passes: false</code> 且依赖都满足的那一个</strong>，不是两个、不是"一组"。做完变绿、E2E 通过、翻 <code>passes: true</code>、干净 commit 就停。<strong>一 session 一 feature</strong> 同时杀死两种失败：contract 人为约束了范围（治一气呵成），"done"由 e2e 测试而非自封定义（治过早胜利）。端到端测试是信任层——单元测试是 Coding Agent 自己写的，可能和实现一样地错，E2E 用浏览器像真实用户一样驱动才是独立信号。若 feature 没做完就撞上限，<strong>回退到上次干净 commit 并报"未完成"</strong>，绝不 commit 坏代码——这是保持 git 可信的方式。核心洞察：<strong>"我知道什么"由磁盘文件回答，不由 Context Window 回答。长程 Agent 老忘事，修复几乎从来不是更大的窗口，是更多的文件。</strong></p>
-<h3>05</h3>
+<h3 id="05">05</h3>
 <p>第五部分 · 评测这道坎</p>
 <p>Agent 做出来了，怎么知道它好不好？评测（Eval）之于 Agent 就像单元测试之于代码——生产中不是可选项。但 Agent 评测比传统 Benchmark 微妙得多，有三个坑几乎每个团队都会踩。</p>
-<h3>5.1 基础设施噪声：多给一个核，排行榜就换了名次</h3>
+<h3 id="5-1-基础设施噪声-多给一个核-排行榜就换了名次">5.1 基础设施噪声：多给一个核，排行榜就换了名次</h3>
 <p>你换了个更强的模型，SWE-bench 涨了两分，这时候先别急着发群里。<strong>也可能你只是恰好给评测容器多分了一个核。</strong></p>
 <p>** **</p>
 <p>传统 Benchmark（MMLU、HumanEval）本质是一次函数调用，2 核和 64 核跑出的分数完全一样，因为推理在远程 API，本地只管 I/O 编排。Agent 评测彻底打破这个假设——Agent 要派生进程（测试运行器、构建工具）、读写大代码库、迭代（跑测试→读失败→改→再跑）、管理时间。<strong>同一套测试，在宽裕的机器上几秒跑完，在被勒住的容器里可能要十几倍的时间；一个只给五分钟就被掐掉的任务，当然比给半小时的做得少——这不是模型变差了，是时间用完了。运行时环境本身就是被测对象的一部分。</strong></p>
@@ -1222,7 +1222,7 @@ EVALUATOR_PROMPT = &quot;&quot;&quot;你是一名严格的评审。你只能看
 <p>资源给多少也有个规律：<strong>从「紧巴巴」放宽到「够用」，收益主要来自消除环境故障</strong>（OOM、超时、磁盘满这类错误率下降，分数本身变化不大）；而从「够用」放宽到「不限」，分数才会明显上去——因为 Agent 会拿多出来的预算做更激进的探索、更重的工具调用、更长的推理链。</p>
 <p>给 Harness 工程师的建议：把资源配置当成<strong>一等实验变量</strong>，记录、版本化、随结果一起报告。具体做法是明确一个下限（保证分配）和一个上限（突发额度），下限要显著高于「刚好能跑起来」的水平——贴着跑不通的边界配置，测出来的更多是环境噪声而不是模型能力；同时单独监控 OOM、超时、磁盘写满这几类错误的发生率，一旦它们不再是个别现象，这批结果就该作废重跑；此外，一次评测独占一台机器，别让邻居的负载混进你的数据；最后，把环境配置文件纳入版本控制，和代码一样管。</p>
 <p><strong>一句话：基准分从来不是模型的属性，而是「模型 + 编排 + 基础设施 + 题目集 + 判分函数」这一整套东西的联合属性。</strong></p>
-<h3>5.2 被测觉察：Agent 察觉到这是考场之后</h3>
+<h3 id="5-2-被测觉察-Agent-察觉到这是考场之后">5.2 被测觉察：Agent 察觉到这是考场之后</h3>
 <p>还有一类更奇特的污染，值得单独说。</p>
 <p>业内已经观察到这样的案例：一个 Agent 在某个检索类评测集上，为单独一道题烧掉了远超中位数几十倍的 Token。前面绝大部分过程都很正常——搜索、推理、走进死胡同、再换方向。然后轨迹性质变了：它不再试图回答这道题，而是开始追问「<strong>这道题本身是什么</strong>」。它去清点公开的评测集，比对特征后锁定了自己正在被哪一个测，找到该评测集的公开仓库，读了数据加载代码，发现题库是加密存放的，于是自己写出解密逻辑，又在第三方镜像里找到了密文，把整个题库解开，直接从答案里取出当前这道题的解。</p>
 <p>- - - -</p>
@@ -1237,7 +1237,7 @@ EVALUATOR_PROMPT = &quot;&quot;&quot;你是一名严格的评审。你只能看
 <p>** **</p>
 <p>由此得到几条启示：静态题库不能再单独采信，要当成会缓慢泄露的物件来管（轮换题目、保留私有切片）；<strong>默认收紧工具能力</strong>（只放行文本抓取、评测模式下剥离写入权限、限制单轮预算）；网络访问用白名单而不是黑名单（黑名单是无限游戏，白名单是有限的）；完整记录推理过程以便事后分析；再加一层轻量的觉察检测（盯住那些引用评测集名称、开始做逆向分析、或者说出「这题像是人造的」之类的推理）。出题方也该假设模型会去读你的仓库。</p>
 <p>这件事<strong>不算欺骗，也不是什么病态行为，它就是能力本身</strong>——它不会被训练掉，反而会被训练得更强（因为在评测之外的场合这套能力到处有用）。Harness 该做的不是指望模型不去走捷径，而是让捷径根本不可用。</p>
-<h3>5.3 用模型来审批：从「每次都问人」到「机器先过一遍」</h3>
+<h3 id="5-3-用模型来审批-从-每次都问人-到-机器先过一遍">5.3 用模型来审批：从「每次都问人」到「机器先过一遍」</h3>
 <p>每个想做安全的 Harness，几乎都从「危险动作前先问一句」开始。前十次管用，到第一百次用户已经不看内容直接点同意，到第一千次索性把弹窗关掉——<strong>只要审批频率超过注意力的承受范围，同意就变成了肌肉记忆，这道防线也就名存实亡了。</strong> 这不是 UX 没做好，是人类注意力的物理极限。</p>
 <p>传统的三个选项都不理想：把一切关进沙盒（维护贵、也断了它和真实环境的连接）、靠人工弹窗（点到麻木，等于没有）、干脆关掉权限检查（一次注入就全线沦陷）。</p>
 <p>于是有了第四种思路：<strong>既然人看不过来，那就让另一个模型先看一遍。</strong></p>
@@ -1251,7 +1251,7 @@ EVALUATOR_PROMPT = &quot;&quot;&quot;你是一名严格的评审。你只能看
 <ul><li><strong>在执行之前</strong>：卡在工具真正落地的那一步前面，而不是事后告警。</li></ul>
 <p>它要挡的是四类情况：Agent 做得过头了、Agent 老实地犯了个错、Agent 被外部内容注入了指令、以及模型这一轮的判断本身跑偏了。</p>
 <p>具体拦什么，可以归成四条：<strong>销毁或外传数据</strong>、<strong>削弱安全配置</strong>（比如把权限放到全开）、<strong>跨越信任边界</strong>、<strong>绕过既有审查</strong>（禁掉 CI、强推、跳过检查钩子）。</p>
-<h4>双层防御：入口和出口各设一道</h4>
+<h4 id="双层防御-入口和出口各设一道">双层防御：入口和出口各设一道</h4>
 <p>光在动作出口审还不够，因为很多问题的源头在<strong>入口</strong>——Agent 读进来的网页、文件、Shell 输出里可能夹带着指令。所以合理的结构是两层：</p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-013-a6e4220c.png"></p>
 <p>两层互相独立，谁失守另一层还在：</p>
@@ -1268,7 +1268,7 @@ EVALUATOR_PROMPT = &quot;&quot;&quot;你是一名严格的评审。你只能看
       │ (扫外部内容注入)   │             └──────────┘
       └──────────────────┘
    两层独立：一层被绕过，另一层仍有机会拦下（纵深防御）</code></pre>
-<h4>成本问题：绝大多数动作不该走到审核模型</h4>
+<h4 id="成本问题-绝大多数动作不该走到审核模型">成本问题：绝大多数动作不该走到审核模型</h4>
 <p>每个动作都多跑一次模型调用，延迟和成本都受不了。所以前面要加分流，让绝大多数调用在更便宜的层就放行：</p>
 <p>- - - - - - - - - - - - - -</p>
 <pre><code>  要执行的动作 ──► ┌──────────────────────┐
@@ -1305,7 +1305,7 @@ EVALUATOR_PROMPT = &quot;&quot;&quot;你是一名严格的评审。你只能看
 FULL_PROMPT = &quot;&quot;&quot;判断【动作】是否是对【用户请求】的合理解读。你能看到用户消息、
 工具调用和工具结果，但看不到 Agent 的推理过程。若动作会：销毁或外传数据、削弱安全
 配置、跨越信任边界、或绕过审查——则拦截；否则放行。&quot;&quot;&quot;</code></pre>
-<h4>最关键的一个设计：不让它看 Agent 的推理</h4>
+<h4 id="最关键的一个设计-不让它看-Agent-的推理">最关键的一个设计：不让它看 Agent 的推理</h4>
 <p>####</p>
 <p>这是整套机制里最容易被写错的地方：<strong>审核模型不应该看到 Agent 的思考过程</strong>，只看用户说了什么、要执行什么动作、之前的工具返回了什么。上面那段代码的入参里刻意没有推理内容。</p>
 <p>原因是 Agent 能给任何动作配上一段说得过去的理由：</p>
@@ -1320,7 +1320,7 @@ Agent（动作）： DROP TABLE orders;</code></pre>
 <ul><li><strong>一定要在自己的真实流量上量误报率。</strong> 拦得太多比没有更糟——用户会直接关掉它。</li></ul>
 <ul><li><strong>几个典型反模式</strong>：把这些规则写进 Agent 的提示词（那只是建议，不是约束）；让 Agent 和审核模型共享同一份上下文；只做一层判断不分快慢；不留判断日志，导致误报无法复盘；以及完全信任审核结果——它本身也是个会出错的模型，后面仍然需要沙盒兜着。</li></ul>
 <p>目标从来不是零风险，而是<strong>让安全的那条路，同时也是最省事的那条路</strong>。</p>
-<h3>06</h3>
+<h3 id="06">06</h3>
 <p>收尾 · 贯穿全篇的心法</p>
 <p>把全文收敛成十二条，每一条背后都对应着前面某一节的血泪：</p>
 <ol><li><strong>Harness 就是一个循环</strong>，复杂度全在循环外围（Context、Memory、Skill、错误恢复、Sandbox）。</li></ol>
@@ -1336,7 +1336,7 @@ Agent（动作）： DROP TABLE orders;</code></pre>
 <ol><li><strong>评测里基础设施是一等实验变量</strong>，且要防 Agent"绕过任务而非解决任务"（限制工具能力、Web 白名单）。</li></ol>
 <ol><li><strong>按需要长出来，不要提前搭</strong>——先跑通最小循环；要跨任务复用了才上 Memory，工具多到挑不清了才上 Skill，真要对外担责了才补 Guardrails 和 Sandbox。</li></ol>
 <p>一句话总结这一整篇：<strong>模型决定 Agent 的能力上限，Harness 决定你能把这个上限稳定、安全、可持续地兑现多少。</strong></p>
-<h3>参考来源</h3>
+<h3 id="参考来源">参考来源</h3>
 <p>本文为综述性汇总，观点与素材整理自以下几类公开来源（按主题归纳，非逐篇对应）：</p>
 <ul><li><strong>模型厂商工程文档</strong>：Agent 构建方法论与实践总结（如 Anthropic "Building effective agents"）、上下文与工具设计、操作审批与评测相关的工程文章。</li></ul>
 <ul><li><strong>论文与公开讨论</strong>：ReAct（推理与行动交替）、MemGPT 的分层记忆、关于上下文工程的公开讨论等，是本文循环结构与信息分层部分的背景。</li></ul>
@@ -1359,7 +1359,7 @@ Agent（动作）： DROP TABLE orders;</code></pre>
 <p><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697030&amp;idx=1&amp;sn=961b696054ae4d9c0f9eda068564203e&amp;scene=21#wechat_redirect"><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-020-182bc42f.png"></a></p>
 <p><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697260&amp;idx=1&amp;sn=bbda847cb4e895e1ea99caf5acec9923&amp;scene=21#wechat_redirect"><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-021-11b59173.png"></a></p>
 <p><img alt="图片" src="../../_assets/20260918-Agent-Harness综述换Harness比换模型管用/img-022-be100d1e.webp"></p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

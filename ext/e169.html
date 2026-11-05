@@ -395,41 +395,41 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</h1><div class="meta">📅 2026-04-21 · <span class="badge">飞书</span> · <a class="src-link" href="https://mi.feishu.cn/docx/BSckdIgxdoKxMDxgidOcspoonVh" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260421-Claude-Code源码深度解析-Agent等于Model加Harness完整拆解.md</div><div class="md"><h1>Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">16</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Claude-Code-源码深度解析-Agent-Model-Harness-六大系统完整拆解">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#一-核心公式与总体架构">一、核心公式与总体架构</a><a class="tl l3" href="#二-提示词工程-Agent-的-工作手册">二、提示词工程——Agent 的&quot;工作手册&quot;</a><a class="tl l3" href="#三-工具调用系统-Agent-的-42只手">三、工具调用系统——Agent 的&quot;42只手&quot;</a><a class="tl l3" href="#四-上下文管理-Agent-的-有限白板">四、上下文管理——Agent 的&quot;有限白板&quot;</a><a class="tl l3" href="#五-任务管理-Agent-的-装修清单">五、任务管理——Agent 的&quot;装修清单&quot;</a><a class="tl l3" href="#六-多Agent协作-Agent-的-施工团队">六、多Agent协作——Agent 的&quot;施工团队&quot;</a><a class="tl l3" href="#七-与-Claude-模型深度绑定">七、与 Claude 模型深度绑定</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文">原文</a><a class="tl l2" href="#原文沉淀">原文沉淀</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</h1><div class="meta">📅 2026-04-21 · <span class="badge">飞书</span> · <a class="src-link" href="https://mi.feishu.cn/docx/BSckdIgxdoKxMDxgidOcspoonVh" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260421-Claude-Code源码深度解析-Agent等于Model加Harness完整拆解.md</div><div class="md"><h1 id="Claude-Code-源码深度解析-Agent-Model-Harness-六大系统完整拆解">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</h1>
 <blockquote><p>来源：飞书 归档日期：2026-04-21 抓取状态：待补充原文 原文字符：0｜配图：0 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>如何将一个"只会说话的大语言模型"变成一个"真正能干活的 AI Agent"？本文通过拆解 Claude Code v2.1.88 源码，给出了工程级的完整答案。</p>
-<h2>核心内容</h2>
-<h3>一、核心公式与总体架构</h3>
+<h2 id="核心内容">核心内容</h2>
+<h3 id="一-核心公式与总体架构">一、核心公式与总体架构</h3>
 <ul><li><strong>Agent = Model + Harness</strong>。Model 是大脑（能思考不能行动），Harness 是工程脚手架（给大脑装上眼睛、手、脚和记忆）。Model 决定智商上限，Harness 决定能力边界</li><li>Claude Code 的 Harness 由六大系统组成：提示词工程（性格规则）、工具调用（手和脚）、上下文管理（记忆管理）、任务管理（项目管理能力）、多Agent协作（团队协作）、Agent Loop（驱动心脏）</li><li><strong>Agent Loop 是系统心脏</strong>：<code>query.ts</code> 的 <code>queryLoop()</code> 是一个 <code>while(true)</code> 循环，不断执行"思考→行动→观察"。收到 <code>end_turn</code>（AI 认为完成）或 <code>tool_use</code>（需要调用工具）时分别走不同路径</li></ul>
-<h3>二、提示词工程——Agent 的"工作手册"</h3>
+<h3 id="二-提示词工程-Agent-的-工作手册">二、提示词工程——Agent 的"工作手册"</h3>
 <ul><li><strong>多层动态组装</strong>：系统提示词不是一个大字符串，而是 12 个模块按顺序拼接。前 7 层是静态的（身份声明、行为规则、编码指南、安全操作、工具使用、语气风格、输出效率），后 5 层是动态的（会话指导、记忆、环境信息、MCP 服务器、Token 预算）</li><li><strong>Prompt Caching 关键优化</strong>：静态层和动态层之间用 <code>SYSTEM_PROMPT_DYNAMIC_BOUNDARY</code> 分界线切割。分界线以上可被 API 缓存（缓存读取仅 0.3 美元/百万 token，比无缓存的 3 美元便宜 90%），分界线以下每次重算</li><li><strong>提示词优先级</strong>：system prompt &lt; CLAUDE.md（项目级）&lt; 用户对话指令，用户说的永远最高优先</li><li><strong>上下文注入系统</strong>：每轮对话自动注入当前日期、CLAUDE.md 内容、权限提醒、自动记忆、恢复对话历史等信息，AI 全程获取最新环境状态</li></ul>
-<h3>三、工具调用系统——Agent 的"42只手"</h3>
+<h3 id="三-工具调用系统-Agent-的-42只手">三、工具调用系统——Agent 的"42只手"</h3>
 <ul><li><strong>42 个内置工具，分 8 大类</strong>：文件操作（Read/Write/Edit/MultiEdit）、搜索发现（Grep/Glob/WebSearch/ToolSearch）、代码执行（Bash/Notebook）、版本控制（GitDiff/GitLog/GitCommit）、代码智能（GoToDefinition/FindReferences/DiagnosticsRefresh）、任务管理（TodoWrite/Task系列）、多Agent（Subagent/AgentTeam系列）、MCP 外部工具</li><li><strong>工具并发编排</strong>：AI 可以一次请求多个工具。执行引擎先将工具分为"可并发"和"需串行"两类：读操作可并发（Read+Grep 同时跑），写操作必须串行（Edit→Bash 按顺序）。并发工具用 <code>Promise.allSettled</code> 并行执行</li><li><strong>权限三级系统</strong>：Allow（直接执行，如 Read/Grep）→ Ask（弹窗询问用户，如 Write/Bash）→ Deny（完全禁止，如 <code>rm -rf /</code>）。权限判断在工具执行前拦截，支持模式匹配和 LLM 分类器自动审批</li></ul>
-<h3>四、上下文管理——Agent 的"有限白板"</h3>
+<h3 id="四-上下文管理-Agent-的-有限白板">四、上下文管理——Agent 的"有限白板"</h3>
 <ul><li><strong>200K token 上下文窗口</strong>中，系统提示词占 5K-10K，工具描述占 10K-20K，每轮工具调用+结果消耗 1K-50K。长对话会快速撑爆</li><li><strong>五层递进式压缩</strong>：① 工具结果预算控制（实时，超限存磁盘只留预览）→ ② 微压缩（闲置&gt;60分钟时裁剪旧工具结果）→ ③ 会话记忆压缩（用预取摘要替代完整对话历史）→ ④ 完整压缩（让 AI 自己总结 15 要点+摘要后砍掉旧消息）→ ⑤ 响应式压缩（API 返回 prompt-too-long 错误时紧急砍 50%）</li><li><strong>Token 计量不用 tokenizer</strong>：用 <code>charCount / 3.25</code> 估算 token 数（比调 tokenizer 快 10 倍），加 10% 安全余量</li><li><strong>Prompt Cache 协同</strong>：压缩时尽量保留缓存友好的前缀不动，只砍中间和尾部的消息</li></ul>
-<h3>五、任务管理——Agent 的"装修清单"</h3>
+<h3 id="五-任务管理-Agent-的-装修清单">五、任务管理——Agent 的"装修清单"</h3>
 <ul><li><strong>两代系统</strong>：V1 TodoWrite（内存存储、轻量、单Agent 用），V2 Task 工具集（磁盘持久化、支持依赖、多Agent 共享、专为 Agent Teams 设计）</li><li><strong>V2 Task 生命周期</strong>：pending → in_progress → completed/failed/cancelled。支持七种依赖类型（blocks/blocked_by/related_to/parent/subtask/follows/duplicates）</li><li><strong>Plan Mode</strong>：遇到复杂任务时，AI 先用 Task 系统生成结构化计划让用户审批，审批通过后才执行。避免 AI 一上来就动手，做错再返工</li></ul>
-<h3>六、多Agent协作——Agent 的"施工团队"</h3>
+<h3 id="六-多Agent协作-Agent-的-施工团队">六、多Agent协作——Agent 的"施工团队"</h3>
 <ul><li><strong>模式一 Subagent</strong>：主 Agent 临时 fork 一个子 Agent 执行特定任务（如探索代码库），子 Agent 有独立上下文和工具权限，完成后返回结果给主 Agent。6 种内置类型：Explore/General/Code Review/Pre-commit/Verification/Orchestrator</li><li><strong>模式二 Agent Teams</strong>：创建持久化团队，成员间通过 message 通道实时通信。类似"一个公司的部门协作"——前端组、后端组、测试组并行工作，通过消息传递协调</li><li><strong>Coordinator 模式</strong>：Agent Teams 的高级形态，一个 Coordinator Agent 总揽全局调度，其他 Agent 是专业工人。Coordinator 有完整权限，Worker 权限受限</li><li><strong>工具使用限制</strong>：子 Agent 不能再创建子 Agent（防递归爆炸），Explore Agent 只有只读工具，不同角色有不同的工具白名单</li></ul>
-<h3>七、与 Claude 模型深度绑定</h3>
+<h3 id="七-与-Claude-模型深度绑定">七、与 Claude 模型深度绑定</h3>
 <ul><li>Claude Code 与 Claude 模型在 <strong>SDK/消息格式</strong>（60+文件）、<strong>独有功能</strong>（Extended Thinking/Prompt Caching/Server Tool/Connector Text/Fast Mode）、<strong>模型配置</strong>（11个模型硬编码+定价表+Token限制+Beta头系统）三层深度绑定</li><li>涉及 100+ 个源文件，直接替换为 GPT/Gemini/Llama 几乎不可能，需要重写大部分 API 层</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <p>思考方向：</p>
 <ol><li>我们自己的 OpenCode Agent 体系（chairman + Ops Skills）和 Claude Code 的 Harness 架构有哪些映射关系？能从中借鉴什么优化思路——比如提示词缓存分层、上下文压缩策略？</li><li>五层压缩架构中，第3层"会话记忆压缩"用预取摘要替代完整历史的思路，能否应用到我们的知识库检索场景——对长知识卡做摘要索引，检索时先匹配摘要再加载全文？</li></ol>
 <hr>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <ul><li><strong>理解 Agent 架构本质</strong>：不是概念性的讨论，而是源码级的工程拆解。自己搭 Agent 系统时，每一层该怎么做都有参照</li><li><strong>Prompt Caching 的实战设计</strong>：静态/动态分层+缓存分界线的思路，直接可以搬到任何需要调 LLM API 的项目里省 90% 成本</li><li><strong>五层压缩架构是上下文管理的标杆</strong>：我们自己搭 Agent 也面临同样的上下文溢出问题，这套渐进式压缩策略可以直接借鉴</li><li><strong>多Agent协作的两种模式</strong>给了清晰的选型依据：临时任务用 Subagent，长期协作用 Agent Teams</li></ul>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li>适用：自己搭建 AI Agent 系统、优化 LLM 调用成本、理解 Claude Code 内部机制、做 Agent 工程架构决策</li><li>不适用：只想学怎么用 Claude Code（不需要看源码级细节），纯概念性了解 Agent（这篇太工程化了）</li></ul>
-<h2>原文</h2>
+<h2 id="原文">原文</h2>
 <blockquote><p>原文约 10 万字，含大量源码级表格和架构图，完整内容请查看飞书原文： <a href="https://mi.feishu.cn/docx/BSckdIgxdoKxMDxgidOcspoonVh">Claude Code 源码深度解析</a>  基于 Claude Code v2.1.88 源码分析（反编译版本），随版本更新具体实现可能变化，核心架构模式保持稳定。</p></blockquote>
-<h2>原文沉淀</h2>
+<h2 id="原文沉淀">原文沉淀</h2>
 <p>（抓取失败，仅有摘要） 原因：来源为登录墙/无权限/错误页，正文不可用； 来源 URL：https://mi.feishu.cn/docx/BSckdIgxdoKxMDxgidOcspoonVh</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

@@ -395,46 +395,46 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</h1><div class="meta">📅 2026-04-07 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/bl77_Mb85C4AKe8h4__V6Q" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260407-Agent-Memory系统本质与架构设计.md</div><div class="md"><h1>Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">46</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Agent-Memory-的本质是闭环系统-不是存储-Ledger-Views-Policy-三件套-五层架构">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#一-Memory-的三个核心命题">一、Memory 的三个核心命题</a><a class="tl l3" href="#二-System-1-System-2-架构">二、System 1 + System 2 架构</a><a class="tl l3" href="#三-非参数化逼近参数化-Memory">三、非参数化逼近参数化 Memory</a><a class="tl l3" href="#四-时序记忆是架构结构维度">四、时序记忆是架构结构维度</a><a class="tl l3" href="#五-程序性记忆-从-知识-到-技能">五、程序性记忆——从&quot;知识&quot;到&quot;技能&quot;</a><a class="tl l3" href="#六-最终架构五件套">六、最终架构五件套</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#增补-学术论文系统实验对比-2026-05-11">【增补】学术论文系统实验对比（2026-05-11）</a><a class="tl l3" href="#统一框架四组件">统一框架四组件</a><a class="tl l3" href="#10方法系统对比实验-LOCOMO-LONGMEMEVAL-两个数据集">10方法系统对比实验（LOCOMO + LONGMEMEVAL 两个数据集）</a><a class="tl l3" href="#新-SOTA-设计">新 SOTA 设计</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#记忆的本质是什么">「记忆的本质是什么？」</a><a class="tl l3" href="#核心命题-Memory-在-Agent-系统里到底-是什么">核心命题：Memory 在 Agent 系统里到底&quot;是什么&quot;</a><a class="tl l3" href="#小结">小结：</a><a class="tl l3" href="#为什么Raw-Ledger-views-policy是自然解">为什么Raw Ledger+views+policy是自然解</a><a class="tl l3" href="#非参数化逼近参数化-Memory">非参数化逼近参数化 Memory</a><a class="tl l3" href="#Memory-System-控制层-策略层-policy">Memory System 控制层/策略层（policy）</a><a class="tl l3" href="#以下-我列举一些2026年-新出现的参数化Memory工作">以下，我列举一些2026年，新出现的参数化Memory工作：</a><a class="tl l3" href="#Memory-单元的结构-时序和压缩">Memory 单元的结构、时序和压缩</a><a class="tl l3" href="#LLM-对时间天然不敏感-尤其是隐含时间-相对时间-跨时区">LLM 对时间天然不敏感（尤其是隐含时间、相对时间、跨时区）</a><a class="tl l3" href="#纯语义检索会把-过去的高相似事实-错当成-现在仍为真">纯语义检索会把&quot;过去的高相似事实&quot;错当成&quot;现在仍为真&quot;</a><a class="tl l3" href="#决策层出现-过时事实复活-以及-被纠正的事实仍反复召回">决策层出现&quot;过时事实复活&quot;、以及&quot;被纠正的事实仍反复召回&quot;</a><a class="tl l3" href="#认知科学视角-episodic-memory-的-时间-是索引-也是解释框架">认知科学视角：episodic memory 的&quot;时间&quot;是索引，也是解释框架</a><a class="tl l3" href="#数据库视角-bi-temporal-把-世界真值-与-系统记账-拆开">数据库视角：bi-temporal 把&quot;世界真值&quot;与&quot;系统记账&quot;拆开</a><a class="tl l3" href="#时序-因果-时间顺序不是因果-但没有时间就更不可能有因果">时序 × 因果：时间顺序不是因果，但没有时间就更不可能有因果</a><a class="tl l3" href="#没有稳定的时间骨干-因果推断会被语义相似牵引-出现-倒因果叙事">没有稳定的时间骨干 → 因果推断会被语义相似牵引，出现&quot;倒因果叙事&quot;</a><a class="tl l3" href="#policy-学到的写-读策略会与真实回报对不上-credit-assignment-变差">policy 学到的写/读策略会与真实回报对不上（credit assignment 变差）</a><a class="tl l3" href="#最终表现为-系统对-变化-纠错-越记越乱">最终表现为：系统对&quot;变化/纠错&quot;越记越乱</a><a class="tl l3" href="#时序-policy-遗忘-衰减-默认-current-的安全性来自-结构化抑制-而非简单-decay">时序 × policy（遗忘/衰减）：默认 current 的安全性来自&quot;结构化抑制&quot;，而非简单 decay</a><a class="tl l3" href="#时序-压缩-固化-consolidation-固化改变分辨率-必须显式绑定时间结构">时序 × 压缩/固化（consolidation）：固化改变分辨率，必须显式绑定时间结构</a><a class="tl l3" href="#不带时间结构的固化-抽象会跨期混合-current-变得不可靠">不带时间结构的固化 → 抽象会跨期混合 → current 变得不可靠</a><a class="tl l3" href="#current-不可靠-默认-current-策略失效-要么漏-要么错">current 不可靠 → 默认 current 策略失效（要么漏，要么错）</a><a class="tl l3" href="#policy-只好提高召回量来-自证-反而增加接口带宽压力">policy 只好提高召回量来&quot;自证&quot;，反而增加接口带宽压力</a><a class="tl l3" href="#时序-skill-程序性记忆-技能有-验证时间-过期更像需要再验证而非线性衰减">时序 × skill（程序性记忆）：技能有&quot;验证时间&quot;，过期更像需要再验证而非线性衰减</a><a class="tl l3" href="#程序性层-The-Procedural-Layer-从-知识-到-技能">程序性层（The Procedural Layer）：从&quot;知识&quot;到&quot;技能&quot;</a><a class="tl l3" href="#Memory-整合层-The-Integration-Layer">Memory 整合层（The Integration Layer）：</a><a class="tl l3" href="#潜层融合与零样本对齐-Memory-Tokens">潜层融合与零样本对齐（Memory Tokens）</a><a class="tl l3" href="#Memory-System-架构总结">Memory System 架构总结</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</h1><div class="meta">📅 2026-04-07 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/bl77_Mb85C4AKe8h4__V6Q" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260407-Agent-Memory系统本质与架构设计.md</div><div class="md"><h1 id="Agent-Memory-的本质是闭环系统-不是存储-Ledger-Views-Policy-三件套-五层架构">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-04-07 抓取状态：成功 原文字符：30013｜配图：23 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>Agent 的记忆系统到底应该怎么设计？不是"存多少历史"的问题，而是"如何让历史有效影响当前决策"的系统设计问题。</p>
-<h2>核心内容</h2>
-<h3>一、Memory 的三个核心命题</h3>
+<h2 id="核心内容">核心内容</h2>
+<h3 id="一-Memory-的三个核心命题">一、Memory 的三个核心命题</h3>
 <ol><li><strong>Memory 不是存储，是外部状态</strong>：价值不在"存了多少历史"，而在"从历史到当前决策的通道"是否有效——输出要么进入上下文（证据/摘要/子图），要么直接参与决策（如 logit 调制）。</li><li><strong>最小闭包是三件套</strong>：Raw Ledger（追加式权威账本）+ Derived Views（向量索引/KG/时序图谱/技能索引等派生视图，可 lossy 但必须可溯源）+ Policy（控制何时读写/更新/遗忘，输出 ADD/UPDATE/DELETE 等显式 Action 序列）。</li><li><strong>基本单位是 event 序列</strong>：每条 event 含作用域/时间戳/输入观测/系统动作/记忆变更/反馈信号。但 event 是"真相来源"，太底层不可直接用；views 和 policy 才是把历史变成能力的关键。</li></ol>
-<h3>二、System 1 + System 2 架构</h3>
+<h3 id="二-System-1-System-2-架构">二、System 1 + System 2 架构</h3>
 <ul><li>System 1 = LLM 通用 Agent（推理/规划/工具调用），System 2 = 外置 Agentic Memory 慢回路</li><li>核心论点：记忆能力与 LLM Agent 能力"相对正交"——可拆成两块低耦合模块分别优化，互不干扰</li><li>外置化的好处：不影响 System 1 性能、记忆可插拔/可迁移/可归因、跨模型可复用</li><li>System 2 回路：PreThink → Retrieve(loop) → Evidence Accumulate → Early Stop → Write/Update</li></ul>
-<h3>三、非参数化逼近参数化 Memory</h3>
+<h3 id="三-非参数化逼近参数化-Memory">三、非参数化逼近参数化 Memory</h3>
 <ul><li>外部记忆对模型输出施加修正项 Δ（可控偏置），不改权重但改决策分布</li><li>上限由三类瓶颈共同决定：</li><ul><li><strong>接口带宽</strong>：能往 System 1 注入多少有效信息（token/注意力/显存）</li><li><strong>检索聚合误差</strong>：views 作为近似结构，错检/漏检/时序冲突会直接污染 Δ</li><li><strong>policy 可学习性</strong>：写多了污染、写少了学不到、UPDATE/DELETE 做错会滚雪球——最被低估的瓶颈</li></ul><li>关键论文：JitRL（优势函数做加性调制）、UMEM（语义邻域迁移，GRPO 训练）、AgeMem（分阶段 RL 训练记忆工具）、InfMem（PreThink + 自适应早停，推理加速 3.9×）</li></ul>
-<h3>四、时序记忆是架构结构维度</h3>
+<h3 id="四-时序记忆是架构结构维度">四、时序记忆是架构结构维度</h3>
 <ul><li>时间不是 metadata，是改变三层语义边界的硬约束</li><li><strong>双时态（bi-temporal）</strong>：valid_time（事实何时为真）≠ transaction_time（系统何时记录）；纠错是"追加更正事件"而非覆写</li><li><strong>三类遗忘/抑制机制</strong>：先 validity gating（硬门控）→ 再 tombstone（可审计撤回）→ 再 decay（软排序）</li><li><strong>固化原则</strong>：consolidation 第一原则是"不跨越变更点"，否则不同时期的真值会被平均化</li><li>Zep/Graphiti 的 TKG 给边加 Temporal Validity；MAGMA 的四正交图（语义/时间/因果/实体）中时间骨干不可变</li></ul>
-<h3>五、程序性记忆——从"知识"到"技能"</h3>
+<h3 id="五-程序性记忆-从-知识-到-技能">五、程序性记忆——从"知识"到"技能"</h3>
 <ul><li>ProcMEM（中科院 2026）：把成功轨迹固化为 Skill-MDP 三元结构（触发条件/动作序列/后置条件），用非参数化 PPO 门控验证</li><li>技能三特点：可执行（非被动叙事）、可复用（跨场景/跨 Agent 稳定增益）、非参数化优化（不改 LLM 权重）</li><li>在线维护：按边际贡献评分淘汰，进化压力让过时技能退出</li></ul>
-<h3>六、最终架构五件套</h3>
+<h3 id="六-最终架构五件套">六、最终架构五件套</h3>
 <ol><li><strong>内核 Kernel</strong>：System 2 慢回路 + 调度器（Planner/Router）</li><li><strong>文件系统 Storage</strong>：Raw Ledger + Derived Views（时序一致性 + 语义压缩 + 溯源链路）</li><li><strong>可执行文件 Skill</strong>：程序性记忆单元（可执行/可验证/可治理）</li><li><strong>总线接口 Context Bridge</strong>：记忆注入推理的接口层（含 latent token / Memory token 方向）</li><li><strong>学习引擎 Learning Engine</strong>：在线适应（优势调制/技能演化/检索策略优化），不改权重</li></ol>
 <hr>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <ul><li>思考方向 1：我们自己的知识库（AGENTS.md + 02-输入索引 + 知识卡）本质上就是一个简化版的 Ledger+Views+Policy 三件套——索引是 view，知识卡是 ledger 的固化，Agent 调度就是 policy。能否借鉴这篇文章的框架，给知识库加上时序维度和更显式的 policy？</li><li>思考方向 2：ProcMEM 的"技能固化"和我们 OpenCode 的 Skill 系统高度相似——都是把成功经验固化为可复用的执行单元。区别在于 ProcMEM 用 PPO 做自动验证和淘汰，我们目前是手动维护。未来能否借鉴？</li></ul>
-<h2>【增补】学术论文系统实验对比（2026-05-11）</h2>
+<h2 id="增补-学术论文系统实验对比-2026-05-11">【增补】学术论文系统实验对比（2026-05-11）</h2>
 <blockquote><p>来源：微信公众号（原论文：Memory in the LLM Era: Modular Architectures and Strategies in a Unified Framework） https://mp.weixin.qq.com/s/KZJbjozIest4pe5oftACcg 论文链接：https://arxiv.org/abs/2604.01707 · 代码：https://github.com/Yanchen398/Memory-in-the-LLM-Era</p></blockquote>
-<h3>统一框架四组件</h3>
+<h3 id="统一框架四组件">统一框架四组件</h3>
 <p>将 Agent Memory 拆解为：<strong>Information Extraction</strong> → <strong>Memory Management</strong> → <strong>Memory Storage</strong> → <strong>Information Retrieval</strong></p>
 <table><thead><tr><th>组件</th><th>关键设计选择</th></tr></thead><tbody><tr><td>信息提取</td><td>直接归档 / 总结式提取 / 基于图的提取</td></tr><tr><td>记忆管理</td><td>连接 / 整合 / 跨层迁移 / 更新 / 过滤 五类操作</td></tr><tr><td>记忆存储</td><td>扁平式（JSON/队列）vs 层级式（长短期/树结构）；向量存储 vs 图存储</td></tr><tr><td>信息检索</td><td>词汇匹配（BM25）/ 向量检索（ANN）/ 结构检索（图遍历）/ LLM辅助检索</td></tr></tbody></table>
-<h3>10方法系统对比实验（LOCOMO + LONGMEMEVAL 两个数据集）</h3>
+<h3 id="10方法系统对比实验-LOCOMO-LONGMEMEVAL-两个数据集">10方法系统对比实验（LOCOMO + LONGMEMEVAL 两个数据集）</h3>
 <p><strong>主要发现：</strong></p>
 <ol><li><strong>层次化方法最优</strong>：MemTree、MemoryOS、MemOS 等树状/层次化方法表现突出——多层结构同时保留高层摘要和底层证据，适合复杂长期任务</li><li><strong>粒度影响显著</strong>：将多轮对话作为整体处理（粗粒度）可显著降低 token 消耗，适当粗粒度反而可能提升效果</li><li><strong>上下文扩展性弱</strong>：上下文扩展到 200% 时几乎所有方法性能下降；层次管理更显式的方法更稳定</li><li><strong>证据位置敏感</strong>：关键证据位于更早会话时，多数方法容易被后续信息干扰而检索失败</li><li><strong>依赖底层 LLM</strong>：从 Qwen2.5-7B 扩展到 72B 后，多数方法有明显提升</li></ol>
-<h3>新 SOTA 设计</h3>
+<h3 id="新-SOTA-设计">新 SOTA 设计</h3>
 <p>组合 MemTree/MemOS 的树状组织能力 + MemoryOS 的分层存储架构，在低 token 开销下达到新 SOTA。</p>
 <hr>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <p>这是目前看到的最体系化的 Agent Memory 设计推导——不是拼凑论文综述，而是从第一性原理（三个命题）一路推到工程架构（五件套），有数学论证有工程落地。对理解 AI Agent 的记忆系统设计、以及自己搭建知识库/Agent 系统的架构决策，都有直接参考价值。尤其是"时序是结构维度不是 metadata"和"policy 是最被低估的瓶颈"这两个洞察非常锐利。增补的论文实验部分提供了"哪种设计在实测中真的更好"的实证依据，与架构设计视角互补。</p>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li>适用：设计 Agent 记忆系统、评估 RAG/长期记忆方案、理解 Memory 前沿方向、做 AI 系统架构决策</li><li>不适用：不涉及具体代码实现（更偏架构思考），不适合当工具教程看</li></ul>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#记忆的本质是什么">「记忆的本质是什么？」</a></li><li><a href="#核心命题memory-在-agent-系统里到底是什么">核心命题：Memory 在 Agent 系统里到底"是什么"</a></li><li><a href="#小结">小结：</a></li><li><a href="#为什么raw-ledgerviewspolicy是自然解">为什么Raw Ledger+views+policy是自然解</a></li><li><a href="#非参数化逼近参数化-memory">非参数化逼近参数化 Memory</a></li><li><a href="#参数化-vs-非参数化在线适应的两种载体">参数化 vs 非参数化：在线适应的两种载体</a></li><li><a href="#记忆对决策的调制修正项-δ">记忆对决策的调制：修正项 Δ</a></li><li><a href="#理论基石相关论文引证">理论基石、相关论文引证</a></li><li><a href="#非参数化-memory-的上限由什么决定">非参数化 Memory 的上限：由什么决定</a></li><li><a href="#一个必要条件逼近的是决策分布而不是存储量">一个必要条件：逼近的是"决策分布"，而不是"存储量"</a></li><li><a href="#上限由三类瓶颈共同决定">上限由三类瓶颈共同决定</a></li><li><a href="#1-接口带宽memory--system-1-的注入容量">(1) 接口带宽（Memory → System 1 的注入容量）</a></li><li><a href="#2-检索与聚合误差views-的近似误差">(2) 检索与聚合误差（views 的近似误差）</a></li><li><a href="#3-policy-的可学习性与可控性什么时候写读写什么信谁">(3) policy 的可学习性与可控性（什么时候写/读、写什么、信谁）</a></li><li><a href="#三类瓶颈与可观测指标的粗略映射">三类瓶颈与可观测指标的粗略映射</a></li><li><a href="#memory-system-控制层策略层policy">Memory System 控制层/策略层（policy）</a></li><li><a href="#以下我列举一些2026年新出现的参数化memory工作">以下，我列举一些2026年，新出现的参数化Memory工作：</a></li><li><a href="#agemem-rl-训练">AgeMem RL 训练</a></li><li><a href="#infmemprethink-retrieve-write-协议">InfMem：PreThink-Retrieve-Write 协议</a></li><li><a href="#memory-单元的结构时序和压缩">Memory 单元的结构、时序和压缩</a></li><li><a href="#为什么时序不是-metadata而是-memory-os-的结构维度">为什么"时序"不是 metadata，而是 Memory OS 的结构维度</a></li><li><a href="#llm-对时间天然不敏感尤其是隐含时间相对时间跨时区">LLM 对时间天然不敏感（尤其是隐含时间、相对时间、跨时区）</a></li><li><a href="#纯语义检索会把过去的高相似事实错当成现在仍为真">纯语义检索会把"过去的高相似事实"错当成"现在仍为真"</a></li><li><a href="#决策层出现过时事实复活以及被纠正的事实仍反复召回">决策层出现"过时事实复活"、以及"被纠正的事实仍反复召回"</a></li><li><a href="#认知科学视角episodic-memory-的时间是索引也是解释框架">认知科学视角：episodic memory 的"时间"是索引，也是解释框架</a></li><li><a href="#数据库视角bi-temporal-把世界真值与系统记账拆开">数据库视角：bi-temporal 把"世界真值"与"系统记账"拆开</a></li><li><a href="#时序与其他维度的交叉分析">时序与其他维度的交叉分析</a></li><li><a href="#时序--因果时间顺序不是因果但没有时间就更不可能有因果">时序 × 因果：时间顺序不是因果，但没有时间就更不可能有因果</a></li><li><a href="#没有稳定的时间骨干--因果推断会被语义相似牵引出现倒因果叙事">没有稳定的时间骨干 → 因果推断会被语义相似牵引，出现"倒因果叙事"</a></li><li><a href="#最终表现为系统对变化纠错越记越乱">最终表现为：系统对"变化/纠错"越记越乱</a></li><li><a href="#不带时间结构的固化--抽象会跨期混合--current-变得不可靠">不带时间结构的固化 → 抽象会跨期混合 → current 变得不可靠</a></li><li><a href="#current-不可靠--默认-current-策略失效要么漏要么错">current 不可靠 → 默认 current 策略失效（要么漏，要么错）</a></li><li><a href="#policy-只好提高召回量来自证反而增加接口带宽压力">policy 只好提高召回量来"自证"，反而增加接口带宽压力</a></li><li><a href="#δ-修正项中的时序分量时间如何进入超越时间衰减">Δ 修正项中的时序分量：时间如何进入（超越"时间衰减"）</a></li><li><a href="#时序记忆的上限瓶颈分析时间让三类瓶颈更尖锐并新增时间地基瓶颈">时序记忆的"上限瓶颈"分析：时间让三类瓶颈更尖锐，并新增"时间地基瓶颈"</a></li><li><a href="#程序性层the-procedural-layer从知识到技能">程序性层（The Procedural Layer）：从"知识"到"技能"</a></li><li><a href="#memory-整合层the-integration-layer">Memory 整合层（The Integration Layer）：</a></li><li><a href="#潜层融合与零样本对齐memory-tokens">潜层融合与零样本对齐（Memory Tokens）</a></li><li><a href="#lycheememory潜层压缩与-kv-cache-注入">LycheeMemory：潜层压缩与 KV-Cache 注入</a></li><li><a href="#memadapter异构记忆的对齐器">MemAdapter：异构记忆的"对齐器"</a></li><li><a href="#memory-tokens-的盲点控制与治理">Memory Tokens 的盲点：控制与治理</a></li><li><a href="#memory-system-架构总结">Memory System 架构总结</a></li></ul>
 <p><img alt="图片" src="../../_assets/20260407-Agent-Memory系统本质与架构设计/img-001-482524ca.jpg"></p>
 <p>阿里妹导读</p>
@@ -445,22 +445,22 @@
 <p>本文会涉及到一些最近一年内的Memory论文（甚至几乎都是 2026 年初的新鲜文章）。未经过同行检验，因此，论文仅供参考。</p>
 <blockquote><p>无AI撰写、润色。</p></blockquote>
 <p>经过一层又一层的思考，我直接给出结论吧，Memory的抽象是：event 序列 / Raw Ledger + views / policy 层。那么我是如何推导和（不严谨）论证出来的呢？——通过提出下面的问题：</p>
-<h3>「记忆的本质是什么？」</h3>
+<h3 id="记忆的本质是什么">「记忆的本质是什么？」</h3>
 <p>我们能否通过更明确的逻辑推导得到合理的系统形态？我倾向于：长期来看参数化 Memory 的潜在上限更高，但在当前工程条件与资源约束下，非参数化 Memory 更易落地。但是，我觉得我们可以思考一下，如何设计非参数化 Memory，使其尽可能逼近参数化方案的效果上限。</p>
 <p>在调研了多种记忆机制（logit 调制、工具化与 RL 训练、记忆固化、技能化、以及协议层的对象模型与闭环）之后，我认为"Memory 的本质"至少应该落到一组更硬的命题上，否则后面所有机制会变成散点。</p>
 <p>文章读一遍是嚼不烂的。等你看完这篇文章，再回首探索Memory的本质（尤其是我以下提出的几个<strong>命题</strong>），或许你会有新的收获。</p>
 <p>关于Memory的本质，我提出了以下三个核心命题：</p>
-<h3>核心命题：Memory 在 Agent 系统里到底"是什么"</h3>
-<h4>命题 A：Memory 不是"存储"，而是可被决策利用的外部状态（external state）</h4>
+<h3 id="核心命题-Memory-在-Agent-系统里到底-是什么">核心命题：Memory 在 Agent 系统里到底"是什么"</h3>
+<h4 id="命题-A-Memory-不是-存储-而是可被决策利用的外部状态-external-state">命题 A：Memory 不是"存储"，而是可被决策利用的外部状态（external state）</h4>
 <p>如果把 Agent 看成一个从输入到输出的函数，仅仅"存了很多历史"并不构成能力；能力来自：在当前状态下，历史能否以某种形式影响决策分布。</p>
 <p>记忆系统负责从历史中提取当前可用的信息（证据、摘要、子图、可执行技能等），并把它提供给推理层，共同产生决策。Memory 的价值不在于"存了多少历史"，而在于这条<strong>从历史到当前决策的通道</strong>是否有效。Memory 不等于历史本身，而是"把历史转成当前可用信息"的通道——它的输出要么进入上下文（证据/摘要/子图），要么直接参与决策（例如对输出分布做调制）。</p>
-<h4>命题 B：Memory 的最小闭包不是"文档块"，而是 (Ledger, Views, Policy) 三件套</h4>
+<h4 id="命题-B-Memory-的最小闭包不是-文档块-而是-Ledger-Views-Policy-三件套">命题 B：Memory 的最小闭包不是"文档块"，而是 (Ledger, Views, Policy) 三件套</h4>
 <p>只要系统要满足可溯源（provenance）、可回滚、可观测这些硬约束，那么 Memory 的最小形态就不可能是"一个向量库 + 若干 prompt"。它必须是一个能被审计的状态机：</p>
 <p><strong>1. Raw Ledger（权威记录）：追加式记录每次写入/更新/删除发生了什么（以及当时的输入、时间、scope 等）。</strong></p>
 <p><strong>2. Derived Views（派生视图）：面向检索/推理的派生状态（向量索引、keyword/hybrid、KG/TKG（时序知识图谱, Temporal Knowledge Graph）、timeline、skill index 等）。views 可以多、可以 lossy，但必须可回指到 Raw Ledger。</strong></p>
 <p><strong>3. Policy（控制层）：决定何时读、读多少、何时写、如何更新、如何遗忘；并且这些决策必须显式化为可记录/可回放的 Action 序列（ADD/UPDATE/DELETE/NONE…），而不是"靠 prompt 里一句话暗示"。</strong></p>
 <p>Raw Ledger 像"账本/黑匣子"；views 像"缓存 + 索引 + 物化视图"；policy 像"调度器/控制回路"。三者缺一，系统要么不可治理（没有账本），要么不可用（没有索引/抽象），要么不可持续迭代（没有可训练/可 A/B 的控制点）。</p>
-<h4>命题 C：Memory 的基本单位应当是 event 序列，但"直接用 event 流"不等于可用系统</h4>
+<h4 id="命题-C-Memory-的基本单位应当是-event-序列-但-直接用-event-流-不等于可用系统">命题 C：Memory 的基本单位应当是 event 序列，但"直接用 event 流"不等于可用系统</h4>
 <p>把 Raw Ledger 建模成 event 序列是合理的，因为协议里所有可审计性都依赖"事件闭包"。一个最通用的 ledger 事件应当包含以下要素：</p>
 <ul><li><strong>作用域（scope）：这条事件属于哪个用户、哪个会话、哪个任务；</strong></li></ul>
 <ul><li><strong>时间戳：事件发生的时刻；</strong></li></ul>
@@ -471,8 +471,8 @@
 <ul><li><strong>决策元数据（可选）：候选集合 candidate_set、命中证据 provenance、early stop 阈值等；</strong></li></ul>
 <p>event 序列是"真相来源"，但<strong>它太底层</strong>。如果只存 event，你得到的是可审计的历史，不是可用的记忆能力；真正把历史变成能力的是 views（对 event 的重组织/压缩/索引/时序化/技能化）和 policy（决定什么时候触发哪些 view、怎么更新 view）。</p>
 <p>换句话说：<strong>event 是 Ledger 的数据形态；views/policy 是能力形态</strong>。</p>
-<h3>小结：</h3>
-<h3>为什么Raw Ledger+views+policy是自然解</h3>
+<h3 id="小结">小结：</h3>
+<h3 id="为什么Raw-Ledger-views-policy是自然解">为什么Raw Ledger+views+policy是自然解</h3>
 <p>现在可以把三个命题补全成一个更明确的结论链：</p>
 <p><strong>1. Memory 需要以 event/Action 序列为第一性对象：否则 provenance/rollback/replay 无从谈起。</strong></p>
 <p><strong>2. 单一 event 流不可用：因为推理需要高密度信息、需要索引、需要时序化、需要技能化；这些都要求 views。</strong></p>
@@ -534,65 +534,65 @@
 |    +--------------------------- control feedback loop ---------------------------+
 +-----------------------------------------------------------------------------------+</code></pre>
 <p>有了 System 1 + System 2 的分工框架，接下来要回答的核心问题是："非参数化的 System 2 能做到多好？"——这就引出参数化 vs 非参数化的讨论，以及非参数化方案的效果上限分析。</p>
-<h3>非参数化逼近参数化 Memory</h3>
-<h4>参数化 vs 非参数化：在线适应的两种载体</h4>
+<h3 id="非参数化逼近参数化-Memory">非参数化逼近参数化 Memory</h3>
+<h4 id="参数化-vs-非参数化-在线适应的两种载体">参数化 vs 非参数化：在线适应的两种载体</h4>
 <p>把"学到的东西"抽象成一个对输出分布有影响的对象，它有两种经典承载方式：</p>
 <ul><li><strong>参数化记忆（parametric memory）：经验被写进模型权重。训练 / 微调就是把历史数据编译进权重的过程，推理时直接用更新后的模型，不需要额外检索。</strong></li></ul>
 <ul><li><strong>非参数化记忆（non-parametric memory）：经验被写在外部状态里（ledger + views + skill pool + 索引结构）。写入由 policy 决定写哪些、怎么写；推理时通过检索、汇聚、注入等环节让外部状态影响输出。</strong></li></ul>
 <p>两者的差别不在"有没有存储"，而在<strong>适应算子写在哪里</strong>。参数化把"写入成本"前置在训练阶段；非参数化把"写入成本"分摊到在线（commit）与推理（retrieve + inject）阶段。前文讨论 System 2 的意义，其实就是：把在线适应的主战场从模型权重挪到外部记忆状态与控制策略上，并让它可观测、可回放、可 A/B。</p>
-<h4>记忆对决策的调制：修正项 Δ</h4>
+<h4 id="记忆对决策的调制-修正项-Δ">记忆对决策的调制：修正项 Δ</h4>
 <p>如果把 LLM/Agent 的一步决策写成 logits（或 action distribution），最通用的"记忆影响决策"的表达方式是：<strong>外部记忆对模型输出施加一个可控的修正项 Δ</strong>。System 1 的权重提供基线能力（通用性），而 Δ 来自外部记忆，负责个性化、任务特化、时序修正、经验复用。</p>
 <p>可以把 Δ 看成"外置的可控偏置"——它不需要改模型权重，但能改变决策分布。下文 JitRL 的工作给出了这种调制的一个具体形式（用优势函数做加性调制）。</p>
 <p>这也解释了为什么我们前文强调 policy 的工具化：如果 Δ 的来源不可审计（比如隐式写在 prompt 里），那么系统无法做到 provenance / rollback / sandbox；而协议要求的正是把 Δ 的来源（命中证据、候选集合、写入动作）显式化。</p>
-<h4>理论基石、相关论文引证</h4>
+<h4 id="理论基石-相关论文引证">理论基石、相关论文引证</h4>
 <p>在"以非参数化方案逼近参数化记忆效果"的前提下，我们进行如下演绎、推理和归纳：</p>
 <p>首先，我们能够从数学原理来证明非参数化的上限。参考了 JitRL 的工作，它给出一种在推理阶段利用外部经验库调制 logits 的形式化写法（代码开源，star 数很少）：</p>
 <p><img alt="图片" src="../../_assets/20260407-Agent-Memory系统本质与架构设计/img-009-7142565f.png"></p>
 <p>我们认为，只需要维护一个动态的非参数化经验库（用在推理时：每步决策/生成动作前检索与当前状态 相似的历史轨迹/样本，估计  并对 logits 做加性调制；维护方式：每个任务/episode 结束将新轨迹 (s,a,r,G) 写回入库，按质量/时效去重淘汰并更新检索索引），即可实现梯度下降类似的效果。逼近的是fine-tune的效果。</p>
 <p>此外，我们认为还有一个要素也很重要，即，记忆系统在相似语义下的<strong>迁移能力</strong>。</p>
 <p>正好，有一篇这样的文章，叫做UMEM（春节前几天published）。UMEM并非孤立地存储记忆片段，而是通过计算查询（Query）的余弦相似度构建语义邻域。在优化过程中，它利用GRPO针对邻域级别的边际效用进行奖励建模 。它打破的是孤立的记忆阶段/事件，通过邻域结构存储了"一类问题"的通用解法，从而在外部存储中复现了参数化模型对潜在语义空间的建模能力。感兴趣可以阅读下。</p>
-<h4>非参数化 Memory 的上限：由什么决定</h4>
+<h4 id="非参数化-Memory-的上限-由什么决定">非参数化 Memory 的上限：由什么决定</h4>
 <p>有了 JitRL 的形式化框架和 UMEM 的迁移能力，接下来要回答的是：非参数化 Memory 的效果上限到底由什么决定？在"不编造新理论/新论文"的前提下，我只能基于本文已讨论的机制，给一个足够工程化的上限刻画。</p>
-<h4>一个必要条件：逼近的是"决策分布"，而不是"存储量"</h4>
+<h4 id="一个必要条件-逼近的是-决策分布-而不是-存储量">一个必要条件：逼近的是"决策分布"，而不是"存储量"</h4>
 <p>参数化方案的"上限"来自：权重可以把大量经验压缩进一个可快速前向的函数；非参数化方案想逼近它，核心不是把更多东西塞进库，而是让修正项 Δ 逼近"如果我真的 fine-tune 了会发生什么"。</p>
 <p>因此，上限问题可以被改写为：给定预算与接口约束，修正项 Δ 这个函数类能有多强。</p>
-<h4>上限由三类瓶颈共同决定</h4>
-<h4>(1) 接口带宽（Memory → System 1 的注入容量）</h4>
+<h4 id="上限由三类瓶颈共同决定">上限由三类瓶颈共同决定</h4>
+<h4 id="1-接口带宽-Memory-System-1-的注入容量">(1) 接口带宽（Memory → System 1 的注入容量）</h4>
 <p>无论你是 passage、graph、skill、tool using description，最终都要通过某种 "Context Bridge" 让 System 1 用上它。最朴素的桥是"拼 prompt"，更激进的是 latent / KV 注入（后文整合层会展开），但不管哪种，带宽都有限：token 预算、注意力容量、或者注入的 KV 长度。</p>
 <p>换言之，注入通道存在预算约束——你能往 System 1 塞进去的"可消费证据/表示"是有上限的，受限于 token 数、延迟、显存、注意力长度等。外部记忆再大也没用，真正起作用的是每一步你能注入多少"有效信息"。记忆固化/压缩、分层记忆、以及 latent token 的动机，本质都是在提高单位预算的信息密度。</p>
-<h4>(2) 检索与聚合误差（views 的近似误差）</h4>
+<h4 id="2-检索与聚合误差-views-的近似误差">(2) 检索与聚合误差（views 的近似误差）</h4>
 <p>views 是从 Raw Ledger 派生出来的近似结构——通过索引、固化、时序化、技能抽取等操作构建，再经由召回、重排、聚合、early stop 等环节产出最终的检索结果。</p>
 <p>只要你不是直接把 ledger 全量塞进模型，views 就一定是近似。近似会带来错检、漏检、时序冲突、语义漂移，这些都会直接污染修正项 Δ（检索噪声会直接破坏推理）。因此，上限不仅取决于"存了多少"，更取决于 views 的误差是否被治理住：可观测、可溯源、可回放，才能迭代降低误差。</p>
-<h4>(3) policy 的可学习性与可控性（什么时候写/读、写什么、信谁）</h4>
+<h4 id="3-policy-的可学习性与可控性-什么时候写-读-写什么-信谁">(3) policy 的可学习性与可控性（什么时候写/读、写什么、信谁）</h4>
 <p>Memory Algorithm Protocol 把 policy 的输出强约束成 Action 序列，并且要求 UPDATE/DELETE 必须受候选集合约束、召回必须带 provenance。也就是说，控制策略接收当前输入、检索结果和记忆状态，输出一系列 Action，然后通过 Commit 把这些 Action 落盘。</p>
 <p>非参数化 Memory 的真正"上限瓶颈"往往不是存储后端，而是 policy：</p>
 <ul><li>写多了污染、写少了学不到；</li></ul>
 <ul><li>召回多了噪声、召回少了信息不够；</li></ul>
 <ul><li>UPDATE/DELETE 做错一次，长期就会滚雪球。</li></ul>
 <p>所以 policy 必须既能学习（RL 训练范式），又能治理（protocol 的候选集合约束 + provenance 闭包 + sandbox 回放 A/B）。这也是为什么本文一直强调 "rubrics based 的 policy 不可持续"，必须把控制回路显式化为可训练对象。</p>
-<h4>三类瓶颈与可观测指标的粗略映射</h4>
+<h4 id="三类瓶颈与可观测指标的粗略映射">三类瓶颈与可观测指标的粗略映射</h4>
 <p>在 sandbox / A/B 环境中，三类瓶颈可以分别对应到一组可观测的 action-level 指标，用于定位"当前系统的效果差在哪里"（我可以举个例子，把我觉得一些可能会影响到Memory的因素列出来，便于理解）：</p>
 <p><img alt="图片" src="../../_assets/20260407-Agent-Memory系统本质与架构设计/img-010-295f606c.png"></p>
 <p>这三组指标不必同时精确度量——在实际迭代中，往往是先通过 sandbox 回放定位"最疼的那个瓶颈"，再针对性地改进。</p>
 <p>上限分析表明，policy 的可学习性与可控性是三大瓶颈之一，也是当前工程中最容易被低估的环节。接下来我们深入讨论 policy 的设计。</p>
-<h3>Memory System 控制层/策略层（policy）</h3>
+<h3 id="Memory-System-控制层-策略层-policy">Memory System 控制层/策略层（policy）</h3>
 <p>首先，我们必须打破传统工程师的思想禁锢——rubrics based的policy，即，基于预定义的规则（rubrics）来控制记忆的读写更新。因此我们必须得用一个model来处理这件事。有两种方案：一，训练一个外部的神经网络；二，Prompt/SFT/RL一个语言模型来做这个事。无论哪种方案，我们都要让这个model具备"记忆操作工具化"的能力，即，能够像控制手臂一样控制记忆的读写更新，而非被动接收上下文。</p>
 <p>第一种方案的难度比较大，目前学术界也是探索为主，而且如果我们在面对任何参数化问题上，都选择训练一个外部的神经网络，那么我们就会陷入"每个问题都要找到正确的训练方法，并成功训练"的困境，显然这是不可持续的。（至少 GRPO 训练方法是大家公认的，要比自己重新训练一个神经网络要简单太多）</p>
 <p>因此，我们尝试第二种方案。不妨提出Agentic Memory这个概念，它将记忆操作彻底工具化，整合进 Agent 的动作空间。这是逼近参数化上限的关键一步——让模型像控制手臂一样控制记忆，而非被动接收上下文。因此，这个步骤的参数就落在底层LLM Agent上了（让我来解释下这种偏好：因为我们还是更加相信LLM的泛化能力和迁移能力，并且LLM自身迭代速度也极快）。</p>
 <p><img alt="图片" src="../../_assets/20260407-Agent-Memory系统本质与架构设计/img-011-5db7fce2.png"></p>
-<h3>以下，我列举一些2026年，新出现的参数化Memory工作：</h3>
-<h4>AgeMem RL 训练</h4>
+<h3 id="以下-我列举一些2026年-新出现的参数化Memory工作">以下，我列举一些2026年，新出现的参数化Memory工作：</h3>
+<h4 id="AgeMem-RL-训练">AgeMem RL 训练</h4>
 <p>因为我们还是希望LLM能够学习到Memory Tool的使用策略，因此，我们选择RL来帮助我们训练这些工具。参考 AgeMem 论文，我们可以采用一套独特的训练策略来内化这些工具的使用策略 ：</p>
 <ul><li>LTM 构建阶段：在休闲对话环境中，仅训练 Agent 识别关键信息并执行 ADD/UPDATE 的能力。</li></ul>
 <ul><li>STM 控制阶段：重置上下文，引入干扰项（Distractors），训练 Agent 使用 FILTER 和 SUMMARY 维持上下文窗口的纯净度。</li></ul>
 <ul><li>综合推理阶段：结合 LTM 检索和 STM 管理，解决复杂的长程任务（如 ALFWorld, HotpotQA）。</li></ul>
-<h4>InfMem：PreThink-Retrieve-Write 协议</h4>
+<h4 id="InfMem-PreThink-Retrieve-Write-协议">InfMem：PreThink-Retrieve-Write 协议</h4>
 <p>除了工具化训练，System 2 中的主动控制回路还可以通过更精细的检索策略来实现。InfMem 这篇工作为了解决长文档推理中的"迷失中间"（Lost-in-the-Middle）问题，引入了 PreThink-Retrieve-Write 协议，显式模拟了慢思考过程，本质上是一种 policy 机制：</p>
 <ul><li>PreThink（预思考）：在检索前，Agent 先评估当前内部权重知识是否足以回答问题。这有效减少了不必要的外部检索，降低了延迟 。</li></ul>
 <ul><li>Adaptive Early Stopping（自适应早停）：传统 RAG 往往检索固定数量的块（Top-K），而 InfMem 训练了一个策略网络，当累积证据置信度达到阈值时立即停止检索。实验显示，这一机制将推理速度提升了 3.9 倍 ，极大地逼近了参数化模型的即时响应速度。</li></ul>
 <ul><li>训练范式（SFT-to-RL）：InfMem 通过从监督微调（SFT）过渡到强化学习（RL），直接优化检索和记忆更新决策，确保每一次外部交互都是为了最大化最终答案的准确率。</li></ul>
 <p>Policy 决定"写什么、读什么"，而"写什么"取决于记忆单元本身的结构与压缩方式。接下来我们讨论具体的记忆单元设计。</p>
-<h3>Memory 单元的结构、时序和压缩</h3>
+<h3 id="Memory-单元的结构-时序和压缩">Memory 单元的结构、时序和压缩</h3>
 <p>现在，我们选择了Agentic Memory的设计，并且大致想好了System 2的构型，那么接下来，我们还需要考虑具体的记忆单元的结构、时序和压缩。</p>
 <p>借鉴SimpleMem的思路，它针对长期交互中的"语境通胀"（Context Inflation）问题，提出了一套模拟生物记忆固化（Consolidation）的机制。</p>
 <p>SimpleMem 不存储原始文本，而是存储压缩后的"记忆单元"。它定义了记忆单元间的亲和力评分（Affinity Score）</p>
@@ -611,26 +611,26 @@
 <p><img alt="图片" src="../../_assets/20260407-Agent-Memory系统本质与架构设计/img-016-9f4b76b0.jpg"></p>
 <p>），用来区分"曾经为真"和"当前为真"。</p>
 <p>在检索阶段，Zep 会结合查询的时间语境动态合成"当前时刻"的真值图谱。直观上，这让 Memory OS 能模拟参数化模型在经历"遗忘学习"（Unlearning）后的状态：能更精确地区分历史事实与当前事实；据称在其报告的长时序记忆评测上，相比传统 RAG 可提升 18.5% 的准确率。</p>
-<h4>时序记忆（Temporal Memory）深度思考：从"发生过什么"到"何时为真、何时被相信"</h4>
-<h4>为什么"时序"不是 metadata，而是 Memory OS 的结构维度</h4>
+<h4 id="时序记忆-Temporal-Memory-深度思考-从-发生过什么-到-何时为真-何时被相信">时序记忆（Temporal Memory）深度思考：从"发生过什么"到"何时为真、何时被相信"</h4>
+<h4 id="为什么-时序-不是-metadata-而是-Memory-OS-的结构维度">为什么"时序"不是 metadata，而是 Memory OS 的结构维度</h4>
 <p>在 Memory OS 的三件套 <strong>(Raw Ledger, Views, Policy)</strong> 中，"时间"并不是附加字段，而是会改变三层的语义边界：</p>
 <ul><li><strong>Raw Ledger：append-only 记录"发生了什么写入动作"。加入时序后，Ledger 不仅要能回答"系统何时写入/更正"（transaction time），还要能表达"该事实在世界中何时为真"（valid time）。这两者不等价：你可以在今天纠正上周发生的事实。</strong></li></ul>
 <ul><li><strong>Views：检索不是"相关即可"，而是"在某个查询时间语境下成立"。没有时间切片（time slice），语义相似检索会把旧事实当作当前事实。</strong></li></ul>
 <ul><li><strong>Policy：默认 time_scope=current 意味着"宁可漏，不可错"。但这要求 policy 在需要历史时能显式触发 historical/all，并让 EvidencePack 承载"冲突并存"的证据结构，让 System 1 决策，而不是 Memory OS 私自裁决。</strong></li></ul>
 <p>推演链条（为什么必须把时序提升到架构骨架层）：</p>
-<h3>LLM 对时间天然不敏感（尤其是隐含时间、相对时间、跨时区）</h3>
-<h3>纯语义检索会把"过去的高相似事实"错当成"现在仍为真"</h3>
-<h3>决策层出现"过时事实复活"、以及"被纠正的事实仍反复召回"</h3>
+<h3 id="LLM-对时间天然不敏感-尤其是隐含时间-相对时间-跨时区">LLM 对时间天然不敏感（尤其是隐含时间、相对时间、跨时区）</h3>
+<h3 id="纯语义检索会把-过去的高相似事实-错当成-现在仍为真">纯语义检索会把"过去的高相似事实"错当成"现在仍为真"</h3>
+<h3 id="决策层出现-过时事实复活-以及-被纠正的事实仍反复召回">决策层出现"过时事实复活"、以及"被纠正的事实仍反复召回"</h3>
 <ol><li>解决方案不是更强 prompt，而是：<strong>以 bi-temporal + time-sliced recall</strong> 把"何时为真"变成检索与聚合的硬约束，并让 policy 可控、可回放。</li></ol>
-<h4>时序记忆的本质命题：三视角交叉（Episodic × Bi-temporal × TKG）</h4>
-<h3>认知科学视角：episodic memory 的"时间"是索引，也是解释框架</h3>
+<h4 id="时序记忆的本质命题-三视角交叉-Episodic-Bi-temporal-TKG">时序记忆的本质命题：三视角交叉（Episodic × Bi-temporal × TKG）</h4>
+<h3 id="认知科学视角-episodic-memory-的-时间-是索引-也是解释框架">认知科学视角：episodic memory 的"时间"是索引，也是解释框架</h3>
 <p>episodic memory 强调"在何时何地经历了什么"。这带来两层能力：</p>
 <ul><li><strong>recollection（回想）：依靠时间线索把事件按顺序重建为叙事（timeline narration）。</strong></li></ul>
 <ul><li><strong>reconsolidation（再巩固/再解释）：后续信息会改变我们对过去事件的理解，但并不会抹去"当时我为何这么认为"的痕迹。</strong></li></ul>
 <p>对 Memory OS 的启发：</p>
 <ul><li>Ledger 需要能表达"事后纠错"而不破坏审计：这天然落在 <strong>transaction_time ≠ valid_time</strong> 的双时态表达上。</li></ul>
 <ul><li>Views 需要能输出"时间序列证据"，否则 WHEN 类问题会退化为 LLM 自洽猜测。</li></ul>
-<h3>数据库视角：bi-temporal 把"世界真值"与"系统记账"拆开</h3>
+<h3 id="数据库视角-bi-temporal-把-世界真值-与-系统记账-拆开">数据库视角：bi-temporal 把"世界真值"与"系统记账"拆开</h3>
 <p>双时态的核心价值是把两类变化分离：</p>
 <ul><li><strong>valid_time：事实在世界中何时为真（可能是区间）。</strong></li></ul>
 <ul><li><strong>transaction_time：系统何时写入/更正/撤回（与 append-only ledger 完全一致）。</strong></li></ul>
@@ -650,8 +650,8 @@
 <p>定义为严格有序对</p>
 <p><img alt="图片" src="../../_assets/20260407-Agent-Memory系统本质与架构设计/img-019-56522e9e.png"></p>
 <p>，构成不可变时间骨干；快速路径只建时间边，慢速路径异步推断因果/实体等高阶关系。消融实验显示移除时间骨干后评判分数从 0.700 降至 0.647，证明时间排序提供了不可替代的推理轴。</p>
-<h4>时序与其他维度的交叉分析</h4>
-<h3>时序 × 因果：时间顺序不是因果，但没有时间就更不可能有因果</h3>
+<h4 id="时序与其他维度的交叉分析">时序与其他维度的交叉分析</h4>
+<h3 id="时序-因果-时间顺序不是因果-但没有时间就更不可能有因果">时序 × 因果：时间顺序不是因果，但没有时间就更不可能有因果</h3>
 <p>MAGMA 的设计原则是快速路径先建立不可变时间骨干（time edges），慢速路径再推断因果/实体等高阶关系，且时间骨干不被修改。其隐含原则是：</p>
 <ul><li><strong>Temporal backbone = hard constraints（低延迟、可重放、不可变）</strong></li></ul>
 <ul><li><strong>Causal links = soft inferences（可修正、异步、需要证据）</strong></li></ul>
@@ -660,35 +660,35 @@
 <ul><li>因果关系可作为 derived view 的推断产物（eventual），并可随新证据修正；</li></ul>
 <ul><li>Policy 决定 WHEN/WHY 类查询要不要走更重的因果遍历，而不是每次都把因果推断塞到关键路径。</li></ul>
 <p>推演链条（为什么必须先时间后因果）：</p>
-<h3>没有稳定的时间骨干 → 因果推断会被语义相似牵引，出现"倒因果叙事"</h3>
-<h3>policy 学到的写/读策略会与真实回报对不上（credit assignment 变差）</h3>
-<h3>最终表现为：系统对"变化/纠错"越记越乱</h3>
+<h3 id="没有稳定的时间骨干-因果推断会被语义相似牵引-出现-倒因果叙事">没有稳定的时间骨干 → 因果推断会被语义相似牵引，出现"倒因果叙事"</h3>
+<h3 id="policy-学到的写-读策略会与真实回报对不上-credit-assignment-变差">policy 学到的写/读策略会与真实回报对不上（credit assignment 变差）</h3>
+<h3 id="最终表现为-系统对-变化-纠错-越记越乱">最终表现为：系统对"变化/纠错"越记越乱</h3>
 <p>因此：fast path 时间归一化 + 时间边，是时序与因果交叉下的"地基"。</p>
-<h3>时序 × policy（遗忘/衰减）：默认 current 的安全性来自"结构化抑制"，而非简单 decay</h3>
+<h3 id="时序-policy-遗忘-衰减-默认-current-的安全性来自-结构化抑制-而非简单-decay">时序 × policy（遗忘/衰减）：默认 current 的安全性来自"结构化抑制"，而非简单 decay</h3>
 <p>遗忘语义为 tombstone commit + 检索抑制。加入时序后，遗忘不应只是一条全局衰减曲线，而应至少区分三类"抑制机制"：</p>
 <ul><li><strong>validity gating：不在 query_time 有效窗口内的事实，直接不进入 current 的候选集（硬门控）。</strong></li></ul>
 <ul><li><strong>tombstone（可审计抑制）：显式撤回某条记忆在某时间范围内的可见性（仍 append-only）。</strong></li></ul>
 <ul><li><strong>decay（可调权重）：在"仍有效/或 time_scope=all"的集合里进行偏好排序（软信号，可作为 bandit 参数）。</strong></li></ul>
 <p>这三者的关系是：<strong>先 validity，再 tombstone，再 decay</strong>。否则会出现"decay 把无效事实拉回来"的语义错误。</p>
 <blockquote><p>开放问题：tombstone 是作用于"某条 commit"、还是作用于"某个 fact_key 的某个 valid_time 区间"？两种都能表达，但会影响 overlay merge 与 multi-evidence 的复杂度。</p></blockquote>
-<h3>时序 × 压缩/固化（consolidation）：固化改变分辨率，必须显式绑定时间结构</h3>
+<h3 id="时序-压缩-固化-consolidation-固化改变分辨率-必须显式绑定时间结构">时序 × 压缩/固化（consolidation）：固化改变分辨率，必须显式绑定时间结构</h3>
 <p>SimpleMem 的固化强调"把相似记忆合并成抽象表征"。加入时序后，如果只按语义相似合并，容易把不同时期的不同真值"平均化"，导致 current 切片错误。</p>
 <p>因此 consolidation 需要时间维度的策略，例如：</p>
 <ul><li><strong>变更点（change points）优先：先按 fact_key 的时间变化把历史切段，再在段内做语义抽象。</strong></li></ul>
 <ul><li><strong>区间合并（interval coalescing）：相邻段若内容一致，可合并成长区间，降低历史体积。</strong></li></ul>
 <ul><li><strong>叙事摘要（narrative summary）：对长区间生成摘要记忆，但必须可回指 Raw Ledger（符合"views lossy but traceable"）。</strong></li></ul>
 <p>推演链条：</p>
-<h3>不带时间结构的固化 → 抽象会跨期混合 → current 变得不可靠</h3>
-<h3>current 不可靠 → 默认 current 策略失效（要么漏，要么错）</h3>
-<h3>policy 只好提高召回量来"自证"，反而增加接口带宽压力</h3>
+<h3 id="不带时间结构的固化-抽象会跨期混合-current-变得不可靠">不带时间结构的固化 → 抽象会跨期混合 → current 变得不可靠</h3>
+<h3 id="current-不可靠-默认-current-策略失效-要么漏-要么错">current 不可靠 → 默认 current 策略失效（要么漏，要么错）</h3>
+<h3 id="policy-只好提高召回量来-自证-反而增加接口带宽压力">policy 只好提高召回量来"自证"，反而增加接口带宽压力</h3>
 <p>因此：consolidation 的第一原则不是更抽象，而是<strong>不跨越变更点</strong>。</p>
-<h3>时序 × skill（程序性记忆）：技能有"验证时间"，过期更像需要再验证而非线性衰减</h3>
+<h3 id="时序-skill-程序性记忆-技能有-验证时间-过期更像需要再验证而非线性衰减">时序 × skill（程序性记忆）：技能有"验证时间"，过期更像需要再验证而非线性衰减</h3>
 <p>ProcMEM 关注技能的环境回报。加入时序后，技能的关键问题不只是"多久没用"，而是"环境是否变了、技能是否仍可执行"。因此时间语义建议更接近：</p>
 <ul><li><strong>last_verified / last_success（上次成功的证据时间）</strong></li></ul>
 <ul><li><strong>applicability window（适用窗口）（环境版本/规则在某段时间成立）</strong></li></ul>
 <ul><li>policy 层引入"触发再验证"：当 query_time 远离 last_verified，先走小步试探/验证路径，再提升 skill 的权重进入 。</li></ul>
 <blockquote><p>开放问题：skill 的"过期"在系统中应表现为 tombstone（不再召回）还是低权重（仍可作为备选）？这取决于错误代价：高风险技能倾向 tombstone/强抑制，低风险技能可低权重并触发验证。</p></blockquote>
-<h4>Δ 修正项中的时序分量：时间如何进入（超越"时间衰减"）</h4>
+<h4 id="Δ-修正项中的时序分量-时间如何进入-超越-时间衰减">Δ 修正项中的时序分量：时间如何进入（超越"时间衰减"）</h4>
 <p>当前机制是：检索相似历史轨迹/样本估计 ，对 logits 加性调制。时序进入 Δ，不应仅是给旧样本乘一个 decay；更结构化的进入方式是"先限定候选，再调制优势"。</p>
 <p><strong>时间先作为"候选集边界"（hard gating），再作为"优势权重"（soft shaping）</strong>：在 Retrieve/Ground 阶段先生成 query_time / query_window，并按 time_scope=current 做硬过滤：只把 valid_time 覆盖 query_time 的证据送入优势估计。在过滤后的证据上，再使用 recency/稳定性等软信号调节 。这与默认 current 的安全目标一致：<strong>宁可漏，不可把旧事实当现在</strong>。</p>
 <p>让</p>
@@ -700,7 +700,7 @@
 <p>这些信号不等价于 decay：它们表达"我们对这个槽位的认识是否稳定"。</p>
 <p><strong>时间不确定性是风险输入：解析越模糊，优势越保守</strong>。相对时间解析会输出区间与置信度。置信度低时， 的注入强度应减小，促使 System 1 采取"澄清/保守动作"。这与"证据而非裁决"的分工一致：Memory 提供"时间不确定的证据"，System 1 决定是否追问或继续。</p>
 <blockquote><p>开放问题：在 EvidencePack 中，时间不确定性应以"显式标注"暴露给 System 1（更可控），还是由 policy 在注入前消化为权重（更简洁但不透明）？</p></blockquote>
-<h4>时序记忆的"上限瓶颈"分析：时间让三类瓶颈更尖锐，并新增"时间地基瓶颈"</h4>
+<h4 id="时序记忆的-上限瓶颈-分析-时间让三类瓶颈更尖锐-并新增-时间地基瓶颈">时序记忆的"上限瓶颈"分析：时间让三类瓶颈更尖锐，并新增"时间地基瓶颈"</h4>
 <p>接口带宽瓶颈 × 时序：时间问题天然需要"多证据序列"。WHEN/变更史/对齐纠错等问题需要多条事件按顺序呈现。若 EvidencePack 不能做"时间叙事压缩"（例如只取变更点+代表证据），token/attention 很快耗尽，反而挤掉当前任务必需信息。</p>
 <p><strong>检索聚合误差 × 时序：冲突不再是噪声，而是多时态并存</strong>。时序系统中，冲突可能是合理的"不同时间为真"。真正的错误变成：</p>
 <ul><li>time slice 错（把历史当 current）</li></ul>
@@ -715,7 +715,7 @@
 <p>此外，多篇论文（包括 LightMemory、MemWeaver 等）都强调"记忆分层"对于提升记忆效率与推理能力的重要性。MemWeaver 提出了一种三层混合存储架构，用于覆盖不同类型的推理需求：Graph Memory（图记忆）侧重存储实体关系以支持多跳推理；Experience Memory（经验记忆）侧重存储从历史交互中抽象出的模式（patterns）以支持类比推理；Passage Memory（片段记忆）保留原始文本证据，用于溯源与验证。</p>
 <p>这种分层设计使系统既能通过经验记忆提供更高层抽象，又能通过片段记忆保留原始证据以支持溯源与验证。</p>
 <p>到这里为止，我们讨论的"记忆单元"更多还是 Declarative Memory（事实/证据/关系）：能回答"是什么/发生过什么"。接下来，我们从"存什么"过渡到"存怎么做"——也就是程序性记忆。</p>
-<h3>程序性层（The Procedural Layer）：从"知识"到"技能"</h3>
+<h3 id="程序性层-The-Procedural-Layer-从-知识-到-技能">程序性层（The Procedural Layer）：从"知识"到"技能"</h3>
 <p>在真实任务里，长期收益更大的往往不是一条事实，而是一段可复用的解决路径：也就是 Procedural Memory（怎么做/怎么一步步做到）。</p>
 <p>传统 RAG 的短板恰好在这里：它擅长把"信息片段"检索回来，却很难直接检索并复用"推理过程/操作流程/可执行技能"。当任务需要多步操作、持续试错或稳定复现时，仅仅把知识注入上下文往往不够。</p>
 <p>另一方面，如果把 System 2 视为外置的记忆读写与检索回路，那么"记忆"不必局限于可阅读的文本证据，也可以扩展为可执行的策略单元（skill）。问题变为：如何将成功轨迹固化为可执行、可复用、且不会引入行为退化的技能。2026 年的一类工作尝试用 Skill-MDP 形式化"经验"：把成功的交互轨迹抽象为可执行技能单元（macro），让 Agent 在相似任务中复用整段策略，而不是每次从 token 级推理重新生成。</p>
@@ -737,8 +737,8 @@
 <p>总结来说，这类机制提供了"经验复用（experience reuse）"的能力：把一次成功的多步策略固化为可复用资产，从而降低重复推理的计算开销；并且把复用发生在外部技能库，而不是依赖模型权重内化。</p>
 <blockquote><p>相关工作还可以顺带看：SWE-Exp（2026 年 2 月，coding 场景）、MemSkill 等。</p></blockquote>
 <p>记忆的形态到这里已经相当多样（文本片段、图谱、时序边、技能），它们都需要以某种方式注入到 LLM 的计算中。这引出了一个"工程上绕不过去"的问题：统一的注入方式。</p>
-<h3>Memory 整合层（The Integration Layer）：</h3>
-<h3>潜层融合与零样本对齐（Memory Tokens）</h3>
+<h3 id="Memory-整合层-The-Integration-Layer">Memory 整合层（The Integration Layer）：</h3>
+<h3 id="潜层融合与零样本对齐-Memory-Tokens">潜层融合与零样本对齐（Memory Tokens）</h3>
 <p>写到这里，其实有一个"工程上绕不过去、但在很多论文里被轻描淡写"的问题：外部记忆通常以文本或结构化数据形式存在，而 LLM 的核心计算对象是 token 与注意力。常见实现会经历一条额外链路：外部内容 → 文本化 → 拼接到上下文 → 模型再次编码为向量。这会带来额外的编解码开销，也可能引入信息损失与语义偏差。可以将其视为外部记忆与模型内部表示之间的"阻抗匹配"问题。</p>
 <p>我注意到，从 2026 年开始，一些工作尝试绕开这条链路，探索所谓 <strong>Machine-Native（机器原生）</strong> 的记忆形态：外部记忆不一定要先变成"人能读的文本"，而是以模型更容易消费的形式存在，甚至直接参与注意力计算或完成跨范式对齐。</p>
 <p>为了更好理解，可以把 "Memory tokens" 相关问题拆成三部分（避免混淆充分条件与必要条件）：</p>
@@ -746,15 +746,15 @@
 <ol><li>对齐（Alignment）：当外部记忆不是纯文本（图谱/技能/时间边/结构化状态），怎么让它和 LLM 的语义空间"对得上"，让 LLM 真能用。</li></ol>
 <ol><li>控制与治理（Control/Governance）：哪些 token 值得注入、注入多少、什么时候注入；以及出了错怎么溯源、怎么回滚、怎么 A/B。</li></ol>
 <p>先看看相关的论文：</p>
-<h4>LycheeMemory：潜层压缩与 KV-Cache 注入</h4>
+<h4 id="LycheeMemory-潜层压缩与-KV-Cache-注入">LycheeMemory：潜层压缩与 KV-Cache 注入</h4>
 <p>LycheeMemory 的思路比较激进，尝试去掉文本中间层：训练一个 compressor，把输入分块压缩成更紧凑的潜层 token，并让这些 token 的形态尽量贴近模型内部的 KV-Cache 风格表示。</p>
 <p>检索时也不再"检索一段文字 -&gt; 贴进 prompt"，而是把潜层 token 直接注入到注意力计算里，使外部记忆以更接近内部上下文的形式参与推理，从而减少文本编解码链路带来的开销。</p>
 <p>论文通常会把它的卖点写成性能数字，所以论文信一半就好了：该方法可以显著降低编解码开销，并带来推理加速与显存占用下降。但从 Memory System 的角度，更需要关注其副作用：潜层记忆可读性较弱，因此更需要可观测性与溯源机制兜底——至少要能把每一次潜层注入追溯回 Raw Ledger 的原始证据，否则排障与 tracing 成本会显著上升。</p>
-<h4>MemAdapter：异构记忆的"对齐器"</h4>
+<h4 id="MemAdapter-异构记忆的-对齐器">MemAdapter：异构记忆的"对齐器"</h4>
 <p>如果说 LycheeMemory 关注的是"外部文本注入的效率"，那 MemAdapter 关注的是另一个更常见的现实：记忆范式往往不止一种。除了文本片段（passage），还可能有图谱（KG/TKG）、工作流、技能等；但 LLM 最终需要统一、可消费的输入。</p>
 <p>MemAdapter 的叙事是，使用生成式子图检索（Generative Subgraph Retrieval）把图谱中与当前问题相关的局部结构检索出来，并通过对齐把结构化信息映射到 LLM 的语义空间。其强调"零样本"：不微调 LLM 也能完成跨范式融合。放在 Memory OS 的架构里，可以把它视为 Integration Layer 的适配器，使不同来源的记忆以相对一致的接口被理解与调用。</p>
 <p>当然，这一层在工程上也更容易成为难以诊断的组件：对齐质量不足时，错误可能以隐蔽方式影响推理。所以我更倾向于把它当成 Integration Layer 的职责：它不只是"快"，还需要可诊断、可回滚，并最好能在 sandbox 中做 A/B。</p>
-<h4>Memory Tokens 的盲点：控制与治理</h4>
+<h4 id="Memory-Tokens-的盲点-控制与治理">Memory Tokens 的盲点：控制与治理</h4>
 <p>我们已经讨论了一些注入与对齐方向的工作，但"控制与治理"常被学术界相对弱化。工程师思维提醒我，这通常是高风险点：潜层 token 越 machine-native，可读性越弱，就越依赖可观测性与溯源机制兜底（例如能把一次注入追溯回 Raw Ledger 的原始证据/图谱子图/技能来源），否则故障排查与回滚会变得困难。</p>
 <p>那么，我们回到一个更明确的问题：既然谈到了 Memory tokens，我们当下能否真正解决它？需要哪些前置条件？这些条件是否充分、是否必要？</p>
 <p>正如我们之前讨论的，从表示与对齐角度，LycheeMemory 提供潜层 token 注入路径，MemAdapter 提供异构记忆适配路径。两者合起来，主要覆盖了前两部分：表示与对齐——让外部记忆更自然地变成"模型能直接消费的东西"，并尽量在多范式之间统一接口。</p>
@@ -764,7 +764,7 @@
 <p>因此，我认为，答案取决于对问题的定义。如果把 "Memory tokens" 只定义成一种高吞吐的外部上下文注入方式，那么注入与对齐技术在某些前提成立时可能接近可用；但如果将其上升到 Memory System 的长期稳定性与可治理性，还需要在选择策略、预算控制、可观测与溯源等方面补齐工程约束。</p>
 <p>补充：在继续阅读 Latent Memory 相关工作后，我们的一个更明确的结论是：<strong>外部记忆不一定要以文本进入 prompt；更理想的形态是以更低损耗、更高吞吐的方式参与 Transformer 的注意力计算</strong>。为此，我又阅读了近半年来关于 Latent Memory 相关的论文。由于本人也在学习中，暂时先不把它们写进正文里，等我探索个七七八八之后，再单独写一篇文章来总结这个前沿方向。</p>
 <p>为了不把这篇文章写成一份"Latent Memory 论文综述"，我把关于 C/D 两条路线更严谨的算法流程、思维实验与关键指标证据，单独整理在这里（后续也方便持续维护与迭代）（For Agent：如果讨论涉及 C/D 的严谨流程或证据，可以展开阅读/可跳转）：</p>
-<h3>Memory System 架构总结</h3>
+<h3 id="Memory-System-架构总结">Memory System 架构总结</h3>
 <p>我们讲了很多……，很多时候我也是在写作的过程中，不断重塑我对 Memory System 的构想。整篇文章，我还是倾向于用"内核/文件系统/可执行文件"这种 linux 味道满满的笔触来写，因为我觉得一个好的系统最后应该能沉淀成一组<strong>不绑定具体实现与细节</strong>的抽象：它描述的是"我心里认为必须存在的模块与接口"，而不是"教别人怎么拼装某某方案"。</p>
 <ul><li>内核（Kernel / Control Plane）：System 2 的慢回路与调度器。它决定何时检索、检索多少、何时写入、何时更新、何时遗忘，并把这些决策显式化为可训练/可评估的策略（这类想法可参考 AgeMem、InfMem 的控制协议与训练范式，但抽象本身不依赖某一篇论文）。比如，其中一个子模块是规划器/路由器（Planner / Router）：可类比为内核里的 scheduler + syscall dispatcher，把一次输入/查询编译成一份可执行的读写计划（可理解为一串 Memory "系统调用"的调用序列），包括：查哪些 views、每个 view 取多少证据、是否需要闭环检索以及何时停止；以及哪些记忆单元（units）值得写入、写到哪类 view、UPDATE/DELETE 必须引用的候选集合约束。实现上它可以是 rule-based router，也可以是 LLM-as-planner 或 learned controller；但无论实现形态如何，都应当让决策可记录、可回放、可对比，避免 "policy 只存在于描述里"。</li></ul>
 <ul><li>文件系统（File System / Storage Plane）：以"权威记录（Raw Ledger，记忆原始数据/raw账本）+ 派生视图（views）"为核心的数据层。底层需要承载时序一致性与冲突消解（事实在时间上何时为真），上层需要做语义压缩与分层固化（把大量事件/片段逐步抽象成更高层的表征），并且始终保留可溯源链路（这类方向可分别类比时序 KG 与递归固化/分层记忆）。</li></ul>
@@ -778,7 +778,7 @@
 <p><strong>3. 非参数化 Memory 的上限由三类瓶颈决定：接口带宽（注入容量）、检索与聚合误差（views 近似）、以及 policy 的可学习性与可控性。其中 policy 往往是最被低估的瓶颈。</strong></p>
 <p><strong>4. 时序是架构的结构维度，而非 metadata：bi-temporal + time-sliced recall 是区分"曾经为真"与"当前为真"的硬约束，不能交给 LLM 自洽猜测。</strong></p>
 <p><strong>5. 架构五件套（内核/文件系统/可执行文件/总线接口/学习引擎）是不绑定具体实现的抽象，它描述的是"必须存在的模块与接口"，而不是"教别人怎么拼装某某方案"。</strong></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

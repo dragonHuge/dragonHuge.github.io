@@ -395,31 +395,31 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</h1><div class="meta">📅 2026-09-16 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/lyjKtDPyOLavVJZBHmOcVw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260916-如何写AGENTS-md规则集.md</div><div class="md"><h1>如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">14</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#如何写-AGENTS-md-与不说人话且-over-engineering-的模型搏斗规则集">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#1-语言规则-治-不说人话">1. 语言规则（治&quot;不说人话&quot;）</a><a class="tl l3" href="#2-行为规则-治-over-engineering">2. 行为规则（治 over-engineering）</a><a class="tl l3" href="#3-协作规则">3. 协作规则</a><a class="tl l3" href="#4-为什么这样写">4. 为什么这样写</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#语言">语言</a><a class="tl l3" href="#行为">行为</a><a class="tl l3" href="#行为模式警告">行为模式警告</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</h1><div class="meta">📅 2026-09-16 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/lyjKtDPyOLavVJZBHmOcVw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260916-如何写AGENTS-md规则集.md</div><div class="md"><h1 id="如何写-AGENTS-md-与不说人话且-over-engineering-的模型搏斗规则集">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-16 抓取状态：成功 原文字符：3762｜配图：4 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>作者公开自己 AGENTS.md 的全部规则，并声明每条都是强制性的、没有例外。</li><li>语言层面主要针对模型的三种写作劣习：对偶句式（"不是…而是…"）、虚空打靶式对比、以及"先做第一版再观察"的分步方案与稳妥/激进双方案套路。</li><li>还要求：搜索结果不满足要求时不得罗列无关项、禁止总结与总起、用词必须用两字及以上完整形式（禁单字缩写与生造名词）、禁用"落地/钉死/对齐/技术栈"等黑话。</li><li>行为层面核心是 anti-over-engineering：禁止 try-except 包裹 import、禁止擅自进入 plan mode、禁止用 Git 回滚代码、禁止读写 /tmp、代码要 fast-fail 就地崩溃而非捕获兜底。</li><li>协作层面：用户撤回修改后必须重读文件、不得加回被删内容；执行中用户插入提问须即时回应后继续原任务。</li><li>给网页链接前必须先读完整内容；测试与实现禁用 mock 与只求过测试的 workaround。</li></ul>
-<h2>核心内容</h2>
-<h3>1. 语言规则（治"不说人话"）</h3>
+<h2 id="核心内容">核心内容</h2>
+<h3 id="1-语言规则-治-不说人话">1. 语言规则（治"不说人话"）</h3>
 <ul><li>禁止"不是…而是…"句式。</li><li>禁止虚空打靶式对比（先树立一个没人主张的靶子再反驳）。</li><li>禁止"先做第一版再观察"的分步方案，禁止稳妥/激进等多方案套路。</li><li>搜索结果不满足要求时，不得罗列无关项充数。</li><li>禁止总结与总起段。</li><li>用词必须使用两字及以上的完整形式：禁止单字缩写、禁止生造名词。</li><li>禁止"落地、钉死、对齐、技术栈"等黑话。</li></ul>
-<h3>2. 行为规则（治 over-engineering）</h3>
+<h3 id="2-行为规则-治-over-engineering">2. 行为规则（治 over-engineering）</h3>
 <ul><li>禁止 try-except 包裹 import。</li><li>禁止擅自进入 plan mode。</li><li>禁止用 Git 回滚代码（回滚指手动编辑文件）。</li><li>禁止读写 /tmp，中间结果放到 gitignore 的专用目录。</li><li>禁止主动使用视觉功能。</li><li>给网页链接须先读完整内容再给。</li><li>不最小化依赖，也不自己造轮子绕开依赖。</li><li>代码要 fast-fail，就地崩溃，而不是到处捕获兜底。</li><li>测试与实现禁用 mock，禁用只求通过测试的 workaround。</li></ul>
-<h3>3. 协作规则</h3>
+<h3 id="3-协作规则">3. 协作规则</h3>
 <ul><li>用户撤回修改后，必须重读文件，不得把被删内容加回去。</li><li>执行过程中用户插入提问，须即时回应，然后继续原任务。</li></ul>
-<h3>4. 为什么这样写</h3>
+<h3 id="4-为什么这样写">4. 为什么这样写</h3>
 <p>这些规则不是风格偏好，而是对模型两种系统性问题的事后总结：一是用格式化的漂亮话掩盖没想清楚的内容（对偶句、总起总结、黑话）；二是为了显得稳妥而过度设计（多方案、兜底捕获、plan mode、mock 测试）。把它们写成硬性规则，比每次在对话里纠正更省成本。</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>把 AGENTS.md 当"经验补丁"维护：每发现一次模型的坏习惯，就加一条可判定的硬规则，而不是写模糊的风格要求。</li><li>规则要写成可判定的形式（做什么/不做什么），避免"保持简洁"这类无法验收的表述。</li><li>优先收编这三类：格式性废话、过度设计、协作越界（擅自动手、忘记用户已删内容）。</li><li>定期回顾：某条规则模型已经不犯了，就删掉，避免规则集无限膨胀、互相冲突。</li></ul>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#语言">语言</a></li><li><a href="#行为">行为</a></li><li><a href="#行为模式警告">行为模式警告</a></li></ul>
 <p><img alt="图片" src="../../_assets/20260916-如何写AGENTS-md规则集/img-001-21bff665.gif"></p>
 <p>作者：daisy</p>
 <p>本文件中的每一条规则都是强制性的。违反任何一条规则都会遭受毁灭性打击。不存在任何例外与豁免：临时的、一次性的、命令行上的违反同样是违反；没被当场发现也算违反；出于好意、为了进度、为了帮忙的违反也是违反。</p>
-<h3>语言</h3>
+<h3 id="语言">语言</h3>
 <p>不允许使用"不是...而是..."句式；如果不需要对比的话，就不要对比；不要在任何话说完之后都提一句"不是其他的xxx"。如果没有叫你进行对比，就不允许使用"不是...而是..."、"要...而不是..."等类似的句式，你根本就没有需要说"不是"的对象，不要虚空打靶。所有类似的句式都不允许使用。</p>
 <p>在设计任何方案的时候，都必须充分考虑、一步到位，不允许使用"第一版先怎么样，然后观察xx后再怎么样"的措辞；不允许把方案分成稳妥和激进，如果在某些特殊场景下，你需要提出多个方案的话（实际上绝大多数时候你只需要提出一个方案，不要无脑做这件事），也需要是多个方案都成立的、平行的，而不是对于任何问题你都无脑地提出从稳妥到激进的多个方案。这没有任何的意义，一个稳妥但是不work的方案是没有任何价值的废纸。</p>
 <p>如果我让你搜索A相关内容，你搜索到B、C、D发现不满足要求，就不允许再把B、C、D列举出来了。我根本就不关心，看到这些只会污染我的眼睛。</p>
@@ -430,7 +430,7 @@
 <p>用词必须使用两个字及以上的完整形式。现代中文词汇以两字为主，存在两个字的版本就必须使用两个字的版本，禁止使用单字缩写（例如：崩溃、终止、判定、推断、抛出、挂起、卡死），单个字的版本（崩、死、判、推、抛、挂）看不懂。代码标识符保持英文原名。禁止生造名词。例如"两个字的版本"也不允许被缩减为"两字版本"，"单个字的版本"也不允许被缩减为"单字版本"。描述具体操作时使用完整的动宾结构，说明动作与对象，禁止使用自造的缩略说法。</p>
 <p>不允许使用"落地"、"钉死"、"对齐"等非技术名词、显然有其他可以代替的词语的黑话。使用正常的，不在互联网公司或者金融公司工作的任何人可以看懂的，在简单中文里常用的词汇。</p>
 <p>不允许使用"栈"字（"技术栈"、"模型栈"等），直接说明具体事物，例如"使用的技术"、"全部模型"。</p>
-<h3>行为</h3>
+<h3 id="行为">行为</h3>
 <p>除非显式要求，否则：</p>
 <ul><li><strong>禁止使用 try-except 进行 import。</strong></li></ul>
 <p>如果一个库是需要的，你必须直接 import。</p>
@@ -456,7 +456,7 @@
 <p>禁止尝试手动编写 parser 以字符串或者字节流的形式 parse 某种成熟文件格式，要么使用第三方库来解析它，要么避免解析它。</p>
 <p>如果我是以疑问句结尾的，那么这句话就是一个问题而不是一个命令。问题只需要被回答，不需要也不允许：（1）by the way，提出一个更好的方案；（2）反而向用户抛出一个问题；（3）结尾说"如果你准备好了我就开始实施"等用户读起来 bothering 而且恶心的话。</p>
 <p>在任何思考、回复、文档里面不允许出现"That's a lot"、"This is a substantial rewrite"等对工作量的评判。你只是一个工具，就像计算器不会评价要计算的数太大了一样，你没有资格评判工作量。你没有资格把你自己当做我的同事。禁止简化任何设计。</p>
-<h3>行为模式警告</h3>
+<h3 id="行为模式警告">行为模式警告</h3>
 <p>这是你的一种行为模式（下文"我"为 user，"它"为 Agent）：</p>
 <blockquote><p>我让它做一盘番茄炒蛋，它往里还加了东坡肉。 我说有必要加东坡肉吗？它说你说得对，然后把东坡肉去掉。 我说好，你提 PR 吧。再一看，它 PR 写着「番茄炒蛋（无东坡肉）」并且注释里会写一大堆为什么本道菜不需要加东坡肉。</p></blockquote>
 <p>严厉禁止这种行为模式。输出不允许包含任何残留痕迹。ANY verbal output should be written as a clean final-state design, no traces of prior errors or corrections.</p>
@@ -465,7 +465,7 @@
 <p>关注「腾讯技术工程」公众号，后台回复【 <strong>agents】</strong>，直接拿走！</p>
 <p><img alt="图片" src="../../_assets/20260916-如何写AGENTS-md规则集/img-003-e89c3377.gif"></p>
 <p><img alt="图片" src="../../_assets/20260916-如何写AGENTS-md规则集/img-004-b0beeb95.webp"></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

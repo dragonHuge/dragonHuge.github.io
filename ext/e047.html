@@ -395,18 +395,18 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>拆开 Pi：Agent Harness 的极简设计</h1><div class="meta">📅 2026-10-11 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/43_tnAQrXV8Tri6PDaRsmQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261011-拆开-PiAgent-Harness-的极简设计.md</div><div class="md"><h1>拆开 Pi：Agent Harness 的极简设计</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">14</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#拆开-Pi-Agent-Harness-的极简设计">拆开 Pi：Agent Harness 的极简设计</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l2" href="#极简-先看那条最短的执行路径">极简，先看那条最短的执行路径</a><a class="tl l2" href="#四个工具-是默认词汇-不是能力上限">四个工具，是默认词汇，不是能力上限</a><a class="tl l2" href="#会话完整留下-模型只看当前分支">会话完整留下，模型只看当前分支</a><a class="tl l2" href="#Codemode-让一次工具调用完成一段编排">Codemode：让一次工具调用完成一段编排</a><a class="tl l2" href="#Pi-把哪些事留在了边界外">Pi 把哪些事留在了边界外</a><a class="tl l2" href="#极简不是代码少-是核心路径少做决定">极简不是代码少，是核心路径少做决定</a><a class="tl l2" href="#往期相关推文">往期相关推文</a><a class="tl l2" href="#参考资料">参考资料</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>拆开 Pi：Agent Harness 的极简设计</h1><div class="meta">📅 2026-10-11 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/43_tnAQrXV8Tri6PDaRsmQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261011-拆开-PiAgent-Harness-的极简设计.md</div><div class="md"><h1 id="拆开-Pi-Agent-Harness-的极简设计">拆开 Pi：Agent Harness 的极简设计</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-10-11 抓取状态：成功 原文字符：7306｜配图：1 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>架构师（JiaGouX） 我们都是架构师！ 架构未来，你来不来？ 最近一直在研究不同的 Agent 和 Harness。这个周末，我把 Pi 的仓库又从头翻了一遍。 上一次看 Pi，我的注意力还在那四个默认工具上：<code>read</code>、<code>bash</code>、<code>edit</code>、<code>write</code>。这次顺着主循环、会话、扩展和 Codemode 一路读下来，我反而觉得，“四个工具”已经不是最值得聊的部分了。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
+<h2 id="原文沉淀">原文沉淀</h2>
 <blockquote><p>来源：https://mp.weixin.qq.com/s/43_tnAQrXV8Tri6PDaRsmQ 平台：weixin｜作者：架构师 抓取方式：cdp｜字符数：7820｜图片：4</p></blockquote>
 <hr>
 <p>架构师（JiaGouX）</p>
@@ -416,7 +416,7 @@
 <p>今天的 Pi 并不小。仓库里有模型适配、Agent Core、Coding Agent、TUI、MCP、Codemode、会话管理，甚至还有一套实验性的持久化运行时。只看功能清单，它和“极简”似乎已经离得很远。</p>
 <p>可它最常走的那条路依然很短：模型拿到上下文，决定是否调用工具，Harness 执行工具，再把结果交还给模型。<strong>其他能力都围着这条路接进来，没有把核心循环拖成一个什么都管的控制器。</strong></p>
 <p>所以这次我想换个角度。先不数 Pi 有多少功能，直接顺着一次任务走，看看它把什么留在主路径上，又把什么放到了边界外。</p>
-<h2>极简，先看那条最短的执行路径</h2>
+<h2 id="极简-先看那条最短的执行路径">极简，先看那条最短的执行路径</h2>
 <p>Pi 的代码分层很直白。<code>pi-ai</code> 负责抹平不同模型供应商的接口差异，<code>pi-agent-core</code> 负责 Agent 循环，<code>pi-coding-agent</code> 再往上补齐文件工具、会话、上下文压缩、扩展和交互界面。</p>
 <p>这几层里，我最关注的是 <code>pi-agent-core</code>。</p>
 <p>它并不知道什么是 Git 仓库，也不关心 Markdown、MCP、终端界面和会话文件。它手里只有模型、消息和工具。一次任务大致就是下面这条路径：</p>
@@ -434,7 +434,7 @@
 <p>一次任务里的模型 - 工具回路</p>
 <p>图 2：一轮任务里，模型、工具和结果按固定顺序回到上下文；并发和插话都在边界接口里处理。</p>
 <p>我觉得 Pi 的极简先体现在这里：它没有假装真实任务只有 happy path，只是把变化关在了几个能说清楚的位置。</p>
-<h2>四个工具，是默认词汇，不是能力上限</h2>
+<h2 id="四个工具-是默认词汇-不是能力上限">四个工具，是默认词汇，不是能力上限</h2>
 <p><code>pi-coding-agent</code> 当前定义了 8 个内置工具：<code>read</code>、<code>bash</code>、<code>powershell</code>、<code>edit</code>、<code>write</code>、<code>grep</code>、<code>find</code> 和 <code>ls</code>。日常编码默认给模型的是 <code>read</code>、<code>bash</code>、<code>edit</code>、<code>write</code>；源码里还单独准备了由 <code>read</code>、<code>grep</code>、<code>find</code>、<code>ls</code> 组成的只读集合。用户和扩展也可以换掉这组默认值。</p>
 <p>从使用上看，四个工具已经能覆盖大部分编码动作。<code>read</code> 负责看，<code>edit</code> 和 <code>write</code> 负责改，剩下那些搜索、构建、测试、Git 操作，大多可以通过 <code>bash</code> 完成。它未必是最安全、最适合所有团队的一组配置，但模型要学习的接口很少。</p>
 <p>这里有一层很重要的区分：<strong>Pi 进程拥有的能力，和模型这一轮看到的工具，并不是同一张表。</strong></p>
@@ -456,7 +456,7 @@
 <p>系统提示词也采用了相近的做法。工具、规则、项目上下文、Skill、当前目录分别组成独立 section；其中一部分发生变化，Pi 会在会话里记录 patch，再从当前状态组装新的提示词。</p>
 <p>这里要把边界说清楚：这不代表每次请求供应商时只发送差异。代码能确认的是，提示词的组成和变化可以追踪、可以恢复。至于最终发给模型的内容，仍然是运行时整理后的完整上下文。</p>
 <p><strong>Pi 压缩的是模型眼前的接口，不是宿主进程实际接入的能力。</strong>这比“四个工具够不够用”更接近它的设计重点。</p>
-<h2>会话完整留下，模型只看当前分支</h2>
+<h2 id="会话完整留下-模型只看当前分支">会话完整留下，模型只看当前分支</h2>
 <p>长任务还有一个绕不过去的问题：会话记录希望尽量完整，模型上下文却不能无限增长。</p>
 <p>很多实现一开始直接维护一份 messages 数组。短任务没什么问题，等到对话需要压缩、回退、分支，麻烦就来了。为了省上下文而删掉旧消息，审计和恢复会丢信息；什么都不删，窗口迟早会被工具结果塞满。</p>
 <p>Pi 把这两件事分开处理。</p>
@@ -466,7 +466,7 @@
 <p>压缩摘要还会保存读过和改过的文件列表。这个信息看起来不起眼，长任务里却很有用：旧的工具输出可以不再携带，Agent 至少知道自己碰过哪些文件，后面继续修改或排查时不至于完全失忆。</p>
 <p>到了请求模型之前，<code>AgentSession</code> 会用这份 projection 替换内存里的消息列表，确保真正发出去的是当前分支的标准视图。上下文溢出时，Pi 会自动 compact 后重试一次；再失败就明确结束，不在后台一遍遍压缩和重放。</p>
 <p>我很喜欢这种处理。<strong>会话负责留下事实，projection 负责服务当下。</strong>两边各有一个清楚的目标，不用互相迁就。</p>
-<h2>Codemode：让一次工具调用完成一段编排</h2>
+<h2 id="Codemode-让一次工具调用完成一段编排">Codemode：让一次工具调用完成一段编排</h2>
 <p>工具数量继续增加后，光是延迟加载 schema 还不够。更大的开销经常来自中间结果。</p>
 <p>假设模型要查几十个 issue，从中找出包含某个标签、最近一周更新、同时还没有负责人的条目。逐个调用工具时，每次参数和返回值都会进入对话，模型最后只是为了得到一张很短的名单，却要重新读一大堆中间数据。</p>
 <p>Codemode 的做法是让模型生成一段 JavaScript，在 QuickJS VM 里完成多次工具调用、筛选和汇总，最终只把名单带回主上下文。嵌套工具调用不会逐条变成新的对话消息，运行时只保存名称、参数、状态、耗时和错误等有上限的元数据，不保存大块返回结果。</p>
@@ -474,24 +474,24 @@
 <p>但 QuickJS 解决的是脚本编排和上下文污染，并没有凭空创造一个安全沙箱。</p>
 <p>脚本调用 <code>read</code>、<code>bash</code>、<code>write</code> 或某个 MCP 工具时，真正执行动作的还是宿主侧工具。它能访问哪些文件、进程和网络，取决于 Pi 进程拿到了什么权限。VM 里的 JavaScript 看不到 <code>process</code>，不代表被它调用的 <code>bash</code> 也失去了宿主权限。</p>
 <p>这点如果不分清，很容易高估 Codemode 的隔离能力。<strong>它主要缩短的是模型和工具之间的数据路径，安全边界仍要在工具或运行环境上建立。</strong></p>
-<h2>Pi 把哪些事留在了边界外</h2>
+<h2 id="Pi-把哪些事留在了边界外">Pi 把哪些事留在了边界外</h2>
 <p>Pi 默认不会为每次工具调用弹出确认，也没有内置一套按目录、命令或网络地址划分的权限系统。它继承启动用户和宿主进程的权限。</p>
 <p>项目 trust 解决的是另一个问题：一个陌生仓库能不能在用户不知情时加载项目自己的扩展、Skill 和配置。它能阻止受保护的项目资源悄悄进入运行时，却不会限制已经启用的 <code>bash</code> 或 <code>write</code> 能访问哪里。还有一个容易漏掉的细节：<code>AGENTS.md</code>、<code>CLAUDE.md</code> 这类上下文文件默认不受 project trust 控制，除非主动关闭 context loading。trust 是加载策略，不是操作系统的安全边界。</p>
 <p>扩展同样运行在 Pi 进程里，可以访问宿主环境。需要处理陌生代码、敏感凭据或多租户任务时，更稳妥的做法是隔离整个进程，或者把高风险工具路由到容器和远程沙箱。Pi 文档给了 Plain Docker、Docker Sandboxes、OpenShell、Gondolin 等方案，但选择哪一种、隔离做到多细，由使用者自己决定。</p>
 <p>另外，Pi 默认也没有把 sub-agent、plan mode 这类工作流固化进核心产品。需要的人可以用扩展加进去。这样的好处是默认行为容易理解，代价也很明确：团队如果需要审批、统一策略、多人协作和集中审计，需要在 Pi 之外继续搭。</p>
 <p>这一点从仓库演进里也能看出来。现在已经有 <code>pi-durable</code> 以及一组服务端、协议和客户端包，但标准 Coding Agent 的主链路仍然围绕 <code>pi-agent-core</code> 和 <code>AgentSession</code> 展开，durable 集成目前放在 <code>experimental</code> 目录。复杂能力有自己的位置，没有被一股脑压进默认 CLI。</p>
 <p>所以我现在更愿意把 Pi 看成一套边界清楚的 Harness 基础，而不是一套替团队把所有决策都做完的 Agent 平台。</p>
-<h2>极简不是代码少，是核心路径少做决定</h2>
+<h2 id="极简不是代码少-是核心路径少做决定">极简不是代码少，是核心路径少做决定</h2>
 <p>这次重新读 Pi，我最大的感受是：一个 Harness 的极简程度，不能只看仓库大小、系统提示词长度，或者默认暴露了几个工具。</p>
 <p><strong>更有用的判断方式，是看核心路径替上层做了多少决定。</strong></p>
 <p>Pi 的 Agent Core 只守住模型、工具和结果之间的循环；会话完整保存，再按当前分支投影；工具可以接很多，模型只看此刻需要的；复杂编排进入 Codemode，权限隔离留给工具和运行环境。每一层都不神秘，组合起来却足够支撑真实的长任务。</p>
 <p>这套取舍当然不适合所有场景。如果公司内部需要细粒度权限、强审批和统一治理，Pi 给的还只是地基。但作为 Harness，它把“默认怎么跑”和“需要时怎么扩”分得很清楚。</p>
 <p>我现在看一个 Agent 框架，会先找它最常走的那条路径，再看功能越来越多之后，这条路径有没有被拖成万能控制器。Pi 的仓库已经长大了，主循环却依然能顺着读下来。我觉得，这才是它最有价值的极简。</p>
-<h2>往期相关推文</h2>
+<h2 id="往期相关推文">往期相关推文</h2>
 <ul><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410581&amp;idx=1&amp;sn=901a554f673cb782cf89b550ec0da01a&amp;scene=21#wechat_redirect">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a>》</li></ul>
 <ul><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410636&amp;idx=1&amp;sn=cb4165811d63240f7bef29e480e4824b&amp;scene=21#wechat_redirect">从 Claude Code 到 Codex：Coding Agent 的 Harness</a>》</li></ul>
 <ul><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410663&amp;idx=1&amp;sn=59fe8c6f7b9fd1ef3dd90bb11c329869&amp;scene=21#wechat_redirect">输出结果不等于完成任务：Agent 最容易忽略的一环</a>》</li></ul>
-<h2>参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 <p>本文代码阅读基于 Pi <code>main</code> 分支提交 <code>96abe9a</code>（2026-10-11），仓库主要包版本为 <code>1.1.0</code>。</p>
 <ul><li>Pi 官方仓库（https://github.com/earendil-works/pi）</li></ul>
 <ul><li>Pi 官方文档：How Pi Works、MCP Servers、Codemode、Containerization（https://pi.dev/docs/latest）</li></ul>
@@ -512,7 +512,7 @@
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>
 <p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

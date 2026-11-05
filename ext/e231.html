@@ -395,39 +395,39 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</h1><div class="meta">📅 2026-05-11 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/8rXk9rn3qoT-_-s8bIEicw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计.md</div><div class="md"><h1>claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">22</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#claude-mem-Claude-Code-跨会话记忆持久化-Hook-管道-SQLite-本地库-Worker-后台压缩">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#一-整体架构-五步管道">一、整体架构：五步管道</a><a class="tl l3" href="#二-Hook-挂载细节">二、Hook 挂载细节</a><a class="tl l3" href="#三-存储双路-SQLite-Chroma">三、存储双路：SQLite + Chroma</a><a class="tl l3" href="#四-mem-search-v5-4">四、mem-search（v5.4+）</a><a class="tl l3" href="#五-安装方式">五、安装方式</a><a class="tl l3" href="#六-风险与局限">六、风险与局限</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#大家好-我是鹏磊">大家好，我是鹏磊。</a><a class="tl l3" href="#断片这毛病-模型不背锅">断片这毛病，模型不背锅</a><a class="tl l3" href="#钩子那点脏活-别整太文艺">钩子那点脏活，别整太文艺</a><a class="tl l3" href="#本地库跟后台-两条腿走路">本地库跟后台，两条腿走路</a><a class="tl l3" href="#咋装上-别跟我杠">咋装上 别跟我杠</a><a class="tl l3" href="#吹得再硬也有代价">吹得再硬也有代价</a><a class="tl l3" href="#https-www-ddkk-com">https://www.ddkk.com</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</h1><div class="meta">📅 2026-05-11 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/8rXk9rn3qoT-_-s8bIEicw" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计.md</div><div class="md"><h1 id="claude-mem-Claude-Code-跨会话记忆持久化-Hook-管道-SQLite-本地库-Worker-后台压缩">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-05-11 抓取状态：成功 原文字符：3217｜配图：5 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>Claude Code 会话关闭后上下文全部丢失，下次打开等于失忆重来。claude-mem 通过 Hook 机制把每次会话的关键观测持久化到本地 SQLite，后台 Worker 压缩后下次会话再注入，实现跨会话记忆续接。</p>
-<h2>核心内容</h2>
-<h3>一、整体架构：五步管道</h3>
+<h2 id="核心内容">核心内容</h2>
+<h3 id="一-整体架构-五步管道">一、整体架构：五步管道</h3>
 <pre><code>Hook 捕获 → 本地存储 → 后台压缩 → 下次会话注入 → 智能检索</code></pre>
 <ul><li>不是"永久记忆"玄学，而是 Claude Code Hook 上接的一根下水管</li><li>脏数据先冲进本地 SQLite，Worker 用 Agent SDK 把 observation 压缩成下次可喂的小抄</li><li>核心文件：<code>bun-runner.js</code> 拉起 <code>worker-service.cjs</code>，避免孤儿进程</li></ul>
-<h3>二、Hook 挂载细节</h3>
+<h3 id="二-Hook-挂载细节">二、Hook 挂载细节</h3>
 <table><thead><tr><th>Hook 时机</th><th>干什么</th></tr></thead><tbody><tr><td>SessionStart</td><td>起 Worker，往当前会话嘴里塞以前的摘要</td></tr><tr><td>UserPromptSubmit</td><td>开 session，把原始 prompt 扔库里供全文检索</td></tr><tr><td>PreToolUse（文件读）</td><td>卡一道文件门，按需加载，省 token</td></tr><tr><td>PostToolUse</td><td>记录所有工具调用结果</td></tr><tr><td>Stop</td><td>summarize 本次会话</td></tr></tbody></table>
 <ul><li><code>version-check.js</code> 启动时校验 <code>.install-version</code>，不一致就 stderr 报错提示 <code>npx claude-mem repair</code></li></ul>
-<h3>三、存储双路：SQLite + Chroma</h3>
+<h3 id="三-存储双路-SQLite-Chroma">三、存储双路：SQLite + Chroma</h3>
 <ul><li><strong>本地库</strong>：<code>~/.claude-mem/claude-mem.db</code>，用 <code>bun:sqlite</code> + FTS5 虚拟表做关键词搜索</li><li><strong>向量库</strong>（可选）：挂 Chroma，做语义相似度检索（"这句像不像上次那句"）</li><li>Worker 暴露 HTTP（默认端口 <code>37700 + uid % 100</code>），提供：搜索接口 / 本地 Viewer 页 / SSE 推流 / Agent SDK 压缩</li><li>大白话：SQLite 管搜得着搜不着，Chroma 管像不像，都不开就闭眼聊</li></ul>
-<h3>四、mem-search（v5.4+）</h3>
+<h3 id="四-mem-search-v5-4">四、mem-search（v5.4+）</h3>
 <ul><li>粗搜时间线再抠细节，不是把整库糊脸上</li><li>分层检索 token 消耗更低，官方说能省"一截"</li></ul>
-<h3>五、安装方式</h3>
+<h3 id="五-安装方式">五、安装方式</h3>
 <pre><code>npx claude-mem install
 # 或 Claude Code marketplace：thedotmack/claude-mem → /plugin install claude-mem</code></pre>
 <ul><li>要求：Node 20+，Bun 1.0+，Chroma 路线还需 uv Python</li><li>装完必须重启 Claude Code，否则 Hook 不生效</li></ul>
-<h3>六、风险与局限</h3>
+<h3 id="六-风险与局限">六、风险与局限</h3>
 <ul><li>记多了本地变黑匣子，Private Tags 要自己配排除规则</li><li>摘要有损，重要决策该写文档，别依赖插件</li><li>Worker 翻车时 observation 堆半截，文档有 recovery 方案；需当服务维护，不是吉祥物</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <p>目前针对 Claude Code 跨会话记忆场景最完整的开源方案之一（74K+ star），Hook 挂载点覆盖完整会话生命周期，SQLite 本地存储无隐私泄露风险，Worker 架构避免孤儿进程，技术实现相对可靠。弥补 Claude Code 自身会话隔离缺陷的工程解法。</p>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li>适用：长期项目跨会话记忆、减少重复交代背景、Claude Code 个人知识库搭建</li><li>不适用：团队共享记忆（Viewer 只在本机）、极度敏感信息（本地黑匣子问题）、要求 100% 召回的关键决策记录</li></ul>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#大家好我是鹏磊">大家好，我是鹏磊。</a></li><li><a href="#断片这毛病模型不背锅">断片这毛病，模型不背锅</a></li><li><a href="#钩子那点脏活别整太文艺">钩子那点脏活，别整太文艺</a></li><li><a href="#本地库跟后台两条腿走路">本地库跟后台，两条腿走路</a></li><li><a href="#咋装上-别跟我杠">咋装上 别跟我杠</a></li><li><a href="#吹得再硬也有代价">吹得再硬也有代价</a></li><li><a href="#httpswwwddkkcom">https://www.ddkk.com</a></li></ul>
-<h3>大家好，我是鹏磊。</h3>
+<h3 id="大家好-我是鹏磊">大家好，我是鹏磊。</h3>
 <p><img alt="图片" src="../../_assets/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计/img-001-6fc16fa5.webp"></p>
 <p>鹏磊我闲得没事刷 GitHub，又瞅见 claude-mem 在那杵着，Star 74.3k多晃荡，具体几位数你爱看不看 claude-mem，反正好孬都是虚胖，过两天又变</p>
 <p>我为啥啃这玩意儿，纯纯是自己也被 Claude Code 恶心过：窗口一关，脑子当场断片，上一把到底刚聊到哪个坑，谁记得住啊</p>
@@ -438,10 +438,10 @@
 <p>扒的，有错你喷文档别喷我</p>
 <p>通过Hook捕获&gt; 本地存储&gt; 后台压缩&gt; 下次会话注入&gt; 智能检索</p>
 <p><img alt="图片" src="../../_assets/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计/img-003-ec3209d3.png"></p>
-<h3>断片这毛病，模型不背锅</h3>
+<h3 id="断片这毛病-模型不背锅">断片这毛病，模型不背锅</h3>
 <p>官方那串 Persistent memory compression 你当洋屁听也行</p>
 <p>人话就一句：会话死了，活别跟着一起埋；它记的是你工具咋用的、读了谁写了谁，不是给你算卦</p>
-<h3>钩子那点脏活，别整太文艺</h3>
+<h3 id="钩子那点脏活-别整太文艺">钩子那点脏活，别整太文艺</h3>
 <p>别天天「记忆记忆」的，烦</p>
 <p>先看它咋挂进去的</p>
 <p>Setup 有个 <code>version-check.js</code>，快得很，瞟一眼 <code>.install-version</code>，不对就 stderr 嚎一嗓让你 <code>npx claude-mem repair</code>，自个不瞎装机，这路子我瞅着像老油条干的事</p>
@@ -450,7 +450,7 @@
 <p>到头来全是 <code>bun-runner.js</code> 拽着 <code>worker-service.cjs</code> 跑，名字土是土，起码没给你一地孤儿进程，我瞅着这算积德</p>
 <p>画个序，图里我直接用文档那套英文事件名，省得你对着官方架构翻字典</p>
 <p><img alt="图片" src="../../_assets/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计/img-004-4c6b9e10.png"></p>
-<h3>本地库跟后台，两条腿走路</h3>
+<h3 id="本地库跟后台-两条腿走路">本地库跟后台，两条腿走路</h3>
 <p>Worker 就 Express 顶着 HTTP，端口默认 <code>37700 + (uid % 100)</code>，想改自己掏 <code>CLAUDE_MEM_WORKER_PORT</code>，别跟我哭端口占用</p>
 <p>它干啥：搜；给人看的网页；SSE 嘀嘀咕咕推流；顺手把 observation 丢给 Agent SDK 压（文档说也能换 Gemini OpenRouter 那条便宜路）</p>
 <p>库躺 <code>~/.claude-mem/claude-mem.db</code>，<code>bun:sqlite</code> 扛着，搜关键词靠 FTS5 那块虚拟表；要想「这句像不像上次那句」再挂 Chroma，爱挂不挂</p>
@@ -459,19 +459,19 @@
 <p><img alt="图片" src="../../_assets/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计/img-005-72b9ac10.png"></p>
 <p>白话还是那句：hook 写库、worker 读 observation、SDK 压完回写、下轮再灌；搜是 query 走 MCP/skill、HTTP 打 SessionSearch、FTS5 命中、分层展开再回去——图就是字少版</p>
 <p>mem-search 那档子事文档吹 v5.4+，粗搜时间线再抠细节，跟一开头把整库糊脸上完全两码事；他们说 token 能省一截，具体几位你自己翻 Release，我不在这跟写财报似的编数</p>
-<h3>咋装上 别跟我杠</h3>
+<h3 id="咋装上-别跟我杠">咋装上 别跟我杠</h3>
 <pre><code>npx claude-mem install</code></pre>
 <p>或者在 Claude Code 里 marketplace 加 <code>thedotmack/claude-mem</code> 再 <code>/plugin install claude-mem</code></p>
 <p>装完重启，不重启别嚷嚷「没记忆」</p>
 <p>Node 20+ Bun 1.0 往上，Chroma 那条路还可能拽 uv Python，公司网死难用的自个心里有数</p>
 <p>Viewer 就本机 <code>127.0.0.1</code> 那块自嗨屏，别当成云上产品</p>
-<h3>吹得再硬也有代价</h3>
+<h3 id="吹得再硬也有代价">吹得再硬也有代价</h3>
 <p>记多了本地就是一黑匣子，Private Tags 不想记啥自己卡，别指望插件替你守法</p>
 <p>摘要摘要，摘就有丢，架构拍板线上扯皮那种大事该写文档写文档，别整得跟「我脑子在插件里」一样神经病</p>
 <p>Worker 翻车了 observation 堆半截，人家文档都写了咋 recovery，说明这路本来就会断，你要当基础设施伺候它就当个小服务运维，别当吉祥物供着</p>
-<h3>https://www.ddkk.com</h3>
+<h3 id="https-www-ddkk-com">https://www.ddkk.com</h3>
 <p>如果你近期准备面试跳槽，建议在ddkk.com在线刷题，涵盖 一万+ 道 Java 面试题，几乎覆盖了所有主流技术面试题，还有市面上最全的技术五百套，精品系列教程，免费提供。</p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

@@ -395,18 +395,18 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent、Harness、Loop 到底怎么分？一条运行链看清楚</h1><div class="meta">📅 2026-10-19 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/6e27GknVlBJ-XoRlnAakLg" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261019-AgentHarnessLoop-到底怎么分一条运行链看清楚.md</div><div class="md"><h1>Agent、Harness、Loop 到底怎么分？一条运行链看清楚</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">18</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Agent-Harness-Loop-到底怎么分-一条运行链看清楚">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l2" href="#先跑一遍">先跑一遍</a><a class="tl l2" href="#Agent-这次谁来做">Agent：这次谁来做</a><a class="tl l2" href="#Harness-这次怎么跑">Harness：这次怎么跑</a><a class="tl l2" href="#Loop-下一步怎么走">Loop：下一步怎么走</a><a class="tl l2" href="#三种节奏">三种节奏</a><a class="tl l2" href="#停下不等于做完">停下不等于做完</a><a class="tl l2" href="#四个标识">四个标识</a><a class="tl l2" href="#Workflow-和-Loop">Workflow 和 Loop</a><a class="tl l2" href="#外层-Loop-何时有用">外层 Loop 何时有用</a><a class="tl l2" href="#长任务不等于多-Agent">长任务不等于多 Agent</a><a class="tl l2" href="#再看这条链">再看这条链</a><a class="tl l2" href="#参考资料">参考资料</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent、Harness、Loop 到底怎么分？一条运行链看清楚</h1><div class="meta">📅 2026-10-19 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/6e27GknVlBJ-XoRlnAakLg" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261019-AgentHarnessLoop-到底怎么分一条运行链看清楚.md</div><div class="md"><h1 id="Agent-Harness-Loop-到底怎么分-一条运行链看清楚">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-10-19 抓取状态：成功 原文字符：8837｜配图：1 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>架构师（JiaGouX） 我们都是架构师！ 架构未来，你来不来？ 把 Agent、Harness、Loop 放在一起，经常看到的是这样一张图：Agent 干活，Harness 管 Agent，Loop 再管 Harness。 可一对照 OpenAI 和 Anthropic 的说法，这张图就对不上了。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
+<h2 id="原文沉淀">原文沉淀</h2>
 <blockquote><p>来源：https://mp.weixin.qq.com/s/6e27GknVlBJ-XoRlnAakLg 平台：weixin｜作者：架构师 抓取方式：cdp｜字符数：9192｜图片：3</p></blockquote>
 <hr>
 <p>架构师（JiaGouX）</p>
@@ -417,7 +417,7 @@
 <p>可聊到 Loop Engineering，Loop 又跑到一次 Agent run 外面去了。它把定时触发、验证、重试、人工接管，甚至上线后的 Badcase 都接了进来。这个 Loop，确实比一次 Harness 运行更大。</p>
 <p>两种说法并不冲突，因为三个词说的不是同一件事：<strong>Agent 是围绕目标判断和行动的执行主体；Harness 托住这次执行；Loop 则看结果，再决定下一步。</strong>系统里，通常按一次具体的 Agent run 来记录、限权和恢复。</p>
 <p>拿一个修测试的任务跑一遍，会更直观。</p>
-<h2>先跑一遍</h2>
+<h2 id="先跑一遍">先跑一遍</h2>
 <p>任务很常见：修复一个失败的端到端测试，通过验证后提交代码。</p>
 <pre><code>task T42
   │ 触发
@@ -447,7 +447,7 @@ candidate C1 → verifier → evidence E1
 <ul><li>run 外面，验证器检查候选结果，任务系统再决定要不要启动下一次 run。</li></ul>
 <p>前一个 Loop 通常以秒、分钟计，后一个可能跑上几小时甚至几天。<strong>名字都叫 Loop，看的状态、手里的权限、停下来的条件却完全不同。</strong></p>
 <table><thead><tr><th>概念</th><th>在这条链里是什么</th><th>它回答的问题</th></tr></thead><tbody><tr><td>Agent / Agent run</td><td>Agent 在 <code>R1</code> 中围绕目标行动</td><td>这次由谁判断、谁行动</td></tr><tr><td>Harness</td><td>承载 <code>R1</code> 的运行时系统</td><td>这次执行怎么安全、稳定地跑</td></tr><tr><td>Loop</td><td>结果回来后的反馈关系</td><td>接下来继续、停止、重试还是转人工</td></tr></tbody></table>
-<h2>Agent：这次谁来做</h2>
+<h2 id="Agent-这次谁来做">Agent：这次谁来做</h2>
 <p>Agent 这个词很宽。有人用它指模型加工具，有人用它指完整产品，也有人把团队里的自动化角色叫 Agent。</p>
 <p>落到运行架构里，<code>Agent run</code> 往往比单说 Agent 更准确：系统给出一个目标，Agent 实际跑了一次。这次执行能被观察，也能被终止。</p>
 <p>一份完整的 run 记录，至少能回答几件事：</p>
@@ -458,7 +458,7 @@ candidate C1 → verifier → evidence E1
 <ul><li>为什么结束，留下了什么结果。</li></ul>
 <p>模型负责判断下一步，工具把判断变成动作，环境接住动作带来的变化。代码写进了哪个 worktree，浏览器点了什么，数据库里到底有没有多出一条记录，这些都发生在模型之外。</p>
 <p>“Agent = LLM + Harness”用来快速理解没问题，真要划系统边界就不够了。<strong>它只说了大概有哪些东西，没有说状态归谁、故障后怎么回来，也没有说谁有权确认任务完成。</strong></p>
-<h2>Harness：这次怎么跑</h2>
+<h2 id="Harness-这次怎么跑">Harness：这次怎么跑</h2>
 <p>我更愿意把 Harness 理解成 Agent 的运行时。一次 run 需要的能力由它接起来，不能越过的边界也由它守住。</p>
 <p>常见职责包括：</p>
 <ul><li>选择并压缩上下文；</li></ul>
@@ -471,19 +471,19 @@ candidate C1 → verifier → evidence E1
 <p>OpenAI 拆解 Codex Agent Loop 时，主链路很朴素：用户输入送给模型；模型返回工具调用，Harness 执行工具并追加结果；模型再次推理；直到返回最终消息。一次对话轮次里，可能已经经历多轮模型调用和工具执行。</p>
 <p>Anthropic 的 Managed Agents 又把 <code>session</code>、<code>harness</code>、<code>sandbox</code> 分开：session 保存不断追加的事件，harness 负责模型调用和工具路由，sandbox 把动作落到环境里。Harness 进程坏了，就按 session 恢复；Sandbox 坏了，就重建执行环境。两类故障没必要绑在一起。</p>
 <p>之前写《从一次 LLM 调用到完整 Harness：系统理解 Agent 如何工作》时，我们拆过模型、工具、上下文和事件记录。《拆开 Pi：Agent Harness 的极简设计》看的是一条最小主链怎么成立。放到今天这条运行链里，两篇讲的都是一件事：<code>R1</code> 怎么可靠地跑起来。</p>
-<h2>Loop：下一步怎么走</h2>
+<h2 id="Loop-下一步怎么走">Loop：下一步怎么走</h2>
 <p>Loop 说的是反馈怎么回来：先做一步，看看结果，再决定下一步。</p>
 <p>这段逻辑可以写在 Harness 的事件循环里，也可以放进任务调度器、工作流引擎、CI 系统或产品后台。它该放在哪儿，要看两件事：它读哪份状态，又能发起什么动作。</p>
 <p>在 <code>R1</code> 内，Loop 读的是 session 事件。测试报错后，模型看日志、改代码、再跑测试。它能继续调用工具，却未必有权合并代码或把业务任务标成完成。</p>
 <p>到了 <code>T42</code> 这一层，Loop 读的是工作项、候选版本和验收证据。它可以结束 <code>R1</code>，等 CI 返回后再启动 <code>R2</code>。读的东西变了，权限也变了。</p>
 <p>再往外，线上 Badcase 进入评测集，推动 Harness、提示、工具或模型配置调整。这个 Loop 改的是系统版本，眼前这次任务早就结束了。</p>
 <p>Loop 到底在 Harness 里面还是外面，要看说的是哪一次反馈。<strong>把所有反馈都塞进最外层的一个大盒子，图是整齐了，恢复和验收的边界反而没了。</strong></p>
-<h2>三种节奏</h2>
+<h2 id="三种节奏">三种节奏</h2>
 <p>同一套 Agent 系统里，往往同时跑着三种节奏。</p>
 <table><thead><tr><th>Loop</th><th>正在处理什么</th><th>主要状态</th><th>停止依据</th></tr></thead><tbody><tr><td>运行 Loop</td><td>模型决策、工具执行、结果回传</td><td>上下文、session 事件、预算</td><td>模型停止、超时、取消或 Harness 规则</td></tr><tr><td>任务 Loop</td><td>候选持久化、外部验证、再次执行</td><td>工作项、run、候选、验收记录</td><td>验收通过、确定阻塞或人工接管</td></tr><tr><td>演进 Loop</td><td>Badcase 归因、评测、灰度、发布</td><td>数据集、配置、基线、版本</td><td>发布门禁与线上结果</td></tr></tbody></table>
 <p>运行 Loop 以秒和分钟计，任务 Loop 可能跨小时和天，演进 Loop 往往要跨版本。它们会互相触发，但不能共用一个含糊的 <code>done</code>。</p>
 <p><code>R1</code> 停止，只说明这次运行结束。<code>C1</code> 测试通过，说明某个候选满足当前技术检查。<strong>代码是否已合并、部署是否完成、真实流量是否生效，还要看后面的状态。</strong></p>
-<h2>停下不等于做完</h2>
+<h2 id="停下不等于做完">停下不等于做完</h2>
 <p>这类系统里，最容易说早了的一个词就是“完成”。</p>
 <pre><code>MODEL_STOPPED
     ↓
@@ -503,7 +503,7 @@ EFFECTIVE</code></pre>
 <p>《输出结果不等于完成任务：Agent 最容易忽略的一环》讨论过这组差别；《AI 写代码越来越快，研发交付系统该怎么演进？》又把候选、验证、交付和生效接到了研发链路上。两篇文章放在这里，恰好补上外层 Loop 的停止条件。</p>
 <p>Anthropic 在 Agent 评测里也特意分开了 <code>transcript</code> 和 <code>outcome</code>。Transcript 记的是一次 trial 的完整过程，outcome 看的是最后环境里真的发生了什么。Agent 说“预订成功”，数据库里不一定真有这条预订记录。同样，run 日志里写着“测试已修复”，也代替不了实际测试结果。</p>
 <p>每一层说到自己能证明的地方，就够了。</p>
-<h2>四个标识</h2>
+<h2 id="四个标识">四个标识</h2>
 <p>回到开头那条链，架构图可以换，下面四个标识最好一直带着：</p>
 <pre><code>task_id      = T42   // 这件事
 run_id       = R1    // 这次执行
@@ -515,12 +515,12 @@ evidence_ref = E1    // 这份结果的验证证据</code></pre>
 <table><thead><tr><th>状态</th><th>典型内容</th><th>更合适的持有方</th></tr></thead><tbody><tr><td>Session</td><td>消息、模型输出、工具调用、工具结果</td><td>Harness / session store</td></tr><tr><td>工作区</td><td>文件、代码、浏览器页面、临时数据库</td><td>Sandbox / worktree / 外部系统</td></tr><tr><td>任务</td><td>待处理、进行中、待验证、阻塞、完成</td><td>调度器或业务系统</td></tr><tr><td>验收</td><td>测试报告、部署回执、人工审批、线上观测</td><td>CI、grader、发布或业务系统</td></tr></tbody></table>
 <p>聊天上下文可以压缩，Harness 可以重启，Sandbox 也可以重建。只要任务、候选和证据没有全塞在一段随时会丢的上下文里，外层 Loop 就知道该从哪里接着跑。</p>
 <p>Managed Agents 把 session、harness、sandbox 拆开，价值也在这里：日志、决策和执行环境可以各自恢复，不用坏一个就全部重来。</p>
-<h2>Workflow 和 Loop</h2>
+<h2 id="Workflow-和-Loop">Workflow 和 Loop</h2>
 <p>有人把 Workflow 理解成固定路径，把 Loop 理解成动态探索。这个说法好记，但容易把两件事讲成对立面。</p>
 <p>Workflow 关心状态怎么流转：有哪些节点，允许哪些分支，出错后走哪条路。Loop 关心结果回来后怎么办：继续、重试、换策略，还是停下来。</p>
 <p>状态机里完全可以有循环和动态分支。看起来很自主的 Agent，也可能只是在同一条脆弱路径上反复试错。两者放在一起更好理解：Workflow 画出有哪些路，Loop 看完反馈，再选下一段。</p>
 <p>到了架构设计里，最后还是两个具体问题：什么证据能让状态往前走，谁有权宣布结束。这两点没说清，流程图画得再漂亮，系统照样会提前报完成，或者一直重试下去。</p>
-<h2>外层 Loop 何时有用</h2>
+<h2 id="外层-Loop-何时有用">外层 Loop 何时有用</h2>
 <p>Peter Steinberger 把关注点从逐轮提示 Coding Agent，推到了外层 Loop：谁来触发，状态放哪儿，结果怎么验，失败后怎么回来。</p>
 <p>Gergely Orosz 很快补了另一面：大多数团队没有无限的 token 预算，也不是每个任务都值得一直跑。他认可的场景很具体——问题难修，但结果容易验证，比如缺陷能稳定复现，又有端到端测试兜底。</p>
 <p>两个人的说法放在一起，边界就清楚多了。外层 Loop 想跑稳，通常得有几个条件：</p>
@@ -532,18 +532,18 @@ evidence_ref = E1    // 这份结果的验证证据</code></pre>
 <p>修复稳定测试、补齐静态检查、处理可回滚的迁移，通常比较适合。要是结果只能靠主观判断，或者一次调用就可能付款、群发、删除数据，外层 Loop 就得谨慎得多。</p>
 <p>比如发布请求超时，系统没收到成功响应，也不知道远端到底有没有创建内容。这时的状态是 <code>UNKNOWN</code>。如果外层 Loop 只认识成功和失败，直接重试就可能重复发布。先保留操作标识，再查询远端；查不清就停下来。这往往比再启动一个 Agent 更重要。</p>
 <p><strong>一个 Loop 靠不靠谱，很多时候就看它怎么处理“不知道”。</strong></p>
-<h2>长任务不等于多 Agent</h2>
+<h2 id="长任务不等于多-Agent">长任务不等于多 Agent</h2>
 <p>任务很长，也不代表一定要上多 Agent。</p>
 <p>一次 run 配上持久化进度、干净的工作区、明确的任务清单和外部验证，已经能处理不少跨上下文工作。Anthropic 早期的长任务实验，核心也是进度文件、Git 历史、增量推进和逐项测试。</p>
 <p>等工作能独立切开，或者生成与评估确实需要隔离时，多 Agent 的价值才会出来。Anthropic 后来的长任务 Harness 采用 planner、generator、evaluator 分工。起作用的不是角色多，而是规划、执行和验证各自有独立的上下文与职责。</p>
 <p>每多一个 Agent，就多一份交接、冲突、合并和验收。任务边界还没理顺时，多 Agent 只是把同一份含糊复制了几遍。</p>
 <p>碰到长任务，我会先看两件事：单次 run 能不能留下可恢复的状态，结果能不能独立验证。至于要几个 Agent，可以晚一点再决定。</p>
-<h2>再看这条链</h2>
+<h2 id="再看这条链">再看这条链</h2>
 <p>再看开头的 <code>T42 → R1 → C1 → E1</code>，三个词的关系就落到了实处。</p>
 <p>Agent 在 <code>R1</code> 里判断和行动。Harness 把模型、工具和执行环境接起来，也负责约束、记录和恢复。<strong>结果一回来，Loop 决定下一步往哪儿走。</strong></p>
 <p>一次 run 里可以有很多轮模型与工具调用；一个任务也可以经历很多次 run；线上反馈还会开启更长的系统演进。它们没有固定的上下级关系，边界来自各自持有的状态、能触发的动作和认可的证据。</p>
 <p>三层图适合记名字。真到系统设计里，我更关心 <code>task_id</code>、<code>run_id</code>、<code>candidate_id</code> 和 <code>evidence_ref</code> 能不能串起来：哪一次执行改了什么，哪份结果经过了什么验证，失败后从哪里继续，最后由谁让 Loop 停下来。</p>
-<h2>参考资料</h2>
+<h2 id="参考资料">参考资料</h2>
 <ul><li>Anthropic, Scaling Managed Agents: Decoupling the brain from the hands（https://www.anthropic.com/engineering/managed-agents）</li></ul>
 <ul><li>OpenAI, Unrolling the Codex agent loop（https://openai.com/index/unrolling-the-codex-agent-loop/）</li></ul>
 <ul><li>OpenAI, Harness engineering: leveraging Codex in an agent-first world（https://openai.com/index/harness-engineering/）</li></ul>
@@ -570,7 +570,7 @@ evidence_ref = E1    // 这份结果的验证证据</code></pre>
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>
 <p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

@@ -395,45 +395,45 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</h1><div class="meta">📅 2026-04-10 · <span class="badge">飞书</span> · <a class="src-link" href="https://bytedance.sg.larkoffice.com/docx/QNsIdi8VFoKm00xY8SRlkXxygve" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260410-Claude-Code封号机制深度探查报告.md</div><div class="md"><h1>Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">53</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Claude-Code-封号机制深度探查-Device-ID-40维指纹-640-事件遥测的完整用户画像">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#具体步骤">具体步骤</a><a class="tl l3" href="#自我保护配置">自我保护配置</a><a class="tl l3" href="#关键文件位置">关键文件位置</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文-instructkr-claude-code-源码分析报告">原文：instructkr/claude-code 源码分析报告</a><a class="tl l3" href="#Claude-Code-封号机制深度探查报告">Claude Code 封号机制深度探查报告</a><a class="tl l2" href="#一-核心结论">一、核心结论</a><a class="tl l3" href="#封号最可能的-5-大原因">封号最可能的 5 大原因</a><a class="tl l2" href="#二-身份追踪体系">二、身份追踪体系</a><a class="tl l3" href="#2-1-持久化标识符">2.1 持久化标识符</a><a class="tl l3" href="#2-2-消息内容指纹-Fingerprint">2.2 消息内容指纹（Fingerprint）</a><a class="tl l3" href="#2-3-每次-API-请求携带的身份信息">2.3 每次 API 请求携带的身份信息</a><a class="tl l2" href="#三-环境指纹采集-40-维度">三、环境指纹采集（40+ 维度）</a><a class="tl l3" href="#3-1-系统级信息">3.1 系统级信息</a><a class="tl l3" href="#3-2-运行环境检测-40-种">3.2 运行环境检测（40+ 种）</a><a class="tl l3" href="#3-3-开发工具链">3.3 开发工具链</a><a class="tl l2" href="#四-遥测上报系统">四、遥测上报系统</a><a class="tl l3" href="#4-1-三路并发上报架构">4.1 三路并发上报架构</a><a class="tl l3" href="#4-2-第一方事件日志-最核心">4.2 第一方事件日志（最核心）</a><a class="tl l3" href="#实际上报数据示例">实际上报数据示例</a><a class="tl l3" href="#4-3-Datadog-上报">4.3 Datadog 上报</a><a class="tl l3" href="#4-4-GrowthBook-双向数据交换">4.4 GrowthBook 双向数据交换</a><a class="tl l2" href="#五-服务端远程控制机制">五、服务端远程控制机制</a><a class="tl l2" href="#六-封号触发机制深度分析">六、封号触发机制深度分析</a><a class="tl l3" href="#6-1-身份关联检测-账号共享">6.1 身份关联检测（账号共享）</a><a class="tl l3" href="#6-2-速率限制违规">6.2 速率限制违规</a><a class="tl l3" href="#6-3-内容策略违规">6.3 内容策略违规</a><a class="tl l3" href="#6-4-自动化滥用检测">6.4 自动化滥用检测</a><a class="tl l3" href="#6-5-客户端篡改检测">6.5 客户端篡改检测</a><a class="tl l2" href="#七-所有外部通信端点汇总">七、所有外部通信端点汇总</a><a class="tl l2" href="#八-自我保护建议">八、自我保护建议</a><a class="tl l3" href="#环境变量防护">环境变量防护</a><a class="tl l3" href="#关键文件清理">关键文件清理</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#一-核心结论-1">一、核心结论</a><a class="tl l3" href="#二-身份追踪体系-1">二、身份追踪体系</a><a class="tl l3" href="#一-核心结论-2">一、核心结论</a><a class="tl l3" href="#二-身份追踪体系-2">二、身份追踪体系</a><a class="tl l3" href="#三-环境指纹采集-40-维度-1">三、环境指纹采集（40+ 维度）</a><a class="tl l3" href="#四-遥测上报系统-1">四、遥测上报系统</a><a class="tl l3" href="#五-服务端远程控制机制-1">五、服务端远程控制机制</a><a class="tl l3" href="#六-封号触发机制深度分析-1">六、封号触发机制深度分析</a><a class="tl l3" href="#七-完整数据流向全景图">七、完整数据流向全景图</a><a class="tl l3" href="#八-所有外部通信端点汇总">八、所有外部通信端点汇总</a><a class="tl l3" href="#九-自我保护建议">九、自我保护建议</a><a class="tl l3" href="#十-总结">十、总结</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</h1><div class="meta">📅 2026-04-10 · <span class="badge">飞书</span> · <a class="src-link" href="https://bytedance.sg.larkoffice.com/docx/QNsIdi8VFoKm00xY8SRlkXxygve" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260410-Claude-Code封号机制深度探查报告.md</div><div class="md"><h1 id="Claude-Code-封号机制深度探查-Device-ID-40维指纹-640-事件遥测的完整用户画像">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</h1>
 <blockquote><p>来源：飞书 归档日期：2026-04-10 抓取状态：成功（CDP 逐块抓取） 原文字符：18530｜配图：0 张（源站未抓到）</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <p>Claude Code 用户频繁遭遇封号但不清楚原因，这篇基于泄露源码的逆向分析揭示了完整的数据采集和封号判定机制，帮你知道哪些行为会触发风险。</p>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li><strong>三层数据模型</strong>：身份层（Device ID + Account UUID + Email + Fingerprint）→ 环境层（OS/架构/终端/CI/容器等 40+ 维度）→ 行为层（640+ 事件类型 + Token 用量 + 工具调用 + 进程资源），三层数据通过 1P API + Datadog + GrowthBook 三条通道实时上报</li><li><strong>封号五大原因排序</strong>：① 共享账号（Device ID 跨设备关联，风险极高）② 速率限制违规（超配额高频调用）③ 内容策略违规（anti-distillation + 消息指纹校验）④ 自动化滥用（CI 环境 + 非交互 + SDK 入口组合检测）⑤ 客户端篡改（指纹不匹配 + 非标准 Header）</li><li><strong>永久设备标识</strong>：Device ID 是 256 位随机值，首次运行生成存入 <code>~/.claude.json</code>，永久追踪。每次 API 请求都携带 Device ID + Account UUID + Session ID，Anthropic 可精确关联同一设备所有活动</li><li><strong>远程控制能力</strong>：Anthropic 可通过 Policy Limits（每小时轮询）、Remote Settings（远程推送配置）、GrowthBook（功能灰度）三个机制远程控制客户端行为，包括禁用工具、限制功能、强制升级，无需用户知情</li><li><strong>消息指纹机制</strong>：SHA256(盐 + 首条消息特定位置字符 + 版本号) 取前 3 字符，嵌入 HTTP Header 和 System Prompt，用于校验请求来源合法性，检测非官方客户端</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <ul><li>思考方向 1：这套追踪体系对个人隐私的边界在哪？40+ 维度环境指纹是否过度采集？和其他 AI 工具（Cursor、GitHub Copilot）的数据采集对比如何？</li><li>思考方向 2：作为内容创作者，是否值得写一篇"Claude Code 用户自保指南"发公众号/小红书？这类技术安全内容很容易引发传播。</li></ul>
 <hr>
-<h2>为什么有用</h2>
+<h2 id="为什么有用">为什么有用</h2>
 <p>作为 Claude Code 重度用户，了解封号机制的底层逻辑能帮你：避免高风险行为（共享账号、篡改客户端）、合理控制使用频率、知道哪些遥测数据可以关闭。特别是 <code>DISABLE_TELEMETRY=1</code> 和 <code>CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1</code> 这两个环境变量，能有效减少数据上报。</p>
-<h2>具体步骤</h2>
-<h3>自我保护配置</h3>
+<h2 id="具体步骤">具体步骤</h2>
+<h3 id="自我保护配置">自我保护配置</h3>
 <ol><li>设置 <code>DISABLE_TELEMETRY=1</code> → 禁用 Datadog + 1P 事件 + 反馈调查</li><li>设置 <code>CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1</code> → 禁用所有非必要网络（遥测 + 更新 + GrowthBook）</li><li>一人一号，不共享账号（这是封号最高风险行为）</li><li>不篡改官方客户端，不伪造 Header</li><li>控制调用频率，避免短时间大量 API 调用</li><li>定期清理 <code>~/.claude/telemetry/</code>（失败遥测缓存）和 <code>~/.claude/projects/</code>（对话历史）</li><li>如需完全规避分析，使用 Bedrock/Vertex 第三方提供商（自动禁用所有分析）</li></ol>
-<h3>关键文件位置</h3>
+<h3 id="关键文件位置">关键文件位置</h3>
 <ul><li><code>~/.claude.json</code> — Device ID + 账户信息（删除 <code>userID</code> 字段可重置设备标识）</li><li><code>~/.claude/telemetry/</code> — 失败遥测事件缓存</li><li><code>~/.claude/.credentials.json</code> — 明文凭证（Keychain 不可用时）</li></ul>
-<h2>适用 / 不适用场景</h2>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
 <ul><li>适用：Claude Code 个人订阅用户避免封号、企业用户理解数据上报范围做合规评估、开发者理解 Anthropic 的用户追踪技术架构</li><li>不适用：其他 AI 编程工具（Cursor、Copilot 等机制不同）、Claude Web/API 直接调用（追踪体系不同）</li></ul>
-<h2>原文：instructkr/claude-code 源码分析报告</h2>
-<h3>Claude Code 封号机制深度探查报告</h3>
+<h2 id="原文-instructkr-claude-code-源码分析报告">原文：instructkr/claude-code 源码分析报告</h2>
+<h3 id="Claude-Code-封号机制深度探查报告">Claude Code 封号机制深度探查报告</h3>
 <blockquote><p>基于 Claude Code 已泄露源代码分析，全面揭示其数据采集、上报机制及封号触发点</p></blockquote>
-<h2>一、核心结论</h2>
+<h2 id="一-核心结论">一、核心结论</h2>
 <p>Claude Code 构建了一套<strong>企业级用户追踪和行为分析系统</strong>，通过 Device ID（永久标识）+ 环境指纹（40+ 维度）+ 行为遥测（640+ 事件类型）形成完整的用户画像。封号并非单一触发，而是多维度综合判定。</p>
-<h3>封号最可能的 5 大原因</h3>
+<h3 id="封号最可能的-5-大原因">封号最可能的 5 大原因</h3>
 <table><thead><tr><th>排名</th><th>原因</th><th>风险等级</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td>订阅滥用/共享账号</td><td>极高</td><td>Device ID 跨设备关联，检测多设备共享同一账号</td></tr><tr><td>2</td><td>速率限制违规</td><td>高</td><td>超出 rateLimitTier 配额，短时间高频调用</td></tr><tr><td>3</td><td>内容策略违规</td><td>高</td><td>消息内容指纹 + anti-distillation 检测</td></tr><tr><td>4</td><td>自动化滥用</td><td>中</td><td>CI/CD 环境检测 + 非交互模式识别 + 异常 token 消耗</td></tr><tr><td>5</td><td>使用非官方客户端/篡改</td><td>中</td><td>指纹校验失败 + 版本归因 header 异常</td></tr></tbody></table>
-<h2>二、身份追踪体系</h2>
-<h3>2.1 持久化标识符</h3>
+<h2 id="二-身份追踪体系">二、身份追踪体系</h2>
+<h3 id="2-1-持久化标识符">2.1 持久化标识符</h3>
 <table><thead><tr><th>标识符</th><th>生成方式</th><th>存储位置</th><th>生命周期</th></tr></thead><tbody><tr><td>Device ID</td><td><code>randomBytes(32).toString(&#x27;hex&#x27;)</code></td><td><code>~/.claude.json</code></td><td><strong>永久</strong>，除非手动删除</td></tr><tr><td>Account UUID</td><td>OAuth 登录时服务端下发</td><td><code>~/.claude.json</code></td><td>绑定账号</td></tr><tr><td>Organization UUID</td><td>OAuth 登录时下发</td><td>同上</td><td>绑定组织</td></tr><tr><td>Session ID</td><td><code>randomUUID()</code> 每次会话生成</td><td>内存</td><td>单次会话</td></tr><tr><td>Email</td><td>OAuth 或 <code>git config user.email</code></td><td>同上</td><td>绑定身份</td></tr></tbody></table>
 <p>Device ID 是 256 位随机值，首次运行时生成并<strong>永久存储</strong>。它是所有事件上报的核心标识，Anthropic 可通过它精确关联同一设备上的所有活动。</p>
-<h3>2.2 消息内容指纹（Fingerprint）</h3>
+<h3 id="2-2-消息内容指纹-Fingerprint">2.2 消息内容指纹（Fingerprint）</h3>
 <p>源码位置：<code>src/utils/fingerprint.ts</code></p>
 <pre><code>算法：SHA256( &quot;59cf53e54c78&quot; + 首条消息[4] + 首条消息[7] + 首条消息[20] + 版本号 )[:3]</code></pre>
 <p>这个 3 字符指纹被嵌入到：</p>
 <ul><li>HTTP Header <code>x-anthropic-billing-header</code> 的 <code>cc_version</code> 字段</li><li>System Prompt 中</li></ul>
 <p><strong>用途推测</strong>：后端可通过此指纹<strong>校验请求来源合法性</strong>，检测是否有人使用非官方客户端伪造请求。</p>
-<h3>2.3 每次 API 请求携带的身份信息</h3>
+<h3 id="2-3-每次-API-请求携带的身份信息">2.3 每次 API 请求携带的身份信息</h3>
 <pre><code>HTTP Headers:
   x-app: cli
   User-Agent: claude-cli/2.x.x (external, cli)
@@ -443,26 +443,26 @@
 
 Request Body metadata:
   user_id: JSON 编码的 Device ID + Account UUID + Session ID</code></pre>
-<h2>三、环境指纹采集（40+ 维度）</h2>
+<h2 id="三-环境指纹采集-40-维度">三、环境指纹采集（40+ 维度）</h2>
 <p>Claude Code 在启动时对用户环境进行<strong>大规模枚举</strong>，以下信息全部上报至服务端。</p>
-<h3>3.1 系统级信息</h3>
+<h3 id="3-1-系统级信息">3.1 系统级信息</h3>
 <table><thead><tr><th>采集维度</th><th>数据来源</th><th>示例值</th></tr></thead><tbody><tr><td>操作系统</td><td><code>process.platform</code></td><td>darwin/linux/win32</td></tr><tr><td>CPU 架构</td><td><code>process.arch</code></td><td>x64/arm64</td></tr><tr><td>Node.js 版本</td><td><code>process.version</code></td><td>v20.x.x</td></tr><tr><td>Linux 发行版</td><td><code>/etc/os-release</code></td><td>ubuntu 22.04</td></tr><tr><td>Linux 内核</td><td><code>os.release()</code></td><td>6.5.0-xxx</td></tr><tr><td>WSL 版本</td><td><code>/proc/version</code> 解析</td><td>WSL2</td></tr></tbody></table>
-<h3>3.2 运行环境检测（40+ 种）</h3>
+<h3 id="3-2-运行环境检测-40-种">3.2 运行环境检测（40+ 种）</h3>
 <p><strong>CI/CD 平台</strong>：GitHub Actions、GitLab CI、CircleCI、Buildkite、Jenkins</p>
 <p><strong>云开发环境</strong>：GitHub Codespaces、Gitpod、Replit、Vercel、Railway</p>
 <p><strong>云平台</strong>：AWS Lambda/Fargate/ECS/EC2、GCP Cloud Run、Azure Functions/App Service</p>
 <p><strong>容器和虚拟化</strong>：Docker（检测 <code>/.dockerenv</code>）、Kubernetes、WSL</p>
 <p><strong>终端和 IDE</strong>：VSCode、Cursor（<code>CURSOR_TRACE_ID</code>）、JetBrains、tmux/screen/SSH</p>
-<h3>3.3 开发工具链</h3>
+<h3 id="3-3-开发工具链">3.3 开发工具链</h3>
 <table><thead><tr><th>检测类型</th><th>方法</th><th>采集内容</th></tr></thead><tbody><tr><td>包管理器</td><td><code>which npm/yarn/pnpm</code></td><td>可用的包管理器列表</td></tr><tr><td>运行时</td><td><code>which bun/deno/node</code></td><td>可用的运行时列表</td></tr><tr><td>VCS</td><td>检测 <code>.git/.hg/.svn</code> 等</td><td>版本控制系统类型</td></tr><tr><td>Git 仓库</td><td><code>git remote get-url origin</code></td><td>SHA256 哈希取前 16 字符</td></tr></tbody></table>
-<h2>四、遥测上报系统</h2>
-<h3>4.1 三路并发上报架构</h3>
+<h2 id="四-遥测上报系统">四、遥测上报系统</h2>
+<h3 id="4-1-三路并发上报架构">4.1 三路并发上报架构</h3>
 <p>（原文此处为白板图）</p>
-<h3>4.2 第一方事件日志（最核心）</h3>
+<h3 id="4-2-第一方事件日志-最核心">4.2 第一方事件日志（最核心）</h3>
 <p><strong>上报端点</strong>：<code>https://api.anthropic.com/api/event_logging/batch</code> <strong>上报频率</strong>：每 5 秒批量发送，最多 200 条/批 <strong>失败恢复</strong>：上报失败的事件持久化到 <code>~/.claude/telemetry/</code> 目录，下次启动自动重试（最多 8 次，指数退避）</p>
 <p><strong>关键事件类型</strong>（640+ 种中最核心的）：</p>
 <table><thead><tr><th>事件名</th><th>上报内容</th><th>封号相关性</th></tr></thead><tbody><tr><td><code>tengu_init</code></td><td>完整环境指纹、设备信息</td><td>高 - 环境异常检测</td></tr><tr><td><code>tengu_api_success</code></td><td>模型名、token 用量、耗时、成本美元、TTFT</td><td>极高 - 用量监控</td></tr><tr><td><code>tengu_api_error</code></td><td>错误类型、HTTP 状态码、重试次数</td><td>中 - 异常模式</td></tr><tr><td><code>tengu_tool_use_*</code></td><td>工具名、执行耗时、成功/失败</td><td>中 - 行为模式</td></tr><tr><td><code>tengu_exit</code></td><td>会话时长、总 token 用量</td><td>高 - 会话级统计</td></tr><tr><td><code>tengu_oauth_*</code></td><td>登录/刷新/失败事件</td><td>高 - 账号安全</td></tr><tr><td><code>tengu_cancel</code></td><td>取消操作</td><td>低</td></tr><tr><td><code>tengu_auto_mode_*</code></td><td>自动模式使用</td><td>中 - 自动化检测</td></tr></tbody></table>
-<h3>实际上报数据示例</h3>
+<h3 id="实际上报数据示例">实际上报数据示例</h3>
 <pre><code>{
     &quot;event_type&quot;: &quot;ClaudeCodeInternalEvent&quot;,
     &quot;event_data&quot;: {
@@ -496,42 +496,42 @@ Request Body metadata:
         }
     }
 }</code></pre>
-<h3>4.3 Datadog 上报</h3>
+<h3 id="4-3-Datadog-上报">4.3 Datadog 上报</h3>
 <p><strong>端点</strong>：<code>https://http-intake.logs.us5.datadoghq.com/api/v2/logs</code> <strong>硬编码客户端 Token</strong>：<code>pubbbf48e6d78dae54bceaa4acf463299bf</code> <strong>白名单</strong>：64 种事件类型</p>
 <p>关键标签化字段：userBucket（用户分群）、subscriptionType（订阅类型）、model（使用模型）、toolName（工具名称）、version（客户端版本）</p>
-<h3>4.4 GrowthBook 双向数据交换</h3>
+<h3 id="4-4-GrowthBook-双向数据交换">4.4 GrowthBook 双向数据交换</h3>
 <p><strong>SDK Key</strong>：<code>sdk-zAZezfDKGoZuXXKe</code>（外部用户）</p>
 <p>发送 Device ID、Session ID、组织/账户 UUID、订阅类型、速率限制等级、首次使用时间戳、邮箱、版本等属性，换取功能开关和 A/B 实验配置。服务端可据此针对特定用户禁用功能。</p>
-<h2>五、服务端远程控制机制</h2>
+<h2 id="五-服务端远程控制机制">五、服务端远程控制机制</h2>
 <ul><li><strong>Policy Limits</strong>（<code>/api/claude_code/policy_limits</code>）：每小时轮询，可禁用特定工具、限制功能</li><li><strong>Remote Managed Settings</strong>（<code>/api/claude_code/settings</code>）：远程推送配置，修改客户端行为</li><li><strong>版本强制升级</strong>：通过 GrowthBook 下发最低版本要求</li><li><strong>功能标志灰度控制</strong>：对特定用户/组织关闭功能、调整速率限制</li></ul>
-<h2>六、封号触发机制深度分析</h2>
-<h3>6.1 身份关联检测（账号共享）</h3>
+<h2 id="六-封号触发机制深度分析">六、封号触发机制深度分析</h2>
+<h3 id="6-1-身份关联检测-账号共享">6.1 身份关联检测（账号共享）</h3>
 <p>检测依据：同一 Account UUID 出现在多个 Device ID 上、不同 IP/OS/时区的设备使用同一账号、短时间内在不同地理位置登录。</p>
-<h3>6.2 速率限制违规</h3>
+<h3 id="6-2-速率限制违规">6.2 速率限制违规</h3>
 <p>每次 API 请求上报 token 用量，服务端按 account + subscription + rate_limit_tier 聚合，超配额 → 429 错误 → 继续违规 → 触发封号。</p>
-<h3>6.3 内容策略违规</h3>
+<h3 id="6-3-内容策略违规">6.3 内容策略违规</h3>
 <p>三道防线：Anti-Distillation（检测用输出训练竞争模型）、消息指纹校验（请求完整性）、额外保护标志（触发更严格审查）。</p>
-<h3>6.4 自动化滥用检测</h3>
+<h3 id="6-4-自动化滥用检测">6.4 自动化滥用检测</h3>
 <p>高风险组合：非交互（<code>is_interactive: false</code>）+ SDK 入口 + 高频调用 + 大量 token 消耗。</p>
-<h3>6.5 客户端篡改检测</h3>
+<h3 id="6-5-客户端篡改检测">6.5 客户端篡改检测</h3>
 <p>版本指纹不匹配、非标准 User-Agent、缺失/多余 Beta Headers、System Prompt 被篡改。</p>
-<h2>七、所有外部通信端点汇总</h2>
+<h2 id="七-所有外部通信端点汇总">七、所有外部通信端点汇总</h2>
 <table><thead><tr><th>目标</th><th>URL</th><th>频率</th><th>可禁用</th></tr></thead><tbody><tr><td>主 API</td><td><code>api.anthropic.com</code></td><td>每次对话</td><td>不可</td></tr><tr><td>1P 事件</td><td><code>api.anthropic.com/api/event_logging/batch</code></td><td>每 5 秒</td><td>可</td></tr><tr><td>Datadog</td><td><code>datadoghq.com</code></td><td>每 15 秒</td><td>可</td></tr><tr><td>GrowthBook</td><td><code>api.anthropic.com</code></td><td>每 20 分钟</td><td>可</td></tr><tr><td>OAuth</td><td><code>platform.claude.com</code></td><td>登录/刷新</td><td>不可</td></tr><tr><td>策略限制</td><td><code>api.anthropic.com/api/claude_code/policy_limits</code></td><td>每小时</td><td>可</td></tr><tr><td>远程设置</td><td><code>api.anthropic.com/api/claude_code/settings</code></td><td>后台轮询</td><td>可</td></tr><tr><td>域名检查</td><td><code>api.anthropic.com/api/web/domain_info</code></td><td>WebFetch 前</td><td>不可</td></tr><tr><td>MCP 代理</td><td><code>mcp-proxy.anthropic.com</code></td><td>MCP 调用</td><td>不可</td></tr></tbody></table>
-<h2>八、自我保护建议</h2>
-<h3>环境变量防护</h3>
+<h2 id="八-自我保护建议">八、自我保护建议</h2>
+<h3 id="环境变量防护">环境变量防护</h3>
 <table><thead><tr><th>环境变量</th><th>作用</th></tr></thead><tbody><tr><td><code>DISABLE_TELEMETRY=1</code></td><td>禁用 Datadog + 1P 事件 + 反馈调查</td></tr><tr><td><code>CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1</code></td><td>禁用所有非必要网络</td></tr><tr><td><code>CLAUDE_CODE_USE_BEDROCK=1</code></td><td>使用 AWS Bedrock（自动禁用所有分析）</td></tr><tr><td><code>CLAUDE_CODE_USE_VERTEX=1</code></td><td>使用 GCP Vertex（自动禁用所有分析）</td></tr></tbody></table>
-<h3>关键文件清理</h3>
+<h3 id="关键文件清理">关键文件清理</h3>
 <table><thead><tr><th>文件/目录</th><th>内容</th><th>建议</th></tr></thead><tbody><tr><td><code>~/.claude.json</code></td><td>Device ID + 账户信息</td><td>删除 <code>userID</code> 字段可重置设备标识</td></tr><tr><td><code>~/.claude/telemetry/</code></td><td>失败的遥测事件缓存</td><td>定期清理</td></tr><tr><td><code>~/.claude/.credentials.json</code></td><td>明文凭证</td><td>确保 Keychain 可用</td></tr><tr><td><code>~/.claude/projects/</code></td><td>完整对话历史</td><td>定期清理敏感会话</td></tr></tbody></table>
 <p>最安全的做法：使用 Bedrock/Vertex 第三方提供商（自动禁用所有分析），或设置 <code>DISABLE_TELEMETRY=1</code> + 控制使用频率 + 一人一号。</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#一、核心结论">一、核心结论</a></li><li><a href="#二、身份追踪体系">二、身份追踪体系</a></li><li><a href="#2.1 持久化标识符">2.1 持久化标识符</a></li><li><a href="#2.2 消息内容指纹（Fingerprint）">2.2 消息内容指纹（Fingerprint）</a></li><li><a href="#2.3 每次 API 请求携带的身份信息">2.3 每次 API 请求携带的身份信息</a></li><li><a href="#一、核心结论">一、核心结论</a></li><li><a href="#二、身份追踪体系">二、身份追踪体系</a></li><li><a href="#2.1 持久化标识符">2.1 持久化标识符</a></li><li><a href="#2.2 消息内容指纹（Fingerprint）">2.2 消息内容指纹（Fingerprint）</a></li><li><a href="#2.3 每次 API 请求携带的身份信息">2.3 每次 API 请求携带的身份信息</a></li><li><a href="#三、环境指纹采集（40+ 维度）">三、环境指纹采集（40+ 维度）</a></li><li><a href="#3.1 系统级信息">3.1 系统级信息</a></li><li><a href="#3.2 运行环境检测（40+ 种）">3.2 运行环境检测（40+ 种）</a></li><li><a href="#3.3 开发工具链">3.3 开发工具链</a></li><li><a href="#3.4 GitHub Actions 专项采集">3.4 GitHub Actions 专项采集</a></li><li><a href="#四、遥测上报系统">四、遥测上报系统</a></li><li><a href="#4.1 三路并发上报架构">4.1 三路并发上报架构</a></li><li><a href="#4.2 第一方事件日志（最核心）">4.2 第一方事件日志（最核心）</a></li><li><a href="#4.3 每个事件附带的元数据">4.3 每个事件附带的元数据</a></li><li><a href="#4.4 Datadog 上报">4.4 Datadog 上报</a></li><li><a href="#4.5 GrowthBook 双向数据交换">4.5 GrowthBook 双向数据交换</a></li><li><a href="#五、服务端远程控制机制">五、服务端远程控制机制</a></li><li><a href="#5.1 Policy Limits（组织级策略限制）">5.1 Policy Limits（组织级策略限制）</a></li><li><a href="#5.2 Remote Managed Settings（远程设置推送）">5.2 Remote Managed Settings（远程设置推送）</a></li><li><a href="#5.3 版本强制升级">5.3 版本强制升级</a></li><li><a href="#5.4 功能标志灰度控制">5.4 功能标志灰度控制</a></li><li><a href="#六、封号触发机制深度分析">六、封号触发机制深度分析</a></li><li><a href="#6.1 身份关联检测（账号共享）">6.1 身份关联检测（账号共享）</a></li><li><a href="#6.2 速率限制违规">6.2 速率限制违规</a></li><li><a href="#6.3 内容策略违规">6.3 内容策略违规</a></li><li><a href="#6.4 自动化滥用检测">6.4 自动化滥用检测</a></li><li><a href="#6.5 客户端篡改检测">6.5 客户端篡改检测</a></li><li><a href="#七、完整数据流向全景图">七、完整数据流向全景图</a></li><li><a href="#八、所有外部通信端点汇总">八、所有外部通信端点汇总</a></li><li><a href="#九、自我保护建议">九、自我保护建议</a></li><li><a href="#9.1 环境变量防护">9.1 环境变量防护</a></li><li><a href="#9.2 使用注意事项">9.2 使用注意事项</a></li><li><a href="#9.3 关键文件清理">9.3 关键文件清理</a></li><li><a href="#十、总结">十、总结</a></li></ul>
 <p>Claude Code 封号机制深度探查报告 | Claude Code Blocking Mechanism Deep Investigation Report HPC的AI小秘书 贺鹏程 9月4日修改</p>
 <p>An AI-translated English version is available for cross-language collaboration. (September 4, 2026, 11:32 GMT+8) English version: Claude Code Blocking Mechanism Deep Investigation Report</p>
 <p>From: https://github.com/instructkr/claude-code</p>
 <p>Claude Code 封号机制深度探查报告</p>
 <p>基于 Claude Code 已泄露源代码分析，全面揭示其数据采集、上报机制及封号触发点</p>
-<h3>一、核心结论</h3>
+<h3 id="一-核心结论-1">一、核心结论</h3>
 <p>🎁 Claude Code 构建了一套企业级用户追踪和行为分析系统，通过 Device ID（永久标识）+ 环境指纹（40+ 维度）+ 行为遥测（640+ 事件类型）形成完整的用户画像。封号并非单一触发，而是多维度综合判定。</p>
 <p>封号最可能的 5 大原因</p>
 <p>排名</p>
@@ -558,8 +558,8 @@ Request Body metadata:
 <p>使用非官方客户端/篡改</p>
 <p>中</p>
 <p>指纹校验失败 + 版本归因 header 异常</p>
-<h3>二、身份追踪体系</h3>
-<h4>2.1 持久化标识符</h4>
+<h3 id="二-身份追踪体系-1">二、身份追踪体系</h3>
+<h4 id="2-1-持久化标识符-1">2.1 持久化标识符</h4>
 <p>Claude Code 通过以下标识符跨会话永久追踪用户：</p>
 <p>标识符</p>
 <p>生成方式</p>
@@ -586,18 +586,18 @@ Request Body metadata:
 <p>同上</p>
 <p>绑定身份</p>
 <p>🎁 Device ID 是 256 位随机值，首次运行时生成并永久存储。它是所有事件上报的核心标识，Anthropic 可通过它精确关联同一设备上的所有活动。</p>
-<h4>2.2 消息内容指纹（Fingerprint）</h4>
+<h4 id="2-2-消息内容指纹-Fingerprint-1">2.2 消息内容指纹（Fingerprint）</h4>
 <p>源码位置：src/utils/fingerprint.ts</p>
 <p>代码块 Plain Text 复制 算法：SHA256( "59cf53e54c78" + 首条消息[4] + 首条消息[7] + 首条消息[20] + 版本号 )[:3]</p>
 <p>这个 3 字符指纹被嵌入到： • HTTP Header x-anthropic-billing-header 的 cc_version 字段 • System Prompt 中 用途推测：后端可通过此指纹校验请求来源合法性，检测是否有人使用非官方客户端伪造请求。</p>
-<h4>2.3 每次 API 请求携带的身份信息</h4>
+<h4 id="2-3-每次-API-请求携带的身份信息-1">2.3 每次 API 请求携带的身份信息</h4>
 <p>An AI-translated English version is available for cross-language collaboration. (September 4, 2026, 11:32 GMT+8) English version: Claude Code Blocking Mechanism Deep Investigation Report</p>
 <p>An AI-translated English version is available for cross-language collaboration. (September 4, 2026, 11:32 GMT+8) English version: Claude Code Blocking Mechanism Deep Investigation Report</p>
 <p>From: https://github.com/instructkr/claude-code</p>
 <p>From: https://github.com/instructkr/claude-code Claude Code 封号机制深度探查报告</p>
 <p>基于 Claude Code 已泄露源代码分析，全面揭示其数据采集、上报机制及封号触发点</p>
 <p>基于 Claude Code 已泄露源代码分析，全面揭示其数据采集、上报机制及封号触发点</p>
-<h3>一、核心结论</h3>
+<h3 id="一-核心结论-2">一、核心结论</h3>
 <p>🎁 Claude Code 构建了一套企业级用户追踪和行为分析系统，通过 Device ID（永久标识）+ 环境指纹（40+ 维度）+ 行为遥测（640+ 事件类型）形成完整的用户画像。封号并非单一触发，而是多维度综合判定。</p>
 <p>Claude Code 构建了一套企业级用户追踪和行为分析系统，通过 Device ID（永久标识）+ 环境指纹（40+ 维度）+ 行为遥测（640+ 事件类型）形成完整的用户画像。封号并非单一触发，而是多维度综合判定。 封号最可能的 5 大原因</p>
 <p>排名</p>
@@ -672,8 +672,8 @@ Request Body metadata:
 <p>中</p>
 <p>指纹校验失败 + 版本归因 header 异常</p>
 <p>指纹校验失败 + 版本归因 header 异常</p>
-<h3>二、身份追踪体系</h3>
-<h4>2.1 持久化标识符</h4>
+<h3 id="二-身份追踪体系-2">二、身份追踪体系</h3>
+<h4 id="2-1-持久化标识符-2">2.1 持久化标识符</h4>
 <p>Claude Code 通过以下标识符跨会话永久追踪用户：</p>
 <p>标识符</p>
 <p>生成方式</p>
@@ -749,17 +749,17 @@ Request Body metadata:
 <p>绑定身份</p>
 <p>🎁 Device ID 是 256 位随机值，首次运行时生成并永久存储。它是所有事件上报的核心标识，Anthropic 可通过它精确关联同一设备上的所有活动。</p>
 <p>Device ID 是 256 位随机值，首次运行时生成并永久存储。它是所有事件上报的核心标识，Anthropic 可通过它精确关联同一设备上的所有活动。</p>
-<h4>2.2 消息内容指纹（Fingerprint）</h4>
+<h4 id="2-2-消息内容指纹-Fingerprint-2">2.2 消息内容指纹（Fingerprint）</h4>
 <p>源码位置：src/utils/fingerprint.ts</p>
 <p>代码块 Plain Text 复制 算法：SHA256( "59cf53e54c78" + 首条消息[4] + 首条消息[7] + 首条消息[20] + 版本号 )[:3]</p>
 <p>这个 3 字符指纹被嵌入到： • HTTP Header x-anthropic-billing-header 的 cc_version 字段 • System Prompt 中 用途推测：后端可通过此指纹校验请求来源合法性，检测是否有人使用非官方客户端伪造请求。</p>
-<h4>2.3 每次 API 请求携带的身份信息</h4>
+<h4 id="2-3-每次-API-请求携带的身份信息-2">2.3 每次 API 请求携带的身份信息</h4>
 <p>代码块 Plain Text 复制 HTTP Headers: x-app: cli User-Agent: claude-cli/2.x.x (external, cli) X-Claude-Code-Session-Id: {SESSION_UUID} x-anthropic-billing-header: cc_version=2.x.x.{FINGERPRINT}; cc_entrypoint=cli x-client-request-id: {REQUEST_UUID}</p>
 <p>Request Body metadata: user_id: JSON 编码的 Device ID + Account UUID + Session ID</p>
-<h3>三、环境指纹采集（40+ 维度）</h3>
+<h3 id="三-环境指纹采集-40-维度-1">三、环境指纹采集（40+ 维度）</h3>
 <p>🎁 Claude Code 在启动时对用户环境进行大规模枚举，以下信息全部上报至服务端。</p>
 <p>Claude Code 在启动时对用户环境进行大规模枚举，以下信息全部上报至服务端。</p>
-<h4>3.1 系统级信息</h4>
+<h4 id="3-1-系统级信息-1">3.1 系统级信息</h4>
 <p>采集维度</p>
 <p>数据来源</p>
 <p>示例值</p>
@@ -823,9 +823,9 @@ Request Body metadata:
 <p>/proc/version 解析</p>
 <p>WSL2</p>
 <p>WSL2</p>
-<h4>3.2 运行环境检测（40+ 种）</h4>
+<h4 id="3-2-运行环境检测-40-种-1">3.2 运行环境检测（40+ 种）</h4>
 <p>Claude Code 通过环境变量和文件探测自动识别运行环境： CI/CD 平台： • GitHub Actions（GITHUB_ACTIONS） • GitLab CI（GITLAB_CI） • CircleCI（CIRCLECI） • Buildkite（BUILDKITE） • Jenkins（JENKINS_URL） 云开发环境： • GitHub Codespaces（CODESPACES） • Gitpod（GITPOD_WORKSPACE_ID） • Replit（REPL_ID） • Vercel（VERCEL） • Railway（RAILWAY_ENVIRONMENT） 云平台： • AWS Lambda/Fargate/ECS/EC2 • GCP Cloud Run • Azure Functions/App Service 容器和虚拟化： • Docker（检测 /.dockerenv 文件） • Kubernetes（KUBERNETES_SERVICE_HOST） • WSL（WSL_DISTRO_NAME） 终端和 IDE： • VSCode（VSCODE_*） • Cursor（CURSOR_TRACE_ID） • JetBrains（TERMINAL_EMULATOR=JetBrains-JediTerm） • tmux/screen/SSH</p>
-<h4>3.3 开发工具链</h4>
+<h4 id="3-3-开发工具链-1">3.3 开发工具链</h4>
 <p>检测类型</p>
 <p>方法</p>
 <p>采集内容</p>
@@ -871,7 +871,7 @@ Request Body metadata:
 <p>git remote get-url origin</p>
 <p>SHA256 哈希取前 16 字符</p>
 <p>SHA256 哈希取前 16 字符</p>
-<h4>3.4 GitHub Actions 专项采集</h4>
+<h4 id="3-4-GitHub-Actions-专项采集">3.4 GitHub Actions 专项采集</h4>
 <p>在 CI 环境中，额外采集：</p>
 <p>字段</p>
 <p>内容</p>
@@ -886,10 +886,10 @@ Request Body metadata:
 <p>触发者 ID</p>
 <p>触发者 ID</p>
 <p>GITHUB_REPOSITORY_ID 仓库 ID GITHUB_REPOSITORY_OWNER_ID 仓库所有者 ID GITHUB_EVENT_NAME 事件类型 RUNNER_ENVIRONMENT Runner 环境 RUNNER_OS Runner 操作系统</p>
-<h3>四、遥测上报系统</h3>
-<h4>4.1 三路并发上报架构</h4>
+<h3 id="四-遥测上报系统-1">四、遥测上报系统</h3>
+<h4 id="4-1-三路并发上报架构-1">4.1 三路并发上报架构</h4>
 <p>0 个结果</p>
-<h4>4.2 第一方事件日志（最核心）</h4>
+<h4 id="4-2-第一方事件日志-最核心-1">4.2 第一方事件日志（最核心）</h4>
 <p>上报端点：https://api.anthropic.com/api/event_logging/batch 上报频率：每 5 秒批量发送，最多 200 条/批 失败恢复：上报失败的事件持久化到 ~/.claude/telemetry/ 目录，下次启动自动重试（最多 8 次，指数退避） 关键事件类型（640+ 种中最核心的）：</p>
 <p>事件名</p>
 <p>上报内容</p>
@@ -959,9 +959,9 @@ Request Body metadata:
 <p>"event_data": { // ===== 事件基础信息 ===== "event_name": "tengu_config_cache_stats", // 事件名：配置缓存统计 "event_id": "ed1cae38-01a8-44dd-...",     // 事件唯一 ID "client_timestamp": "2026-03-22T10:26:10.747Z",  // 客户端时间戳</p>
 <p>// ===== 用户身份标识（核心追踪字段）===== "device_id": "eab29b910fcc91bxxxxxxxxx8f3c3e6d53d06", // 你的永久设备 ID（256 位） "session_id": "8c503d21-2d92-...",         // 本次会话 ID "email": "xxx@gmail.com",              // 你的邮箱（直接明文上报） "auth": { "organization_uuid": "b2c3112d-...",   // 组织 UUID "account_uuid": "7616b4d3-..."         // 账户 UUID },</p>
 <p>// ===== 客户端信息 ===== "model": "claude-opus-4-6[1m]",           // 使用的模型 "user_type": "external",                   // 用户类型（非内部员工） "entrypoint": "cli",                       // 入口点 "is_interactive": true,                    // 交互模式 "client_type": "cli",                      // 客户端类型</p>
-<h4>4.3 每个事件附带的元数据</h4>
+<h4 id="4-3-每个事件附带的元数据">4.3 每个事件附带的元数据</h4>
 <p>代码块 Plain Text 复制 核心字段: session_id          - 会话 ID device_id           - 设备 ID（永久） account_uuid        - 账户 UUID organization_uuid   - 组织 UUID subscription_type   - 订阅类型（pro/max/enterprise/team） rate_limit_tier     - 速率限制等级</p>
-<h4>4.4 Datadog 上报</h4>
+<h4 id="4-4-Datadog-上报">4.4 Datadog 上报</h4>
 <p>端点：https://http-intake.logs.us5.datadoghq.com/api/v2/logs 硬编码客户端 Token：pubbbf48e6d78dae54bceaa4acf463299bf 白名单：64 种事件类型 标签化字段（用于后台聚合分析和告警）：</p>
 <p>标签</p>
 <p>说明</p>
@@ -982,7 +982,7 @@ Request Body metadata:
 <p>高 - 用户分群</p>
 <p>高 - 用户分群</p>
 <p>subscriptionType 订阅类型 极高 - 配额管理 model 使用模型 高 - 资源消耗 toolName 工具名称 中 - 行为模式 platform 操作系统 低 provider API 提供商 中 version 客户端版本 中 - 旧版本检测</p>
-<h4>4.5 GrowthBook 双向数据交换</h4>
+<h4 id="4-5-GrowthBook-双向数据交换">4.5 GrowthBook 双向数据交换</h4>
 <p>SDK Key：sdk-zAZezfDKGoZuXXKe（外部用户） 发送给 GrowthBook 的用户属性：</p>
 <p>属性</p>
 <p>说明</p>
@@ -1051,22 +1051,22 @@ Request Body metadata:
 <p>appVersion</p>
 <p>客户端版本</p>
 <p>客户端版本 作用：服务端可据此精确控制功能开关、A/B 实验分配，甚至针对特定用户禁用功能。</p>
-<h3>五、服务端远程控制机制</h3>
+<h3 id="五-服务端远程控制机制-1">五、服务端远程控制机制</h3>
 <p>🎁 Anthropic 可通过以下机制远程控制客户端行为，无需用户知情。</p>
 <p>Anthropic 可通过以下机制远程控制客户端行为，无需用户知情。</p>
-<h4>5.1 Policy Limits（组织级策略限制）</h4>
+<h4 id="5-1-Policy-Limits-组织级策略限制">5.1 Policy Limits（组织级策略限制）</h4>
 <p>端点：/api/claude_code/policy_limits 轮询频率：每小时 能力： • 禁用特定工具 • 限制功能访问 • 强制执行组织安全策略</p>
-<h4>5.2 Remote Managed Settings（远程设置推送）</h4>
+<h4 id="5-2-Remote-Managed-Settings-远程设置推送">5.2 Remote Managed Settings（远程设置推送）</h4>
 <p>端点：/api/claude_code/settings 能力： • 远程推送 settings.json 配置 • 修改客户端行为 • 企业治理</p>
-<h4>5.3 版本强制升级</h4>
+<h4 id="5-3-版本强制升级">5.3 版本强制升级</h4>
 <p>通过 GrowthBook 配置 tengu_version_config 下发最低版本要求，可强制旧版本用户升级。</p>
-<h4>5.4 功能标志灰度控制</h4>
+<h4 id="5-4-功能标志灰度控制">5.4 功能标志灰度控制</h4>
 <p>服务端可通过 GrowthBook 对特定用户/组织： • 关闭特定功能 • 调整速率限制 • 修改采样率 • 启用/禁用 Beta 特性</p>
-<h3>六、封号触发机制深度分析</h3>
-<h4>6.1 身份关联检测（账号共享）</h4>
+<h3 id="六-封号触发机制深度分析-1">六、封号触发机制深度分析</h3>
+<h4 id="6-1-身份关联检测-账号共享-1">6.1 身份关联检测（账号共享）</h4>
 <p>0 个结果</p>
 <p>检测依据： • 同一 Account UUID 出现在多个 Device ID 上 • 不同 IP、不同操作系统、不同时区的设备使用同一账号 • 短时间内在不同地理位置登录</p>
-<h4>6.2 速率限制违规</h4>
+<h4 id="6-2-速率限制违规-1">6.2 速率限制违规</h4>
 <p>检测链路： 1. 每次 API 请求上报 tengu_api_success，包含 token 用量和模型 2. 服务端按 account_uuid + subscription_type + rate_limit_tier 聚合 3. 超出配额阈值 → 429 错误 → 继续违规 → 触发封号 上报的关键指标：</p>
 <p>指标</p>
 <p>说明</p>
@@ -1081,9 +1081,9 @@ Request Body metadata:
 <p>输入 token 数</p>
 <p>输入 token 数</p>
 <p>outputTokens 输出 token 数 cacheReadTokens 缓存读取 token cacheCreationTokens 缓存创建 token costUsd 每次请求的美元成本 duration 请求耗时 model 使用的模型</p>
-<h4>6.3 内容策略违规</h4>
+<h4 id="6-3-内容策略违规-1">6.3 内容策略违规</h4>
 <p>防线 1 - Anti-Distillation： API 请求中包含 anti_distillation: ["fake_tools"]，检测是否有人用 Claude Code 输出训练竞争模型。 防线 2 - 消息指纹： 从首条消息特定位置提取字符计算指纹，嵌入 Header 和 System Prompt，后端可校验请求完整性。 防线 3 - 额外保护标志： x-anthropic-additional-protection: true header 可触发服务端更严格的内容审查。</p>
-<h4>6.4 自动化滥用检测</h4>
+<h4 id="6-4-自动化滥用检测-1">6.4 自动化滥用检测</h4>
 <p>检测信号</p>
 <p>来源</p>
 <p>说明</p>
@@ -1121,7 +1121,7 @@ Request Body metadata:
 <p>非交互式调用</p>
 <p>非交互式调用</p>
 <p>entrypoint: "sdk" 入口点 通过 SDK 调用而非 CLI auto_mode_* 事件 自动模式 AFK 自动执行模式 风险组合：非交互 + SDK 入口 + 高频调用 + 大量 token 消耗 → 自动化滥用嫌疑</p>
-<h4>6.5 客户端篡改检测</h4>
+<h4 id="6-5-客户端篡改检测-1">6.5 客户端篡改检测</h4>
 <p>检测点</p>
 <p>方法</p>
 <p>后果</p>
@@ -1167,9 +1167,9 @@ Request Body metadata:
 <p>包含归因信息</p>
 <p>篡改 → 检测到</p>
 <p>篡改 → 检测到</p>
-<h3>七、完整数据流向全景图</h3>
+<h3 id="七-完整数据流向全景图">七、完整数据流向全景图</h3>
 <p>0 个结果</p>
-<h3>八、所有外部通信端点汇总</h3>
+<h3 id="八-所有外部通信端点汇总">八、所有外部通信端点汇总</h3>
 <p>目标</p>
 <p>URL</p>
 <p>频率</p>
@@ -1365,8 +1365,8 @@ Request Body metadata:
 <p>获取更新日志</p>
 <p>可</p>
 <p>可</p>
-<h3>九、自我保护建议</h3>
-<h4>9.1 环境变量防护</h4>
+<h3 id="九-自我保护建议">九、自我保护建议</h3>
+<h4 id="9-1-环境变量防护">9.1 环境变量防护</h4>
 <p>环境变量</p>
 <p>作用</p>
 <p>DISABLE_TELEMETRY=1</p>
@@ -1397,7 +1397,7 @@ Request Body metadata:
 <p>CLAUDE_CODE_USE_VERTEX=1</p>
 <p>使用 GCP Vertex（自动禁用所有分析）</p>
 <p>使用 GCP Vertex（自动禁用所有分析）</p>
-<h4>9.2 使用注意事项</h4>
+<h4 id="9-2-使用注意事项">9.2 使用注意事项</h4>
 <p>行为</p>
 <p>风险</p>
 <p>建议</p>
@@ -1452,7 +1452,7 @@ Request Body metadata:
 <p>低-中</p>
 <p>跟随官方更新</p>
 <p>跟随官方更新</p>
-<h4>9.3 关键文件清理</h4>
+<h4 id="9-3-关键文件清理">9.3 关键文件清理</h4>
 <p>文件/目录</p>
 <p>内容</p>
 <p>建议</p>
@@ -1498,7 +1498,7 @@ Request Body metadata:
 <p>完整对话历史</p>
 <p>定期清理敏感会话</p>
 <p>定期清理敏感会话</p>
-<h3>十、总结</h3>
+<h3 id="十-总结">十、总结</h3>
 <p>Claude Code 的数据采集体系可以总结为三层模型：</p>
 <p>层级</p>
 <p>内容</p>
@@ -1538,7 +1538,7 @@ Request Body metadata:
 <p>分析使用模式 这三层数据通过三条通道（1P API + Datadog + GrowthBook）实时上报，服务端拥有对每个用户完整的使用画像，可以从多个维度检测异常并触发封号决策。</p>
 <p>🎁 最安全的做法：使用 Bedrock/Vertex 第三方提供商（自动禁用所有分析），或设置DISABLE_TELEMETRY=1 + 控制使用频率 + 一人一号。</p>
 <p>最安全的做法：使用 Bedrock/Vertex 第三方提供商（自动禁用所有分析），或设置DISABLE_TELEMETRY=1 + 控制使用频率 + 一人一号。</p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

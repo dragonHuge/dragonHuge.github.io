@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</h1><div class="meta">📅 2026-09-21 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/RfCE5yqOrR_b2AWeI530GQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260921-Browser-Use把Jev装进浏览器Agent.md</div><div class="md"><h1>开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">13</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#开源仅3天狂揽7-1K-Star-Browser-Use-把-Jev-模型装进浏览器-Agent">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#先简单聊聊-什么是-Jev">先简单聊聊：什么是 Jev？</a><a class="tl l3" href="#把-Jev-装进浏览器-agent">把 Jev 装进浏览器 agent</a><a class="tl l3" href="#性能数据-数字说话">性能数据：数字说话</a><a class="tl l3" href="#快速上手">快速上手</a><a class="tl l3" href="#航班搜索-带结果验证-不会真的订票">航班搜索（带结果验证，不会真的订票）</a><a class="tl l3" href="#在看你就赞赞我">在看你就赞赞我！</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</h1><div class="meta">📅 2026-09-21 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/RfCE5yqOrR_b2AWeI530GQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260921-Browser-Use把Jev装进浏览器Agent.md</div><div class="md"><h1 id="开源仅3天狂揽7-1K-Star-Browser-Use-把-Jev-模型装进浏览器-Agent">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-21 抓取状态：成功 原文字符：5398｜配图：5 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>jev-ultrafast：browser-use 团队 9/17 开源，用「系统一决策模型」Jev（TypeSafe）替代 LLM 视觉推理驱动浏览器 agent，当天上 HN 首页。</li><li>核心思路「读 DOM 不看截图」：一次性拿到可见可交互控件并编号，交给 Jev 只做两个决策——做什么操作（CLICK/TYPE_TEXT/SELECT）+ 对哪个编号元素做。</li><li>性能：Google Flights 任务从 9.45s 降到 7.09s（快 25%），浏览器协议调用从 1092 次降到 101 次（降 91%），单次 API 成本约 $0.0039。</li><li>Jev「系统一模型」：非 LLM，结构化决策毫秒级返回，快 100-200 倍、便宜 100-400 倍、不幻觉、永远带置信度。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li>传统浏览器 agent 痛点：每步截图→图像理解→LLM 推理，慢/贵/不稳定；jev-ultrafast 改为读 DOM 结构化数据，去掉图像编解码和冗长对话链。</li><li>只在需要 TYPE_TEXT 时才调用小语言模型（如 inception/mercury-2.5）生成输入文本，能省则省。</li><li>大量提速细节：每快照只一次浏览器协议调用、执行前校验目标有效性、智能等待策略（combobox 输入后最多等 200ms）、后台标签页保持渲染、只给模型看可见文字。</li><li>Jev 的采用速度：Vercel AI Gateway 上线 24h 被 13% 付费团队接入，是史上最快。</li><li>上手：git clone + uv sync，配 TYPESAFE_API_KEY 和 TEXT_MODEL_API_KEY，uv run jev 打开 8766 端口 Inspector。</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>范式启示：「系统一模型 + 结构化环境 = 便宜、快速、可靠的自动化」——先把世界翻译成 AI 能快速理解的结构化数据，再让模型做它最擅长的「选一个」。</li><li>浏览器自动化不必依赖 LLM 视觉推理，DOM 结构化读取 + 决策模型可大幅降本提速。</li></ul>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#先简单聊聊什么是-jev">先简单聊聊：什么是 Jev？</a></li><li><a href="#把-jev-装进浏览器-agent">把 Jev 装进浏览器 agent</a></li><li><a href="#性能数据数字说话">性能数据：数字说话</a></li><li><a href="#快速上手">快速上手</a></li><li><a href="#航班搜索带结果验证不会真的订票">航班搜索（带结果验证，不会真的订票）</a></li></ul>
 <p>前几天在 X 上刷到一条短视频，画面里一个浏览器窗口在 Google Flights 页面上飞一般地点击、选择、输入，从打开页面到列出苏黎世飞伦敦的航班，只用了 <strong>7.1 秒</strong>。</p>
 <p><img alt="图片" src="../../_assets/20260921-browser-use-jev/img-001-bb1bfeab.gif"></p>
@@ -419,21 +419,21 @@
 <p><img alt="图片" src="../../_assets/20260921-browser-use-jev/img-002-43139f95.png"></p>
 <p>📦 5 Parts + Conclusion</p>
 <p>👉 滑动</p>
-<h3>先简单聊聊：什么是 Jev？</h3>
-<h3>把 Jev 装进浏览器 agent</h3>
-<h3>性能数据：数字说话</h3>
-<h3>快速上手</h3>
+<h3 id="先简单聊聊-什么是-Jev">先简单聊聊：什么是 Jev？</h3>
+<h3 id="把-Jev-装进浏览器-agent">把 Jev 装进浏览器 agent</h3>
+<h3 id="性能数据-数字说话">性能数据：数字说话</h3>
+<h3 id="快速上手">快速上手</h3>
 <p>PART ///</p>
 <p>写在最后</p>
 <p>01</p>
 <p>PART</p>
-<h4>先简单聊聊：什么是 Jev？</h4>
+<h4 id="先简单聊聊-什么是-Jev-1">先简单聊聊：什么是 Jev？</h4>
 <p>如果你最近关注 AI 圈，肯定已经被 Jev 刷屏了。</p>
 <p><img alt="图像" src="../../_assets/20260921-browser-use-jev/img-003-0ac0701d.jpg"></p>
 <p>简单说几句：</p>
 <p>Jev 是 <strong>TypeSafe AI</strong> 开发的一种全新 AI 模型——注意，不是大语言模型（LLM）。</p>
 <p>TypeSafe 的创始人 Diogo Almeida 是 OpenAI 前研究员、RLHF 训练方法的共同发明者，当年参与了 ChatGPT 的核心技术开发。离开 OpenAI 两年后，他带着 <strong>Jev</strong> 杀了回来。</p>
-<h4>Jev 和普通 LLM 到底有啥不一样？</h4>
+<h4 id="Jev-和普通-LLM-到底有啥不一样">Jev 和普通 LLM 到底有啥不一样？</h4>
 <p>传统 LLM 是 <strong>自回归（autoregressive）</strong> 的：一个 token 一个 token 地往外蹦。你问它一句话，它先想第一个字是什么，再想第二个，以此类推。所以 LLM 的回答越长越慢，代码里接个 LLM 做决策，动不动就是几百毫秒甚至几秒。</p>
 <p>Jev 完全<strong>不走这条路</strong>。它是 TypeSafe 定义的「<strong>System One Model</strong>」——系统一模型。</p>
 <p>这个名字借用了认知科学里的概念：人类大脑的系统一是快速、直觉、几乎不经过思考就能做出反应的那部分（比如开车时的条件反射）；系统二才是慢速、深度、需要推理的部分。</p>
@@ -446,9 +446,9 @@
 <p>一句话总结：<strong>Jev 不是用来聊天的，是用来做程序里的"聪明 if-else"的。</strong></p>
 <p>02</p>
 <p>PART</p>
-<h4>把 Jev 装进浏览器 agent</h4>
+<h4 id="把-Jev-装进浏览器-agent-1">把 Jev 装进浏览器 agent</h4>
 <p><code>browser-use</code> 团队做了一件很聪明的事——他们把 <strong>Jev</strong> 的决策能力和浏览器代理结合了起来，解决了当前浏览器 agent 最痛的几个问题。</p>
-<h4>传统浏览器 agent 的烦恼</h4>
+<h4 id="传统浏览器-agent-的烦恼">传统浏览器 agent 的烦恼</h4>
 <p>现在大多数 AI 浏览器 agent 的工作方式，说白了就是：<strong>每走一步都截个图，发给 LLM 问："我现在看到了啥？下一步该干啥？"</strong></p>
 <p>这导致几个致命问题：</p>
 <p>1</p>
@@ -458,7 +458,7 @@
 <p>3</p>
 <p><strong>不稳定</strong>：LLM 对视觉信息的理解经常出错，按钮识别不准、位置偏差都是家常便饭</p>
 <p>jev-ultrafast 直接<strong>掀翻了这张桌子</strong>。</p>
-<h4>它的核心思路：读 DOM，不看截图</h4>
+<h4 id="它的核心思路-读-DOM-不看截图">它的核心思路：读 DOM，不看截图</h4>
 <p>网页本质上是什么？是一堆 DOM 节点：<code>&amp;lt;button&amp;gt;</code>、<code>&amp;lt;input&amp;gt;</code>、<code>&amp;lt;select&amp;gt;</code>……浏览器本身就知道页面上每个可交互元素的类型、位置、状态。</p>
 <p><strong>jev-ultrafast</strong> 做的事情很简单但很有效：</p>
 <p>不截屏，直接读 DOM 通过一次性的浏览器调用，拿到页面上所有可见的、可交互的控件——按钮、输入框、下拉菜单、滚动条……每一个都带上类型、名称、当前值、DOM 引用</p>
@@ -468,7 +468,7 @@
 <p>只有在需要打字时才动用小模型 如果 Jev 决定要 TYPE_TEXT，才会调用一个小语言模型（比如 inception/mercury-2.5）生成要输入的文本。能省则省。</p>
 <p>这个设计太漂亮了。原来一个决策周期可能要好几秒（看图 → 理解 → 决策 → 执行 → 再看图……），现在压缩成：<strong>读 DOM → Jev 决策 → 执行 → 验证 → 循环</strong>。</p>
 <p>中间没有图像编码解码，没有冗长的 LLM 对话链，Jev 的响应本身就是毫秒级的。</p>
-<h4>还有一堆"快"的小细节</h4>
+<h4 id="还有一堆-快-的小细节">还有一堆"快"的小细节</h4>
 <p>除了核心架构，jev-ultrafast 还在很多小地方抠速度：</p>
 <p>每个快照只调用一次浏览器协议 一次性拿到所有可见控件的信息</p>
 <p>执行前校验目标有效性 点击前先检查元素有没有被遮挡、有没有动画在跑、页面是不是最新的——避免点了个寂寞还得重来</p>
@@ -477,7 +477,7 @@
 <p>只给模型看可见文字 屏幕外的文章正文、页脚、隐藏元素统统不进模型 context</p>
 <p>03</p>
 <p>PART</p>
-<h4>性能数据：数字说话</h4>
+<h4 id="性能数据-数字说话-1">性能数据：数字说话</h4>
 <p>项目 README 里给出了真实测量结果，全部是 1× 速度录制，没有剪辑：</p>
 <table><thead><tr><th>任务</th><th>耗时</th></tr></thead><tbody><tr><td>Google Flights：苏黎世→伦敦</td><td><strong>7.073 秒</strong></td></tr><tr><td>Wikipedia：打开哥德尔不完备定理词条</td><td><strong>2.798 秒</strong></td></tr><tr><td>本地酒店搜索+筛选</td><td><strong>1.896 秒</strong></td></tr></tbody></table>
 <p>对比之前的版本：</p>
@@ -485,36 +485,36 @@
 <p>更有意思的是成本估算——Google Flights 那次完整运行，TypeSafe API 调用成本大约 <strong>$0.0039</strong>（不到 3 厘钱）。因为 Jev 的输出 token 免费，而输入 token 实在太便宜了。</p>
 <p>04</p>
 <p>PART</p>
-<h4>快速上手</h4>
-<h4>1. 克隆项目 + 同步依赖</h4>
+<h4 id="快速上手-1">快速上手</h4>
+<h4 id="1-克隆项目-同步依赖">1. 克隆项目 + 同步依赖</h4>
 <p>`git clone https://github.com/browser-use/jev-ultrafast.git cd jev-ultrafast uv sync `</p>
 <p>用的是 <code>uv</code> 包管理器，速度比 pip 快得多。如果没装 uv，先 <code>pip install uv</code>。</p>
-<h4>2. 配置 API Key</h4>
+<h4 id="2-配置-API-Key">2. 配置 API Key</h4>
 <p>`cp .env.example .env `</p>
 <p>然后编辑 <code>.env</code>，填上两个 key：</p>
 <p>`TYPESAFE_API_KEY=你的TypeSafe API Key TEXT_MODEL_API_KEY=你的OpenRouter API Key（或其他兼容OpenAI的key） `</p>
 <p>TYPESAFE_API_KEY：去 TypeSafe 官网 申请（目前需排队）</p>
 <p>TEXT_MODEL_API_KEY：用于 TYPE_TEXT 操作时生成文本，demo 默认用的是 OpenRouter 上的 inception/mercury-2.5，也可以换 Gemini、GLM、DeepSeek，只要兼容 OpenAI 格式就行</p>
-<h4>3. 连接 Chrome</h4>
+<h4 id="3-连接-Chrome">3. 连接 Chrome</h4>
 <p>项目通过 Browser Harness 和 Chrome 通信，<code>uv sync</code> 的时候已经装好了。第一次运行前：</p>
 <p>`uv run browser-harness --doctor `</p>
 <p>按提示在 Chrome 里允许远程调试就行。</p>
-<h4>4. 跑 demo</h4>
+<h4 id="4-跑-demo">4. 跑 demo</h4>
 <p>`uv run jev `</p>
 <p>浏览器打开 <strong>http://127.0.0.1:8766</strong>，点 <strong>Start demo → Run automatically</strong> 就能看它飞了。</p>
 <p>Inspector 界面会实时显示：每个元素的编号、操作概率分布、目标元素概率、实际执行的动作。还可以点 <strong>Choose next</strong> 暂停，每一步确认后再继续。</p>
-<h4>5. 写自己的 agent</h4>
+<h4 id="5-写自己的-agent">5. 写自己的 agent</h4>
 <p>更有意思的是把它当库来用：</p>
 <p>`from jev_ultrafast import Agent</p>
 <p>with Agent( &amp;amp;quot;https://www.google.com/travel/flights?hl=en", &amp;amp;quot;Find one-way flights from Zurich to London on September 20, 2026, &amp;amp;quot; &amp;amp;quot;for one adult in economy. Stop when matching flight options are visible.&amp;amp;quot;, ) as agent: for state in agent.run(): print(state[&amp;amp;quot;elapsed_ms&amp;amp;quot;], state[&amp;amp;quot;status&amp;amp;quot;]) `</p>
 <p>就这几行代码。给一个 URL 和一个自然语言目标，agent 自己跑。</p>
 <p>示例脚本仓库里已经放好了：</p>
 <p>`# Wikipedia 任务 uv run --env-file .env python examples/run.py \ --url https://en.wikipedia.org/wiki/Main_Page \ --goal 'Find and open the Wikipedia article about Gödel'"'"'s incompleteness theorems.'</p>
-<h3>航班搜索（带结果验证，不会真的订票）</h3>
+<h3 id="航班搜索-带结果验证-不会真的订票">航班搜索（带结果验证，不会真的订票）</h3>
 <p>uv run --env-file .env python examples/flights.py --keep-open `</p>
 <p>///</p>
 <p>LAST</p>
-<h4>写在最后</h4>
+<h4 id="写在最后">写在最后</h4>
 <p>jev-ultrafast 最让我兴奋的，不是那个 7 秒的数字，而是它证明了一件事：<strong>浏览器 agent 不一定要靠 LLM 的"视觉+推理"来驱动。</strong></p>
 <p>传统思路是"给 AI 看整个世界，让它自己搞清楚怎么玩"。jev-ultrafast 换了个方向：<strong>先把世界翻译成 AI 能快速理解的结构化数据，再让 AI 做它最擅长的事——选一个。</strong></p>
 <p>这个范式上的变化，可能比 25% 的速度提升更有价值。它意味着浏览器 agent 的成本可以降到几乎为零，延迟可以压到用户感知不到的程度，可靠性可以因为不依赖 LLM 的"灵感"而大幅提升。</p>
@@ -524,10 +524,10 @@
 <p><strong>TypeSafe AI：</strong>https://typesafe.ai/</p>
 <p><img alt="图片" src="../../_assets/20260921-browser-use-jev/img-004-f61847be.gif"></p>
 <p>如果本文对您有帮助，也请帮忙点个 赞👍 + 在看 哈！❤️</p>
-<h3>在看你就赞赞我！</h3>
+<h3 id="在看你就赞赞我">在看你就赞赞我！</h3>
 <p><img alt="图片" src="../../_assets/20260921-browser-use-jev/img-005-0c86396b.gif"></p>
 <p>归属：归属：归属：归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p>
-<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

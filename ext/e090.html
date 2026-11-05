@@ -395,46 +395,46 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>腾讯开源BrowserSkill：让AI用你的账号上网</h1><div class="meta">📅 2026-09-26 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Xb6X9jUATAyZdYryg9ZZHA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260926-腾讯开源BrowserSkill让AI用你的账号上网.md</div><div class="md"><h1>腾讯开源BrowserSkill：让AI用你的账号上网</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">13</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#腾讯开源BrowserSkill-让AI用你的账号上网">腾讯开源BrowserSkill：让AI用你的账号上网</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#它怎么连上的-一条三段式链路">它怎么连上的：一条三段式链路</a><a class="tl l3" href="#凭什么不碰你其他标签页">凭什么不碰你其他标签页</a><a class="tl l3" href="#卡住的时候-它举手-而不是硬撞">卡住的时候，它举手，而不是硬撞</a><a class="tl l3" href="#除了点网页-它还能当调试器用">除了点网页，它还能当调试器用</a><a class="tl l3" href="#它不绑定任何-Agent">它不绑定任何 Agent</a><a class="tl l3" href="#装-CLI-默认落到-local-bin">装 CLI（默认落到 /.local/bin）</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>腾讯开源BrowserSkill：让AI用你的账号上网</h1><div class="meta">📅 2026-09-26 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Xb6X9jUATAyZdYryg9ZZHA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260926-腾讯开源BrowserSkill让AI用你的账号上网.md</div><div class="md"><h1 id="腾讯开源BrowserSkill-让AI用你的账号上网">腾讯开源BrowserSkill：让AI用你的账号上网</h1>
 <blockquote><p>来源：微信公众号·每日学AI 归档日期：2026-09-26 抓取状态：成功 原文字符：6276｜配图：0 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>腾讯开源 BrowserSkill：换思路让 Agent 接入你已登录的浏览器去跑内网流程，避开新浏览器无登录态撞墙的问题。文章讲清三段式链路、标签页的借入与归还规矩，以及它明确不承诺的那部分安全边界。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#它怎么连上的一条三段式链路">它怎么连上的：一条三段式链路</a></li><li><a href="#凭什么不碰你其他标签页">凭什么不碰你其他标签页</a></li><li><a href="#卡住的时候它举手而不是硬撞">卡住的时候，它举手，而不是硬撞</a></li><li><a href="#除了点网页它还能当调试器用">除了点网页，它还能当调试器用</a></li><li><a href="#它不绑定任何-agent">它不绑定任何 Agent</a></li><li><a href="#装-cli默认落到localbin">装 CLI（默认落到 ~/.local/bin）</a></li></ul>
 <blockquote><p>来源：https://mp.weixin.qq.com/s/Xb6X9jUATAyZdYryg9ZZHA 平台：weixin｜作者：每日学AI</p></blockquote>
 <p>摘要 让 AI 去内网后台跑个流程，它另开一个干净浏览器，撞上登录墙、卡在验证码，然后就死在那儿。腾讯开源的 BrowserSkill 换了个思路：把 Agent 接到你已经登录的浏览器上。本文讲清它的三段式链路、标签页的借入与归还规矩，以及它明确不承诺的那部分安全。</p>
 <p>↓ 一句话：让 AI 在你已登录的浏览器里干活</p>
 <p>「让 Agent 帮我去内网后台把这个流程跑一遍。」 这句话在过去两年里，结局通常是一样的。它开了一个干干净净的浏览器，没有 Cookie、没有登录态、没有任何身份。然后它撞上登录页，卡住；你给它一个账号，它卡在短信验证；你帮它过了验证，页面上又弹出一个人机校验。三个回合之后，它停在那里，任务结束在一堆你看不懂的日志里。 另一条路是那些「直接接管你的浏览器」的方案。它们确实能用你的登录态，但代价是你得和 AI 抢同一个窗口——它点了哪里、提交了什么、有没有顺手关掉你的标签页，你只能事后去猜。 腾讯开源的 BrowserSkill 想同时把这两件事解决掉：让 AI 用你已经登录的身份干活，同时不去碰你正在做的事。</p>
 <p>它到底做了什么 一句话：它不给 AI 造一个新浏览器，而是把 Agent 接到你已经登录的 Chrome 或 Microsoft Edge 上。 官方 README 里的原话是：用你已经登录的账号，把你已有的浏览器接给 Agent（“connects your AI agent to Chrome or Microsoft Edge, using the accounts you are already signed into”）。 数据摆一下。仓库 2026 年 6 月 22 日创建，据第三方追踪站点记录，对外公开是 9 月的事。按 GitHub API 在 2026 年 9 月 24 日的实测值，它已经有 7,019 star、506 fork，协议是 MIT。 官方还有一句定位说得很清楚：你选 Agent 和模型，它只负责那根「浏览器连接」。这句话决定了它后面所有的设计取向。</p>
-<h3>它怎么连上的：一条三段式链路</h3>
+<h3 id="它怎么连上的-一条三段式链路">它怎么连上的：一条三段式链路</h3>
 <p>从 Agent 到浏览器，它中间隔了三层： Agent（Cursor / Claude Code / Codex / …） │  shell 命令：bsk click @e1 --session ab12 ▼ bsk CLI            ← 解析子命令，输出可读文本或 --json │  JSON Lines over UDS / 命名管道 ▼ bsk daemon         ← 本地常驻进程，管会话、排队与路由 │  WebSocket（回环地址，默认端口 52800） ▼ 浏览器扩展（MV3）   ← 校验来源、分发工具 │  CDP ▼ Agent Window / 被借用的标签页</p>
 <p>•AI 从不直接和浏览器说话。它只会生成 bsk 命令。所有请求都必须先过 CLI 这一层——这也是它天然可审计的原因：Agent 想干什么，命令行上摆着。 •CLI 和 daemon 之间走本地管道。Unix 上是 UDS（Unix 域套接字，同一台机器内进程通信用的通道），Windows 上是命名管道，格式是 JSON Lines（一行一个 JSON 对象），默认目录 ~/.bsk。CLI 只在找不到 daemon 时才自动拉起一个；设了 BSK_AUTO_START=0 就不会自动拉，沙箱环境里用得上。 •daemon 和扩展之间走回环 WebSocket，默认端口 52800。握手时 daemon 会校验 Origin: chrome-extension://…，不是自己那个扩展直接拒绝。 •真正动手的是扩展，走的是 CDP。CDP 全称 Chrome DevTools Protocol——Chromium 官方那套给开发者工具用的调试接口，扩展拿到调试权限后，就能通过它精确地点击、输入、滚动、截图。这个扩展基于 Chromium 125 或更高版本的 MV3 架构，内部有 21 个工具处理器负责各类动作。</p>
 <p>daemon 还负责一件容易被忽略的事：同一个会话里的调用是串行的，只有不同会话之间才并行。因为 Agent 定位元素用的是 @e1 这种短引用（会话内的临时编号），一旦并发就会串位——同一时刻页面上可能有多个 @e1，谁也说不清点的是哪个。串行是为了让引用不出错。</p>
-<h3>凭什么不碰你其他标签页</h3>
+<h3 id="凭什么不碰你其他标签页">凭什么不碰你其他标签页</h3>
 <p>这是标题里的问题，也是它设计上最花心思的地方。答案是三层机制，层层收口。 ℹ️ 一句话 它把「这个标签页归谁」做成了协议里的状态，而不是靠 AI 自觉。 第一层：默认在一个独立窗口里干活。 每次会话绑定一个专门的 Agent Window（Agent 窗口）。你开多个会话，就有多个互相隔离的 Agent 窗口。你自己的窗口和标签页原封不动——不抢焦点、不占你的标签栏，你继续干自己的事。 第二层：写操作只能发生在「允许的标签页」里。 这一条是硬约束：除非某个标签页是被显式「借」进来的，否则写类工具只能作用于 Agent 窗口内的标签页。也就是说，你自己开着的那些标签页，默认对 Agent 是关着的。 真要动，就得走借用流程。而浏览器扩展里有一项默认开启的设置：借用前先问你（Confirm before borrowing tabs）。你点头，它才接手那个标签页；任务结束，标签页还回去。 有个细节挺严谨：页面自己弹出来的新窗口，或者被你手动拖进 Agent 窗口的标签页，都不会自动变成可控制对象。控制权不会因为「它恰好在那个窗口里」就顺延过去。 第三层：会话必须显式结束。 官方把 bsk session stop 写成了工作流里的强制步骤——Agent 干完活要主动停掉会话。那个 5 分钟的空闲超时只是兜底的安全网，不是正常的退出方式。 三层加起来，它把「这个标签页归谁」做成了一份协议状态：没借给你的，写不进去；要借，先问你；结束了，必须显式还。这一套不依赖 AI 自觉。 顺带说一句范围控制：它查标签页分三个可见范围——user（你的窗口，默认值）、agent（只看当前会话的 Agent 窗口）、all（两者都看）。想收紧就收紧。</p>
-<h3>卡住的时候，它举手，而不是硬撞</h3>
+<h3 id="卡住的时候-它举手-而不是硬撞">卡住的时候，它举手，而不是硬撞</h3>
 <p>登录、验证、或者需要你拍板的操作，它的处理方式是请求你接管。 浏览器扩展里的第二项默认设置就是干这个的：允许 Agent 请求人工帮助（Allow requests for human help）。Agent 走到这一步会停下来，把页面交给你；你处理完，它接着往下走。 ⚠️ 注意 官方文档特意点明：命令行参数覆盖不了浏览器里那两项设置。想在命令行上绕开「要问你一声」这条路走不通。文档还补了一句很清醒的话：关闭人工帮助，不代表那一步已经完成了。 具体来说，--unattended、tab borrow --no-confirm、BSK_REQUEST_HELP=off 这几个旧参数，都盖不住浏览器设置里的开关。要中止它的任务，最直接的办法是关掉 Agent 窗口。</p>
-<h3>除了点网页，它还能当调试器用</h3>
+<h3 id="除了点网页-它还能当调试器用">除了点网页，它还能当调试器用</h3>
 <p>这块是大多数介绍会漏掉的：它不是只能点按钮，也真能查问题。 它的思路是把你看到的手势和背后发生的事关联起来。一个步骤点下去，能同时看到发出的请求、响应体、Console 消息、表单字段值，以及页面随之发生的变化——而且你自己的手动操作也会被捕获进来，不只是 Agent 的动作。 •查一次请求：留下来的请求头、提交的数据、响应体、时序、错误都能读，可以按流量过滤，也可以直接看某个 JSON 字段。 •查性能：页面加载指标、API 时序摘要、疑似重复请求。有个细节做得比较克制——证据缺失或不完整时会被显式标注，而不是含糊带过。 •做实验并留证：任务级的请求修改、阻塞、mock 响应、同源重放；结果可以导出成 JSON 供复查或分享。 ⚠️ 风险 官方写得毫不含糊：请求重放会用页面当前的会话发出一个真实的新请求，可能改变服务器上的数据。紧接着还有一句：捕获与脱敏都有局限，留存下来的证据仍可能包含敏感信息。</p>
-<h3>它不绑定任何 Agent</h3>
+<h3 id="它不绑定任何-Agent">它不绑定任何 Agent</h3>
 <p>这是它另一个聪明的取舍：它不做 Agent、不做模型、也不做某个 IDE 的专属插件。它只提供跨平台的 bsk 命令行和浏览器扩展，所以任何能跑 Shell 的 Agent 都能用。 官方列出的适配对象是：Cursor、Claude Code、Codex、OpenClaw、CodeBuddy、WorkBuddy、Pi、Hermes Agent，以及任何具备 shell 能力的 Agent。用 DeepSeek Harness 的话还有个专门插件，能把它变成原生的 browser_* 工具，并带任务预览。 两个让人放心的表述同样写在 README 里：它不运营强制性的云服务，也不采集产品遥测。自动化结果只发往你选的 daemon 或网关，以及使用它的那个 Agent；扩展本身不会独立调用任何 AI 服务商。 扩展界面支持 10 种语言，包括简体中文、繁体中文、韩语、日语、法语、意大利语、西班牙语、德语和巴西葡萄牙语。</p>
 <p>上手：最省事的办法是让 Agent 自己装 官方推荐的第一步，是直接把这句话发给你在用的 Agent： TEXT Set up browser-skill on this machine by following https://raw.githubusercontent.com/Tencent/BrowserSkill/main/AGENT_INSTALL.md 手动装是四步：</p>
-<h3>装 CLI（默认落到 ~/.local/bin）</h3>
+<h3 id="装-CLI-默认落到-local-bin">装 CLI（默认落到 ~/.local/bin）</h3>
 <p>· macOS / Linux：curl -fsSL …/install.sh | sh · Windows：irm …/install.ps1 | iex · 验证：bsk --version 2.装浏览器扩展，然后在弹窗里启用本地连接。 3.给 Agent 装 skill：bsk install-skill。DeepSeek Harness 用户改装那个专属插件。 4.检查连接：bsk doctor。</p>
 <p>扩展弹窗：左边三张卡讲定位——真实浏览器 / 任意 Agent / 你照常用；右边是连接状态、浏览器别名和实例 ID</p>
 <p>装好后你会看到这个弹窗。右边那栏里的浏览器别名值得说一句：它多浏览器场景下才有意义。你同时开着个人和工作两个浏览器时，用 bsk session start --browser "Work profile" 就能把任务指定给其中一个。官方提醒这个别名是在 BrowserSkill 里设的，不会自动读取 Chrome 自己的 profile 名字。 bsk doctor 全部通过后，开一个新的 Agent 会话试试： Use browser-skill to open https://example.com, summarize the page, and end the browser session when finished. 更新用 bsk update --yes（默认会重启正在跑的 daemon）。官方建议 CLI、daemon、扩展、DSH 插件保持同一版本，省得碰到版本错配。</p>
 <p>局限与风险 到这里都是它的本事。接下来这段更重要——它明确不承诺什么，以及用之前得想清楚什么。 ⚠️ 第一，它自己说了：这不是安全沙箱 官方原话是，Agent 窗口共享你所选浏览器 profile 的登录态（profile 指你在浏览器里的那套账号与配置档案），「它不是独立账号，也不是安全沙箱」。Agent 能做的事，就是那些已登录网站给出的权限能做的事。 这句话的分量在于：它划的边界是「会问你一声」，不是「做不到」。你不借出的标签页它写不进去；但你借出去的、或者它自己窗口里的页面，Agent 拿到的权限和你本人一模一样。所以官方紧接着补了一句：请自己选择可信的任务和可信的 Agent。 第二，风险是双向的。向内，留存的调试证据可能含敏感信息——官方给的边界是停止记录 30 天后过期、配额 50 条 / 50 MiB，想提前清得先停止捕获。向外，请求重放可能真的改动服务器数据。 第三，浏览器支持很窄。只支持 Chrome 和 Microsoft Edge，且需要 Chromium 125 或更高版本。其他 Chromium 内核浏览器「可能能用」，但官方明说不保证兼容。 第四，远程模式有功能缺口。上传和下载只在本地连接下支持；远程会话会直接返回 unsupported，只有截图这类内容结果还能用。 第五，「自托管」不等于零成本。每台机器都要装 CLI 和扩展，daemon 得持续活着；如果 Agent 跑在会清理后台进程的沙箱里，还要额外按沙箱指南配置（共享 BSK_HOME、设 BSK_AUTO_START=0）。而且它绑定的是一台机器上的一个浏览器 profile，所以不适合要跑高并发爬虫或测试车队的场景——那是云浏览器的活。 第六，能拦住纯文本模型的东西还在。需要你本人参与的步骤，它只能请你接管，不会自己硬闯——手机扫码、人脸核验、收不到短信这类情况，仍然是人工环节。另外整页截图跟随文档的滚动区域，嵌套滚动面板和虚拟化列表有局限。</p>
 <p>写在最后 回到标题那个问题：它凭什么不碰你其他标签页？ 答案不是「因为它很守规矩」，而是它把「这个标签页归谁」写成了协议里的状态：没借给你的，写操作进不去；要借，先在浏览器里问你一声；卡住了，举手请你接管，而不是硬来。这些机制不依赖 Agent 的自觉，命令行参数也绕不过去。 但同一份文档也把另一半说清了：它不是沙箱。它给你的是可见、可控、随时能收回，不是隔离。这两件事差得很远，值得在动手之前分清楚。 真正该问自己的问题，不是「这个工具安不安全」，而是——我愿不愿意让一个 Agent 用我的身份上网，以及我准备把那条边界划在哪里。</p>
 <p>项目地址 GitHub：https://github.com/Tencent/BrowserSkill 协议：MIT　·　文中数据截至 2026-09-24 END — 谢 · 谢 · 观 · 看 — 如果本文对你有帮助，点个赞 + 在看，是对我最大的鼓励 ❤️ 关注我，每日学AI，每天进步一点点 这里有 AI 前沿 · 开源一线 · 实战教程</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

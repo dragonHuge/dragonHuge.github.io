@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>AI时代，让AI写缓存，spec怎么写（5/100）</h1><div class="meta">📅 2026-09-21 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/pXAznRuoQKr5qgbPzeBDIQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260921-AI时代让AI写缓存spec怎么写5100.md</div><div class="md"><h1>AI时代，让AI写缓存，spec怎么写（5/100）</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">18</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#AI时代-让AI写缓存-spec怎么写-5-100">AI时代，让AI写缓存，spec怎么写（5/100）</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#读实践是怎么样的">读实践是怎么样的？</a><a class="tl l3" href="#写实践是怎么样的">写实践是怎么样的？</a><a class="tl l3" href="#对于写请求">对于写请求：</a><a class="tl l3" href="#为什么建议淘汰缓存-而不是更新缓存">为什么建议淘汰缓存，而不是更新缓存？</a><a class="tl l3" href="#为什么建议先操作数据库-再操作缓存">为什么建议先操作数据库，再操作缓存？</a><a class="tl l3" href="#这套方案有什么潜在问题">这套方案有什么潜在问题？</a><a class="tl l3" href="#那么问题来了-到了AI时代-这套模式变了吗">那么问题来了，到了AI时代，这套模式变了吗？</a><a class="tl l3" href="#验收标准-什么样算做对-并发写场景时序正确-cache-hit-miss有日志可查-验收标准不写-AI说-做完了-我们拿什么查">验收标准：什么样算做对——并发写场景时序正确；cache hit/miss有日志可查。验收标准不写，AI说&quot;做完了&quot;，我们拿什么查？</a><a class="tl l3" href="#spec示例-md格式-可以直接复制">spec示例（md格式），可以直接复制：</a><a class="tl l3" href="#AI写完了-就完事了吗">AI写完了，就完事了吗？</a><a class="tl l3" href="#总结">总结</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>AI时代，让AI写缓存，spec怎么写（5/100）</h1><div class="meta">📅 2026-09-21 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/pXAznRuoQKr5qgbPzeBDIQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260921-AI时代让AI写缓存spec怎么写5100.md</div><div class="md"><h1 id="AI时代-让AI写缓存-spec怎么写-5-100">AI时代，让AI写缓存，spec怎么写（5/100）</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-21 抓取状态：成功 原文字符：3061｜配图：5 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>《AI时代的架构设计100讲》第5篇：AI 时代如何为缓存编写 spec，让 AI 正确实现缓存逻辑。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li>原文已完整抓取，按章节分层；细节以「原文沉淀」为准。</li><li>配图 5 张已本地化到 <code>_assets/20260921-AI时代让AI写缓存spec怎么写5100/</code>。</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>按原文目录定位相关章节精读。</li><li>引用数据/步骤时打开对应小节，避免只看摘要。</li></ul>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#读实践是怎么样的">读实践是怎么样的？</a></li><li><a href="#写实践是怎么样的">写实践是怎么样的？</a></li><li><a href="#对于写请求">对于写请求：</a></li><li><a href="#为什么建议淘汰缓存而不是更新缓存">为什么建议淘汰缓存，而不是更新缓存？</a></li><li><a href="#为什么建议先操作数据库再操作缓存">为什么建议先操作数据库，再操作缓存？</a></li><li><a href="#这套方案有什么潜在问题">这套方案有什么潜在问题？</a></li><li><a href="#那么问题来了到了ai时代这套模式变了吗">那么问题来了，到了AI时代，这套模式变了吗？</a></li><li><a href="#spec示例md格式可以直接复制">spec示例（md格式），可以直接复制：</a></li><li><a href="#ai写完了就完事了吗">AI写完了，就完事了吗？</a></li><li><a href="#总结">总结</a></li></ul>
 <blockquote><p>《AI时代的架构设计100讲》    第5讲：让AI写缓存代码，spec怎么写？</p></blockquote>
 <p>AI时代，架构设计变了吗？架构师的职责变了吗？准备新起一个AI时代的架构设计系列，初定100讲，每周更新2-3讲，这是第5讲。</p>
@@ -417,15 +417,15 @@
 <p>什么是Cache Aside Pattern？</p>
 <p>旁路缓存方案的经验实践。这个实践，又分读实践和写实践。</p>
 <p>画外音：与旁路缓存对应的，是穿透缓存。</p>
-<h3>读实践是怎么样的？</h3>
+<h3 id="读实践是怎么样的">读实践是怎么样的？</h3>
 <p>对于读请求：</p>
 <p><img alt="图片" src="../../_assets/20260921-AI时代让AI写缓存spec怎么写5100/img-001-6fa21268.png"></p>
 <ol><li>先读cache，再读db；</li><li>如果cache hit，直接返回数据；</li><li>如果cache miss，访问db，并把数据set回缓存。</li></ol>
-<h3>写实践是怎么样的？</h3>
+<h3 id="写实践是怎么样的">写实践是怎么样的？</h3>
 <p><img alt="图片" src="../../_assets/20260921-AI时代让AI写缓存spec怎么写5100/img-002-8621749e.png"></p>
-<h3>对于写请求：</h3>
+<h3 id="对于写请求">对于写请求：</h3>
 <ol><li>淘汰缓存，而不是更新缓存；</li><li>先操作数据库，再淘汰缓存。</li></ol>
-<h3>为什么建议淘汰缓存，而不是更新缓存？</h3>
+<h3 id="为什么建议淘汰缓存-而不是更新缓存">为什么建议淘汰缓存，而不是更新缓存？</h3>
 <p>如果更新缓存，并发写时，可能出现数据不一致。</p>
 <p><img alt="图片" src="../../_assets/20260921-AI时代让AI写缓存spec怎么写5100/img-003-a5c6033f.png"></p>
 <p>如上图，假设采用set缓存。</p>
@@ -433,7 +433,7 @@
 <ol><li>请求1先操作数据库，请求2后操作数据库；</li><li>请求2先set了缓存，请求1后set了缓存。</li></ol>
 <p>结果就是，数据库与缓存之间的数据不一致。</p>
 <p>所以，Cache Aside Pattern建议，delete缓存，而不是set缓存。</p>
-<h3>为什么建议先操作数据库，再操作缓存？</h3>
+<h3 id="为什么建议先操作数据库-再操作缓存">为什么建议先操作数据库，再操作缓存？</h3>
 <p>如果先操作缓存，读写并发时，可能出现数据不一致。</p>
 <p><img alt="图片" src="../../_assets/20260921-AI时代让AI写缓存spec怎么写5100/img-004-403cfc0d.png"></p>
 <p>如上图，假设先操作缓存。</p>
@@ -441,11 +441,11 @@
 <ol><li>写请求淘汰了缓存；</li><li>写请求操作了数据库（主从同步还没完成）；</li><li>读请求读了缓存（cache miss）；</li><li>读请求读了从库（读了一个旧数据）；</li><li>读请求set回缓存（set了一个旧数据）；</li><li>数据库主从同步完成。</li></ol>
 <p>导致，数据库与缓存的数据不一致。</p>
 <p>所以，Cache Aside Pattern建议，先操作数据库，再操作缓存。</p>
-<h3>这套方案有什么潜在问题？</h3>
+<h3 id="这套方案有什么潜在问题">这套方案有什么潜在问题？</h3>
 <p>如果先操作数据库、再淘汰缓存，原子性被破坏时：</p>
 <ol><li>修改数据库成功了；</li><li>淘汰缓存失败了。</li></ol>
 <p>数据库与缓存，还是会不一致。</p>
-<h3>那么问题来了，到了AI时代，这套模式变了吗？</h3>
+<h3 id="那么问题来了-到了AI时代-这套模式变了吗">那么问题来了，到了AI时代，这套模式变了吗？</h3>
 <p>先说结论：模式没变，执行者变了。</p>
 <p><strong>没变的部分：AI写的缓存代码，同样得遵守这两条红线：淘汰缓存而不是更新缓存、先DB后缓存。违反了，一样的不一致——只是锅不是AI背，是我们背。</strong></p>
 <p>** **</p>
@@ -456,15 +456,15 @@
 <ol><li>模式声明：明确告诉AI用Cache Aside——读，先cache后db，miss回源并set；写，先操作DB，再delete缓存。模式有名字就报名字，AI训练语料里全是它；</li></ol>
 <ol><li>红线约束：禁止set方式更新缓存，只允许delete；禁止先操作缓存；cache key规范写清；TTL必须显式给。红线，就是"不许AI自由发挥"的地方；</li></ol>
 <ol><li>异常与降级：缓存挂了怎么办——直接读DB，但要注意限流；淘汰缓存失败怎么办——重试、告警、补偿。前面说的"潜在问题"，就得在这里兜底；</li></ol>
-<h3>验收标准：什么样算做对——并发写场景时序正确；cache hit/miss有日志可查。验收标准不写，AI说"做完了"，我们拿什么查？</h3>
-<h3>spec示例（md格式），可以直接复制：</h3>
+<h3 id="验收标准-什么样算做对-并发写场景时序正确-cache-hit-miss有日志可查-验收标准不写-AI说-做完了-我们拿什么查">验收标准：什么样算做对——并发写场景时序正确；cache hit/miss有日志可查。验收标准不写，AI说"做完了"，我们拿什么查？</h3>
+<h3 id="spec示例-md格式-可以直接复制">spec示例（md格式），可以直接复制：</h3>
 <blockquote><p>```md    # 缓存模块实现spec         ## 模式Cache Aside Pattern（旁路缓存）    1. 读：先读cache，cache hit直接返回；cache miss读db，并将数据set回缓存。    2. 写：先操作数据库，成功后delete缓存。         ## 红线    1. 禁止以set方式更新缓存，只允许delete；    2. 禁止先操作缓存，再操作数据库；    3. cache key格式：业务名:实体:id（例如 user:info:123）；    4. 所有缓存必须显式设置TTL。         ## 异常与降级    1. 缓存不可用时，直接读数据库，注意限流，并记录告警日志；    2. delete缓存失败时，重试3次；仍失败则告警，并记录补偿任务。         ## 验收标准    1. 并发写场景下，数据库与缓存不出现长时间不一致；    2. cache hit/miss有日志，可查询、可统计。    ```</p></blockquote>
 <p>这四件事写清楚，AI输出的缓存代码，才是靠谱的。</p>
-<h3>AI写完了，就完事了吗？</h3>
+<h3 id="AI写完了-就完事了吗">AI写完了，就完事了吗？</h3>
 <p>没有。第四讲聊过，我们还得验收。验收的重点，是防AI"好心办坏事"——它很可能觉得delete太粗暴，悄悄给你"优化"成set。</p>
 <p>红线，就是验收时最先看的地方。</p>
 <p>画外音：顺带一提，AI应用里的语义缓存，读写实践和旁路缓存是同构的——先查缓存，miss回源，写回；知识更新了，delete而不是set。今天这份spec的思路，可照搬。</p>
-<h3>总结</h3>
+<h3 id="总结">总结</h3>
 <ol><li>Cache Aside Pattern：读，先cache后db，miss回源set；写，先操作DB，再delete缓存；</li><li>两条红线：淘汰缓存，而不是更新缓存（并发写会不一致）、先DB后缓存（读写并发会不一致）；潜在问题，是原子性被破坏；</li><li>AI时代，模式没变，执行者变了：把模式写成spec——模式声明、红线约束、异常与降级、验收标准，四件事写清；</li><li>AI写完后，对着spec验收，红线最先看。</li></ol>
 <p>前篇简介：</p>
 <p>《<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODYxMDA5OQ==&amp;mid=2651981611&amp;idx=1&amp;sn=968dd82827d6fdc666391bb151feb848&amp;scene=21#wechat_redirect">AI时代，究竟怎么做架构设计？（2/100）</a>》</p>
@@ -472,7 +472,7 @@
 <p>交流讨论：</p>
 <p>AI时代，你们的缓存操作spec，是怎么写的？</p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

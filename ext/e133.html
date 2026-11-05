@@ -395,23 +395,23 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</h1><div class="meta">📅 2026-09-18 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/f4_O_ZpWiXpGyUiVwvGggg" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260918-GLM-5.3-FlashX上线200tokens每秒.md</div><div class="md"><h1>GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">11</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#GLM-5-3-FlashX-上线-200-tokens-s-提速-5-倍-提价-2-5-倍">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#GLM-的-Infra-由-GLM-构建">GLM 的 Infra，由 GLM 构建</a><a class="tl l3" href="#案例一-输入是-FP32-计算却用了-TF32">案例一：输入是 FP32，计算却用了 TF32</a><a class="tl l3" href="#案例二-KV-Transfer-被-GIL-卡住了">案例二：KV Transfer 被 GIL 卡住了</a><a class="tl l3" href="#案例三-同一组计算-做了四遍">案例三：同一组计算，做了四遍</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</h1><div class="meta">📅 2026-09-18 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/f4_O_ZpWiXpGyUiVwvGggg" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260918-GLM-5.3-FlashX上线200tokens每秒.md</div><div class="md"><h1 id="GLM-5-3-FlashX-上线-200-tokens-s-提速-5-倍-提价-2-5-倍">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-18 抓取状态：成功 原文字符：2006｜配图：4 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>智谱上线 GLM-5.3-FlashX：推理速度最高 200 tokens/s，较 GLM-5.3-Flash 提速 5 倍、提价 2.5 倍，API 同步开放；底层基于 10 万张国产芯片推理算力。</li><li>Flash Infra 由 GLM-5.3 驱动的 Agent 构建：从模型适配到生产上线不到两周，端到端吞吐达初始基线 3 倍；人只负责定目标、设边界、搭反馈环境与关键修改审核。</li><li>案例一：KDA CP 路径 tl.dot 输入 FP32 却按 TF32 计算导致精度偏差，显式加 input_precision="tf32x3" 修复，已合入 Flash Linear Attention 上游。</li><li>案例二：DeepEP v1.2.1 两处 C++ 调用未释放 GIL 被卡住，Prefill+传输性能差距从 20%+ 降到 1% 以内。</li><li>案例三：KDA Decode 沿 V 维分块导致归一化与门控重复四遍，合并线程块批量共享中间结果，算子性能提升至 1.71 倍。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <ul><li>商业信号：提速 5 倍对应提价 2.5 倍——推理速度本身成为定价能力。</li><li>方法论价值：Agent 做 Infra 优化的分工范式——人定目标与边界，测试/日志/Trace/微基准交给 Agent 自查自改，形成「稠密反馈」优化闭环；上线周期从传统数月压到两周。</li><li>三个案例共同点：不是换模型架构，而是精度语义、语言运行时、并行分块三类「隐性低效」的定点清除。</li></ul>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <ul><li>性能优化任务给 Agent 配齐稠密反馈（微基准+Trace），让它可自查自改，人才把关关键修改。</li><li>排查推理精度问题先查输入精度类型（FP32/TF32）是否与算子预期一致。</li></ul>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#glm-的-infra由-glm-构建">GLM 的 Infra，由 GLM 构建</a></li><li><a href="#案例一输入是-fp32计算却用了-tf32">案例一：输入是 FP32，计算却用了 TF32</a></li><li><a href="#案例二kv-transfer-被-gil-卡住了">案例二：KV Transfer 被 GIL 卡住了</a></li><li><a href="#案例三同一组计算做了四遍">案例三：同一组计算，做了四遍</a></li></ul>
 <p>智谱今天上线 <strong>GLM-5.3-FlashX</strong>，推理速度最高 <strong>200 tokens/s</strong>，较 GLM-5.3-Flash 模型 <strong>提速 5 倍、提价 2.5 倍</strong>，API 同步开放，模型名称：<code>GLM-5.3-FlashX</code></p>
 <p>在这背后，是在 <code>10万</code> 张国产芯片提供的推理算力基础上，进一步<strong>加大对 Infra 侧的投入与推理优化</strong></p>
-<h3>GLM 的 Infra，由 GLM 构建</h3>
+<h3 id="GLM-的-Infra-由-GLM-构建">GLM 的 Infra，由 GLM 构建</h3>
 <p>跑 Flash 的这套 Infra，是由 GLM-5.3 驱动 Agent 构建的，从模型适配一路做到生产上线，前后不到两周，端到端吞吐做到了初始基线的 <strong>3 倍</strong></p>
 <p><img alt="GLM-5.3-Flash 从首次运行到正式上线的性能演进" src="../../_assets/20260918-GLM-5.3-FlashX上线200tokens每秒/img-001-9a99d3b1.jpg"></p>
 <p>GLM-5.3-Flash 从首次运行到正式上线的性能演进</p>
@@ -419,20 +419,20 @@
 <p><img alt="基于稠密反馈的 Infra Agent 优化闭环" src="../../_assets/20260918-GLM-5.3-FlashX上线200tokens每秒/img-002-07faaba9.png"></p>
 <p>基于稠密反馈的 Infra Agent 优化闭环</p>
 <p>下面是构建、优化这套推理系统时的三个案例。</p>
-<h3>案例一：输入是 FP32，计算却用了 TF32</h3>
+<h3 id="案例一-输入是-FP32-计算却用了-TF32">案例一：输入是 FP32，计算却用了 TF32</h3>
 <p>KDA 的 CP 路径出了精度偏差，长上下文下尤其明显。Agent 顺着状态合并、更新的过程查下去，问题落在两处 <code>tl.dot</code> 上：输入是 FP32，计算却默认用了 TF32，误差逐步积了起来。</p>
 <p>这两处都显式加上了 <code>input_precision=&quot;tf32x3&quot;</code>。修复已合入 Flash Linear Attention 上游。</p>
-<h3>案例二：KV Transfer 被 GIL 卡住了</h3>
+<h3 id="案例二-KV-Transfer-被-GIL-卡住了">案例二：KV Transfer 被 GIL 卡住了</h3>
 <p>同样的 workload，Prefill 加上传输后，与单独 Prefill 的性能差距要求不超过 <strong>5%</strong>，测试却跑出了 <strong>20% 以上</strong>。Agent 翻看 Trace，发现 KV Transfer 的 Python 侧执行，始终没能和 DeepEP 的 dispatch/combine 调用重叠。</p>
 <p>再往下查，DeepEP v1.2.1 的两处 C++ 调用没有释放 GIL，负责 Mooncake Transfer 的 Python 线程拿不到锁，传输任务迟迟交不出去。改完，同样测试条件下，性能差距降到了 <strong>1% 以内</strong>。</p>
 <p><img alt="KV Transfer 并发瓶颈的排查与修复" src="../../_assets/20260918-GLM-5.3-FlashX上线200tokens每秒/img-003-737a0da4.jpg"></p>
 <p>KV Transfer 并发瓶颈的排查与修复</p>
-<h3>案例三：同一组计算，做了四遍</h3>
+<h3 id="案例三-同一组计算-做了四遍">案例三：同一组计算，做了四遍</h3>
 <p>KDA Decode 沿 V 维度分块，同一组 FP32 归一化和门控计算，被不同分块重复做了四遍。</p>
 <p>Agent 把这些分块合到同一线程块里，提前批量计算，共享中间结果。并行度少了一些，重复计算也去掉了；这一步，算子性能提高到优化前的 <strong>1.71 倍</strong>。</p>
 <p><img alt="KDA Decode 算子从基础实现到生产版本的性能演进" src="../../_assets/20260918-GLM-5.3-FlashX上线200tokens每秒/img-004-a7e55849.png"></p>
 <p>KDA Decode 算子从基础实现到生产版本的性能演进</p>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

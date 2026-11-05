@@ -395,25 +395,25 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>万字详解10道AI Agent高频面试题</h1><div class="meta">📅 2026-09-26 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/0TQ_cRoQO8sqJgYL4Z7nCQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260926-万字详解10道AI-Agent高频面试题.md</div><div class="md"><h1>万字详解10道AI Agent高频面试题</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">23</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#万字详解10道AI-Agent高频面试题">万字详解10道AI Agent高频面试题</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#什么是-AI-Agent-跟普通-LLM-应用的本质区别">什么是 AI Agent？跟普通 LLM 应用的本质区别？</a><a class="tl l3" href="#什么时候用-Workflow-单-Agent-多-Agent">什么时候用 Workflow、单 Agent、多 Agent？</a><a class="tl l3" href="#ReAct-CoT-Plan-and-Execute-Self-Refine-怎么选">ReAct、CoT、Plan-and-Execute、Self-Refine 怎么选？</a><a class="tl l3" href="#Function-Calling-的完整流程">Function Calling 的完整流程？</a><a class="tl l3" href="#1-你提前写好的工具函数-你写的-不是-LLM-写的">1. 你提前写好的工具函数（你写的，不是 LLM 写的）</a><a class="tl l3" href="#2-告诉-LLM-我有哪些工具-只传说明文档-不传函数本身">2. 告诉 LLM「我有哪些工具」——只传说明文档，不传函数本身</a><a class="tl l3" href="#3-用户问题-工具说明发给-LLM">3. 用户问题 + 工具说明发给 LLM</a><a class="tl l3" href="#4-LLM-返回的不是结果-是一个-JSON-我想调-queryorder-参数-123">4. LLM 返回的不是结果，是一个 JSON——&quot;我想调 queryorder，参数 123&quot;</a><a class="tl l3" href="#它做的只是语义匹配-用户说-查订单-和-description-最接近的就是-queryorder">它做的只是语义匹配：用户说&quot;查订单&quot;，和 description 最接近的就是 queryorder</a><a class="tl l3" href="#name-queryorder-arguments-orderid-123">{&quot;name&quot;: &quot;queryorder&quot;, &quot;arguments&quot;: {&quot;orderid&quot;: &quot;123&quot;}}</a><a class="tl l3" href="#5-你的代码根据-JSON-调用第-1-步的函数">5. 你的代码根据 JSON 调用第 1 步的函数</a><a class="tl l3" href="#6-结果回填给-LLM-让它组织最终回答">6. 结果回填给 LLM，让它组织最终回答</a><a class="tl l3" href="#用途①-调用前-自动生成-JSON-Schema-给-LLM-看-参数怎么填">用途① 调用前：自动生成 JSON Schema 给 LLM 看（参数怎么填）</a><a class="tl l3" href="#用途②-LLM-返回参数后-校验-脏参数拦住">用途② LLM 返回参数后：校验，脏参数拦住</a><a class="tl l3" href="#MCP-是什么-跟-Function-Calling-什么关系">MCP 是什么？跟 Function Calling 什么关系？</a><a class="tl l3" href="#工具调用失败怎么容错-怎么防止-Age">工具调用失败怎么容错？怎么防止 Age</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>万字详解10道AI Agent高频面试题</h1><div class="meta">📅 2026-09-26 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/0TQ_cRoQO8sqJgYL4Z7nCQ" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260926-万字详解10道AI-Agent高频面试题.md</div><div class="md"><h1 id="万字详解10道AI-Agent高频面试题">万字详解10道AI Agent高频面试题</h1>
 <blockquote><p>来源：微信公众号·ImportNew 归档日期：2026-09-26 抓取状态：成功 原文字符：8632｜配图：0 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>金九银十求职向：把 AI Agent 高频考点整理成 10 道面试题，1.6 万字，每题配图解、代码示例和总结。首题从交互模式（单轮映射 vs 目标驱动循环）和决策权（用户逐步决定 vs 自主循环）对比 AI Agent 与普通 LLM 应用的本质区别。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#什么是-ai-agent跟普通-llm-应用的本质区别">什么是 AI Agent？跟普通 LLM 应用的本质区别？</a></li><li><a href="#什么时候用-workflow单-agent多-agent">什么时候用 Workflow、单 Agent、多 Agent？</a></li><li><a href="#function-calling-的完整流程">Function Calling 的完整流程？</a></li><li><a href="#1-你提前写好的工具函数你写的不是-llm-写的">1. 你提前写好的工具函数（你写的，不是 LLM 写的）</a></li><li><a href="#2-告诉-llm我有哪些工具只传说明文档不传函数本身">2. 告诉 LLM「我有哪些工具」——只传说明文档，不传函数本身</a></li><li><a href="#3-用户问题--工具说明发给-llm">3. 用户问题 + 工具说明发给 LLM</a></li><li><a href="#5-你的代码根据-json-调用第-1-步的函数">5. 你的代码根据 JSON 调用第 1 步的函数</a></li><li><a href="#6-结果回填给-llm让它组织最终回答">6. 结果回填给 LLM，让它组织最终回答</a></li><li><a href="#用途①-调用前自动生成-json-schema-给-llm-看参数怎么填">用途① 调用前：自动生成 JSON Schema 给 LLM 看（参数怎么填）</a></li><li><a href="#用途②-llm-返回参数后校验脏参数拦住">用途② LLM 返回参数后：校验，脏参数拦住</a></li><li><a href="#mcp-是什么跟-function-calling-什么关系">MCP 是什么？跟 Function Calling 什么关系？</a></li><li><a href="#工具调用失败怎么容错怎么防止-age">工具调用失败怎么容错？怎么防止 Age</a></li></ul>
 <blockquote><p>来源：https://mp.weixin.qq.com/s/0TQ_cRoQO8sqJgYL4Z7nCQ 平台：weixin｜作者：ImportNew</p></blockquote>
 <p>最近金九银十，估计很多小伙伴又开始准备找工作了，特别是今年的应届生，毋庸置疑，AI Agent 一定是今年最火的研发岗位就业方向。</p>
 <p>为了帮大家更好地准备复习，我把一些高频的面试考点整理成 10 道面试题，每题都配了图解、代码示例和总结，希望对大家找工作能有所帮助。</p>
 <p>文章很长，1.6W 字，建议先收藏。</p>
-<h3>什么是 AI Agent？跟普通 LLM 应用的本质区别？</h3>
+<h3 id="什么是-AI-Agent-跟普通-LLM-应用的本质区别">什么是 AI Agent？跟普通 LLM 应用的本质区别？</h3>
 <p>两者本质区别，一张表分清：</p>
 <p>普通 LLM 应用</p>
 <p>AI Agent</p>
@@ -444,7 +444,7 @@
 <p>一句话：模型权重 ❌，记忆、工具、流程 ✅。</p>
 <p>能把"行为层面进化 ≠ 权重训练"讲清，反而加分。</p>
 <p>总结：Agent 和普通 LLM 应用的区别不在组件多少，而在有没有自主决策和闭环。Agent 的循环是被自回归生成机制逼出来的。</p>
-<h3>什么时候用 Workflow、单 Agent、多 Agent？</h3>
+<h3 id="什么时候用-Workflow-单-Agent-多-Agent">什么时候用 Workflow、单 Agent、多 Agent？</h3>
 <p>别背定义，先看三个例子，各干各的活。</p>
 <p>例子一：退款进度查询——Workflow</p>
 <p>用户问"我的退款到哪了"，系统的活永远是三步：</p>
@@ -492,7 +492,7 @@
 <p>真被追问"单 Agent 自己跑测试行不行？"——行，那等于把验证动作内化进一个循环，判据还是那条"有没有新信息"，跟几个 Agent 无关。多 Agent 只是把"干净视角 + 执行验证"制度化的常见结构，不是唯一做法。</p>
 <p>多 Agent 常见三种搭法：对等协作互相挑刺，管理者模式拆活派活（多数业务够用），去中心化走消息总线 + 共享状态（大规模并行才用得上）。</p>
 <p>总结：步骤可预定义用 Workflow，需要自主决策上单 Agent，协作能拿到新信息才上多 Agent。没有新信息的多 Agent 辩论，等于烧钱。</p>
-<h3>ReAct、CoT、Plan-and-Execute、Self-Refine 怎么选？</h3>
+<h3 id="ReAct-CoT-Plan-and-Execute-Self-Refine-怎么选">ReAct、CoT、Plan-and-Execute、Self-Refine 怎么选？</h3>
 <p>四个范式先看全景对比：</p>
 <p>范式</p>
 <p>核心动作</p>
@@ -530,35 +530,35 @@
 <p>用户大任务 → Plan-and-Execute 拆成子任务清单 → 每个子任务用 ReAct 灵活执行（调工具、看结果、调整） → 最终输出过一遍 Self-Refine（自审 → 修正 → 定稿）</p>
 <p>纯 Plan 太死板，纯 ReAct 太短视。用词坑：CoT 别叫"闭环"，它是单次顺序推理，真正的闭环是 ReAct。</p>
 <p>总结：CoT 管"想"，ReAct 加上"做"，Plan-and-Execute 先想全局，Self-Refine 做完再审。生产环境混着用：Plan 拆解、ReAct 执行、Refine 把关。</p>
-<h3>Function Calling 的完整流程？</h3>
+<h3 id="Function-Calling-的完整流程">Function Calling 的完整流程？</h3>
 <p>先焊死一条铁律：模型只做决策，不执行。</p>
 <p>完整流程 6 步，用代码走一遍：</p>
-<h3>1. 你提前写好的工具函数（你写的，不是 LLM 写的）</h3>
+<h3 id="1-你提前写好的工具函数-你写的-不是-LLM-写的">1. 你提前写好的工具函数（你写的，不是 LLM 写的）</h3>
 <p>def query_order(order_id: str) -&gt; dict: return db.query("SELECT * FROM orders WHERE id = ?", order_id)</p>
-<h3>2. 告诉 LLM「我有哪些工具」——只传说明文档，不传函数本身</h3>
+<h3 id="2-告诉-LLM-我有哪些工具-只传说明文档-不传函数本身">2. 告诉 LLM「我有哪些工具」——只传说明文档，不传函数本身</h3>
 <p>tools = [{ "name": "query_order", "description": "根据订单号查询订单信息", "parameters": { "type": "object", "properties": {"order_id": {"type": "string", "description": "订单号，如 12345"}}, "required": ["order_id"], }, }]</p>
-<h3>3. 用户问题 + 工具说明发给 LLM</h3>
+<h3 id="3-用户问题-工具说明发给-LLM">3. 用户问题 + 工具说明发给 LLM</h3>
 <p>response = llm.chat(messages=[{"role": "user", "content": "帮我查订单 12345"}], tools=tools)</p>
-<h3>4. LLM 返回的不是结果，是一个 JSON——"我想调 query_order，参数 123"</h3>
-<h3>它做的只是语义匹配：用户说"查订单"，和 description 最接近的就是 query_order</h3>
-<h3>{"name": "query_order", "arguments": {"order_id": "123"}}</h3>
-<h3>5. 你的代码根据 JSON 调用第 1 步的函数</h3>
+<h3 id="4-LLM-返回的不是结果-是一个-JSON-我想调-queryorder-参数-123">4. LLM 返回的不是结果，是一个 JSON——"我想调 query_order，参数 123"</h3>
+<h3 id="它做的只是语义匹配-用户说-查订单-和-description-最接近的就是-queryorder">它做的只是语义匹配：用户说"查订单"，和 description 最接近的就是 query_order</h3>
+<h3 id="name-queryorder-arguments-orderid-123">{"name": "query_order", "arguments": {"order_id": "123"}}</h3>
+<h3 id="5-你的代码根据-JSON-调用第-1-步的函数">5. 你的代码根据 JSON 调用第 1 步的函数</h3>
 <p>if response.tool_call.name == "query_order": result = query_order(**response.tool_call.arguments)   # 真正干活的是这里</p>
-<h3>6. 结果回填给 LLM，让它组织最终回答</h3>
+<h3 id="6-结果回填给-LLM-让它组织最终回答">6. 结果回填给 LLM，让它组织最终回答</h3>
 <p>llm.chat(messages=[ {"role": "user", "content": "帮我查订单 12345"}, response.assistant_message,                             # 原样放回，让模型看到自己的决策 {"role": "tool", "tool_call_id": "call_123", "content": json.dumps(result)}, ])</p>
 <p>LLM 从头到尾只产出了第 4 步那个 JSON，没写脚本、没碰数据库。类比：你是老板，提前招好员工（函数）；LLM 是只动嘴的经理，写纸条"让查订单的人查单号 123"；框架代码是传令员，拿纸条找到员工干活，把结果拿回来。</p>
 <p>和"代码生成"的区分：Function Calling 里 LLM 输出的是调用意图（一个 JSON），执行的是你预先写好、注册好的函数；代码生成里 LLM 输出的是一段可运行的代码文本，工具是它现场生成的，由沙箱负责跑。</p>
 <p>加分层：Pydantic 参数校验——一次定义，两个用途：</p>
 <p>from pydantic import BaseModel, Field</p>
 <p>class QueryOrderInput(BaseModel): order_id: str = Field(description="订单号，如 12345") days: int = Field(default=7, description="查询最近几天，默认 7")</p>
-<h3>用途① 调用前：自动生成 JSON Schema 给 LLM 看（参数怎么填）</h3>
-<h3>用途② LLM 返回参数后：校验，脏参数拦住</h3>
+<h3 id="用途①-调用前-自动生成-JSON-Schema-给-LLM-看-参数怎么填">用途① 调用前：自动生成 JSON Schema 给 LLM 看（参数怎么填）</h3>
+<h3 id="用途②-LLM-返回参数后-校验-脏参数拦住">用途② LLM 返回参数后：校验，脏参数拦住</h3>
 <p>QueryOrderInput(order_id="12345", days=7)        # ✅ 通过 QueryOrderInput(order_id=12345, channel="小程序")  # ❌ ValidationError，进不了业务函数</p>
 <p>注意两个细节：</p>
 <p>▪ 校验发生在 LLM 返回参数之后，不是调用之前。链路：定义模型 → 转 schema 给 LLM → LLM 返回参数 → Pydantic 校验 → 通过才进函数。</p>
 <p>▪ 校验有两道闸：Pydantic 只管格式（类型、必填、枚举），业务合法性（订单号存不存在、金额是不是负数）在函数内部再校验。</p>
 <p>总结：模型选工具 = 把工具描述和用户意图做语义匹配。模型是"决策"，不是"执行"——执行的永远是你的代码。</p>
-<h3>MCP 是什么？跟 Function Calling 什么关系？</h3>
+<h3 id="MCP-是什么-跟-Function-Calling-什么关系">MCP 是什么？跟 Function Calling 什么关系？</h3>
 <p>MCP（Model Context Protocol）是 Anthropic 提出的开放协议，标准化"模型怎么接外部工具和数据源"。类比：MCP 是工具界的 USB-C 接口——以前每个工具都得写定制适配，有了 MCP，工具按协议暴露一次，任何支持 MCP 的 Agent 插上就用。</p>
 <p>和 Function Calling 的关系：</p>
 <p>Function Calling</p>
@@ -590,8 +590,8 @@
 <p>▪ 工具命名空间：按组起名（db.query、mail.send 这种），像代码包一样逐层定位。适合分类清晰的工具集</p>
 <p>MCP 天生就是 Server → Tool 两层结构，做分层路由一点问题没有——骂 MCP 撑爆上下文，属于骂错了对象。</p>
 <p>总结：FC 解决"模型怎么表达调用"，MCP 解决"工具怎么标准化接入"——一个在模型侧、一个在工具侧，正交、可配合。工具一多会撑爆上下文，但爆不爆只看路由（平铺、分层、按需检索），跟工具形态、接入协议都无关——MCP 天生就是 Server → Tool 两层结构，做分层路由一点问题没有。</p>
-<h3>工具调用失败怎么容错？怎么防止 Age</h3>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<h3 id="工具调用失败怎么容错-怎么防止-Age">工具调用失败怎么容错？怎么防止 Age</h3>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>

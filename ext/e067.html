@@ -395,19 +395,19 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>NVIDIA又开源了一个顶级Agent项目：OpenShell</h1><div class="meta">📅 2026-09-30 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/vxcy2Wy0rTDBtkYJdExluA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260930-NVIDIA又开源了一个顶级Agent项目OpenShell.md</div><div class="md"><h1>NVIDIA又开源了一个顶级Agent项目：OpenShell</h1>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">12</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#NVIDIA又开源了一个顶级Agent项目-OpenShell">NVIDIA又开源了一个顶级Agent项目：OpenShell</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#一次联网请求-先经过谁">一次联网请求，先经过谁？</a><a class="tl l3" href="#密钥可以用-但不必直接交给-Agent">密钥可以用，但不必直接交给 Agent</a><a class="tl l3" href="#请求被拦了-按需要补权限">请求被拦了，按需要补权限</a><a class="tl l3" href="#先用一个空沙箱确认环境">先用一个空沙箱确认环境</a><a class="tl l3" href="#总结">总结</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>NVIDIA又开源了一个顶级Agent项目：OpenShell</h1><div class="meta">📅 2026-09-30 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/vxcy2Wy0rTDBtkYJdExluA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20260930-NVIDIA又开源了一个顶级Agent项目OpenShell.md</div><div class="md"><h1 id="NVIDIA又开源了一个顶级Agent项目-OpenShell">NVIDIA又开源了一个顶级Agent项目：OpenShell</h1>
 <blockquote><p>来源：微信公众号 归档日期：2026-09-30 抓取状态：成功 原文字符：5706｜配图：6 张</p></blockquote>
-<h2>摘要速览</h2>
+<h2 id="摘要速览">摘要速览</h2>
 <ul><li>NVIDIA 开源项目 OpenShell 爆火：给 Coding Agent 修 Bug 时要交出读代码、改文件、装依赖、调 API 的权限，担心它读不该读的文件、把密钥带进请求或连无关服务——提示词约束不够，OpenShell 在实际操作发生时用策略执行这些规则（规定 Agent 能碰哪些文件、访问哪些服务），适合运行需要读写文件、执行命令的 Agent。</li></ul>
-<h2>核心内容</h2>
+<h2 id="核心内容">核心内容</h2>
 <p>（待补充）</p>
-<h2>可执行启发</h2>
+<h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
-<h2>我的想法</h2>
+<h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
 <hr>
-<h2>原文沉淀</h2>
-<h3>目录</h3>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
 <ul><li><a href="#一次联网请求先经过谁">一次联网请求，先经过谁？</a></li><li><a href="#密钥可以用但不必直接交给-agent">密钥可以用，但不必直接交给 Agent</a></li><li><a href="#请求被拦了按需要补权限">请求被拦了，按需要补权限</a></li><li><a href="#先用一个空沙箱确认环境">先用一个空沙箱确认环境</a></li><li><a href="#总结">总结</a></li></ul>
 <p>让 Coding Agent 修一个 Bug，往往要给它读代码、改文件、装依赖、调用 API 的权限。任务交出去以后，又会惦记另一件事：它会不会读到不该读的文件，把密钥带进某个请求，或者连上一个根本用不着的服务？</p>
 <p>把这些要求写进提示词，执行时仍然需要有人或程序把关。</p>
@@ -419,7 +419,7 @@
 <p><img alt="OpenShell README 项目介绍" src="../../_assets/NVIDIA又开源了一个顶级Agent项目OpenShell/img-002-ca9f43f8.png"></p>
 <p>OpenShell README 项目介绍</p>
 <p>项目地址：<strong>https://github.com/NVIDIA/OpenShell</strong></p>
-<h3>一次联网请求，先经过谁？</h3>
+<h3 id="一次联网请求-先经过谁">一次联网请求，先经过谁？</h3>
 <p>假设 Agent 正在处理一个代码仓库，需要连接外部服务。按 OpenShell 的实现，请求先经过沙箱，由沙箱识别是哪个程序发起，再交给沙箱外的 <strong>Supervisor</strong> 检查。</p>
 <p>Supervisor 会核对策略，允许后才建立真正的外部连接；需要凭据的请求，还要检查它有没有资格使用对应密钥。</p>
 <p>是否放行由沙箱外的组件判断：Agent 和它启动的程序在受限制的一侧，负责判断是否放行的 Supervisor 在另一侧。Agent 不能靠自己说一句“这个请求很安全”获得访问权。</p>
@@ -431,7 +431,7 @@
 <p>文件访问也有对应的限制。当前 Linux 后端用 Landlock 约束文件系统访问，工作负载以非 root 身份运行，不带 Linux capabilities。哪些目录能读、哪些能写，要在策略中明确。</p>
 <p>文件策略默认采用 <code>best_effort</code>：当列出的路径全部无法应用，或 Landlock 无法执行这些规则时，沙箱可能不应用这些文件规则而继续运行，并记录高严重性告警。设为 <code>hard_requirement</code> 后，这类情况会导致启动失败；但两种模式都会跳过个别缺失或无法打开的路径。这个区别不影响 Landlock ABI v3 等强制内核要求。</p>
 <p>文件限制正常生效时，你给 Agent 开放的可写目录仍然可能被它改错。代码审查、测试和版本管理还有各自要做的事。</p>
-<h3>密钥可以用，但不必直接交给 Agent</h3>
+<h3 id="密钥可以用-但不必直接交给-Agent">密钥可以用，但不必直接交给 Agent</h3>
 <p>Agent 调用模型 API，通常需要一个 API Key。把真实 Key 直接塞进它的环境变量，进程就有机会读到这段字符串。</p>
 <p>OpenShell 提供了 <strong>Provider</strong> 来管理凭据。交给 Provider 管理后，Agent 环境里拿到的是占位令牌，Proxy 在转发请求前才把它替换成真实凭据。</p>
 <p>能联网和能带上密钥，是两次独立检查：请求的程序与目的地要符合网络策略，目标主机、端口和路径还要符合凭据绑定范围。</p>
@@ -439,7 +439,7 @@
 <p>所以，批准访问一个网站，并不等于顺手把 GitHub Token 也交给了它。</p>
 <p>这套保护有明确的适用条件。凭据替换需要 Proxy 按 HTTP 处理请求，跳过检查的原始 TLS 隧道和非 HTTP 隧道不支持这种替换。自己放在项目文件、提示词或其他位置的密钥，也不能指望 Provider 自动接管。</p>
 <p>另外，请求获准发送给云端模型后，其中的内容仍会到达模型服务商。沙箱限制访问权限，不会把云端推理变成本地推理。</p>
-<h3>请求被拦了，按需要补权限</h3>
+<h3 id="请求被拦了-按需要补权限">请求被拦了，按需要补权限</h3>
 <p>比如 Agent 需要安装依赖，当前策略却没有允许访问对应的软件源，请求会被拒绝。</p>
 <p>OpenShell 能从被拦截的连接中起草规则，把范围收在具体的程序、主机和端口。人在宿主机查看待处理提案，确认它确实属于当前任务，再批准；新规则会加载到正在运行的沙箱，Agent 可以重试，不必重启整个环境。</p>
 <p>还有一种更主动的用法：开启 <strong>Policy Advisor</strong>，让 Agent 读取拒绝记录，自己提交需要的网络规则。对于 HTTP API，提案还可以进一步限定请求方法和路径。</p>
@@ -452,7 +452,7 @@
 <p>官方还把执行请求的数据平面和管理沙箱的控制平面分开画了出来，下图标出了两部分各自的扩展位置。</p>
 <p><img alt="OpenShell 数据平面与控制平面的扩展位置" src="../../_assets/NVIDIA又开源了一个顶级Agent项目OpenShell/img-005-de65c9a8.png"></p>
 <p>OpenShell 数据平面与控制平面的扩展位置</p>
-<h3>先用一个空沙箱确认环境</h3>
+<h3 id="先用一个空沙箱确认环境">先用一个空沙箱确认环境</h3>
 <p>本文对照 OpenShell 0.1.2 文档，未做本地部署实测。官方平台表列出 Debian / Ubuntu 的 x86_64、arm64，以及使用 Docker Desktop 的 Apple Silicon Mac；Windows 的实验支持覆盖 x86_64，需要 WSL 2 和 Docker Desktop。运行时还支持符合条件的 Linux Podman 和 MicroVM；MicroVM 在 macOS 上使用 Hypervisor.framework，在 Linux 上使用 KVM。</p>
 <p>走 Docker 路线，需要 Docker Desktop 或 Docker Engine 28.0 及以上版本。Linux 沙箱还依赖 Landlock、seccomp 等内核能力，内核版本号本身不足以保证能运行；不满足必要条件时，启动检查会拒绝放行。</p>
 <p>下面是官方安装与最小启动命令。安装脚本会按平台安装软件包并启动本地 Gateway 服务，创建沙箱时还可能拉取镜像：</p>
@@ -464,14 +464,14 @@ openshell sandbox create --name demo</code></pre>
 <p>官方的首个 Agent 教程用 OpenCode 加 OpenRouter 演示了这条流程，包含凭据配置、镜像选择，以及遇到网络拒绝后如何审批。</p>
 <p>地址： <strong>https://docs.nvidia.com/openshell/latest/about/run-your-first-agent</strong></p>
 <p>首次尝试可以沿用这个示例，再拿一个没有敏感数据的小项目验证：所需工具能否运行、网络规则是否够用、被拒绝的请求是否容易判断。等这条流程走通，再考虑接入日常仓库。</p>
-<h3>总结</h3>
+<h3 id="总结">总结</h3>
 <p>你可以把 OpenShell 理解成一个专门给 AI Agent 准备的工作环境。Agent 在里面读代码、改文件、跑命令，OpenShell 就按你设好的规则，管住它能访问哪些文件、连接哪些服务，以及怎么使用托管的密钥。想让 Agent 多干点活，又不想一下子把所有权限都交出去，可以看看这个项目。</p>
 <p><img alt="图片" src="../../_assets/NVIDIA又开源了一个顶级Agent项目OpenShell/img-006-c1262e6b.webp"></p>
 <p><strong>⭐️推荐阅读</strong>:</p>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247555122&amp;idx=1&amp;sn=96278bed8e2b414434398b56785ea2bd&amp;scene=21#wechat_redirect">AIGuide：AI 应用开发、AI 编程实战与面试指南</a>（对标 JavaGuide，完全开源免费）</li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247552140&amp;idx=1&amp;sn=551aeaa2298099436d22ac4983b17c49&amp;scene=21#wechat_redirect">JavaGuide： Java 面试指南和后端通用面试复习资料</a>（Github 157k+ Star）</li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247552320&amp;idx=1&amp;sn=a7e4e5a8d957446e6bb032d78b2fa5fb&amp;scene=21#wechat_redirect">《SpringAI 智能面试平台》（2.0 版本已开源）</a>(Star 数量 <strong>3k+</strong>)</li></ul>
-<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
 <script src="../assets/search.js"></script>
