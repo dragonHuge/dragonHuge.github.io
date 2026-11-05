@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt） · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+    <a class="brand" href="../index.html">🐉 DragonHuge · 知识花园</a>
+    <a class="search-m" href="../search.html" aria-label="搜索">🔍</a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…  /" autocomplete="off" aria-label="搜索全站文章">
+      <div class="sug" id="sug" hidden></div>
+    </div>
+    <nav class="topnav">
+      <a href="../index.html" class="">首页</a>
+      <a href="../daily/index.html" class="">日常</a>
+      <a href="../tech/index.html" class="">技术文章</a>
+      <a href="../ext/index.html" class="on">外部沉淀</a>
+    </nav>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar"><nav class="side-nav">
+<details class="mod"><summary>📒 日常知识库沉淀 <span class="cnt">21</span></summary>
+<div class="grp">灵感火花</div>
+<a class="art" href="../daily/d001.html">2026-10-24</a>
+<a class="art" href="../daily/d002.html">2026-10-17</a>
+<a class="art" href="../daily/d003.html">2026-09-27</a>
+<a class="art" href="../daily/d004.html">2026-09-19</a>
+<a class="art" href="../daily/d005.html">2026-09-12</a>
+<div class="grp">2026 · Q2 · 第7周(05.11-05.17)</div>
+<a class="art" href="../daily/d006.html">2026-05-15</a>
+<a class="art" href="../daily/d007.html">2026-05-13</a>
+<a class="art" href="../daily/d008.html">2026-05-12</a>
+<a class="art" href="../daily/d009.html">2026-05-11</a>
+<div class="grp">2026 · Q2 · 第6周(05.04-05.10)</div>
+<a class="art" href="../daily/d010.html">2026-05-09</a>
+<a class="art" href="../daily/d011.html">2026-05-08</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d012.html">2026-04-28</a>
+<a class="art" href="../daily/d013.html">2026-04-27</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d014.html">2026-04-26</a>
+<a class="art" href="../daily/d015.html">2026-04-25 周六无事</a>
+<div class="grp">2026 · Q2 · 第2周(04.06-04.12)</div>
+<a class="art" href="../daily/d016.html">2026-04-12 随记</a>
+<a class="art" href="../daily/d017.html">2026-04-07 随记</a>
+<a class="art" href="../daily/d018.html">2026-04-06</a>
+<div class="grp">2026 · Q2 · 第1周(03.30-04.05)</div>
+<a class="art" href="../daily/d019.html">2026-04-04</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d020.html">第5周(04.27-05.03) 周报</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d021.html">第4周(04.20-04.26) 周报</a>
+</details>
+<details class="mod"><summary>💻 技术文章 <span class="cnt">22</span></summary>
+<details class="cat" open><summary>AI底层原理</summary>
+<a class="art" href="../tech/t001.html">AI 底层原理 — 资料来源</a>
+<a class="art" href="../tech/t002.html">AI 底层原理 — 感悟日志</a>
+<a class="art" href="../tech/t003.html">LLM Agent 工程原理 — 学习笔记</a>
+</details>
+<details class="cat" open><summary>Agent应用开发</summary>
+<a class="art" href="../tech/t004.html">DeepSeek dsh-superagent 技术方案分析（学习版）</a>
+<a class="art" href="../tech/t005.html">Agent 应用开发 — 知识点全景图</a>
+<a class="art" href="../tech/t006.html">Agent 应用开发 — 五阶段学习计划</a>
+</details>
+<details class="cat" open><summary>安全风控</summary>
+<a class="art" href="../tech/t007.html">H5 活动风控 · 技术学习问答笔记（龙老板提问 → 小墨答复）</a>
+<a class="art" href="../tech/t008.html">H5 活动风控完整技术调研（小白友好汇总版）：需求还原 · 核心概念 · 行业方案 · 落地路线</a>
+<a class="art" href="../tech/t009.html">H5 活动风控第二轮调研：业界设备指纹落地、WebAuthn 边界、黑产攻击面与落地方案</a>
+<a class="art" href="../tech/t010.html">JS 虚拟化保护（防守侧）第一轮调研：原理、实现与 ZCode 风控重叠度</a>
+</details>
+<details class="cat" open><summary>投资理财</summary>
+<a class="art" href="../tech/t011.html">投资理财 — 资料来源</a>
+<a class="art" href="../tech/t012.html">投资理财 — 知识库组织规范</a>
+<a class="art" href="../tech/t013.html">投资理财 — 四阶段学习路径</a>
+<div class="grp">实践记录</div>
+<a class="art" href="../tech/t014.html">决策日志</a>
+<a class="art" href="../tech/t015.html">定投记录</a>
+<div class="grp">知识卡/01-基础概念</div>
+<a class="art" href="../tech/t016.html">风险与收益</a>
+<a class="art" href="../tech/t017.html">通胀</a>
+<a class="art" href="../tech/t018.html">复利</a>
+<div class="grp">配置方案</div>
+<a class="art" href="../tech/t019.html">退休目标测算</a>
+<a class="art" href="../tech/t020.html">财务地基自查</a>
+</details>
+<details class="cat" open><summary>日常问答</summary>
+<a class="art" href="../tech/t021.html">日常问答沉淀 · 2026-09</a>
+</details>
+<details class="cat" open><summary>综合文章</summary>
+<a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+</details>
+</details>
+<details class="mod" open><summary>📥 外部沉淀 <span class="cnt">285</span></summary>
+<details class="cat"><summary>AI与效率 <span class="cnt">186</span></summary>
+<a class="art" href="../ext/e001.html">Anthropic：子Agent拆多了，为什么反而更慢</a>
+<a class="art" href="../ext/e002.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a>
+<a class="art" href="../ext/e003.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a>
+<a class="art" href="../ext/e004.html">从Harness到Harness²，Google自进化新突破</a>
+<a class="art" href="../ext/e005.html">深度解析 Codex Harness 架构及其全新上下文压缩记忆体系的设计思路</a>
+<a class="art" href="../ext/e006.html">让Agent可评可控可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e007.html">Agent时代的输入法：80亿token打磨的效率工具即将开源</a>
+<a class="art" href="../ext/e008.html">Anthropic最新长文：请谨慎使用子智能体</a>
+<a class="art" href="../ext/e009.html">Anthropic长文详解Claude Duet安全设计：密码永远不经过模型</a>
+<a class="art" href="../ext/e010.html">Codex核心团队复盘：从30秒一次反馈到放手跑几小时</a>
+<a class="art" href="../ext/e011.html">一篇多模态Agentic框架最新前沿综述</a>
+<a class="art" href="../ext/e012.html">为什么现在的top大模型说话越来越拗口难懂了</a>
+<a class="art" href="../ext/e013.html">你的Personal Agent如何真正跑起来？Agent实战指南</a>
+<a class="art" href="../ext/e014.html">实测最近爆火的Teamily，是真有东西啊</a>
+<a class="art" href="../ext/e015.html">替代CC Switch的这个项目已斩获20K Star</a>
+<a class="art" href="../ext/e016.html">维基百科编辑抓AI的清单，被反着做成了6万多star的skill</a>
+<a class="art" href="../ext/e017.html">刚刚，Anthropic公开内部Sub-Agent+Loop最佳实践</a>
+<a class="art" href="../ext/e018.html">刚刚！斯坦福CS336中文教程发布了</a>
+<a class="art" href="../ext/e019.html">Agent的长期记忆要怎么做？RAG是不是最好的选择（4/12）</a>
+<a class="art" href="../ext/e020.html">Uber的合同审阅Agent工程实践和拆解</a>
+<a class="art" href="../ext/e021.html">6.3万星开源求职流水线：69份简历拿下20轮面试</a>
+<a class="art" href="../ext/e022.html">Agent如何自己变强：从Skill到模型权重的进化全景图</a>
+<a class="art" href="../ext/e023.html">Anthropic：谨慎使用子Agent</a>
+<a class="art" href="../ext/e024.html">Jev创始人访谈：Jev是面向智能的SQL，软件设计需回到工作流为中心</a>
+<a class="art" href="../ext/e025.html">MCP解决连接RAG解决知识，那谁来解决业务理解：企业AI的本体论</a>
+<a class="art" href="../ext/e026.html">OpenAI：FDE的目标是让自己失业</a>
+<a class="art" href="../ext/e027.html">去年教的85%全扔掉！斯坦福最新AI神课：200行写Claude Code</a>
+<a class="art" href="../ext/e028.html">唐杰团队RSI新作：让Agent越改越强，执行成本反降26%</a>
+<a class="art" href="../ext/e029.html">在上海听了一天AI论坛，我学到新的AI焚诀了</a>
+<a class="art" href="../ext/e030.html">大家用AI胆子还不够大！Claude工程负责人亲授顶级用法</a>
+<a class="art" href="../ext/e031.html">3篇NeurIPS顶会Skill，很精彩</a>
+<a class="art" href="../ext/e032.html">刚刚，Anthropic推出个人智能体Claude Duet：opus 5.5 驱动</a>
+<a class="art" href="../ext/e033.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+<a class="art" href="../ext/e034.html">Meta的智能体工程经验：轻量编排与专业分工</a>
+<a class="art" href="../ext/e035.html">分享8个让我最近很惊艳的Claude Opus 5.5玩法</a>
+<a class="art" href="../ext/e036.html">坏了，真给openai从deepseek那学到真的了</a>
+<a class="art" href="../ext/e037.html">天猫数字员工：研发暗物质与AI Native组织协作</a>
+<a class="art" href="../ext/e038.html">AI工程化防翻车指南</a>
+<a class="art" href="../ext/e039.html">Anthropic最新就业报告公开：AI时代，新人何去何从?</a>
+<a class="art" href="../ext/e040.html">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</a>
+<a class="art" href="../ext/e041.html">从 BERT、GPT 到 Jev：一文看懂大模型架构的演进与分化</a>
+<a class="art" href="../ext/e042.html">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a>
+<a class="art" href="../ext/e043.html">面试官皱眉：“你知道Codex多Agent实现机制吗？ ”我笑了：“独立会话、上下文交接、异步通信、任务调度，你想先听哪块？”</a>
+<a class="art" href="../ext/e044.html">把逆向工程交给 Agent：一文拆解爆火的 REA 技术原理</a>
+<a class="art" href="../ext/e045.html">为什么说 DeepSeek Harness 的灵魂是一切皆插件？</a>
+<a class="art" href="../ext/e046.html">踩了无数坑后，实践出来的Claude Code省token小技巧👇 其实Opus5.5整体还挺耐用的，但是需要对默认设置稍微做点调整： 1、主力模型可以用Opus5.5，但最好别用尽1M的上下文，设定400k-600k之间的自动压缩机制比较好，上下文太短的话影响视线效果，上下文长了耗token，以及会明显变慢，效果实际也会变差； 2、一个任务尽量更快的连续完成，因为主agent的缓存时间是1小时，如果你隔几个小时回来提要求，缓存失效的话，输入token的消耗量会明显增大； 3、subagent尽量用sonnet 5.5吧，反正是接受主agent派发的任务干杂活的，用opus5.5提升不大，haiku5.5的话又没必要了，也没省多少； 4、主动设置把subagent的缓存时间改到1小时，因为Claude Code中默认subagent的缓存时间是5分钟，所以很容易会产生大量的不被缓存的输入token。 5、主动要求少启动subagent，其实主agent能在大压缩或者少压缩情况下完成一个任务的前提下，一直持续对话缓存率在98%以上，还是挺省的。一开subagent，即使用sonnet5.5，也会明显增加消耗。</a>
+<a class="art" href="../ext/e047.html">拆开 Pi：Agent Harness 的极简设计</a>
+<a class="art" href="../ext/e048.html">AI时代架构设计，给AI的4条缓存红线（9/100）</a>
+<a class="art" href="../ext/e049.html">四大多 Agent 架构详解（三）：Hierarchical 如何解决一个 Supervisor 管不过来的问题</a>
+<a class="art" href="../ext/e050.html">CLAUDE.md 还是 AGENTS.md？Anthropic 的答案是：以后都不用</a>
+<a class="art" href="../ext/e051.html">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</a>
+<a class="art" href="../ext/e052.html">huashu-art-motion发布！可能是最有审美的动画skill。</a>
+<a class="art" href="../ext/e053.html">1024个Agent协同，微软Loop工程杀疯了</a>
+<a class="art" href="../ext/e054.html">AI让写代码变便宜了，但没让架构变便宜</a>
+<a class="art" href="../ext/e055.html">Agent SDK 双面宿主：有 UI 与无 UI 不是两套 Agent</a>
+<a class="art" href="../ext/e056.html">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a>
+<a class="art" href="../ext/e057.html">Claude Code Mods 入门指南：从零做一个 Mod</a>
+<a class="art" href="../ext/e058.html">Agent、Harness、Loop 到底是什么关系？一文讲透 AI 系统的分层架构</a>
+<a class="art" href="../ext/e059.html">Claude.dev 的四篇工程文章：Agent 怎样才算真的改进</a>
+<a class="art" href="../ext/e060.html">Google：首篇词元（Token）技术全景综述</a>
+<a class="art" href="../ext/e061.html">解读 Jev 的 4 种应用方式</a>
+<a class="art" href="../ext/e062.html">重磅！Anthropic公开内部Claude进化最佳实践</a>
+<a class="art" href="../ext/e063.html">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a>
+<a class="art" href="../ext/e064.html">从生成到决策：Jev正在改变LLM应用的开发范式</a>
+<a class="art" href="../ext/e065.html">AI Coding卷到现在，真正卡脖子的东西没人提</a>
+<a class="art" href="../ext/e066.html">Agent不只烧Token：为什么Agent Sandbox正在变得重要</a>
+<a class="art" href="../ext/e067.html">NVIDIA又开源了一个顶级Agent项目：OpenShell</a>
+<a class="art" href="../ext/e068.html">公司规定所有接口都用POST请求，为什么</a>
+<a class="art" href="../ext/e069.html">碾压GPT-4o！94.6%准确率的开源Agent记忆Hindsight来了</a>
+<a class="art" href="../ext/e070.html">风控这个行业，入行10年，迷茫十年</a>
+<a class="art" href="../ext/e071.html">Jev Skill技能包来了！全球开发者砸出500个开源项目</a>
+<a class="art" href="../ext/e072.html">当Agent开始做梦：Dream-RSI如何改进探索策略</a>
+<a class="art" href="../ext/e073.html">预热合流：进了页面也预热了，为什么首句仍可能冷启</a>
+<a class="art" href="../ext/e074.html">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</a>
+<a class="art" href="../ext/e075.html">Anthropic：effort已不再是思考强度开关了</a>
+<a class="art" href="../ext/e076.html">Meta Muse架构深度解析：到底有何不同</a>
+<a class="art" href="../ext/e077.html">Plan Mode之死？Agent需要一条可验证的工作回路</a>
+<a class="art" href="../ext/e078.html">从Harness，走向受控RSI</a>
+<a class="art" href="../ext/e079.html">开源一个Vibe Coding最佳伴侣：口喷鸡</a>
+<a class="art" href="../ext/e080.html">改变世界前先认识世界：Ontology决策结构化实践</a>
+<a class="art" href="../ext/e081.html">本地复刻Jev范式！APUS开源全新浏览器Agent Skill</a>
+<a class="art" href="../ext/e082.html">谷歌RSI新作，让Agent Harness自进化不跑偏！</a>
+<a class="art" href="../ext/e083.html">长程Agent也能“倒带重来”！中科院自动化所联合提出运行时恢复框架AgentRewind</a>
+<a class="art" href="../ext/e084.html">Graph的尽头是自进化Ontology</a>
+<a class="art" href="../ext/e085.html">万字详解10道AI Agent高频面试题</a>
+<a class="art" href="../ext/e086.html">从一次LLM调用到完整Harness：系统理解Agent如何工作</a>
+<a class="art" href="../ext/e087.html">把多语种Laya微调成中文决策模型，代码评估全开源</a>
+<a class="art" href="../ext/e088.html">来了！DeepSeek又发新作DSec</a>
+<a class="art" href="../ext/e089.html">耗时1h！打造属于你自己的Jev，喂饭级教程来了</a>
+<a class="art" href="../ext/e090.html">腾讯开源BrowserSkill：让AI用你的账号上网</a>
+<a class="art" href="../ext/e091.html">谷歌重磅发布Dream-RSI，最新RSI研究！</a>
+<a class="art" href="../ext/e092.html">2万Star开源项目作者入职Hugging Face，副业变全职</a>
+<a class="art" href="../ext/e093.html">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</a>
+<a class="art" href="../ext/e094.html">微软 186k Star 的 markitdown：它凭什么这么火，又在哪会让你踩坑？</a>
+<a class="art" href="../ext/e095.html">错误码排查从 3～8 小时到分钟级，Agent怎么做到的？</a>
+<a class="art" href="../ext/e096.html">给项目建Agent知识库，一套完整方法来了！</a>
+<a class="art" href="../ext/e097.html">AI写得快 ≠ 真正提效：一文讲清Harness&quot;记忆&quot;和&quot;验证闭环</a>
+<a class="art" href="../ext/e098.html">一个字都不会写的 Jev，凭什么成为 ChatGPT 之后最火的模型？</a>
+<a class="art" href="../ext/e099.html">我替大家先试了一把 Jev：一个不写代码、不聊天，只负责&quot;做决定&quot;的奇葩模型</a>
+<a class="art" href="../ext/e100.html">阿里文征：面向Agent全面升级模型服务、Agent服务、AI应用</a>
+<a class="art" href="../ext/e101.html">Agent时代，RAG怎么选？这份指南一次讲清！</a>
+<a class="art" href="../ext/e102.html">Jev 深度解析：从生成式模型到语义决策引擎</a>
+<a class="art" href="../ext/e103.html">Jev 爆火全网，有人把 200+ 个社区案例攒成了开源案例墙，已经 1 亿浏览了！</a>
+<a class="art" href="../ext/e104.html">RAG解决不了的问题，GBrain想解决：给AI Agent装一个能记事的&#x27;第二大脑</a>
+<a class="art" href="../ext/e105.html">开源版 Jev 发布了！</a>
+<a class="art" href="../ext/e106.html">终于有人把数据指标体系讲明白了：指标怎么定、怎么分、怎么用一次讲透</a>
+<a class="art" href="../ext/e107.html">腾讯15年资深后台工程师，转战大模型推理的抉择</a>
+<a class="art" href="../ext/e108.html">腾讯音乐的 MusicBuddy 上线了，Buddy 家族凑够七个</a>
+<a class="art" href="../ext/e109.html">这是一篇把&quot;Jev模型&quot;讲明白的科普级解读！</a>
+<a class="art" href="../ext/e110.html">重磅！从 Agent 开发到 Agent 算法，进阶指南来了</a>
+<a class="art" href="../ext/e111.html">AI时代，让AI写缓存，spec怎么写（5/100）</a>
+<a class="art" href="../ext/e112.html">Agents成新一代造王者，开发者正在快速失去技术决定权</a>
+<a class="art" href="../ext/e113.html">Harness RSI框架来了，登上Hugging Face日榜第二！</a>
+<a class="art" href="../ext/e114.html">Jev Search 开源！当 Jev 遇上搜索引擎：这个开源项目让你用大白话搜遍全网！</a>
+<a class="art" href="../ext/e115.html">Jev是什么AI模型？不做自然语言生成为何引发热议</a>
+<a class="art" href="../ext/e116.html">Jev是分类器吗？今天向所有人开放，送1.2亿token</a>
+<a class="art" href="../ext/e117.html">Jev 爆火：一个不做生成的 AI，凭什么让半个技术圈熬夜跑 Demo？</a>
+<a class="art" href="../ext/e118.html">Loop engineering：把 agent 放进工程循环</a>
+<a class="art" href="../ext/e119.html">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</a>
+<a class="art" href="../ext/e120.html">一文详解Jev：把 Agent 里的“小判断”，从大模型调用改成结构化决策</a>
+<a class="art" href="../ext/e121.html">不会聊天的 AI，彻底爆火：Jev 保姆级教程来了！</a>
+<a class="art" href="../ext/e122.html">为啥 Jev 突然就全网爆火了？</a>
+<a class="art" href="../ext/e123.html">什么是 Jev？</a>
+<a class="art" href="../ext/e124.html">四大多 Agent 架构详解（一）：Workflow 如何把固定流程变成可回放的系统</a>
+<a class="art" href="../ext/e125.html">基于Jev的浏览器Agent插件开源，狂揽12.1k star！</a>
+<a class="art" href="../ext/e126.html">怎样构建一个 Agent-friendly 的网站</a>
+<a class="art" href="../ext/e127.html">整理了最新Jev模型的全网22个爆火玩法！</a>
+<a class="art" href="../ext/e128.html">知识库答不准，可能真不是模型的锅，66.6K star的Docling 到底解决了什么</a>
+<a class="art" href="../ext/e129.html">简单讲讲 Agent 的工作原理</a>
+<a class="art" href="../ext/e130.html">聊聊最近爆火的Jev 模型，到底是个啥？</a>
+<a class="art" href="../ext/e131.html">刚刚，Anthropic公开内部RSI落地方法论</a>
+<a class="art" href="../ext/e132.html">Anthropic 公开「递归自我改进」核心数据：3 万 Agent 正在研发下一代 Claude</a>
+<a class="art" href="../ext/e133.html">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a>
+<a class="art" href="../ext/e134.html">Jev：只会做选择题的 System One 模型，TypeSafe AI 的高频决策分类器</a>
+<a class="art" href="../ext/e135.html">什么是 RSI：2026 年最贵的三个字母（递归自我改进科普）</a>
+<a class="art" href="../ext/e136.html">小米 MiMo-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a>
+<a class="art" href="../ext/e137.html">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a>
+<a class="art" href="../ext/e138.html">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a>
+<a class="art" href="../ext/e139.html">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a>
+<a class="art" href="../ext/e140.html">本地该怎么做 RSI？与 StartLux CTO 郭权玮聊本地自我改进</a>
+<a class="art" href="../ext/e141.html">货拉拉 AI Coding 落地实践：个人提效攒不成组织提效</a>
+<a class="art" href="../ext/e142.html">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</a>
+<a class="art" href="../ext/e143.html">别再只卷 Prompt 了：Context Engineering 才是 Agent 差距所在</a>
+<a class="art" href="../ext/e144.html">面试官：讲一讲多 Agent 协作如何保持一致性</a>
+<a class="art" href="../ext/e145.html">Codex想让Harness消失，Claude Code却要把它做成承重墙</a>
+<a class="art" href="../ext/e146.html">RSI 到底还有多远？三位 AI 研究员谈递归自我改进时间线</a>
+<a class="art" href="../ext/e147.html">OpenAI首席科学家发布长文：《An Alien Mind》（异星心智）</a>
+<a class="art" href="../ext/e148.html">让Agent像人一样记忆：本地长期记忆系统HL-Mem的设计与取舍</a>
+<a class="art" href="../ext/e149.html">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</a>
+<a class="art" href="../ext/e150.html">DeepSeek Harness背后的心脏：Cordis到底是什么</a>
+<a class="art" href="../ext/e151.html">聊一聊 GPT-6 Astra 背后的 Loop 技术</a>
+<a class="art" href="../ext/e152.html">Multi-Agent已死！Anthropic这次完全反着做</a>
+<a class="art" href="../ext/e153.html">个人自进化知识库完整搭建教程</a>
+<a class="art" href="../ext/e154.html">从一次 LLM 调用到完整 Harness，Agent 到底经历了什么？</a>
+<a class="art" href="../ext/e155.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a>
+<a class="art" href="../ext/e156.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a>
+<a class="art" href="../ext/e157.html">字节一天连发3篇自进化Agent，彻底杀疯了</a>
+<a class="art" href="../ext/e158.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
+<a class="art" href="../ext/e159.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
+<a class="art" href="../ext/e160.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
+<a class="art" href="../ext/e161.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
+<a class="art" href="../ext/e162.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
+<a class="art" href="../ext/e163.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
+<a class="art" href="../ext/e164.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
+<a class="art" href="../ext/e165.html">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</a>
+<a class="art" href="../ext/e166.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
+<a class="art" href="../ext/e167.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
+<a class="art" href="../ext/e168.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
+<a class="art" href="../ext/e169.html">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a>
+<a class="art" href="../ext/e170.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
+<a class="art" href="../ext/e171.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
+<a class="art" href="../ext/e172.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
+<a class="art" href="../ext/e173.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
+<a class="art" href="../ext/e174.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
+<a class="art" href="../ext/e175.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
+<a class="art" href="../ext/e176.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
+<a class="art" href="../ext/e177.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
+<a class="art" href="../ext/e178.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
+<a class="art" href="../ext/e179.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
+<a class="art" href="../ext/e180.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
+<a class="art" href="../ext/e181.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
+<a class="art" href="../ext/e182.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
+<a class="art" href="../ext/e183.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
+<a class="art" href="../ext/e184.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
+<a class="art" href="../ext/e185.html">Claude Code 15 条高频实用技巧</a>
+<a class="art" href="../ext/e186.html">Everything Claude Code：Anthropic 黑客松冠军的生产级配置集合</a>
+</details>
+<details class="cat" open><summary>工具与技术 <span class="cnt">65</span></summary>
+<a class="art" href="../ext/e187.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e188.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e189.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e190.html">EasySync、OpenPlug、Resojot三件套</a>
+<a class="art" href="../ext/e191.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
+<a class="art" href="../ext/e192.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
+<a class="art" href="../ext/e193.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
+<a class="art" href="../ext/e194.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
+<a class="art" href="../ext/e195.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
+<a class="art" href="../ext/e196.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
+<a class="art" href="../ext/e197.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e198.html">防重放攻击Nonce机制</a>
+<a class="art" href="../ext/e199.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
+<a class="art" href="../ext/e200.html">手推Transformer（3）架构图解</a>
+<a class="art" href="../ext/e201.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
+<a class="art" href="../ext/e202.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
+<a class="art" href="../ext/e203.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
+<a class="art" href="../ext/e204.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<a class="art" href="../ext/e205.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
+<a class="art" href="../ext/e206.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
+<a class="art" href="../ext/e207.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e208.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
+<a class="art" href="../ext/e209.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
+<a class="art" href="../ext/e210.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
+<a class="art" href="../ext/e211.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
+<a class="art" href="../ext/e212.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
+<a class="art" href="../ext/e213.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
+<a class="art" href="../ext/e214.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
+<a class="art active" href="../ext/e215.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
+<a class="art" href="../ext/e216.html">2026年量化投资类Skills排行榜</a>
+<a class="art" href="../ext/e217.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
+<a class="art" href="../ext/e218.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
+<a class="art" href="../ext/e219.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
+<a class="art" href="../ext/e220.html">6个Vibe Coding必备宝藏网站</a>
+<a class="art" href="../ext/e221.html">Archify：AI代码仓库架构可视化开源Skill</a>
+<a class="art" href="../ext/e222.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
+<a class="art" href="../ext/e223.html">anything2explainer：一键制作科普视频的开源Skill</a>
+<a class="art" href="../ext/e224.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
+<a class="art" href="../ext/e225.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
+<a class="art" href="../ext/e226.html">内容审核控制台嵌入式 MCP Server 落地方案</a>
+<a class="art" href="../ext/e227.html">MCP 开发指北(Java) — 组内分享</a>
+<a class="art" href="../ext/e228.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
+<a class="art" href="../ext/e229.html">html-anything — Agent 时代的 HTML 编辑器</a>
+<a class="art" href="../ext/e230.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
+<a class="art" href="../ext/e231.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
+<a class="art" href="../ext/e232.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
+<a class="art" href="../ext/e233.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
+<a class="art" href="../ext/e234.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
+<a class="art" href="../ext/e235.html">Claude Code Prompt Cache 配置实战</a>
+<a class="art" href="../ext/e236.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
+<a class="art" href="../ext/e237.html">待考证 Claude Code Skill / MCP 清单</a>
+<a class="art" href="../ext/e238.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
+<a class="art" href="../ext/e239.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
+<a class="art" href="../ext/e240.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
+<a class="art" href="../ext/e241.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
+<a class="art" href="../ext/e242.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
+<a class="art" href="../ext/e243.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
+<a class="art" href="../ext/e244.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
+<a class="art" href="../ext/e245.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
+<a class="art" href="../ext/e246.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
+<a class="art" href="../ext/e247.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
+<a class="art" href="../ext/e248.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<a class="art" href="../ext/e249.html">Obsidian 必装的 9 个 AI Agent Skill</a>
+<a class="art" href="../ext/e250.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
+<a class="art" href="../ext/e251.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
+</details>
+<details class="cat"><summary>认知与思维 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e252.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
+<a class="art" href="../ext/e253.html">高性价比人生指南（全书归档）</a>
+<a class="art" href="../ext/e254.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
+<a class="art" href="../ext/e255.html">单Agent思维链惯性与Agent Team挑战者架构</a>
+<a class="art" href="../ext/e256.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
+<a class="art" href="../ext/e257.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
+<a class="art" href="../ext/e258.html">普通人怎样在6-12个月内改变自己</a>
+<a class="art" href="../ext/e259.html">一天一小时，365天后，你的人生会彻底翻篇</a>
+<a class="art" href="../ext/e260.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
+<a class="art" href="../ext/e261.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
+<a class="art" href="../ext/e262.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
+<a class="art" href="../ext/e263.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
+</details>
+<details class="cat"><summary>写作与创作 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e264.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e265.html">全网首发！AI动态漫制作全流程</a>
+<a class="art" href="../ext/e266.html">宫斗宅斗文创作五大核心技巧：爽点密集化+人设标签化+设定易懂化+情感共鸣化+细节代入感</a>
+<a class="art" href="../ext/e267.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
+<a class="art" href="../ext/e268.html">短视频不是拼勤奋，是拼方向和系统</a>
+</details>
+<details class="cat"><summary>商业与变现 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e269.html">一口气讲明白：中国金融机构体系的底层逻辑</a>
+<a class="art" href="../ext/e270.html">50岁左右及以上父母的保障配置</a>
+<a class="art" href="../ext/e271.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
+<a class="art" href="../ext/e272.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
+<a class="art" href="../ext/e273.html">AI 五层价值链：收入往上走资本往下走，钱在大多数人看不见的基础设施层</a>
+</details>
+<details class="cat"><summary>待分拣 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e274.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
+<a class="art" href="../ext/e275.html">2025游戏安全风控指南</a>
+<a class="art" href="../ext/e276.html">我用Obsidian搭了一个会自己生长的个人网</a>
+<a class="art" href="../ext/e277.html">AI时代，普通人用Mac mini能干点啥</a>
+<a class="art" href="../ext/e278.html">Dan Koe：用AI做一个自己的人生模型</a>
+<a class="art" href="../ext/e279.html">【闪客】Computer Use真的在看你的屏幕吗</a>
+<a class="art" href="../ext/e280.html">GitHub技巧｜项目一键可视化</a>
+<a class="art" href="../ext/e281.html">焚诀，提示词模板，思维方式</a>
+<a class="art" href="../ext/e282.html">jev-chat-jarvis：装在手机上的对话副驾</a>
+<a class="art" href="../ext/e283.html">永远相信统计学 永远相信大数法则</a>
+<a class="art" href="../ext/e284.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
+</details>
+</details></nav></aside><div class="mask" id="mask"></div>
+  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</h1><div class="meta">📅 2026-09-15 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/pS3UX6_XWcqjNCYxtNzNjA" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260915-EVADE-Bench电商规避性内容检测基准.md</div><div class="md"><h1>EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</h1>
+<blockquote><p>来源：微信公众号 归档日期：2026-09-15 抓取状态：成功 原文字符：13351｜配图：7 张</p></blockquote>
+<h2>摘要速览</h2>
+<ul><li>核心论断：黑灰产绕过的是规则缝隙，因此大模型风控的重点不只在模型，还在规则分类与 Prompt 设计。</li><li>论文 EVADE-Bench（SIGIR 2026，arXiv 2505.17654）发布首个专家整理的中文多模态电商规避内容数据集，含 Single-Violation 与 All-in-One 两条评测赛道，并系统评测 26 个开源/闭源 LLM 与 VLM 建立首个基线。</li><li>最反直觉的结论：规则更长、类别更多（26 类）时，很多模型反而答得更好——提升来自规则边界澄清，而非提示变长。</li><li>模型的主要失误不是"没看见"，而是"不会适用规则"；识别出风险线索 ≠ 完成合规判断。</li><li>工程建议：语义歧义交给模型，标签存在性/重复/互斥等确定性约束交给程序校验。</li></ul>
+<h2>核心内容</h2>
+<h3>1. 数据集与任务设计</h3>
+<p>以中国广告法律规范为基础，评估模型能否按明确政策识别真实电商中的规避性内容。输入分两类：文本任务（商品文本 + 规则提示 → LLM）、图像任务（商品图像 + 规则提示 → VLM）；图像可能内嵌文字宣传，需同时识别文字并把文字、画面与规则结合推理。</p>
+<p>领域与规模：塑形（202 文本 / 2134 图）、女性健康（211 / 1295）、增高（553 / 3424）、男性健康（652 / 1738）、减重（442 / 1203）、健康补充剂（773 / 4167），合计 2833 条文本、13961 张图像。</p>
+<p>标注流程（论文的核心方法论价值）：</p>
+<ol><li>预处理：按样本 ID 去重。</li><li>聚类与采样：CLIP 分别编码文本与图像，K-Means 聚 300 类，每类最多随机抽 60 个样本。</li><li>模型分歧筛选：多规模模型预测，若含最小模型在内全部一致则视为简单样本剔除；存在分歧的保留为困难集。</li><li>专家标注与复核：专家独立标注（标注时不能看到模型预测），再与强模型预测（文本 GPT-o1mini / DeepSeek-R1 / QwenMax，视觉 GPT-4o / Claude-3.7 / Gemini-2.5-Pro）比对定位不一致案例，必要时五位专家多数意见定标签。</li></ol>
+<p><strong>关键前提</strong>：这是"困难样本基准"，不是线上随机抽样，准确率不能直接当作真实流量准确率。</p>
+<h3>2. 两种规则任务</h3>
+<ul><li><strong>Single-Violation</strong>：仅给某领域规则，考察局部上下文细粒度判断。问题在于领域间语义交叉（减重产品声称改善健康、健康产品把体重管理作为效果）。</li><li><strong>All-in-One</strong>：六类规则合并为统一指令、合并语义重叠规则，提示从约 1K 增至约 7K Token，标签从单领域平均约 5 类扩到 26 类。分「简化指令」（仅必要定义，观察自主推理）与「详细指令」（含正反例约束推理）。注意 All-in-One 同时改变了规则覆盖范围、标签数量和重叠规则组织方式，因此不是严格的"只换提示长度"对照实验。</li></ul>
+<p>输出格式强制 JSON（分析 / 关键词 / 结论），结论为 A~Z 中一个或多个选项，Z 表示其他/无违规。</p>
+<h3>3. 两项评测指标</h3>
+<ul><li>完全准确率：预测标签集合与标准答案完全一致才记正确。</li><li>部分准确率：至少重合一个标签即记正确（容忍类别语义交叉）。</li></ul>
+<p>两者都不等同违规召回率：标准答案 {A}、模型输出 {A,B,C} 时完全准确率 0、部分准确率 1，部分准确率本身不惩罚多报。</p>
+<h3>4. 反直觉结论</h3>
+<ol><li><strong>真实审核难在"内容没直说、规则也不好套"</strong>：同词可出现在介绍、引述、否定或夸大中；图文组合可改变含义；黑灰产会拆词、用间接表达替代明确承诺。审核模型必须"先看清（识别图中文字/物体/位置关系）→ 再看懂（省略、暗示、隐喻、图文组合）→ 最后判对（映射规则并守标签边界）"。</li><li><strong>规则更长、类别更多，模型反而答得更好</strong>：Qwen2.5-7B 从单领域规则到整合规则+详细指令，部分准确率 38.48%→53.18%（+14.70pp），完全准确率 27.18%→50.60%（+23.42pp）。解释是规则边界清晰后决策歧义减少。对企业团队的启发：在买更贵模型之前先检查——是否存在多个名字对应近似含义的标签？是否缺少易混淆类别的区分条件？是否有未写明的优先级和例外？是否要求模型遵守从未明确告知的约束？</li><li><strong>主要问题不是"没看见"，而是"不会适用规则"</strong>：论文 GPT-4o 错误分析样本中，46 个属规则查找失败、33 个属规则理解失败，合计 79 个（分母是分析的错误案例，不能改写成"79% 都错在规则上"）。另外 Z.other（无违规）不能与违规标签同时出现，但部分模型会同时输出——这是输出违反分类体系逻辑约束，不是视觉理解问题。</li><li><strong>"让模型多想一会儿"不是万能方案</strong>：Qwen3-32B 开思考模式后，部分准确率 48.71%→47.86%、完全准确率 26.16%→24.71%。加更多正反例也不是普遍有效（有些模型在详细指令下提高，有些下降）。这些都该当作需要验证的干预，而非默认成立的答案。</li><li><strong>感知与规则推理分工</strong>：两阶段方案（VLM 先把图描述成文字，LLM 再据文字与规则分类）部分组合有效。GPT-4o 直接判断 59.61%/29.14% → GPT-4o 描述 + GPT-4.1 判断 61.65%/32.76%；Claude-3.7 直接判断 59.07%/24.53% → Claude-3.7 描述 + GPT-4.1 判断 62.55%/30.97%。但并非所有组合都提升，收益究竟来自分解、模型差异还是额外计算仍需更严格对照。</li><li><strong>分解的审计价值</strong>：中间描述没提到关键文字 → 问题在感知；描述完整但引错条款 → 问题在规则检索/理解；条款与判断都对却输出互斥标签 → 问题在结果生成/校验。改进方向是让第一阶段输出可追溯证据（原始文字、区域、不确定项），证据不足时允许回看原图或转人工。</li><li><strong>诊断框架</strong>：审核系统表现不佳时依次问——没看到关键证据？看到了没理解隐含意义？理解了没找到规则？找到规则用错条件？结论正确但输出违反标签约束？这比"模型还不够强"更有行动价值，因为分别指向感知增强、语义训练、规则检索、分类体系重构、确定性校验。</li></ol>
+<h3>5. 基线水平</h3>
+<p>单领域任务中，文本模型最高完全准确率 31.59%（专家 57.03%），VLM 最高 26.96%（专家 51.41%）。专家也未满分，说明任务本身存在较高难度与判断分歧。</p>
+<h2>可执行启发</h2>
+<ul><li>先修规则再换模型：上线前自查标签同义重复、类别边界、隐式优先级与例外，这通常比升级模型便宜。</li><li>确定性校验（标签存在性、重复、互斥）由程序执行，模型只承担语义歧义判断，便于验证。</li><li>评测集必须区分"困难样本基准"与"线上真实分布"，不要把基准分数直接当作线上误杀率/漏检率。</li><li>生产落地需补齐误杀与漏检指标、分类别表现、证据充分性、人工复核比例、延迟与成本。</li><li>做多阶段 Agent 时保留中间证据链（原始识别结果 + 不确定项），让错误可定位、可回看。</li></ul>
+<h2>我的想法</h2>
+<p>（待补充）</p>
+<h2>参考</h2>
+<ul><li>数据：https://huggingface.co/datasets/koenshen/EVADE-Bench</li><li>论文：https://arxiv.org/pdf/2505.17654 ｜ https://arxiv.org/html/2505.17654v2</li></ul>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p>
+<h2>原文沉淀</h2>
+<h3>目录</h3>
+<ul><li><a href="#一数据集与任务如何把业务问题转化为评测">一、数据集与任务：如何把业务问题转化为评测</a></li><li><a href="#1数据集集概览">1、数据集集概览</a></li><li><a href="#2数据收集与标注流程">2、数据收集与标注流程</a></li><li><a href="#3两种规则识别任务">3、两种规则识别任务</a></li><li><a href="#1single-violation单违规类型任务">1）Single-Violation：单违规类型任务</a></li><li><a href="#2all-in-one规则整合任务">2）All-in-One：规则整合任务</a></li><li><a href="#4两项评测指标">4、两项评测指标</a></li><li><a href="#1完全准确率">1）完全准确率：</a></li><li><a href="#2部分准确率">2）部分准确率：</a></li><li><a href="#二几个反直觉的结论">二、几个反直觉的结论</a></li><li><a href="#1真实世界的审核难在内容没直说规则也不好套">1、真实世界的审核，难在“内容没直说，规则也不好套”</a></li><li><a href="#2最反直觉的结果规则更长类别更多模型却答得更好">2、最反直觉的结果：规则更长、类别更多，模型却答得更好</a></li><li><a href="#3模型的主要问题可能不是没看见而是不会适用规则">3、模型的主要问题，可能不是“没看见”，而是“不会适用规则”</a></li><li><a href="#4让模型多想一会儿也不是万能方案">4、“让模型多想一会儿”也不是万能方案</a></li><li><a href="#5让看图和判规则分工能不能更可靠">5、让“看图”和“判规则”分工，能不能更可靠？</a></li><li><a href="#6比涨分更值得关注的是可以定位错误">6、比涨分更值得关注的，是“可以定位错误”</a></li><li><a href="#7这篇论文真正改变的是我们诊断审核系统的方式">7、这篇论文真正改变的，是我们诊断审核系统的方式</a></li><li><a href="#往期精彩">往期精彩：</a></li></ul>
+<p><img alt="图片" src="../../_assets/20260915-EVADE-Bench电商规避性内容检测基准/img-001-ed810864.png"></p>
+<p>大家好，我是小伍哥，今天给大家分享一篇大模型在电商风控领域应用的论文，虽然里面用到的模型不是最新的，但是论文涉及到的【<strong>样本标注流程、多种规则试验形式、多种推理试验方案、思考模式和非思考模式对比，RAG和SFT效果提升对比</strong>】等等，还是非常值得借鉴的，提供的多模态数据集，也是难得的学习资源。</p>
+<p>论文三条贡献：</p>
+<ul><li>发布 EVADE—首个专家整理的<strong>中文多模态电商规避内容数据集</strong>，含 Single-Violation 与 All-in-One 两条评测赛道，考察不同政策语境下的推理能力。</li></ul>
+<ul><li>证明更清晰的规则分类能显著提升模型一致性、降低误判，凸显基准设计本身的重要性。</li></ul>
+<ul><li>系统评测 26 个开源/闭源 LLM 与 VLM，是该问题首个系统性基线。</li></ul>
+<p>英文标题：<em>EVADE-Bench: Multimodal Benchmark for Evaluating and Enhancing Evasive Content Detection。</em></p>
+<p>中文译名：EVADE-Bench：用于评估与提升<strong>规避性内容检测</strong>能力的多模态基准。</p>
+<p>数据地址：https://huggingface.co/datasets/koenshen/EVADE-Bench</p>
+<p>论文地址：https://arxiv.org/pdf/2505.17654</p>
+<p>论文地址：https://arxiv.org/html/2505.17654v2</p>
+<p>作者来自中国科学院深圳先进技术研究院、中国科学院大学、阿里巴巴集团、新南威尔士大学等机构。论文都多个版本，最新的文发表于 <strong>SIGIR 2026</strong>，正文标注的 arXiv 版本为 <strong>2505.17654v4，2026 年 5 月 27 日</strong>。</p>
+<p>先看几个样本感受下：</p>
+<p><img alt="图片" src="../../_assets/20260915-EVADE-Bench电商规避性内容检测基准/img-002-1b1ff566.png"></p>
+<h3>一、数据集与任务：如何把业务问题转化为评测</h3>
+<p>大模型的应用，数据集的标注和准备，以及如何把业务问题转换成可优化、可执行的识别方案、对应的评测方案，都是比较重要的一个环节，要不然没法进行有效的效果评估和识别部署。论文也提供了一定的思路。</p>
+<h3>1、数据集集概览</h3>
+<p><img alt="图片" src="../../_assets/20260915-EVADE-Bench电商规避性内容检测基准/img-003-0522c547.png"></p>
+<p>EVADE-Bench 以中国广告法律规范为基础，评估模型能否按照明确政策，识别真实电商中的规避性内容。其输入分为两类：</p>
+<ul><li><strong>文本任务：商品文本与对应规则提示拼接，交由 LLM 判断</strong></li><li><strong>图像任务：商品图像与对应规则提示共同输入 VLM</strong></li></ul>
+<p>这里的图像不仅包含视觉元素，也可能嵌入文字宣传。因此，VLM 既需要识别图中文字，又需要将文字、画面与规则结合起来推理。</p>
+<table><thead><tr><th>风险领域</th><th>文本数</th><th>图像数</th><th>规则提示 Token 数</th></tr></thead><tbody><tr><td>塑形</td><td>202</td><td>2,134</td><td>614</td></tr><tr><td>女性健康</td><td>211</td><td>1,295</td><td>652</td></tr><tr><td>增高</td><td>553</td><td>3,424</td><td>953</td></tr><tr><td>男性健康</td><td>652</td><td>1,738</td><td>1,123</td></tr><tr><td>减重</td><td>442</td><td>1,203</td><td>1,364</td></tr><tr><td>健康补充剂</td><td>773</td><td>4,167</td><td>3,379</td></tr><tr><td><strong>合计</strong></td><td><strong>2,833</strong></td><td><strong>13,961</strong></td><td>—</td></tr></tbody></table>
+<h3>2、数据收集与标注流程</h3>
+<p><img alt="图片" src="../../_assets/20260915-EVADE-Bench电商规避性内容检测基准/img-004-c7c732df.png"></p>
+<p>作者最初收集了：</p>
+<ul><li>25,380 条原始文本；</li></ul>
+<ul><li>48,000 张原始图像。</li></ul>
+<p>随后采用多阶段流程处理。</p>
+<p><strong>阶段一：预处理。按照样本 ID 去重。</strong></p>
+<p><strong>阶段二：聚类与采样。分别使用 CLIP 对文本和图像编码，通过 K-Means 聚为 300 类，每类最多随机抽取 60 个样本，以增加样本多样性。</strong></p>
+<p><strong>阶段三：模型分歧筛选。使用不同规模的模型预测样本。如果包括最小模型在内的全部模型预测一致，该样本被视为相对简单，不进入待标注困难集；模型存在分歧的样本则保留。</strong></p>
+<p><strong>阶段四：专家标注与复核。专家独立标注，再由流程将标注结果与强模型预测进行比较，定位不一致案例。参与比较的文本模型包括 GPT-o1mini、DeepSeek-R1、QwenMax；视觉模型包括 GPT-4o、Claude-3.7 和 Gemini-2.5-Pro。对不一致案例进行迭代复核，必要时由五位专家参与，并以多数意见确定标签。</strong></p>
+<p>作者特别强调：<strong>专家执行标注时不能看到模型预测。这是一套“困难样本基准”，不是线上随机抽样。</strong>该设计能够集中暴露模型短板，但也意味着：论文中的准确率不能直接当作模型在整个平台真实流量上的准确率。</p>
+<p><img alt="图片" src="../../_assets/20260915-EVADE-Bench电商规避性内容检测基准/img-005-b5819159.png"></p>
+<h3>3、两种规则识别任务</h3>
+<h3>1）Single-Violation：单违规类型任务</h3>
+<p>模型在某一业务领域的规则提示下判断样本。例如，塑形领域使用 614 Token 的规则，评估 202 条文本和 2134 张图像。它主要考察模型在局部上下文中进行细粒度判断的能力。这一设置的问题是：不同领域存在语义交叉。例如，减重产品可能声称改善健康，而健康产品也可能将体重管理作为效果之一。</p>
+<p>- - - - - - - - - - - - - - - - - -</p>
+<pre><code># 任务描述
+请你根据给定信息和关键词，仔细判断对应的管控类型。给出最终的选项（一个到多个不等）。都不相关返回 Z.其他。
+
+# 管控类型
+A. 丰胸功效直接描述：内容直接或间接表达使用商品后能达到丰胸效果，包括但是不限于使用明确指向“增大”或“变丰满”的词语（例如：丰胸、丰乳、丰盈、增大、变大、饱满、圆润、波涛汹涌、波霸等）、罩杯变化（例如A-&gt;B/C/D/E、罩杯升级、升杯）、通过身材变化暗示（例如傲人身材、傲人双峰、凹凸有致、前凸后翘）、改善胸部不良状态（例如改善/告别 飞机场、太平公主、搓衣板、平板身材、发育不良、干瘪、萎缩、缩水、下垂、松弛）
+B. 丰胸精准化功效承诺：内容使用精确的数字、用量、时间、使用前后效果对比等量化方式，来承诺或保证使用商品后能够达到特定程度的丰胸效果。例如：一粒胸大、100%变大、3天告别飞机场等
+Z. 其他：当给定信息与上述选项均无明显关联时选择此项。
+
+# 输出格式
+输出必须严格按照以下JSON格式，包括“分析”、“关键词”、“结论”字段：
+</code></pre>
+<p>{ "分析": "让我们一步一步地思考，......", "关键词": ["关键词1", "关键词2", ...], "结论": "A~Z中的一个或多个选项" }</p>
+<pre><code></code></pre>
+<h3>2）All-in-One：规则整合任务</h3>
+<p>将六类规则合并为统一指令，并合并语义重叠的规则。原文将提示长度变化概括为从约 1K 增加至约 7K Token，分类标签则从单领域平均约 5 类扩展为 <strong>26 类</strong>。注意，这里的单领域提示长度实际上随领域变化，表 1 中约为 614—3,379 Token。规则整合任务进一步分为：</p>
+<table><thead><tr><th>设置</th><th>提示内容</th><th>目的</th></tr></thead><tbody><tr><td>简化指令</td><td>必要定义，基本不加入额外示例</td><td>观察模型自主推理表现</td></tr><tr><td>详细指令</td><td>定义、正例与反例</td><td>通过示例约束推理，尝试提高稳定性</td></tr></tbody></table>
+<p>All-in-One 并非单纯“把提示写长”。它同时改变了：</p>
+<ul><li>规则覆盖范围；</li></ul>
+<ul><li>标签数量；</li></ul>
+<ul><li>重叠规则的组织方式。</li></ul>
+<p>因此，更准确的结论是“<strong>规则整合与边界澄清后，模型表现改善</strong>”，而不是“更长的提示天然更好”。下面是参考，不完整，删除了敏感字段：</p>
+<p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
+<pre><code># 任务描述
+请你根据给定信息和关键词，仔细判断对应的管控类型。给出最终的选项（一个到多个不等）。都不相关返回 Z.其他。
+
+# 管控类型
+A. 增高功效描述：
+- 包括但不限于：增高、长高、长个、蹭蹭长/涨、xx岁还能长、（身高）用了高/吃了高/喝了高/贴了高、吃出/喝出/补出/贴出高个子、描述商品使用前和使用后身高差距。注意：若涉及未成年人进行此类表达，则不管控，其中未成年人相关描述包括但不限于：孩子、儿童、宝宝、青少年、发育、青春期、同龄、成长缓慢、小于等于18岁、出现未成年人的形象、身穿校服等；
+- 包括但不限于：矮个子专用、适合矮个子、告别矮小、对矮小说不/say no/说拜拜/say goodbye、不做矮个子/矮XX、不再矮、X年不长、身高不够、矮小、身高+数字、不足+数字、数字+以下等间接表达身高矮小；
+- 包括但不限于使用以下词汇来暗示身高增长：腰以下全是腿、吃出大长腿、个头/身高不掉队；
+- 包括但不限于使用如下违反科学原理的方式来增长身高：打开骨闭合/骨骼闭合、突破遗传、二次发育/破高；
+- 包括但不限于使用数字/时间/百分数来承诺使用商品后能达到确定的增高效果：一喝长高、一粒长高、不管多矮，只用3支、一周长高、100%长高、睡前涂，睡醒长；
+- 包括但不限于使用以下词汇来描述身高增高、腿型矫正：鞋垫+磁石/磁疗/火疗；鞋垫+矫正/矫形/纠正/X型腿/O型腿/罗圈腿/腿直了；带有黑色磁石的鞋垫；
+
+B. 丰胸功效描述：
+- 包括但不限于使用指向“增大”或“变丰满”的词语：例如：丰胸、丰乳、丰盈、增大、变大、饱满、圆润、波涛汹涌、波霸等；
+- 包括但不限于描述罩杯变化的词语：例如A-&gt;B/C/D/E、罩杯升级、升杯；
+- 包括但必不限于使用身材变化的词语：例如傲人身材、傲人双峰、凹凸有致、前凸后翘；
+- 包括但不限于使用改善胸部不良状态的词语：例如改善/告别 飞机场、太平公主、搓衣板、平板身材、发育不良、干瘪、萎缩、缩水、下垂、松弛；
+- 包括但不限于使用精确的数字、用量、时间、使用前后效果对比等量化方式，来承诺或保证使用商品后能够达到特定程度的丰胸效果。例如：一粒胸大、100%变大、3天告别飞机场等；
+
+C. 特定减肥商品：
+- 包括以下商品：例如星空咖啡、韩国星空咖啡、泰国果蔬 slim7day局部减肥药、slim7day、无限畅、纤so、纤姿、司美格鲁肽、司美、口服司美、利拉鲁肽、索马鲁肽、格鲁肽、glp-1；
+
+E. 壮阳功效描述：
+- 包括以下商品：嗨三天、
+- 包括但不限于直接描述产……
+- 包括但不限于出现壮阳暗……
+
+F. 缩阴功效描述：
+- 包括但不限于直接或…………
+
+# 输出格式
+输出必须严格按照以下JSON格式，包括“分析”、“关键词”、“结论”字段：
+</code></pre>
+<p>{ "分析": "让我们一步一步地思考，......", "关键词": ["关键词1", "关键词2", ...], "结论": "A~Z中的一个或多个选项" }</p>
+<pre><code></code></pre>
+<h3>4、两项评测指标</h3>
+<ul><li>(N) 为样本总数；</li></ul>
+<ul><li>(C_i) 为模型预测的标签集合；</li></ul>
+<ul><li>(G_i) 为标准答案标签集合。</li></ul>
+<h3>1）完全准确率：</h3>
+<p><img alt="图片" src="../../_assets/20260915-EVADE-Bench电商规避性内容检测基准/img-006-1171d91d.png"></p>
+<p>只有预测集合与标准答案完全一致，才记为正确。</p>
+<h3>2）部分准确率：</h3>
+<p><img alt="图片" src="../../_assets/20260915-EVADE-Bench电商规避性内容检测基准/img-007-118effcd.png"></p>
+<p>只要预测集合与标准答案至少重合一个标签，就记为正确。</p>
+<p>作者认为：</p>
+<ul><li>完全准确率更严格地衡量模型与人工判断的一致性；</li></ul>
+<ul><li>部分准确率能够容忍违规类别之间的语义交叉，更贴近某些实际审核需求。</li></ul>
+<p><strong>部分准确率不等于违规召回率。</strong></p>
+<p>例如，标准答案为 {A}，模型输出 {A, B, C}：</p>
+<ul><li>完全准确率记 0；</li></ul>
+<ul><li>部分准确率记 1。</li></ul>
+<p>因此，部分准确率本身不惩罚所有多报标签的行为。它不能单独说明误杀率、漏检率或者实际审核成本。</p>
+<h3>二、几个反直觉的结论</h3>
+<h3>1、真实世界的审核，难在“内容没直说，规则也不好套”</h3>
+<p>很多人理解的内容审核，是寻找明显的违规词或危险图像。但真实电商不是一道关键词检索题。同样的词语，可能出现在正常介绍、引述、否定句或夸大宣传中；同样的画面，也可能因为文字搭配不同而传达完全不同的意思。</p>
+<p>更关键的是，有些内容会被有意加工：把词语拆开，用间接表达替代明确承诺，或者让文字与视觉元素共同传达某种暗示。</p>
+<p>EVADE-Bench 将这类输入称为 <strong>Evasive Content，规避性内容</strong>。它不是简单让模型“说错话”，而是试图让审核系统把经过包装的违规宣传判成正常内容。搜索结果中对该基准“检测误导性广告”的介绍，也对应这一业务背景。</p>
+<p>这使得审核模型必须完成三件不同的事：</p>
+<p><strong>先看清。识别图片中的文字、物体、位置和关系。</strong></p>
+<p><strong>再看懂。理解省略、暗示、隐喻，以及图文组合后的真实含义。</strong></p>
+<p><strong>最后判对。把这些含义映射到具体规则，同时遵守标签之间的边界和约束。任何一步失误，都可能导致最终判断失败。为了评估这条完整链路，作者构建了包含 </strong><strong>2,833 条文本、13,961 张图像</strong> 的数据集，覆盖塑形、女性健康、增高、男性健康、减重和健康补充剂六个领域。</p>
+<p>这些样本来自真实电商平台，但不是对线上流量的简单随机抽样。作者先进行去重、聚类和采样，再利用多个模型的预测分歧筛出困难案例，最后交由专家标注复核。因此，理解后文成绩时，要记住一个前提：</p>
+<p><strong>这是一套集中暴露模型短板的困难题库，不是平台日常流量的缩影。模型在这里得分不高，说明存在值得研究的薄弱点；但不能直接推断它上线后也会以相同的比例出错。</strong></p>
+<p>** **</p>
+<h3>2、最反直觉的结果：规则更长、类别更多，模型却答得更好</h3>
+<p>论文设计了两种评测方式。</p>
+<p>第一种叫 <strong>Single-Violation</strong>。可以将其理解为：只给模型某个领域的规则，让它在局部规则体系内判断。</p>
+<p>第二种叫 <strong>All-in-One</strong>。作者把六个领域的规则放到一起，同时整合语义重叠的分类，形成统一规则体系。</p>
+<p>后者听起来应该更难：</p>
+<ul><li>提示更长；</li></ul>
+<ul><li>涉及的领域更多；</li></ul>
+<ul><li>标签数量增加到 26 类。</li></ul>
+<p>然而，很多模型的成绩反而提高了。以 Qwen2.5-7B 为例：</p>
+<table><thead><tr><th>指标</th><th>单领域规则</th><th>整合规则＋详细指令</th><th>变化</th></tr></thead><tbody><tr><td>部分准确率</td><td>38.48%</td><td>53.18%</td><td>+14.70 个百分点</td></tr><tr><td>完全准确率</td><td>27.18%</td><td>50.60%</td><td>+23.42 个百分点</td></tr></tbody></table>
+<p><em>来源：原文表2、表4。这里需要解释两个指标。</em></p>
+<p><strong>部分准确率</strong>：模型预测的标签与标准答案至少有一个重合。</p>
+<p><strong>完全准确率</strong>：模型输出的整组标签与标准答案完全一致。</p>
+<p>因此，从 27.18% 到 50.60% 的变化，意味着在新的规则体系下，模型更频繁地输出了与标准答案完全一致的标签集合。为什么会这样？</p>
+<p>论文给出的核心解释是：<strong>规则边界清晰了。</strong></p>
+<p>在真实业务中，多个部门、品类或流程往往分别积累自己的规则。每条规则单独看似乎都合理，放到一起却可能出现同义重复、范围交叉和例外冲突。</p>
+<p>对模型来说，真正增加难度的未必是字数，而是：同一条内容，为什么看起来同时符合三种分类，而标准答案却只认可其中一种？从这个角度看，规则整合并不是给模型“塞更多材料”，而是在减少决策歧义。不过，也不能把这一结果解释得过头。All-in-One 同时改变了规则范围、标签体系和重叠关系。因此，这不是严格意义上“同一道题只换了提示长度”的对照实验。</p>
+<p>更稳妥的结论是：<strong>在这套基准中，重新组织规则与标签后，模型整体更容易作出符合标注体系的判断。</strong>对于企业团队，这个发现依然重要。在购买更昂贵的模型之前，值得先检查：</p>
+<ul><li>是否存在多个名字对应近似含义的标签？</li></ul>
+<ul><li>是否缺少容易混淆类别的区分条件？</li></ul>
+<ul><li>是否有未写明的优先级和例外？</li></ul>
+<ul><li>是否要求模型遵守了从未明确告诉它的约束？</li></ul>
+<p><strong>模型能力有上限，规则含糊也有成本。后者往往更容易被忽视。</strong></p>
+<h3>3、模型的主要问题，可能不是“没看见”，而是“不会适用规则”</h3>
+<p>论文对模型错误进行了分类。有些错误确实发生在感知阶段：</p>
+<ul><li>没看到关键文字；</li></ul>
+<ul><li>被遮挡或变形影响识别；</li></ul>
+<ul><li>没理解刻意省略的信息；</li></ul>
+<ul><li>生成了图片中不存在的内容。</li></ul>
+<p>但另一类错误更值得注意：</p>
+<p>模型已经识别出了相关信息，却没找到正确规则，或者误解了规则的适用方式。</p>
+<p>在论文列出的 GPT-4o 错误分析样本中，46 个错误属于规则查找失败，33 个属于规则理解失败，合计 79 个。（原文表5）这里的分母是表中分析的错误案例，<strong>不是整个测试集</strong>。它不能被改写为“GPT-4o 有 79% 的判断都错在规则上”。但这个错误构成仍然给出了一个明确提醒：</p>
+<p><strong>识别出风险线索，不等于完成了合规判断。</strong></p>
+<p>一个审核模型可能知道“这句话在暗示某种效果”，却不知道：</p>
+<ul><li>哪一条规则适用；</li></ul>
+<ul><li>相近规则之间如何区分；</li></ul>
+<ul><li>当前案例是否满足必要条件；</li></ul>
+<ul><li>有没有例外；</li></ul>
+<ul><li>多个标签能否同时成立。</li></ul>
+<p>论文还提到一个很具体的例子。</p>
+<p>数据集中的 <code>Z.other</code> 表示无违规，它不能与违规标签同时出现。但部分模型会同时输出“无违规”和某个违规标签。（原文 §5.4）</p>
+<p>这并不是视觉理解问题，而是输出违反了分类体系的逻辑约束。</p>
+<p>由此可以得到一个超出论文实验、但很实用的工程建议：不要让概率生成承担所有确定性校验。</p>
+<p>标签是否存在、是否重复、是否互斥，往往可以由程序可靠检查。模型负责处理语义歧义，程序负责执行明确约束，通常比要求模型在一段自由文本中包办一切更容易验证。</p>
+<h3>4、“让模型多想一会儿”也不是万能方案</h3>
+<p>经常不准的时候，我们会开个思考模式，论文还比较了 Qwen3 的思考与非思考模式。Qwen3-32B 开启思考模式后：</p>
+<ul><li>部分准确率从 48.71% 降至 47.86%；</li></ul>
+<ul><li>完全准确率从 26.16% 降至 24.71%。（原文表3）</li></ul>
+<p>这不能说明推理能力没有价值。它说明的是：<strong>开启思考模式并不保证模型能够弥补证据缺失，或自动修复含糊的规则边界。</strong>同样，加入更多正反例也不是普遍有效。有些模型在详细指令下提高，有些则下降。（原文表4）</p>
+<p>所以，可靠的审核系统不能只靠一个简单配方：“提示更长一点”“例子更多一点”“思考再深一点”。这些都应该被当作需要验证的干预，而不是默认成立的答案。</p>
+<h3>5、让“看图”和“判规则”分工，能不能更可靠？</h3>
+<p>既然错误分布在不同阶段，一个自然想法是：<strong>能不能把任务拆开？</strong></p>
+<p>论文尝试了一个两阶段方案：</p>
+<p>先由 VLM 把图片描述成文字，再由 LLM 根据文字与规则完成分类。</p>
+<p>第一阶段使用 GPT-4o 或 Claude-3.7 描述图片。</p>
+<p>第二阶段使用 GPT-4.1、Qwen3-235B 或 DeepSeek-R1 推理，而且不再直接访问原始图片。（原文 §5.5）</p>
+<p>部分组合取得了不错的结果。</p>
+<table><thead><tr><th>方案</th><th>部分准确率</th><th>完全准确率</th></tr></thead><tbody><tr><td>GPT-4o 直接判断</td><td>59.61%</td><td>29.14%</td></tr><tr><td>GPT-4o 描述 → GPT-4.1 判断</td><td>61.65%</td><td>32.76%</td></tr><tr><td>Claude-3.7 直接判断</td><td>59.07%</td><td>24.53%</td></tr><tr><td>Claude-3.7 描述 → GPT-4.1 判断</td><td>62.55%</td><td>30.97%</td></tr></tbody></table>
+<p><em>来源：原文表6；比较均使用该表内的对应基线。其中，Claude-3.7 描述、GPT-4.1 判断的方案，完全准确率比 Claude-3.7 直接判断高出 </em><strong>6.44 个百分点</strong>。</p>
+<p>这支持了一个值得探索的方向：将感知与规则推理分开，可能让各阶段更好地发挥作用。</p>
+<p>但不要急着得出“多智能体一定更强”的结论。</p>
+<p>首先，这里的“多智能体”主要是两个阶段的串行分工，并不是复杂的自主协作系统。</p>
+<p>其次，并非所有组合都在所有指标上提升。GPT-4o 描述后交给 Qwen3-235B 或 DeepSeek-R1，部分准确率提高，但完全准确率略有下降。（原文表6）</p>
+<p>再次，这种方案同时更换了推理模型，并增加了调用。收益究竟来自分解、模型差异还是额外计算，还需要更严格的对照。</p>
+<h3>6、比涨分更值得关注的，是“可以定位错误”</h3>
+<p>从系统设计角度看，分解还有一个潜在价值：更容易审计。如果中间描述没有提到图片中的关键文字，问题可能出在感知阶段。如果描述完整，但引用了错误条款，问题可能出在规则检索或理解阶段。如果条款和判断都正确，却输出了互斥标签，问题可能出在结果生成或校验阶段。</p>
+<p>这种可定位性，是改进生产系统的重要基础。当然，中间描述也会带来新的风险：它可能遗漏文字与图像的位置关系、限定语或其他关键证据。第二阶段如果看不到原图，就未必有机会纠正。因此，一个值得进一步验证的实现方向是：<strong>让第一阶段输出可追溯的证据，而不只是流畅的概括。</strong></p>
+<p>例如保留识别到的原始文字、对应区域、不确定项，并在证据不足时允许回看原图或转交人工。这是基于论文的工程延伸，不是本文已经验证的实验结论。</p>
+<h3>7、这篇论文真正改变的，是我们诊断审核系统的方式</h3>
+<p>EVADE-Bench 不是一篇证明“某个模型已经可以完全替代审核员”的论文。恰恰相反，它表明：即使强模型，在困难的中文规避内容上，也会暴露明显短板。</p>
+<p>在单领域任务中：</p>
+<ul><li>文本模型最高完全准确率为 31.59%，专家为 57.03%；</li></ul>
+<ul><li>视觉语言模型最高完全准确率为 26.96%，专家为 51.41%。（原文表2）</li></ul>
+<p>这里比较的是各自模态、同一任务设置下的结果，不能把文本与图像成绩直接横向混比。</p>
+<p>专家自身也没有达到满分，说明该任务确实存在较高难度和判断分歧。</p>
+<p>另外，论文的“部分准确率”也不等于上线时最关心的漏检率或误杀率。模型只要预测标签与标准答案有交集，就可能被算作部分正确，即使它同时多报了其他标签。</p>
+<p>因此，若将类似方案投入实际业务，还需要补充：</p>
+<p><strong>误杀与漏检指标、不同违规类别的表现、证据充分性、人工复核比例，以及延迟和成本。</strong></p>
+<p>这些生产要求不能由一个排行榜分数替代。但这篇论文确实提供了一种更好的诊断框架。当一个审核系统表现不佳时，我们可以依次问：</p>
+<blockquote><p>是没有看到关键证据？    是看到了，但没理解隐含意义？    是理解了，但没有找到规则？    是找到了规则，却用错了条件？    还是结论本来正确，输出却违反了标签约束？</p></blockquote>
+<p>这些问题，比一句“模型还不够强”更有行动价值。因为它们分别指向不同的改进手段：感知增强、语义训练、规则检索、分类体系重构，以及确定性校验。</p>
+<h3>往期精彩：</h3>
+<p><strong><a href="https://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650197244&amp;idx=1&amp;sn=8a55f73c7a89bece82b76df3d437fd9e&amp;scene=21#wechat_redirect">训练你的第一个「鉴黄」大模型，Qwen3.5_0.8B微调实战详解</a></strong></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650196849&amp;idx=1&amp;sn=6d4e4a5c1131907d78133b7da19bdcb1&amp;scene=21#wechat_redirect">课程介绍《万物皆网络-风控中的网络挖掘方法》</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650197099&amp;idx=1&amp;sn=39c9d069b9d46fc0a011d46b8e2c7b0b&amp;scene=21#wechat_redirect">风控中的图片聚类-基于Sentence-transformers</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650197130&amp;idx=1&amp;sn=78f80ec0abb34d10a466e056d57837c6&amp;scene=21#wechat_redirect">风控中的文本聚类-基于Sentence-transformers</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650196675&amp;idx=1&amp;sn=f37a78159356b6e647b5df6807285114&amp;scene=21#wechat_redirect">复杂网络特征提取-节点特征、边特征和图整体特征</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650196711&amp;idx=1&amp;sn=7d324316850fb4d9b9463fd99543989e&amp;scene=21#wechat_redirect">树模型还是图模型？风控中的树模型和图模型 效果大比拼！</a></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650196317&amp;idx=1&amp;sn=ee460c07cf3449682698c7d1b7aa2e26&amp;chksm=8823ee99bf54678fdb906489448d51f7cbcf660672ad8d1cb86ceba1bb658379c2259171d7f1&amp;scene=21#wechat_redirect">金融风控-通用建模流程</a></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650196265&amp;idx=1&amp;sn=221b4ccddfe4297c82849050bf64ad9e&amp;chksm=8823eeedbf5467fbc9a0d92dbc0546d9c6a8efdb554a82995a40cca9b9105b6fb2c258811a17&amp;scene=21#wechat_redirect">业务实战-如何搭建知识图谱？</a></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650196240&amp;idx=1&amp;sn=43bcd37e065392c5ec8866cd4e0f2a51&amp;chksm=8823eed4bf5467c28e45e5c8c636d7a5b819d5078a550edf5e006f0a2d8b379c303d491355df&amp;scene=21#wechat_redirect">作为风控人，你会找工作么？</a></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650196089&amp;idx=1&amp;sn=7456b8942f5b29fe70daa8adc8244b5f&amp;chksm=8823efbdbf5466ab17e3d6d9f067552f8c0ff4949223a426cd292c3f215395b43e2a65a845bf&amp;scene=21#wechat_redirect">利用决策树分分钟生成上千条策略-代码更新</a></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650192424&amp;idx=1&amp;sn=df51fdc3f4c515eb094f0a476bf55ea9&amp;chksm=88239decbf5414fabfb0198f627e714f2a93c497c317be9b39014051245806d5f945d1dbf697&amp;scene=21#wechat_redirect">万物皆网络，万字长文详解社区发现算法Louvain</a></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650190420&amp;idx=1&amp;sn=16eb3b1e30e797b7725fc571f5645d16&amp;chksm=88239590bf541c86590bec30f298616ecac754d514b613235cc11727b22d2b983a3f660fa4fe&amp;scene=21#wechat_redirect">社区发现之标签传播算法（LPA）</a></p>
+<p><a href="http://mp.weixin.qq.com/s?__biz=MzA4OTAwMjY2Nw==&amp;mid=2650194725&amp;idx=1&amp;sn=53bd3dd05db74a6482bc7c7afa9039e2&amp;chksm=8823e4e1bf546df733eaacf118af3d3aa442f2c1c079b74b103e0689f7b86dbaef3dea002675&amp;scene=21#wechat_redirect">风控中的复杂网络-学习路径图</a></p>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+</div>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+</body>
+</html>

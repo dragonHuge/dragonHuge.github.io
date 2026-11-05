@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+    <a class="brand" href="../index.html">🐉 DragonHuge · 知识花园</a>
+    <a class="search-m" href="../search.html" aria-label="搜索">🔍</a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…  /" autocomplete="off" aria-label="搜索全站文章">
+      <div class="sug" id="sug" hidden></div>
+    </div>
+    <nav class="topnav">
+      <a href="../index.html" class="">首页</a>
+      <a href="../daily/index.html" class="">日常</a>
+      <a href="../tech/index.html" class="">技术文章</a>
+      <a href="../ext/index.html" class="on">外部沉淀</a>
+    </nav>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar"><nav class="side-nav">
+<details class="mod"><summary>📒 日常知识库沉淀 <span class="cnt">21</span></summary>
+<div class="grp">灵感火花</div>
+<a class="art" href="../daily/d001.html">2026-10-24</a>
+<a class="art" href="../daily/d002.html">2026-10-17</a>
+<a class="art" href="../daily/d003.html">2026-09-27</a>
+<a class="art" href="../daily/d004.html">2026-09-19</a>
+<a class="art" href="../daily/d005.html">2026-09-12</a>
+<div class="grp">2026 · Q2 · 第7周(05.11-05.17)</div>
+<a class="art" href="../daily/d006.html">2026-05-15</a>
+<a class="art" href="../daily/d007.html">2026-05-13</a>
+<a class="art" href="../daily/d008.html">2026-05-12</a>
+<a class="art" href="../daily/d009.html">2026-05-11</a>
+<div class="grp">2026 · Q2 · 第6周(05.04-05.10)</div>
+<a class="art" href="../daily/d010.html">2026-05-09</a>
+<a class="art" href="../daily/d011.html">2026-05-08</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d012.html">2026-04-28</a>
+<a class="art" href="../daily/d013.html">2026-04-27</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d014.html">2026-04-26</a>
+<a class="art" href="../daily/d015.html">2026-04-25 周六无事</a>
+<div class="grp">2026 · Q2 · 第2周(04.06-04.12)</div>
+<a class="art" href="../daily/d016.html">2026-04-12 随记</a>
+<a class="art" href="../daily/d017.html">2026-04-07 随记</a>
+<a class="art" href="../daily/d018.html">2026-04-06</a>
+<div class="grp">2026 · Q2 · 第1周(03.30-04.05)</div>
+<a class="art" href="../daily/d019.html">2026-04-04</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d020.html">第5周(04.27-05.03) 周报</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d021.html">第4周(04.20-04.26) 周报</a>
+</details>
+<details class="mod"><summary>💻 技术文章 <span class="cnt">22</span></summary>
+<details class="cat" open><summary>AI底层原理</summary>
+<a class="art" href="../tech/t001.html">AI 底层原理 — 资料来源</a>
+<a class="art" href="../tech/t002.html">AI 底层原理 — 感悟日志</a>
+<a class="art" href="../tech/t003.html">LLM Agent 工程原理 — 学习笔记</a>
+</details>
+<details class="cat" open><summary>Agent应用开发</summary>
+<a class="art" href="../tech/t004.html">DeepSeek dsh-superagent 技术方案分析（学习版）</a>
+<a class="art" href="../tech/t005.html">Agent 应用开发 — 知识点全景图</a>
+<a class="art" href="../tech/t006.html">Agent 应用开发 — 五阶段学习计划</a>
+</details>
+<details class="cat" open><summary>安全风控</summary>
+<a class="art" href="../tech/t007.html">H5 活动风控 · 技术学习问答笔记（龙老板提问 → 小墨答复）</a>
+<a class="art" href="../tech/t008.html">H5 活动风控完整技术调研（小白友好汇总版）：需求还原 · 核心概念 · 行业方案 · 落地路线</a>
+<a class="art" href="../tech/t009.html">H5 活动风控第二轮调研：业界设备指纹落地、WebAuthn 边界、黑产攻击面与落地方案</a>
+<a class="art" href="../tech/t010.html">JS 虚拟化保护（防守侧）第一轮调研：原理、实现与 ZCode 风控重叠度</a>
+</details>
+<details class="cat" open><summary>投资理财</summary>
+<a class="art" href="../tech/t011.html">投资理财 — 资料来源</a>
+<a class="art" href="../tech/t012.html">投资理财 — 知识库组织规范</a>
+<a class="art" href="../tech/t013.html">投资理财 — 四阶段学习路径</a>
+<div class="grp">实践记录</div>
+<a class="art" href="../tech/t014.html">决策日志</a>
+<a class="art" href="../tech/t015.html">定投记录</a>
+<div class="grp">知识卡/01-基础概念</div>
+<a class="art" href="../tech/t016.html">风险与收益</a>
+<a class="art" href="../tech/t017.html">通胀</a>
+<a class="art" href="../tech/t018.html">复利</a>
+<div class="grp">配置方案</div>
+<a class="art" href="../tech/t019.html">退休目标测算</a>
+<a class="art" href="../tech/t020.html">财务地基自查</a>
+</details>
+<details class="cat" open><summary>日常问答</summary>
+<a class="art" href="../tech/t021.html">日常问答沉淀 · 2026-09</a>
+</details>
+<details class="cat" open><summary>综合文章</summary>
+<a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+</details>
+</details>
+<details class="mod" open><summary>📥 外部沉淀 <span class="cnt">285</span></summary>
+<details class="cat" open><summary>AI与效率 <span class="cnt">186</span></summary>
+<a class="art" href="../ext/e001.html">Anthropic：子Agent拆多了，为什么反而更慢</a>
+<a class="art" href="../ext/e002.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a>
+<a class="art" href="../ext/e003.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a>
+<a class="art" href="../ext/e004.html">从Harness到Harness²，Google自进化新突破</a>
+<a class="art" href="../ext/e005.html">深度解析 Codex Harness 架构及其全新上下文压缩记忆体系的设计思路</a>
+<a class="art" href="../ext/e006.html">让Agent可评可控可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e007.html">Agent时代的输入法：80亿token打磨的效率工具即将开源</a>
+<a class="art" href="../ext/e008.html">Anthropic最新长文：请谨慎使用子智能体</a>
+<a class="art" href="../ext/e009.html">Anthropic长文详解Claude Duet安全设计：密码永远不经过模型</a>
+<a class="art" href="../ext/e010.html">Codex核心团队复盘：从30秒一次反馈到放手跑几小时</a>
+<a class="art" href="../ext/e011.html">一篇多模态Agentic框架最新前沿综述</a>
+<a class="art" href="../ext/e012.html">为什么现在的top大模型说话越来越拗口难懂了</a>
+<a class="art" href="../ext/e013.html">你的Personal Agent如何真正跑起来？Agent实战指南</a>
+<a class="art" href="../ext/e014.html">实测最近爆火的Teamily，是真有东西啊</a>
+<a class="art" href="../ext/e015.html">替代CC Switch的这个项目已斩获20K Star</a>
+<a class="art" href="../ext/e016.html">维基百科编辑抓AI的清单，被反着做成了6万多star的skill</a>
+<a class="art" href="../ext/e017.html">刚刚，Anthropic公开内部Sub-Agent+Loop最佳实践</a>
+<a class="art" href="../ext/e018.html">刚刚！斯坦福CS336中文教程发布了</a>
+<a class="art" href="../ext/e019.html">Agent的长期记忆要怎么做？RAG是不是最好的选择（4/12）</a>
+<a class="art" href="../ext/e020.html">Uber的合同审阅Agent工程实践和拆解</a>
+<a class="art" href="../ext/e021.html">6.3万星开源求职流水线：69份简历拿下20轮面试</a>
+<a class="art" href="../ext/e022.html">Agent如何自己变强：从Skill到模型权重的进化全景图</a>
+<a class="art" href="../ext/e023.html">Anthropic：谨慎使用子Agent</a>
+<a class="art" href="../ext/e024.html">Jev创始人访谈：Jev是面向智能的SQL，软件设计需回到工作流为中心</a>
+<a class="art" href="../ext/e025.html">MCP解决连接RAG解决知识，那谁来解决业务理解：企业AI的本体论</a>
+<a class="art" href="../ext/e026.html">OpenAI：FDE的目标是让自己失业</a>
+<a class="art" href="../ext/e027.html">去年教的85%全扔掉！斯坦福最新AI神课：200行写Claude Code</a>
+<a class="art" href="../ext/e028.html">唐杰团队RSI新作：让Agent越改越强，执行成本反降26%</a>
+<a class="art" href="../ext/e029.html">在上海听了一天AI论坛，我学到新的AI焚诀了</a>
+<a class="art" href="../ext/e030.html">大家用AI胆子还不够大！Claude工程负责人亲授顶级用法</a>
+<a class="art" href="../ext/e031.html">3篇NeurIPS顶会Skill，很精彩</a>
+<a class="art" href="../ext/e032.html">刚刚，Anthropic推出个人智能体Claude Duet：opus 5.5 驱动</a>
+<a class="art" href="../ext/e033.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+<a class="art" href="../ext/e034.html">Meta的智能体工程经验：轻量编排与专业分工</a>
+<a class="art" href="../ext/e035.html">分享8个让我最近很惊艳的Claude Opus 5.5玩法</a>
+<a class="art" href="../ext/e036.html">坏了，真给openai从deepseek那学到真的了</a>
+<a class="art" href="../ext/e037.html">天猫数字员工：研发暗物质与AI Native组织协作</a>
+<a class="art" href="../ext/e038.html">AI工程化防翻车指南</a>
+<a class="art" href="../ext/e039.html">Anthropic最新就业报告公开：AI时代，新人何去何从?</a>
+<a class="art" href="../ext/e040.html">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</a>
+<a class="art" href="../ext/e041.html">从 BERT、GPT 到 Jev：一文看懂大模型架构的演进与分化</a>
+<a class="art active" href="../ext/e042.html">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a>
+<a class="art" href="../ext/e043.html">面试官皱眉：“你知道Codex多Agent实现机制吗？ ”我笑了：“独立会话、上下文交接、异步通信、任务调度，你想先听哪块？”</a>
+<a class="art" href="../ext/e044.html">把逆向工程交给 Agent：一文拆解爆火的 REA 技术原理</a>
+<a class="art" href="../ext/e045.html">为什么说 DeepSeek Harness 的灵魂是一切皆插件？</a>
+<a class="art" href="../ext/e046.html">踩了无数坑后，实践出来的Claude Code省token小技巧👇 其实Opus5.5整体还挺耐用的，但是需要对默认设置稍微做点调整： 1、主力模型可以用Opus5.5，但最好别用尽1M的上下文，设定400k-600k之间的自动压缩机制比较好，上下文太短的话影响视线效果，上下文长了耗token，以及会明显变慢，效果实际也会变差； 2、一个任务尽量更快的连续完成，因为主agent的缓存时间是1小时，如果你隔几个小时回来提要求，缓存失效的话，输入token的消耗量会明显增大； 3、subagent尽量用sonnet 5.5吧，反正是接受主agent派发的任务干杂活的，用opus5.5提升不大，haiku5.5的话又没必要了，也没省多少； 4、主动设置把subagent的缓存时间改到1小时，因为Claude Code中默认subagent的缓存时间是5分钟，所以很容易会产生大量的不被缓存的输入token。 5、主动要求少启动subagent，其实主agent能在大压缩或者少压缩情况下完成一个任务的前提下，一直持续对话缓存率在98%以上，还是挺省的。一开subagent，即使用sonnet5.5，也会明显增加消耗。</a>
+<a class="art" href="../ext/e047.html">拆开 Pi：Agent Harness 的极简设计</a>
+<a class="art" href="../ext/e048.html">AI时代架构设计，给AI的4条缓存红线（9/100）</a>
+<a class="art" href="../ext/e049.html">四大多 Agent 架构详解（三）：Hierarchical 如何解决一个 Supervisor 管不过来的问题</a>
+<a class="art" href="../ext/e050.html">CLAUDE.md 还是 AGENTS.md？Anthropic 的答案是：以后都不用</a>
+<a class="art" href="../ext/e051.html">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</a>
+<a class="art" href="../ext/e052.html">huashu-art-motion发布！可能是最有审美的动画skill。</a>
+<a class="art" href="../ext/e053.html">1024个Agent协同，微软Loop工程杀疯了</a>
+<a class="art" href="../ext/e054.html">AI让写代码变便宜了，但没让架构变便宜</a>
+<a class="art" href="../ext/e055.html">Agent SDK 双面宿主：有 UI 与无 UI 不是两套 Agent</a>
+<a class="art" href="../ext/e056.html">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a>
+<a class="art" href="../ext/e057.html">Claude Code Mods 入门指南：从零做一个 Mod</a>
+<a class="art" href="../ext/e058.html">Agent、Harness、Loop 到底是什么关系？一文讲透 AI 系统的分层架构</a>
+<a class="art" href="../ext/e059.html">Claude.dev 的四篇工程文章：Agent 怎样才算真的改进</a>
+<a class="art" href="../ext/e060.html">Google：首篇词元（Token）技术全景综述</a>
+<a class="art" href="../ext/e061.html">解读 Jev 的 4 种应用方式</a>
+<a class="art" href="../ext/e062.html">重磅！Anthropic公开内部Claude进化最佳实践</a>
+<a class="art" href="../ext/e063.html">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a>
+<a class="art" href="../ext/e064.html">从生成到决策：Jev正在改变LLM应用的开发范式</a>
+<a class="art" href="../ext/e065.html">AI Coding卷到现在，真正卡脖子的东西没人提</a>
+<a class="art" href="../ext/e066.html">Agent不只烧Token：为什么Agent Sandbox正在变得重要</a>
+<a class="art" href="../ext/e067.html">NVIDIA又开源了一个顶级Agent项目：OpenShell</a>
+<a class="art" href="../ext/e068.html">公司规定所有接口都用POST请求，为什么</a>
+<a class="art" href="../ext/e069.html">碾压GPT-4o！94.6%准确率的开源Agent记忆Hindsight来了</a>
+<a class="art" href="../ext/e070.html">风控这个行业，入行10年，迷茫十年</a>
+<a class="art" href="../ext/e071.html">Jev Skill技能包来了！全球开发者砸出500个开源项目</a>
+<a class="art" href="../ext/e072.html">当Agent开始做梦：Dream-RSI如何改进探索策略</a>
+<a class="art" href="../ext/e073.html">预热合流：进了页面也预热了，为什么首句仍可能冷启</a>
+<a class="art" href="../ext/e074.html">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</a>
+<a class="art" href="../ext/e075.html">Anthropic：effort已不再是思考强度开关了</a>
+<a class="art" href="../ext/e076.html">Meta Muse架构深度解析：到底有何不同</a>
+<a class="art" href="../ext/e077.html">Plan Mode之死？Agent需要一条可验证的工作回路</a>
+<a class="art" href="../ext/e078.html">从Harness，走向受控RSI</a>
+<a class="art" href="../ext/e079.html">开源一个Vibe Coding最佳伴侣：口喷鸡</a>
+<a class="art" href="../ext/e080.html">改变世界前先认识世界：Ontology决策结构化实践</a>
+<a class="art" href="../ext/e081.html">本地复刻Jev范式！APUS开源全新浏览器Agent Skill</a>
+<a class="art" href="../ext/e082.html">谷歌RSI新作，让Agent Harness自进化不跑偏！</a>
+<a class="art" href="../ext/e083.html">长程Agent也能“倒带重来”！中科院自动化所联合提出运行时恢复框架AgentRewind</a>
+<a class="art" href="../ext/e084.html">Graph的尽头是自进化Ontology</a>
+<a class="art" href="../ext/e085.html">万字详解10道AI Agent高频面试题</a>
+<a class="art" href="../ext/e086.html">从一次LLM调用到完整Harness：系统理解Agent如何工作</a>
+<a class="art" href="../ext/e087.html">把多语种Laya微调成中文决策模型，代码评估全开源</a>
+<a class="art" href="../ext/e088.html">来了！DeepSeek又发新作DSec</a>
+<a class="art" href="../ext/e089.html">耗时1h！打造属于你自己的Jev，喂饭级教程来了</a>
+<a class="art" href="../ext/e090.html">腾讯开源BrowserSkill：让AI用你的账号上网</a>
+<a class="art" href="../ext/e091.html">谷歌重磅发布Dream-RSI，最新RSI研究！</a>
+<a class="art" href="../ext/e092.html">2万Star开源项目作者入职Hugging Face，副业变全职</a>
+<a class="art" href="../ext/e093.html">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</a>
+<a class="art" href="../ext/e094.html">微软 186k Star 的 markitdown：它凭什么这么火，又在哪会让你踩坑？</a>
+<a class="art" href="../ext/e095.html">错误码排查从 3～8 小时到分钟级，Agent怎么做到的？</a>
+<a class="art" href="../ext/e096.html">给项目建Agent知识库，一套完整方法来了！</a>
+<a class="art" href="../ext/e097.html">AI写得快 ≠ 真正提效：一文讲清Harness&quot;记忆&quot;和&quot;验证闭环</a>
+<a class="art" href="../ext/e098.html">一个字都不会写的 Jev，凭什么成为 ChatGPT 之后最火的模型？</a>
+<a class="art" href="../ext/e099.html">我替大家先试了一把 Jev：一个不写代码、不聊天，只负责&quot;做决定&quot;的奇葩模型</a>
+<a class="art" href="../ext/e100.html">阿里文征：面向Agent全面升级模型服务、Agent服务、AI应用</a>
+<a class="art" href="../ext/e101.html">Agent时代，RAG怎么选？这份指南一次讲清！</a>
+<a class="art" href="../ext/e102.html">Jev 深度解析：从生成式模型到语义决策引擎</a>
+<a class="art" href="../ext/e103.html">Jev 爆火全网，有人把 200+ 个社区案例攒成了开源案例墙，已经 1 亿浏览了！</a>
+<a class="art" href="../ext/e104.html">RAG解决不了的问题，GBrain想解决：给AI Agent装一个能记事的&#x27;第二大脑</a>
+<a class="art" href="../ext/e105.html">开源版 Jev 发布了！</a>
+<a class="art" href="../ext/e106.html">终于有人把数据指标体系讲明白了：指标怎么定、怎么分、怎么用一次讲透</a>
+<a class="art" href="../ext/e107.html">腾讯15年资深后台工程师，转战大模型推理的抉择</a>
+<a class="art" href="../ext/e108.html">腾讯音乐的 MusicBuddy 上线了，Buddy 家族凑够七个</a>
+<a class="art" href="../ext/e109.html">这是一篇把&quot;Jev模型&quot;讲明白的科普级解读！</a>
+<a class="art" href="../ext/e110.html">重磅！从 Agent 开发到 Agent 算法，进阶指南来了</a>
+<a class="art" href="../ext/e111.html">AI时代，让AI写缓存，spec怎么写（5/100）</a>
+<a class="art" href="../ext/e112.html">Agents成新一代造王者，开发者正在快速失去技术决定权</a>
+<a class="art" href="../ext/e113.html">Harness RSI框架来了，登上Hugging Face日榜第二！</a>
+<a class="art" href="../ext/e114.html">Jev Search 开源！当 Jev 遇上搜索引擎：这个开源项目让你用大白话搜遍全网！</a>
+<a class="art" href="../ext/e115.html">Jev是什么AI模型？不做自然语言生成为何引发热议</a>
+<a class="art" href="../ext/e116.html">Jev是分类器吗？今天向所有人开放，送1.2亿token</a>
+<a class="art" href="../ext/e117.html">Jev 爆火：一个不做生成的 AI，凭什么让半个技术圈熬夜跑 Demo？</a>
+<a class="art" href="../ext/e118.html">Loop engineering：把 agent 放进工程循环</a>
+<a class="art" href="../ext/e119.html">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</a>
+<a class="art" href="../ext/e120.html">一文详解Jev：把 Agent 里的“小判断”，从大模型调用改成结构化决策</a>
+<a class="art" href="../ext/e121.html">不会聊天的 AI，彻底爆火：Jev 保姆级教程来了！</a>
+<a class="art" href="../ext/e122.html">为啥 Jev 突然就全网爆火了？</a>
+<a class="art" href="../ext/e123.html">什么是 Jev？</a>
+<a class="art" href="../ext/e124.html">四大多 Agent 架构详解（一）：Workflow 如何把固定流程变成可回放的系统</a>
+<a class="art" href="../ext/e125.html">基于Jev的浏览器Agent插件开源，狂揽12.1k star！</a>
+<a class="art" href="../ext/e126.html">怎样构建一个 Agent-friendly 的网站</a>
+<a class="art" href="../ext/e127.html">整理了最新Jev模型的全网22个爆火玩法！</a>
+<a class="art" href="../ext/e128.html">知识库答不准，可能真不是模型的锅，66.6K star的Docling 到底解决了什么</a>
+<a class="art" href="../ext/e129.html">简单讲讲 Agent 的工作原理</a>
+<a class="art" href="../ext/e130.html">聊聊最近爆火的Jev 模型，到底是个啥？</a>
+<a class="art" href="../ext/e131.html">刚刚，Anthropic公开内部RSI落地方法论</a>
+<a class="art" href="../ext/e132.html">Anthropic 公开「递归自我改进」核心数据：3 万 Agent 正在研发下一代 Claude</a>
+<a class="art" href="../ext/e133.html">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a>
+<a class="art" href="../ext/e134.html">Jev：只会做选择题的 System One 模型，TypeSafe AI 的高频决策分类器</a>
+<a class="art" href="../ext/e135.html">什么是 RSI：2026 年最贵的三个字母（递归自我改进科普）</a>
+<a class="art" href="../ext/e136.html">小米 MiMo-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a>
+<a class="art" href="../ext/e137.html">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a>
+<a class="art" href="../ext/e138.html">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a>
+<a class="art" href="../ext/e139.html">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a>
+<a class="art" href="../ext/e140.html">本地该怎么做 RSI？与 StartLux CTO 郭权玮聊本地自我改进</a>
+<a class="art" href="../ext/e141.html">货拉拉 AI Coding 落地实践：个人提效攒不成组织提效</a>
+<a class="art" href="../ext/e142.html">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</a>
+<a class="art" href="../ext/e143.html">别再只卷 Prompt 了：Context Engineering 才是 Agent 差距所在</a>
+<a class="art" href="../ext/e144.html">面试官：讲一讲多 Agent 协作如何保持一致性</a>
+<a class="art" href="../ext/e145.html">Codex想让Harness消失，Claude Code却要把它做成承重墙</a>
+<a class="art" href="../ext/e146.html">RSI 到底还有多远？三位 AI 研究员谈递归自我改进时间线</a>
+<a class="art" href="../ext/e147.html">OpenAI首席科学家发布长文：《An Alien Mind》（异星心智）</a>
+<a class="art" href="../ext/e148.html">让Agent像人一样记忆：本地长期记忆系统HL-Mem的设计与取舍</a>
+<a class="art" href="../ext/e149.html">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</a>
+<a class="art" href="../ext/e150.html">DeepSeek Harness背后的心脏：Cordis到底是什么</a>
+<a class="art" href="../ext/e151.html">聊一聊 GPT-6 Astra 背后的 Loop 技术</a>
+<a class="art" href="../ext/e152.html">Multi-Agent已死！Anthropic这次完全反着做</a>
+<a class="art" href="../ext/e153.html">个人自进化知识库完整搭建教程</a>
+<a class="art" href="../ext/e154.html">从一次 LLM 调用到完整 Harness，Agent 到底经历了什么？</a>
+<a class="art" href="../ext/e155.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a>
+<a class="art" href="../ext/e156.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a>
+<a class="art" href="../ext/e157.html">字节一天连发3篇自进化Agent，彻底杀疯了</a>
+<a class="art" href="../ext/e158.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
+<a class="art" href="../ext/e159.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
+<a class="art" href="../ext/e160.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
+<a class="art" href="../ext/e161.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
+<a class="art" href="../ext/e162.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
+<a class="art" href="../ext/e163.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
+<a class="art" href="../ext/e164.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
+<a class="art" href="../ext/e165.html">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</a>
+<a class="art" href="../ext/e166.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
+<a class="art" href="../ext/e167.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
+<a class="art" href="../ext/e168.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
+<a class="art" href="../ext/e169.html">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a>
+<a class="art" href="../ext/e170.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
+<a class="art" href="../ext/e171.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
+<a class="art" href="../ext/e172.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
+<a class="art" href="../ext/e173.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
+<a class="art" href="../ext/e174.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
+<a class="art" href="../ext/e175.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
+<a class="art" href="../ext/e176.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
+<a class="art" href="../ext/e177.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
+<a class="art" href="../ext/e178.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
+<a class="art" href="../ext/e179.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
+<a class="art" href="../ext/e180.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
+<a class="art" href="../ext/e181.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
+<a class="art" href="../ext/e182.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
+<a class="art" href="../ext/e183.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
+<a class="art" href="../ext/e184.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
+<a class="art" href="../ext/e185.html">Claude Code 15 条高频实用技巧</a>
+<a class="art" href="../ext/e186.html">Everything Claude Code：Anthropic 黑客松冠军的生产级配置集合</a>
+</details>
+<details class="cat"><summary>工具与技术 <span class="cnt">65</span></summary>
+<a class="art" href="../ext/e187.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e188.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e189.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e190.html">EasySync、OpenPlug、Resojot三件套</a>
+<a class="art" href="../ext/e191.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
+<a class="art" href="../ext/e192.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
+<a class="art" href="../ext/e193.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
+<a class="art" href="../ext/e194.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
+<a class="art" href="../ext/e195.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
+<a class="art" href="../ext/e196.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
+<a class="art" href="../ext/e197.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e198.html">防重放攻击Nonce机制</a>
+<a class="art" href="../ext/e199.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
+<a class="art" href="../ext/e200.html">手推Transformer（3）架构图解</a>
+<a class="art" href="../ext/e201.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
+<a class="art" href="../ext/e202.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
+<a class="art" href="../ext/e203.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
+<a class="art" href="../ext/e204.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<a class="art" href="../ext/e205.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
+<a class="art" href="../ext/e206.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
+<a class="art" href="../ext/e207.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e208.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
+<a class="art" href="../ext/e209.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
+<a class="art" href="../ext/e210.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
+<a class="art" href="../ext/e211.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
+<a class="art" href="../ext/e212.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
+<a class="art" href="../ext/e213.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
+<a class="art" href="../ext/e214.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
+<a class="art" href="../ext/e215.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
+<a class="art" href="../ext/e216.html">2026年量化投资类Skills排行榜</a>
+<a class="art" href="../ext/e217.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
+<a class="art" href="../ext/e218.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
+<a class="art" href="../ext/e219.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
+<a class="art" href="../ext/e220.html">6个Vibe Coding必备宝藏网站</a>
+<a class="art" href="../ext/e221.html">Archify：AI代码仓库架构可视化开源Skill</a>
+<a class="art" href="../ext/e222.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
+<a class="art" href="../ext/e223.html">anything2explainer：一键制作科普视频的开源Skill</a>
+<a class="art" href="../ext/e224.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
+<a class="art" href="../ext/e225.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
+<a class="art" href="../ext/e226.html">内容审核控制台嵌入式 MCP Server 落地方案</a>
+<a class="art" href="../ext/e227.html">MCP 开发指北(Java) — 组内分享</a>
+<a class="art" href="../ext/e228.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
+<a class="art" href="../ext/e229.html">html-anything — Agent 时代的 HTML 编辑器</a>
+<a class="art" href="../ext/e230.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
+<a class="art" href="../ext/e231.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
+<a class="art" href="../ext/e232.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
+<a class="art" href="../ext/e233.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
+<a class="art" href="../ext/e234.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
+<a class="art" href="../ext/e235.html">Claude Code Prompt Cache 配置实战</a>
+<a class="art" href="../ext/e236.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
+<a class="art" href="../ext/e237.html">待考证 Claude Code Skill / MCP 清单</a>
+<a class="art" href="../ext/e238.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
+<a class="art" href="../ext/e239.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
+<a class="art" href="../ext/e240.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
+<a class="art" href="../ext/e241.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
+<a class="art" href="../ext/e242.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
+<a class="art" href="../ext/e243.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
+<a class="art" href="../ext/e244.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
+<a class="art" href="../ext/e245.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
+<a class="art" href="../ext/e246.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
+<a class="art" href="../ext/e247.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
+<a class="art" href="../ext/e248.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<a class="art" href="../ext/e249.html">Obsidian 必装的 9 个 AI Agent Skill</a>
+<a class="art" href="../ext/e250.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
+<a class="art" href="../ext/e251.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
+</details>
+<details class="cat"><summary>认知与思维 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e252.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
+<a class="art" href="../ext/e253.html">高性价比人生指南（全书归档）</a>
+<a class="art" href="../ext/e254.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
+<a class="art" href="../ext/e255.html">单Agent思维链惯性与Agent Team挑战者架构</a>
+<a class="art" href="../ext/e256.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
+<a class="art" href="../ext/e257.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
+<a class="art" href="../ext/e258.html">普通人怎样在6-12个月内改变自己</a>
+<a class="art" href="../ext/e259.html">一天一小时，365天后，你的人生会彻底翻篇</a>
+<a class="art" href="../ext/e260.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
+<a class="art" href="../ext/e261.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
+<a class="art" href="../ext/e262.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
+<a class="art" href="../ext/e263.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
+</details>
+<details class="cat"><summary>写作与创作 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e264.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e265.html">全网首发！AI动态漫制作全流程</a>
+<a class="art" href="../ext/e266.html">宫斗宅斗文创作五大核心技巧：爽点密集化+人设标签化+设定易懂化+情感共鸣化+细节代入感</a>
+<a class="art" href="../ext/e267.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
+<a class="art" href="../ext/e268.html">短视频不是拼勤奋，是拼方向和系统</a>
+</details>
+<details class="cat"><summary>商业与变现 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e269.html">一口气讲明白：中国金融机构体系的底层逻辑</a>
+<a class="art" href="../ext/e270.html">50岁左右及以上父母的保障配置</a>
+<a class="art" href="../ext/e271.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
+<a class="art" href="../ext/e272.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
+<a class="art" href="../ext/e273.html">AI 五层价值链：收入往上走资本往下走，钱在大多数人看不见的基础设施层</a>
+</details>
+<details class="cat"><summary>待分拣 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e274.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
+<a class="art" href="../ext/e275.html">2025游戏安全风控指南</a>
+<a class="art" href="../ext/e276.html">我用Obsidian搭了一个会自己生长的个人网</a>
+<a class="art" href="../ext/e277.html">AI时代，普通人用Mac mini能干点啥</a>
+<a class="art" href="../ext/e278.html">Dan Koe：用AI做一个自己的人生模型</a>
+<a class="art" href="../ext/e279.html">【闪客】Computer Use真的在看你的屏幕吗</a>
+<a class="art" href="../ext/e280.html">GitHub技巧｜项目一键可视化</a>
+<a class="art" href="../ext/e281.html">焚诀，提示词模板，思维方式</a>
+<a class="art" href="../ext/e282.html">jev-chat-jarvis：装在手机上的对话副驾</a>
+<a class="art" href="../ext/e283.html">永远相信统计学 永远相信大数法则</a>
+<a class="art" href="../ext/e284.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
+</details>
+</details></nav></aside><div class="mask" id="mask"></div>
+  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</h1><div class="meta">📅 2026-10-15 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/hsRucmrbY8h98di-rXVzww" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261015-Agent-缺的不是记忆是教训causal-memory-的设计与实战.md</div><div class="md"><h1>Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</h1>
+<blockquote><p>来源：微信公众号 归档日期：2026-10-15 抓取状态：成功 原文字符：12577｜配图：8 张</p></blockquote>
+<h2>摘要速览</h2>
+<ul><li>用过 AI 编程助手的人对这些场面不陌生：昨天刚踩过的坑，今天换个会话再踩一遍；上周评审否决过的方案，这周原样又提了回来。前两个问题是「忘」，后两个问题是「错」——记错比忘记更麻烦。 <strong>缺陷一：上下文压缩会吃掉"当初为什么"。</strong>长任务跑到一半，Agent 开始用同样的错误方法反复修同一个 bug。它不是忘了做过什么，是忘了当初为什么那么做、后果是什么。这不是感觉，可以实测：把一段包含因果细节的对话用生产级压缩算法反复压缩，每轮测两类</li></ul>
+<h2>核心内容</h2>
+<p>（待补充）</p>
+<h2>可执行启发</h2>
+<p>（待补充）</p>
+<h2>我的想法</h2>
+<p>（待补充）</p>
+<hr>
+<h2>原文沉淀</h2>
+<h3>目录</h3>
+<ul><li><a href="#3.1 七种边类型：先给因果关系分型">3.1 七种边类型：先给因果关系分型</a></li><li><a href="#3.2 海马体引擎：把脑科学翻译成工程组件">3.2 海马体引擎：把脑科学翻译成工程组件</a></li><li><a href="#3.3 因果三层：顺着 Pearl 的阶梯往上爬">3.3 因果三层：顺着 Pearl 的阶梯往上爬</a></li><li><a href="#3.4 记忆归账：结果怎么回流成"下次排前面"">3.4 记忆归账：结果怎么回流成"下次排前面"</a></li><li><a href="#3.5 写入门控：噪声不进场，检索才干净">3.5 写入门控：噪声不进场，检索才干净</a></li><li><a href="#3.6 检索：每查询临时建索引的反直觉选择">3.6 检索：每查询临时建索引的反直觉选择</a></li><li><a href="#4.1 五道 refuter：给每条因果边做置信度体检">4.1 五道 refuter：给每条因果边做置信度体检</a></li><li><a href="#4.2 BiasAudit：给记忆库做统计体检">4.2 BiasAudit：给记忆库做统计体检</a></li><li><a href="#4.3 矛盾主动检索：检索结果里的"反方辩友"">4.3 矛盾主动检索：检索结果里的"反方辩友"</a></li></ul>
+<blockquote><p>来源：https://mp.weixin.qq.com/s/hsRucmrbY8h98di-rXVzww 平台：weixin｜作者：滴滴技术 抓取方式：cdp｜字符数：13772｜图片：8</p></blockquote>
+<hr>
+<h2>一、Agent 的记忆有四个结构性缺陷</h2>
+<p>用过 AI 编程助手的人对这些场面不陌生：昨天刚踩过的坑，今天换个会话再踩一遍；上周评审否决过的方案，这周原样又提了回来。前两个问题是「忘」，后两个问题是「错」——记错比忘记更麻烦。</p>
+<p><strong>缺陷一：上下文压缩会吃掉"当初为什么"。</strong>长任务跑到一半，Agent 开始用同样的错误方法反复修同一个 bug。它不是忘了做过什么，是忘了当初为什么那么做、后果是什么。这不是感觉，可以实测：把一段包含因果细节的对话用生产级压缩算法反复压缩，每轮测两类记忆的召回率</p>
+<p><img alt="图片" src="img-001-869ecf77.png"></p>
+<p><em>图 1 ｜ 压缩 5 轮后，原文里的因果信息只剩 45%（2→3 轮之间断崖式衰退），而因果记忆库一行没丢——它活在上下文窗口之外，压缩算法够不着</em></p>
+<p><strong>缺陷二：踩过的坑换个会话再踩一遍。</strong>我们做了一个专门埋重复陷阱的 trap-world 基准：不带因果记忆的系统重复踩坑率 67%，带上之后降到 33%。差别不在模型，在于"决策→结果"有没有被存成能检索的结构。</p>
+<p><strong>缺陷三：记忆困在一台机器、一个进程里。</strong>Agent 的"经验"存在某个本地目录，换台电脑、换个同事接手，全部归零。团队里"那个坑我踩过"靠口口相传。</p>
+<p><strong>缺陷四：记忆自己会劣化，而且没人发现。</strong>把"相关"记成"因果"、同一个决策反复记录同一种结局形成回声、失败案例压根没被写下来、互相矛盾的记忆同时排在检索前排——记忆入了库，不等于记忆是对的。这是四个里最难的一个，也是本文后半段的重点。</p>
+<p>目前常见的记忆方案主要在解决前三个缺陷。causal-memory 想把四个一起解掉：给 Agent 建一层以「决策 → 结果」因果边为核心、住在上下文窗口之外、并且持续接受体检的记忆系统。</p>
+<h2>二、相关方向的现状</h2>
+<p>2025–2026 年，Agent 记忆成了热门方向，学术界和工业界都有不少探索。几条主要路线：</p>
+<table><thead><tr><th>方案</th><th>路线</th><th>核心机制</th></tr></thead><tbody><tr><td>mem0（arXiv:2504.19413）</td><td>事实抽取</td><td>从对话动态抽取/整合/检索事实，Mem0g 增加图表示；2026 年转向单遍 ADD-only 抽取</td></tr><tr><td>Zep / Graphiti（arXiv:2501.13956）</td><td>时序知识图谱</td><td>episode → 实体/事实（带双时态有效期）→ 社区摘要三层结构</td></tr><tr><td>Letta / MemGPT（arXiv:2310.08560）</td><td>OS 式内存管理</td><td>LLM 自主管理 core/archival 两级内存，函数调用换入换出</td></tr><tr><td>腾讯 TencentDB Agent Memory（2026-05 开源）</td><td>分层记忆</td><td>L0 原始对话 → L1 原子事实 → L2 场景 → L3 画像逐层蒸馏；符号化短期记忆使 Token 消耗最高降约 61%</td></tr><tr><td>Anthropic memory tool + Dreaming（2026-05 发布）</td><td>上下文外存储 + 后台巩固</td><td>文件系统式记忆 + 定时"做梦"进程重组记忆库；Harvey 报告任务完成量提升 6 倍</td></tr></tbody></table>
+<p>这些路线的重心大多在事实的抽取与召回上，主流基准（LoCoMo、LongMemEval）考的也主要是事实召回——用户的偏好是什么、第几周说过什么。</p>
+<p>评测口径的争议也一直存在：Zep 官方曾发文逐条质疑 mem0 的 LoCoMo 成绩（数据集只有 16k–26k token、不测知识更新、评测实现有 role 混淆）；社区里也有"benchmark theatre"的说法，各家自报的分数因裁判模型和检索协议不同而难以直接对比。对读者来说，看分数之前先问评测协议，总是没错的。</p>
+<p>比分数更要紧的是：这些基准不考"Agent 有没有从失败里学到东西"。学术界更早开始关注这个问题——CLIN（ICLR 2024）让 Agent 从 action→observation→reward 里提炼因果抽象；MemRL（arXiv:2601.03192）指出被动语义匹配容易检索到噪声，解法是给记忆挂 Q-value 做效用排序；HeLa-Mem（ACL 2026）引入 Hebbian 学习，让一起激活的记忆互相增强。</p>
+<p>causal-memory 和 HeLa-Mem 的关系顺便说清：HeLa-Mem 做了记忆的「兴奋侧」，causal-memory 补上了「抑制侧」。完整的记忆既要知道"什么导致了什么"，也要知道"什么阻止了什么再次发生"。</p>
+<h2>三、核心设计</h2>
+<h3>3.1 七种边类型：先给因果关系分型</h3>
+<p>causal-memory 把所有记忆统一成一张图上的七种边，每种边在扩散激活时有不同的传播系数（<code>hippocampus/types.rs</code> 的 <code>spread_coeff</code>）：</p>
+<p><img alt="图片" src="img-002-022e5302.png"></p>
+<p><em>图 2 ｜ 七种边的扩散系数。</em></p>
+<p><em>prevented 是唯一的负系数边——生物大脑有兴奋和抑制两种信号，这里把抑制侧补上了</em></p>
+<p>这张词表是因果记忆和事实记忆的分界线。写入时 LLM 必须给每条经验标注关系类型；下游所有因果推演都读它。关键的一条：<code>co_occurrence</code>（共现）专门收留"机制不明、疑似共同原因"的观察——机制没搞清楚的一律记为关联而非因果，链式前向遍历的 SQL 里显式排除它。一条混杂未排除的关联，永远不会以因果预测的身份出现在干预查询结果里。</p>
+<p><code>prevented</code> 是另一端的重头戏。它不是"低分事实"，而是负扩散：Agent 即将采取一个曾经避免过事故的动作时，相关节点以负激活出现在召回结果前列，作为显式警告，而不是沉默地排在队尾。实现上有三个细节：</p>
+<ul><li><strong>绝对值最大合并</strong>。节点激活的合并规则是 abs-max 而不是有符号 max——signed-max 下 −0.126 &gt; 0.0 不成立，负激活永远写不进去。abs-max 让同一节点上 caused（正）和 prevented（负）谁强谁赢。</li></ul>
+<ul><li><strong>扇出豁免</strong>。经典的 Collins &amp; Loftus 扩散模型要求激活按扇出度分流，但这里只对联想通道（fact / co_occurrence）除扇出，因果家族边不除——否则一条“此操作曾阻止生产事故”的边，仅仅因为节点连接多，警告信号就被稀释掉了。</li></ul>
+<ul><li><strong>消融可验证</strong>。引擎留了 <code>disable_inhibition()</code> 开关，测试证明：有抑制时“零停机发布”节点以负激活出现（预警生效）；关掉抑制后这个节点彻底消失。预警能力确实来自负扩散，不是别的机制顺带实现的。</li></ul>
+<h3>3.2 海马体引擎：把脑科学翻译成工程组件</h3>
+<p>引擎不是工程堆叠，是脑科学 × 因果推断 × 系统工程的交叉。人脑海马体不是硬盘，它有精细分工，代码里逐一有对应实现（<code>hippocampus/mod.rs</code>，模块头注释就是映射表）：</p>
+<p><img alt="图片" src="img-003-5fbf41e2.png"></p>
+<p><em>图 3 ｜ 整体架构：写入门控保证检索池干净，海马体引擎负责扩散激活与离线巩固，SQLite 持久层位于上下文窗外</em></p>
+<ul><li><strong>DG（齿状回）→ SimHash 模式分离</strong>：128 位 SimHash，hamming ≤ 2 判定近重复。相似经验不重复记录，防止互相污染。</li></ul>
+<ul><li><strong>CA3 → K-hop 扩散激活</strong>：正向 CSR 图（decision→outcome）加反向 CSR 图（归因追溯用），默认衰减 0.7、最深 5 跳；种子激活按 Q 值加权（0.5 + 0.5·Q），被验证好用的经验天然先被点亮。图存储是 CSR + SoA 布局，扩散系数建图时预乘进权重数组；新写入的边走 patch overlay，下次重建时并入。</li></ul>
+<ul><li><strong>CA1 → 新颖度检测</strong>：新记忆写入前先对 decision 文本做内部扩散得到“预测结果”，再和实际 outcome 比相似度，surprise 超过阈值才值得记——<strong>意外才是最有价值的经验</strong>。混合门控模式下，只有落在边界带的样本才付费调 LLM 做语义级判断。</li></ul>
+<ul><li><strong>SWR（尖波涟漪）→ 离线巩固</strong>：对齐 Anthropic Dreams 的不可变模式——所有变更（LTP 强化 ×1.05 封顶 2.0、LTD 衰减、三重标准 GC：弱且零重放且 30 天休眠）先算成 delta 应用到 clone 上，原图绝不动，附完整审计日志。</li></ul>
+<h3>3.3 因果三层：顺着 Pearl 的阶梯往上爬</h3>
+<p>Pearl 的因果阶梯把智能分三级：<strong>观察</strong>（我看到了 X）、<strong>干预</strong>（如果做 X 会怎样）、<strong>反事实</strong>（当时换个做法会怎样）。事实的存取对应第一级，causal-memory 的工具按三级阶梯补齐：</p>
+<table><thead><tr><th>层级</th><th>工具</th><th>实际在算什么</th></tr></thead><tbody><tr><td>R1 关联</td><td><code>search_causal</code></td><td>从已记录的边算 P(outcome｜相似决策）</td></tr><tr><td>R2 干预</td><td><code>intervention_query</code></td><td>经验式 do-效应：沿相似历史动作的前向链推演，按 task_tag 分层，带Simpson 悖论警告</td></tr><tr><td>R3 反事实</td><td><code>counterfactual_query</code></td><td>对比式 A/B：两个候选方案各自的实际结局分布</td></tr></tbody></table>
+<p><img alt="图片" src="img-004-fcd1e15a.png"></p>
+<p><em>图 4 ｜ Pearl 因果阶梯的工程化映射：R1 检索、R2 干预仿真、R3 对比式反事实，逐级上行</em></p>
+<p>反事实这一层值得展开。严格的 Pearl 第三层需要溯因（abduction，基于当时的世界状态做条件化）和机制模型，开放世界里拿不到 SCM 真值——有论文测过（arXiv:2510.01539），强制模型做溯因时分数会掉 25–40 个点。我们的做法是只做工程上能站住的子集：</p>
+<p><strong>第一，记录溯因需要的原料。</strong></p>
+<p><code>record_decision</code> 有个 <code>context</code> 参数，记下决策时的环境、约束、关键参数。同样的 task_tag + 同样的 context 指纹 = 同一个世界状态下的不同选择，也就是一次自然实验（存进 <code>decision_forks</code> 表）。设计文档里有句话我很喜欢："a fork pair is evidence about one world; distributions are evidence about many"——成对证据讲的是同一个世界里的两种选择，比跨世界的统计分布硬得多。所以反事实对比时，fork 兄弟边永远渲染在分布证据前面。</p>
+<p><strong>第二，每次反事实判断都记账。</strong></p>
+<p><code>counterfactual_query</code> 每出一个结论（prefer_a / prefer_b / no_difference），就往 <code>pending_predictions</code> 写一条待决预测。等现实发生了——新记录的决策文本匹配上某个待决选项——自动结算对错：押了 X、现实走了 X、结局是好，算押对；现实走了对手、对手翻车了，也算押对；结局 mixed 则不计入分母。</p>
+<p><code>prediction_report</code> 随时给出按方法、按领域分层的准确率仪表盘。反事实判断因此是可证伪的，而不是修辞。</p>
+<p><strong>第三，证据不足时明说。</strong></p>
+<p>真正的 micro-SCM 估计（noisy-OR + EM 拟合）被刻意推迟：同一个领域内攒够 30 个 fork 对才触发，不够就直接回答"不可识别，降级为对比式"。这比硬给一个漂亮数字强。</p>
+<p>R2 干预查询是 Agent 动手前的最后一道安检。一次典型调用长这样：</p>
+<p><img alt="图片" src="img-005-108eed32.png"></p>
+<p><em>图 5 ｜ 一次干预预警的完整链路：危险动作触发前向仿真，命中 prevented 负扩散边，输出 DANGER 并引用当初记录的事故教训</em></p>
+<p>这道安检经过了带 ground-truth 的合成世界校准：真危险、真安全、被阻止三类场景 100% 判准；而"被混杂伪装"类在修复前 100% 虚报 DANGER——Agent 会因为一条假因果不敢做正确的事。修复就是把机制不明的观察全部降级为 co_occurrence 并在前向链 SQL 里排除，修复后这类虚警降到 0%，写死为回归守卫。</p>
+<h3>3.4 记忆归账：结果怎么回流成"下次排前面"</h3>
+<p>记住了"决策→结果"只是第一步。更难的问题是归账（credit assignment）：一堆决策和结果混在一起，谁该为哪个结果负责？被验证有用的经验，下次凭什么排在前面？causal-memory 里有四条归账链路。</p>
+<p><strong>第一条，Q-value 贝尔曼回传。</strong>睡眠巩固时，被重放验证过的边给两端节点发奖励 r=1.0，跑标准贝尔曼更新 <code>Q ← Q + α·(r + γ·max_Q(邻居) − Q)</code>（α=0.1，γ=0.9）。关键在 γ·max_Q 那一项：结果端的高 Q 会沿因果链回流到父决策——一个决策通向了好结果，它自己的分数也涨。Q 值写回 SQLite 持久化，下次检索时种子激活就是 0.5 + 0.5·Q。一句话：<strong>有用的经验下次自动排前，不用人调</strong>。</p>
+<p><img alt="图片" src="img-006-6a42ee02.png"></p>
+<p><em>图 6 ｜ 归账回路：验证有用 → Q 值更新并沿链回传 → 持久化 → 下次召回自动排前</em></p>
+<p><strong>第二条，失败显著性。</strong>巩固阶段给边打重放分数时，结局明确失败的加 0.5 分、用户反馈来源的加 0.3、别处出现矛盾结局的加 0.2。代码注释里管这个叫 emotional salience——和人脑一样，<strong>疼过的记忆更牢</strong>。</p>
+<p><strong>第三条，影响面归账。</strong>每条新决策可以记录 <code>influenced_by</code>——"这个决定受了哪些已有记忆的影响"。等到某条记忆被证伪作废时，系统反查它影响过的所有后续决策，浮出水面供人复查。错误记忆的影响半径是显式的，不是猜的。</p>
+<p><strong>第四条，来源分层的时间账。</strong>每条边记录发现来源（用户反馈 / LLM 推断 / 时间邻近 / 规则），来源直接决定半衰期档位：用户确认过的经验 90 天半衰期且永不被 GC，LLM 推断的 90 天，纯时间邻近的只剩 7 天。谁说的，决定了这话能活多久。</p>
+<h3>3.5 写入门控：噪声不进场，检索才干净</h3>
+<p>很多记忆系统精度不行，锅不在检索，在写入太脏。写入路径有三道闸：原始对话轮次只进审计表 session_logs，永不进检索池；规则过滤分三级——失败必记（40+ 个 error/panic/timeout 标记）、状态变更工具必记、只读工具显式排除，早期版本"每个工具调用都记"曾产出大量 <code>ran cargo build → exit 0</code> 式噪声；最后 LLM 用 130 行的 V3 prompt 提炼五类条目（fact / preference / lesson / event / causal），其中 causal 类用对照 few-shot 严防 caused 和 prevented 混淆——"加了重试之后超时消失"是 PREVENTED 不是 CAUSED。</p>
+<h3>3.6 检索：每查询临时建索引的反直觉选择</h3>
+<p>检索是 BM25（k1=1.2, b=0.75）与语义向量（本地 ONNX bge-small，或 HTTP 嵌入，没配置就优雅降级纯 BM25）经 RRF 融合。一个反直觉的选择：<strong>每查询临时重建 BM25 索引</strong>，不维护全局索引。候选集通常数百到数千条，重建只要微秒，换来的是按 task_tag 过滤后的子语料上 IDF 统计精确——过滤完再算词频，和不过滤直接查全局索引，结果可能完全不同。</p>
+<h2>四、记忆治理：入库之后，谁保证它是对的</h2>
+<p>回到开头的缺陷四。记忆入库 ≠ 记忆是对的。提炼模型会犯几种系统性错误：看到"改了 A 之后 B 也变了"就记一条 A→B（可能背后有共同原因 C，这是伪因果）；同一个决策反复记录、结局永远相同（记忆在回声，不在跟踪世界）；某类任务记下来的几乎全是好结果（失败根本没被写下来）；互相矛盾的记忆同时排在检索前排，谁也不提醒谁的存在。</p>
+<p>causal-memory 的做法是给引擎加一条治理横切面，核心原则一句话：<strong>系统只标注、不静默裁决</strong>——所有可疑结构标出来给人审查，记忆库永远不替人删历史。</p>
+<h3>4.1 五道 refuter：给每条因果边做置信度体检</h3>
+<p>借鉴 DoWhy 的反证框架，但 Agent 记忆图上跑不了统计检验，于是全部换成图结构检验。每条有效边过 5 道测试，综合打 A–F 级：</p>
+<table><thead><tr><th>#</th><th>Refuter</th><th>检验逻辑</th><th>抓什么</th></tr></thead><tbody><tr><td>1</td><td>confounder</td><td>两端邻居集合的 Jaccard 重叠</td><td>真因果边共享上下文；零重叠 = 疑似伪相关</td></tr><tr><td>2</td><td>corroboration</td><td>去掉该边后的替代路径计数</td><td>真关系有冗余证据；孤立单边可疑</td></tr><tr><td>3</td><td>placebo</td><td>随机节点替换源点做可达性测试</td><td>真边有激活特异性；随便换个节点也能到 = 不特异</td></tr><tr><td>4</td><td>backdoor</td><td>公共祖先能否绕过该边到达终点（底层是精确 d-分离判定）</td><td>"A→B"其实被共同原因 C 完全解释</td></tr><tr><td>5</td><td>temporal</td><td>因的 event_time 必须早于果</td><td>果先于因 = 时序上不可能，伪边铁证</td></tr></tbody></table>
+<p>这些阈值不是拍脑袋的，是校准出来的——每个阈值背后都有一次"合成 ground-truth 世界"实验。举两个校准期的真实战例：corroboration 里"无替代路径即判伪"这一支被直接砍掉，因为最小 DAG 链本来就不可冗余，它曾误杀 38% 的真边；backdoor 坚持绝对计数阈值而不是密度归一化，因为稠密图里祖先路径几乎连通所有节点，归一化版本同样误杀 38% 真边。temporal 是唯一近乎零误杀的信号，加入后伪边标记率从 35.7% 提到 64.3%，真边保留率纹丝不动。</p>
+<h3>4.2 BiasAudit：给记忆库做统计体检</h3>
+<p>睡眠巩固的第五个阶段是三个纯观测检测器：</p>
+<ul><li><strong>极性偏斜</strong>：某个领域已知结局 ≥90% 是同一方向（至少 5 个样本）就盖章。13 个样本只有 1 个反对，在公平过程下是约 0.2% 的小概率事件——要么这个领域真的顺，要么失败根本没被记录。</li></ul>
+<ul><li><strong>零方差重复</strong>：同一决策记录 ≥3 次、结局极性次次相同，自我强化嫌疑。</li></ul>
+<ul><li><strong>置信度漂移</strong>：最近 20 条边的平均置信度和历史均值偏移 ≥0.15，只报告不盖章——没有单条边该负责，这是提炼模型最近的系统性偏差。</li></ul>
+<p>被盖章的边进人类审查队列。检索、衰减、GC 全部刻意忽略这个标记——它和软作废是同一个哲学：系统只标注，不裁决。</p>
+<h3>4.3 矛盾主动检索：检索结果里的"反方辩友"</h3>
+<p><code>search_causal</code> 带 <code>explain=true</code> 时，检索完正信之后主动追加一段矛盾历史：取候选池里排位最高的带极性条目当"当前信念"，把极性相反的历史条目以 <code>[contradiction]</code> 标签附上。同一个问题的两面同时摆上台面，"记忆自相矛盾"从沉默风险变成显式信息。</p>
+<h2>五、评测：自己出一份考卷</h2>
+<p>公开基准考不了因果能力，所以项目自带了一份考卷 <strong>CausalEval</strong>：因果图即答案键。先确定性生成类型化 DAG，再由 LLM 把图叙事化成对话，标准答案直接从图结构推导，零人工标注。结果如下图，灰色是同一协议下不带因果结构的事实记忆基线：</p>
+<p><img alt="图片" src="img-007-2253b5f7.png"></p>
+<p><em>图 7 ｜ CausalEval v13 七个维度的自评结果（项目内部基准，仅供参考）。C2 干预、C4 抑制、C7 更新是相对基线提升最多的维度；C6 跨任务迁移是目前最弱的维度</em></p>
+<p>公开的事实召回基准（LoCoMo、LongMemEval-S）我们也跑了对照实验，能到可用水平，但那不是这套系统的主攻方向，具体数据以仓库评测页为准。另外提醒一句：各家基准的裁判模型和检索协议差异很大，这类分数建议都当"自报数据"看待——包括我们自己。</p>
+<p>两组更贴近实际价值的实验：压缩存活（图 1 的数据来源，5 次压缩后文本 45%、因果表 100%）；trap-world 重复犯错率 33% vs 无记忆对照组 67%。</p>
+<h2>六、实战：一个真实记忆库的两个多月</h2>
+<p>评测之外，我自己日常研发的 Agent 一直挂着 causal-memory。下面是这个真实数据库（2026-07-27 至 2026-10-03，只读统计）的全貌：</p>
+<p>426 条因果边、817 个记忆节点、2901 条事实、56 条跨任务 meta 边。边的分布：caused 303（71%）、enabled 69（16%）、prevented 52（12%）。有个分布细节值得注意：<strong>prevented 类的平均置信度最高（0.815）</strong>——"避免事故"的教训被记得最牢，写入时系统也最有把握。</p>
+<p><img alt="图片" src="img-008-cedfa72a.png"></p>
+<p><em>图 8 ｜ 真实记忆库画像：426 条因果边的类型分布（左）与月度增长（右）</em></p>
+<p>复用情况有硬数据：46% 的因果边被召回过 6 次以上。最典型的一条是"GitHub 直连不通时用 <code>git -c http.proxy</code> 走系统代理"——两个月里被复用了 4 次，每次都有新边记录"又复用了同一方案"。被召回最多（19 次）的是一条 Go toolchain 缓存路径的工程细节。</p>
+<p>两个我自己印象最深的故事：</p>
+<blockquote><p>“  <strong>一次被阻止的生产事故</strong>（prevented · 置信度 0.95）    某存储服务多租户改造，Agent 记录下"新二进制先对租户库副本跑漂移验证，确认后再换容器"。副本验证直接暴露了一个迁移 FK bug——避免了生产 9 个租户库全部打不开的事故。修复后全量迁移零失败。</p></blockquote>
+<blockquote><p>“  "没查记忆，多花 20 分钟"（元教训 · negative）    一次 GitHub 443 端口完全不通，Agent 没有先查因果记忆，手写脚本走 REST API 绕推，多花约 20 分钟；事后发现代理方案在记忆里已经被验证过两次，一行命令就能解决。这条边让我们定下一条纪律：网络/部署类操作前，先 search_causal。</p></blockquote>
+<p>意外也被如实记录过。distill 链路曾经整体失效，查下来是上游模型静默升级，V3 prompt 在新模型上陷入重复循环。这条边以 0.4 的低置信度入库，如实标注"这是负面意外结果"，后来直接促成了一条工程纪律：prompt 必须按当前模型重新校准。</p>
+<p>也得说实话：这个库同样暴露了短板。写时门控的 session_logs 没启用，Hebbian 共现边只积累了 6 条且权重从没涨过，召回审计功能 9 月才上线、只有 12 条记录，决策分叉表还是空的。机制都落地了，但有几个能力还没攒够有统计意义的实战样本。</p>
+<h2>七、工程化：一个人也能维护的记忆层</h2>
+<p>整个系统是 Rust 写的单二进制：MCP server（stdio + Streamable HTTP）、离线 session 提取 CLI（extract / judge / reasoning / distill 四档成本可选）、睡眠巩固、基准 harness，全在一个文件里。几个工程决策值得单独说：</p>
+<ul><li><strong>git 式快照同步，语义完全自实现</strong>。commit 是内容寻址的 sha256 对象，换机器 <code>clone</code> 一次恢复完整上下文，<code>checkout</code> 回滚任意快照；单写者假设下不需要 merge 算法。第一目标不是团队共享，是上下文灾备——Agent 跑到哪，记忆跟到哪。团队共享是自然延伸：多台 AI 工具挂同一个共享远端，纠错状态随 pull 全员对齐，新人一次 clone 继承全组历史。</li></ul>
+<ul><li><strong>多租户 HTTP</strong>：token 映射租户，每租户独立 SQLite 惰性打开，配置热重载、损坏时 fail-closed。团队级共享记忆中心的部署形态。</li></ul>
+<ul><li><strong>可观测性</strong>：Prometheus /metrics，<code>/debug/recall</code> 返回每次召回的完整 trace（种子、逐跳摘要、逐结果溯源）。记忆系统的召回过程本身必须可调试。</li></ul>
+<ul><li><strong>生态接入</strong>：Claude Code / Cursor / Kimi Code / Codex 走 MCP + skill；PyO3 Python 绑定与 17 个 MCP 工具一一对应；另有 Hermes 和 DeepSeek Harness 的原生插件。</li></ul>
+<ul><li><strong>测试</strong>：HEAD 实测 460+ 个测试，覆盖 16 个设计层的端到端验证；校准 harness（合成 ground-truth 世界）全部开源在仓库里。</li></ul>
+<h2>八、一个延伸视角：自我改进的地基是记忆</h2>
+<p>最近 RSI（Recursive Self-Improvement，递归自我改进）的讨论不少：ICLR 2026 开了相关 workshop，工业界和开源社区都有项目在探索让 Agent 越用越强。有个定义比较干净：<strong>系统改变自身的持久组件，评估这个改变，再用改进后的流程跑下一轮</strong>。</p>
+<p>拆开看是三个环节：改持久组件、评估、循环。每个环节都值得问一句。</p>
+<p><strong>改哪个组件？</strong>按风险和成本排：改权重最贵最险，改自身代码次之，改 prompt、工具策略便宜一些，而改记忆是成本最低、今天就能做的一层——不动模型、不动代码，只让"下次调用时的经验排序"变得更好。causal-memory 的睡眠巩固加 Q 值归账，本质上就是一个记忆层的最小闭环：行动 → 记录结局 → 归账更新排序 → 下次行动用到新排序 → 再记录。循环已经跑起来了，只是改的东西是记忆而不是权重。</p>
+<p><strong>评估信号从哪来？</strong>每个自改进循环，本质上都在声称"某种评估信号可以替代人类判断"，这个信号不能凭空来。causal-memory 里有三样东西在造它：结局极性判定（这次成了还是败了）、Q 值贝尔曼回传（好结果沿因果链给决策加分）、预测账本（反事实判断自动结算准确率）。没有这层归账，"改进"就只是"变化"——系统变了，但没人知道是变好了还是变坏了。</p>
+<p><strong>循环怎么不退化？</strong>这是最少人提的一点。没有持久记忆的自我改进会原地打转：上一轮改了什么、效果如何，下一轮全忘了，同样的错误改法反复出现；更糟的是回声式劣化——自己产生的记录不断强化自己。第四章的治理机制放在这个语境下再看就有新含义：BiasAudit 的零方差重复检测，防的是"自我改进变成自我重复"；置信度漂移检测，防的是"评估信号本身悄悄变质"。</p>
+<p>所以 causal-memory 在这件事上的位置，我们放得比较低：它不承诺让 Agent 自己变成更强的模型，只是让 Agent 的每一次"改"都有据可查、有账可算、有坑可避。</p>
+<h2>九、局限与展望</h2>
+<p>系统目前还是 alpha（v0.9.3），未竟之事写明白：C6 跨任务迁移只有 20%，跨领域的经验类比还是最难的开放问题；干预查询的准确率基准设计好了还没跑完；缺 7×24 生产环境的长周期验证；Hebbian 共现、决策分叉在真实流量下还没形成规模。</p>
+<p>后续有几个明确的方向：把 session 级的快照与恢复补上，让上下文灾备形成闭环（换机器、换工具都能带走完整记忆）；从反复成功的决策模式里蒸馏可复用的 skill 文件，从 prevented 边里沉淀"禁止事项"；做更主动的记忆保鲜——过期轮换和陈旧度检测，让"这条经验还新吗"成为可查询的属性。企业场景里也有自然的落地处：运维 Agent 的故障复盘记忆（每次处置的 decision→outcome 自动沉淀，同类故障不二次踩坑）、研发团队的共享记忆中心、客服运营里"什么动作曾引发客诉"的抑制性预警。</p>
+<blockquote><p>“  记忆这件事，目标不是让 AI 记住所有事，是让人不必重复所有坑。</p></blockquote>
+<h2>参考与链接</h2>
+<ul><li>项目仓库（Apache-2.0）：github.com/JingxuanC/causal-memory</li></ul>
+<ul><li>mem0：arXiv:2504.19413</li></ul>
+<ul><li>Zep / Graphiti：arXiv:2501.13956；Zep 对 LoCoMo 评测的质疑：getzep.com/blog（2025-05）</li></ul>
+<ul><li>MemGPT：arXiv:2310.08560</li></ul>
+<ul><li>CLIN：arXiv:2310.10134（ICLR 2024）</li></ul>
+<ul><li>MemRL：arXiv:2601.03192</li></ul>
+<ul><li>HeLa-Mem：arXiv:2604.16839（ACL 2026）</li></ul>
+<ul><li>Executable Counterfactuals：arXiv:2510.01539</li></ul>
+<ul><li>ICLR 2026 Workshop on AI with Recursive Self-Improvement；awesome-rsi 资源库</li></ul>
+<ul><li>腾讯 TencentDB Agent Memory：github.com/TencentCloud/TencentDB-Agent-Memory（2026-05 开源）</li></ul>
+<ul><li>Anthropic：Effective context engineering for AI agents（anthropic.com/engineering）；Dreaming（Code with Claude, 2026-05）</li></ul>
+<ul><li>LoCoMo（ACL 2024）、LongMemEval：arXiv:2410.10813（ICLR 2025）</li></ul>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+</div>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+</body>
+</html>

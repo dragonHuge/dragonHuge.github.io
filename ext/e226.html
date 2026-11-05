@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内容审核控制台嵌入式 MCP Server 落地方案 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+    <a class="brand" href="../index.html">🐉 DragonHuge · 知识花园</a>
+    <a class="search-m" href="../search.html" aria-label="搜索">🔍</a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…  /" autocomplete="off" aria-label="搜索全站文章">
+      <div class="sug" id="sug" hidden></div>
+    </div>
+    <nav class="topnav">
+      <a href="../index.html" class="">首页</a>
+      <a href="../daily/index.html" class="">日常</a>
+      <a href="../tech/index.html" class="">技术文章</a>
+      <a href="../ext/index.html" class="on">外部沉淀</a>
+    </nav>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar"><nav class="side-nav">
+<details class="mod"><summary>📒 日常知识库沉淀 <span class="cnt">21</span></summary>
+<div class="grp">灵感火花</div>
+<a class="art" href="../daily/d001.html">2026-10-24</a>
+<a class="art" href="../daily/d002.html">2026-10-17</a>
+<a class="art" href="../daily/d003.html">2026-09-27</a>
+<a class="art" href="../daily/d004.html">2026-09-19</a>
+<a class="art" href="../daily/d005.html">2026-09-12</a>
+<div class="grp">2026 · Q2 · 第7周(05.11-05.17)</div>
+<a class="art" href="../daily/d006.html">2026-05-15</a>
+<a class="art" href="../daily/d007.html">2026-05-13</a>
+<a class="art" href="../daily/d008.html">2026-05-12</a>
+<a class="art" href="../daily/d009.html">2026-05-11</a>
+<div class="grp">2026 · Q2 · 第6周(05.04-05.10)</div>
+<a class="art" href="../daily/d010.html">2026-05-09</a>
+<a class="art" href="../daily/d011.html">2026-05-08</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d012.html">2026-04-28</a>
+<a class="art" href="../daily/d013.html">2026-04-27</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d014.html">2026-04-26</a>
+<a class="art" href="../daily/d015.html">2026-04-25 周六无事</a>
+<div class="grp">2026 · Q2 · 第2周(04.06-04.12)</div>
+<a class="art" href="../daily/d016.html">2026-04-12 随记</a>
+<a class="art" href="../daily/d017.html">2026-04-07 随记</a>
+<a class="art" href="../daily/d018.html">2026-04-06</a>
+<div class="grp">2026 · Q2 · 第1周(03.30-04.05)</div>
+<a class="art" href="../daily/d019.html">2026-04-04</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d020.html">第5周(04.27-05.03) 周报</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d021.html">第4周(04.20-04.26) 周报</a>
+</details>
+<details class="mod"><summary>💻 技术文章 <span class="cnt">22</span></summary>
+<details class="cat" open><summary>AI底层原理</summary>
+<a class="art" href="../tech/t001.html">AI 底层原理 — 资料来源</a>
+<a class="art" href="../tech/t002.html">AI 底层原理 — 感悟日志</a>
+<a class="art" href="../tech/t003.html">LLM Agent 工程原理 — 学习笔记</a>
+</details>
+<details class="cat" open><summary>Agent应用开发</summary>
+<a class="art" href="../tech/t004.html">DeepSeek dsh-superagent 技术方案分析（学习版）</a>
+<a class="art" href="../tech/t005.html">Agent 应用开发 — 知识点全景图</a>
+<a class="art" href="../tech/t006.html">Agent 应用开发 — 五阶段学习计划</a>
+</details>
+<details class="cat" open><summary>安全风控</summary>
+<a class="art" href="../tech/t007.html">H5 活动风控 · 技术学习问答笔记（龙老板提问 → 小墨答复）</a>
+<a class="art" href="../tech/t008.html">H5 活动风控完整技术调研（小白友好汇总版）：需求还原 · 核心概念 · 行业方案 · 落地路线</a>
+<a class="art" href="../tech/t009.html">H5 活动风控第二轮调研：业界设备指纹落地、WebAuthn 边界、黑产攻击面与落地方案</a>
+<a class="art" href="../tech/t010.html">JS 虚拟化保护（防守侧）第一轮调研：原理、实现与 ZCode 风控重叠度</a>
+</details>
+<details class="cat" open><summary>投资理财</summary>
+<a class="art" href="../tech/t011.html">投资理财 — 资料来源</a>
+<a class="art" href="../tech/t012.html">投资理财 — 知识库组织规范</a>
+<a class="art" href="../tech/t013.html">投资理财 — 四阶段学习路径</a>
+<div class="grp">实践记录</div>
+<a class="art" href="../tech/t014.html">决策日志</a>
+<a class="art" href="../tech/t015.html">定投记录</a>
+<div class="grp">知识卡/01-基础概念</div>
+<a class="art" href="../tech/t016.html">风险与收益</a>
+<a class="art" href="../tech/t017.html">通胀</a>
+<a class="art" href="../tech/t018.html">复利</a>
+<div class="grp">配置方案</div>
+<a class="art" href="../tech/t019.html">退休目标测算</a>
+<a class="art" href="../tech/t020.html">财务地基自查</a>
+</details>
+<details class="cat" open><summary>日常问答</summary>
+<a class="art" href="../tech/t021.html">日常问答沉淀 · 2026-09</a>
+</details>
+<details class="cat" open><summary>综合文章</summary>
+<a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+</details>
+</details>
+<details class="mod" open><summary>📥 外部沉淀 <span class="cnt">285</span></summary>
+<details class="cat"><summary>AI与效率 <span class="cnt">186</span></summary>
+<a class="art" href="../ext/e001.html">Anthropic：子Agent拆多了，为什么反而更慢</a>
+<a class="art" href="../ext/e002.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a>
+<a class="art" href="../ext/e003.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a>
+<a class="art" href="../ext/e004.html">从Harness到Harness²，Google自进化新突破</a>
+<a class="art" href="../ext/e005.html">深度解析 Codex Harness 架构及其全新上下文压缩记忆体系的设计思路</a>
+<a class="art" href="../ext/e006.html">让Agent可评可控可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e007.html">Agent时代的输入法：80亿token打磨的效率工具即将开源</a>
+<a class="art" href="../ext/e008.html">Anthropic最新长文：请谨慎使用子智能体</a>
+<a class="art" href="../ext/e009.html">Anthropic长文详解Claude Duet安全设计：密码永远不经过模型</a>
+<a class="art" href="../ext/e010.html">Codex核心团队复盘：从30秒一次反馈到放手跑几小时</a>
+<a class="art" href="../ext/e011.html">一篇多模态Agentic框架最新前沿综述</a>
+<a class="art" href="../ext/e012.html">为什么现在的top大模型说话越来越拗口难懂了</a>
+<a class="art" href="../ext/e013.html">你的Personal Agent如何真正跑起来？Agent实战指南</a>
+<a class="art" href="../ext/e014.html">实测最近爆火的Teamily，是真有东西啊</a>
+<a class="art" href="../ext/e015.html">替代CC Switch的这个项目已斩获20K Star</a>
+<a class="art" href="../ext/e016.html">维基百科编辑抓AI的清单，被反着做成了6万多star的skill</a>
+<a class="art" href="../ext/e017.html">刚刚，Anthropic公开内部Sub-Agent+Loop最佳实践</a>
+<a class="art" href="../ext/e018.html">刚刚！斯坦福CS336中文教程发布了</a>
+<a class="art" href="../ext/e019.html">Agent的长期记忆要怎么做？RAG是不是最好的选择（4/12）</a>
+<a class="art" href="../ext/e020.html">Uber的合同审阅Agent工程实践和拆解</a>
+<a class="art" href="../ext/e021.html">6.3万星开源求职流水线：69份简历拿下20轮面试</a>
+<a class="art" href="../ext/e022.html">Agent如何自己变强：从Skill到模型权重的进化全景图</a>
+<a class="art" href="../ext/e023.html">Anthropic：谨慎使用子Agent</a>
+<a class="art" href="../ext/e024.html">Jev创始人访谈：Jev是面向智能的SQL，软件设计需回到工作流为中心</a>
+<a class="art" href="../ext/e025.html">MCP解决连接RAG解决知识，那谁来解决业务理解：企业AI的本体论</a>
+<a class="art" href="../ext/e026.html">OpenAI：FDE的目标是让自己失业</a>
+<a class="art" href="../ext/e027.html">去年教的85%全扔掉！斯坦福最新AI神课：200行写Claude Code</a>
+<a class="art" href="../ext/e028.html">唐杰团队RSI新作：让Agent越改越强，执行成本反降26%</a>
+<a class="art" href="../ext/e029.html">在上海听了一天AI论坛，我学到新的AI焚诀了</a>
+<a class="art" href="../ext/e030.html">大家用AI胆子还不够大！Claude工程负责人亲授顶级用法</a>
+<a class="art" href="../ext/e031.html">3篇NeurIPS顶会Skill，很精彩</a>
+<a class="art" href="../ext/e032.html">刚刚，Anthropic推出个人智能体Claude Duet：opus 5.5 驱动</a>
+<a class="art" href="../ext/e033.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+<a class="art" href="../ext/e034.html">Meta的智能体工程经验：轻量编排与专业分工</a>
+<a class="art" href="../ext/e035.html">分享8个让我最近很惊艳的Claude Opus 5.5玩法</a>
+<a class="art" href="../ext/e036.html">坏了，真给openai从deepseek那学到真的了</a>
+<a class="art" href="../ext/e037.html">天猫数字员工：研发暗物质与AI Native组织协作</a>
+<a class="art" href="../ext/e038.html">AI工程化防翻车指南</a>
+<a class="art" href="../ext/e039.html">Anthropic最新就业报告公开：AI时代，新人何去何从?</a>
+<a class="art" href="../ext/e040.html">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</a>
+<a class="art" href="../ext/e041.html">从 BERT、GPT 到 Jev：一文看懂大模型架构的演进与分化</a>
+<a class="art" href="../ext/e042.html">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a>
+<a class="art" href="../ext/e043.html">面试官皱眉：“你知道Codex多Agent实现机制吗？ ”我笑了：“独立会话、上下文交接、异步通信、任务调度，你想先听哪块？”</a>
+<a class="art" href="../ext/e044.html">把逆向工程交给 Agent：一文拆解爆火的 REA 技术原理</a>
+<a class="art" href="../ext/e045.html">为什么说 DeepSeek Harness 的灵魂是一切皆插件？</a>
+<a class="art" href="../ext/e046.html">踩了无数坑后，实践出来的Claude Code省token小技巧👇 其实Opus5.5整体还挺耐用的，但是需要对默认设置稍微做点调整： 1、主力模型可以用Opus5.5，但最好别用尽1M的上下文，设定400k-600k之间的自动压缩机制比较好，上下文太短的话影响视线效果，上下文长了耗token，以及会明显变慢，效果实际也会变差； 2、一个任务尽量更快的连续完成，因为主agent的缓存时间是1小时，如果你隔几个小时回来提要求，缓存失效的话，输入token的消耗量会明显增大； 3、subagent尽量用sonnet 5.5吧，反正是接受主agent派发的任务干杂活的，用opus5.5提升不大，haiku5.5的话又没必要了，也没省多少； 4、主动设置把subagent的缓存时间改到1小时，因为Claude Code中默认subagent的缓存时间是5分钟，所以很容易会产生大量的不被缓存的输入token。 5、主动要求少启动subagent，其实主agent能在大压缩或者少压缩情况下完成一个任务的前提下，一直持续对话缓存率在98%以上，还是挺省的。一开subagent，即使用sonnet5.5，也会明显增加消耗。</a>
+<a class="art" href="../ext/e047.html">拆开 Pi：Agent Harness 的极简设计</a>
+<a class="art" href="../ext/e048.html">AI时代架构设计，给AI的4条缓存红线（9/100）</a>
+<a class="art" href="../ext/e049.html">四大多 Agent 架构详解（三）：Hierarchical 如何解决一个 Supervisor 管不过来的问题</a>
+<a class="art" href="../ext/e050.html">CLAUDE.md 还是 AGENTS.md？Anthropic 的答案是：以后都不用</a>
+<a class="art" href="../ext/e051.html">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</a>
+<a class="art" href="../ext/e052.html">huashu-art-motion发布！可能是最有审美的动画skill。</a>
+<a class="art" href="../ext/e053.html">1024个Agent协同，微软Loop工程杀疯了</a>
+<a class="art" href="../ext/e054.html">AI让写代码变便宜了，但没让架构变便宜</a>
+<a class="art" href="../ext/e055.html">Agent SDK 双面宿主：有 UI 与无 UI 不是两套 Agent</a>
+<a class="art" href="../ext/e056.html">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a>
+<a class="art" href="../ext/e057.html">Claude Code Mods 入门指南：从零做一个 Mod</a>
+<a class="art" href="../ext/e058.html">Agent、Harness、Loop 到底是什么关系？一文讲透 AI 系统的分层架构</a>
+<a class="art" href="../ext/e059.html">Claude.dev 的四篇工程文章：Agent 怎样才算真的改进</a>
+<a class="art" href="../ext/e060.html">Google：首篇词元（Token）技术全景综述</a>
+<a class="art" href="../ext/e061.html">解读 Jev 的 4 种应用方式</a>
+<a class="art" href="../ext/e062.html">重磅！Anthropic公开内部Claude进化最佳实践</a>
+<a class="art" href="../ext/e063.html">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a>
+<a class="art" href="../ext/e064.html">从生成到决策：Jev正在改变LLM应用的开发范式</a>
+<a class="art" href="../ext/e065.html">AI Coding卷到现在，真正卡脖子的东西没人提</a>
+<a class="art" href="../ext/e066.html">Agent不只烧Token：为什么Agent Sandbox正在变得重要</a>
+<a class="art" href="../ext/e067.html">NVIDIA又开源了一个顶级Agent项目：OpenShell</a>
+<a class="art" href="../ext/e068.html">公司规定所有接口都用POST请求，为什么</a>
+<a class="art" href="../ext/e069.html">碾压GPT-4o！94.6%准确率的开源Agent记忆Hindsight来了</a>
+<a class="art" href="../ext/e070.html">风控这个行业，入行10年，迷茫十年</a>
+<a class="art" href="../ext/e071.html">Jev Skill技能包来了！全球开发者砸出500个开源项目</a>
+<a class="art" href="../ext/e072.html">当Agent开始做梦：Dream-RSI如何改进探索策略</a>
+<a class="art" href="../ext/e073.html">预热合流：进了页面也预热了，为什么首句仍可能冷启</a>
+<a class="art" href="../ext/e074.html">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</a>
+<a class="art" href="../ext/e075.html">Anthropic：effort已不再是思考强度开关了</a>
+<a class="art" href="../ext/e076.html">Meta Muse架构深度解析：到底有何不同</a>
+<a class="art" href="../ext/e077.html">Plan Mode之死？Agent需要一条可验证的工作回路</a>
+<a class="art" href="../ext/e078.html">从Harness，走向受控RSI</a>
+<a class="art" href="../ext/e079.html">开源一个Vibe Coding最佳伴侣：口喷鸡</a>
+<a class="art" href="../ext/e080.html">改变世界前先认识世界：Ontology决策结构化实践</a>
+<a class="art" href="../ext/e081.html">本地复刻Jev范式！APUS开源全新浏览器Agent Skill</a>
+<a class="art" href="../ext/e082.html">谷歌RSI新作，让Agent Harness自进化不跑偏！</a>
+<a class="art" href="../ext/e083.html">长程Agent也能“倒带重来”！中科院自动化所联合提出运行时恢复框架AgentRewind</a>
+<a class="art" href="../ext/e084.html">Graph的尽头是自进化Ontology</a>
+<a class="art" href="../ext/e085.html">万字详解10道AI Agent高频面试题</a>
+<a class="art" href="../ext/e086.html">从一次LLM调用到完整Harness：系统理解Agent如何工作</a>
+<a class="art" href="../ext/e087.html">把多语种Laya微调成中文决策模型，代码评估全开源</a>
+<a class="art" href="../ext/e088.html">来了！DeepSeek又发新作DSec</a>
+<a class="art" href="../ext/e089.html">耗时1h！打造属于你自己的Jev，喂饭级教程来了</a>
+<a class="art" href="../ext/e090.html">腾讯开源BrowserSkill：让AI用你的账号上网</a>
+<a class="art" href="../ext/e091.html">谷歌重磅发布Dream-RSI，最新RSI研究！</a>
+<a class="art" href="../ext/e092.html">2万Star开源项目作者入职Hugging Face，副业变全职</a>
+<a class="art" href="../ext/e093.html">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</a>
+<a class="art" href="../ext/e094.html">微软 186k Star 的 markitdown：它凭什么这么火，又在哪会让你踩坑？</a>
+<a class="art" href="../ext/e095.html">错误码排查从 3～8 小时到分钟级，Agent怎么做到的？</a>
+<a class="art" href="../ext/e096.html">给项目建Agent知识库，一套完整方法来了！</a>
+<a class="art" href="../ext/e097.html">AI写得快 ≠ 真正提效：一文讲清Harness&quot;记忆&quot;和&quot;验证闭环</a>
+<a class="art" href="../ext/e098.html">一个字都不会写的 Jev，凭什么成为 ChatGPT 之后最火的模型？</a>
+<a class="art" href="../ext/e099.html">我替大家先试了一把 Jev：一个不写代码、不聊天，只负责&quot;做决定&quot;的奇葩模型</a>
+<a class="art" href="../ext/e100.html">阿里文征：面向Agent全面升级模型服务、Agent服务、AI应用</a>
+<a class="art" href="../ext/e101.html">Agent时代，RAG怎么选？这份指南一次讲清！</a>
+<a class="art" href="../ext/e102.html">Jev 深度解析：从生成式模型到语义决策引擎</a>
+<a class="art" href="../ext/e103.html">Jev 爆火全网，有人把 200+ 个社区案例攒成了开源案例墙，已经 1 亿浏览了！</a>
+<a class="art" href="../ext/e104.html">RAG解决不了的问题，GBrain想解决：给AI Agent装一个能记事的&#x27;第二大脑</a>
+<a class="art" href="../ext/e105.html">开源版 Jev 发布了！</a>
+<a class="art" href="../ext/e106.html">终于有人把数据指标体系讲明白了：指标怎么定、怎么分、怎么用一次讲透</a>
+<a class="art" href="../ext/e107.html">腾讯15年资深后台工程师，转战大模型推理的抉择</a>
+<a class="art" href="../ext/e108.html">腾讯音乐的 MusicBuddy 上线了，Buddy 家族凑够七个</a>
+<a class="art" href="../ext/e109.html">这是一篇把&quot;Jev模型&quot;讲明白的科普级解读！</a>
+<a class="art" href="../ext/e110.html">重磅！从 Agent 开发到 Agent 算法，进阶指南来了</a>
+<a class="art" href="../ext/e111.html">AI时代，让AI写缓存，spec怎么写（5/100）</a>
+<a class="art" href="../ext/e112.html">Agents成新一代造王者，开发者正在快速失去技术决定权</a>
+<a class="art" href="../ext/e113.html">Harness RSI框架来了，登上Hugging Face日榜第二！</a>
+<a class="art" href="../ext/e114.html">Jev Search 开源！当 Jev 遇上搜索引擎：这个开源项目让你用大白话搜遍全网！</a>
+<a class="art" href="../ext/e115.html">Jev是什么AI模型？不做自然语言生成为何引发热议</a>
+<a class="art" href="../ext/e116.html">Jev是分类器吗？今天向所有人开放，送1.2亿token</a>
+<a class="art" href="../ext/e117.html">Jev 爆火：一个不做生成的 AI，凭什么让半个技术圈熬夜跑 Demo？</a>
+<a class="art" href="../ext/e118.html">Loop engineering：把 agent 放进工程循环</a>
+<a class="art" href="../ext/e119.html">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</a>
+<a class="art" href="../ext/e120.html">一文详解Jev：把 Agent 里的“小判断”，从大模型调用改成结构化决策</a>
+<a class="art" href="../ext/e121.html">不会聊天的 AI，彻底爆火：Jev 保姆级教程来了！</a>
+<a class="art" href="../ext/e122.html">为啥 Jev 突然就全网爆火了？</a>
+<a class="art" href="../ext/e123.html">什么是 Jev？</a>
+<a class="art" href="../ext/e124.html">四大多 Agent 架构详解（一）：Workflow 如何把固定流程变成可回放的系统</a>
+<a class="art" href="../ext/e125.html">基于Jev的浏览器Agent插件开源，狂揽12.1k star！</a>
+<a class="art" href="../ext/e126.html">怎样构建一个 Agent-friendly 的网站</a>
+<a class="art" href="../ext/e127.html">整理了最新Jev模型的全网22个爆火玩法！</a>
+<a class="art" href="../ext/e128.html">知识库答不准，可能真不是模型的锅，66.6K star的Docling 到底解决了什么</a>
+<a class="art" href="../ext/e129.html">简单讲讲 Agent 的工作原理</a>
+<a class="art" href="../ext/e130.html">聊聊最近爆火的Jev 模型，到底是个啥？</a>
+<a class="art" href="../ext/e131.html">刚刚，Anthropic公开内部RSI落地方法论</a>
+<a class="art" href="../ext/e132.html">Anthropic 公开「递归自我改进」核心数据：3 万 Agent 正在研发下一代 Claude</a>
+<a class="art" href="../ext/e133.html">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a>
+<a class="art" href="../ext/e134.html">Jev：只会做选择题的 System One 模型，TypeSafe AI 的高频决策分类器</a>
+<a class="art" href="../ext/e135.html">什么是 RSI：2026 年最贵的三个字母（递归自我改进科普）</a>
+<a class="art" href="../ext/e136.html">小米 MiMo-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a>
+<a class="art" href="../ext/e137.html">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a>
+<a class="art" href="../ext/e138.html">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a>
+<a class="art" href="../ext/e139.html">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a>
+<a class="art" href="../ext/e140.html">本地该怎么做 RSI？与 StartLux CTO 郭权玮聊本地自我改进</a>
+<a class="art" href="../ext/e141.html">货拉拉 AI Coding 落地实践：个人提效攒不成组织提效</a>
+<a class="art" href="../ext/e142.html">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</a>
+<a class="art" href="../ext/e143.html">别再只卷 Prompt 了：Context Engineering 才是 Agent 差距所在</a>
+<a class="art" href="../ext/e144.html">面试官：讲一讲多 Agent 协作如何保持一致性</a>
+<a class="art" href="../ext/e145.html">Codex想让Harness消失，Claude Code却要把它做成承重墙</a>
+<a class="art" href="../ext/e146.html">RSI 到底还有多远？三位 AI 研究员谈递归自我改进时间线</a>
+<a class="art" href="../ext/e147.html">OpenAI首席科学家发布长文：《An Alien Mind》（异星心智）</a>
+<a class="art" href="../ext/e148.html">让Agent像人一样记忆：本地长期记忆系统HL-Mem的设计与取舍</a>
+<a class="art" href="../ext/e149.html">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</a>
+<a class="art" href="../ext/e150.html">DeepSeek Harness背后的心脏：Cordis到底是什么</a>
+<a class="art" href="../ext/e151.html">聊一聊 GPT-6 Astra 背后的 Loop 技术</a>
+<a class="art" href="../ext/e152.html">Multi-Agent已死！Anthropic这次完全反着做</a>
+<a class="art" href="../ext/e153.html">个人自进化知识库完整搭建教程</a>
+<a class="art" href="../ext/e154.html">从一次 LLM 调用到完整 Harness，Agent 到底经历了什么？</a>
+<a class="art" href="../ext/e155.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a>
+<a class="art" href="../ext/e156.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a>
+<a class="art" href="../ext/e157.html">字节一天连发3篇自进化Agent，彻底杀疯了</a>
+<a class="art" href="../ext/e158.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
+<a class="art" href="../ext/e159.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
+<a class="art" href="../ext/e160.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
+<a class="art" href="../ext/e161.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
+<a class="art" href="../ext/e162.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
+<a class="art" href="../ext/e163.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
+<a class="art" href="../ext/e164.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
+<a class="art" href="../ext/e165.html">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</a>
+<a class="art" href="../ext/e166.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
+<a class="art" href="../ext/e167.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
+<a class="art" href="../ext/e168.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
+<a class="art" href="../ext/e169.html">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a>
+<a class="art" href="../ext/e170.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
+<a class="art" href="../ext/e171.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
+<a class="art" href="../ext/e172.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
+<a class="art" href="../ext/e173.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
+<a class="art" href="../ext/e174.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
+<a class="art" href="../ext/e175.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
+<a class="art" href="../ext/e176.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
+<a class="art" href="../ext/e177.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
+<a class="art" href="../ext/e178.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
+<a class="art" href="../ext/e179.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
+<a class="art" href="../ext/e180.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
+<a class="art" href="../ext/e181.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
+<a class="art" href="../ext/e182.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
+<a class="art" href="../ext/e183.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
+<a class="art" href="../ext/e184.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
+<a class="art" href="../ext/e185.html">Claude Code 15 条高频实用技巧</a>
+<a class="art" href="../ext/e186.html">Everything Claude Code：Anthropic 黑客松冠军的生产级配置集合</a>
+</details>
+<details class="cat" open><summary>工具与技术 <span class="cnt">65</span></summary>
+<a class="art" href="../ext/e187.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e188.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e189.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e190.html">EasySync、OpenPlug、Resojot三件套</a>
+<a class="art" href="../ext/e191.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
+<a class="art" href="../ext/e192.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
+<a class="art" href="../ext/e193.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
+<a class="art" href="../ext/e194.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
+<a class="art" href="../ext/e195.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
+<a class="art" href="../ext/e196.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
+<a class="art" href="../ext/e197.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e198.html">防重放攻击Nonce机制</a>
+<a class="art" href="../ext/e199.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
+<a class="art" href="../ext/e200.html">手推Transformer（3）架构图解</a>
+<a class="art" href="../ext/e201.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
+<a class="art" href="../ext/e202.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
+<a class="art" href="../ext/e203.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
+<a class="art" href="../ext/e204.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<a class="art" href="../ext/e205.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
+<a class="art" href="../ext/e206.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
+<a class="art" href="../ext/e207.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e208.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
+<a class="art" href="../ext/e209.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
+<a class="art" href="../ext/e210.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
+<a class="art" href="../ext/e211.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
+<a class="art" href="../ext/e212.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
+<a class="art" href="../ext/e213.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
+<a class="art" href="../ext/e214.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
+<a class="art" href="../ext/e215.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
+<a class="art" href="../ext/e216.html">2026年量化投资类Skills排行榜</a>
+<a class="art" href="../ext/e217.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
+<a class="art" href="../ext/e218.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
+<a class="art" href="../ext/e219.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
+<a class="art" href="../ext/e220.html">6个Vibe Coding必备宝藏网站</a>
+<a class="art" href="../ext/e221.html">Archify：AI代码仓库架构可视化开源Skill</a>
+<a class="art" href="../ext/e222.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
+<a class="art" href="../ext/e223.html">anything2explainer：一键制作科普视频的开源Skill</a>
+<a class="art" href="../ext/e224.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
+<a class="art" href="../ext/e225.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
+<a class="art active" href="../ext/e226.html">内容审核控制台嵌入式 MCP Server 落地方案</a>
+<a class="art" href="../ext/e227.html">MCP 开发指北(Java) — 组内分享</a>
+<a class="art" href="../ext/e228.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
+<a class="art" href="../ext/e229.html">html-anything — Agent 时代的 HTML 编辑器</a>
+<a class="art" href="../ext/e230.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
+<a class="art" href="../ext/e231.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
+<a class="art" href="../ext/e232.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
+<a class="art" href="../ext/e233.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
+<a class="art" href="../ext/e234.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
+<a class="art" href="../ext/e235.html">Claude Code Prompt Cache 配置实战</a>
+<a class="art" href="../ext/e236.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
+<a class="art" href="../ext/e237.html">待考证 Claude Code Skill / MCP 清单</a>
+<a class="art" href="../ext/e238.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
+<a class="art" href="../ext/e239.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
+<a class="art" href="../ext/e240.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
+<a class="art" href="../ext/e241.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
+<a class="art" href="../ext/e242.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
+<a class="art" href="../ext/e243.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
+<a class="art" href="../ext/e244.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
+<a class="art" href="../ext/e245.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
+<a class="art" href="../ext/e246.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
+<a class="art" href="../ext/e247.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
+<a class="art" href="../ext/e248.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<a class="art" href="../ext/e249.html">Obsidian 必装的 9 个 AI Agent Skill</a>
+<a class="art" href="../ext/e250.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
+<a class="art" href="../ext/e251.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
+</details>
+<details class="cat"><summary>认知与思维 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e252.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
+<a class="art" href="../ext/e253.html">高性价比人生指南（全书归档）</a>
+<a class="art" href="../ext/e254.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
+<a class="art" href="../ext/e255.html">单Agent思维链惯性与Agent Team挑战者架构</a>
+<a class="art" href="../ext/e256.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
+<a class="art" href="../ext/e257.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
+<a class="art" href="../ext/e258.html">普通人怎样在6-12个月内改变自己</a>
+<a class="art" href="../ext/e259.html">一天一小时，365天后，你的人生会彻底翻篇</a>
+<a class="art" href="../ext/e260.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
+<a class="art" href="../ext/e261.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
+<a class="art" href="../ext/e262.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
+<a class="art" href="../ext/e263.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
+</details>
+<details class="cat"><summary>写作与创作 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e264.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e265.html">全网首发！AI动态漫制作全流程</a>
+<a class="art" href="../ext/e266.html">宫斗宅斗文创作五大核心技巧：爽点密集化+人设标签化+设定易懂化+情感共鸣化+细节代入感</a>
+<a class="art" href="../ext/e267.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
+<a class="art" href="../ext/e268.html">短视频不是拼勤奋，是拼方向和系统</a>
+</details>
+<details class="cat"><summary>商业与变现 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e269.html">一口气讲明白：中国金融机构体系的底层逻辑</a>
+<a class="art" href="../ext/e270.html">50岁左右及以上父母的保障配置</a>
+<a class="art" href="../ext/e271.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
+<a class="art" href="../ext/e272.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
+<a class="art" href="../ext/e273.html">AI 五层价值链：收入往上走资本往下走，钱在大多数人看不见的基础设施层</a>
+</details>
+<details class="cat"><summary>待分拣 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e274.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
+<a class="art" href="../ext/e275.html">2025游戏安全风控指南</a>
+<a class="art" href="../ext/e276.html">我用Obsidian搭了一个会自己生长的个人网</a>
+<a class="art" href="../ext/e277.html">AI时代，普通人用Mac mini能干点啥</a>
+<a class="art" href="../ext/e278.html">Dan Koe：用AI做一个自己的人生模型</a>
+<a class="art" href="../ext/e279.html">【闪客】Computer Use真的在看你的屏幕吗</a>
+<a class="art" href="../ext/e280.html">GitHub技巧｜项目一键可视化</a>
+<a class="art" href="../ext/e281.html">焚诀，提示词模板，思维方式</a>
+<a class="art" href="../ext/e282.html">jev-chat-jarvis：装在手机上的对话副驾</a>
+<a class="art" href="../ext/e283.html">永远相信统计学 永远相信大数法则</a>
+<a class="art" href="../ext/e284.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
+</details>
+</details></nav></aside><div class="mask" id="mask"></div>
+  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>内容审核控制台嵌入式 MCP Server 落地方案</h1><div class="meta">📅 2026-05-19 · <span class="badge">飞书</span> · <a class="src-link" href="https://mi.feishu.cn/wiki/VJg2w9zRXih3tpkuAKxcOQOQnch" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 工具与技术/20260519-MCP-Server嵌入式架构设计与技术选型-内容审核控制台落地方案.md</div><div class="md"><h1>内容审核控制台嵌入式 MCP Server 落地方案</h1>
+<blockquote><p>来源：飞书 归档日期：2026-05-19 抓取状态：待补充原文 原文字符：0｜配图：0 张</p></blockquote>
+<h2>摘要速览</h2>
+<ul><li><strong>解决的问题</strong>：审核运营日常重复操作（查机审/人审日志、排查审核效果、核验配置）无法被 AI Agent 自动编排，需要标准化 AI 友好接口</li><li><strong>核心架构决策</strong>：MCP 嵌入现有控制台（而非独立服务或脚本封装），核心判断是"AI 只是控制台的另一类用户"，复用全部 Service/DAO 层，人机始终对齐，每次 bugfix/新增接口 AI 自动受益</li><li><strong>JDK 8 困境解法</strong>：官方 MCP SDK 和 Spring AI 都要 JDK 17+，ali-langengine-mcp-jdk8 是天坑（只有 interface 声明），最终选用 Solon <code>solon-ai-mcp 3.10.4-M1</code>（JDK 8 兼容），通过 <code>SolonServletFilter</code> 嵌入 Spring Boot Tomcat 不占额外端口</li><li><strong>传输协议选型</strong>：选 Streamable HTTP（MCP 2025-03-26 spec），单 POST 端点，短操作直接返回 JSON、长操作升级 SSE 流，无长连接，适合负载均衡；In-process 部署模式复用 Spring Boot Tomcat 线程池</li><li><strong>鉴权机制</strong>：McpAuthFilter(Order=0) → Bearer token 校验（Nacos 热刷新，无需重启）→ 跳过 SSO → Solon 兜底二次校验，审计日志记录 <code>mcp:&amp;lt;caller&amp;gt;</code> 可追溯每次 AI 调用</li><li><strong>工具注册</strong>：<code>@McpTool</code> 注解 + <code>McpSpringToolProvider</code> 自动扫描 <code>@RestController</code> 生成 JSON Schema，结合 <code>@ApiModelProperty</code>/<code>@ApiParam</code> 三层注解生成完整描述，已注册 15 个审核工具</li><li><strong>新增工具只需三步</strong>：在 Controller 方法加 <code>@McpTool</code> 注解 → 确认 DTO 字段 <code>@ApiModelProperty</code> 描述完整 → 重启验证</li><li><strong>适配其他项目</strong>：5 个通用文件可直接复制（McpAuthFilter/McpServerConfig/McpSpringToolProvider/McpTool/mcpserver.yml），替换 ConsoleContext/DynamicConfig/WebResponse 即可</li></ul>
+<hr>
+<h2>核心内容</h2>
+<p>（待补充）</p>
+<h2>可执行启发</h2>
+<p>（待补充）</p>
+<h2>我的想法</h2>
+<p>（待补充）</p>
+<h2>一、背景与价值</h2>
+<p>内容审核中台处理海量多媒体内容，接入腾讯云、数美、易盾、图普等多家供应商。审核运营日常需要频繁登录控制台查询机审/人审日志、排查审核效果、核验配置——这些操作高度重复、耗时，且无法被 AI Agent 自动编排，亟需提效。</p>
+<table><thead><tr><th>痛点</th><th>AI 友好性基建 方案效果</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr><tr><td>审核运营查数据需登录 Console 手动操作</td><td>AI 助手直接调用工具，自然语言驱动查询</td></tr><tr><td>数据分析需反复切换页面、手动筛选</td><td>多工具组合调用，一次对话完成复合查询</td></tr><tr><td>接口能力无法被 AI Agent 编排</td><td>标准 AI落地 协议，兼容所有 AI客户端</td></tr></tbody></table>
+<p><strong>为什么不用脚本/Skills/CLI，不另起炉灶？</strong></p>
+<p>&lt;callout emoji="🔔"&gt; 核心思路：人能查的，AI 也能查，用同一套服务，不造两套。 &lt;/callout&gt;</p>
+<table><thead><tr><th>方案</th><th>代表形态</th><th>备注</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>脚本/Skills / CLI 封装</td><td>写一批 Shell/Python 脚本调 REST API，塞进 Claude Code skills</td><td>每个工具单独维护、无统一协议；接口变更需同步脚本；工具数一多，维护成本线性膨胀</td></tr><tr><td>独立 AI 专用控制台  &lt;br/&gt;(或MCP专用server）</td><td>另搭一套服务专门给 AI 调用</td><td>两套服务各自演化，容易出不一致的问题；人用控制台的演进无法自动惠及 AI</td></tr><tr><td><strong>MCP嵌入现有控制台（选用）</strong></td><td>在 console 服务内新增 <code>/mcp/**</code> 端点</td><td>复用全部 Service/DAO 层；鉴权、审计、监控共用；部署单元不增加；人机始终对齐</td></tr></tbody></table>
+<p>&lt;callout emoji="🔔"&gt; 核心判断： AI 只是控制台的另一类用户，需要的数据和权限与运营人员高度重合，差别仅在接口形式（自然语言 vs Web UI）。 把 MCP 嵌进现有服务，意味着每次 bugfix、每次新增接口，AI 自动受益，不引入第二套维护债。 *<strong>MCP</strong>**（Model Context Protocol）是 Anthropic 制定的开放协议，让 AI 模型能够以标准方式调用外部工具。接入后，Claude Desktop、Claude Code、Cursor 等客户端可以直接查询审核数据，无需任何 UI 操作。* &lt;/callout&gt;</p>
+<hr>
+<h2>二、整体架构</h2>
+<pre><code>Claude / AI Client
+       │  HTTP  Authorization: Bearer &lt;key&gt;
+       │  POST /mcp/audition/mcp             ← JSON-RPC 2.0（Streamable HTTP）
+       ▼
+┌─────────────────────────────────────────────────────┐
+│           middle-audition-console（8085）            │
+│                                                      │
+│  ① McpAuthFilter (Order=0)                          │
+│     Bearer token → Nacos mcp.auth.key.* auth验证   │
+│     命中 → 写 mcpCaller attr                        │
+│     未命中 → 401 JSON-RPC error                     │
+│                                                      │
+│  ② SolonServletFilter (Order=10)                    │
+│     /mcp/* 请求 → 转发给 Solon 内嵌容器             │
+│     └─ Solon 兜底 filter：二次 Bearer 校验           │
+│                                                     │
+│  ③ McpServerEndpointProvider (Streamable HTTP)                  │
+│     └─ McpSpringToolProvider                        │
+│         扫描 @McpTool 方法，自动生成 JSON Schema     │
+│         调用时注入 ConsoleContext+入参，剥 WebResponse 壳 │
+│         写审计日志（AUDIT logger）                   │
+│                                                      │
+│  ④ 已有 Spring Controller / Service（零改动）        │
+└─────────────────────────────────────────────────────┘
+       │
+       ▼  
+ThreadLocal ConsoleContext（appGroupId/appId/role）
+middle-audition-core（Service / DAO 层）
+
+</code></pre>
+<hr>
+<h2>三、技术选型</h2>
+<h3>3.1 为什么不用官方 MCP SDK / Spring AI？</h3>
+<table><thead><tr><th>方案</th><th>JDK 要求</th><th>结论</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td><code>io.modelcontextprotocol.sdk:mcp</code></td><td>17+</td><td>❌ 不兼容</td></tr><tr><td>Spring AI MCP Server</td><td>17 + Spring Boot 3</td><td>❌ 不兼容</td></tr><tr><td>com.alibaba:ali-langengine-mcp-jdk8</td><td>8</td><td>❌ 不可用，天坑  &lt;br/&gt;当时在设计文档里还把它列为"推荐"，后来实际拉代码构建私有maven包时才发现 MCP 相关接口只有 interface/约定抽象声明</td></tr><tr><td><code>greycode/MCP-Java-SDK-JDK8</code></td><td>8</td><td>❌ 已 archive 停更</td></tr><tr><td><strong><code>org.noear:solon-ai-mcp 3.10.4-M1</code></strong></td><td><strong>8+</strong></td><td>✅ 选用</td></tr></tbody></table>
+<h3>3.2 Solon 内嵌模式</h3>
+<p>Solon 通过 <code>SolonServletFilter</code> <strong>嵌入 Spring Boot 的 Tomcat</strong>，不需要独立端口，不影响现有 Spring 能力。</p>
+<pre><code>Spring Boot Tomcat (8085)
+  └─ SolonServletFilter → /mcp/*
+       └─ Solon 内嵌容器
+            └─ McpServerEndpointProvider → /mcp/audition/mcp
+</code></pre>
+<p><strong>关键配置（mcpserver.yml）：</strong></p>
+<pre><code>solon.app:
+  name: middle-audition-mcp
+  enableHttp: false   # 禁用 Solon 自带 HTTP，复用 Spring Boot 的 Tomcat
+solon.logging.logger:
+  &quot;root&quot;:
+    level: WARN</code></pre>
+<hr>
+<h3>3.3 MCP 传输协议选型</h3>
+<p>MCP 协议在传输层提供 5 种选择，选型取决于部署方式、客户端生态和通信模型。</p>
+<table><thead><tr><th>传输方式</th><th>协议基础</th><th>通信模型</th><th>跨网络</th><th>多客户端</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>stdio</td><td>进程管道</td><td>stdin/stdout 全双工</td><td>❌</td><td>❌</td></tr><tr><td><strong>HTTP + SSE（2024-11-05）</strong></td><td>HTTP 1.1 + SSE</td><td>GET 建连 + POST 发消息</td><td>✅</td><td>✅</td></tr><tr><td><strong>Streamable HTTP（2025-03-26）</strong></td><td>HTTP 1.1</td><td>单 POST，响应可升级 SSE 流</td><td>✅</td><td>✅</td></tr><tr><td>WebSocket</td><td>RFC 6455</td><td>全双工长连接</td><td>✅</td><td>✅</td></tr><tr><td>In-process 嵌入式</td><td>JVM 内方法调用</td><td>无网络 IO</td><td>❌</td><td>❌</td></tr></tbody></table>
+<hr>
+<p><strong>① stdio（本地子进程）</strong></p>
+<p>客户端直接 fork 本地进程，通过 stdin/stdout 收发 JSON-RPC 消息。Claude Code 大多数官方工具（filesystem、github、brave-search 等）均使用此方式。</p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;filesystem&quot;: {
+      &quot;type&quot;: &quot;stdio&quot;,
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-filesystem&quot;, &quot;/tmp&quot;]
+    }
+  }
+}</code></pre>
+<hr>
+<p>优点：无需部署网络服务，进程隔离，安全沙箱易实现。缺点：无法跨网络，不支持多客户端同时接入。</p>
+<p><strong>审核场景：用「薄代理」模式低成本接入</strong></p>
+<p>无需开发 Client（Claude Desktop / Claude Code 已内置），只需写一个薄代理 Server，把 stdin JSON-RPC 转发给已有的 console REST API：</p>
+<pre><code>Claude Desktop（MCP Client，内置，无需开发）
+     │  fork 子进程 + stdin/stdout 管道
+     ▼
+stdio MCP Server（薄代理，只需开发这一层+ 业务知识注入）
+     │  HTTP 调用已有 REST 接口
+     ▼
+middle-audition-console REST API（零改动）</code></pre>
+<p>客户端配置只需在本地 .mcp.json 添加一段，服务端零改动：</p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;audition-stdio&quot;: {
+      &quot;type&quot;: &quot;stdio&quot;,
+      &quot;command&quot;: &quot;python3&quot;,
+      &quot;args&quot;: [&quot;/path/to/audition_mcp_proxy.py&quot;]
+    }
+  }
+}</code></pre>
+<table><thead><tr><th>维度</th><th>stdio 薄代理</th><th>当前嵌入式 Streamable HTTP</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>开发成本</td><td>~150 行 Python，0.5 天 + 业务接口知识灌入 xx天</td><td>~600 行 Java，已完成</td></tr><tr><td>多客户端同时接入</td><td>❌ 每人本地起一个进程，需要维护代理</td><td>✅ 共用一个服务</td></tr><tr><td>集中鉴权 &amp; 审计</td><td>❌ 无</td><td>✅ Nacos key + MCP_AUDIT</td></tr><tr><td>适合场景</td><td>个人本地试验、快速验证</td><td>团队共享、生产级</td></tr></tbody></table>
+<p><strong>结论</strong>：stdio 薄代理适合「个人本地快速验证」或「没有条件嵌入 MCP 的老项目」。生产环境走嵌入式 Streamable HTTP 方案。</p>
+<hr>
+<p><strong>② HTTP + SSE（MCP 2024-11-05，已弃用）</strong>两个端点分工合作：</p>
+<ul><li><code>GET /mcp/audition/sse</code> — 建立 SSE 长连接，服务端通过此通道推送响应</li><li><code>POST /mcp/audition/sse/message</code> — 客户端发送 JSON-RPC 请求</li></ul>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;audition-console&quot;: {
+      &quot;type&quot;: &quot;sse&quot;,
+      &quot;url&quot;: &quot;http://&lt;host&gt;:8085/mcp/audition/sse&quot;,
+      &quot;headers&quot;: { &quot;Authorization&quot;: &quot;Bearer mcp_key_xxxxx&quot; }
+    }
+  }
+}
+</code></pre>
+<p>客户端兼容性：Claude Desktop、Claude Code（<code>type: &quot;sse&quot;</code>）、Cursor 均支持。~~本项目曾选用此方案~~，已迁移至 Streamable HTTP。</p>
+<hr>
+<p><strong>③ Streamable HTTP（MCP 2025-03-26，本项目选用）</strong>单 POST 端点，根据操作时长动态选择响应方式：短操作直接返回 JSON，长操作升级为 SSE 流式响应。</p>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;audition-console&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;http://&lt;host&gt;:8085/mcp/audition/mcp&quot;,
+      &quot;headers&quot;: { &quot;Authorization&quot;: &quot;Bearer mcp_key_xxxxx&quot; }
+    }
+  }
+}
+</code></pre>
+<p>⚠️ <strong>注意</strong>：Streamable HTTP 不接受客户端的 GET 建连请求。若客户端用 <code>type: &quot;sse&quot;</code> 连接 Streamable HTTP 服务端，GET 请求会被 400 拒绝。需确保客户端配置 <code>type: &quot;http&quot;</code>。<strong>本项目选用</strong>：主流客户端（Claude Desktop、Claude Code、Cursor）已全面支持此协议，相比 SSE 更简洁（单端点）、无需维护长连接、更适合负载均衡。</p>
+<hr>
+<p><strong>④ WebSocket（全双工双向，暂不适用）</strong></p>
+<p>基于 RFC 6455，握手升级后客户端和服务端均可主动推送，天然支持双向实时通信。部分 MCP SDK（如 Python <code>mcp</code> 库）提供 WebSocket transport 支持。</p>
+<p>Solon AI MCP 3.10.4-M1 当前版本尚未提供开箱即用的 WebSocket transport，接入需自行实现适配层。<strong>本项目不适用</strong>：审核工具全为请求-响应模型，无服务端主动推送需求，引入 WebSocket 增加复杂度而无收益。</p>
+<hr>
+<h3>3.4 落地方式</h3>
+<p><strong>In-process 嵌入式 + Streamable HTTP（本项目实际架构）</strong>MCP Server 与宿主服务运行在<strong>同一 JVM 进程</strong>内，通过 Solon 内嵌容器托管，不占用额外端口，不产生网络 IO。</p>
+<pre><code>Spring Boot Tomcat（8085）
+  └─ SolonServletFilter → /mcp/*
+       └─ Solon 内嵌容器（同一 JVM，非独立进程）
+            └─ McpServerEndpointProvider（Streamable HTTP 传输）
+</code></pre>
+<p>这是架构层面的部署模式，而非独立传输协议——它对外暴露 Streamable HTTP 端点（③ 方案，单 POST），区别在于 Solon 容器复用了 Spring Boot 的 Tomcat 线程池，随主服务同生命周期启停。</p>
+<p>嵌入式的核心收益：不引入新端口、不增加运维复杂度；代价：Solon 与 Spring 共享同一 JVM，需要通过双重过滤器链（McpAuthFilter → SolonServletFilter → Solon 兜底 filter）做好隔离，详见第四节。</p>
+<hr>
+<p><strong>最终选型决策矩阵</strong></p>
+<table><thead><tr><th></th><th>stdio</th><th><strong>HTTP+SSE</strong></th><th>Streamable HTTP</th><th>WebSocket</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>主流客户端兼容</td><td>✅（本地）</td><td>✅</td><td>✅...✅</td><td></td></tr><tr><td>多客户端接入</td><td>❌</td><td>✅</td><td>✅</td><td>✅</td></tr><tr><td>独立端口</td><td>无</td><td>复用 8085</td><td>复用 8085</td><td>通常需要</td></tr><tr><td>JDK 8 + Spring Boot 2 落地难度</td><td>低</td><td>中</td><td>中</td><td>高</td></tr><tr><td>是否选用</td><td>❌</td><td>⚠️ 已弃用</td><td>✅ In-process部署模式</td><td>❌</td></tr></tbody></table>
+<hr>
+<h2>四、核心组件详解</h2>
+<h3>4.1 @McpTool — 工具注册注解</h3>
+<p>只需在已有 Controller 方法上加一行注解，无需编写任何额外代码：</p>
+<pre><code>@McpTool(value = &quot;search_machine_audit_logs&quot;, description = &quot;分页查询机审日志。&quot;)
+@GetMapping(&quot;list&quot;)
+public WebResponse&lt;PagedResult&lt;MachineLogVO&gt;&gt; getLogList(
+        @ApiIgnore ConsoleContext ctx,   // ← 必须存在
+        @Valid MachineLogDTO logDTO,
+        @RequestParam(defaultValue = &quot;1&quot;) Integer page,
+        @RequestParam(defaultValue = &quot;20&quot;) Integer limit) { ... }</code></pre>
+<p><strong>命名规范</strong>：<code>&amp;lt;动词&amp;gt;_&amp;lt;名词&amp;gt;</code>，全小写 snake_case。</p>
+<h3>4.2 McpSpringToolProvider — 自动 Schema 生成 + 动态调用</h3>
+<p><strong>职责</strong>：启动时扫描所有 <code>@RestController</code> Bean，找到 <code>@McpTool</code> 方法，自动构建工具描述和 JSON Schema。</p>
+<p><strong>注解 → Schema 映射示例</strong></p>
+<p>以 <code>search_machine_audit_logs</code> 为例，三层注解共同决定 AI 拿到的 inputSchema：</p>
+<pre><code>// Controller 方法
+@McpTool(value = &quot;search_machine_audit_logs&quot;,
+         description = &quot;分页查询机审日志。appGroupId/appId 必填；startTime/endTime 为毫秒时间戳，必填。&quot;)
+public WebResponse&lt;PagedResult&lt;MachineLogVO&gt;&gt; getLogList(
+        @ApiIgnore ConsoleContext ctx,
+        @Valid MachineLogDTO logDTO,
+        @RequestParam(defaultValue = &quot;1&quot;)  @ApiParam(&quot;页码，从1开始&quot;)     Integer page,
+        @RequestParam(defaultValue = &quot;20&quot;) @ApiParam(&quot;每页条数，最大100&quot;) Integer limit) { ... }
+
+// DTO 字段
+public class MachineLogDTO {
+    @ApiModelProperty(&quot;关键词，支持模糊匹配&quot;)
+    private String keyword;
+
+    @NotNull
+    @ApiModelProperty(&quot;开始时间（毫秒时间戳）&quot;)
+    private Long startTime;
+
+    @NotNull
+    @ApiModelProperty(&quot;结束时间（毫秒时间戳）&quot;)
+    private Long endTime;
+}</code></pre>
+<p>AI 在 <code>tools/list</code> 时实际拿到的 inputSchema：</p>
+<pre><code>{
+  &quot;type&quot;: &quot;object&quot;,
+  &quot;properties&quot;: {
+    &quot;appGroupId&quot;: { &quot;type&quot;: &quot;integer&quot;, &quot;description&quot;: &quot;应用组 ID&quot; },
+    &quot;appId&quot;:      { &quot;type&quot;: &quot;string&quot;,  &quot;description&quot;: &quot;应用场景 ID&quot; },
+    &quot;page&quot;:       { &quot;type&quot;: &quot;integer&quot;, &quot;description&quot;: &quot;页码，从1开始&quot; },
+    &quot;limit&quot;:      { &quot;type&quot;: &quot;integer&quot;, &quot;description&quot;: &quot;每页条数，最大100&quot; },
+    &quot;logDTO&quot;: {
+      &quot;type&quot;: &quot;object&quot;,
+      &quot;properties&quot;: {
+        &quot;keyword&quot;:   { &quot;type&quot;: &quot;string&quot;,  &quot;description&quot;: &quot;关键词，支持模糊匹配&quot; },
+        &quot;startTime&quot;: { &quot;type&quot;: &quot;integer&quot;, &quot;description&quot;: &quot;开始时间（毫秒时间戳）&quot; },
+        &quot;endTime&quot;:   { &quot;type&quot;: &quot;integer&quot;, &quot;description&quot;: &quot;结束时间（毫秒时间戳）&quot; }
+      },
+      &quot;required&quot;: [&quot;startTime&quot;, &quot;endTime&quot;]
+    }
+  },
+  &quot;required&quot;: [&quot;appGroupId&quot;, &quot;appId&quot;]
+}</code></pre>
+<h3>4.3 McpContextBuilder — 上下文生命周期管理</h3>
+<pre><code>McpAuthFilter 写入 CALLER ThreadLocal
+      ↓
+McpContextBuilder.runTool()
+      ↓
+build(appGroupId, appId, caller) → ConsoleContext(role=superAdmin)
+      ↓ ThreadLocalUtil 写入
+callable.call()  ← 调用 Controller 方法
+      ↓
+audit log 写入
+      ↓
+ConsoleContext.clear() + CALLER.clear()</code></pre>
+<p><code>createBy = &quot;mcp:&amp;lt;caller&amp;gt;&quot;</code> 写入操作日志，可追溯每次 AI 调用的发起方。</p>
+<h3>4.4 McpAuthFilter — Bearer Token 鉴权</h3>
+<p><strong>Nacos 配置（DynamicConfig，支持热刷新，无需重启）：</strong></p>
+<pre><code>mcp.auth.key.mcp_key_claude_ops=claude-ops-team
+mcp.auth.key.mcp_key_ai_bot=ai-assistant-bot
+mcp.service.mi-account=12345678</code></pre>
+<p><strong>请求链路：</strong></p>
+<pre><code>请求到达 /mcp/*
+  ↓
+McpAuthFilter（Order=0）
+  ├─ 命中 Nacos key → 写 mcpCaller + skipAuth attr → 放行
+  └─ 未命中 → 401 {&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;error&quot;:{&quot;code&quot;:-32001,&quot;message&quot;:&quot;Unauthorized&quot;}}
+  ↓
+LoginFilter（检测 skipAuth=true → 跳过 SSO）
+  ↓
+SolonServletFilter → Solon 兜底二次校验 → 工具执行</code></pre>
+<h3>4.5 McpServerConfig — 容器装配</h3>
+<pre><code>// Spring 启动后拉起 Solon 内嵌容器
+Solon.start(McpServerConfig.class, new String[]{&quot;--cfg=mcpserver.yml&quot;}, app -&gt; {
+    app.enableScanning(false);
+    // 兜底鉴权，防止绕过 Spring 侧 McpAuthFilter
+    app.filter((ctx, chain) -&gt; { ... });
+});
+
+// 所有 singleton 就绪后注册工具
+@Override
+public void afterSingletonsInstantiated() {
+    McpServerEndpointProvider provider = McpServerEndpointProvider.builder()
+        .name(&quot;audition_tools&quot;)
+        .channel(McpChannel.STREAMABLE_STATELESS)   // Streamable HTTP 协议（MCP 2025-03-26）
+        .mcpEndpoint(&quot;/mcp/audition/mcp&quot;)
+        .build();
+    provider.addTool(new McpSpringToolProvider(applicationContext));
+    provider.postStart();
+}
+</code></pre>
+<hr>
+<table><thead><tr><th>工具名</th><th>对应接口</th><th>描述</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td><code>search_machine_audit_logs</code></td><td>GET /machinelog/list</td><td>分页查询机审日志</td></tr><tr><td><code>search_human_audit_logs</code></td><td>GET /auditorLog/list</td><td>分页查询人审日志</td></tr><tr><td><code>get_audit_trace</code></td><td>GET /audition/trace</td><td>按 reviewId 查完整审核轨迹</td></tr><tr><td><code>list_machine_audit_queues</code></td><td>GET /auditionQueueInfo/list</td><td>机审队列列表</td></tr><tr><td><code>get_machine_audit_queue</code></td><td>GET /auditionQueueInfo/get</td><td>机审队列详情</td></tr><tr><td><code>get_app_audit_config</code></td><td>GET /auditionQueueInfo/appConf</td><td>应用场景全局审核策略</td></tr><tr><td><code>list_human_audit_queues</code></td><td>GET /auditorQueueInfo/list</td><td>人审队列列表</td></tr><tr><td><code>list_human_audit_queue_names</code></td><td>GET /auditorQueueInfo/listQueueNames</td><td>可用人审队列名</td></tr><tr><td><code>list_app_scenarios</code></td><td>GET /appInfo/list</td><td>应用场景列表</td></tr><tr><td><code>get_app_scenario</code></td><td>GET /appInfo/get</td><td>应用场景详情</td></tr><tr><td><code>list_app_groups</code></td><td>GET /appGroupInfo/list</td><td>应用组列表</td></tr><tr><td><code>get_app_group</code></td><td>GET /appGroupInfo/get</td><td>应用组详情</td></tr><tr><td><code>get_app_group_tree</code></td><td>GET /appGroupInfo/cascade</td><td>应用-场景级联树</td></tr><tr><td><code>list_self_defined_labels</code></td><td>GET /auditResultLabel/selfDefinedLabelList</td><td>自定义审核结果标签列表</td></tr><tr><td><code>get_diversion_config</code></td><td>GET /auditionQueueInfo/getDiversionConfig</td><td>各供应商分流比例；diversionStrategyEnable=true 时使用，queueType 来自 list_machine_audit_queues</td></tr></tbody></table>
+<hr>
+<h2>五、新增工具步骤（标准流程）</h2>
+<p>只需三步，无需改动任何 MCP 框架代码。</p>
+<h3>Step 1：在 Controller 方法上加 @McpTool 注解</h3>
+<pre><code>@McpTool(value = &quot;get_whitelist_hits&quot;,
+         description = &quot;查询内容命中白名单的记录，按时间范围过滤。&quot;)
+@GetMapping(&quot;hits&quot;)
+public WebResponse&lt;PagedResult&lt;WhitelistHitVO&gt;&gt; getHits(
+        @ApiIgnore ConsoleContext ctx,   // ← 必须保留
+        WhitelistQueryDTO dto,
+        @RequestParam(defaultValue = &quot;1&quot;) Integer page,
+        @RequestParam(defaultValue = &quot;20&quot;) Integer limit) { ... }</code></pre>
+<p><strong>检查清单：</strong></p>
+<ul><li>方法签名中有 ConsoleContext ctx 参数</li><li>工具名唯一，snake_case 命名</li><li>description 清晰描述工具用途和参数含义</li><li>只注册只读接口（GET），写操作需审批评估</li></ul>
+<h3>Step 2：确认 DTO 字段描述完整</h3>
+<pre><code>public class WhitelistQueryDTO {
+    @ApiModelProperty(&quot;关键词，支持模糊匹配&quot;)
+    private String keyword;
+
+    @ApiModelProperty(&quot;开始时间（毫秒时间戳）&quot;)
+    private Long startTime;
+
+    @ApiModelProperty(&quot;结束时间（毫秒时间戳）&quot;)
+    private Long endTime;
+}</code></pre>
+<h3>Step 3：重启服务，验证工具已注册</h3>
+<pre><code>[MCP] registered tool: get_whitelist_hits
+[MCP] tools registered, count=15</code></pre>
+<hr>
+<h2>六、整体配置指南</h2>
+<h3>Nacos 配置</h3>
+<pre><code># 格式：mcp.auth.key.&lt;token&gt;=&lt;调用方标识&gt;
+mcp.auth.key.mcp_key_claude_ops_abc123=claude-ops-team
+mcp.auth.key.mcp_key_ai_platform_xyz=ai-platform
+mcp.service.mi-account=12345678</code></pre>
+<h3>MCP 客户端配置（~/.claude.json）</h3>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;audition-console&quot;: {
+      &quot;type&quot;: &quot;http&quot;,
+      &quot;url&quot;: &quot;http://&lt;host&gt;:8085/mcp/audition/mcp&quot;,
+      &quot;headers&quot;: {
+        &quot;Authorization&quot;: &quot;Bearer mcp_key_claude_ops_abc123&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<h3>MCP Inspector 调试</h3>
+<pre><code>URL:    http://&lt;host&gt;:8085/mcp/audition/mcp
+Header: Authorization: Bearer mcp_key_xxxxx
+</code></pre>
+<hr>
+<h3>审计日志</h3>
+<p>每次工具调用写入结构化日志（MCP_AUDIT logger）：</p>
+<pre><code>{
+  &quot;tool&quot;: &quot;search_machine_audit_logs&quot;,
+  &quot;caller&quot;: &quot;claude-ops-team&quot;,
+  &quot;appGroupId&quot;: 123,
+  &quot;appId&quot;: &quot;video_content&quot;,
+  &quot;elapsedMs&quot;: 187,
+  &quot;success&quot;: true
+}</code></pre>
+<p>失败时额外记录 error 字段：</p>
+<pre><code>{
+  &quot;success&quot;: false,
+  &quot;error&quot;: &quot;IllegalArgumentException:查询时间范围超过30天，请缩短后重试。&quot;
+}</code></pre>
+<hr>
+<h3>依赖引入</h3>
+<pre><code>&lt;!-- Solon AI MCP Server（JDK 8 兼容） --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.noear&lt;/groupId&gt;
+    &lt;artifactId&gt;solon-ai-mcp&lt;/artifactId&gt;
+    &lt;version&gt;3.10.4-M1&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- Solon 嵌入 Spring Boot Servlet 容器 --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.noear&lt;/groupId&gt;
+    &lt;artifactId&gt;solon-web-servlet&lt;/artifactId&gt;
+    &lt;version&gt;3.10.4-M1&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+<hr>
+<h3>适配其他 Spring Boot 2 项目</h3>
+<table><thead><tr><th>本项目</th><th>目标项目替换</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr><tr><td><code>ConsoleContext</code>（ThreadLocal 上下文）</td><td>替换为目标项目的 ThreadLocal 上下文对象</td></tr><tr><td><code>DynamicConfig</code>（Nacos 配置读取）</td><td>替换为目标项目的配置读取方式</td></tr><tr><td><code>mcp.service.mi-account</code>（内部账号）</td><td>替换为目标项目的内部服务账号字段</td></tr><tr><td><code>WebResponse</code>（响应体剥包）</td><td>替换为目标项目的统一响应体类型</td></tr><tr><td><code>/mcp/audition/mcp</code>（端点路径）</td><td>可按业务调整</td></tr></tbody></table>
+<p><strong>可直接复制的通用文件：</strong></p>
+<ul><li>McpAuthFilter.java — Bearer 鉴权</li><li>McpServerConfig.java — Solon 容器装配</li><li>McpSpringToolProvider.java — Schema 生成 + 动态调用核心</li><li>McpTool.java — 注解定义</li><li>mcpserver.yml — Solon 配置</li></ul>
+<hr>
+<h2>七、常见问题</h2>
+<p><strong>Q：客户端连接返回 400？</strong>A：检查客户端配置。本项目使用 Streamable HTTP 协议，客户端必须配置 <code>type: &quot;http&quot;</code>，不能用 <code>type: &quot;sse&quot;</code>。旧版 SSE 客户端会发 GET 建连请求，而 Streamable HTTP 端点只接受 POST，因此返回 400。</p>
+<p><strong>Q：工具调用返回空数据？</strong> A：检查 Controller 方法是否有 ConsoleContext 参数。缺少该参数时 appGroupId=-1 导致查询空结果，启动日志会有对应 ERROR。</p>
+<p><strong>Q：新加的 Key 不生效？</strong> A：McpAuthFilter 监听 DynamicConfig，Nacos 推送后自动热刷新，无需重启。查看日志 [MCP] auth keys reloaded, count=N 确认。</p>
+<p><strong>Q：工具注册数量不对？</strong> A：查看启动日志 [MCP] tools registered, count=N，注册失败的 tool 会有 [MCP] failed to register tool: xxx 的 ERROR。</p>
+<p>*Q：Solon 启动失败后 /mcp/ 请求怎么处理？** A：solonStarted=false 时 SolonServletFilter 被禁用，/mcp/* 走 Spring Security 报 403，不会出现服务假响应。</p>
+<p>（图片未能落盘：飞书盘外链需登录态，待CDP补图）</p>
+<hr>
+<p><em>文档维护：fangdengfei | 最后更新：2026-04</em></p>
+<h2>原文沉淀</h2>
+<p>（抓取失败，仅有摘要） 原因：来源为登录墙/无权限/错误页，正文不可用； 来源 URL：https://mi.feishu.cn/wiki/VJg2w9zRXih3tpkuAKxcOQOQnch</p>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+</div>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+</body>
+</html>

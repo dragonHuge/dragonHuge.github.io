@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+    <a class="brand" href="../index.html">🐉 DragonHuge · 知识花园</a>
+    <a class="search-m" href="../search.html" aria-label="搜索">🔍</a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…  /" autocomplete="off" aria-label="搜索全站文章">
+      <div class="sug" id="sug" hidden></div>
+    </div>
+    <nav class="topnav">
+      <a href="../index.html" class="">首页</a>
+      <a href="../daily/index.html" class="">日常</a>
+      <a href="../tech/index.html" class="">技术文章</a>
+      <a href="../ext/index.html" class="on">外部沉淀</a>
+    </nav>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar"><nav class="side-nav">
+<details class="mod"><summary>📒 日常知识库沉淀 <span class="cnt">21</span></summary>
+<div class="grp">灵感火花</div>
+<a class="art" href="../daily/d001.html">2026-10-24</a>
+<a class="art" href="../daily/d002.html">2026-10-17</a>
+<a class="art" href="../daily/d003.html">2026-09-27</a>
+<a class="art" href="../daily/d004.html">2026-09-19</a>
+<a class="art" href="../daily/d005.html">2026-09-12</a>
+<div class="grp">2026 · Q2 · 第7周(05.11-05.17)</div>
+<a class="art" href="../daily/d006.html">2026-05-15</a>
+<a class="art" href="../daily/d007.html">2026-05-13</a>
+<a class="art" href="../daily/d008.html">2026-05-12</a>
+<a class="art" href="../daily/d009.html">2026-05-11</a>
+<div class="grp">2026 · Q2 · 第6周(05.04-05.10)</div>
+<a class="art" href="../daily/d010.html">2026-05-09</a>
+<a class="art" href="../daily/d011.html">2026-05-08</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d012.html">2026-04-28</a>
+<a class="art" href="../daily/d013.html">2026-04-27</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d014.html">2026-04-26</a>
+<a class="art" href="../daily/d015.html">2026-04-25 周六无事</a>
+<div class="grp">2026 · Q2 · 第2周(04.06-04.12)</div>
+<a class="art" href="../daily/d016.html">2026-04-12 随记</a>
+<a class="art" href="../daily/d017.html">2026-04-07 随记</a>
+<a class="art" href="../daily/d018.html">2026-04-06</a>
+<div class="grp">2026 · Q2 · 第1周(03.30-04.05)</div>
+<a class="art" href="../daily/d019.html">2026-04-04</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d020.html">第5周(04.27-05.03) 周报</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d021.html">第4周(04.20-04.26) 周报</a>
+</details>
+<details class="mod"><summary>💻 技术文章 <span class="cnt">22</span></summary>
+<details class="cat" open><summary>AI底层原理</summary>
+<a class="art" href="../tech/t001.html">AI 底层原理 — 资料来源</a>
+<a class="art" href="../tech/t002.html">AI 底层原理 — 感悟日志</a>
+<a class="art" href="../tech/t003.html">LLM Agent 工程原理 — 学习笔记</a>
+</details>
+<details class="cat" open><summary>Agent应用开发</summary>
+<a class="art" href="../tech/t004.html">DeepSeek dsh-superagent 技术方案分析（学习版）</a>
+<a class="art" href="../tech/t005.html">Agent 应用开发 — 知识点全景图</a>
+<a class="art" href="../tech/t006.html">Agent 应用开发 — 五阶段学习计划</a>
+</details>
+<details class="cat" open><summary>安全风控</summary>
+<a class="art" href="../tech/t007.html">H5 活动风控 · 技术学习问答笔记（龙老板提问 → 小墨答复）</a>
+<a class="art" href="../tech/t008.html">H5 活动风控完整技术调研（小白友好汇总版）：需求还原 · 核心概念 · 行业方案 · 落地路线</a>
+<a class="art" href="../tech/t009.html">H5 活动风控第二轮调研：业界设备指纹落地、WebAuthn 边界、黑产攻击面与落地方案</a>
+<a class="art" href="../tech/t010.html">JS 虚拟化保护（防守侧）第一轮调研：原理、实现与 ZCode 风控重叠度</a>
+</details>
+<details class="cat" open><summary>投资理财</summary>
+<a class="art" href="../tech/t011.html">投资理财 — 资料来源</a>
+<a class="art" href="../tech/t012.html">投资理财 — 知识库组织规范</a>
+<a class="art" href="../tech/t013.html">投资理财 — 四阶段学习路径</a>
+<div class="grp">实践记录</div>
+<a class="art" href="../tech/t014.html">决策日志</a>
+<a class="art" href="../tech/t015.html">定投记录</a>
+<div class="grp">知识卡/01-基础概念</div>
+<a class="art" href="../tech/t016.html">风险与收益</a>
+<a class="art" href="../tech/t017.html">通胀</a>
+<a class="art" href="../tech/t018.html">复利</a>
+<div class="grp">配置方案</div>
+<a class="art" href="../tech/t019.html">退休目标测算</a>
+<a class="art" href="../tech/t020.html">财务地基自查</a>
+</details>
+<details class="cat" open><summary>日常问答</summary>
+<a class="art" href="../tech/t021.html">日常问答沉淀 · 2026-09</a>
+</details>
+<details class="cat" open><summary>综合文章</summary>
+<a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+</details>
+</details>
+<details class="mod" open><summary>📥 外部沉淀 <span class="cnt">285</span></summary>
+<details class="cat" open><summary>AI与效率 <span class="cnt">186</span></summary>
+<a class="art" href="../ext/e001.html">Anthropic：子Agent拆多了，为什么反而更慢</a>
+<a class="art" href="../ext/e002.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a>
+<a class="art" href="../ext/e003.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a>
+<a class="art" href="../ext/e004.html">从Harness到Harness²，Google自进化新突破</a>
+<a class="art" href="../ext/e005.html">深度解析 Codex Harness 架构及其全新上下文压缩记忆体系的设计思路</a>
+<a class="art" href="../ext/e006.html">让Agent可评可控可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e007.html">Agent时代的输入法：80亿token打磨的效率工具即将开源</a>
+<a class="art" href="../ext/e008.html">Anthropic最新长文：请谨慎使用子智能体</a>
+<a class="art" href="../ext/e009.html">Anthropic长文详解Claude Duet安全设计：密码永远不经过模型</a>
+<a class="art" href="../ext/e010.html">Codex核心团队复盘：从30秒一次反馈到放手跑几小时</a>
+<a class="art" href="../ext/e011.html">一篇多模态Agentic框架最新前沿综述</a>
+<a class="art" href="../ext/e012.html">为什么现在的top大模型说话越来越拗口难懂了</a>
+<a class="art" href="../ext/e013.html">你的Personal Agent如何真正跑起来？Agent实战指南</a>
+<a class="art" href="../ext/e014.html">实测最近爆火的Teamily，是真有东西啊</a>
+<a class="art" href="../ext/e015.html">替代CC Switch的这个项目已斩获20K Star</a>
+<a class="art" href="../ext/e016.html">维基百科编辑抓AI的清单，被反着做成了6万多star的skill</a>
+<a class="art" href="../ext/e017.html">刚刚，Anthropic公开内部Sub-Agent+Loop最佳实践</a>
+<a class="art" href="../ext/e018.html">刚刚！斯坦福CS336中文教程发布了</a>
+<a class="art" href="../ext/e019.html">Agent的长期记忆要怎么做？RAG是不是最好的选择（4/12）</a>
+<a class="art" href="../ext/e020.html">Uber的合同审阅Agent工程实践和拆解</a>
+<a class="art" href="../ext/e021.html">6.3万星开源求职流水线：69份简历拿下20轮面试</a>
+<a class="art" href="../ext/e022.html">Agent如何自己变强：从Skill到模型权重的进化全景图</a>
+<a class="art" href="../ext/e023.html">Anthropic：谨慎使用子Agent</a>
+<a class="art" href="../ext/e024.html">Jev创始人访谈：Jev是面向智能的SQL，软件设计需回到工作流为中心</a>
+<a class="art" href="../ext/e025.html">MCP解决连接RAG解决知识，那谁来解决业务理解：企业AI的本体论</a>
+<a class="art" href="../ext/e026.html">OpenAI：FDE的目标是让自己失业</a>
+<a class="art" href="../ext/e027.html">去年教的85%全扔掉！斯坦福最新AI神课：200行写Claude Code</a>
+<a class="art" href="../ext/e028.html">唐杰团队RSI新作：让Agent越改越强，执行成本反降26%</a>
+<a class="art" href="../ext/e029.html">在上海听了一天AI论坛，我学到新的AI焚诀了</a>
+<a class="art" href="../ext/e030.html">大家用AI胆子还不够大！Claude工程负责人亲授顶级用法</a>
+<a class="art" href="../ext/e031.html">3篇NeurIPS顶会Skill，很精彩</a>
+<a class="art" href="../ext/e032.html">刚刚，Anthropic推出个人智能体Claude Duet：opus 5.5 驱动</a>
+<a class="art" href="../ext/e033.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+<a class="art" href="../ext/e034.html">Meta的智能体工程经验：轻量编排与专业分工</a>
+<a class="art" href="../ext/e035.html">分享8个让我最近很惊艳的Claude Opus 5.5玩法</a>
+<a class="art" href="../ext/e036.html">坏了，真给openai从deepseek那学到真的了</a>
+<a class="art" href="../ext/e037.html">天猫数字员工：研发暗物质与AI Native组织协作</a>
+<a class="art" href="../ext/e038.html">AI工程化防翻车指南</a>
+<a class="art" href="../ext/e039.html">Anthropic最新就业报告公开：AI时代，新人何去何从?</a>
+<a class="art" href="../ext/e040.html">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</a>
+<a class="art" href="../ext/e041.html">从 BERT、GPT 到 Jev：一文看懂大模型架构的演进与分化</a>
+<a class="art" href="../ext/e042.html">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a>
+<a class="art" href="../ext/e043.html">面试官皱眉：“你知道Codex多Agent实现机制吗？ ”我笑了：“独立会话、上下文交接、异步通信、任务调度，你想先听哪块？”</a>
+<a class="art" href="../ext/e044.html">把逆向工程交给 Agent：一文拆解爆火的 REA 技术原理</a>
+<a class="art" href="../ext/e045.html">为什么说 DeepSeek Harness 的灵魂是一切皆插件？</a>
+<a class="art" href="../ext/e046.html">踩了无数坑后，实践出来的Claude Code省token小技巧👇 其实Opus5.5整体还挺耐用的，但是需要对默认设置稍微做点调整： 1、主力模型可以用Opus5.5，但最好别用尽1M的上下文，设定400k-600k之间的自动压缩机制比较好，上下文太短的话影响视线效果，上下文长了耗token，以及会明显变慢，效果实际也会变差； 2、一个任务尽量更快的连续完成，因为主agent的缓存时间是1小时，如果你隔几个小时回来提要求，缓存失效的话，输入token的消耗量会明显增大； 3、subagent尽量用sonnet 5.5吧，反正是接受主agent派发的任务干杂活的，用opus5.5提升不大，haiku5.5的话又没必要了，也没省多少； 4、主动设置把subagent的缓存时间改到1小时，因为Claude Code中默认subagent的缓存时间是5分钟，所以很容易会产生大量的不被缓存的输入token。 5、主动要求少启动subagent，其实主agent能在大压缩或者少压缩情况下完成一个任务的前提下，一直持续对话缓存率在98%以上，还是挺省的。一开subagent，即使用sonnet5.5，也会明显增加消耗。</a>
+<a class="art" href="../ext/e047.html">拆开 Pi：Agent Harness 的极简设计</a>
+<a class="art" href="../ext/e048.html">AI时代架构设计，给AI的4条缓存红线（9/100）</a>
+<a class="art" href="../ext/e049.html">四大多 Agent 架构详解（三）：Hierarchical 如何解决一个 Supervisor 管不过来的问题</a>
+<a class="art" href="../ext/e050.html">CLAUDE.md 还是 AGENTS.md？Anthropic 的答案是：以后都不用</a>
+<a class="art active" href="../ext/e051.html">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</a>
+<a class="art" href="../ext/e052.html">huashu-art-motion发布！可能是最有审美的动画skill。</a>
+<a class="art" href="../ext/e053.html">1024个Agent协同，微软Loop工程杀疯了</a>
+<a class="art" href="../ext/e054.html">AI让写代码变便宜了，但没让架构变便宜</a>
+<a class="art" href="../ext/e055.html">Agent SDK 双面宿主：有 UI 与无 UI 不是两套 Agent</a>
+<a class="art" href="../ext/e056.html">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a>
+<a class="art" href="../ext/e057.html">Claude Code Mods 入门指南：从零做一个 Mod</a>
+<a class="art" href="../ext/e058.html">Agent、Harness、Loop 到底是什么关系？一文讲透 AI 系统的分层架构</a>
+<a class="art" href="../ext/e059.html">Claude.dev 的四篇工程文章：Agent 怎样才算真的改进</a>
+<a class="art" href="../ext/e060.html">Google：首篇词元（Token）技术全景综述</a>
+<a class="art" href="../ext/e061.html">解读 Jev 的 4 种应用方式</a>
+<a class="art" href="../ext/e062.html">重磅！Anthropic公开内部Claude进化最佳实践</a>
+<a class="art" href="../ext/e063.html">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a>
+<a class="art" href="../ext/e064.html">从生成到决策：Jev正在改变LLM应用的开发范式</a>
+<a class="art" href="../ext/e065.html">AI Coding卷到现在，真正卡脖子的东西没人提</a>
+<a class="art" href="../ext/e066.html">Agent不只烧Token：为什么Agent Sandbox正在变得重要</a>
+<a class="art" href="../ext/e067.html">NVIDIA又开源了一个顶级Agent项目：OpenShell</a>
+<a class="art" href="../ext/e068.html">公司规定所有接口都用POST请求，为什么</a>
+<a class="art" href="../ext/e069.html">碾压GPT-4o！94.6%准确率的开源Agent记忆Hindsight来了</a>
+<a class="art" href="../ext/e070.html">风控这个行业，入行10年，迷茫十年</a>
+<a class="art" href="../ext/e071.html">Jev Skill技能包来了！全球开发者砸出500个开源项目</a>
+<a class="art" href="../ext/e072.html">当Agent开始做梦：Dream-RSI如何改进探索策略</a>
+<a class="art" href="../ext/e073.html">预热合流：进了页面也预热了，为什么首句仍可能冷启</a>
+<a class="art" href="../ext/e074.html">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</a>
+<a class="art" href="../ext/e075.html">Anthropic：effort已不再是思考强度开关了</a>
+<a class="art" href="../ext/e076.html">Meta Muse架构深度解析：到底有何不同</a>
+<a class="art" href="../ext/e077.html">Plan Mode之死？Agent需要一条可验证的工作回路</a>
+<a class="art" href="../ext/e078.html">从Harness，走向受控RSI</a>
+<a class="art" href="../ext/e079.html">开源一个Vibe Coding最佳伴侣：口喷鸡</a>
+<a class="art" href="../ext/e080.html">改变世界前先认识世界：Ontology决策结构化实践</a>
+<a class="art" href="../ext/e081.html">本地复刻Jev范式！APUS开源全新浏览器Agent Skill</a>
+<a class="art" href="../ext/e082.html">谷歌RSI新作，让Agent Harness自进化不跑偏！</a>
+<a class="art" href="../ext/e083.html">长程Agent也能“倒带重来”！中科院自动化所联合提出运行时恢复框架AgentRewind</a>
+<a class="art" href="../ext/e084.html">Graph的尽头是自进化Ontology</a>
+<a class="art" href="../ext/e085.html">万字详解10道AI Agent高频面试题</a>
+<a class="art" href="../ext/e086.html">从一次LLM调用到完整Harness：系统理解Agent如何工作</a>
+<a class="art" href="../ext/e087.html">把多语种Laya微调成中文决策模型，代码评估全开源</a>
+<a class="art" href="../ext/e088.html">来了！DeepSeek又发新作DSec</a>
+<a class="art" href="../ext/e089.html">耗时1h！打造属于你自己的Jev，喂饭级教程来了</a>
+<a class="art" href="../ext/e090.html">腾讯开源BrowserSkill：让AI用你的账号上网</a>
+<a class="art" href="../ext/e091.html">谷歌重磅发布Dream-RSI，最新RSI研究！</a>
+<a class="art" href="../ext/e092.html">2万Star开源项目作者入职Hugging Face，副业变全职</a>
+<a class="art" href="../ext/e093.html">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</a>
+<a class="art" href="../ext/e094.html">微软 186k Star 的 markitdown：它凭什么这么火，又在哪会让你踩坑？</a>
+<a class="art" href="../ext/e095.html">错误码排查从 3～8 小时到分钟级，Agent怎么做到的？</a>
+<a class="art" href="../ext/e096.html">给项目建Agent知识库，一套完整方法来了！</a>
+<a class="art" href="../ext/e097.html">AI写得快 ≠ 真正提效：一文讲清Harness&quot;记忆&quot;和&quot;验证闭环</a>
+<a class="art" href="../ext/e098.html">一个字都不会写的 Jev，凭什么成为 ChatGPT 之后最火的模型？</a>
+<a class="art" href="../ext/e099.html">我替大家先试了一把 Jev：一个不写代码、不聊天，只负责&quot;做决定&quot;的奇葩模型</a>
+<a class="art" href="../ext/e100.html">阿里文征：面向Agent全面升级模型服务、Agent服务、AI应用</a>
+<a class="art" href="../ext/e101.html">Agent时代，RAG怎么选？这份指南一次讲清！</a>
+<a class="art" href="../ext/e102.html">Jev 深度解析：从生成式模型到语义决策引擎</a>
+<a class="art" href="../ext/e103.html">Jev 爆火全网，有人把 200+ 个社区案例攒成了开源案例墙，已经 1 亿浏览了！</a>
+<a class="art" href="../ext/e104.html">RAG解决不了的问题，GBrain想解决：给AI Agent装一个能记事的&#x27;第二大脑</a>
+<a class="art" href="../ext/e105.html">开源版 Jev 发布了！</a>
+<a class="art" href="../ext/e106.html">终于有人把数据指标体系讲明白了：指标怎么定、怎么分、怎么用一次讲透</a>
+<a class="art" href="../ext/e107.html">腾讯15年资深后台工程师，转战大模型推理的抉择</a>
+<a class="art" href="../ext/e108.html">腾讯音乐的 MusicBuddy 上线了，Buddy 家族凑够七个</a>
+<a class="art" href="../ext/e109.html">这是一篇把&quot;Jev模型&quot;讲明白的科普级解读！</a>
+<a class="art" href="../ext/e110.html">重磅！从 Agent 开发到 Agent 算法，进阶指南来了</a>
+<a class="art" href="../ext/e111.html">AI时代，让AI写缓存，spec怎么写（5/100）</a>
+<a class="art" href="../ext/e112.html">Agents成新一代造王者，开发者正在快速失去技术决定权</a>
+<a class="art" href="../ext/e113.html">Harness RSI框架来了，登上Hugging Face日榜第二！</a>
+<a class="art" href="../ext/e114.html">Jev Search 开源！当 Jev 遇上搜索引擎：这个开源项目让你用大白话搜遍全网！</a>
+<a class="art" href="../ext/e115.html">Jev是什么AI模型？不做自然语言生成为何引发热议</a>
+<a class="art" href="../ext/e116.html">Jev是分类器吗？今天向所有人开放，送1.2亿token</a>
+<a class="art" href="../ext/e117.html">Jev 爆火：一个不做生成的 AI，凭什么让半个技术圈熬夜跑 Demo？</a>
+<a class="art" href="../ext/e118.html">Loop engineering：把 agent 放进工程循环</a>
+<a class="art" href="../ext/e119.html">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</a>
+<a class="art" href="../ext/e120.html">一文详解Jev：把 Agent 里的“小判断”，从大模型调用改成结构化决策</a>
+<a class="art" href="../ext/e121.html">不会聊天的 AI，彻底爆火：Jev 保姆级教程来了！</a>
+<a class="art" href="../ext/e122.html">为啥 Jev 突然就全网爆火了？</a>
+<a class="art" href="../ext/e123.html">什么是 Jev？</a>
+<a class="art" href="../ext/e124.html">四大多 Agent 架构详解（一）：Workflow 如何把固定流程变成可回放的系统</a>
+<a class="art" href="../ext/e125.html">基于Jev的浏览器Agent插件开源，狂揽12.1k star！</a>
+<a class="art" href="../ext/e126.html">怎样构建一个 Agent-friendly 的网站</a>
+<a class="art" href="../ext/e127.html">整理了最新Jev模型的全网22个爆火玩法！</a>
+<a class="art" href="../ext/e128.html">知识库答不准，可能真不是模型的锅，66.6K star的Docling 到底解决了什么</a>
+<a class="art" href="../ext/e129.html">简单讲讲 Agent 的工作原理</a>
+<a class="art" href="../ext/e130.html">聊聊最近爆火的Jev 模型，到底是个啥？</a>
+<a class="art" href="../ext/e131.html">刚刚，Anthropic公开内部RSI落地方法论</a>
+<a class="art" href="../ext/e132.html">Anthropic 公开「递归自我改进」核心数据：3 万 Agent 正在研发下一代 Claude</a>
+<a class="art" href="../ext/e133.html">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a>
+<a class="art" href="../ext/e134.html">Jev：只会做选择题的 System One 模型，TypeSafe AI 的高频决策分类器</a>
+<a class="art" href="../ext/e135.html">什么是 RSI：2026 年最贵的三个字母（递归自我改进科普）</a>
+<a class="art" href="../ext/e136.html">小米 MiMo-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a>
+<a class="art" href="../ext/e137.html">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a>
+<a class="art" href="../ext/e138.html">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a>
+<a class="art" href="../ext/e139.html">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a>
+<a class="art" href="../ext/e140.html">本地该怎么做 RSI？与 StartLux CTO 郭权玮聊本地自我改进</a>
+<a class="art" href="../ext/e141.html">货拉拉 AI Coding 落地实践：个人提效攒不成组织提效</a>
+<a class="art" href="../ext/e142.html">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</a>
+<a class="art" href="../ext/e143.html">别再只卷 Prompt 了：Context Engineering 才是 Agent 差距所在</a>
+<a class="art" href="../ext/e144.html">面试官：讲一讲多 Agent 协作如何保持一致性</a>
+<a class="art" href="../ext/e145.html">Codex想让Harness消失，Claude Code却要把它做成承重墙</a>
+<a class="art" href="../ext/e146.html">RSI 到底还有多远？三位 AI 研究员谈递归自我改进时间线</a>
+<a class="art" href="../ext/e147.html">OpenAI首席科学家发布长文：《An Alien Mind》（异星心智）</a>
+<a class="art" href="../ext/e148.html">让Agent像人一样记忆：本地长期记忆系统HL-Mem的设计与取舍</a>
+<a class="art" href="../ext/e149.html">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</a>
+<a class="art" href="../ext/e150.html">DeepSeek Harness背后的心脏：Cordis到底是什么</a>
+<a class="art" href="../ext/e151.html">聊一聊 GPT-6 Astra 背后的 Loop 技术</a>
+<a class="art" href="../ext/e152.html">Multi-Agent已死！Anthropic这次完全反着做</a>
+<a class="art" href="../ext/e153.html">个人自进化知识库完整搭建教程</a>
+<a class="art" href="../ext/e154.html">从一次 LLM 调用到完整 Harness，Agent 到底经历了什么？</a>
+<a class="art" href="../ext/e155.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a>
+<a class="art" href="../ext/e156.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a>
+<a class="art" href="../ext/e157.html">字节一天连发3篇自进化Agent，彻底杀疯了</a>
+<a class="art" href="../ext/e158.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
+<a class="art" href="../ext/e159.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
+<a class="art" href="../ext/e160.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
+<a class="art" href="../ext/e161.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
+<a class="art" href="../ext/e162.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
+<a class="art" href="../ext/e163.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
+<a class="art" href="../ext/e164.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
+<a class="art" href="../ext/e165.html">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</a>
+<a class="art" href="../ext/e166.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
+<a class="art" href="../ext/e167.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
+<a class="art" href="../ext/e168.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
+<a class="art" href="../ext/e169.html">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a>
+<a class="art" href="../ext/e170.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
+<a class="art" href="../ext/e171.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
+<a class="art" href="../ext/e172.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
+<a class="art" href="../ext/e173.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
+<a class="art" href="../ext/e174.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
+<a class="art" href="../ext/e175.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
+<a class="art" href="../ext/e176.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
+<a class="art" href="../ext/e177.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
+<a class="art" href="../ext/e178.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
+<a class="art" href="../ext/e179.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
+<a class="art" href="../ext/e180.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
+<a class="art" href="../ext/e181.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
+<a class="art" href="../ext/e182.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
+<a class="art" href="../ext/e183.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
+<a class="art" href="../ext/e184.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
+<a class="art" href="../ext/e185.html">Claude Code 15 条高频实用技巧</a>
+<a class="art" href="../ext/e186.html">Everything Claude Code：Anthropic 黑客松冠军的生产级配置集合</a>
+</details>
+<details class="cat"><summary>工具与技术 <span class="cnt">65</span></summary>
+<a class="art" href="../ext/e187.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e188.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e189.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e190.html">EasySync、OpenPlug、Resojot三件套</a>
+<a class="art" href="../ext/e191.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
+<a class="art" href="../ext/e192.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
+<a class="art" href="../ext/e193.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
+<a class="art" href="../ext/e194.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
+<a class="art" href="../ext/e195.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
+<a class="art" href="../ext/e196.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
+<a class="art" href="../ext/e197.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e198.html">防重放攻击Nonce机制</a>
+<a class="art" href="../ext/e199.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
+<a class="art" href="../ext/e200.html">手推Transformer（3）架构图解</a>
+<a class="art" href="../ext/e201.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
+<a class="art" href="../ext/e202.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
+<a class="art" href="../ext/e203.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
+<a class="art" href="../ext/e204.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<a class="art" href="../ext/e205.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
+<a class="art" href="../ext/e206.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
+<a class="art" href="../ext/e207.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e208.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
+<a class="art" href="../ext/e209.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
+<a class="art" href="../ext/e210.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
+<a class="art" href="../ext/e211.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
+<a class="art" href="../ext/e212.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
+<a class="art" href="../ext/e213.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
+<a class="art" href="../ext/e214.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
+<a class="art" href="../ext/e215.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
+<a class="art" href="../ext/e216.html">2026年量化投资类Skills排行榜</a>
+<a class="art" href="../ext/e217.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
+<a class="art" href="../ext/e218.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
+<a class="art" href="../ext/e219.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
+<a class="art" href="../ext/e220.html">6个Vibe Coding必备宝藏网站</a>
+<a class="art" href="../ext/e221.html">Archify：AI代码仓库架构可视化开源Skill</a>
+<a class="art" href="../ext/e222.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
+<a class="art" href="../ext/e223.html">anything2explainer：一键制作科普视频的开源Skill</a>
+<a class="art" href="../ext/e224.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
+<a class="art" href="../ext/e225.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
+<a class="art" href="../ext/e226.html">内容审核控制台嵌入式 MCP Server 落地方案</a>
+<a class="art" href="../ext/e227.html">MCP 开发指北(Java) — 组内分享</a>
+<a class="art" href="../ext/e228.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
+<a class="art" href="../ext/e229.html">html-anything — Agent 时代的 HTML 编辑器</a>
+<a class="art" href="../ext/e230.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
+<a class="art" href="../ext/e231.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
+<a class="art" href="../ext/e232.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
+<a class="art" href="../ext/e233.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
+<a class="art" href="../ext/e234.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
+<a class="art" href="../ext/e235.html">Claude Code Prompt Cache 配置实战</a>
+<a class="art" href="../ext/e236.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
+<a class="art" href="../ext/e237.html">待考证 Claude Code Skill / MCP 清单</a>
+<a class="art" href="../ext/e238.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
+<a class="art" href="../ext/e239.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
+<a class="art" href="../ext/e240.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
+<a class="art" href="../ext/e241.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
+<a class="art" href="../ext/e242.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
+<a class="art" href="../ext/e243.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
+<a class="art" href="../ext/e244.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
+<a class="art" href="../ext/e245.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
+<a class="art" href="../ext/e246.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
+<a class="art" href="../ext/e247.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
+<a class="art" href="../ext/e248.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<a class="art" href="../ext/e249.html">Obsidian 必装的 9 个 AI Agent Skill</a>
+<a class="art" href="../ext/e250.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
+<a class="art" href="../ext/e251.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
+</details>
+<details class="cat"><summary>认知与思维 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e252.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
+<a class="art" href="../ext/e253.html">高性价比人生指南（全书归档）</a>
+<a class="art" href="../ext/e254.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
+<a class="art" href="../ext/e255.html">单Agent思维链惯性与Agent Team挑战者架构</a>
+<a class="art" href="../ext/e256.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
+<a class="art" href="../ext/e257.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
+<a class="art" href="../ext/e258.html">普通人怎样在6-12个月内改变自己</a>
+<a class="art" href="../ext/e259.html">一天一小时，365天后，你的人生会彻底翻篇</a>
+<a class="art" href="../ext/e260.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
+<a class="art" href="../ext/e261.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
+<a class="art" href="../ext/e262.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
+<a class="art" href="../ext/e263.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
+</details>
+<details class="cat"><summary>写作与创作 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e264.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e265.html">全网首发！AI动态漫制作全流程</a>
+<a class="art" href="../ext/e266.html">宫斗宅斗文创作五大核心技巧：爽点密集化+人设标签化+设定易懂化+情感共鸣化+细节代入感</a>
+<a class="art" href="../ext/e267.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
+<a class="art" href="../ext/e268.html">短视频不是拼勤奋，是拼方向和系统</a>
+</details>
+<details class="cat"><summary>商业与变现 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e269.html">一口气讲明白：中国金融机构体系的底层逻辑</a>
+<a class="art" href="../ext/e270.html">50岁左右及以上父母的保障配置</a>
+<a class="art" href="../ext/e271.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
+<a class="art" href="../ext/e272.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
+<a class="art" href="../ext/e273.html">AI 五层价值链：收入往上走资本往下走，钱在大多数人看不见的基础设施层</a>
+</details>
+<details class="cat"><summary>待分拣 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e274.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
+<a class="art" href="../ext/e275.html">2025游戏安全风控指南</a>
+<a class="art" href="../ext/e276.html">我用Obsidian搭了一个会自己生长的个人网</a>
+<a class="art" href="../ext/e277.html">AI时代，普通人用Mac mini能干点啥</a>
+<a class="art" href="../ext/e278.html">Dan Koe：用AI做一个自己的人生模型</a>
+<a class="art" href="../ext/e279.html">【闪客】Computer Use真的在看你的屏幕吗</a>
+<a class="art" href="../ext/e280.html">GitHub技巧｜项目一键可视化</a>
+<a class="art" href="../ext/e281.html">焚诀，提示词模板，思维方式</a>
+<a class="art" href="../ext/e282.html">jev-chat-jarvis：装在手机上的对话副驾</a>
+<a class="art" href="../ext/e283.html">永远相信统计学 永远相信大数法则</a>
+<a class="art" href="../ext/e284.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
+</details>
+</details></nav></aside><div class="mask" id="mask"></div>
+  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</h1><div class="meta">📅 2026-10-06 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/vOiidxV8rURYXoDP1ZmWng" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261006-Codex-Harness-源码拆解Agent-控制面如何嵌进业务系统.md</div><div class="md"><h1>Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</h1>
+<blockquote><p>来源：微信公众号 归档日期：2026-10-06 抓取状态：成功 原文字符：12644｜配图：5 张</p></blockquote>
+<h2>摘要速览</h2>
+<ul><li>架构师（JiaGouX） 我们都是架构师！ 架构未来，你来不来？ 国庆这几天，正好把最近对 Harness 和 Agent 运行时的一些学习，陆续整理成几篇文章。 昨天先把总的运行链捋了一遍：Goal 进来以后，Context 怎么装配，模型怎么决定下一步，工具怎么执行，结果又怎么被观察、验证和留下来。</li></ul>
+<h2>核心内容</h2>
+<p>（待补充）</p>
+<h2>可执行启发</h2>
+<p>（待补充）</p>
+<h2>我的想法</h2>
+<p>（待补充）</p>
+<hr>
+<h2>原文沉淀</h2>
+<blockquote><p>来源：https://mp.weixin.qq.com/s/vOiidxV8rURYXoDP1ZmWng 平台：weixin｜作者：架构师 抓取方式：cdp｜字符数：13351｜图片：5</p></blockquote>
+<hr>
+<p>架构师（JiaGouX）</p>
+<p>我们都是架构师！ 架构未来，你来不来？</p>
+<p>国庆这几天，正好把最近对 Harness 和 Agent 运行时的一些学习，陆续整理成几篇文章。</p>
+<p>昨天先把总的运行链捋了一遍：Goal 进来以后，Context 怎么装配，模型怎么决定下一步，工具怎么执行，结果又怎么被观察、验证和留下来。</p>
+<p>今天顺着这条线，再往 Codex Harness 的源码里看一层。</p>
+<p>一开始很容易被一串对象名带着走：Model、Host、Harness、Thread、Turn、Step、Item、ToolRouter、app-server。名字很多，但多看几层以后，会发现它们想回答的并不是“怎么再调一次模型”，而是一个更靠近工程现场的问题：</p>
+<p><strong>怎样把一次模型输出，变成一段可以继续、可以观察、可以审批、可以恢复的工作过程？</strong></p>
+<p>只做一次模型调用时，这个问题不明显。用户发一句话，模型回一段文本，调用就结束了。</p>
+<p>但 Agent 一旦进入业务系统，事情就没这么干净了。任务跑到一半，用户可能补一句约束；工具已经开始执行，某个动作还要等人确认；前端断开以后，任务也许还要继续。最后系统还得说清楚：Agent 看过什么、调过什么、哪一步被批准了，业务记录有没有真的改。</p>
+<p>所以今天不打算把源码文件逐个铺开讲。我更想抓住一条线：<strong>模型说“下一步可以这么做”之后，系统怎样让这一步受控地发生，并且留下以后还能复盘的痕迹。</strong></p>
+<h2>三层关系放在一起看</h2>
+<p>看 Codex Harness，先把 Model、Harness、Host 三层放在一起，后面很多对象关系会更容易对上。</p>
+<p>Model 负责在当前上下文里给出下一步。它可以生成文字，也可以输出结构化的工具调用意图。</p>
+<p>Harness 负责把这一步放进运行时。上下文、工具路由、审批、沙箱、事件和恢复，大多在这一层组织起来。</p>
+<p>Host 是外壳。Codex CLI 是 Host，IDE 扩展是 Host，未来业务系统里的“帮我处理这张工单”面板，也可以是 Host。</p>
+<p>粗略说，模型提出动作，Harness 让动作在边界内发生，Host 把这段过程放进产品。</p>
+<p><img alt="Codex Harness 的三层位置" src="img-001-14446963.png"></p>
+<p>Codex Harness 的三层位置</p>
+<p>图 1：Model 提出动作，Harness 管住运行过程，Host 把这段过程放进产品。</p>
+<p>一个物流运营面板里有订单、路线、承运商、异常事件和审批记录。某批货延误了，运营同学让 Agent 看一下能不能改路线。Agent 要先读订单和承运商信息，再比较替代路线，必要时调用改签工具。涉及费用变化或 SLA 风险时，还要停下来等人确认。</p>
+<p>这个例子里，业务系统仍然拥有事实。订单状态、用户权限、审批记录、幂等键、外部事务，都在业务后端。</p>
+<p>模型只是在当前信息下提出下一步。它可以建议查路线、比较方案、调用工具，但真实动作要经过 Harness 和工具系统。</p>
+<p>Harness 保存的是运行现场。当前任务属于哪个 Thread，这一轮 Turn 走到哪里，哪些 Item 已经产生，哪些工具还在执行，是否在等审批，上下文是不是快满了，这些状态都由它记着。</p>
+<p>OpenAI 在平台文章和 App Server 文章里给出的分工，大体也是这条线：应用拥有界面、上下文、工具和操作边界；Harness 处理 agent loop、状态、流式事件、工具交互和审批请求。</p>
+<p>这个分工写在图上像概念，落到系统里就会变成具体日志和状态。任务哪天出问题，能不能复盘，看的还是这些状态有没有落下来。</p>
+<h2>Thread、Turn、Step、Item 放在一条时间线里</h2>
+<p>9 月 25 日我们讲过，从一次 LLM 调用到完整 Harness，中间多出来的不是几段提示词，而是上下文、权限、状态和验证。</p>
+<p>昨天那篇 Agent 架构文章里，我们又把它放进一条运行链里看：Goal 进入系统，运行时装配 Context，模型决定下一步，工具执行，结果被观察、验证、记录，再进入下一轮。</p>
+<p>再看 Codex，抽象链路就落到了源码对象上。它没有把所有东西塞进一个 loop，而是把运行过程拆成了几种时间尺度。</p>
+<p>从 app-server 协议看，Thread 是一段可恢复的长期会话。Turn 是一次用户请求以及随后发生的 Agent 工作。Item 是消息、命令、工具调用、文件变化、审批请求和最终结果这类可记录单元。</p>
+<p>有一个边界值得先记住：Thread 是 app-server 协议层对外暴露的对象，Core 内部真正持有输入队列、活动状态和历史的运行时对象叫 Session。协议对象和运行时对象不重名，本身就在提醒这是两层。</p>
+<p>源码内部还会出现 Step / StepContext 这一层。一个 Turn 里可能有多次模型采样：先读文件，再跑命令，再根据结果决定下一步。StepContext 固定的是“这一次模型请求看到什么、能调用什么、在哪个环境里执行”。</p>
+<p>看 <code>step_context.rs</code> 时，这层的含义会更实一点。文件顶部的注释给它的定位是 request-scoped：随采样请求变化，活动权限绑定到发起它的 Turn。它不只是带着 Turn 和 settings 往下传，而是把 MCP 绑定、ToolRouter、环境快照、能力根、AGENTS.md、token budget 和权限访问一起收进这一次采样请求里。</p>
+<p>run_turn 每次捕获这一层，源码注释把意图写得很直白：capture once，让上下文、发给模型的工具说明、实际发生的工具调用共用同一个请求视图。ToolRouter 的定义注释是同一个意思：一份最终确定的工具计划，公布给模型的工具清单和真正可执行的实现，都在里面。模型看到什么，运行时就分派什么，两者来自同一份计划。</p>
+<p>这层不是为了多造一个对象，而是在给<strong>“下一步”划一致性边界</strong>。模型按旧工具说明发起调用、执行时却换了一套权限或工具，就会出现很麻烦的竞态；StepContext 让采样时看到的世界和执行时依据的世界，保持同一次冻结。</p>
+<p>所以 Thread、Turn、Step、Item 不是给界面增加几个名词，而是在保存一条可追踪的时间线。</p>
+<p><img alt="Thread、Turn、Step、Item 的时间尺度" src="img-002-afb8a02d.png"></p>
+<p>Thread、Turn、Step、Item 的时间尺度</p>
+<p>图 2：Thread、Turn、Step、Item 不是名词堆叠，而是在不同时间尺度上保存运行事实。</p>
+<p>普通接口调用只关心请求什么时候返回。Agent 任务要多看几步：它先读什么，工具返回什么，用户有没有中途插话，审批卡在哪里，失败以后从哪里继续。</p>
+<p>如果这些过程最后只剩一条回答，系统就少了很多证据：Agent 到底看到了什么、做了什么、在哪一步等人、哪一步可以重试。</p>
+<h2>run_turn 做的不是“再问一次模型”</h2>
+<p>从源码入口看，<code>run_turn</code> 很容易被简化成一句话：模型给出工具调用，Harness 执行工具，再把结果交回模型。</p>
+<p>这句话没错，但只说了最小循环。</p>
+<p>实际跑起来时，<code>run_turn</code> 还要处理上下文捕获、模型采样、工具结果回填、输入队列、自动压缩和取消。模型流、工具 future、用户追加输入和审批结果，都会汇到同一条运行链里。</p>
+<p>源码里有个小分岔值得留意：输入不是简单追加到 messages 后面。</p>
+<p><code>turn_input.rs</code> 顶部的注释先声明了自己的位置：Core 在这一个地方决定输入是启动 Turn、转向当前 Turn，还是被拒绝；回复在决定之后就返回，不等 prompt hooks，不等上下文更新和 rollout 持久化，也不等采样。被拒绝也不是抛异常了事，而是带原因的明确回复：输入为空、上一个 Turn 还没结束、服务正在下线、期望的 Turn 已经不是当前 Turn，各占一个枚举值。审查和压缩这类内部 Turn，干脆不接受插话。</p>
+<p>进了队列，<code>input_queue.rs</code> 又把用户输入、工具输出、内部 response item、agent 间通信分成不同来源。用户在任务中途补的一句话，去向有两种。</p>
+<p>开了 InstantInterrupt 特性时，StepContext 会带一个 preempt 取消令牌。采样请求一边读模型流，一边盯着输入队列，用户输入一到就取消这次读取。被打断的采样返回 needs_follow_up，主循环拿着新输入立刻续跑。没开这个特性，或者没赶上打断，输入就排进 pending，在下一次构造模型请求前写进历史。写回的时机也有固定规则：Turn 刚启动，先让新输入被采样；auto-compact 之后，先让模型和工具续跑完。这两个时点暂缓合并。</p>
+<p>主循环要不要再问一次模型，判断条件跟着收口：模型的 needs_follow_up，或者队列里还有没消费的输入，满足其一就继续。</p>
+<p>这和 <a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410608&amp;idx=1&amp;sn=bbc8b0e105f9ab2610ed2a85f28bbaf4&amp;scene=21#wechat_redirect">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a> 那条运行链能接上。Context 不是一袋越塞越长的文本，Act 的返回也不是普通聊天回复。每一份输入进来时，系统先判断它属于当前哪一段运行过程，能不能改变已经在路上的动作，什么时候写进历史。</p>
+<p>Codex 和普通 streaming chat loop 的差别，也在这里露出来。</p>
+<p>普通 streaming chat 里，前端主要消费文本 delta。Codex 这里，客户端看到的是更细的事件：<code>item/started</code>、文本增量、工具进度、<code>item/completed</code>、审批请求、<code>turn/completed</code>。文本只是其中一种 Item，命令、文件编辑、工具调用、审批也都是运行事实的一部分。</p>
+<p>SDK 里的类型也沿着这条线往外露：<code>ThreadEvent</code> 不是只有 final response，<code>ThreadItem</code> 也不是只有 agent message。command execution、file change、MCP tool call、web search、todo list、error，都做成了可订阅的 Item。</p>
+<p>这样一来，UI 不必等最终答案才知道发生了什么。IDE 可以把命令 Item 绑定到终端面板，把文件变化绑定到 diff 视图，把文本 delta 放进聊天面板。业务系统也可以把审批请求、工具结果和状态变化投到自己的界面里。</p>
+<p>所以这里值得看的，不只是模型能力本身，还有模型能力变成真实动作以后留下的那条过程线。</p>
+<p>前面比较 Pi 和 DeepSeek Harness 时，问题其实也是这一类：继续、收口、恢复，最后都要变成状态转换。放到 Codex 里看，输入队列、工具 future、审批结果和事件流，都是为了避免把“模型流结束了”误当成“任务已经可交接”。</p>
+<p><img alt="一次 Turn 的控制回路" src="img-003-7f55f6d7.png"></p>
+<p>一次 Turn 的控制回路</p>
+<p>图 3：一次 Turn 里，输入、采样、工具、审批和事件会不断汇合，再决定继续还是结束。</p>
+<h2>App Server 接的是运行现场</h2>
+<p>Codex App Server 表面上是一组 JSON-RPC 方法和 WebSocket 通道。放到产品架构里看，它接的正是这个运行现场。</p>
+<p>产品可以创建 Thread、恢复 Thread、启动 Turn，也可以追加 steer、中断 Turn、接收流式事件、处理审批请求。运营台、IDE、内部工具或桌面应用，不必自己重写一套 agent loop，就能订阅同一条任务时间线。</p>
+<p>官方的 Relay 示例也很典型：产品侧保留业务面板、MCP 工具和人工审批，Harness 负责 loop、状态、流式事件和工具交互。用户看到的是业务产品里的按钮、记录和控制项，不是一个裸露的模型接口。</p>
+<p>看 Claude Code Mods 时，能看到另一种打开方式：宿主内部开放工具调用、turn、UI、diff 这些事件切面。Codex app-server 不在同一个层次上，它更像是把 Thread、Turn、Item 和审批事件通过协议接给外部产品。两条路开放的边界不同，但都在说明一件事：运行时控制点正在从平台内部走向产品接口。</p>
+<p>有两个细节，真实接入时很容易影响判断。</p>
+<p>第一，协议支持中途介入。真实任务不会总是按第一次输入走到底。用户会补约束，系统会发现风险，工具会失败。<code>turn/steer</code> 和 <code>turn/interrupt</code> 这类入口，让产品有机会在任务中途介入，而不是只能等最后答案出来再补救。</p>
+<p><code>TurnSteerParams</code> 里还带着 <code>expected_turn_id</code>，协议注释把它定义为必需的前置条件。中途插话不能只是往会话里塞一句文本，它还带着自己要影响的 active turn。核心侧收到 steer 会先比对当前活跃 Turn 的 id，对不上就按 mismatch 拒绝。前端慢了一拍、用户切了任务，这句补充不会落进任何一段运行过程，而是变成一次调用方看得见的失败。</p>
+<p>第二，app-server 的方法安全等级并不一样。文档里提到的 <code>thread/shellCommand</code> 会在 sandbox 之外运行，拥有完整访问能力。也就是说，“接了 app-server”不等于所有动作都天然落在同一层安全模型里。展示、审批、工具执行和业务写入，仍然要分开看。</p>
+<p>官方文档也给了边界：<code>codex app-server</code> 命令和 WebSocket transport 都标着 experimental，不支持 production workloads。这个限制不影响我们理解它的架构思路，但会影响真实接入时的判断。</p>
+<h2>业务状态和运行状态分开看</h2>
+<p>app-server 可以管理 Thread 生命周期、事件订阅、审批请求和运行状态。业务系统里的订单、退款、发布、告警关闭，还是要回到业务后端。</p>
+<p>Agent 的状态和业务状态不是一回事。</p>
+<p>前面聊业务语义时，也反复碰到这个边界：对话状态、业务状态和执行状态，不能塞进一个字段。放到 Codex 里也是一样，Thread 和 Item 能说明 Agent 运行到哪里，订单、退款、发布这些事实仍要回到业务系统确认。</p>
+<p><code>turn/completed</code> 表示这一轮 Agent 工作结束了，不表示业务事务一定成功提交。某次工具调用被批准，也不表示用户拥有工具背后的全部<strong>业务权力边界</strong>。工具 schema 写得再严格，也不能替代后端权限、幂等、审计和回滚。</p>
+<p>边界怎么画，我倾向于这样分：</p>
+<p>业务系统负责事实和权力。事实包括记录、状态、权限、事务和最终验收。</p>
+<p>Harness 负责运行过程。过程包括上下文、工具、事件、审批、取消、恢复和可观察性。</p>
+<p><img alt="业务系统与 Harness 不要混成一层" src="img-004-89914c02.png"></p>
+<p>业务系统与 Harness 不要混成一层</p>
+<p>图 4：Harness 保存运行证据，业务系统保存权威事实，两者要关联，但不能混成一层。</p>
+<p>两边会互相传递信息，但一混在一起，问题反而会变多。业务系统把 Agent 的 <code>completed</code> 当成业务完成，后面很容易说不清事务是否真的提交。反过来，如果要求 Harness 理解所有业务事务细节，它又会变成一个不清不楚的业务后端。</p>
+<p>Codex 平台化让我觉得耐看的地方也在这里。它没有要求业务系统把自己改造成聊天应用，而是在已有事实模型旁边，接入一条受控的行动链。</p>
+<h2>三种入口，对应三种任务寿命</h2>
+<p>回到接入方式，OpenAI 把 Codex 分成了三类入口：<code>codex exec</code>、Codex SDK 和 Codex app-server。三个入口背后是三种任务寿命。</p>
+<p><code>codex exec</code> 适合一次性任务。比如在 CI 里分析一次失败、批量检查某类代码问题、对固定输入生成结果。进程启动，任务执行，结果返回，生命周期跟流水线绑定。</p>
+<p>SDK 适合把 Codex 放进服务端工作流。应用可以启动或恢复 Thread，流式读取事件，把 Codex 当成一个可编排的执行节点。它比 exec 更灵活，但仍然可以被宿主流程包住。</p>
+<p>app-server 适合产品内的长生命周期任务。它强调持续会话、流式事件、审批处理、恢复和 UI 呈现。只要用户会在任务中途继续追问、补充材料、改约束，或者需要多人看同一条任务进度，这个场景就靠近 app-server 的位置。</p>
+<p>所以看这三种入口，未必先按“哪个 API 更高级”来分。更贴近系统设计的分法是：这项任务跑完就散，还是要在产品里继续活着？</p>
+<p>任务跑完就散，用长生命周期控制面会显得重。任务需要被订阅、暂停、审批、恢复和审计，却只用一次性调用硬撑，状态很容易散落到业务代码里。</p>
+<h2>为什么 Harness 变得重要</h2>
+<p>看完这条线，再回头看几条外部讨论，会发现大家关注点也在往这一层靠。</p>
+<p>Karpathy 在 2025 年关于 context engineering 的讨论里，把生产级 LLM 应用的问题从“写提示词”推到了上下文装配。任务说明、示例、RAG、工具、状态、历史和压缩，都要在下一步推理之前放到合适的位置。他后面还提到，完整 LLM 应用要管的不止这些：控制流、模型选择、验证、安全、评测，都在名单里。</p>
+<p>Addy Osmani 在 Agent Harness Engineering 里的说法更偏工程：coding agent 不是模型本身，而是模型加上 prompts、tools、context policies、hooks、sandboxes、feedback loops 和 recovery paths。他引用的“Agent = Model + Harness”，讲的也是这个方向。</p>
+<p>这些观点不是 Codex 实现细节的证据，只能算旁证。但方向接近：不少讨论已经不再把 Agent 只当成“更会聊天的模型”，而是把它看成一层正在变厚的软件系统。</p>
+<p>Codex Harness 的平台化，落点也是这里。它把上下文、工具、审批、沙箱、事件和恢复集中到一条运行时协议里，让 CLI、SDK、app-server 和不同产品复用。</p>
+<p>这里也要留一个边界。OpenAI 说的是 open-source Codex harness / components，不等于 Codex 产品、模型服务和云端能力全部开源。官方文章里的 ARC-AGI-3 分数提升、税务试点 7,000 份 returns 和准备时间下降，也都是特定实验或试点，不能直接外推成所有业务的收益承诺。</p>
+<h2>放回产品里看</h2>
+<p>把 Codex Harness 放到业务系统旁边，有几个连接处会很快露出来。</p>
+<p>先看用户中途补充的信息怎么进入运行时。</p>
+<p>用户在任务中途补一句话，是当前 Turn 的 steer，还是下一轮任务？如果工具已经启动，这句话能不能影响正在跑的动作？表面看是交互问题，往下就是约束何时进入运行时。</p>
+<p>App Server v2 里 <code>additional_context</code> 还区分 <code>untrusted</code> 和 <code>application</code>。放到业务系统里看，这相当于先承认上下文有来源差异。用户粘贴的一段材料、产品侧注入的一条业务事实、工具刚返回的观察结果，放进同一个上下文窗口时，后面的信任和执行边界也会跟着变。</p>
+<p>再看审批和业务授权怎么接起来。</p>
+<p>Harness 的审批可以决定某个命令、文件修改或工具调用能不能继续。源码里它是一个等待中的 oneshot 通道，等待方消失或 Turn 中断，默认结果写死为 Abort，不是放行。UI 崩溃、连接断开、任务取消，代码都不会当成“用户默认同意”。但业务动作还要回到业务权限系统。一个人能批准 Agent 执行工具，不等于他能批准退款、改签或发布。</p>
+<p>还有运行状态和业务事实怎么关联。</p>
+<p>Thread、Turn、Item 保存运行过程；业务数据库保存权威事实。两套状态之间如果没有关联，追踪会断；如果混成一张总表，Agent 说完成、工具返回成功、业务事务提交，又会被揉成一个模糊的 completed。</p>
+<p>最后是失败以后从哪里继续。</p>
+<p>工具失败、连接断开、上下文压缩、用户中断、审批拒绝，恢复点都不一样。Agent 平台不必假装自己不会失败，更有用的是说清楚已经发生了什么，下一步适合回到哪里。</p>
+<p>前面看 Claude.dev 的改进流程时，有一个问题很直接：工单关掉以后，系统究竟留下了什么。这里也能接上。Thread、Turn、Item 保存的不是给界面看的流水账，而是后面复盘、评测、规则修补和回滚要用的运行事实。</p>
+<p>这些连接处越清楚，后面再扩 MCP 工具或多 Agent，代价就越可控。工具越多，状态和权限越需要有自己的落点。</p>
+<h2>最后</h2>
+<p>只看功能，Codex Harness 像是把工具调用、沙箱、审批、上下文压缩、事件流和会话恢复放在一起。</p>
+<p>从架构上看，我更愿意把它理解成 OpenAI 把 Agent 控制面做成了产品。</p>
+<p>控制面这个词听起来有点重，落到系统里并不玄。系统不只执行动作，还要管理动作怎样开始、怎样被看见、怎样暂停、怎样审批、怎样恢复、怎样结束。</p>
+<p>过去这些东西常常散在应用代码、脚本、提示词、工具包装和人工流程里。Codex Harness 把它们集中到一条运行时协议里，再让不同入口复用。</p>
+<p>它和普通模型 SDK 的差别也在这里。模型 SDK 给的是一次推理调用；Harness 给的是一段可以持续推进的工作现场。</p>
+<p>如果把 9 月以来几篇放在一起看，<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410608&amp;idx=1&amp;sn=bbc8b0e105f9ab2610ed2a85f28bbaf4&amp;scene=21#wechat_redirect">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a> 讲的是运行链，Codex Harness 提供的是源码样本：Goal 进入以后，Context 怎么冻结到一次采样，Act 怎么通过工具路由执行，Observe 怎么变成 Item 和事件，State 又怎么支持继续、恢复和复盘。</p>
+<p>边界还要保留。正文里的源码论断，本轮逐条核对到 10 月 6 日的 main 分支（c0c230e673），StepContext、输入准入、preempt、审批通道在这一版都能定位。但仓库变动很快：8 月固定分析基线里 run_turn 在 turn.rs 的第 139 行，同一个函数现在在第 164 行，文件已经三千二百多行。<code>codex app-server</code> 命令和 WebSocket transport 也还带着实验性说明。我们可以借鉴它的分层和协议思路，但按行号引用会过期，“已经能接”和“生产形态已经稳定”也还不是一回事。</p>
+<p>Codex Harness 这次有启发的地方，也许不是某个 Rust 文件怎么写，而是它把 Agent 接入业务系统时最容易混在一起的几件事拆开了：采样一致性、输入归属、事件事实、业务权力边界。</p>
+<p>Agent 进入业务系统以后，模型和工具当然都重要。难的地方，也许就在这里：把不确定的模型输出，放进一条可观察、可审批、可恢复、可回滚的运行链路里。</p>
+<h2>参考资料</h2>
+<ol><li>OpenAI，Codex as a platform: build on the open agent harness（https://developers.openai.com/blog/codex-as-a-platform）</li></ol>
+<ol><li>OpenAI Engineering，Unlocking the Codex harness: how we built the App Server（https://openai.com/index/unlocking-the-codex-harness/）</li></ol>
+<ol><li>OpenAI Engineering，Unrolling the Codex agent loop（https://openai.com/index/unrolling-the-codex-agent-loop/）</li></ol>
+<ol><li>OpenAI，Codex App Server 文档（https://learn.chatgpt.com/docs/app-server）</li></ol>
+<ol><li>OpenAI Developers on X，open-source Codex harness（https://x.com/OpenAIDevs/status/2090230646497251387）</li></ol>
+<ol><li>Greg Brockman on X，Codex can power much more than coding tools（https://x.com/gdb/status/2090246288478814281）</li></ol>
+<ol><li>Andrej Karpathy on X，context engineering（https://x.com/karpathy/status/1937902205765607626）</li></ol>
+<ol><li>Addy Osmani，Agent Harness Engineering（https://addyosmani.com/blog/agent-harness-engineering/）</li></ol>
+<ol><li>OpenAI Codex 源码仓库（https://github.com/openai/codex）</li></ol>
+<ol><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410533&amp;idx=1&amp;sn=dadafe2c6a74514249528c486bd4ccf5&amp;scene=21#wechat_redirect">从一次 LLM 调用到完整 Harness：系统理解 Agent 如何工作</a>》（2026-09-25）</li></ol>
+<ol><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410581&amp;idx=1&amp;sn=901a554f673cb782cf89b550ec0da01a&amp;scene=21#wechat_redirect">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a>》（2026-10-01）</li></ol>
+<ol><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410594&amp;idx=1&amp;sn=41f54a8f9f32b79c233cd601706fbbe5&amp;scene=21#wechat_redirect">Claude.dev 的四篇工程文章：Agent 怎样才算真的改进</a>》（2026-10-03）</li></ol>
+<ol><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410599&amp;idx=1&amp;sn=acc870aad94da998ab5bc9e997e5b70c&amp;scene=21#wechat_redirect">从插件到控制面：Claude Code Mods 把 Agent Harness 开到哪一层</a>》（2026-10-04）</li></ol>
+<ol><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650410608&amp;idx=1&amp;sn=bbc8b0e105f9ab2610ed2a85f28bbaf4&amp;scene=21#wechat_redirect">别只背 Planner、MCP 和 Memory：Agent 架构要看这条运行链</a>》（2026-10-05）</li></ol>
+<ol><li>《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409913&amp;idx=1&amp;sn=61a4aa3777248d917a82129d57c24854&amp;scene=21#wechat_redirect">一文讲清 Agent 如何理解业务：别只补 Prompt，把对象、状态和权限接进流程</a>》（2026-07-26）</li></ol>
+<p>如喜欢本文，请点击右上角，把文章分享到朋友圈</p>
+<p>如有想了解学习的技术点，请留言给若飞安排分享</p>
+<p>因公众号更改推送规则，请点“在看”并加“星标”第一时间获取精彩技术分享</p>
+<p>·END·</p>
+<p><strong>相关阅读：</strong></p>
+<ul><li>从 LLM 到 Agent 到 Harness：真正复杂的是运转起来之后</li><li>Loop Engineering，应该赞成还是反对？</li><li>设计 Self-Harness 架构：会自我改进的Harness</li><li>架构排熵：Loop Engineering 的持续清理系统</li><li>CLAUDE.md 拆解：Agent 进仓库前的上下文入口</li><li>Harness工程还没唱罢，Environment工程已然登场</li></ul>
+<p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p>
+<p>架构师</p>
+<p>我们都是架构师！</p>
+<p><img alt="图片" src="img-005-926fad59.png"></p>
+<p>关注架构师(JiaGouX)，添加“星标”</p>
+<p>获取每天技术干货，一起成为牛逼架构师</p>
+<p>技术群请加若飞：1321113940 进架构师群</p>
+<p>投稿、合作、版权等邮箱：<strong>admin@137x.com</strong></p>
+<p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></main>
+</div>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+</body>
+</html>

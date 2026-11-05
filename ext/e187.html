@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Cloud Model Armor API与Gemini 4企业安全治理 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+    <a class="brand" href="../index.html">🐉 DragonHuge · 知识花园</a>
+    <a class="search-m" href="../search.html" aria-label="搜索">🔍</a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…  /" autocomplete="off" aria-label="搜索全站文章">
+      <div class="sug" id="sug" hidden></div>
+    </div>
+    <nav class="topnav">
+      <a href="../index.html" class="">首页</a>
+      <a href="../daily/index.html" class="">日常</a>
+      <a href="../tech/index.html" class="">技术文章</a>
+      <a href="../ext/index.html" class="on">外部沉淀</a>
+    </nav>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar"><nav class="side-nav">
+<details class="mod"><summary>📒 日常知识库沉淀 <span class="cnt">21</span></summary>
+<div class="grp">灵感火花</div>
+<a class="art" href="../daily/d001.html">2026-10-24</a>
+<a class="art" href="../daily/d002.html">2026-10-17</a>
+<a class="art" href="../daily/d003.html">2026-09-27</a>
+<a class="art" href="../daily/d004.html">2026-09-19</a>
+<a class="art" href="../daily/d005.html">2026-09-12</a>
+<div class="grp">2026 · Q2 · 第7周(05.11-05.17)</div>
+<a class="art" href="../daily/d006.html">2026-05-15</a>
+<a class="art" href="../daily/d007.html">2026-05-13</a>
+<a class="art" href="../daily/d008.html">2026-05-12</a>
+<a class="art" href="../daily/d009.html">2026-05-11</a>
+<div class="grp">2026 · Q2 · 第6周(05.04-05.10)</div>
+<a class="art" href="../daily/d010.html">2026-05-09</a>
+<a class="art" href="../daily/d011.html">2026-05-08</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d012.html">2026-04-28</a>
+<a class="art" href="../daily/d013.html">2026-04-27</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d014.html">2026-04-26</a>
+<a class="art" href="../daily/d015.html">2026-04-25 周六无事</a>
+<div class="grp">2026 · Q2 · 第2周(04.06-04.12)</div>
+<a class="art" href="../daily/d016.html">2026-04-12 随记</a>
+<a class="art" href="../daily/d017.html">2026-04-07 随记</a>
+<a class="art" href="../daily/d018.html">2026-04-06</a>
+<div class="grp">2026 · Q2 · 第1周(03.30-04.05)</div>
+<a class="art" href="../daily/d019.html">2026-04-04</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d020.html">第5周(04.27-05.03) 周报</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d021.html">第4周(04.20-04.26) 周报</a>
+</details>
+<details class="mod"><summary>💻 技术文章 <span class="cnt">22</span></summary>
+<details class="cat" open><summary>AI底层原理</summary>
+<a class="art" href="../tech/t001.html">AI 底层原理 — 资料来源</a>
+<a class="art" href="../tech/t002.html">AI 底层原理 — 感悟日志</a>
+<a class="art" href="../tech/t003.html">LLM Agent 工程原理 — 学习笔记</a>
+</details>
+<details class="cat" open><summary>Agent应用开发</summary>
+<a class="art" href="../tech/t004.html">DeepSeek dsh-superagent 技术方案分析（学习版）</a>
+<a class="art" href="../tech/t005.html">Agent 应用开发 — 知识点全景图</a>
+<a class="art" href="../tech/t006.html">Agent 应用开发 — 五阶段学习计划</a>
+</details>
+<details class="cat" open><summary>安全风控</summary>
+<a class="art" href="../tech/t007.html">H5 活动风控 · 技术学习问答笔记（龙老板提问 → 小墨答复）</a>
+<a class="art" href="../tech/t008.html">H5 活动风控完整技术调研（小白友好汇总版）：需求还原 · 核心概念 · 行业方案 · 落地路线</a>
+<a class="art" href="../tech/t009.html">H5 活动风控第二轮调研：业界设备指纹落地、WebAuthn 边界、黑产攻击面与落地方案</a>
+<a class="art" href="../tech/t010.html">JS 虚拟化保护（防守侧）第一轮调研：原理、实现与 ZCode 风控重叠度</a>
+</details>
+<details class="cat" open><summary>投资理财</summary>
+<a class="art" href="../tech/t011.html">投资理财 — 资料来源</a>
+<a class="art" href="../tech/t012.html">投资理财 — 知识库组织规范</a>
+<a class="art" href="../tech/t013.html">投资理财 — 四阶段学习路径</a>
+<div class="grp">实践记录</div>
+<a class="art" href="../tech/t014.html">决策日志</a>
+<a class="art" href="../tech/t015.html">定投记录</a>
+<div class="grp">知识卡/01-基础概念</div>
+<a class="art" href="../tech/t016.html">风险与收益</a>
+<a class="art" href="../tech/t017.html">通胀</a>
+<a class="art" href="../tech/t018.html">复利</a>
+<div class="grp">配置方案</div>
+<a class="art" href="../tech/t019.html">退休目标测算</a>
+<a class="art" href="../tech/t020.html">财务地基自查</a>
+</details>
+<details class="cat" open><summary>日常问答</summary>
+<a class="art" href="../tech/t021.html">日常问答沉淀 · 2026-09</a>
+</details>
+<details class="cat" open><summary>综合文章</summary>
+<a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+</details>
+</details>
+<details class="mod" open><summary>📥 外部沉淀 <span class="cnt">285</span></summary>
+<details class="cat"><summary>AI与效率 <span class="cnt">186</span></summary>
+<a class="art" href="../ext/e001.html">Anthropic：子Agent拆多了，为什么反而更慢</a>
+<a class="art" href="../ext/e002.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a>
+<a class="art" href="../ext/e003.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a>
+<a class="art" href="../ext/e004.html">从Harness到Harness²，Google自进化新突破</a>
+<a class="art" href="../ext/e005.html">深度解析 Codex Harness 架构及其全新上下文压缩记忆体系的设计思路</a>
+<a class="art" href="../ext/e006.html">让Agent可评可控可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e007.html">Agent时代的输入法：80亿token打磨的效率工具即将开源</a>
+<a class="art" href="../ext/e008.html">Anthropic最新长文：请谨慎使用子智能体</a>
+<a class="art" href="../ext/e009.html">Anthropic长文详解Claude Duet安全设计：密码永远不经过模型</a>
+<a class="art" href="../ext/e010.html">Codex核心团队复盘：从30秒一次反馈到放手跑几小时</a>
+<a class="art" href="../ext/e011.html">一篇多模态Agentic框架最新前沿综述</a>
+<a class="art" href="../ext/e012.html">为什么现在的top大模型说话越来越拗口难懂了</a>
+<a class="art" href="../ext/e013.html">你的Personal Agent如何真正跑起来？Agent实战指南</a>
+<a class="art" href="../ext/e014.html">实测最近爆火的Teamily，是真有东西啊</a>
+<a class="art" href="../ext/e015.html">替代CC Switch的这个项目已斩获20K Star</a>
+<a class="art" href="../ext/e016.html">维基百科编辑抓AI的清单，被反着做成了6万多star的skill</a>
+<a class="art" href="../ext/e017.html">刚刚，Anthropic公开内部Sub-Agent+Loop最佳实践</a>
+<a class="art" href="../ext/e018.html">刚刚！斯坦福CS336中文教程发布了</a>
+<a class="art" href="../ext/e019.html">Agent的长期记忆要怎么做？RAG是不是最好的选择（4/12）</a>
+<a class="art" href="../ext/e020.html">Uber的合同审阅Agent工程实践和拆解</a>
+<a class="art" href="../ext/e021.html">6.3万星开源求职流水线：69份简历拿下20轮面试</a>
+<a class="art" href="../ext/e022.html">Agent如何自己变强：从Skill到模型权重的进化全景图</a>
+<a class="art" href="../ext/e023.html">Anthropic：谨慎使用子Agent</a>
+<a class="art" href="../ext/e024.html">Jev创始人访谈：Jev是面向智能的SQL，软件设计需回到工作流为中心</a>
+<a class="art" href="../ext/e025.html">MCP解决连接RAG解决知识，那谁来解决业务理解：企业AI的本体论</a>
+<a class="art" href="../ext/e026.html">OpenAI：FDE的目标是让自己失业</a>
+<a class="art" href="../ext/e027.html">去年教的85%全扔掉！斯坦福最新AI神课：200行写Claude Code</a>
+<a class="art" href="../ext/e028.html">唐杰团队RSI新作：让Agent越改越强，执行成本反降26%</a>
+<a class="art" href="../ext/e029.html">在上海听了一天AI论坛，我学到新的AI焚诀了</a>
+<a class="art" href="../ext/e030.html">大家用AI胆子还不够大！Claude工程负责人亲授顶级用法</a>
+<a class="art" href="../ext/e031.html">3篇NeurIPS顶会Skill，很精彩</a>
+<a class="art" href="../ext/e032.html">刚刚，Anthropic推出个人智能体Claude Duet：opus 5.5 驱动</a>
+<a class="art" href="../ext/e033.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+<a class="art" href="../ext/e034.html">Meta的智能体工程经验：轻量编排与专业分工</a>
+<a class="art" href="../ext/e035.html">分享8个让我最近很惊艳的Claude Opus 5.5玩法</a>
+<a class="art" href="../ext/e036.html">坏了，真给openai从deepseek那学到真的了</a>
+<a class="art" href="../ext/e037.html">天猫数字员工：研发暗物质与AI Native组织协作</a>
+<a class="art" href="../ext/e038.html">AI工程化防翻车指南</a>
+<a class="art" href="../ext/e039.html">Anthropic最新就业报告公开：AI时代，新人何去何从?</a>
+<a class="art" href="../ext/e040.html">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</a>
+<a class="art" href="../ext/e041.html">从 BERT、GPT 到 Jev：一文看懂大模型架构的演进与分化</a>
+<a class="art" href="../ext/e042.html">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a>
+<a class="art" href="../ext/e043.html">面试官皱眉：“你知道Codex多Agent实现机制吗？ ”我笑了：“独立会话、上下文交接、异步通信、任务调度，你想先听哪块？”</a>
+<a class="art" href="../ext/e044.html">把逆向工程交给 Agent：一文拆解爆火的 REA 技术原理</a>
+<a class="art" href="../ext/e045.html">为什么说 DeepSeek Harness 的灵魂是一切皆插件？</a>
+<a class="art" href="../ext/e046.html">踩了无数坑后，实践出来的Claude Code省token小技巧👇 其实Opus5.5整体还挺耐用的，但是需要对默认设置稍微做点调整： 1、主力模型可以用Opus5.5，但最好别用尽1M的上下文，设定400k-600k之间的自动压缩机制比较好，上下文太短的话影响视线效果，上下文长了耗token，以及会明显变慢，效果实际也会变差； 2、一个任务尽量更快的连续完成，因为主agent的缓存时间是1小时，如果你隔几个小时回来提要求，缓存失效的话，输入token的消耗量会明显增大； 3、subagent尽量用sonnet 5.5吧，反正是接受主agent派发的任务干杂活的，用opus5.5提升不大，haiku5.5的话又没必要了，也没省多少； 4、主动设置把subagent的缓存时间改到1小时，因为Claude Code中默认subagent的缓存时间是5分钟，所以很容易会产生大量的不被缓存的输入token。 5、主动要求少启动subagent，其实主agent能在大压缩或者少压缩情况下完成一个任务的前提下，一直持续对话缓存率在98%以上，还是挺省的。一开subagent，即使用sonnet5.5，也会明显增加消耗。</a>
+<a class="art" href="../ext/e047.html">拆开 Pi：Agent Harness 的极简设计</a>
+<a class="art" href="../ext/e048.html">AI时代架构设计，给AI的4条缓存红线（9/100）</a>
+<a class="art" href="../ext/e049.html">四大多 Agent 架构详解（三）：Hierarchical 如何解决一个 Supervisor 管不过来的问题</a>
+<a class="art" href="../ext/e050.html">CLAUDE.md 还是 AGENTS.md？Anthropic 的答案是：以后都不用</a>
+<a class="art" href="../ext/e051.html">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</a>
+<a class="art" href="../ext/e052.html">huashu-art-motion发布！可能是最有审美的动画skill。</a>
+<a class="art" href="../ext/e053.html">1024个Agent协同，微软Loop工程杀疯了</a>
+<a class="art" href="../ext/e054.html">AI让写代码变便宜了，但没让架构变便宜</a>
+<a class="art" href="../ext/e055.html">Agent SDK 双面宿主：有 UI 与无 UI 不是两套 Agent</a>
+<a class="art" href="../ext/e056.html">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a>
+<a class="art" href="../ext/e057.html">Claude Code Mods 入门指南：从零做一个 Mod</a>
+<a class="art" href="../ext/e058.html">Agent、Harness、Loop 到底是什么关系？一文讲透 AI 系统的分层架构</a>
+<a class="art" href="../ext/e059.html">Claude.dev 的四篇工程文章：Agent 怎样才算真的改进</a>
+<a class="art" href="../ext/e060.html">Google：首篇词元（Token）技术全景综述</a>
+<a class="art" href="../ext/e061.html">解读 Jev 的 4 种应用方式</a>
+<a class="art" href="../ext/e062.html">重磅！Anthropic公开内部Claude进化最佳实践</a>
+<a class="art" href="../ext/e063.html">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a>
+<a class="art" href="../ext/e064.html">从生成到决策：Jev正在改变LLM应用的开发范式</a>
+<a class="art" href="../ext/e065.html">AI Coding卷到现在，真正卡脖子的东西没人提</a>
+<a class="art" href="../ext/e066.html">Agent不只烧Token：为什么Agent Sandbox正在变得重要</a>
+<a class="art" href="../ext/e067.html">NVIDIA又开源了一个顶级Agent项目：OpenShell</a>
+<a class="art" href="../ext/e068.html">公司规定所有接口都用POST请求，为什么</a>
+<a class="art" href="../ext/e069.html">碾压GPT-4o！94.6%准确率的开源Agent记忆Hindsight来了</a>
+<a class="art" href="../ext/e070.html">风控这个行业，入行10年，迷茫十年</a>
+<a class="art" href="../ext/e071.html">Jev Skill技能包来了！全球开发者砸出500个开源项目</a>
+<a class="art" href="../ext/e072.html">当Agent开始做梦：Dream-RSI如何改进探索策略</a>
+<a class="art" href="../ext/e073.html">预热合流：进了页面也预热了，为什么首句仍可能冷启</a>
+<a class="art" href="../ext/e074.html">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</a>
+<a class="art" href="../ext/e075.html">Anthropic：effort已不再是思考强度开关了</a>
+<a class="art" href="../ext/e076.html">Meta Muse架构深度解析：到底有何不同</a>
+<a class="art" href="../ext/e077.html">Plan Mode之死？Agent需要一条可验证的工作回路</a>
+<a class="art" href="../ext/e078.html">从Harness，走向受控RSI</a>
+<a class="art" href="../ext/e079.html">开源一个Vibe Coding最佳伴侣：口喷鸡</a>
+<a class="art" href="../ext/e080.html">改变世界前先认识世界：Ontology决策结构化实践</a>
+<a class="art" href="../ext/e081.html">本地复刻Jev范式！APUS开源全新浏览器Agent Skill</a>
+<a class="art" href="../ext/e082.html">谷歌RSI新作，让Agent Harness自进化不跑偏！</a>
+<a class="art" href="../ext/e083.html">长程Agent也能“倒带重来”！中科院自动化所联合提出运行时恢复框架AgentRewind</a>
+<a class="art" href="../ext/e084.html">Graph的尽头是自进化Ontology</a>
+<a class="art" href="../ext/e085.html">万字详解10道AI Agent高频面试题</a>
+<a class="art" href="../ext/e086.html">从一次LLM调用到完整Harness：系统理解Agent如何工作</a>
+<a class="art" href="../ext/e087.html">把多语种Laya微调成中文决策模型，代码评估全开源</a>
+<a class="art" href="../ext/e088.html">来了！DeepSeek又发新作DSec</a>
+<a class="art" href="../ext/e089.html">耗时1h！打造属于你自己的Jev，喂饭级教程来了</a>
+<a class="art" href="../ext/e090.html">腾讯开源BrowserSkill：让AI用你的账号上网</a>
+<a class="art" href="../ext/e091.html">谷歌重磅发布Dream-RSI，最新RSI研究！</a>
+<a class="art" href="../ext/e092.html">2万Star开源项目作者入职Hugging Face，副业变全职</a>
+<a class="art" href="../ext/e093.html">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</a>
+<a class="art" href="../ext/e094.html">微软 186k Star 的 markitdown：它凭什么这么火，又在哪会让你踩坑？</a>
+<a class="art" href="../ext/e095.html">错误码排查从 3～8 小时到分钟级，Agent怎么做到的？</a>
+<a class="art" href="../ext/e096.html">给项目建Agent知识库，一套完整方法来了！</a>
+<a class="art" href="../ext/e097.html">AI写得快 ≠ 真正提效：一文讲清Harness&quot;记忆&quot;和&quot;验证闭环</a>
+<a class="art" href="../ext/e098.html">一个字都不会写的 Jev，凭什么成为 ChatGPT 之后最火的模型？</a>
+<a class="art" href="../ext/e099.html">我替大家先试了一把 Jev：一个不写代码、不聊天，只负责&quot;做决定&quot;的奇葩模型</a>
+<a class="art" href="../ext/e100.html">阿里文征：面向Agent全面升级模型服务、Agent服务、AI应用</a>
+<a class="art" href="../ext/e101.html">Agent时代，RAG怎么选？这份指南一次讲清！</a>
+<a class="art" href="../ext/e102.html">Jev 深度解析：从生成式模型到语义决策引擎</a>
+<a class="art" href="../ext/e103.html">Jev 爆火全网，有人把 200+ 个社区案例攒成了开源案例墙，已经 1 亿浏览了！</a>
+<a class="art" href="../ext/e104.html">RAG解决不了的问题，GBrain想解决：给AI Agent装一个能记事的&#x27;第二大脑</a>
+<a class="art" href="../ext/e105.html">开源版 Jev 发布了！</a>
+<a class="art" href="../ext/e106.html">终于有人把数据指标体系讲明白了：指标怎么定、怎么分、怎么用一次讲透</a>
+<a class="art" href="../ext/e107.html">腾讯15年资深后台工程师，转战大模型推理的抉择</a>
+<a class="art" href="../ext/e108.html">腾讯音乐的 MusicBuddy 上线了，Buddy 家族凑够七个</a>
+<a class="art" href="../ext/e109.html">这是一篇把&quot;Jev模型&quot;讲明白的科普级解读！</a>
+<a class="art" href="../ext/e110.html">重磅！从 Agent 开发到 Agent 算法，进阶指南来了</a>
+<a class="art" href="../ext/e111.html">AI时代，让AI写缓存，spec怎么写（5/100）</a>
+<a class="art" href="../ext/e112.html">Agents成新一代造王者，开发者正在快速失去技术决定权</a>
+<a class="art" href="../ext/e113.html">Harness RSI框架来了，登上Hugging Face日榜第二！</a>
+<a class="art" href="../ext/e114.html">Jev Search 开源！当 Jev 遇上搜索引擎：这个开源项目让你用大白话搜遍全网！</a>
+<a class="art" href="../ext/e115.html">Jev是什么AI模型？不做自然语言生成为何引发热议</a>
+<a class="art" href="../ext/e116.html">Jev是分类器吗？今天向所有人开放，送1.2亿token</a>
+<a class="art" href="../ext/e117.html">Jev 爆火：一个不做生成的 AI，凭什么让半个技术圈熬夜跑 Demo？</a>
+<a class="art" href="../ext/e118.html">Loop engineering：把 agent 放进工程循环</a>
+<a class="art" href="../ext/e119.html">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</a>
+<a class="art" href="../ext/e120.html">一文详解Jev：把 Agent 里的“小判断”，从大模型调用改成结构化决策</a>
+<a class="art" href="../ext/e121.html">不会聊天的 AI，彻底爆火：Jev 保姆级教程来了！</a>
+<a class="art" href="../ext/e122.html">为啥 Jev 突然就全网爆火了？</a>
+<a class="art" href="../ext/e123.html">什么是 Jev？</a>
+<a class="art" href="../ext/e124.html">四大多 Agent 架构详解（一）：Workflow 如何把固定流程变成可回放的系统</a>
+<a class="art" href="../ext/e125.html">基于Jev的浏览器Agent插件开源，狂揽12.1k star！</a>
+<a class="art" href="../ext/e126.html">怎样构建一个 Agent-friendly 的网站</a>
+<a class="art" href="../ext/e127.html">整理了最新Jev模型的全网22个爆火玩法！</a>
+<a class="art" href="../ext/e128.html">知识库答不准，可能真不是模型的锅，66.6K star的Docling 到底解决了什么</a>
+<a class="art" href="../ext/e129.html">简单讲讲 Agent 的工作原理</a>
+<a class="art" href="../ext/e130.html">聊聊最近爆火的Jev 模型，到底是个啥？</a>
+<a class="art" href="../ext/e131.html">刚刚，Anthropic公开内部RSI落地方法论</a>
+<a class="art" href="../ext/e132.html">Anthropic 公开「递归自我改进」核心数据：3 万 Agent 正在研发下一代 Claude</a>
+<a class="art" href="../ext/e133.html">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a>
+<a class="art" href="../ext/e134.html">Jev：只会做选择题的 System One 模型，TypeSafe AI 的高频决策分类器</a>
+<a class="art" href="../ext/e135.html">什么是 RSI：2026 年最贵的三个字母（递归自我改进科普）</a>
+<a class="art" href="../ext/e136.html">小米 MiMo-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a>
+<a class="art" href="../ext/e137.html">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a>
+<a class="art" href="../ext/e138.html">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a>
+<a class="art" href="../ext/e139.html">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a>
+<a class="art" href="../ext/e140.html">本地该怎么做 RSI？与 StartLux CTO 郭权玮聊本地自我改进</a>
+<a class="art" href="../ext/e141.html">货拉拉 AI Coding 落地实践：个人提效攒不成组织提效</a>
+<a class="art" href="../ext/e142.html">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</a>
+<a class="art" href="../ext/e143.html">别再只卷 Prompt 了：Context Engineering 才是 Agent 差距所在</a>
+<a class="art" href="../ext/e144.html">面试官：讲一讲多 Agent 协作如何保持一致性</a>
+<a class="art" href="../ext/e145.html">Codex想让Harness消失，Claude Code却要把它做成承重墙</a>
+<a class="art" href="../ext/e146.html">RSI 到底还有多远？三位 AI 研究员谈递归自我改进时间线</a>
+<a class="art" href="../ext/e147.html">OpenAI首席科学家发布长文：《An Alien Mind》（异星心智）</a>
+<a class="art" href="../ext/e148.html">让Agent像人一样记忆：本地长期记忆系统HL-Mem的设计与取舍</a>
+<a class="art" href="../ext/e149.html">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</a>
+<a class="art" href="../ext/e150.html">DeepSeek Harness背后的心脏：Cordis到底是什么</a>
+<a class="art" href="../ext/e151.html">聊一聊 GPT-6 Astra 背后的 Loop 技术</a>
+<a class="art" href="../ext/e152.html">Multi-Agent已死！Anthropic这次完全反着做</a>
+<a class="art" href="../ext/e153.html">个人自进化知识库完整搭建教程</a>
+<a class="art" href="../ext/e154.html">从一次 LLM 调用到完整 Harness，Agent 到底经历了什么？</a>
+<a class="art" href="../ext/e155.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a>
+<a class="art" href="../ext/e156.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a>
+<a class="art" href="../ext/e157.html">字节一天连发3篇自进化Agent，彻底杀疯了</a>
+<a class="art" href="../ext/e158.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
+<a class="art" href="../ext/e159.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
+<a class="art" href="../ext/e160.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
+<a class="art" href="../ext/e161.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
+<a class="art" href="../ext/e162.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
+<a class="art" href="../ext/e163.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
+<a class="art" href="../ext/e164.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
+<a class="art" href="../ext/e165.html">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</a>
+<a class="art" href="../ext/e166.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
+<a class="art" href="../ext/e167.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
+<a class="art" href="../ext/e168.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
+<a class="art" href="../ext/e169.html">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a>
+<a class="art" href="../ext/e170.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
+<a class="art" href="../ext/e171.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
+<a class="art" href="../ext/e172.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
+<a class="art" href="../ext/e173.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
+<a class="art" href="../ext/e174.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
+<a class="art" href="../ext/e175.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
+<a class="art" href="../ext/e176.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
+<a class="art" href="../ext/e177.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
+<a class="art" href="../ext/e178.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
+<a class="art" href="../ext/e179.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
+<a class="art" href="../ext/e180.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
+<a class="art" href="../ext/e181.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
+<a class="art" href="../ext/e182.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
+<a class="art" href="../ext/e183.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
+<a class="art" href="../ext/e184.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
+<a class="art" href="../ext/e185.html">Claude Code 15 条高频实用技巧</a>
+<a class="art" href="../ext/e186.html">Everything Claude Code：Anthropic 黑客松冠军的生产级配置集合</a>
+</details>
+<details class="cat" open><summary>工具与技术 <span class="cnt">65</span></summary>
+<a class="art active" href="../ext/e187.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e188.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e189.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e190.html">EasySync、OpenPlug、Resojot三件套</a>
+<a class="art" href="../ext/e191.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
+<a class="art" href="../ext/e192.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
+<a class="art" href="../ext/e193.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
+<a class="art" href="../ext/e194.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
+<a class="art" href="../ext/e195.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
+<a class="art" href="../ext/e196.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
+<a class="art" href="../ext/e197.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e198.html">防重放攻击Nonce机制</a>
+<a class="art" href="../ext/e199.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
+<a class="art" href="../ext/e200.html">手推Transformer（3）架构图解</a>
+<a class="art" href="../ext/e201.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
+<a class="art" href="../ext/e202.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
+<a class="art" href="../ext/e203.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
+<a class="art" href="../ext/e204.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<a class="art" href="../ext/e205.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
+<a class="art" href="../ext/e206.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
+<a class="art" href="../ext/e207.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e208.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
+<a class="art" href="../ext/e209.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
+<a class="art" href="../ext/e210.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
+<a class="art" href="../ext/e211.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
+<a class="art" href="../ext/e212.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
+<a class="art" href="../ext/e213.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
+<a class="art" href="../ext/e214.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
+<a class="art" href="../ext/e215.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
+<a class="art" href="../ext/e216.html">2026年量化投资类Skills排行榜</a>
+<a class="art" href="../ext/e217.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
+<a class="art" href="../ext/e218.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
+<a class="art" href="../ext/e219.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
+<a class="art" href="../ext/e220.html">6个Vibe Coding必备宝藏网站</a>
+<a class="art" href="../ext/e221.html">Archify：AI代码仓库架构可视化开源Skill</a>
+<a class="art" href="../ext/e222.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
+<a class="art" href="../ext/e223.html">anything2explainer：一键制作科普视频的开源Skill</a>
+<a class="art" href="../ext/e224.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
+<a class="art" href="../ext/e225.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
+<a class="art" href="../ext/e226.html">内容审核控制台嵌入式 MCP Server 落地方案</a>
+<a class="art" href="../ext/e227.html">MCP 开发指北(Java) — 组内分享</a>
+<a class="art" href="../ext/e228.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
+<a class="art" href="../ext/e229.html">html-anything — Agent 时代的 HTML 编辑器</a>
+<a class="art" href="../ext/e230.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
+<a class="art" href="../ext/e231.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
+<a class="art" href="../ext/e232.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
+<a class="art" href="../ext/e233.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
+<a class="art" href="../ext/e234.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
+<a class="art" href="../ext/e235.html">Claude Code Prompt Cache 配置实战</a>
+<a class="art" href="../ext/e236.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
+<a class="art" href="../ext/e237.html">待考证 Claude Code Skill / MCP 清单</a>
+<a class="art" href="../ext/e238.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
+<a class="art" href="../ext/e239.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
+<a class="art" href="../ext/e240.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
+<a class="art" href="../ext/e241.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
+<a class="art" href="../ext/e242.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
+<a class="art" href="../ext/e243.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
+<a class="art" href="../ext/e244.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
+<a class="art" href="../ext/e245.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
+<a class="art" href="../ext/e246.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
+<a class="art" href="../ext/e247.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
+<a class="art" href="../ext/e248.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<a class="art" href="../ext/e249.html">Obsidian 必装的 9 个 AI Agent Skill</a>
+<a class="art" href="../ext/e250.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
+<a class="art" href="../ext/e251.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
+</details>
+<details class="cat"><summary>认知与思维 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e252.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
+<a class="art" href="../ext/e253.html">高性价比人生指南（全书归档）</a>
+<a class="art" href="../ext/e254.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
+<a class="art" href="../ext/e255.html">单Agent思维链惯性与Agent Team挑战者架构</a>
+<a class="art" href="../ext/e256.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
+<a class="art" href="../ext/e257.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
+<a class="art" href="../ext/e258.html">普通人怎样在6-12个月内改变自己</a>
+<a class="art" href="../ext/e259.html">一天一小时，365天后，你的人生会彻底翻篇</a>
+<a class="art" href="../ext/e260.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
+<a class="art" href="../ext/e261.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
+<a class="art" href="../ext/e262.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
+<a class="art" href="../ext/e263.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
+</details>
+<details class="cat"><summary>写作与创作 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e264.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e265.html">全网首发！AI动态漫制作全流程</a>
+<a class="art" href="../ext/e266.html">宫斗宅斗文创作五大核心技巧：爽点密集化+人设标签化+设定易懂化+情感共鸣化+细节代入感</a>
+<a class="art" href="../ext/e267.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
+<a class="art" href="../ext/e268.html">短视频不是拼勤奋，是拼方向和系统</a>
+</details>
+<details class="cat"><summary>商业与变现 <span class="cnt">5</span></summary>
+<a class="art" href="../ext/e269.html">一口气讲明白：中国金融机构体系的底层逻辑</a>
+<a class="art" href="../ext/e270.html">50岁左右及以上父母的保障配置</a>
+<a class="art" href="../ext/e271.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
+<a class="art" href="../ext/e272.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
+<a class="art" href="../ext/e273.html">AI 五层价值链：收入往上走资本往下走，钱在大多数人看不见的基础设施层</a>
+</details>
+<details class="cat"><summary>待分拣 <span class="cnt">12</span></summary>
+<a class="art" href="../ext/e274.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
+<a class="art" href="../ext/e275.html">2025游戏安全风控指南</a>
+<a class="art" href="../ext/e276.html">我用Obsidian搭了一个会自己生长的个人网</a>
+<a class="art" href="../ext/e277.html">AI时代，普通人用Mac mini能干点啥</a>
+<a class="art" href="../ext/e278.html">Dan Koe：用AI做一个自己的人生模型</a>
+<a class="art" href="../ext/e279.html">【闪客】Computer Use真的在看你的屏幕吗</a>
+<a class="art" href="../ext/e280.html">GitHub技巧｜项目一键可视化</a>
+<a class="art" href="../ext/e281.html">焚诀，提示词模板，思维方式</a>
+<a class="art" href="../ext/e282.html">jev-chat-jarvis：装在手机上的对话副驾</a>
+<a class="art" href="../ext/e283.html">永远相信统计学 永远相信大数法则</a>
+<a class="art" href="../ext/e284.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
+</details>
+</details></nav></aside><div class="mask" id="mask"></div>
+  <main class="content"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>Google Cloud Model Armor API与Gemini 4企业安全治理</h1><div class="meta">📅 2026-10-28 · <span class="badge">文字记录</span> · 📄 工具与技术/20261028-ModelArmor与Gemini4企业安全治理介绍.md</div><div class="md"><h1>Google Cloud Model Armor API与Gemini 4企业安全治理</h1>
+<blockquote><p>来源：文字记录（PDF 原件：02-输入/_assets/20261028-ModelArmor与Gemini4企业安全治理介绍/source.pdf） 归档日期：2026-10-28 抓取状态：成功 原文字符：9293｜配图：0 张</p></blockquote>
+<h2>摘要速览</h2>
+<ul><li>双层架构：首层 Model Armor 秒级过滤（约拦 85% 违规），边缘转二层 Gemini 4 视觉复核</li><li>实测基准：文本端到端 100ms、多模态图片 700ms、单图上限 4MiB（OCR+视觉并行）</li><li>Model Armor 统一网关：sanitizeUserPrompt/Response、五过滤器并行、SDP 脱敏、Safe Browsing</li><li>图片审核双路径：OCR 字符级+像素坐标框（可打码留痕）与视觉分类（IMAGE_TYPE InfoType）</li><li>工程铁律：前置转码+4MiB 限流、Fail-Closed 状态机——不可仅凭 HTTP 200 放行</li><li>落地页三段式治理：Safe Browsing→Cloud Run 无头浏览器正文→首屏截图 OCR 复核</li><li>中文敏感词：SDP 自定义正则+De-id 自动脱敏，突破词典分词连续中文漏报</li><li>附录：Gemini 4.0 Argon GA（1M Input+1M Output、单任务约 $1.99）与 Antigravity 2.0</li></ul>
+<h2>核心内容</h2>
+<p>面向企业内容安全的双层纵深方案：把「确定性规则的低延迟」与「大模型推理的上下文理解」分工——首层 Model Armor API 以单次调用并行执行五大内置检测器与敏感数据保护完成高速基线过滤与脱敏，首层拦截约 85% 违规；仅 POSSIBLE 及可疑样本升级二层 Gemini 4 视觉复核（temperature=0、输出结构化 JSON 判罚理由）对接 SOC。图片侧走 OCR+视觉双路径并以坐标框支撑精准打码；落地页用三段式流水线封堵「正文干净、违规词绘入海报」的图文分离黑产页；跨区域合规以 SDP 自定义正则+De-id 在送模型前完成脱敏。全篇以大量实测值（延迟、召回、成本权衡矩阵）给出按业务场景的分级路由与 90 天三阶段实施路线图。</p>
+<h2>可执行启发</h2>
+<ul><li>拦截链路按置信度分级：固定黑名单走本地前缀树（&lt;50ms），常规走首层，可疑才升级大模型复核</li><li>送审前置统一转码与限流，状态机 Fail-Closed，杜绝「返 200 即安全」的静默跳过陷阱</li><li>中文敏感词改用自定义正则+自动脱敏占位符，绕开词典按空格分词的连续中文漏报</li><li>图片返回违规字像素边界框，可直接用于打码与审计留痕，是图文审核落地的关键工程细节</li></ul>
+<h2>我的想法</h2>
+<p>（待补充——可对照集团现有风控/审核链路评估可借鉴点）</p>
+<hr>
+<h2>原文沉淀</h2>
+<p>GOOGLE CLOUD SECURITY ARCHITECTURE</p>
+<p>Model Armor API 与 Gemini 4</p>
+<p>多模态内容审核、落地⻚治理与跨区域合规架构</p>
+<p>Google Cloud 团队 · 2026 年 10 ⽉</p>
+<p>EXECUTIVE SUMMARY 双层安全架构兼顾 秒级拦截 与 合规审计</p>
+<p>基于⽂本、图⽚与伪装落地⻚的实测结论</p>
+<p>100 ms</p>
+<p>⽂本端到端实测延迟</p>
+<p>含⽹络开销（实测基准）</p>
+<p>700 ms</p>
+<p>多模态图⽚实测延迟</p>
+<p>OCR + 视觉分类并⾏（实测）</p>
+<p>4 MiB</p>
+<p>单图最⼤处理上限</p>
+<p>配合前置标准化防静默放⾏</p>
+<p>01</p>
+<p>02</p>
+<p>03</p>
+<p>04</p>
+<p>业务挑战与双层纵深架构</p>
+<p>剖析终端越狱、伪装落地⻚挑战与双层协同机制</p>
+<p>多模态图⽚审核与防静默放⾏</p>
+<p>详解 OCR 坐标框、视觉分类、Gemini 4 复核与避坑</p>
+<p>⼴告落地⻚三段式治理流⽔线</p>
+<p>Safe Browsing 结合⽆头浏览器正⽂及截图双重审查</p>
+<p>跨区域合规词库与实施路线图</p>
+<p>SDP 正则脱敏、成本权衡矩阵</p>
+<p>核⼼架构主张</p>
+<p>⾼速拦截越狱、恶意链与敏感词</p>
+<p>2 / 14</p>
+<p>SECURITY CHALLENGES 智能终端与全球⽣态⾯临 三⼤内容安全挑战</p>
+<p>单⼀词库或纯模型难以兼顾延迟与召回率</p>
+<p>挑战⼀：终端图⽂夹带越狱</p>
+<p>挑战⼆：落地⻚视觉伪装</p>
+<p>挑战三：跨区域合规差异</p>
+<p>· 越狱指令嵌⼊海报绕过纯⽂本⽹关</p>
+<p>· ⽹⻚正⽂⼲净但将违规词绘⼊海报</p>
+<p>· 全球通⽤基线不含特定区域政企词库</p>
+<p>· 语⾳与视觉助⼿⾯临跨模态注⼊</p>
+<p>· 钓⻥链接隐藏在动态脚本或⼆维码</p>
+<p>· 传统词典分词在连续中⽂下易漏报</p>
+<p>· 缺⽂字坐标框难以⽀撑精准打码</p>
+<p>· WebP 与超⼤图默认易触发静默放⾏</p>
+<p>· 隐喻与艺术画作易造成误报或漏报</p>
+<p>核⼼症结 — 确定性规则缺乏上下⽂理解，⽽全量调⽤⼤模型推理成本⾼且缺乏统⼀脱敏基线。</p>
+<p>3 / 14</p>
+<p>REFERENCE ARCHITECTURE</p>
+<p>Model Armor 与 Gemini 4 纵深防御</p>
+<p>⾸层拦截约 85% 违规（预估），边缘转⼆层</p>
+<p>接⼊与预处</p>
+<p>理</p>
+<p>终端⽹关</p>
+<p>图像转码</p>
+<p>Cloud Run</p>
+<p>动态抓取</p>
+<p>API ⽹关</p>
+<p>状态校验</p>
+<p>Model</p>
+<p>Armor</p>
+<p>RAI 防越狱</p>
+<p>多模态过滤</p>
+<p>Safe Browsing</p>
+<p>恶意链拦截</p>
+<p>SDP 保护</p>
+<p>正则与脱敏</p>
+<p>Gemini 4</p>
+<p>复核</p>
+<p>视觉复核</p>
+<p>艺术品甄别</p>
+<p>合规裁判</p>
+<p>隐喻转 JSON</p>
+<p>BigQuery</p>
+<p>审计⽇志库</p>
+<p>第⼀层防线</p>
+<p>⾼速基线过滤</p>
+<p>与脱敏</p>
+<p>第⼆层防线</p>
+<p>Gemini 4 推理</p>
+<p>出 JSON</p>
+<p>4 / 14</p>
+<p>LAYER 1 · MODEL ARMOR API</p>
+<p>Model Armor API 提供统⼀安全⽹关</p>
+<p>单次调⽤并⾏执⾏五⼤过滤器与敏感数据保护</p>
+<p>全⾯覆盖输⼊清洗与输出审计</p>
+<p>· 提供 sanitizeUserPrompt 与 sanitizeModelResponse 接⼝</p>
+<p>· 与底层⼤模型解耦，统⼀保护⾃研与第三⽅模型</p>
+<p>五⼤内置安全检测器并⾏执⾏</p>
+<p>· 涵盖 RAI 有害内容、提⽰词越狱与 CSAM 拦截</p>
+<p>· 集成 Safe Browsing 实时识别钓⻥与恶意软件链接</p>
+<p>深度集成⾼级敏感数据保护 (SDP)</p>
+<p>· 挂载⾃定义正则 Inspect 与⾃动脱敏 De-id 模板</p>
+<p>· ⽀持多语⾔检测与 Floor Settings 全局基线管控</p>
+<p>5 / 14</p>
+<p>MULTIMODAL IMAGE AUDIT 图⽚审核实现 OCR 与视觉 双路径</p>
+<p>实测：图⽚模态仅⽀持 us/eu/global 端点</p>
+<p>检测维度</p>
+<p>技术实现机制</p>
+<p>返回结果粒度</p>
+<p>适⽤⻛险场景与实测表现</p>
+<p>区域与模态配置</p>
+<p>仅⽀持 us / eu / global 端点， 声明 MODALITY_IMAGE</p>
+<p>API 路由校验</p>
+<p>us-central1 建图⽚模板返 400；发纯 ⽂本模板返 FAILURE</p>
+<p>路径 ①：OCR 路 径</p>
+<p>提取图中⽂字送⼊ RAI、越 狱、URL 与 SDP 正则</p>
+<p>字符级 + 像素坐标 框</p>
+<p>拦截海报隐藏越狱指令、PII 与敏感词 ，坐标框⽤于打码</p>
+<p>路径 ②：视觉路 径</p>
+<p>⼆维码与⻓链接</p>
+<p>⾼级 SDP 挂载 IMAGE_TYPE/CONTEXT/* 视 觉类别</p>
+<p>OCR 对⻓ URL 易产⽣空格切 分（如 testsafe browsing）</p>
+<p>整图分类 + 似然度</p>
+<p>覆盖⽆⽂字图⽚；VERY_LIKELY 拦截 ，POSSIBLE 转 Gemini 4</p>
+<p>应⽤侧独⽴解析</p>
+<p>⽣产流⽔线额外提取⼆维码与 URL 作 为纯⽂本单独送审</p>
+<p>OCR 坐标框</p>
+<p>返回违规字像</p>
+<p>素边界框</p>
+<p>多区域路由</p>
+<p>绑定</p>
+<p>us/eu/global</p>
+<p>端点</p>
+<p>表格阅读要点 — ⽆⽂字图⽚须配置 SDP 视觉 InfoType；图⽚模板仅挂 Inspect 模板以防跳过。</p>
+<p>6 / 14</p>
+<p>LAYER 2 · GEMINI 4 VISUAL JUDGE 引⼊ Gemini 4 视觉复核降低艺术画作误判</p>
+<p>实测对⽐：弥补分类器对艺术画作的语境盲区</p>
+<p>正向收益驱动 (Growth Drivers)</p>
+<p>· 区分古典艺术名画与真实违规⾊情</p>
+<p>· 识别战争画作暴⼒信号并输出理由</p>
+<p>关键⻛险管控 (Key Risks &amp; Asks)</p>
+<p>· 最低返回阈值设为 POSSIBLE 防误报</p>
+<p>· 固定 temperature=0 配合⼈⼯抽检</p>
+<p>分级处置策略 — LIKELY 及以上由 Model Armor 直接拦截；POSSIBLE 触发 Gemini 4 复核并输出 JSON。</p>
+<p>7 / 14</p>
+<p>PRODUCTION ENGINEERING GUARDRAILS 前置图像转码与校验消除 静默放⾏ 隐患</p>
+<p>实测：WebP 与超 4 MiB 图⽚返 200 但跳过过滤</p>
+<p>步骤 1：前置 图像转码与 4 MiB 限流</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>1</p>
+<p>2</p>
+<p>3</p>
+<p>def normalize_image(raw: bytes, max_side=2000) -&gt; bytes:</p>
+<p>im = Image.open(io.BytesIO(raw)).convert("RGB")</p>
+<p>return encode_jpeg_under_4mib(im, max_side)</p>
+<p>步骤 2：Fail-Closed 状态机严格校 验</p>
+<p>def is_trustworthy(sr: dict) -&gt; bool:</p>
+<p>ok = sr.get("invocationResult") == "SUCCESS"</p>
+<p>return ok and not has_skipped_filters(sr)</p>
+<p>⼯程铁律 — 不可仅凭 HTTP 200 放⾏，须断⾔ is_trustworthy(sr) 为真。</p>
+<p>陷阱⼀：WebP 格式跳过</p>
+<p>原样送审返 FAILURE，须前置统⼀转</p>
+<p>JPEG。</p>
+<p>陷阱⼆：超 4 MiB 静默跳过</p>
+<p>超限⻓截图过滤器 SKIPPED，须压缩</p>
+<p>校验。</p>
+<p>8 / 14</p>
+<p>LANDING PAGE COMPLIANCE PIPELINE 三段式流⽔线精准拦截 图⽂伪装落地⻚</p>
+<p>应对⽂本⼲净、将违规标语绘⼊⾸屏海报⼿法</p>
+<p>阶段 ①：URL 威胁检测</p>
+<p>阶段 ②：动态抓取正⽂</p>
+<p>阶段 ③：⾸屏截图复核</p>
+<p>Safe Browsing 拦截钓⻥链接</p>
+<p>⽆头浏览器提取正⽂与跳转链</p>
+<p>转码后执⾏ OCR 与视觉审计</p>
+<p>① URL 级威胁检测</p>
+<p>· 毫秒级识别钓⻥与</p>
+<p>⽊⻢</p>
+<p>· 不主动抓取⽹⻚正</p>
+<p>⽂</p>
+<p>② 反 Cloaking 抓取</p>
+<p>· Cloud Run 渲染真</p>
+<p>实 DOM</p>
+<p>· 解析⼆维码与短链</p>
+<p>送审</p>
+<p>③ ⾸屏海报图⽂穿透</p>
+<p>· 拦截正⽂⼲净的违</p>
+<p>规海报</p>
+<p>· 捕获伪造公⽂与违</p>
+<p>规邮箱</p>
+<p>落地⻚治理结论 — 任⼀阶段命中或过滤器跳过均触发 BLOCK / REVIEW，封堵图⽂分离⿊产⻚。</p>
+<p>9 / 14</p>
+<p>LOCALIZED COMPLIANCE &amp; DLP 采⽤ SDP 正则表达式 实现中⽂敏感词全召回</p>
+<p>全球安全基线叠加⾃定义策略与⾃动脱敏</p>
+<p>传统误区 · DICTIONARY</p>
+<p>推荐⽅案 · REGEX + DE-ID</p>
+<p>词典模式（中⽂易漏报）</p>
+<p>正则模式（全量召回）</p>
+<p>按空格或标点词边界分词匹配</p>
+<p>VS</p>
+<p>⾃定义 Regex 突破中⽂分词限制</p>
+<p>连续中⽂句⼦⽆分隔符时漏报</p>
+<p>实测连续中⽂敏感词 100% 召回</p>
+<p>图⽚混挂脱敏模板导致被跳过</p>
+<p>⽂本挂 De-id ⾃动替换占位符</p>
+<p>中⽂正则命中</p>
+<p>按主题拆分多</p>
+<p>个词库</p>
+<p>实时隐私脱敏</p>
+<p>送模型前掩码</p>
+<p>敏感词</p>
+<p>对外产品定位 — 内置 RAI 提供全球通⽤安全基线；区域政企合规通过 SDP ⾃定义正则与 Gemini 4 落地。</p>
+<p>10 / 14</p>
+<p>GEMINI 4 NEXT-GEN CAPABILITIES</p>
+<p>Gemini 4 多模态推理精准 识别隐喻与变体</p>
+<p>输出结构化 JSON 判罚依据对接安全运营中⼼</p>
+<p>语义裁判三⼤核⼼价值</p>
+<p>• 隐喻识别：拦截⽆敏感词的诱导与集会⽂案 • 结构化输出：返回⻛险等级与中⽂判罚理由 • 注⼊调优：中⽂设 MEDIUM_AND_ABOVE 降误报</p>
+<p>双层联动闭锁 — 只要 Model Armor 命中恶意链接/正则或 Gemini 4 判定 BLOCK，⽹关即刻执⾏阻断。</p>
+<p>11 / 14</p>
+<p>ARCHITECTURAL TRADE-OFFS 按 延迟预算 与 ⻛险等级 动态路由控制成本</p>
+<p>明确选型边界：分级路由把控总体成本（预估）</p>
+<p>⼩⽶典型业务场景</p>
+<p>推荐防护组合⽅案</p>
+<p>终端实时语⾳/对话助 ⼿</p>
+<p>仅第⼀层 Model Armor + 异 步抽检</p>
+<p>海外应⽤商店与社区评 论</p>
+<p>Model Armor 全量 + POSSIBLE 复核</p>
+<p>⼴告主与促销落地⻚准 ⼊</p>
+<p>三段式流⽔线 + 双层全量审 核</p>
+<p>静态固定⿊名单⾼频过 滤</p>
+<p>本地前缀树过滤 + Model Armor 兜底</p>
+<p>延迟预算（实测/预 估）</p>
+<p>0.7 ‒ 0.9 s（实测⽂ 本）</p>
+<p>1.3 s 基线 / 2.5 s 复 核</p>
+<p>3.0 ‒ 5.0 s（异步准 ⼊）</p>
+<p>&lt; 50 ms（本地缓存 命中）</p>
+<p>架构权衡与选型说明</p>
+<p>延迟敏感，同步链路不串⾏叠加完 整⼤模型复核</p>
+<p>约 85% 常规图⽂由⾸层处理，省 约 70% 成本（预估）</p>
+<p>准⼊⼯单对延迟不敏感，优先保障 ⿊产伪装⾼召回</p>
+<p>⾼频固定词⽆需每次调云端 API， 本地前置更经济</p>
+<p>低延迟⻋道</p>
+<p>实时对话仅⾛</p>
+<p>⾸层</p>
+<p>精细化成本</p>
+<p>按置信度分流</p>
+<p>推理</p>
+<p>诚实选型权衡 — 仅拦截固定违禁词且要求 50 ms 内返回的边缘⽹关，本地正则更经济。</p>
+<p>12 / 14</p>
+<p>IMPLEMENTATION ROADMAP 分三阶段推进 PoC 验证 与 全量⽣产割接</p>
+<p>设定量化准出指标，90 天完成双层安全上线</p>
+<p>起点 2026Q4</p>
+<p>M1 上半⽉</p>
+<p>M1 下半⽉</p>
+<p>M2 上半⽉</p>
+<p>M2 下半⽉</p>
+<p>M3 上半⽉</p>
+<p>M3 下半⽉</p>
+<p>阶段⼀：基线验证</p>
+<p>阶段⼆：灰度双跑</p>
+<p>阶段三：⽣产割接</p>
+<p>条宽 = 跨度   竖线 = PoC 启动⾥程碑</p>
+<p>API ⾃检与模板初始化</p>
+<p>500 组图⽂样本评测</p>
+<p>转码与爬⾍流⽔线集成</p>
+<p>10% 影⼦流量阈值调优</p>
+<p>开启 Fail-Closed 拦截</p>
+<p>对接 SOC ⼤盘与词库迭代</p>
+<p>Day 1‒30 准出</p>
+<p>完成 500 组样</p>
+<p>本基线评测</p>
+<p>Day 31‒90 准</p>
+<p>出</p>
+<p>影⼦流量校准</p>
+<p>后切⽣产拦截</p>
+<p>开箱即⽤资产 — 已备好含⼀键初始化、OCR 解析与 Gemini 4 复核的完整 Jupyter Notebook 供复现。</p>
+<p>13 / 14</p>
+<p>SECTION 02 · GEMINI 4.0 (ARGON) FRONTIER MODEL Gemini 4.0 (Argon) 正式 GA： ⾯向深度推理与复杂⼯程的前沿模型</p>
+<p>10 ⽉ 13 ⽇ GA，12 个⽉⽣命周期与 99.5% SLA</p>
+<p>1M</p>
+<p>⾏业⾸创 1M Input + 1M Output</p>
+<p>Tokens 双向百万级上下⽂与连续⻓推</p>
+<p>演窗⼝ 为什么命名为 Gemini 4.0 Argon？</p>
+<p>· 开启 Gemini 4 模型尺⼨全新命名体系（以 Argon ⾸发领 航）</p>
+<p>· 较前代 3.1 Pro 在前沿编程与⽹络安全基准上实现 最⾼ +25</p>
+<p>个百分点 的跨越式提升</p>
+<p>· 定位⾼复杂度、多步骤任务，与⾼吞吐 Gemini 3.8 Flash 形 成⾼低协同</p>
+<p>三⼤核⼼领跑域：⼯程、知识⼯作与安全防御</p>
+<p>• 软件⼯程：DeepSWE v1.1 达 77.9% • 知识⼯作：Vals Index 排名 #1 (68.9%) • ⽹络安全：⾃主发现、验证并修补⾼危漏洞</p>
+<p>Long-Term GA</p>
+<p>⽣产承诺与全渠道同步上线</p>
+<p>• Long-Term GA：12 个⽉⽀持与 99.5% SLA • Day 1 可⽤：Global、US/EU 多区域端点 · 同步登陆 Gemini Enterprise 与 Antigravity</p>
+<p>产品定位：gemini-4-argon 是⽬前 Google 最强⼤的前沿推理模型，专为需要⻓时思考（Sustained Thinking）与多步执⾏的复杂任务打造。</p>
+<p>8 / 14</p>
+<p>GEMINI 4.0 ARGON · CORE CAPABILITIES 四⼤技术⽀柱：1M 超⻓连续解 码、⾃主软件⼯程与原⽣全模态 单次推理完成⼤型代码库重构与漏洞修复</p>
+<p>01 · ⾏业⾸创 1M Output ⻓解码</p>
+<p>输出上限从 64K 跃升⾄ 1,000,000 Tokens</p>
+<p>02 · 端到端多⽂件 Agentic Coding DeepSWE v1.1 实测 77.9% 排名第⼀</p>
+<p>· ⽀持数万⾏级完整模块代码⼀次性⽣成与⻓</p>
+<p>· 专为跨多⽂件真实代码仓库重构、终端命令</p>
+<p>链路数学科学推演</p>
+<p>执⾏与⾃动化测试打造</p>
+<p>• GraphWalks (1M Context) 得分⾼达 84.2% （领先同类前沿模型 +12.4 pts）</p>
+<p>· 原⽣集成⾄ AlphaEvolve，驱动复杂算法设 计与科学发现</p>
+<p>• AutomationBench 端到端业务流执⾏得分 51.3%（领先 +8.8 pts） · 作为核⼼推理引擎全⾯驱动 Antigravity 2.0、CLI 与 IDE 插件</p>
+<p>03 · ⾃主⽹络安全防御与全模态</p>
+<p>CWE-Bench v1 漏洞修复率提升⾄ 73.23%</p>
+<p>· 裸模型在 CWE-Bench 达 68.0%，结合 CodeMender ⾃动验证修补升⾄ 73.23% • 原⽣全模态统⼀推理：跨⽂本、代码、⾳ 频、PDF 与视频直接推理，免除外挂视觉切分</p>
+<p>流⽔线</p>
+<p>架构师视⻆：1M 输⼊解决“读得全”，1M 输出解决“写得完与想得深”，彻底消除⻓周期 Agent 任务的中途截断与上下⽂丢失。</p>
+<p>9 / 14</p>
+<p>FRONTIER BENCHMARKS &amp; TOKEN ECONOMICS</p>
+<p>权威基准与商业经济学：六⼤评测全⾯领跑， 单任务 TCO 仅 $1.99</p>
+<p>⾸发 5 折与 95% 缓存折扣，122 TPS 吞吐</p>
+<p>权威评测基准（截⾄ 2026-09-30）</p>
+<p>评测领域</p>
+<p>DeepSWE v1.1</p>
+<p>Vals Index（GDP 加权）</p>
+<p>GraphWalks (1M Context)</p>
+<p>Vals Finance Agent v2</p>
+<p>AutomationBench</p>
+<p>CWE-Bench v1 (+CodeMender)</p>
+<p>⻓周期软件⼯ 程</p>
+<p>企业编码/⾦融/ 法务</p>
+<p>百万上下⽂深 度推理</p>
+<p>多步⾦融研究 分析</p>
+<p>端到端业务流 ⾃动化</p>
+<p>⾃主漏洞发现 与修复</p>
+<p>Gemini 4.0 Argon</p>
+<p>77.9%</p>
+<p>主流前 沿参照 A 74.2%</p>
+<p>主流前 沿参照 B 74.1%</p>
+<p>68.9%</p>
+<p>67.0%</p>
+<p>65.8%</p>
+<p>84.2%</p>
+<p>66.8%</p>
+<p>71.8%</p>
+<p>65.4%</p>
+<p>58.6%</p>
+<p>58.9%</p>
+<p>51.3%</p>
+<p>42.5%</p>
+<p>41.4%</p>
+<p>73.2%（裸 模 68%）</p>
+<p>—</p>
+<p>—</p>
+<p>领先幅度</p>
+<p>⾸发期特惠定价与隐式缓</p>
+<p>+3.7 pts (#1)</p>
+<p>+1.9 pts (#1)</p>
+<p>+12.4 pts (#1)</p>
+<p>+6.5 pts (#1)</p>
+<p>+8.8 pts (#1) ⾏业领先 ⽔平</p>
+<p>存· 输⼊ $2 / 1M，输出 $10 / 1M · 隐式缓存低⾄ $0.10 / 1M （95% 折扣）</p>
+<p>单任务综合成本降低 66%· 单任务成本约 $1.99 （Artiﬁcial Analysis）</p>
+<p>· Token 消耗减半，输出 122</p>
+<p>TPS</p>
+<p>成本与效率洞察：得益于更⾼的单次推理准确率（AA-Omniscience 幻觉率仅 15%）与 95% 隐式缓存折扣，真实 Agent 任务总成本仅为同类⽅案的 1/3。</p>
+<p>10 / 14</p>
+<p>SECTION 03 · GOOGLE ANTIGRAVITY 2.0 Antigravity 2.0：从单⼀代码补全插 件演进为独⽴多智能体指挥中⼼</p>
+<p>Agent Manager 独⽴成桌⾯应⽤，多智能体并⾏</p>
+<p>Mission Control 独⽴桌</p>
+<p>⾯端· 不再绑定单⼀代码编辑器， ⾯向所有构建者提供全局多智能</p>
+<p>ANTIGRAVITY 2.0 MISSION…</p>
+<p>体调度台</p>
+<p>LEGACY IDE COPILOT</p>
+<p>传统 IDE 辅助编码（1.0 模式）</p>
+<p>Antigravity 2.0 独⽴指挥中 ⼼ (Agent-First)</p>
+<p>局限于单⼀编辑器内的对话补全</p>
+<p>VS</p>
+<p>跨平台桌⾯应⽤ + CLI + SDK</p>
+<p>串⾏交互，开发者需盯屏等待</p>
+<p>先审 /plan 计划，再后台执⾏</p>
+<p>缺少前置计划，易偏离设计意图</p>
+<p>Subagents 并⾏推进多条⼯作流</p>
+<p>⻓任务上下⽂易被⽇志撑满</p>
+<p>定时任务与原⽣语⾳指令</p>
+<p>· ⽀持同时监控本地与云端多</p>
+<p>个异步 Agent 任务流</p>
+<p>“施⼯监理”⼈机协同范 式 • Agent 是总包施⼯⽅，开发者 是现场监理</p>
+<p>· ⼈⼯把控“审批架构计划”</p>
+<p>与“验收代码 Diﬀ”两个关键决</p>
+<p>策点</p>
+<p>范式升级：让⼯程师从“逐⾏盯屏结对编程”解放出来，以架构监理⾝份同时并⾏管理多个由 Gemini 4.0 Argon 驱动的⾃主研发⼯作流。</p>
+<p>11 / 14</p>
+<p>ANTIGRAVITY 2.0 · ORCHESTRATION WORKFLOW</p>
+<p>四⼤核⼼引擎：规划、并⾏、 定时与语⾳</p>
+<p>从被动问答⾛向全天候主动式⼯程智能体</p>
+<ol><li>语⾳/指令输⼊</li></ol>
+<ol><li>架构与测试规划</li></ol>
+<ol><li>Subagents 并⾏执⾏</li></ol>
+<ol><li>Cron ⾃动化与交付</li></ol>
+<p>Voice 或 /plan 发起任务</p>
+<p>⽣成实现⽅案与验证矩阵</p>
+<p>主从分治 + 独⽴分⽀沙箱</p>
+<p>定时唤醒巡检 + Diﬀ 审批</p>
+<p>Mission Control 与 /plan 规划</p>
+<p>Subagents 主从多智能体并⾏</p>
+<p>Scheduled Tasks 与原⽣语⾳驱动</p>
+<p>先规划、后执⾏、⾃动跑通测试</p>
+<p>主 Agent 控全局，⼦ Agent 专精深潜</p>
+<p>Cron 定时⾃动驾驶 + ⻨克⻛⾃然⼝述</p>
+<p>· 输⼊ /plan 触发深度推理模式，输出完整实</p>
+<p>· 单条提⽰词动态派⽣多个 research 或专项</p>
+<p>施蓝图与测试验证计划</p>
+<p>编码 Subagents 并⾏作业</p>
+<p>• Scheduled Tasks：配置 Cron 表达式 ，Agent 按时唤醒执⾏晨间 PR 汇总或云端健</p>
+<p>· 内置 /browser ⾃动化浏览器验证与可视化</p>
+<p>· ⽀持 branch / share 隔离⼯作区，避免多</p>
+<p>康巡检</p>
+<p>Artifact 报告审阅</p>
+<p>智能体并发改写冲突</p>
+<p>· 结合 Gemini 4.0 1M 输出，单次规划可覆盖</p>
+<p>· ⼦智能体完成后通过响应式消息唤醒主会话</p>
+<p>• Voice 语⾳指令：直接通过⻨克⻛⼝述复杂 需求，由 Gemini ⾳频理解直转⼯程任务</p>
+<p>⼤型跨模块重构</p>
+<p>，零轮询开销</p>
+<p>端到端⼯程提效：通过 /plan 锁定架构⽅向、Subagents 并发缩短⻓尾耗时、Scheduled Tasks 实现⽆⼈值守夜间构建与巡检。</p>
+<p>12 / 14</p>
+<p>ANTIGRAVITY ECOSYSTEM &amp; HARDWARE INTEGRATION 全栈⼯具链与⽣态集成：四端协同、 多模型路由与端侧硬件开发</p>
+<p>桌⾯、CLI、IDE 与 SDK 全覆盖，⽀持端侧部署</p>
+<p>Antigravity 产品形态</p>
+<p>核⼼定位与适⽤⼈群</p>
+<p>模型选择与集成特性</p>
+<p>Antigravity 2.0 Desktop</p>
+<p>跨平台桌⾯指挥中⼼</p>
+<p>编排多 Agent、定时任务与 Diﬀ 审阅</p>
+<p>Antigravity CLI (agy)</p>
+<p>终端命令⾏智能体</p>
+<p>⽀持 /model 按轮次切换模型</p>
+<p>⼀键集成 Android 与</p>
+<p>Google ⽣态 · 接⼊ Android、Firebase、 Chrome</p>
+<p>· 预置 Google Cloud MCP</p>
+<p>IDE Extensions</p>
+<p>VS Code、JetBrains、Zed 等</p>
+<p>通过 ACP 协议嵌⼊既有编辑器</p>
+<p>Servers</p>
+<p>Antigravity SDK</p>
+<p>企业⾃建 Agent 框架</p>
+<p>⽀持私有化部署与 LiteRT 离线运⾏</p>
+<p>多模型⾃由路由 + Google Cloud 企业级安全治理</p>
+<p>• 多模型：Gemini 4.0 Argon、3.8 Flash 及第三⽅与开源模型 • 企业安全：沙箱隔离、访问控制、漏洞扫描与数据零训练承诺</p>
+<p>硬件⼯程与端侧</p>
+<p>LiteRT 协同 · ⽀持 PCB 辅助设计与旧代码现 代化</p>
+<p>· SDK ⽀持 LiteRT 端侧离线运⾏ Gemma 4</p>
+<p>⽣态协同亮点：云端由 Gemini 4.0 Argon 驱动重度研发与跨仓重构，端侧通过 Antigravity SDK + LiteRT 部署离线轻量化模型。</p>
+<p>13 / 14</p>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></main>
+</div>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+</body>
+</html>
