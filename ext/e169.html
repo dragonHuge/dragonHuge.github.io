@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解 · DragonHuge · 知识花园</title>
+<title>Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比 · DragonHuge · 知识花园</title>
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -97,8 +97,8 @@
 <a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
 </details>
 </details>
-<details class="mod" open><summary>外部沉淀 <span class="cnt">285</span></summary>
-<details class="cat" open><summary>AI与效率 <span class="cnt">186</span></summary>
+<details class="mod" open><summary>外部沉淀 <span class="cnt">293</span></summary>
+<details class="cat" open><summary>AI与效率 <span class="cnt">188</span></summary>
 <a class="art" href="../ext/e001.html">Anthropic：子Agent拆多了，为什么反而更慢</a>
 <a class="art" href="../ext/e002.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a>
 <a class="art" href="../ext/e003.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a>
@@ -256,179 +256,540 @@
 <a class="art" href="../ext/e155.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a>
 <a class="art" href="../ext/e156.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a>
 <a class="art" href="../ext/e157.html">字节一天连发3篇自进化Agent，彻底杀疯了</a>
-<a class="art" href="../ext/e158.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
-<a class="art" href="../ext/e159.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
-<a class="art" href="../ext/e160.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
-<a class="art" href="../ext/e161.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
-<a class="art" href="../ext/e162.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
-<a class="art" href="../ext/e163.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
-<a class="art" href="../ext/e164.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
-<a class="art" href="../ext/e165.html">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</a>
-<a class="art" href="../ext/e166.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
-<a class="art" href="../ext/e167.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
-<a class="art" href="../ext/e168.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
-<a class="art active" href="../ext/e169.html">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a>
-<a class="art" href="../ext/e170.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
-<a class="art" href="../ext/e171.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
-<a class="art" href="../ext/e172.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
-<a class="art" href="../ext/e173.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
-<a class="art" href="../ext/e174.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
-<a class="art" href="../ext/e175.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
-<a class="art" href="../ext/e176.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
-<a class="art" href="../ext/e177.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
-<a class="art" href="../ext/e178.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
-<a class="art" href="../ext/e179.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
-<a class="art" href="../ext/e180.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
-<a class="art" href="../ext/e181.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
-<a class="art" href="../ext/e182.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
-<a class="art" href="../ext/e183.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
-<a class="art" href="../ext/e184.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
-<a class="art" href="../ext/e185.html">Claude Code 15 条高频实用技巧</a>
-<a class="art" href="../ext/e186.html">Everything Claude Code：Anthropic 黑客松冠军的生产级配置集合</a>
+<a class="art" href="../ext/e158.html">Hermes-Agent-The-Complete-Guide-v260407</a>
+<a class="art" href="../ext/e159.html">Hermes-Agent-从入门到精通-v260407</a>
+<a class="art" href="../ext/e160.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
+<a class="art" href="../ext/e161.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
+<a class="art" href="../ext/e162.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
+<a class="art" href="../ext/e163.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
+<a class="art" href="../ext/e164.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
+<a class="art" href="../ext/e165.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
+<a class="art" href="../ext/e166.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
+<a class="art" href="../ext/e167.html">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</a>
+<a class="art" href="../ext/e168.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
+<a class="art active" href="../ext/e169.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
+<a class="art" href="../ext/e170.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
+<a class="art" href="../ext/e171.html">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a>
+<a class="art" href="../ext/e172.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
+<a class="art" href="../ext/e173.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
+<a class="art" href="../ext/e174.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
+<a class="art" href="../ext/e175.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
+<a class="art" href="../ext/e176.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
+<a class="art" href="../ext/e177.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
+<a class="art" href="../ext/e178.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
+<a class="art" href="../ext/e179.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
+<a class="art" href="../ext/e180.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
+<a class="art" href="../ext/e181.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
+<a class="art" href="../ext/e182.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
+<a class="art" href="../ext/e183.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
+<a class="art" href="../ext/e184.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
+<a class="art" href="../ext/e185.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
+<a class="art" href="../ext/e186.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
+<a class="art" href="../ext/e187.html">Claude Code 15 条高频实用技巧</a>
+<a class="art" href="../ext/e188.html">Everything Claude Code：Anthropic 黑客松冠军的生产级配置集合</a>
 </details>
 <details class="cat"><summary>工具与技术 <span class="cnt">65</span></summary>
-<a class="art" href="../ext/e187.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
-<a class="art" href="../ext/e188.html">火山引擎大模型应用防火墙文档指南</a>
-<a class="art" href="../ext/e189.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
-<a class="art" href="../ext/e190.html">EasySync、OpenPlug、Resojot三件套</a>
-<a class="art" href="../ext/e191.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
-<a class="art" href="../ext/e192.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
-<a class="art" href="../ext/e193.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
-<a class="art" href="../ext/e194.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
-<a class="art" href="../ext/e195.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
-<a class="art" href="../ext/e196.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
-<a class="art" href="../ext/e197.html">FID：小米设备不变的硬件标识</a>
-<a class="art" href="../ext/e198.html">防重放攻击Nonce机制</a>
-<a class="art" href="../ext/e199.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
-<a class="art" href="../ext/e200.html">手推Transformer（3）架构图解</a>
-<a class="art" href="../ext/e201.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
-<a class="art" href="../ext/e202.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
-<a class="art" href="../ext/e203.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
-<a class="art" href="../ext/e204.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
-<a class="art" href="../ext/e205.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
-<a class="art" href="../ext/e206.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
-<a class="art" href="../ext/e207.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
-<a class="art" href="../ext/e208.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
-<a class="art" href="../ext/e209.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
-<a class="art" href="../ext/e210.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
-<a class="art" href="../ext/e211.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
-<a class="art" href="../ext/e212.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
-<a class="art" href="../ext/e213.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
-<a class="art" href="../ext/e214.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
-<a class="art" href="../ext/e215.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
-<a class="art" href="../ext/e216.html">2026年量化投资类Skills排行榜</a>
-<a class="art" href="../ext/e217.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
-<a class="art" href="../ext/e218.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
-<a class="art" href="../ext/e219.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
-<a class="art" href="../ext/e220.html">6个Vibe Coding必备宝藏网站</a>
-<a class="art" href="../ext/e221.html">Archify：AI代码仓库架构可视化开源Skill</a>
-<a class="art" href="../ext/e222.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
-<a class="art" href="../ext/e223.html">anything2explainer：一键制作科普视频的开源Skill</a>
-<a class="art" href="../ext/e224.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
-<a class="art" href="../ext/e225.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
-<a class="art" href="../ext/e226.html">内容审核控制台嵌入式 MCP Server 落地方案</a>
-<a class="art" href="../ext/e227.html">MCP 开发指北(Java) — 组内分享</a>
-<a class="art" href="../ext/e228.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
-<a class="art" href="../ext/e229.html">html-anything — Agent 时代的 HTML 编辑器</a>
-<a class="art" href="../ext/e230.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
-<a class="art" href="../ext/e231.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
-<a class="art" href="../ext/e232.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
-<a class="art" href="../ext/e233.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
-<a class="art" href="../ext/e234.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
-<a class="art" href="../ext/e235.html">Claude Code Prompt Cache 配置实战</a>
-<a class="art" href="../ext/e236.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
-<a class="art" href="../ext/e237.html">待考证 Claude Code Skill / MCP 清单</a>
-<a class="art" href="../ext/e238.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
-<a class="art" href="../ext/e239.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
-<a class="art" href="../ext/e240.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
-<a class="art" href="../ext/e241.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
-<a class="art" href="../ext/e242.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
-<a class="art" href="../ext/e243.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
-<a class="art" href="../ext/e244.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
-<a class="art" href="../ext/e245.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
-<a class="art" href="../ext/e246.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
-<a class="art" href="../ext/e247.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
-<a class="art" href="../ext/e248.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
-<a class="art" href="../ext/e249.html">Obsidian 必装的 9 个 AI Agent Skill</a>
-<a class="art" href="../ext/e250.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
-<a class="art" href="../ext/e251.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
+<a class="art" href="../ext/e189.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e190.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e191.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e192.html">EasySync、OpenPlug、Resojot三件套</a>
+<a class="art" href="../ext/e193.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
+<a class="art" href="../ext/e194.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
+<a class="art" href="../ext/e195.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
+<a class="art" href="../ext/e196.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
+<a class="art" href="../ext/e197.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
+<a class="art" href="../ext/e198.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
+<a class="art" href="../ext/e199.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e200.html">防重放攻击Nonce机制</a>
+<a class="art" href="../ext/e201.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
+<a class="art" href="../ext/e202.html">手推Transformer（3）架构图解</a>
+<a class="art" href="../ext/e203.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
+<a class="art" href="../ext/e204.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
+<a class="art" href="../ext/e205.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
+<a class="art" href="../ext/e206.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<a class="art" href="../ext/e207.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
+<a class="art" href="../ext/e208.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
+<a class="art" href="../ext/e209.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e210.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
+<a class="art" href="../ext/e211.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
+<a class="art" href="../ext/e212.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
+<a class="art" href="../ext/e213.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
+<a class="art" href="../ext/e214.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
+<a class="art" href="../ext/e215.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
+<a class="art" href="../ext/e216.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
+<a class="art" href="../ext/e217.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
+<a class="art" href="../ext/e218.html">2026年量化投资类Skills排行榜</a>
+<a class="art" href="../ext/e219.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
+<a class="art" href="../ext/e220.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
+<a class="art" href="../ext/e221.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
+<a class="art" href="../ext/e222.html">6个Vibe Coding必备宝藏网站</a>
+<a class="art" href="../ext/e223.html">Archify：AI代码仓库架构可视化开源Skill</a>
+<a class="art" href="../ext/e224.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
+<a class="art" href="../ext/e225.html">anything2explainer：一键制作科普视频的开源Skill</a>
+<a class="art" href="../ext/e226.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
+<a class="art" href="../ext/e227.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
+<a class="art" href="../ext/e228.html">内容审核控制台嵌入式 MCP Server 落地方案</a>
+<a class="art" href="../ext/e229.html">MCP 开发指北(Java) — 组内分享</a>
+<a class="art" href="../ext/e230.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
+<a class="art" href="../ext/e231.html">html-anything — Agent 时代的 HTML 编辑器</a>
+<a class="art" href="../ext/e232.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
+<a class="art" href="../ext/e233.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
+<a class="art" href="../ext/e234.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
+<a class="art" href="../ext/e235.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
+<a class="art" href="../ext/e236.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
+<a class="art" href="../ext/e237.html">Claude Code Prompt Cache 配置实战</a>
+<a class="art" href="../ext/e238.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
+<a class="art" href="../ext/e239.html">待考证 Claude Code Skill / MCP 清单</a>
+<a class="art" href="../ext/e240.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
+<a class="art" href="../ext/e241.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
+<a class="art" href="../ext/e242.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
+<a class="art" href="../ext/e243.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
+<a class="art" href="../ext/e244.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
+<a class="art" href="../ext/e245.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
+<a class="art" href="../ext/e246.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
+<a class="art" href="../ext/e247.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
+<a class="art" href="../ext/e248.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
+<a class="art" href="../ext/e249.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
+<a class="art" href="../ext/e250.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<a class="art" href="../ext/e251.html">Obsidian 必装的 9 个 AI Agent Skill</a>
+<a class="art" href="../ext/e252.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
+<a class="art" href="../ext/e253.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
 </details>
 <details class="cat"><summary>认知与思维 <span class="cnt">12</span></summary>
-<a class="art" href="../ext/e252.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
-<a class="art" href="../ext/e253.html">高性价比人生指南（全书归档）</a>
-<a class="art" href="../ext/e254.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
-<a class="art" href="../ext/e255.html">单Agent思维链惯性与Agent Team挑战者架构</a>
-<a class="art" href="../ext/e256.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
-<a class="art" href="../ext/e257.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
-<a class="art" href="../ext/e258.html">普通人怎样在6-12个月内改变自己</a>
-<a class="art" href="../ext/e259.html">一天一小时，365天后，你的人生会彻底翻篇</a>
-<a class="art" href="../ext/e260.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
-<a class="art" href="../ext/e261.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
-<a class="art" href="../ext/e262.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
-<a class="art" href="../ext/e263.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
+<a class="art" href="../ext/e254.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
+<a class="art" href="../ext/e255.html">高性价比人生指南（全书归档）</a>
+<a class="art" href="../ext/e256.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
+<a class="art" href="../ext/e257.html">单Agent思维链惯性与Agent Team挑战者架构</a>
+<a class="art" href="../ext/e258.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
+<a class="art" href="../ext/e259.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
+<a class="art" href="../ext/e260.html">普通人怎样在6-12个月内改变自己</a>
+<a class="art" href="../ext/e261.html">一天一小时，365天后，你的人生会彻底翻篇</a>
+<a class="art" href="../ext/e262.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
+<a class="art" href="../ext/e263.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
+<a class="art" href="../ext/e264.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
+<a class="art" href="../ext/e265.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
 </details>
 <details class="cat"><summary>写作与创作 <span class="cnt">5</span></summary>
-<a class="art" href="../ext/e264.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
-<a class="art" href="../ext/e265.html">全网首发！AI动态漫制作全流程</a>
-<a class="art" href="../ext/e266.html">宫斗宅斗文创作五大核心技巧：爽点密集化+人设标签化+设定易懂化+情感共鸣化+细节代入感</a>
-<a class="art" href="../ext/e267.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
-<a class="art" href="../ext/e268.html">短视频不是拼勤奋，是拼方向和系统</a>
+<a class="art" href="../ext/e266.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e267.html">全网首发！AI动态漫制作全流程</a>
+<a class="art" href="../ext/e268.html">宫斗宅斗文创作五大核心技巧：爽点密集化+人设标签化+设定易懂化+情感共鸣化+细节代入感</a>
+<a class="art" href="../ext/e269.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
+<a class="art" href="../ext/e270.html">短视频不是拼勤奋，是拼方向和系统</a>
 </details>
 <details class="cat"><summary>商业与变现 <span class="cnt">5</span></summary>
-<a class="art" href="../ext/e269.html">一口气讲明白：中国金融机构体系的底层逻辑</a>
-<a class="art" href="../ext/e270.html">50岁左右及以上父母的保障配置</a>
-<a class="art" href="../ext/e271.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
-<a class="art" href="../ext/e272.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
-<a class="art" href="../ext/e273.html">AI 五层价值链：收入往上走资本往下走，钱在大多数人看不见的基础设施层</a>
+<a class="art" href="../ext/e271.html">一口气讲明白：中国金融机构体系的底层逻辑</a>
+<a class="art" href="../ext/e272.html">50岁左右及以上父母的保障配置</a>
+<a class="art" href="../ext/e273.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
+<a class="art" href="../ext/e274.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
+<a class="art" href="../ext/e275.html">AI 五层价值链：收入往上走资本往下走，钱在大多数人看不见的基础设施层</a>
 </details>
-<details class="cat"><summary>待分拣 <span class="cnt">12</span></summary>
-<a class="art" href="../ext/e274.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
-<a class="art" href="../ext/e275.html">2025游戏安全风控指南</a>
-<a class="art" href="../ext/e276.html">我用Obsidian搭了一个会自己生长的个人网</a>
-<a class="art" href="../ext/e277.html">AI时代，普通人用Mac mini能干点啥</a>
-<a class="art" href="../ext/e278.html">Dan Koe：用AI做一个自己的人生模型</a>
-<a class="art" href="../ext/e279.html">【闪客】Computer Use真的在看你的屏幕吗</a>
-<a class="art" href="../ext/e280.html">GitHub技巧｜项目一键可视化</a>
-<a class="art" href="../ext/e281.html">焚诀，提示词模板，思维方式</a>
-<a class="art" href="../ext/e282.html">jev-chat-jarvis：装在手机上的对话副驾</a>
-<a class="art" href="../ext/e283.html">永远相信统计学 永远相信大数法则</a>
-<a class="art" href="../ext/e284.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
-<a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
+<details class="cat"><summary>待分拣 <span class="cnt">18</span></summary>
+<a class="art" href="../ext/e276.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
+<a class="art" href="../ext/e277.html">360大模型安全白皮书</a>
+<a class="art" href="../ext/e278.html">AI基础设施安全白皮书</a>
+<a class="art" href="../ext/e279.html">MicrosoftAI安全</a>
+<a class="art" href="../ext/e280.html">华为AI安全白皮书</a>
+<a class="art" href="../ext/e281.html">华为云AI安全解决方案白皮书</a>
+<a class="art" href="../ext/e282.html">华为算力基础设施安全技术白皮书</a>
+<a class="art" href="../ext/e283.html">2025游戏安全风控指南</a>
+<a class="art" href="../ext/e284.html">我用Obsidian搭了一个会自己生长的个人网</a>
+<a class="art" href="../ext/e285.html">AI时代，普通人用Mac mini能干点啥</a>
+<a class="art" href="../ext/e286.html">Dan Koe：用AI做一个自己的人生模型</a>
+<a class="art" href="../ext/e287.html">【闪客】Computer Use真的在看你的屏幕吗</a>
+<a class="art" href="../ext/e288.html">GitHub技巧｜项目一键可视化</a>
+<a class="art" href="../ext/e289.html">焚诀，提示词模板，思维方式</a>
+<a class="art" href="../ext/e290.html">jev-chat-jarvis：装在手机上的对话副驾</a>
+<a class="art" href="../ext/e291.html">永远相信统计学 永远相信大数法则</a>
+<a class="art" href="../ext/e292.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e293.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">15</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#一-核心公式与总体架构">一、核心公式与总体架构</a><a class="tl l3" href="#二-提示词工程-Agent-的-工作手册">二、提示词工程——Agent 的&quot;工作手册&quot;</a><a class="tl l3" href="#三-工具调用系统-Agent-的-42只手">三、工具调用系统——Agent 的&quot;42只手&quot;</a><a class="tl l3" href="#四-上下文管理-Agent-的-有限白板">四、上下文管理——Agent 的&quot;有限白板&quot;</a><a class="tl l3" href="#五-任务管理-Agent-的-装修清单">五、任务管理——Agent 的&quot;装修清单&quot;</a><a class="tl l3" href="#六-多Agent协作-Agent-的-施工团队">六、多Agent协作——Agent 的&quot;施工团队&quot;</a><a class="tl l3" href="#七-与-Claude-模型深度绑定">七、与 Claude 模型深度绑定</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文">原文</a><a class="tl l2" href="#原文沉淀">原文沉淀</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</h1><div class="meta">2026-04-21 · <span class="badge">飞书</span> · <a class="src-link" href="https://mi.feishu.cn/docx/BSckdIgxdoKxMDxgidOcspoonVh" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">AI与效率/20260421-Claude-Code源码深度解析-Agent等于Model加Harness完整拆解.md</span></div><div class="md"><blockquote><p>来源：飞书 归档日期：2026-04-21 抓取状态：待补充原文 原文字符：0｜配图：0 张</p></blockquote>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">61</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l3" href="#四者对比">四者对比</a><a class="tl l3" href="#三个关键差异">三个关键差异</a><a class="tl l3" href="#类比">类比</a><a class="tl l3" href="#Ralph-的核心设计原则">Ralph 的核心设计原则</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#本地工具对应">本地工具对应</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#Navigation-Menu">Navigation Menu</a><a class="tl l3" href="#1k">1k</a><a class="tl l3" href="#Latest-commit">Latest commit</a><a class="tl l3" href="#History">History</a><a class="tl l3" href="#Folders-and-files">Folders and files</a><a class="tl l3" href="#Repository-files-navigation">Repository files navigation</a><a class="tl l3" href="#Ralph">Ralph</a><a class="tl l3" href="#Prerequisites">Prerequisites</a><a class="tl l3" href="#Setup">Setup</a><a class="tl l3" href="#Option-1-Copy-to-your-project">Option 1: Copy to your project</a><a class="tl l3" href="#Option-2-Install-skills-globally-Amp">Option 2: Install skills globally (Amp)</a><a class="tl l3" href="#Option-3-Use-as-Claude-Code-Marketplace">Option 3: Use as Claude Code Marketplace</a><a class="tl l3" href="#Configure-Amp-auto-handoff-recommended">Configure Amp auto-handoff (recommended)</a><a class="tl l3" href="#Workflow">Workflow</a><a class="tl l3" href="#1-Create-a-PRD">1. Create a PRD</a><a class="tl l3" href="#2-Convert-PRD-to-Ralph-format">2. Convert PRD to Ralph format</a><a class="tl l3" href="#3-Run-Ralph">3. Run Ralph</a><a class="tl l3" href="#Create-a-feature-branch-from-PRD-branchName">Create a feature branch (from PRD branchName)</a><a class="tl l3" href="#Pick-the-highest-priority-story-where-passes-false">Pick the highest priority story where passes: false</a><a class="tl l3" href="#Implement-that-single-story">Implement that single story</a><a class="tl l3" href="#Run-quality-checks-typecheck-tests">Run quality checks (typecheck, tests)</a><a class="tl l3" href="#Commit-if-checks-pass">Commit if checks pass</a><a class="tl l3" href="#Update-prd-json-to-mark-story-as-passes-true">Update prd.json to mark story as passes: true</a><a class="tl l3" href="#Append-learnings-to-progress-txt">Append learnings to progress.txt</a><a class="tl l3" href="#Repeat-until-all-stories-pass-or-max-iterations-reached">Repeat until all stories pass or max iterations reached</a><a class="tl l3" href="#Key-Files">Key Files</a><a class="tl l3" href="#Flowchart">Flowchart</a><a class="tl l3" href="#Critical-Concepts">Critical Concepts</a><a class="tl l3" href="#Each-Iteration-Fresh-Context">Each Iteration = Fresh Context</a><a class="tl l3" href="#Small-Tasks">Small Tasks</a><a class="tl l3" href="#AGENTS-md-Updates-Are-Critical">AGENTS.md Updates Are Critical</a><a class="tl l3" href="#Feedback-Loops">Feedback Loops</a><a class="tl l3" href="#Browser-Verification-for-UI-Stories">Browser Verification for UI Stories</a><a class="tl l3" href="#Stop-Condition">Stop Condition</a><a class="tl l3" href="#Debugging">Debugging</a><a class="tl l3" href="#Customizing-the-Prompt">Customizing the Prompt</a><a class="tl l3" href="#Archiving">Archiving</a><a class="tl l3" href="#References">References</a><a class="tl l3" href="#About">About</a><a class="tl l3" href="#Resources">Resources</a><a class="tl l3" href="#Stars">Stars</a><a class="tl l3" href="#Watchers">Watchers</a><a class="tl l3" href="#Forks">Forks</a><a class="tl l3" href="#Releases">Releases</a><a class="tl l3" href="#Packages">Packages</a><a class="tl l3" href="#Contributors">Contributors</a><a class="tl l3" href="#Languages">Languages</a><a class="tl l3" href="#Footer">Footer</a><a class="tl l3" href="#Footer-navigation">Footer navigation</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</h1><div class="meta">2026-04-23 · <span class="badge">网页</span> · <a class="src-link" href="https://github.com/snarktank/ralph" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">AI与效率/20260423-Ralph对比ClaudeCode与OpenCode自动化Agent循环机制.md</span></div><div class="md"><blockquote><p>来源：网页 归档日期：2026-04-23 抓取状态：成功 原文字符：14631｜配图：2 张</p></blockquote>
 <h2 id="摘要速览">摘要速览</h2>
-<p>如何将一个"只会说话的大语言模型"变成一个"真正能干活的 AI Agent"？本文通过拆解 Claude Code v2.1.88 源码，给出了工程级的完整答案。</p>
+<p>AI coding agent 单次 context 有限，复杂任务无法一次完成。如何让 AI 持续工作直到任务真正完成？这三种机制给出了不同层次的答案。</p>
+<hr>
 <h2 id="核心内容">核心内容</h2>
-<h3 id="一-核心公式与总体架构">一、核心公式与总体架构</h3>
-<ul><li><strong>Agent = Model + Harness</strong>。Model 是大脑（能思考不能行动），Harness 是工程脚手架（给大脑装上眼睛、手、脚和记忆）。Model 决定智商上限，Harness 决定能力边界</li><li>Claude Code 的 Harness 由六大系统组成：提示词工程（性格规则）、工具调用（手和脚）、上下文管理（记忆管理）、任务管理（项目管理能力）、多Agent协作（团队协作）、Agent Loop（驱动心脏）</li><li><strong>Agent Loop 是系统心脏</strong>：<code>query.ts</code> 的 <code>queryLoop()</code> 是一个 <code>while(true)</code> 循环，不断执行"思考→行动→观察"。收到 <code>end_turn</code>（AI 认为完成）或 <code>tool_use</code>（需要调用工具）时分别走不同路径</li></ul>
-<h3 id="二-提示词工程-Agent-的-工作手册">二、提示词工程——Agent 的"工作手册"</h3>
-<ul><li><strong>多层动态组装</strong>：系统提示词不是一个大字符串，而是 12 个模块按顺序拼接。前 7 层是静态的（身份声明、行为规则、编码指南、安全操作、工具使用、语气风格、输出效率），后 5 层是动态的（会话指导、记忆、环境信息、MCP 服务器、Token 预算）</li><li><strong>Prompt Caching 关键优化</strong>：静态层和动态层之间用 <code>SYSTEM_PROMPT_DYNAMIC_BOUNDARY</code> 分界线切割。分界线以上可被 API 缓存（缓存读取仅 0.3 美元/百万 token，比无缓存的 3 美元便宜 90%），分界线以下每次重算</li><li><strong>提示词优先级</strong>：system prompt &lt; CLAUDE.md（项目级）&lt; 用户对话指令，用户说的永远最高优先</li><li><strong>上下文注入系统</strong>：每轮对话自动注入当前日期、CLAUDE.md 内容、权限提醒、自动记忆、恢复对话历史等信息，AI 全程获取最新环境状态</li></ul>
-<h3 id="三-工具调用系统-Agent-的-42只手">三、工具调用系统——Agent 的"42只手"</h3>
-<ul><li><strong>42 个内置工具，分 8 大类</strong>：文件操作（Read/Write/Edit/MultiEdit）、搜索发现（Grep/Glob/WebSearch/ToolSearch）、代码执行（Bash/Notebook）、版本控制（GitDiff/GitLog/GitCommit）、代码智能（GoToDefinition/FindReferences/DiagnosticsRefresh）、任务管理（TodoWrite/Task系列）、多Agent（Subagent/AgentTeam系列）、MCP 外部工具</li><li><strong>工具并发编排</strong>：AI 可以一次请求多个工具。执行引擎先将工具分为"可并发"和"需串行"两类：读操作可并发（Read+Grep 同时跑），写操作必须串行（Edit→Bash 按顺序）。并发工具用 <code>Promise.allSettled</code> 并行执行</li><li><strong>权限三级系统</strong>：Allow（直接执行，如 Read/Grep）→ Ask（弹窗询问用户，如 Write/Bash）→ Deny（完全禁止，如 <code>rm -rf /</code>）。权限判断在工具执行前拦截，支持模式匹配和 LLM 分类器自动审批</li></ul>
-<h3 id="四-上下文管理-Agent-的-有限白板">四、上下文管理——Agent 的"有限白板"</h3>
-<ul><li><strong>200K token 上下文窗口</strong>中，系统提示词占 5K-10K，工具描述占 10K-20K，每轮工具调用+结果消耗 1K-50K。长对话会快速撑爆</li><li><strong>五层递进式压缩</strong>：① 工具结果预算控制（实时，超限存磁盘只留预览）→ ② 微压缩（闲置&gt;60分钟时裁剪旧工具结果）→ ③ 会话记忆压缩（用预取摘要替代完整对话历史）→ ④ 完整压缩（让 AI 自己总结 15 要点+摘要后砍掉旧消息）→ ⑤ 响应式压缩（API 返回 prompt-too-long 错误时紧急砍 50%）</li><li><strong>Token 计量不用 tokenizer</strong>：用 <code>charCount / 3.25</code> 估算 token 数（比调 tokenizer 快 10 倍），加 10% 安全余量</li><li><strong>Prompt Cache 协同</strong>：压缩时尽量保留缓存友好的前缀不动，只砍中间和尾部的消息</li></ul>
-<h3 id="五-任务管理-Agent-的-装修清单">五、任务管理——Agent 的"装修清单"</h3>
-<ul><li><strong>两代系统</strong>：V1 TodoWrite（内存存储、轻量、单Agent 用），V2 Task 工具集（磁盘持久化、支持依赖、多Agent 共享、专为 Agent Teams 设计）</li><li><strong>V2 Task 生命周期</strong>：pending → in_progress → completed/failed/cancelled。支持七种依赖类型（blocks/blocked_by/related_to/parent/subtask/follows/duplicates）</li><li><strong>Plan Mode</strong>：遇到复杂任务时，AI 先用 Task 系统生成结构化计划让用户审批，审批通过后才执行。避免 AI 一上来就动手，做错再返工</li></ul>
-<h3 id="六-多Agent协作-Agent-的-施工团队">六、多Agent协作——Agent 的"施工团队"</h3>
-<ul><li><strong>模式一 Subagent</strong>：主 Agent 临时 fork 一个子 Agent 执行特定任务（如探索代码库），子 Agent 有独立上下文和工具权限，完成后返回结果给主 Agent。6 种内置类型：Explore/General/Code Review/Pre-commit/Verification/Orchestrator</li><li><strong>模式二 Agent Teams</strong>：创建持久化团队，成员间通过 message 通道实时通信。类似"一个公司的部门协作"——前端组、后端组、测试组并行工作，通过消息传递协调</li><li><strong>Coordinator 模式</strong>：Agent Teams 的高级形态，一个 Coordinator Agent 总揽全局调度，其他 Agent 是专业工人。Coordinator 有完整权限，Worker 权限受限</li><li><strong>工具使用限制</strong>：子 Agent 不能再创建子 Agent（防递归爆炸），Explore Agent 只有只读工具，不同角色有不同的工具白名单</li></ul>
-<h3 id="七-与-Claude-模型深度绑定">七、与 Claude 模型深度绑定</h3>
-<ul><li>Claude Code 与 Claude 模型在 <strong>SDK/消息格式</strong>（60+文件）、<strong>独有功能</strong>（Extended Thinking/Prompt Caching/Server Tool/Connector Text/Fast Mode）、<strong>模型配置</strong>（11个模型硬编码+定价表+Token限制+Beta头系统）三层深度绑定</li><li>涉及 100+ 个源文件，直接替换为 GPT/Gemini/Llama 几乎不可能，需要重写大部分 API 层</li></ul>
+<h3 id="四者对比">四者对比</h3>
+<table><thead><tr><th>维度</th><th>Ralph 原版（shell）</th><th>Claude Code <code>/ralph-loop</code> 插件</th><th>Claude Code <code>/loop</code> 命令</th><th>OpenCode（oh-my-opencode）</th></tr></thead><tbody><tr><td><strong>本质</strong></td><td>外部 bash <code>for</code> 循环，每次拉起全新 Claude/Amp 进程</td><td>Session 内部循环，用 Stop hook 拦截退出行为，续命当前 session</td><td>内置定时调度器，按固定时间间隔或 model 自选节奏唤醒</td><td>集成 ralph-loop + <code>/ulw-loop</code>，OpenCode 内置能力</td></tr><tr><td><strong>触发方式</strong></td><td>手动执行 <code>ralph.sh</code>，外部 shell 控制</td><td><code>/ralph-loop &quot;prompt&quot; --completion-promise &quot;DONE&quot;</code></td><td><code>/loop 5m /foo</code>；省略间隔则 model 自决节奏</td><td>通过 oh-my-opencode 配置集成</td></tr><tr><td><strong>循环退出条件</strong></td><td>输出 <code>&amp;lt;promise&amp;gt;COMPLETE&amp;lt;/promise&amp;gt;</code> 或达到 max_iterations</td><td>completion-promise 字符串匹配 或 max-iterations</td><td>时间间隔到期 或 model 自判</td><td>同插件版 + Todo Enforcer 兜底（agent 空闲时系统强制唤回）</td></tr><tr><td><strong>上下文隔离</strong></td><td>完全隔离——每次新进程，零上下文；靠 git + progress.txt + prd.json 传递记忆</td><td>同一 session 内连续——上下文累积，靠文件和 git 传递跨迭代状态</td><td>同一 session 内——每次唤醒时仍在原 session，上下文连续</td><td>同插件版</td></tr><tr><td><strong>是否需要验收标准</strong></td><td>强制需要——prd.json 每条 user story 必须有 testable acceptance criteria，以 <code>passes: true/false</code> 追踪</td><td>推荐有 completion-promise，但任意文本均可</td><td>不需要——可仅为"每 5 分钟检查一次 log"</td><td>同插件版，但 Prometheus Planner 做策略性前置规划</td></tr><tr><td><strong>任务粒度</strong></td><td>项目级——完整 PRD 的功能开发，多个 story 逐一完成</td><td>任务级——单个有明确边界的开发任务</td><td>轻量级——监控/定期巡检/自定速轮询</td><td>复合场景，适合 overnight 大项目</td></tr><tr><td><strong>记忆机制</strong></td><td>progress.txt（学习日志）+ git commits + AGENTS.md 注入</td><td>文件 + git + session 内上下文天然保留</td><td>无专属记忆机制，靠 session 上下文</td><td>集成 supermemory 等外部记忆 MCP</td></tr><tr><td><strong>适用场景</strong></td><td>大型功能、可离线跑一夜、需严格验收</td><td>中型任务、有明确完成信号、当前 session 自动迭代</td><td>定时监控/探索型/自定节奏任务</td><td>复合场景，OpenCode 完整工具链</td></tr></tbody></table>
+<h3 id="三个关键差异">三个关键差异</h3>
+<p><strong>1. 上下文隔离 vs 连续</strong></p>
+<p>Ralph 原版每次是全新进程，完全不记得上一次做了什么，只能靠写到磁盘的文件（progress.txt、git history）来传递记忆。好处是不怕 context window 爆炸；坏处是冷启动重，每次要重新读文件建立认知。</p>
+<p><code>/ralph-loop</code> 在同一 session 内续命，上下文连续，感知更流畅；但长时间运行有 context 被撑爆的风险，需要配合 <code>/compact</code>。</p>
+<p><strong>2. 结构化验收 vs 自由完成信号</strong></p>
+<p>Ralph 原版的核心是 prd.json：每个 user story 都要有 testable acceptance criteria（可验证的验收标准），agent 每轮都要尝试将 <code>passes: false</code> 变成 <code>passes: true</code>，跑 typecheck/tests 作为客观判断依据。</p>
+<p><code>/ralph-loop</code> 只需要一个 completion-promise 字符串，没有结构化的 story 队列；适合"做完一件事"而不是"逐一完成多个有依赖关系的 story"。</p>
+<p><code>/loop</code> 根本没有完成判断，就是时间驱动的调度器。</p>
+<p><strong>3. 任务粒度</strong></p>
+<ul><li>Ralph 原版：项目级，PRD 驱动，多 story 有依赖顺序（schema → backend → UI）</li><li><code>/ralph-loop</code>：任务级，单任务自动迭代</li><li><code>/loop</code>：维护级，轻量定时触发</li></ul>
+<h3 id="类比">类比</h3>
+<table><thead><tr><th>类比</th><th>机制</th></tr></thead><tbody><tr><td>CI/CD pipeline，每个 job 是独立容器，共享磁盘传日志</td><td>Ralph 原版</td></tr><tr><td>同一浏览器标签页不断刷新并读取本地文件</td><td><code>/ralph-loop</code></td></tr><tr><td>cron job，时间到了就触发，不关心上次结果</td><td><code>/loop</code></td></tr></tbody></table>
+<h3 id="Ralph-的核心设计原则">Ralph 的核心设计原则</h3>
+<ol><li><strong>每个 story 必须小</strong>——能在一个 context window 内完成，约 2-3 句话描述完的改动</li><li><strong>依赖顺序</strong>——schema → backend → UI，不能反向依赖</li><li><strong>验收标准必须可验证</strong>——"works correctly"是坏标准，"typecheck passes + filter dropdown has 3 options"是好标准</li><li><strong>AGENTS.md 更新是关键</strong>——每轮迭代后将发现的 pattern、gotcha 写入 AGENTS.md，后续轮次自动读取，实现跨轮次学习</li><li><strong>feedback loop 是前提</strong>——没有自动化测试/typecheck，Ralph 无法判断是否完成</li></ol>
+<hr>
 <h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
 <h2 id="我的想法">我的想法</h2>
-<p>（待补充）</p>
-<p>思考方向：</p>
-<ol><li>我们自己的 OpenCode Agent 体系（chairman + Ops Skills）和 Claude Code 的 Harness 架构有哪些映射关系？能从中借鉴什么优化思路——比如提示词缓存分层、上下文压缩策略？</li><li>五层压缩架构中，第3层"会话记忆压缩"用预取摘要替代完整历史的思路，能否应用到我们的知识库检索场景——对长知识卡做摘要索引，检索时先匹配摘要再加载全文？</li></ol>
-<hr>
+<p>（留给你补充）</p>
 <h2 id="为什么有用">为什么有用</h2>
-<ul><li><strong>理解 Agent 架构本质</strong>：不是概念性的讨论，而是源码级的工程拆解。自己搭 Agent 系统时，每一层该怎么做都有参照</li><li><strong>Prompt Caching 的实战设计</strong>：静态/动态分层+缓存分界线的思路，直接可以搬到任何需要调 LLM API 的项目里省 90% 成本</li><li><strong>五层压缩架构是上下文管理的标杆</strong>：我们自己搭 Agent 也面临同样的上下文溢出问题，这套渐进式压缩策略可以直接借鉴</li><li><strong>多Agent协作的两种模式</strong>给了清晰的选型依据：临时任务用 Subagent，长期协作用 Agent Teams</li></ul>
-<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
-<ul><li>适用：自己搭建 AI Agent 系统、优化 LLM 调用成本、理解 Claude Code 内部机制、做 Agent 工程架构决策</li><li>不适用：只想学怎么用 Claude Code（不需要看源码级细节），纯概念性了解 Agent（这篇太工程化了）</li></ul>
-<h2 id="原文">原文</h2>
-<blockquote><p>原文约 10 万字，含大量源码级表格和架构图，完整内容请查看飞书原文： <a href="https://mi.feishu.cn/docx/BSckdIgxdoKxMDxgidOcspoonVh">Claude Code 源码深度解析</a>  基于 Claude Code v2.1.88 源码分析（反编译版本），随版本更新具体实现可能变化，核心架构模式保持稳定。</p></blockquote>
+<p>了解三者差异后，可以按场景精确选型：</p>
+<ul><li>需要跑一夜做完某个功能 → Ralph 原版（进程独立、不怕 context 爆）</li><li>当前 session 想让 AI 持续迭代直到某件事完成 → <code>/ralph-loop</code></li><li>定期检查某个状态 / 自定速探索 → <code>/loop</code></li><li>OpenCode 用户且想要完整工具链 → oh-my-opencode 内置集成</li></ul>
+<hr>
+<h2 id="本地工具对应">本地工具对应</h2>
+<table><thead><tr><th>工具</th><th>本地路径</th></tr></thead><tbody><tr><td>Claude Code <code>/ralph-loop</code> 插件</td><td><code>~/.claude/plugins/marketplaces/claude-plugins-official/plugins/ralph-loop/</code></td></tr><tr><td>Claude Code <code>/ralph-loop</code> skill（ralph skill）</td><td><code>~/.claude/skills/ralph-loop/</code></td></tr><tr><td><code>~/.agents/skills/ralph-loop/</code></td><td>agents 体系中的 ralph-loop skill</td></tr></tbody></table>
+<hr>
 <h2 id="原文沉淀">原文沉淀</h2>
-<p>（抓取失败，仅有摘要） 原因：来源为登录墙/无权限/错误页，正文不可用； 来源 URL：https://mi.feishu.cn/docx/BSckdIgxdoKxMDxgidOcspoonVh</p>
+<h3 id="目录">目录</h3>
+<ul><li><a href="#navigation-menu">Navigation Menu</a></li><li><a href="#1k">1k</a></li><li><a href="#latest-commit">Latest commit</a></li><li><a href="#history">History</a></li><li><a href="#folders-and-files">Folders and files</a></li><li><a href="#repository-files-navigation">Repository files navigation</a></li><li><a href="#ralph">Ralph</a></li><li><a href="#prerequisites">Prerequisites</a></li><li><a href="#setup">Setup</a></li><li><a href="#option-1-copy-to-your-project">Option 1: Copy to your project</a></li><li><a href="#option-2-install-skills-globally-amp">Option 2: Install skills globally (Amp)</a></li><li><a href="#option-3-use-as-claude-code-marketplace">Option 3: Use as Claude Code Marketplace</a></li><li><a href="#configure-amp-auto-handoff-recommended">Configure Amp auto-handoff (recommended)</a></li><li><a href="#workflow">Workflow</a></li><li><a href="#1-create-a-prd">1. Create a PRD</a></li><li><a href="#2-convert-prd-to-ralph-format">2. Convert PRD to Ralph format</a></li><li><a href="#3-run-ralph">3. Run Ralph</a></li><li><a href="#implement-that-single-story">Implement that single story</a></li><li><a href="#run-quality-checks-typecheck-tests">Run quality checks (typecheck, tests)</a></li><li><a href="#commit-if-checks-pass">Commit if checks pass</a></li><li><a href="#append-learnings-to-progresstxt">Append learnings to <code>progress.txt</code></a></li><li><a href="#key-files">Key Files</a></li><li><a href="#flowchart">Flowchart</a></li><li><a href="#critical-concepts">Critical Concepts</a></li><li><a href="#each-iteration--fresh-context">Each Iteration = Fresh Context</a></li><li><a href="#small-tasks">Small Tasks</a></li><li><a href="#agentsmd-updates-are-critical">AGENTS.md Updates Are Critical</a></li><li><a href="#feedback-loops">Feedback Loops</a></li><li><a href="#browser-verification-for-ui-stories">Browser Verification for UI Stories</a></li><li><a href="#stop-condition">Stop Condition</a></li><li><a href="#debugging">Debugging</a></li><li><a href="#customizing-the-prompt">Customizing the Prompt</a></li><li><a href="#archiving">Archiving</a></li><li><a href="#references">References</a></li><li><a href="#about">About</a></li><li><a href="#resources">Resources</a></li><li><a href="#stars">Stars</a></li><li><a href="#watchers">Watchers</a></li><li><a href="#forks">Forks</a></li><li><a href="#releases">Releases</a></li><li><a href="#packages">Packages</a></li><li><a href="#contributors">Contributors</a></li><li><a href="#languages">Languages</a></li><li><a href="#footer">Footer</a></li><li><a href="#footer-navigation">Footer navigation</a></li></ul>
+<p>Skip to content</p>
+<h3 id="Navigation-Menu">Navigation Menu</h3>
+<p>Sign inAppearance settings</p>
+<p>-</p>
+<ul><li>AI CODE CREATION</li></ul>
+<ul><li><a href="https://github.com/features/copilot">GitHub CopilotWrite better code with AI</a></li></ul>
+<ul><li><a href="https://github.com/features/ai/github-app">GitHub Copilot appDirect agents from issue to merge</a></li></ul>
+<ul><li><a href="https://github.com/mcp">MCP RegistryIntegrate external tools</a></li></ul>
+<ul><li>DEVELOPER WORKFLOWS</li></ul>
+<ul><li><a href="https://github.com/features/actions">ActionsAutomate any workflow</a></li></ul>
+<ul><li><a href="https://github.com/features/codespaces">CodespacesInstant dev environments</a></li></ul>
+<ul><li><a href="https://github.com/features/issues">IssuesPlan and track work</a></li></ul>
+<ul><li><a href="https://github.com/features/code-review">Code ReviewManage code changes</a></li></ul>
+<ul><li><a href="https://github.com/features/code-quality">Code QualityEnforce quality at merge</a></li></ul>
+<ul><li>APPLICATION SECURITY</li></ul>
+<ul><li><a href="https://github.com/security/advanced-security">GitHub Advanced SecurityFind and fix vulnerabilities</a></li></ul>
+<ul><li><a href="https://github.com/security/advanced-security/code-security">Code securitySecure your code as you build</a></li></ul>
+<ul><li><a href="https://github.com/security/advanced-security/secret-protection">Secret protectionStop leaks before they start</a></li></ul>
+<ul><li>EXPLORE</li></ul>
+<ul><li><a href="https://github.com/why-github">Why GitHub</a></li></ul>
+<ul><li><a href="https://docs.github.com">Documentation</a></li></ul>
+<ul><li><a href="https://github.blog">Blog</a></li></ul>
+<ul><li><a href="https://github.blog/changelog">Changelog</a></li></ul>
+<ul><li><a href="https://github.com/marketplace">Marketplace</a></li></ul>
+<p><a href="https://github.com/features">View all features</a></p>
+<p>-</p>
+<ul><li>BY COMPANY SIZE</li></ul>
+<ul><li><a href="https://github.com/enterprise">Enterprises</a></li></ul>
+<ul><li><a href="https://github.com/team">Small and medium teams</a></li></ul>
+<ul><li><a href="https://github.com/enterprise/startups">Startups</a></li></ul>
+<ul><li><a href="https://github.com/solutions/industry/nonprofits">Nonprofits</a></li></ul>
+<ul><li>BY USE CASE</li></ul>
+<ul><li><a href="https://github.com/solutions/use-case/app-modernization">App Modernization</a></li></ul>
+<ul><li><a href="https://github.com/solutions/use-case/devsecops">DevSecOps</a></li></ul>
+<ul><li><a href="https://github.com/solutions/use-case/devops">DevOps</a></li></ul>
+<ul><li><a href="https://github.com/solutions/use-case/ci-cd">CI/CD</a></li></ul>
+<ul><li><a href="https://github.com/solutions/use-case">View all use cases</a></li></ul>
+<ul><li>BY INDUSTRY</li></ul>
+<ul><li><a href="https://github.com/solutions/industry/healthcare">Healthcare</a></li></ul>
+<ul><li><a href="https://github.com/solutions/industry/financial-services">Financial services</a></li></ul>
+<ul><li><a href="https://github.com/solutions/industry/manufacturing">Manufacturing</a></li></ul>
+<ul><li><a href="https://github.com/solutions/industry/government">Government</a></li></ul>
+<ul><li><a href="https://github.com/solutions/industry">View all industries</a></li></ul>
+<p><a href="https://github.com/solutions">View all solutions</a></p>
+<p>-</p>
+<ul><li>EXPLORE BY TOPIC</li></ul>
+<ul><li><a href="https://github.com/resources/articles?topic=ai">AI</a></li></ul>
+<ul><li><a href="https://github.com/resources/articles?topic=software-development">Software Development</a></li></ul>
+<ul><li><a href="https://github.com/resources/articles?topic=devops">DevOps</a></li></ul>
+<ul><li><a href="https://github.com/resources/articles?topic=security">Security</a></li></ul>
+<ul><li><a href="https://github.com/resources/articles">View all topics</a></li></ul>
+<ul><li>EXPLORE BY TYPE</li></ul>
+<ul><li><a href="https://github.com/customer-stories">Customer stories</a></li></ul>
+<ul><li><a href="https://github.com/resources/events">Events &amp; webinars</a></li></ul>
+<ul><li><a href="https://github.com/resources/whitepapers">Ebooks &amp; reports</a></li></ul>
+<ul><li><a href="https://github.com/solutions/executive-insights">Business insights</a></li></ul>
+<ul><li><a href="https://skills.github.com">GitHub Skills</a></li></ul>
+<ul><li>SUPPORT &amp; SERVICES</li></ul>
+<ul><li><a href="https://docs.github.com">Documentation</a></li></ul>
+<ul><li><a href="https://support.github.com">Customer support</a></li></ul>
+<ul><li><a href="https://github.com/orgs/community/discussions">Community forum</a></li></ul>
+<ul><li><a href="https://github.com/trust-center">Trust center</a></li></ul>
+<ul><li><a href="https://github.com/partners">Partners</a></li></ul>
+<p><a href="https://github.com/resources">View all resources</a></p>
+<p>-</p>
+<ul><li>COMMUNITY</li></ul>
+<ul><li><a href="https://github.com/open-source/sponsors">GitHub SponsorsFund open source developers</a></li></ul>
+<ul><li>PROGRAMS</li></ul>
+<ul><li><a href="https://securitylab.github.com">Security Lab</a></li></ul>
+<ul><li><a href="https://maintainers.github.com">Maintainer Community</a></li></ul>
+<ul><li><a href="https://stars.github.com">GitHub Stars</a></li></ul>
+<ul><li><a href="https://archiveprogram.github.com">Archive Program</a></li></ul>
+<ul><li>REPOSITORIES</li></ul>
+<ul><li><a href="https://github.com/topics">Topics</a></li></ul>
+<ul><li><a href="https://github.com/trending">Trending</a></li></ul>
+<ul><li><a href="https://github.com/collections">Collections</a></li></ul>
+<p>-</p>
+<ul><li>ENTERPRISE SOLUTIONS</li></ul>
+<ul><li><a href="https://github.com/enterprise">Enterprise platformAI-powered developer platform</a></li></ul>
+<ul><li>AVAILABLE ADD-ONS</li></ul>
+<ul><li><a href="https://github.com/security/advanced-security">GitHub Advanced SecurityEnterprise-grade security features</a></li></ul>
+<ul><li><a href="https://github.com/features/copilot/copilot-business">Copilot for BusinessEnterprise-grade AI features</a></li></ul>
+<ul><li><a href="https://github.com/enterprise/premium-support">Premium SupportEnterprise-grade 24/7 support</a></li></ul>
+<ul><li><a href="https://github.com/pricing">Pricing</a></li></ul>
+<p>Sign in</p>
+<p>Sign upAppearance settings</p>
+<p>You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session.</p>
+<p>Dismiss alert</p>
+<p>{{ message }}</p>
+<p>snarktank</p>
+<p>/ ** ralph **</p>
+<p>Public</p>
+<p>- Notifications You must be signed in to change notification settings</p>
+<p>- Fork</p>
+<h3 id="1k">1k</h3>
+<p>-</p>
+<p>Star 21.8k</p>
+<p>-</p>
+<p>Code</p>
+<p>-</p>
+<p>Issues 34</p>
+<p>-</p>
+<p>Pull requests 41</p>
+<p>-</p>
+<p>Actions</p>
+<p>-</p>
+<p>Projects</p>
+<p>-</p>
+<p>Security and quality 0</p>
+<p>-</p>
+<p>Insights</p>
+<p>Additional navigation options</p>
+<p>-</p>
+<p>Code</p>
+<p>-</p>
+<p>Issues</p>
+<p>-</p>
+<p>Pull requests</p>
+<p>-</p>
+<p>Actions</p>
+<p>-</p>
+<p>Projects</p>
+<p>-</p>
+<p>Security and quality</p>
+<p>-</p>
+<p>Insights</p>
+<p>BranchesTags</p>
+<p>Open more actions menu</p>
+<h3 id="Latest-commit">Latest commit</h3>
+<h3 id="History">History</h3>
+<p>20 Commits</p>
+<p>20 Commits</p>
+<h3 id="Folders-and-files">Folders and files</h3>
+<p>NameNameLast commit message</p>
+<p>Last commit date</p>
+<p>.claude-plugin</p>
+<p>.claude-plugin</p>
+<p>.github/workflows</p>
+<p>.github/workflows</p>
+<p>flowchart</p>
+<p>flowchart</p>
+<p>skills</p>
+<p>skills</p>
+<p>.gitignore</p>
+<p>.gitignore</p>
+<p>AGENTS.md</p>
+<p>AGENTS.md</p>
+<p>CLAUDE.md</p>
+<p>CLAUDE.md</p>
+<p>LICENSE</p>
+<p>LICENSE</p>
+<p>README.md</p>
+<p>README.md</p>
+<p>prd.json.example</p>
+<p>prd.json.example</p>
+<p>prompt.md</p>
+<p>prompt.md</p>
+<p>ralph-flowchart.png</p>
+<p>ralph-flowchart.png</p>
+<p>ralph.sh</p>
+<p>ralph.sh</p>
+<p>ralph.webp</p>
+<p>ralph.webp</p>
+<h3 id="Repository-files-navigation">Repository files navigation</h3>
+<p>-</p>
+<ul><li>README</li></ul>
+<ul><li>MIT license</li></ul>
+<h3 id="Ralph">Ralph</h3>
+<p><img alt="Ralph" src="../assets/img/img-001-b84ae62e-838654475c2a.webp"></p>
+<p>Ralph is an autonomous AI agent loop that runs AI coding tools (<a href="https://ampcode.com">Amp</a> or <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a>) repeatedly until all PRD items are complete. Each iteration is a fresh instance with clean context. Memory persists via git history, <code>progress.txt</code>, and <code>prd.json</code>.</p>
+<p>Based on <a href="https://ghuntley.com/ralph/">Geoffrey Huntley's Ralph pattern</a>.</p>
+<p><a href="https://x.com/ryancarson/status/2008548371712135632">Read my in-depth article on how I use Ralph</a></p>
+<h3 id="Prerequisites">Prerequisites</h3>
+<ul><li>One of the following AI coding tools installed and authenticated:</li></ul>
+<ul><li><a href="https://ampcode.com">Amp CLI</a> (default)</li></ul>
+<ul><li><a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> (<code>npm install -g @anthropic-ai/claude-code</code>)</li></ul>
+<ul><li><code>jq</code> installed (<code>brew install jq</code> on macOS)</li></ul>
+<ul><li>A git repository for your project</li></ul>
+<h3 id="Setup">Setup</h3>
+<h3 id="Option-1-Copy-to-your-project">Option 1: Copy to your project</h3>
+<p>Copy the ralph files into your project:</p>
+<pre><code># From your project root
+mkdir -p scripts/ralph
+cp /path/to/ralph/ralph.sh scripts/ralph/
+
+# Copy the prompt template for your AI tool of choice:
+cp /path/to/ralph/prompt.md scripts/ralph/prompt.md    # For Amp
+# OR
+cp /path/to/ralph/CLAUDE.md scripts/ralph/CLAUDE.md    # For Claude Code
+
+chmod +x scripts/ralph/ralph.sh</code></pre>
+<h3 id="Option-2-Install-skills-globally-Amp">Option 2: Install skills globally (Amp)</h3>
+<p>Copy the skills to your Amp or Claude config for use across all projects:</p>
+<p>For AMP</p>
+<pre><code>cp -r skills/prd ~/.config/amp/skills/
+cp -r skills/ralph ~/.config/amp/skills/</code></pre>
+<p>For Claude Code (manual)</p>
+<pre><code>cp -r skills/prd ~/.claude/skills/
+cp -r skills/ralph ~/.claude/skills/</code></pre>
+<h3 id="Option-3-Use-as-Claude-Code-Marketplace">Option 3: Use as Claude Code Marketplace</h3>
+<p>Add the Ralph marketplace to Claude Code:</p>
+<pre><code>/plugin marketplace add snarktank/ralph</code></pre>
+<p>Then install the skills:</p>
+<pre><code>/plugin install ralph-skills@ralph-marketplace</code></pre>
+<p>Available skills after installation:</p>
+<ul><li><code>/prd</code> - Generate Product Requirements Documents</li></ul>
+<ul><li><code>/ralph</code> - Convert PRDs to prd.json format</li></ul>
+<p>Skills are automatically invoked when you ask Claude to:</p>
+<ul><li>"create a prd", "write prd for", "plan this feature"</li></ul>
+<ul><li>"convert this prd", "turn into ralph format", "create prd.json"</li></ul>
+<h3 id="Configure-Amp-auto-handoff-recommended">Configure Amp auto-handoff (recommended)</h3>
+<p>Add to <code>~/.config/amp/settings.json</code>:</p>
+<pre><code>{
+  &quot;amp.experimental.autoHandoff&quot;: { &quot;context&quot;: 90 }
+}</code></pre>
+<p>This enables automatic handoff when context fills up, allowing Ralph to handle large stories that exceed a single context window.</p>
+<h3 id="Workflow">Workflow</h3>
+<h3 id="1-Create-a-PRD">1. Create a PRD</h3>
+<p>Use the PRD skill to generate a detailed requirements document:</p>
+<pre><code>Load the prd skill and create a PRD for [your feature description]
+</code></pre>
+<p>Answer the clarifying questions. The skill saves output to <code>tasks/prd-[feature-name].md</code>.</p>
+<h3 id="2-Convert-PRD-to-Ralph-format">2. Convert PRD to Ralph format</h3>
+<p>Use the Ralph skill to convert the markdown PRD to JSON:</p>
+<pre><code>Load the ralph skill and convert tasks/prd-[feature-name].md to prd.json
+</code></pre>
+<p>This creates <code>prd.json</code> with user stories structured for autonomous execution.</p>
+<h3 id="3-Run-Ralph">3. Run Ralph</h3>
+<pre><code># Using Amp (default)
+./scripts/ralph/ralph.sh [max_iterations]
+
+# Using Claude Code
+./scripts/ralph/ralph.sh --tool claude [max_iterations]</code></pre>
+<p>Default is 10 iterations. Use <code>--tool amp</code> or <code>--tool claude</code> to select your AI coding tool.</p>
+<p>Ralph will:</p>
+<h3 id="Create-a-feature-branch-from-PRD-branchName">Create a feature branch (from PRD <code>branchName</code>)</h3>
+<h3 id="Pick-the-highest-priority-story-where-passes-false">Pick the highest priority story where <code>passes: false</code></h3>
+<h3 id="Implement-that-single-story">Implement that single story</h3>
+<h3 id="Run-quality-checks-typecheck-tests">Run quality checks (typecheck, tests)</h3>
+<h3 id="Commit-if-checks-pass">Commit if checks pass</h3>
+<h3 id="Update-prd-json-to-mark-story-as-passes-true">Update <code>prd.json</code> to mark story as <code>passes: true</code></h3>
+<h3 id="Append-learnings-to-progress-txt">Append learnings to <code>progress.txt</code></h3>
+<h3 id="Repeat-until-all-stories-pass-or-max-iterations-reached">Repeat until all stories pass or max iterations reached</h3>
+<h3 id="Key-Files">Key Files</h3>
+<p>File Purpose</p>
+<p><code>ralph.sh</code> The bash loop that spawns fresh AI instances (supports <code>--tool amp</code> or <code>--tool claude</code>)</p>
+<p><code>prompt.md</code> Prompt template for Amp</p>
+<p><code>CLAUDE.md</code> Prompt template for Claude Code</p>
+<p><code>prd.json</code> User stories with <code>passes</code> status (the task list)</p>
+<p><code>prd.json.example</code> Example PRD format for reference</p>
+<p><code>progress.txt</code> Append-only learnings for future iterations</p>
+<p><code>skills/prd/</code> Skill for generating PRDs (works with Amp and Claude Code)</p>
+<p><code>skills/ralph/</code> Skill for converting PRDs to JSON (works with Amp and Claude Code)</p>
+<p><code>.claude-plugin/</code> Plugin manifest for Claude Code marketplace discovery</p>
+<p><code>flowchart/</code> Interactive visualization of how Ralph works</p>
+<h3 id="Flowchart">Flowchart</h3>
+<p>[</p>
+<p><img alt="Ralph Flowchart" src="../assets/img/img-002-088332e7-1136b38b7647.png"></p>
+<p>](https://snarktank.github.io/ralph/)</p>
+<p><strong><a href="https://snarktank.github.io/ralph/">View Interactive Flowchart</a></strong> - Click through to see each step with animations.</p>
+<p>The <code>flowchart/</code> directory contains the source code. To run locally:</p>
+<pre><code>cd flowchart
+npm install
+npm run dev</code></pre>
+<h3 id="Critical-Concepts">Critical Concepts</h3>
+<h3 id="Each-Iteration-Fresh-Context">Each Iteration = Fresh Context</h3>
+<p>Each iteration spawns a <strong>new AI instance</strong> (Amp or Claude Code) with clean context. The only memory between iterations is:</p>
+<ul><li>Git history (commits from previous iterations)</li></ul>
+<ul><li><code>progress.txt</code> (learnings and context)</li></ul>
+<ul><li><code>prd.json</code> (which stories are done)</li></ul>
+<h3 id="Small-Tasks">Small Tasks</h3>
+<p>Each PRD item should be small enough to complete in one context window. If a task is too big, the LLM runs out of context before finishing and produces poor code.</p>
+<p>Right-sized stories:</p>
+<ul><li>Add a database column and migration</li></ul>
+<ul><li>Add a UI component to an existing page</li></ul>
+<ul><li>Update a server action with new logic</li></ul>
+<ul><li>Add a filter dropdown to a list</li></ul>
+<p>Too big (split these):</p>
+<ul><li>"Build the entire dashboard"</li></ul>
+<ul><li>"Add authentication"</li></ul>
+<ul><li>"Refactor the API"</li></ul>
+<h3 id="AGENTS-md-Updates-Are-Critical">AGENTS.md Updates Are Critical</h3>
+<p>After each iteration, Ralph updates the relevant <code>AGENTS.md</code> files with learnings. This is key because AI coding tools automatically read these files, so future iterations (and future human developers) benefit from discovered patterns, gotchas, and conventions.</p>
+<p>Examples of what to add to AGENTS.md:</p>
+<ul><li>Patterns discovered ("this codebase uses X for Y")</li></ul>
+<ul><li>Gotchas ("do not forget to update Z when changing W")</li></ul>
+<ul><li>Useful context ("the settings panel is in component X")</li></ul>
+<h3 id="Feedback-Loops">Feedback Loops</h3>
+<p>Ralph only works if there are feedback loops:</p>
+<ul><li>Typecheck catches type errors</li></ul>
+<ul><li>Tests verify behavior</li></ul>
+<ul><li>CI must stay green (broken code compounds across iterations)</li></ul>
+<h3 id="Browser-Verification-for-UI-Stories">Browser Verification for UI Stories</h3>
+<p>Frontend stories must include "Verify in browser using dev-browser skill" in acceptance criteria. Ralph will use the dev-browser skill to navigate to the page, interact with the UI, and confirm changes work.</p>
+<h3 id="Stop-Condition">Stop Condition</h3>
+<p>When all stories have <code>passes: true</code>, Ralph outputs <code>&amp;lt;promise&amp;gt;COMPLETE&amp;lt;/promise&amp;gt;</code> and the loop exits.</p>
+<h3 id="Debugging">Debugging</h3>
+<p>Check current state:</p>
+<pre><code># See which stories are done
+cat prd.json | jq &#x27;.userStories[] | {id, title, passes}&#x27;
+
+# See learnings from previous iterations
+cat progress.txt
+
+# Check git history
+git log --oneline -10</code></pre>
+<h3 id="Customizing-the-Prompt">Customizing the Prompt</h3>
+<p>After copying <code>prompt.md</code> (for Amp) or <code>CLAUDE.md</code> (for Claude Code) to your project, customize it for your project:</p>
+<ul><li>Add project-specific quality check commands</li></ul>
+<ul><li>Include codebase conventions</li></ul>
+<ul><li>Add common gotchas for your stack</li></ul>
+<h3 id="Archiving">Archiving</h3>
+<p>Ralph automatically archives previous runs when you start a new feature (different <code>branchName</code>). Archives are saved to <code>archive/YYYY-MM-DD-feature-name/</code>.</p>
+<h3 id="References">References</h3>
+<ul><li><a href="https://ghuntley.com/ralph/">Geoffrey Huntley's Ralph article</a></li></ul>
+<ul><li><a href="https://ampcode.com/manual">Amp documentation</a></li></ul>
+<ul><li><a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code documentation</a></li></ul>
+<h3 id="About">About</h3>
+<p>Ralph is an autonomous AI agent loop that runs repeatedly until all PRD items are complete.</p>
+<p><a href="https://x.com/ryancarson/status/2008548371712135632">x.com/ryancarson/status/2008548371712135632</a></p>
+<h3 id="Resources">Resources</h3>
+<p>Readme</p>
+<p>MIT license</p>
+<p>Activity</p>
+<h3 id="Stars">Stars</h3>
+<p><strong>21.8k</strong> stars</p>
+<h3 id="Watchers">Watchers</h3>
+<p><strong>117</strong> watching</p>
+<h3 id="Forks">Forks</h3>
+<p><strong>2.1k</strong> forks</p>
+<p>Report repository</p>
+<h3 id="Releases">Releases</h3>
+<h3 id="Packages">Packages</h3>
+<h3 id="Contributors">Contributors</h3>
+<h3 id="Languages">Languages</h3>
+<h3 id="Footer">Footer</h3>
+<p>[</p>
+<p>](https://github.com)</p>
+<p>© 2026 GitHub, Inc.</p>
+<h3 id="Footer-navigation">Footer navigation</h3>
+<p>- <a href="https://docs.github.com/site-policy/github-terms/github-terms-of-service">Terms</a></p>
+<p>- <a href="https://docs.github.com/site-policy/privacy-policies/github-privacy-statement">Privacy</a></p>
+<p>- <a href="https://github.com/security">Security</a></p>
+<p>- <a href="https://www.githubstatus.com/">Status</a></p>
+<p>- <a href="https://github.community/">Community</a></p>
+<p>- <a href="https://docs.github.com/">Docs</a></p>
+<p>- <a href="https://support.github.com?tags=dotcom-footer">Contact</a></p>
+<p>-</p>
+<p>-</p>
+<p>You can’t perform that action at this time.</p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>

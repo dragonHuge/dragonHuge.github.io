@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智 · DragonHuge · 知识花园</title>
+<title>Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论 · DragonHuge · 知识花园</title>
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -97,8 +97,8 @@
 <a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
 </details>
 </details>
-<details class="mod" open><summary>外部沉淀 <span class="cnt">285</span></summary>
-<details class="cat" open><summary>AI与效率 <span class="cnt">186</span></summary>
+<details class="mod" open><summary>外部沉淀 <span class="cnt">293</span></summary>
+<details class="cat" open><summary>AI与效率 <span class="cnt">188</span></summary>
 <a class="art" href="../ext/e001.html">Anthropic：子Agent拆多了，为什么反而更慢</a>
 <a class="art" href="../ext/e002.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a>
 <a class="art" href="../ext/e003.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a>
@@ -256,194 +256,537 @@
 <a class="art" href="../ext/e155.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a>
 <a class="art" href="../ext/e156.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a>
 <a class="art" href="../ext/e157.html">字节一天连发3篇自进化Agent，彻底杀疯了</a>
-<a class="art" href="../ext/e158.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
-<a class="art" href="../ext/e159.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
-<a class="art" href="../ext/e160.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
-<a class="art" href="../ext/e161.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
-<a class="art" href="../ext/e162.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
-<a class="art" href="../ext/e163.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
-<a class="art" href="../ext/e164.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
-<a class="art active" href="../ext/e165.html">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</a>
-<a class="art" href="../ext/e166.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
-<a class="art" href="../ext/e167.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
-<a class="art" href="../ext/e168.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
-<a class="art" href="../ext/e169.html">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a>
-<a class="art" href="../ext/e170.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
-<a class="art" href="../ext/e171.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
-<a class="art" href="../ext/e172.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
-<a class="art" href="../ext/e173.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
-<a class="art" href="../ext/e174.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
-<a class="art" href="../ext/e175.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
-<a class="art" href="../ext/e176.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
-<a class="art" href="../ext/e177.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
-<a class="art" href="../ext/e178.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
-<a class="art" href="../ext/e179.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
-<a class="art" href="../ext/e180.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
-<a class="art" href="../ext/e181.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
-<a class="art" href="../ext/e182.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
-<a class="art" href="../ext/e183.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
-<a class="art" href="../ext/e184.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
-<a class="art" href="../ext/e185.html">Claude Code 15 条高频实用技巧</a>
-<a class="art" href="../ext/e186.html">Everything Claude Code：Anthropic 黑客松冠军的生产级配置集合</a>
+<a class="art" href="../ext/e158.html">Hermes-Agent-The-Complete-Guide-v260407</a>
+<a class="art" href="../ext/e159.html">Hermes-Agent-从入门到精通-v260407</a>
+<a class="art" href="../ext/e160.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
+<a class="art" href="../ext/e161.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
+<a class="art" href="../ext/e162.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
+<a class="art" href="../ext/e163.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
+<a class="art" href="../ext/e164.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
+<a class="art active" href="../ext/e165.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
+<a class="art" href="../ext/e166.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
+<a class="art" href="../ext/e167.html">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</a>
+<a class="art" href="../ext/e168.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
+<a class="art" href="../ext/e169.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
+<a class="art" href="../ext/e170.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
+<a class="art" href="../ext/e171.html">Claude Code 源码深度解析：Agent = Model + Harness 六大系统完整拆解</a>
+<a class="art" href="../ext/e172.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
+<a class="art" href="../ext/e173.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
+<a class="art" href="../ext/e174.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
+<a class="art" href="../ext/e175.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
+<a class="art" href="../ext/e176.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
+<a class="art" href="../ext/e177.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
+<a class="art" href="../ext/e178.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
+<a class="art" href="../ext/e179.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
+<a class="art" href="../ext/e180.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
+<a class="art" href="../ext/e181.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
+<a class="art" href="../ext/e182.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
+<a class="art" href="../ext/e183.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
+<a class="art" href="../ext/e184.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
+<a class="art" href="../ext/e185.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
+<a class="art" href="../ext/e186.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
+<a class="art" href="../ext/e187.html">Claude Code 15 条高频实用技巧</a>
+<a class="art" href="../ext/e188.html">Everything Claude Code：Anthropic 黑客松冠军的生产级配置集合</a>
 </details>
 <details class="cat"><summary>工具与技术 <span class="cnt">65</span></summary>
-<a class="art" href="../ext/e187.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
-<a class="art" href="../ext/e188.html">火山引擎大模型应用防火墙文档指南</a>
-<a class="art" href="../ext/e189.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
-<a class="art" href="../ext/e190.html">EasySync、OpenPlug、Resojot三件套</a>
-<a class="art" href="../ext/e191.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
-<a class="art" href="../ext/e192.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
-<a class="art" href="../ext/e193.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
-<a class="art" href="../ext/e194.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
-<a class="art" href="../ext/e195.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
-<a class="art" href="../ext/e196.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
-<a class="art" href="../ext/e197.html">FID：小米设备不变的硬件标识</a>
-<a class="art" href="../ext/e198.html">防重放攻击Nonce机制</a>
-<a class="art" href="../ext/e199.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
-<a class="art" href="../ext/e200.html">手推Transformer（3）架构图解</a>
-<a class="art" href="../ext/e201.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
-<a class="art" href="../ext/e202.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
-<a class="art" href="../ext/e203.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
-<a class="art" href="../ext/e204.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
-<a class="art" href="../ext/e205.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
-<a class="art" href="../ext/e206.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
-<a class="art" href="../ext/e207.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
-<a class="art" href="../ext/e208.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
-<a class="art" href="../ext/e209.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
-<a class="art" href="../ext/e210.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
-<a class="art" href="../ext/e211.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
-<a class="art" href="../ext/e212.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
-<a class="art" href="../ext/e213.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
-<a class="art" href="../ext/e214.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
-<a class="art" href="../ext/e215.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
-<a class="art" href="../ext/e216.html">2026年量化投资类Skills排行榜</a>
-<a class="art" href="../ext/e217.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
-<a class="art" href="../ext/e218.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
-<a class="art" href="../ext/e219.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
-<a class="art" href="../ext/e220.html">6个Vibe Coding必备宝藏网站</a>
-<a class="art" href="../ext/e221.html">Archify：AI代码仓库架构可视化开源Skill</a>
-<a class="art" href="../ext/e222.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
-<a class="art" href="../ext/e223.html">anything2explainer：一键制作科普视频的开源Skill</a>
-<a class="art" href="../ext/e224.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
-<a class="art" href="../ext/e225.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
-<a class="art" href="../ext/e226.html">内容审核控制台嵌入式 MCP Server 落地方案</a>
-<a class="art" href="../ext/e227.html">MCP 开发指北(Java) — 组内分享</a>
-<a class="art" href="../ext/e228.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
-<a class="art" href="../ext/e229.html">html-anything — Agent 时代的 HTML 编辑器</a>
-<a class="art" href="../ext/e230.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
-<a class="art" href="../ext/e231.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
-<a class="art" href="../ext/e232.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
-<a class="art" href="../ext/e233.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
-<a class="art" href="../ext/e234.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
-<a class="art" href="../ext/e235.html">Claude Code Prompt Cache 配置实战</a>
-<a class="art" href="../ext/e236.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
-<a class="art" href="../ext/e237.html">待考证 Claude Code Skill / MCP 清单</a>
-<a class="art" href="../ext/e238.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
-<a class="art" href="../ext/e239.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
-<a class="art" href="../ext/e240.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
-<a class="art" href="../ext/e241.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
-<a class="art" href="../ext/e242.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
-<a class="art" href="../ext/e243.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
-<a class="art" href="../ext/e244.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
-<a class="art" href="../ext/e245.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
-<a class="art" href="../ext/e246.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
-<a class="art" href="../ext/e247.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
-<a class="art" href="../ext/e248.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
-<a class="art" href="../ext/e249.html">Obsidian 必装的 9 个 AI Agent Skill</a>
-<a class="art" href="../ext/e250.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
-<a class="art" href="../ext/e251.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
+<a class="art" href="../ext/e189.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e190.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e191.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e192.html">EasySync、OpenPlug、Resojot三件套</a>
+<a class="art" href="../ext/e193.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
+<a class="art" href="../ext/e194.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
+<a class="art" href="../ext/e195.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
+<a class="art" href="../ext/e196.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
+<a class="art" href="../ext/e197.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
+<a class="art" href="../ext/e198.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
+<a class="art" href="../ext/e199.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e200.html">防重放攻击Nonce机制</a>
+<a class="art" href="../ext/e201.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
+<a class="art" href="../ext/e202.html">手推Transformer（3）架构图解</a>
+<a class="art" href="../ext/e203.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
+<a class="art" href="../ext/e204.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
+<a class="art" href="../ext/e205.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
+<a class="art" href="../ext/e206.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<a class="art" href="../ext/e207.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
+<a class="art" href="../ext/e208.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
+<a class="art" href="../ext/e209.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
+<a class="art" href="../ext/e210.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
+<a class="art" href="../ext/e211.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
+<a class="art" href="../ext/e212.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
+<a class="art" href="../ext/e213.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
+<a class="art" href="../ext/e214.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
+<a class="art" href="../ext/e215.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
+<a class="art" href="../ext/e216.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
+<a class="art" href="../ext/e217.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
+<a class="art" href="../ext/e218.html">2026年量化投资类Skills排行榜</a>
+<a class="art" href="../ext/e219.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
+<a class="art" href="../ext/e220.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
+<a class="art" href="../ext/e221.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
+<a class="art" href="../ext/e222.html">6个Vibe Coding必备宝藏网站</a>
+<a class="art" href="../ext/e223.html">Archify：AI代码仓库架构可视化开源Skill</a>
+<a class="art" href="../ext/e224.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
+<a class="art" href="../ext/e225.html">anything2explainer：一键制作科普视频的开源Skill</a>
+<a class="art" href="../ext/e226.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
+<a class="art" href="../ext/e227.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
+<a class="art" href="../ext/e228.html">内容审核控制台嵌入式 MCP Server 落地方案</a>
+<a class="art" href="../ext/e229.html">MCP 开发指北(Java) — 组内分享</a>
+<a class="art" href="../ext/e230.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
+<a class="art" href="../ext/e231.html">html-anything — Agent 时代的 HTML 编辑器</a>
+<a class="art" href="../ext/e232.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
+<a class="art" href="../ext/e233.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
+<a class="art" href="../ext/e234.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
+<a class="art" href="../ext/e235.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
+<a class="art" href="../ext/e236.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
+<a class="art" href="../ext/e237.html">Claude Code Prompt Cache 配置实战</a>
+<a class="art" href="../ext/e238.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
+<a class="art" href="../ext/e239.html">待考证 Claude Code Skill / MCP 清单</a>
+<a class="art" href="../ext/e240.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
+<a class="art" href="../ext/e241.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
+<a class="art" href="../ext/e242.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
+<a class="art" href="../ext/e243.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
+<a class="art" href="../ext/e244.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
+<a class="art" href="../ext/e245.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
+<a class="art" href="../ext/e246.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
+<a class="art" href="../ext/e247.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
+<a class="art" href="../ext/e248.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
+<a class="art" href="../ext/e249.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
+<a class="art" href="../ext/e250.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<a class="art" href="../ext/e251.html">Obsidian 必装的 9 个 AI Agent Skill</a>
+<a class="art" href="../ext/e252.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
+<a class="art" href="../ext/e253.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
 </details>
 <details class="cat"><summary>认知与思维 <span class="cnt">12</span></summary>
-<a class="art" href="../ext/e252.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
-<a class="art" href="../ext/e253.html">高性价比人生指南（全书归档）</a>
-<a class="art" href="../ext/e254.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
-<a class="art" href="../ext/e255.html">单Agent思维链惯性与Agent Team挑战者架构</a>
-<a class="art" href="../ext/e256.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
-<a class="art" href="../ext/e257.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
-<a class="art" href="../ext/e258.html">普通人怎样在6-12个月内改变自己</a>
-<a class="art" href="../ext/e259.html">一天一小时，365天后，你的人生会彻底翻篇</a>
-<a class="art" href="../ext/e260.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
-<a class="art" href="../ext/e261.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
-<a class="art" href="../ext/e262.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
-<a class="art" href="../ext/e263.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
+<a class="art" href="../ext/e254.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
+<a class="art" href="../ext/e255.html">高性价比人生指南（全书归档）</a>
+<a class="art" href="../ext/e256.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
+<a class="art" href="../ext/e257.html">单Agent思维链惯性与Agent Team挑战者架构</a>
+<a class="art" href="../ext/e258.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
+<a class="art" href="../ext/e259.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
+<a class="art" href="../ext/e260.html">普通人怎样在6-12个月内改变自己</a>
+<a class="art" href="../ext/e261.html">一天一小时，365天后，你的人生会彻底翻篇</a>
+<a class="art" href="../ext/e262.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
+<a class="art" href="../ext/e263.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
+<a class="art" href="../ext/e264.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
+<a class="art" href="../ext/e265.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
 </details>
 <details class="cat"><summary>写作与创作 <span class="cnt">5</span></summary>
-<a class="art" href="../ext/e264.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
-<a class="art" href="../ext/e265.html">全网首发！AI动态漫制作全流程</a>
-<a class="art" href="../ext/e266.html">宫斗宅斗文创作五大核心技巧：爽点密集化+人设标签化+设定易懂化+情感共鸣化+细节代入感</a>
-<a class="art" href="../ext/e267.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
-<a class="art" href="../ext/e268.html">短视频不是拼勤奋，是拼方向和系统</a>
+<a class="art" href="../ext/e266.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e267.html">全网首发！AI动态漫制作全流程</a>
+<a class="art" href="../ext/e268.html">宫斗宅斗文创作五大核心技巧：爽点密集化+人设标签化+设定易懂化+情感共鸣化+细节代入感</a>
+<a class="art" href="../ext/e269.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
+<a class="art" href="../ext/e270.html">短视频不是拼勤奋，是拼方向和系统</a>
 </details>
 <details class="cat"><summary>商业与变现 <span class="cnt">5</span></summary>
-<a class="art" href="../ext/e269.html">一口气讲明白：中国金融机构体系的底层逻辑</a>
-<a class="art" href="../ext/e270.html">50岁左右及以上父母的保障配置</a>
-<a class="art" href="../ext/e271.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
-<a class="art" href="../ext/e272.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
-<a class="art" href="../ext/e273.html">AI 五层价值链：收入往上走资本往下走，钱在大多数人看不见的基础设施层</a>
+<a class="art" href="../ext/e271.html">一口气讲明白：中国金融机构体系的底层逻辑</a>
+<a class="art" href="../ext/e272.html">50岁左右及以上父母的保障配置</a>
+<a class="art" href="../ext/e273.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
+<a class="art" href="../ext/e274.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
+<a class="art" href="../ext/e275.html">AI 五层价值链：收入往上走资本往下走，钱在大多数人看不见的基础设施层</a>
 </details>
-<details class="cat"><summary>待分拣 <span class="cnt">12</span></summary>
-<a class="art" href="../ext/e274.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
-<a class="art" href="../ext/e275.html">2025游戏安全风控指南</a>
-<a class="art" href="../ext/e276.html">我用Obsidian搭了一个会自己生长的个人网</a>
-<a class="art" href="../ext/e277.html">AI时代，普通人用Mac mini能干点啥</a>
-<a class="art" href="../ext/e278.html">Dan Koe：用AI做一个自己的人生模型</a>
-<a class="art" href="../ext/e279.html">【闪客】Computer Use真的在看你的屏幕吗</a>
-<a class="art" href="../ext/e280.html">GitHub技巧｜项目一键可视化</a>
-<a class="art" href="../ext/e281.html">焚诀，提示词模板，思维方式</a>
-<a class="art" href="../ext/e282.html">jev-chat-jarvis：装在手机上的对话副驾</a>
-<a class="art" href="../ext/e283.html">永远相信统计学 永远相信大数法则</a>
-<a class="art" href="../ext/e284.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
-<a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
+<details class="cat"><summary>待分拣 <span class="cnt">18</span></summary>
+<a class="art" href="../ext/e276.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
+<a class="art" href="../ext/e277.html">360大模型安全白皮书</a>
+<a class="art" href="../ext/e278.html">AI基础设施安全白皮书</a>
+<a class="art" href="../ext/e279.html">MicrosoftAI安全</a>
+<a class="art" href="../ext/e280.html">华为AI安全白皮书</a>
+<a class="art" href="../ext/e281.html">华为云AI安全解决方案白皮书</a>
+<a class="art" href="../ext/e282.html">华为算力基础设施安全技术白皮书</a>
+<a class="art" href="../ext/e283.html">2025游戏安全风控指南</a>
+<a class="art" href="../ext/e284.html">我用Obsidian搭了一个会自己生长的个人网</a>
+<a class="art" href="../ext/e285.html">AI时代，普通人用Mac mini能干点啥</a>
+<a class="art" href="../ext/e286.html">Dan Koe：用AI做一个自己的人生模型</a>
+<a class="art" href="../ext/e287.html">【闪客】Computer Use真的在看你的屏幕吗</a>
+<a class="art" href="../ext/e288.html">GitHub技巧｜项目一键可视化</a>
+<a class="art" href="../ext/e289.html">焚诀，提示词模板，思维方式</a>
+<a class="art" href="../ext/e290.html">jev-chat-jarvis：装在手机上的对话副驾</a>
+<a class="art" href="../ext/e291.html">永远相信统计学 永远相信大数法则</a>
+<a class="art" href="../ext/e292.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
+<a class="art" href="../ext/e293.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">13</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Hermes-Agent-自进化双路径-动态-Skill-生成-RL-训练闭环-实现-吃一堑长一智">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智&quot;</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#具体步骤-Skill-生成路径">具体步骤（Skill 生成路径）</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文-阿里云开发者">原文：阿里云开发者</a><a class="tl l3" href="#背景">背景</a><a class="tl l3" href="#Self-Evolving-内外-双路径驱动的-自进化">Self-Evolving：&quot;内外&quot;双路径驱动的&quot;自进化&quot;</a><a class="tl l3" href="#Prompt-Context-Harness-与-OpenClaw-Claude-Code-的比较">Prompt / Context / Harness 与 OpenClaw/Claude Code 的比较</a><a class="tl l2" href="#原文沉淀">原文沉淀</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现&quot;吃一堑长一智</h1><div class="meta">2026-04-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/2xFei8dMx99lc-iyrZZrww" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">AI与效率/20260424-Hermes-Agent自进化双路径-动态Skill生成与RL训练闭环.md</span></div><div class="md"><h1 id="Hermes-Agent-自进化双路径-动态-Skill-生成-RL-训练闭环-实现-吃一堑长一智">Hermes Agent 自进化双路径：动态 Skill 生成 + RL 训练闭环，实现"吃一堑长一智"</h1>
-<blockquote><p>来源：微信公众号 归档日期：2026-04-24 抓取状态：待补充原文 原文字符：0｜配图：0 张</p></blockquote>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">47</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#具体步骤">具体步骤</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文-阿里云开发者">原文：阿里云开发者</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#Skill-是什么">Skill 是什么</a><a class="tl l3" href="#Frontmatter">Frontmatter：</a><a class="tl l3" href="#2-1-必填字段">2.1 必填字段</a><a class="tl l3" href="#2-2-Description-的写法决定加载率">2.2 Description 的写法决定加载率</a><a class="tl l3" href="#2-3-可选扩展字段">2.3 可选扩展字段</a><a class="tl l3" href="#5-种核心设计模式">5 种核心设计模式</a><a class="tl l3" href="#模式-1-线性流程">模式 1：线性流程</a><a class="tl l3" href="#模式-2-决策树-按需加载">模式 2：决策树 + 按需加载</a><a class="tl l3" href="#模式-3-循环迭代">模式 3：循环迭代</a><a class="tl l3" href="#模式-4-接力棒循环-跨-Session-持久化">模式 4：接力棒循环（跨 Session 持久化）</a><a class="tl l3" href="#模式-5-多阶段-检查点-Skill-编排">模式 5：多阶段 + 检查点 + Skill 编排</a><a class="tl l3" href="#特殊模式-思维框架-控制-LLM-怎么想">特殊模式：思维框架（控制 LLM &quot;怎么想&quot;）</a><a class="tl l3" href="#通用写作技巧">通用写作技巧</a><a class="tl l3" href="#4-1-防止-LLM-偷懒的-4-种武器">4.1 防止 LLM 偷懒的 4 种武器</a><a class="tl l3" href="#4-2-教学的-3-种有效方式">4.2 教学的 3 种有效方式</a><a class="tl l3" href="#4-3-安全与边界的-3-条原则">4.3 安全与边界的 3 条原则</a><a class="tl l3" href="#4-4-知识组织的-3-层架构">4.4 知识组织的 3 层架构</a><a class="tl l3" href="#模式选择决策树">模式选择决策树</a><a class="tl l3" href="#快速上手模板">快速上手模板</a><a class="tl l3" href="#最小可用-Skill-线性模式">最小可用 Skill（线性模式）</a><a class="tl l3" href="#循环迭代-Skill-模板">循环迭代 Skill 模板</a><a class="tl l3" href="#参考资源">参考资源</a><a class="tl l3" href="#官方规范">官方规范</a><a class="tl l3" href="#Agent-Skills-开放标准">Agent Skills 开放标准</a><a class="tl l3" href="#anthropics-skills-官方模板">anthropics/skills — 官方模板</a><a class="tl l3" href="#anthropics-skills-规范文档">anthropics/skills — 规范文档</a><a class="tl l3" href="#精选仓库">精选仓库</a><a class="tl l3" href="#openai-skills-OpenAI-Codex-官方-Skill-目录">openai/skills — OpenAI Codex 官方 Skill 目录</a><a class="tl l3" href="#obra-superpowers-14-个工作流型-Skill">obra/superpowers — 14 个工作流型 Skill</a><a class="tl l3" href="#google-labs-code-stitch-skills-设计到代码的-Skill">google-labs-code/stitch-skills — 设计到代码的 Skill</a><a class="tl l3" href="#deanpeters-Product-Manager-Skills-40-产品管理-Skill">deanpeters/Product-Manager-Skills — 40+ 产品管理 Skill</a><a class="tl l3" href="#trailofbits-skills-安全审计-Skill">trailofbits/skills — 安全审计 Skill</a><a class="tl l3" href="#openclaw-clawhub-Skill-注册中心">openclaw/clawhub — Skill 注册中心</a><a class="tl l3" href="#精选列表">精选列表</a><a class="tl l3" href="#VoltAgent-awesome-agent-skills-500-Skill-索引">VoltAgent/awesome-agent-skills — 500+ Skill 索引</a><a class="tl l3" href="#travisvn-awesome-claude-skills-精选列表-Skill-vs-MCP-对比">travisvn/awesome-claude-skills — 精选列表 + Skill vs MCP 对比</a><a class="tl l3" href="#本文分析的-7-个-Skill-速查表">本文分析的 7 个 Skill 速查表</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</h1><div class="meta">2026-04-27 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/aoNwyY5ZkCRMkZirn1rElQ" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">AI与效率/20260427-Agent-Skill五种设计模式与写作方法论.md</span></div><div class="md"><blockquote><p>来源：微信公众号 归档日期：2026-04-27 抓取状态：成功 原文字符：10996｜配图：1 张</p></blockquote>
 <h2 id="摘要速览">摘要速览</h2>
-<p>OpenClaw/Claude Code 执行完任务后宝贵的"试错经验"无法自动沉淀，下次遇到类似问题仍从零开始"重蹈覆辙"——Hermes 用两条路径解决了这个"无状态 Agent"问题。</p>
+<p>写 Skill 的人多，但写"对"的少——description 太模糊导致 LLM 不加载，或内容结构混乱导致 LLM 乱执行。本文提供了从结构到语气的完整方法论。</p>
 <h2 id="核心内容">核心内容</h2>
-<ul><li><strong>双路径自进化</strong>：外挂式"记笔记"（动态 Skill 生成）+ 权重内化"练内功"（RL 训练），两条路并行</li><li><strong>动态 Skill 生成</strong>：任务结束后后台异步 Fork 一个审查 Agent，从三维度复盘（记忆审查/技能审查/综合审查），自动将踩坑经验抽象为结构化 Skill 文件；10 轮无 Skill 操作触发"催促"提醒</li><li><strong>RL 训练闭环</strong>：批量生成 Agent 运行轨迹（ShareGPT 格式）→ 质量筛选（零推理轨迹丢弃）→ 用 Teacher 模型（Opus）生成 Baseline → 渐进式小规模实验 → 正式训练 → 自动评估，最终改变模型权重本身</li><li><strong>前台即时响应，后台异步进化</strong>：用户看到的是秒回，审查 Agent 在后台慢慢整理经验，互不干扰</li><li><strong>局限</strong>：动态 Skill 不改变底层权重（仍是"外挂"）；RL 训练需手动触发，且依赖 GPU 资源；GLM-5.1 速率限制会在多 Agent 并发时卡住</li></ul>
+<ol><li><strong>Skill 本质是知识注入</strong>：SKILL.md 内容作为 tool-result 注入上下文，LLM 用已有工具（bash/read/edit）执行——不生成新工具，只注入指令文本</li></ol>
+<ol><li><strong>description 决定加载率</strong>：要包含触发短语（"deploy my app"）、定义时序位置（"before writing code"）、列出产品关键词。太模糊则 LLM 不加载</li></ol>
+<ol><li><strong>五种核心模式</strong>：</li><ul><li><strong>线性流程</strong>（vercel-deploy，77行）：操作性 Skill，Steps + Fallback + 安全默认值</li><li><strong>决策树+按需加载</strong>（cloudflare，211行）：大知识域，用用户意图分类而非技术分类，references/ 渐进披露</li><li><strong>循环迭代</strong>（TDD，371行）：反复"做→验证→改进"，核心是铁律+借口反驳表+量化退出条件</li><li><strong>接力棒循环</strong>（stitch-loop，203行）：跨 session 持久化，<code>next-prompt.md</code> 做接力棒文件，Step 6 写下一棒是关键</li><li><strong>多阶段+检查点</strong>（discovery-process，502行）：多天/多周项目，每 Phase = Activities + Outputs + Decision Point，编排 10+ 子 Skill</li></ul></ol>
+<ol><li><strong>防 LLM 偷懒四武器</strong>：强硬语气（"Delete it. Start over."）、借口反驳表（预判+堵死）、量化阈值（"最少 3 个不变量"）、负面指令（"Do not curl the URL"）</li></ol>
+<ol><li><strong>三层知识架构 + Token 预算</strong>：Frontmatter（~100 token）→ SKILL.md 正文（2K-5K token）→ references/ 按需加载（1K-3K token/个），总上下文控制在 10K 以内</li></ol>
 <h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
 <h2 id="我的想法">我的想法</h2>
-<p>（待补充——1. SXL 的 Skills 演进能否借鉴"后台审查 Agent"，把执行反馈日志的人工记录改为半自动化？2. RL 训练对个人知识管理 Agent 是否有实用价值，还是 Skill 沉淀就够了？）</p>
+<p>（待补充——思考方向：1. 现有 Skill 对照五种模式做一次分类盘点，看哪些可以优化；2. input-ops / knowledge-card 是否适合拆成导航型+操作型两个 Skill？）</p>
 <hr>
 <h2 id="为什么有用">为什么有用</h2>
-<p>SXL 正在构建多 Agent 体系，当前 chairman/novel-master 等 Agent 也面临"每次从零开始"的问题。Hermes 的后台审查 Agent + Skill 自动沉淀机制，可以直接借鉴到 skill 演进流程中——执行反馈日志其实就是手动版的"记忆审查"，可以考虑自动化。</p>
-<h2 id="具体步骤-Skill-生成路径">具体步骤（Skill 生成路径）</h2>
-<ol><li>主 Agent 完成任务，返回用户响应</li><li><code>_spawn_background_review</code> 异步 Fork 轻量审查 Agent</li><li>审查 Agent 执行三维度审查（记忆/技能/综合）</li><li>判断是否值得抽象为 Skill → 生成结构化 Skill 文件</li><li>下次同类任务直接读取复用已沉淀的 Skill</li></ol>
+<p>自己在维护多个 Skill（input-ops、knowledge-card、memo-ops 等），这套方法论直接指导 description 怎么写、何时用循环模式、怎么防止 LLM 忽略关键步骤。特别是接力棒循环对跨 session 的 novel-master 等项目有借鉴价值。</p>
+<h2 id="具体步骤">具体步骤</h2>
+<p>按决策树选模式：</p>
+<ol><li>有明确操作步骤 → 线性流程</li><li>大知识域选型 → 决策树+按需加载</li><li>单 session 内反复迭代 → 循环迭代</li><li>跨 session 长期项目 → 接力棒循环</li><li>多天/多周阶段项目 → 多阶段+检查点</li><li>需要深度分析 → 思维框架</li></ol>
 <h2 id="适用-不适用场景">适用 / 不适用场景</h2>
-<ul><li>适用：长期运行的 Agent 系统、需要持续积累领域知识的场景、有 GPU 资源可做垂直领域微调</li><li>不适用：一次性任务 Agent、对延迟敏感不允许后台异步操作的场景、没有 GPU 资源的轻量部署</li></ul>
+<ul><li>适用：新建 Skill、优化现有 Skill 加载率、设计跨 session Agent 工作流</li><li>不适用：单次临时任务（不值得建 Skill）、纯数据处理（用脚本更直接）</li></ul>
 <h2 id="原文-阿里云开发者">原文：阿里云开发者</h2>
-<p>阿里妹导读本文是「项目深度解析」系列的第3篇，也欢迎阅读：《深度解析OpenClaw》《深度解析Claude Code》。（文章内容基于作者个人技术实践与独立思考，旨在分享经验，仅代表个人观点。）</p>
-<h3 id="背景">背景</h3>
-<p>不知道大家有没有同感，自从进入2026年，AI这个行业仿佛被开了N倍速，近几个月的技术迭代速度感觉都超过了过去好几年，AI领域真正开始进入"技术爆炸"阶段。</p>
-<p>Hermes Agent 是由 Nous Research 在2月底推出的开源 Agent 项目，自从发布以来在 GitHub 上已经狂揽4万颗Star。主打核心亮点："持久运行"（Persistent）和"自进化"（Self-Evolving）。支持40+款内置工具，兼容多种主流大语言模型，内置 Cron 调度器。</p>
-<h3 id="Self-Evolving-内外-双路径驱动的-自进化">Self-Evolving："内外"双路径驱动的"自进化"</h3>
-<p>Hermes Agent 的"自进化"依赖两条路径：</p>
-<p><strong>路径一：动态 Skill 生成（外挂式"记笔记"）</strong></p>
-<p>每次完成复杂任务后，Hermes 不会丢弃对话历史，而是启动"复盘"流程：</p>
-<ul><li>审视整个执行轨迹，提取关键步骤、踩过的坑、有效纠错手段和人工验证的最佳实践</li><li>将经验总结、抽象为结构化 Skill 文件包</li><li>实现自动生成、持续优化、持续积累</li></ul>
-<p>触发机制：<code>_iters_since_skill</code> 计数器，每 10 轮触发提醒；每次 Agent 回复后，<code>_spawn_background_review</code> 异步启动审查 Agent，从三维度复盘：</p>
-<ul><li>记忆审查（<code>_MEMORY_REVIEW_PROMPT</code>）：有什么值得记住的经验？</li><li>技能审查（<code>_SKILL_REVIEW_PROMPT</code>）：任务模式是否值得变成 Skill？</li><li>综合审查（<code>_COMBINED_REVIEW_PROMPT</code>）：有什么可以改进的？</li></ul>
-<p><strong>路径二：RL 训练闭环（权重内化"练内功"）</strong></p>
-<p>基于强化学习的模型训练闭环，真正改变模型权重：</p>
-<ol><li>任务定义：指定训练目标</li><li>轨迹捕获 &amp; 批量数据合成：<code>batch_runner.py</code> 并行处理，生成 ShareGPT 格式轨迹，零推理轨迹过滤</li><li>渐进式训练：小规模实验验证 → 正式大规模训练 → 自动评估</li></ol>
-<p>Agent 轨迹数据格式（ShareGPT）：</p>
-<pre><code>[
-  {&quot;from&quot;: &quot;system&quot;, &quot;value&quot;: &quot;你是 Hermes Agent...&quot;},
-  {&quot;from&quot;: &quot;human&quot;, &quot;value&quot;: &quot;帮我部署这个应用&quot;},
-  {&quot;from&quot;: &quot;gpt&quot;, &quot;value&quot;: &quot;好的，我先检查环境...&quot;},
-  {&quot;from&quot;: &quot;tool&quot;, &quot;value&quot;: &quot;&lt;tool_call&gt;execute_code(...)&lt;/tool_call&gt;&quot;},
-  {&quot;from&quot;: &quot;tool&quot;, &quot;value&quot;: &quot;&lt;tool_response&gt;成功&lt;/tool_response&gt;&quot;},
-  {&quot;from&quot;: &quot;gpt&quot;, &quot;value&quot;: &quot;部署完成！&quot;}
-]</code></pre>
-<p>质量控制：通过 <code>_extract_reasoning_stats</code> 统计推理标签；两者都为零则丢弃样本（无推理过程的样本无训练价值）。</p>
-<p>工具集随机采样：不固定工具配置，让模型学会灵活运用各种工具组合。</p>
-<h3 id="Prompt-Context-Harness-与-OpenClaw-Claude-Code-的比较">Prompt / Context / Harness 与 OpenClaw/Claude Code 的比较</h3>
-<p>与 OpenClaw、Claude Code 相似之处（不展开）：Prompt 结构、Context 管理、Harness 设计。</p>
-<p>核心差异：Hermes 将 Skill 从"静态安装"变成"动态生成"，将 Memory 从"关键事实记录"变成"执行轨迹学习"。</p>
+<p>一、Skill 是什么</p>
+<p>Skill 是一个文件夹，核心是 <code>SKILL.md</code> 文件，使用 YAML frontmatter + Markdown 正文的格式。当 LLM 判断需要某个 Skill 时，会调用 <code>skill</code> 工具加载它，SKILL.md 的全部内容会作为 tool-result 注入到对话上下文中，LLM 读到后自主决定怎么执行。</p>
+<pre><code>my-skill/
+├── SKILL.md              # 主文件（必须）
+├── scripts/              # 可执行脚本（可选）
+├── references/           # 详细参考文档（可选，按需加载）
+├── resources/            # 模板、清单等资源（可选）
+└── examples/             # 示例（可选）</code></pre>
+<p>关键机制：Skill 本质是"知识注入"——它不会动态生成新工具，而是把指令文本注入到 LLM 的上下文中，LLM 用已有的工具（bash、read、edit 等）来执行这些指令。</p>
+<p>二、Frontmatter：决定 Skill 是否被加载的"门面"</p>
+<p><strong>2.1 必填字段</strong></p>
+<table><thead><tr><th>字段</th><th>作用</th><th>示例</th></tr></thead><tbody><tr><td><code>name</code></td><td>唯一标识符，小写连字符</td><td><code>test-driven-development</code></td></tr><tr><td><code>description</code></td><td>最关键——LLM 通过它决定是否加载</td><td>见下方对比</td></tr></tbody></table>
+<p><strong>2.2 Description 的写法决定加载率</strong></p>
+<pre><code># ✅ 好的 description — 包含触发短语和关键词
+description: Deploy applications and websites to Vercel. Use when the user
+  requests deployment actions like &quot;deploy my app&quot;, &quot;push this live&quot;,
+  or &quot;create a preview deployment&quot;.
+
+# ✅ 好的 description — 定义时序位置
+description: Use when implementing any feature or bugfix, before writing
+  implementation code
+
+# ❌ 差的 description — 太模糊
+description: Helps with deployment stuff</code></pre>
+<p>核心原则：列举触发短语 + 定义时序位置 + 包含产品关键词</p>
+<p><strong>2.3 可选扩展字段</strong></p>
+<table><thead><tr><th>字段</th><th>来源</th><th>作用</th></tr></thead><tbody><tr><td><code>references</code></td><td>OpenCode cloudflare</td><td>声明最重要的参考文档</td></tr><tr><td><code>allowed-tools</code></td><td>Google Labs stitch-loop</td><td>声明需要的工具权限</td></tr><tr><td><code>type</code></td><td>Dean Peters discovery-process</td><td>声明 Skill 类型</td></tr><tr><td><code>best_for</code></td><td>Dean Peters</td><td>最适合的场景列表</td></tr><tr><td><code>scenarios</code></td><td>Dean Peters</td><td>具体触发场景示例</td></tr><tr><td><code>estimated_time</code></td><td>Dean Peters</td><td>预估执行时间</td></tr></tbody></table>
+<p>三、5 种核心设计模式</p>
+<p><strong>模式 1：线性流程</strong></p>
+<p>适用：部署、安装、迁移等有明确步骤的操作。代表：vercel-deploy（77行）</p>
+<p>结构：Prerequisites → Quick Start（Step 1→2→3）→ Fallback → Troubleshooting</p>
+<p>关键技巧：安全默认值（"Always deploy as preview"）+ 具体命令 + 超时提示 + 降级方案 + 负面指令（"Do not curl the URL"）</p>
+<p><strong>模式 2：决策树 + 按需加载</strong></p>
+<p>适用：大型平台选型、产品导航。代表：cloudflare（211行）</p>
+<p>结构：Authentication → Quick Decision Trees（按用户意图分类）→ Product Index</p>
+<p>关键技巧：用用户语言（"I need to run code"）+ 树形导航 + 渐进式披露（主文件 7KB，references/ 按需展开）</p>
+<p>进阶：同一知识域拆成导航型 + 操作型两个 Skill</p>
+<p><strong>模式 3：循环迭代</strong></p>
+<p>适用：TDD、代码审查等需要反复执行的流程。代表：test-driven-development（371行）</p>
+<p>结构：Iron Law → Red-Green-Refactor 循环体 → Rationalizations 借口反驳表 → Verification Checklist</p>
+<p>关键技巧：强硬语气（"Delete it. Start over."）+ Good/Bad 对比 + 12 种借口预判并堵死 + 8 项 checklist 退出条件</p>
+<p><strong>模式 4：接力棒循环（跨 Session 持久化）</strong></p>
+<p>适用：跨多个 session 持续推进的长期项目。代表：stitch-loop（203行）</p>
+<p>结构：Overview → Baton System → 6 步执行协议（Read → Consult → Generate → Integrate → UpdateDocs → <strong>PrepareNextBaton⚠️</strong>）</p>
+<p>关键技巧：文件即状态（<code>next-prompt.md</code> 作为接力棒）+ Step 6 标记 Critical + MUST + 与循环迭代的区别（状态在文件而非上下文，支持跨 session）</p>
+<p><strong>模式 5：多阶段 + 检查点 + Skill 编排</strong></p>
+<p>适用：跨天/跨周项目，有阶段划分和 Go/No-Go。代表：discovery-process（502行）</p>
+<p>结构：每个 Phase = Activities（调用子 Skill）→ Outputs → Decision Point（YES/NO + 时间影响）</p>
+<p>关键技巧：统一阶段模板 + 决策检查点 + 调度 10+ 子 Skill + 时间影响标注（"+1 week"）</p>
+<p><strong>特殊模式：思维框架（控制 LLM "怎么想"）</strong></p>
+<p>适用：安全审计、架构分析等深度思考场景。代表：audit-context-building（302行）</p>
+<p>关键技巧：思维工具（第一性原理/5Why）+ 量化阈值（"最少 3 个不变量"）+ 非目标约束 + 反幻觉规则（"Never reshape evidence to fit earlier assumptions"）</p>
+<p>四、通用写作技巧</p>
+<p><strong>4.1 防止 LLM 偷懒的 4 种武器</strong></p>
+<table><thead><tr><th>武器</th><th>原理</th><th>示例</th></tr></thead><tbody><tr><td>强硬语气</td><td>命令式遵从率更高</td><td>"Delete it. Start over."</td></tr><tr><td>借口反驳表</td><td>预判自我合理化路径并堵死</td><td>12种借口+反驳</td></tr><tr><td>量化阈值</td><td>硬性最低标准</td><td>"最少 3 个不变量、5 个假设"</td></tr><tr><td>负面指令</td><td>明确说"不要做 X"</td><td>"Do not curl the URL"</td></tr></tbody></table>
+<p><strong>4.2 三层知识架构 + Token 预算</strong></p>
+<pre><code>第 1 层：Frontmatter（~100 tokens）→ 扫描决定是否加载
+第 2 层：SKILL.md 正文（2K-5K tokens）→ 核心指令
+第 3 层：references/（按需加载，1K-3K tokens/个）→ 详细文档
+总上下文占用 &lt; 10K tokens</code></pre>
+<p>五、模式选择决策树</p>
+<pre><code>执行有明确步骤的操作 → 线性流程
+大量选项中帮用户选方向 → 决策树+按需加载
+单 session 内反复做→验证→改进 → 循环迭代
+跨多个 session 持续推进 → 接力棒循环
+多天/多周，有阶段+Go/No-Go → 多阶段+检查点
+深度分析而非快速执行 → 思维框架</code></pre>
+<p>六、参考资源</p>
+<ul><li>Agent Skills 开放标准：https://agentskills.io/</li><li>anthropics/skills 官方模板：https://github.com/anthropics/skills/tree/main/template</li><li>openai/skills：https://github.com/openai/skills</li><li>obra/superpowers（14个工作流型Skill）：https://github.com/obra/superpowers</li><li>google-labs-code/stitch-skills：https://github.com/google-labs-code/stitch-skills</li><li>trailofbits/skills（安全审计）：https://github.com/trailofbits/skills</li><li>VoltAgent/awesome-agent-skills（500+ Skill索引）：https://github.com/VoltAgent/awesome-agent-skills</li></ul>
 <h2 id="原文沉淀">原文沉淀</h2>
-<p>（抓取失败，仅有摘要） 原因：来源为登录墙/无权限/错误页，正文不可用； 来源 URL：https://mp.weixin.qq.com/s/2xFei8dMx99lc-iyrZZrww</p>
+<h3 id="目录">目录</h3>
+<ul><li><a href="#skill-是什么">Skill 是什么</a></li><li><a href="#frontmatter">Frontmatter：</a></li><li><a href="#21-必填字段">2.1 必填字段</a></li><li><a href="#22-description-的写法决定加载率">2.2 Description 的写法决定加载率</a></li><li><a href="#23-可选扩展字段">2.3 可选扩展字段</a></li><li><a href="#5-种核心设计模式">5 种核心设计模式</a></li><li><a href="#模式-1线性流程">模式 1：线性流程</a></li><li><a href="#模式-2决策树--按需加载">模式 2：决策树 + 按需加载</a></li><li><a href="#模式-3循环迭代">模式 3：循环迭代</a></li><li><a href="#模式-4接力棒循环跨-session-持久化">模式 4：接力棒循环（跨 Session 持久化）</a></li><li><a href="#模式-5多阶段--检查点--skill-编排">模式 5：多阶段 + 检查点 + Skill 编排</a></li><li><a href="#特殊模式思维框架控制-llm-怎么想">特殊模式：思维框架（控制 LLM "怎么想"）</a></li><li><a href="#通用写作技巧">通用写作技巧</a></li><li><a href="#41-防止-llm-偷懒的-4-种武器">4.1 防止 LLM 偷懒的 4 种武器</a></li><li><a href="#42-教学的-3-种有效方式">4.2 教学的 3 种有效方式</a></li><li><a href="#43-安全与边界的-3-条原则">4.3 安全与边界的 3 条原则</a></li><li><a href="#44-知识组织的-3-层架构">4.4 知识组织的 3 层架构</a></li><li><a href="#模式选择决策树">模式选择决策树</a></li><li><a href="#快速上手模板">快速上手模板</a></li><li><a href="#最小可用-skill线性模式">最小可用 Skill（线性模式）</a></li><li><a href="#循环迭代-skill-模板">循环迭代 Skill 模板</a></li><li><a href="#参考资源">参考资源</a></li><li><a href="#官方规范">官方规范</a></li><li><a href="#agent-skills-开放标准">Agent Skills 开放标准</a></li><li><a href="#anthropicsskills--官方模板">anthropics/skills — 官方模板</a></li><li><a href="#anthropicsskills--规范文档">anthropics/skills — 规范文档</a></li><li><a href="#精选仓库">精选仓库</a></li><li><a href="#openaiskills--openai-codex-官方-skill-目录">openai/skills — OpenAI Codex 官方 Skill 目录</a></li><li><a href="#obrasuperpowers--14-个工作流型-skill">obra/superpowers — 14 个工作流型 Skill</a></li><li><a href="#trailofbitsskills--安全审计-skill">trailofbits/skills — 安全审计 Skill</a></li><li><a href="#openclawclawhub--skill-注册中心">openclaw/clawhub — Skill 注册中心</a></li><li><a href="#精选列表">精选列表</a></li><li><a href="#本文分析的-7-个-skill-速查表">本文分析的 7 个 Skill 速查表</a></li></ul>
+<p><img alt="图片" src="../assets/img/img-001-27c253a9-46bf624cea78.jpg"></p>
+<h3 id="Skill-是什么">Skill 是什么</h3>
+<p>Skill 是一个文件夹，核心是 <code>SKILL.md</code> 文件，使用 YAML frontmatter + Markdown 正文 的格式。当 LLM 判断需要某个 Skill 时，会调用 <code>skill</code> 工具加载它，SKILL.md 的全部内容会作为 tool-result 注入到对话上下文中，LLM 读到后自主决定怎么执行。</p>
+<p>- - - - - -</p>
+<pre><code>my-skill/
+├── SKILL.md              # 主文件（必须）
+├── scripts/              # 可执行脚本（可选）
+├── references/           # 详细参考文档（可选，按需加载）
+├── resources/            # 模板、清单等资源（可选）
+└── examples/             # 示例（可选）</code></pre>
+<p>关键机制：Skill 本质是"知识注入"——它不会动态生成新工具，而是把指令文本注入到 LLM 的上下文中，LLM 用已有的工具（bash、read、edit 等）来执行这些指令。</p>
+<h3 id="Frontmatter">Frontmatter：</h3>
+<p>决定 Skill 是否被加载的"门面"</p>
+<h3 id="2-1-必填字段">2.1 必填字段</h3>
+<table><thead><tr><th>字段</th><th>作用</th><th>示例</th></tr></thead><tbody><tr><td><code>name</code></td><td>唯一标识符，小写连字符</td><td><code>test-driven-development</code></td></tr><tr><td><code>description</code></td><td>最关键——LLM 通过它决定是否加载</td><td>见下方对比</td></tr></tbody></table>
+<h3 id="2-2-Description-的写法决定加载率">2.2 Description 的写法决定加载率</h3>
+<p>- - - - - - - - - - -</p>
+<pre><code># ✅ 好的 description — 包含触发短语和关键词
+description: Deploy applications and websites to Vercel. Use when the user
+  requests deployment actions like &quot;deploy my app&quot;, &quot;push this live&quot;,
+  or &quot;create a preview deployment&quot;.
+
+# ✅ 好的 description — 定义时序位置
+description: Use when implementing any feature or bugfix, before writing
+  implementation code
+
+# ❌ 差的 description — 太模糊
+description: Helps with deployment stuff</code></pre>
+<p>核心原则：</p>
+<ul><li>列举触发短语：把用户可能说的话写进去（"deploy my app"、"push this live"）</li></ul>
+<ul><li>定义时序位置：说明"在什么之前/之后"使用（"before writing implementation code"）</li></ul>
+<ul><li>包含产品关键词：如果覆盖大平台，把所有产品名列出来</li></ul>
+<h3 id="2-3-可选扩展字段">2.3 可选扩展字段</h3>
+<p>从 7 个 Skill 中观察到的扩展字段：</p>
+<table><thead><tr><th>字段</th><th>来源</th><th>作用</th></tr></thead><tbody><tr><td><code>references</code></td><td>OpenCode cloudflare</td><td>声明最重要的参考文档</td></tr><tr><td><code>allowed-tools</code></td><td>Google Labs stitch-loop</td><td>声明需要的工具权限</td></tr><tr><td><code>type</code></td><td>Dean Peters discovery-process</td><td>声明 Skill 类型（workflow/component）</td></tr><tr><td><code>best_for</code></td><td>Dean Peters discovery-process</td><td>最适合的场景列表</td></tr><tr><td><code>scenarios</code></td><td>Dean Peters discovery-process</td><td>具体的触发场景示例</td></tr><tr><td><code>estimated_time</code></td><td>Dean Peters discovery-process</td><td>预估执行时间</td></tr></tbody></table>
+<h3 id="5-种核心设计模式">5 种核心设计模式</h3>
+<h3 id="模式-1-线性流程">模式 1：线性流程</h3>
+<p>适用场景：部署、安装、迁移等有明确步骤的操作。</p>
+<p>代表：openai/skills — vercel-deploy（77 行）</p>
+<p>结构：</p>
+<p>- - - - -</p>
+<pre><code># 标题
+## Prerequisites（前置条件）
+## Quick Start（主流程：Step 1 → 2 → 3）
+## Fallback（降级方案）
+## Troubleshooting（故障排除）</code></pre>
+<p>关键技巧：</p>
+<table><thead><tr><th>技巧</th><th>示例</th><th>为什么有效</th></tr></thead><tbody><tr><td>安全默认值</td><td>"Always deploy as preview, not production"</td><td>防止 LLM 做出危险操作</td></tr><tr><td>具体命令</td><td>每步给出可直接执行的 bash 命令</td><td>LLM 不需要猜测</td></tr><tr><td>超时提示</td><td>"Use a 10 minute (600000ms) timeout"</td><td>防止 LLM 因超时中断</td></tr><tr><td>降级方案</td><td>CLI 失败有 Fallback 脚本</td><td>提供 B 计划</td></tr><tr><td>负面指令</td><td>"Do not curl the deployed URL to verify"</td><td>明确禁止不该做的事</td></tr></tbody></table>
+<p>适用判断：如果你的 Skill 可以用"先做 A，再做 B，最后做 C"描述，就用线性模式。</p>
+<h3 id="模式-2-决策树-按需加载">模式 2：决策树 + 按需加载</h3>
+<p>适用场景：大型平台选型、产品导航、问题诊断。</p>
+<p>代表：openai/skills — cloudflare-deploy（224 行）</p>
+<p>结构：</p>
+<p>- - - - - - -</p>
+<pre><code># 标题
+## Authentication（认证前置）
+## Quick Decision Trees（决策树）
+  ### &quot;I need to run code&quot;（按用户意图分类）
+  ### &quot;I need to store data&quot;
+  ### &quot;I need AI/ML&quot;
+## Product Index（产品索引表）</code></pre>
+<p>关键技巧：</p>
+<table><thead><tr><th>技巧</th><th>示例</th><th>为什么有效</th></tr></thead><tbody><tr><td>用户意图分类</td><td>"I need to run code" 而非 "Compute products"</td><td>用用户语言而非技术术语</td></tr><tr><td>树形导航</td><td><code>├─ 边缘无服务器函数 → workers/</code></td><td>LLM 快速定位正确产品</td></tr><tr><td>渐进式披露</td><td>主文件 7KB，references/ 按需展开到几十万字</td><td>不浪费上下文窗口</td></tr><tr><td>产品索引表</td><td>Product → Reference 的映射表</td><td>结构化的快速查找</td></tr></tbody></table>
+<p>适用判断：如果你的 Skill 覆盖的知识域有 10+ 个分支，且每个分支都有大量详细文档，就用决策树模式。</p>
+<p>进阶：同一个知识域可以拆成两个 Skill——</p>
+<ul><li>导航型（cloudflare）：只做选型，不涉及操作</li></ul>
+<ul><li>操作型（cloudflare-deploy）：包含认证、命令、故障排除</li></ul>
+<h3 id="模式-3-循环迭代">模式 3：循环迭代</h3>
+<p>适用场景：TDD、代码审查、设计评审等需要反复执行的流程。</p>
+<p>代表：obra/superpowers — test-driven-development（371 行）</p>
+<p>结构：</p>
+<p>- - - - - - - - - - -</p>
+<pre><code># 标题
+## The Iron Law（铁律——不可违反的核心原则）
+## Red-Green-Refactor（循环体）
+  ### RED — 写失败的测试
+  ### Verify RED — 验证确实失败
+  ### GREEN — 写最少的代码
+  ### Verify GREEN — 验证确实通过
+  ### REFACTOR — 清理
+  ### Repeat（回到 RED）
+## Common Rationalizations（借口反驳表）
+## Verification Checklist（退出条件）</code></pre>
+<p>关键技巧：</p>
+<table><thead><tr><th>技巧</th><th>示例</th><th>为什么有效</th></tr></thead><tbody><tr><td>强硬语气</td><td>"Delete it. Start over."</td><td>LLM 倾向于"灵活变通"，强硬语气提高遵从率</td></tr><tr><td>Good/Bad 对比</td><td>用 <code>&amp;lt;Good&amp;gt;</code> 和 <code>&amp;lt;Bad&amp;gt;</code> 标签包裹代码示例</td><td>对比教学效果最好</td></tr><tr><td>借口反驳表</td><td>预判 LLM 可能的 12 种偷懒借口并逐一反驳</td><td>堵死所有逃避路径</td></tr><tr><td>验证清单</td><td>8 项 checklist 作为循环退出条件</td><td>确保质量达标才能结束</td></tr><tr><td>人类兜底</td><td>"ask your human partner"</td><td>不确定时交给人</td></tr></tbody></table>
+<p>适用判断：如果你的 Skill 需要 LLM 反复执行"做→验证→改进"的循环，就用迭代模式。</p>
+<h3 id="模式-4-接力棒循环-跨-Session-持久化">模式 4：接力棒循环（跨 Session 持久化）</h3>
+<p>适用场景：多次迭代的长期项目，需要跨多个 session 持续工作。</p>
+<p>代表：google-labs-code/stitch-skills — stitch-loop（203 行）</p>
+<p>https://github.com/google-labs-code/stitch-skills/tree/main/skills/stitch-loop</p>
+<p>结构：</p>
+<p>- - - - - - - - - - - -</p>
+<pre><code># 标题
+## Overview（接力棒模式概述）
+## The Baton System（接力棒文件规范）
+## Execution Protocol（6 步执行协议）
+  ### Step 1: Read the Baton（读接力棒）
+  ### Step 2: Consult Context Files（查阅上下文）
+  ### Step 3: Generate（执行任务）
+  ### Step 4: Integrate（集成结果）
+  ### Step 5: Update Documentation（更新文档）
+  ### Step 6: Prepare the Next Baton ⚠️（写下一个接力棒——关键！）
+## File Structure Reference（文件协议）
+## Orchestration Options（编排方式）</code></pre>
+<p>关键技巧：</p>
+<table><thead><tr><th>技巧</th><th>示例</th><th>为什么有效</th></tr></thead><tbody><tr><td>文件即状态</td><td><code>next-prompt.md</code> 作为接力棒</td><td>LLM 不需要记住"上次做到哪了"</td></tr><tr><td>续命机制</td><td>Step 6 标记为 Critical + MUST</td><td>忘了写接力棒循环就断了</td></tr><tr><td>文件协议</td><td>每个文件有明确职责</td><td>LLM 只需按协议读写文件</td></tr><tr><td>编排无关</td><td>CI/CD、人在回路、Agent 链都能驱动</td><td>同一个 Skill 适配多种自动化环境</td></tr></tbody></table>
+<p>适用判断：如果你的 Skill 需要跨多个 session 持续工作，或者需要多个 Agent 协作，就用接力棒模式。</p>
+<p>与模式 3 的区别：</p>
+<table><thead><tr><th>维度</th><th>循环迭代（TDD）</th><th>接力棒循环（Stitch Loop）</th></tr></thead><tbody><tr><td>状态存储</td><td>LLM 对话上下文</td><td>外部文件系统</td></tr><tr><td>跨 session</td><td>❌</td><td>✅</td></tr><tr><td>循环退出</td><td>Checklist 全部打勾</td><td>路线图清空</td></tr><tr><td>适用时长</td><td>单次会话（分钟~小时）</td><td>长期项目（天~周）</td></tr></tbody></table>
+<h3 id="模式-5-多阶段-检查点-Skill-编排">模式 5：多阶段 + 检查点 + Skill 编排</h3>
+<p>适用场景：复杂的多周流程，需要在关键节点做 Go/No-Go 决策。</p>
+<p>代表：deanpeters/Product-Manager-Skills — discovery-process（502 行）</p>
+<p>结构：</p>
+<p>- - - - - - - - - -</p>
+<pre><code># 标题
+## Key Concepts（核心概念 + 反模式）
+## Phase 1: Frame the Problem（阶段 1）
+  ### Activities（调用哪些子 Skill）
+  ### Outputs（阶段产出）
+  ### Decision Point 1（检查点：YES/NO + 时间影响）
+## Phase 2-6...（重复相同结构）
+## Complete Workflow（端到端时间线）
+## Common Pitfalls（常见陷阱）
+## References（引用的子 Skill 列表）</code></pre>
+<p>关键技巧：</p>
+<table><thead><tr><th>技巧</th><th>示例</th><th>为什么有效</th></tr></thead><tbody><tr><td>统一阶段模板</td><td>每个 Phase 都有 Activities → Outputs → Decision Point</td><td>LLM 快速理解结构</td></tr><tr><td>决策检查点</td><td>"达到饱和了吗？YES → 下一阶段，NO → +1 周"</td><td>防止盲目推进</td></tr><tr><td>Skill 编排</td><td>调度 10+ 个子 Skill 完成各阶段</td><td>编排器模式，大 Skill 调度小 Skill</td></tr><tr><td>时间影响</td><td>每个 NO 路径标注"+2-3 days"、"+1 week"</td><td>让用户了解延迟成本</td></tr><tr><td>交互协议分离</td><td>引用 <code>workshop-facilitation</code> 定义交互方式</td><td>关注点分离</td></tr></tbody></table>
+<p>适用判断：如果你的 Skill 跨越多天/多周，有明确的阶段划分和 Go/No-Go 决策点，就用多阶段模式。</p>
+<h3 id="特殊模式-思维框架-控制-LLM-怎么想">特殊模式：思维框架（控制 LLM "怎么想"）</h3>
+<p>适用场景：安全审计、代码审查、架构分析等需要深度思考的场景。</p>
+<p>代表：trailofbits/skills — audit-context-building（302 行）</p>
+<p>结构：</p>
+<p>- - - - - - - - - - - - -</p>
+<pre><code># 标题
+## Purpose（定位：控制思维方式，不是控制行为）
+## When to Use / When NOT to Use
+## Rationalizations（借口反驳表）
+## Phase 1: Initial Orientation（定向扫描）
+## Phase 2: Ultra-Granular Function Analysis（逐行分析——核心）
+  ### Per-Function Checklist（函数微分析清单）
+  ### Cross-Function Flow Analysis（跨函数追踪）
+  ### Output Requirements（输出格式 + 量化阈值）
+  ### Completeness Checklist（完整性检查）
+## Phase 3: Global System Understanding（全局理解）
+## Stability Rules（反幻觉规则）
+## Non-Goals（明确禁止做的事）</code></pre>
+<p>关键技巧：</p>
+<table><thead><tr><th>技巧</th><th>示例</th><th>为什么有效</th></tr></thead><tbody><tr><td>思维工具</td><td>第一性原理、5 Why、5 How</td><td>给 LLM 分析框架而非具体命令</td></tr><tr><td>量化阈值</td><td>"每个函数最少 3 个不变量、5 个假设"</td><td>强制 LLM 达到足够的分析深度</td></tr><tr><td>非目标约束</td><td>"不要识别漏洞、不要提出修复"</td><td>克制 LLM 最想做的事，先理解再判断</td></tr><tr><td>反幻觉规则</td><td>"Never reshape evidence to fit earlier assumptions"</td><td>防止 LLM 自我欺骗</td></tr><tr><td>子 Agent 指导</td><td>何时以及如何使用 function-analyzer Agent</td><td>分而治之</td></tr></tbody></table>
+<p>适用判断：如果你的 Skill 需要 LLM 进行深度分析而非快速执行，需要控制的是"思维质量"而非"操作步骤"，就用思维框架模式。</p>
+<h3 id="通用写作技巧">通用写作技巧</h3>
+<h3 id="4-1-防止-LLM-偷懒的-4-种武器">4.1 防止 LLM 偷懒的 4 种武器</h3>
+<table><thead><tr><th>武器</th><th>原理</th><th>示例来源</th></tr></thead><tbody><tr><td>强硬语气</td><td>LLM 对命令式语气的遵从率更高</td><td>TDD："Delete it. Start over."</td></tr><tr><td>借口反驳表</td><td>预判 LLM 的自我合理化路径并堵死</td><td>TDD：12 种借口 + 反驳；审计：6 种借口</td></tr><tr><td>量化阈值</td><td>给出硬性的最低标准</td><td>审计："最少 3 个不变量、5 个假设"</td></tr><tr><td>负面指令</td><td>明确说"不要做 X"</td><td>vercel-deploy："Do not curl the URL"</td></tr></tbody></table>
+<h3 id="4-2-教学的-3-种有效方式">4.2 教学的 3 种有效方式</h3>
+<table><thead><tr><th>方式</th><th>原理</th><th>示例来源</th></tr></thead><tbody><tr><td>Good/Bad 对比</td><td>对比学习效果最好</td><td>TDD：<code>&amp;lt;Good&amp;gt;</code> vs <code>&amp;lt;Bad&amp;gt;</code> 代码示例</td></tr><tr><td>具体命令</td><td>LLM 擅长执行具体指令</td><td>vercel-deploy：每步都有 bash 命令</td></tr><tr><td>完整示例</td><td>展示期望的输出格式</td><td>审计：引用 <code>FUNCTION_MICRO_ANALYSIS_EXAMPLE.md</code></td></tr></tbody></table>
+<h3 id="4-3-安全与边界的-3-条原则">4.3 安全与边界的 3 条原则</h3>
+<table><thead><tr><th>原则</th><th>做法</th><th>示例来源</th></tr></thead><tbody><tr><td>安全默认值</td><td>默认选择最安全的选项</td><td>vercel-deploy："Always deploy as preview"</td></tr><tr><td>权限最小化</td><td>只在必要时提升权限</td><td>vercel-deploy："Do not escalate the installation check"</td></tr><tr><td>人类兜底</td><td>不确定时交给人</td><td>TDD："ask your human partner"</td></tr></tbody></table>
+<h3 id="4-4-知识组织的-3-层架构">4.4 知识组织的 3 层架构</h3>
+<p>- - - - - - - -</p>
+<pre><code>第 1 层：Frontmatter（~100 tokens）
+  → LLM 扫描所有 Skill 的 description，决定是否加载
+
+第 2 层：SKILL.md 正文（&lt;5K tokens）
+  → 核心指令、决策树、流程步骤
+
+第 3 层：references/ 和 resources/（按需加载）
+  → 详细文档、示例、清单，LLM 用 read 工具按需读取</code></pre>
+<p>Token 预算参考：</p>
+<table><thead><tr><th>层级</th><th>Token 预算</th><th>内容</th></tr></thead><tbody><tr><td>Frontmatter</td><td>~100 tokens</td><td>name + description</td></tr><tr><td>主文件</td><td>2K-5K tokens</td><td>核心指令</td></tr><tr><td>参考文档（单个）</td><td>1K-3K tokens</td><td>按需加载</td></tr><tr><td>总上下文占用</td><td>&lt;10K tokens</td><td>主文件 + 1-2 个参考文档</td></tr></tbody></table>
+<h3 id="模式选择决策树">模式选择决策树</h3>
+<p>- - - - - - - - - - - - - - - - - - - -</p>
+<pre><code>你的 Skill 需要做什么？
+│
+├─ 执行一个有明确步骤的操作
+│  └─ → 模式 1：线性流程
+│
+├─ 在大量选项中帮用户选择正确的方向
+│  └─ → 模式 2：决策树 + 按需加载
+│
+├─ 在单次会话中反复执行&quot;做→验证→改进&quot;
+│  └─ → 模式 3：循环迭代
+│
+├─ 跨多个 session 持续推进一个长期项目
+│  └─ → 模式 4：接力棒循环
+│
+├─ 跨越多天/多周，有阶段划分和 Go/No-Go 决策
+│  └─ → 模式 5：多阶段 + 检查点
+│
+└─ 需要 LLM 进行深度分析而非快速执行
+   └─ → 特殊模式：思维框架
+</code></pre>
+<h3 id="快速上手模板">快速上手模板</h3>
+<h3 id="最小可用-Skill-线性模式">最小可用 Skill（线性模式）</h3>
+<p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
+<pre><code>---
+name: my-skill
+description: [一句话描述做什么 + 什么时候触发]
+---
+
+# Skill 名称
+
+[一句话核心原则 + 安全默认值]
+
+## Prerequisites
+- [前置条件 1]
+- [前置条件 2]
+
+## Steps
+
+### Step 1: [动作]
+\`\`\`bash
+[具体命令]
+\`\`\`
+
+### Step 2: [动作]
+[具体指令]
+
+### Step 3: [动作]
+[具体指令]
+
+## Troubleshooting
+| Issue | Solution |
+|-------|----------|
+| [问题 1] | [解决方案] |
+</code></pre>
+<h3 id="循环迭代-Skill-模板">循环迭代 Skill 模板</h3>
+<p>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
+<pre><code>---
+name: my-loop-skill
+description: [描述 + 触发时机]
+---
+
+# Skill 名称
+
+## Core Principle
+[不可违反的铁律]
+
+## The Loop
+
+### Phase A — [动作]
+[具体指令]
+
+### Verify A
+[验证命令]
+
+### Phase B — [动作]
+[具体指令]
+
+### Verify B
+[验证命令]
+
+### Repeat
+回到 Phase A。
+
+## Rationalizations
+| Excuse | Reality |
+|--------|---------|
+| &quot;[借口 1]&quot; | [反驳] |
+
+## Completion Checklist
+- [ ] [条件 1]
+- [ ] [条件 2]
+</code></pre>
+<h3 id="参考资源">参考资源</h3>
+<h3 id="官方规范">官方规范</h3>
+<h3 id="Agent-Skills-开放标准">Agent Skills 开放标准</h3>
+<p>https://agentskills.io/</p>
+<h3 id="anthropics-skills-官方模板">anthropics/skills — 官方模板</h3>
+<p>https://github.com/anthropics/skills/tree/main/template</p>
+<h3 id="anthropics-skills-规范文档">anthropics/skills — 规范文档</h3>
+<p>https://github.com/anthropics/skills/tree/main/spec</p>
+<h3 id="精选仓库">精选仓库</h3>
+<h3 id="openai-skills-OpenAI-Codex-官方-Skill-目录">openai/skills — OpenAI Codex 官方 Skill 目录</h3>
+<p>https://github.com/openai/skills</p>
+<h3 id="obra-superpowers-14-个工作流型-Skill">obra/superpowers — 14 个工作流型 Skill</h3>
+<p>https://github.com/obra/superpowers</p>
+<h3 id="google-labs-code-stitch-skills-设计到代码的-Skill">google-labs-code/stitch-skills — 设计到代码的 Skill</h3>
+<p>https://github.com/google-labs-code/stitch-skills</p>
+<h3 id="deanpeters-Product-Manager-Skills-40-产品管理-Skill">deanpeters/Product-Manager-Skills — 40+ 产品管理 Skill</h3>
+<p>https://github.com/deanpeters/Product-Manager-Skills</p>
+<h3 id="trailofbits-skills-安全审计-Skill">trailofbits/skills — 安全审计 Skill</h3>
+<p>https://github.com/trailofbits/skills</p>
+<h3 id="openclaw-clawhub-Skill-注册中心">openclaw/clawhub — Skill 注册中心</h3>
+<p>https://github.com/openclaw/clawhub</p>
+<h3 id="精选列表">精选列表</h3>
+<h3 id="VoltAgent-awesome-agent-skills-500-Skill-索引">VoltAgent/awesome-agent-skills — 500+ Skill 索引</h3>
+<p>https://github.com/VoltAgent/awesome-agent-skills</p>
+<h3 id="travisvn-awesome-claude-skills-精选列表-Skill-vs-MCP-对比">travisvn/awesome-claude-skills — 精选列表 + Skill vs MCP 对比</h3>
+<p>https://github.com/travisvn/awesome-claude-skills</p>
+<h3 id="本文分析的-7-个-Skill-速查表">本文分析的 7 个 Skill 速查表</h3>
+<table><thead><tr><th>#</th><th>Skill</th><th>来源</th><th>模式</th><th>行数</th><th>一句话精髓</th></tr></thead><tbody><tr><td>1</td><td><code>vercel-deploy</code></td><td>OpenAI</td><td>线性</td><td>77</td><td>最小但完整的 Skill 模板</td></tr><tr><td>2</td><td><code>cloudflare-deploy</code></td><td>OpenAI</td><td>线性+决策树</td><td>224</td><td>大平台的渐进式披露</td></tr><tr><td>3</td><td><code>cloudflare</code></td><td>OpenCode</td><td>纯决策树</td><td>211</td><td>导航型 vs 操作型的区别</td></tr><tr><td>4</td><td><code>test-driven-development</code></td><td>obra</td><td>循环迭代</td><td>371</td><td>堵死 LLM 偷懒的所有退路</td></tr><tr><td>5</td><td><code>stitch-loop</code></td><td>Google Labs</td><td>接力棒循环</td><td>203</td><td>文件即状态，跨 session 持久化</td></tr><tr><td>6</td><td><code>discovery-process</code></td><td>Dean Peters</td><td>多阶段+检查点</td><td>502</td><td>编排器模式，调度 10+ 子 Skill</td></tr><tr><td>7</td><td><code>audit-context-building</code></td><td>Trail of Bits</td><td>思维框架</td><td>302</td><td>控制 LLM "怎么想"而非"做什么"</td></tr></tbody></table>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
