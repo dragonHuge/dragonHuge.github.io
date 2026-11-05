@@ -11,10 +11,11 @@
   <header class="topbar">
     <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
     <a class="brand" href="../index.html">🐉 DragonHuge · 知识花园</a>
-    <a class="search-m" href="../search.html" aria-label="搜索">🔍</a>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
     <div class="searchbox">
-      <input type="search" id="topq" placeholder="搜索文章…  /" autocomplete="off" aria-label="搜索全站文章">
-      <div class="sug" id="sug" hidden></div>
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
     </div>
     <nav class="topnav">
       <a href="../index.html" class="">首页</a>
@@ -25,7 +26,7 @@
   </header>
 <div class="layout">
   <aside class="sidebar" id="sidebar"><nav class="side-nav">
-<details class="mod"><summary>📒 日常知识库沉淀 <span class="cnt">21</span></summary>
+<details class="mod"><summary>日常知识库沉淀 <span class="cnt">21</span></summary>
 <div class="grp">灵感火花</div>
 <a class="art" href="../daily/d001.html">2026-10-24</a>
 <a class="art" href="../daily/d002.html">2026-10-17</a>
@@ -57,7 +58,7 @@
 <div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
 <a class="art" href="../daily/d021.html">第4周(04.20-04.26) 周报</a>
 </details>
-<details class="mod"><summary>💻 技术文章 <span class="cnt">22</span></summary>
+<details class="mod"><summary>技术文章 <span class="cnt">22</span></summary>
 <details class="cat" open><summary>AI底层原理</summary>
 <a class="art" href="../tech/t001.html">AI 底层原理 — 资料来源</a>
 <a class="art" href="../tech/t002.html">AI 底层原理 — 感悟日志</a>
@@ -96,7 +97,7 @@
 <a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
 </details>
 </details>
-<details class="mod" open><summary>📥 外部沉淀 <span class="cnt">285</span></summary>
+<details class="mod" open><summary>外部沉淀 <span class="cnt">285</span></summary>
 <details class="cat" open><summary>AI与效率 <span class="cnt">186</span></summary>
 <a class="art" href="../ext/e001.html">Anthropic：子Agent拆多了，为什么反而更慢</a>
 <a class="art" href="../ext/e002.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a>
@@ -395,8 +396,7 @@
 <a class="art" href="../ext/e285.html">在抖音记录美好生活20261021 - 抖音</a>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>📖 本篇目录<span class="toc-n">26</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#Agent-缺的不是记忆-是-教训-causal-memory-的设计与实战">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l2" href="#一-Agent-的记忆有四个结构性缺陷">一、Agent 的记忆有四个结构性缺陷</a><a class="tl l2" href="#二-相关方向的现状">二、相关方向的现状</a><a class="tl l2" href="#三-核心设计">三、核心设计</a><a class="tl l3" href="#3-1-七种边类型-先给因果关系分型">3.1 七种边类型：先给因果关系分型</a><a class="tl l3" href="#3-2-海马体引擎-把脑科学翻译成工程组件">3.2 海马体引擎：把脑科学翻译成工程组件</a><a class="tl l3" href="#3-3-因果三层-顺着-Pearl-的阶梯往上爬">3.3 因果三层：顺着 Pearl 的阶梯往上爬</a><a class="tl l3" href="#3-4-记忆归账-结果怎么回流成-下次排前面">3.4 记忆归账：结果怎么回流成&quot;下次排前面&quot;</a><a class="tl l3" href="#3-5-写入门控-噪声不进场-检索才干净">3.5 写入门控：噪声不进场，检索才干净</a><a class="tl l3" href="#3-6-检索-每查询临时建索引的反直觉选择">3.6 检索：每查询临时建索引的反直觉选择</a><a class="tl l2" href="#四-记忆治理-入库之后-谁保证它是对的">四、记忆治理：入库之后，谁保证它是对的</a><a class="tl l3" href="#4-1-五道-refuter-给每条因果边做置信度体检">4.1 五道 refuter：给每条因果边做置信度体检</a><a class="tl l3" href="#4-2-BiasAudit-给记忆库做统计体检">4.2 BiasAudit：给记忆库做统计体检</a><a class="tl l3" href="#4-3-矛盾主动检索-检索结果里的-反方辩友">4.3 矛盾主动检索：检索结果里的&quot;反方辩友&quot;</a><a class="tl l2" href="#五-评测-自己出一份考卷">五、评测：自己出一份考卷</a><a class="tl l2" href="#六-实战-一个真实记忆库的两个多月">六、实战：一个真实记忆库的两个多月</a><a class="tl l2" href="#七-工程化-一个人也能维护的记忆层">七、工程化：一个人也能维护的记忆层</a><a class="tl l2" href="#八-一个延伸视角-自我改进的地基是记忆">八、一个延伸视角：自我改进的地基是记忆</a><a class="tl l2" href="#九-局限与展望">九、局限与展望</a><a class="tl l2" href="#参考与链接">参考与链接</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</h1><div class="meta">📅 2026-10-15 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/hsRucmrbY8h98di-rXVzww" target="_blank" rel="noopener">原文来源 ↗</a> · 📄 AI与效率/20261015-Agent-缺的不是记忆是教训causal-memory-的设计与实战.md</div><div class="md"><h1 id="Agent-缺的不是记忆-是-教训-causal-memory-的设计与实战">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</h1>
-<blockquote><p>来源：微信公众号 归档日期：2026-10-15 抓取状态：成功 原文字符：12577｜配图：8 张</p></blockquote>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">25</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l2" href="#一-Agent-的记忆有四个结构性缺陷">一、Agent 的记忆有四个结构性缺陷</a><a class="tl l2" href="#二-相关方向的现状">二、相关方向的现状</a><a class="tl l2" href="#三-核心设计">三、核心设计</a><a class="tl l3" href="#3-1-七种边类型-先给因果关系分型">3.1 七种边类型：先给因果关系分型</a><a class="tl l3" href="#3-2-海马体引擎-把脑科学翻译成工程组件">3.2 海马体引擎：把脑科学翻译成工程组件</a><a class="tl l3" href="#3-3-因果三层-顺着-Pearl-的阶梯往上爬">3.3 因果三层：顺着 Pearl 的阶梯往上爬</a><a class="tl l3" href="#3-4-记忆归账-结果怎么回流成-下次排前面">3.4 记忆归账：结果怎么回流成&quot;下次排前面&quot;</a><a class="tl l3" href="#3-5-写入门控-噪声不进场-检索才干净">3.5 写入门控：噪声不进场，检索才干净</a><a class="tl l3" href="#3-6-检索-每查询临时建索引的反直觉选择">3.6 检索：每查询临时建索引的反直觉选择</a><a class="tl l2" href="#四-记忆治理-入库之后-谁保证它是对的">四、记忆治理：入库之后，谁保证它是对的</a><a class="tl l3" href="#4-1-五道-refuter-给每条因果边做置信度体检">4.1 五道 refuter：给每条因果边做置信度体检</a><a class="tl l3" href="#4-2-BiasAudit-给记忆库做统计体检">4.2 BiasAudit：给记忆库做统计体检</a><a class="tl l3" href="#4-3-矛盾主动检索-检索结果里的-反方辩友">4.3 矛盾主动检索：检索结果里的&quot;反方辩友&quot;</a><a class="tl l2" href="#五-评测-自己出一份考卷">五、评测：自己出一份考卷</a><a class="tl l2" href="#六-实战-一个真实记忆库的两个多月">六、实战：一个真实记忆库的两个多月</a><a class="tl l2" href="#七-工程化-一个人也能维护的记忆层">七、工程化：一个人也能维护的记忆层</a><a class="tl l2" href="#八-一个延伸视角-自我改进的地基是记忆">八、一个延伸视角：自我改进的地基是记忆</a><a class="tl l2" href="#九-局限与展望">九、局限与展望</a><a class="tl l2" href="#参考与链接">参考与链接</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与效率</div><article><h1>Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</h1><div class="meta">2026-10-15 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/hsRucmrbY8h98di-rXVzww" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">AI与效率/20261015-Agent-缺的不是记忆是教训causal-memory-的设计与实战.md</span></div><div class="md"><blockquote><p>来源：微信公众号 归档日期：2026-10-15 抓取状态：成功 原文字符：12577｜配图：8 张</p></blockquote>
 <h2 id="摘要速览">摘要速览</h2>
 <ul><li>用过 AI 编程助手的人对这些场面不陌生：昨天刚踩过的坑，今天换个会话再踩一遍；上周评审否决过的方案，这周原样又提了回来。前两个问题是「忘」，后两个问题是「错」——记错比忘记更麻烦。 <strong>缺陷一：上下文压缩会吃掉"当初为什么"。</strong>长任务跑到一半，Agent 开始用同样的错误方法反复修同一个 bug。它不是忘了做过什么，是忘了当初为什么那么做、后果是什么。这不是感觉，可以实测：把一段包含因果细节的对话用生产级压缩算法反复压缩，每轮测两类</li></ul>
 <h2 id="核心内容">核心内容</h2>
