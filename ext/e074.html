@@ -437,7 +437,7 @@
 <p>这几层里，我最关注的是 <code>pi-agent-core</code>。</p>
 <p>它并不知道什么是 Git 仓库，也不关心 Markdown、MCP、终端界面和会话文件。它手里只有模型、消息和工具。一次任务大致就是下面这条路径：</p>
 <blockquote><p>用户消息 → 模型响应 → 工具调用 → 工具结果 → 再问模型 → 结束</p></blockquote>
-<p><img alt="Pi 的 Harness 分层" src="img-001-a72e3bb4.gif"></p>
+<p><span class="img-missing">［图：Pi 的 Harness 分层］</span></p>
 <p>Pi 的 Harness 分层</p>
 <p>图 1：Pi 把主路径压短，把会话、MCP、Codemode 和运行隔离放到边界上。</p>
 <p>短归短，该处理的异常没有被省掉。</p>
@@ -446,7 +446,7 @@
 <p>任务执行中，用户还可能临时插话。</p>
 <p>比如 Agent 正在改代码，我补一句“配置文件先别动”。这句话应该尽快改变当前方向。Pi 把这种输入叫 <code>steering message</code>，会在一轮工具执行结束后插进当前任务。另一种情况是 Agent 已经准备收尾，我又说“顺便补一下测试”，它更适合作为 <code>follow-up message</code>，等当前任务自然停下来再开启下一轮。</p>
 <p>核心循环没有硬编码这些产品策略，只留下几个位置清楚的接口：<code>prepareRequest()</code> 在请求模型前整理输入，<code>prepareNextTurn()</code> 决定下一轮如何继续，<code>finishTurn()</code> 在一轮结束时判断收口还是续跑。上下文压缩、模型切换和扩展逻辑从这些接口接入，<strong>主循环仍然只管“模型—工具—结果”这件事。</strong></p>
-<p><img alt="一次任务里的模型 - 工具回路" src="img-002-d08eeb0a.gif"></p>
+<p><span class="img-missing">［图：一次任务里的模型 - 工具回路］</span></p>
 <p>一次任务里的模型 - 工具回路</p>
 <p>图 2：一轮任务里，模型、工具和结果按固定顺序回到上下文；并发和插话都在边界接口里处理。</p>
 <p>我觉得 Pi 的极简先体现在这里：它没有假装真实任务只有 happy path，只是把变化关在了几个能说清楚的位置。</p>
@@ -465,7 +465,7 @@
 <ul><li><code>hidden</code></li></ul>
 <p>：接入运行时，但不向模型开放。</p>
 <p>默认值是 <code>codemode</code>。也就是说，接入 MCP 并不等于把整个工具箱摊在上下文里。模型先通过 <code>searchTools</code> 和 <code>describeTool</code> 找到需要的能力，再在脚本里调用。</p>
-<p><img alt="能力接入，不等于模型可见" src="img-003-6c0fc3e4.gif"></p>
+<p><span class="img-missing">［图：能力接入，不等于模型可见］</span></p>
 <p>能力接入，不等于模型可见</p>
 <p>图 3：工具生态可以很大，模型这一轮看到的只是被选出来的接口、上下文和脚本输出。</p>
 <p>这个差别在工具多、返回结果大的时候很实在。普通 MCP 调用的文本结果如果超过 20 KB，Pi 会把中间部分截掉，只把头尾留给模型，完整结果另存到临时文件。Codemode 则能拿到完整返回值，在脚本里筛选、聚合，最后只交回几行真正有用的内容。</p>
