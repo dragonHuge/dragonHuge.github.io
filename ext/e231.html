@@ -428,16 +428,16 @@
 <h3 id="目录">目录</h3>
 <ul><li><a href="#大家好我是鹏磊">大家好，我是鹏磊。</a></li><li><a href="#断片这毛病模型不背锅">断片这毛病，模型不背锅</a></li><li><a href="#钩子那点脏活别整太文艺">钩子那点脏活，别整太文艺</a></li><li><a href="#本地库跟后台两条腿走路">本地库跟后台，两条腿走路</a></li><li><a href="#咋装上-别跟我杠">咋装上 别跟我杠</a></li><li><a href="#吹得再硬也有代价">吹得再硬也有代价</a></li><li><a href="#httpswwwddkkcom">https://www.ddkk.com</a></li></ul>
 <h3 id="大家好-我是鹏磊">大家好，我是鹏磊。</h3>
-<p><img alt="图片" src="../../_assets/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计/img-001-6fc16fa5.webp"></p>
+<p><img alt="图片" src="../assets/img/img-001-6fc16fa5-dee090d6c8.webp"></p>
 <p>鹏磊我闲得没事刷 GitHub，又瞅见 claude-mem 在那杵着，Star 74.3k多晃荡，具体几位数你爱看不看 claude-mem，反正好孬都是虚胖，过两天又变</p>
 <p>我为啥啃这玩意儿，纯纯是自己也被 Claude Code 恶心过：窗口一关，脑子当场断片，上一把到底刚聊到哪个坑，谁记得住啊</p>
-<p><img alt="图片" src="../../_assets/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计/img-002-588d1840.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-588d1840-c92e6d25ce.png"></p>
 <p>它不是啥玄学「永久记忆」，说白了就是在 Claude Code 的 Hook 上头接了一根下水管，脏水先冲进本地 SQLite，后台再起个 Worker，拿 Agent SDK 那套把 observation 搓吧搓吧变成能喂回模型的小抄，下回张嘴不那么像失忆</p>
 <p>细节我照</p>
 <p>https://docs.claude-mem.ai/architecture/overview</p>
 <p>扒的，有错你喷文档别喷我</p>
 <p>通过Hook捕获&gt; 本地存储&gt; 后台压缩&gt; 下次会话注入&gt; 智能检索</p>
-<p><img alt="图片" src="../../_assets/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计/img-003-ec3209d3.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-ec3209d3-f0e4f4d184.png"></p>
 <h3 id="断片这毛病-模型不背锅">断片这毛病，模型不背锅</h3>
 <p>官方那串 Persistent memory compression 你当洋屁听也行</p>
 <p>人话就一句：会话死了，活别跟着一起埋；它记的是你工具咋用的、读了谁写了谁，不是给你算卦</p>
@@ -449,14 +449,14 @@
 <p>后面一串才是正经：啥 SessionStart 起 Worker 往你嘴里塞以前的摘要；UserPromptSubmit 开 session 把你原话 prompt 扔库里给全文检索当饲料；Read 前头还有 PreToolUse 卡一道文件门，文档吹得花花，本质就是想省 token；PostToolUse 跟狗皮膏药似的啥工具都贴；Stop 了 summarize；完事标记完成不搞硬删，<code>/clear</code> 有时还躲一手</p>
 <p>到头来全是 <code>bun-runner.js</code> 拽着 <code>worker-service.cjs</code> 跑，名字土是土，起码没给你一地孤儿进程，我瞅着这算积德</p>
 <p>画个序，图里我直接用文档那套英文事件名，省得你对着官方架构翻字典</p>
-<p><img alt="图片" src="../../_assets/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计/img-004-4c6b9e10.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-4c6b9e10-800ef5fa12.png"></p>
 <h3 id="本地库跟后台-两条腿走路">本地库跟后台，两条腿走路</h3>
 <p>Worker 就 Express 顶着 HTTP，端口默认 <code>37700 + (uid % 100)</code>，想改自己掏 <code>CLAUDE_MEM_WORKER_PORT</code>，别跟我哭端口占用</p>
 <p>它干啥：搜；给人看的网页；SSE 嘀嘀咕咕推流；顺手把 observation 丢给 Agent SDK 压（文档说也能换 Gemini OpenRouter 那条便宜路）</p>
 <p>库躺 <code>~/.claude-mem/claude-mem.db</code>，<code>bun:sqlite</code> 扛着，搜关键词靠 FTS5 那块虚拟表；要想「这句像不像上次那句」再挂 Chroma，爱挂不挂</p>
 <p>要我说大白话：SQLite 管你搜得着搜不着；Chroma 管你像不像；你俩都懒得开就闭着眼硬聊</p>
 <p>下面两张跟 docs 里的 Memory / Search pipeline 对齐，节点全英文，GitHub 上瞟一眼能对上号就成</p>
-<p><img alt="图片" src="../../_assets/20260511-claude-mem-Hook记忆持久化架构-SQLite加Worker双路设计/img-005-72b9ac10.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-72b9ac10-fe2f2f57ff.png"></p>
 <p>白话还是那句：hook 写库、worker 读 observation、SDK 压完回写、下轮再灌；搜是 query 走 MCP/skill、HTTP 打 SessionSearch、FTS5 命中、分层展开再回去——图就是字少版</p>
 <p>mem-search 那档子事文档吹 v5.4+，粗搜时间线再抠细节，跟一开头把整库糊脸上完全两码事；他们说 token 能省一截，具体几位你自己翻 Release，我不在这跟写财报似的编数</p>
 <h3 id="咋装上-别跟我杠">咋装上 别跟我杠</h3>

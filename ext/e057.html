@@ -419,7 +419,7 @@
 <p>工具调用、prompt 提交、turn 开始和结束、slash command、界面绘制，都在这个事件链上。</p>
 <p>从零做一个 Mod，不只是写一个小插件。它更像是给 Claude Code 的运行时事件，装上一段可以安装、验证、禁用的代码。</p>
 <p>下面顺着 Token Weather 走一遍。先看它怎么从空文件夹跑起来，再看 Blast Radius 和 Replay Theater 说明了什么，最后回到架构问题：Claude Code Mods 到底打开了 Agent Harness 的哪一层。</p>
-<p><img alt="图 1：Claude Code Mods 放在会话事件链里" src="img-001-a70571b6.png"></p>
+<p><img alt="图 1：Claude Code Mods 放在会话事件链里" src="../assets/img/img-001-a70571b6-17a98417bd.png"></p>
 <p>图 1：Claude Code Mods 放在会话事件链里</p>
 <p>图 1：Claude Code Mods 放在会话事件链里。核心 loop 仍由 Claude Code 掌握，Mod 进入的是事件、状态、UI 和宿主 API。</p>
 <h2 id="最小骨架">最小骨架</h2>
@@ -513,7 +513,7 @@ async function takeReading($) {
 <p>它会列出 hooks、calls、state reads 和 state writes。对个人来说，这是自查；对团队来说，<strong>这是后面治理的入口</strong>。</p>
 <p>官方教程还给了 <code>claude plugin test</code>。测试文件运行在真实 Claude Code runtime 上，测试里注册的 hook 会排在 Mod 后面，用来 stub Claude Code 原本会返回的结果。这样就能固定 <code>$.session.usage()</code> 的返回值，检查状态栏是否从 Clear 变成 Showers，是否显示 67% 和上一轮新增 token。</p>
 <p>这类测试细节容易被入门文章略过。它说明 Mod 不是只能靠肉眼看 UI 的小玩具，也可以进入测试。</p>
-<p><img alt="图 2：Token Weather 的最小数据流" src="img-002-6713dcdb.png"></p>
+<p><img alt="图 2：Token Weather 的最小数据流" src="../assets/img/img-002-6713dcdb-f76d8fd5ba.png"></p>
 <p>图 2：Token Weather 的最小数据流</p>
 <p>图 2：Token Weather 的最小数据流。它从会话事件取读数，写入 state，再由 ui.render 画到输入框上方。</p>
 <h2 id="天气条">天气条</h2>
@@ -568,7 +568,7 @@ async function takeReading($) {
 <p>竞品文章引用的社媒截图里，崔添翼也把两者放在一起看：Claude Code Mods 和 DeepSeek Harness 在方向上接近，但开放范围不同。由于这次没有独立拿到 X 原文全文，这里只把这部分当作截图转述，不当作逐字原文引用。</p>
 <p>DeepSeek Harness 的 GitHub 文档也单独写了 Claude Code Mods 兼容层。这个文档很有参考价值，因为它不是只说“兼容”，而是逐项列出差异：Claude Code 的 <code>tool.call</code> 在权限检查前触发，桥接里则在 Harness 权限决定之后；Claude Code 可以画 pane，桥接里很多场景会退回到横幅；有些事件可以注册，但宿主永远不会触发。</p>
 <p><strong>这些差异反而说明了一件事：Mod 不是一段可以无损搬运的脚本。</strong>它依赖宿主什么时候发事件、给哪些 <code>$</code> API、UI surface 能放在哪里、权限在事件链的哪一段判断。</p>
-<p><img alt="图 3：Claude Code Mods 与 DeepSeek Harness 的路线差异" src="img-003-dbed602c.png"></p>
+<p><img alt="图 3：Claude Code Mods 与 DeepSeek Harness 的路线差异" src="../assets/img/img-003-dbed602c-ec04863a75.png"></p>
 <p>图 3：Claude Code Mods 与 DeepSeek Harness 的路线差异</p>
 <p>图 3：两条路线都在走向运行时控制面，但一个从成熟宿主开放切面，一个从 Harness 底层做插件化组合。</p>
 <p>即便只看官方材料，两条路线也能分开。</p>
@@ -615,7 +615,7 @@ async function takeReading($) {
 <p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p>
 <p>架构师</p>
 <p>我们都是架构师！</p>
-<p><img alt="图片" src="img-004-650f25e6.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-650f25e6-2a154d8e81.png"></p>
 <p>关注架构师(JiaGouX)，添加“星标”</p>
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>

@@ -417,7 +417,7 @@
 <p>我用同一个任务来比较：模型读取文件，调用两个工具，用户在工具运行中追加约束，任务最后因为完成、取消或达到 token 上限而收口。两套实现都围绕 Agent Loop，控制点却不在同一层。Pi 把短循环和扩展插口放在核心，Pi Durable 再补上持久运行时；DSH 把 inbox、事件和恢复语义放进循环。</p>
 <p>这里不数 API，关注四个架构问题：<strong>输入归属、工具调度、收口权限、持久证据</strong>。这四件事决定 Agent 在正常路径和失败路径上留下什么状态。</p>
 <h2 id="两条路线-控制面不在同一层">两条路线，控制面不在同一层</h2>
-<p><img alt="图 1：两套 Agent Loop 的控制面" src="img-001-66d64a7e.png"></p>
+<p><img alt="图 1：两套 Agent Loop 的控制面" src="../assets/img/img-001-66d64a7e-8371c5bad4.png"></p>
 <p>图 1：两套 Agent Loop 的控制面</p>
 <p>图 1：两套 Agent Loop 的控制面</p>
 <p>两边都有循环，差别在循环之外保存了什么。Pi 基础包由调用方通过回调和队列安排输入、生命周期；DSH 把输入投影、事件边界和调度结果写进运行时。Pi Durable 不改基础 Loop 的写法，在外面增加会话、任务和恢复的持久模型。</p>
@@ -471,12 +471,12 @@
 <p>取消发生时，已启动的调用会被排空，尚未启动的调用补上 <code>ABORTED_BEFORE_DISPATCH</code> 结果。调度器失败，或 step 在结果提交前异常退出时，未得到结果的调用会记录 <code>TOOL_OUTCOME_UNKNOWN</code> 一类的恢复结果。下一次请求看到的是成对的调用和结果，而不是无法判断是否执行过的半截记录。</p>
 <p>输出达到 <code>max-tokens</code> 时，DSH 把本轮标成 <code>max-tokens</code>，后续 step 即使正常完成，也不会把它改写成普通 <code>completed</code>。状态保留了截断信号，外部策略才有机会决定重试、人工检查或结束任务。</p>
 <h2 id="同一任务-两个-Loop-怎样走">同一任务，两个 Loop 怎样走</h2>
-<p><img alt="图 2：用户追加约束时的收口流程" src="img-002-b745fd52.png"></p>
+<p><img alt="图 2：用户追加约束时的收口流程" src="../assets/img/img-002-b745fd52-2ef3d7aecf.png"></p>
 <p>图 2：用户追加约束时的收口流程</p>
 <p>图 2：用户追加约束时的收口流程</p>
 <p>同一任务走到收口时，Pi 依靠 <code>steering</code>、<code>follow-up</code> 和 <code>finishTurn</code> 协调输入与请求；DSH 依靠 <code>next-step</code>、<code>next-turn</code>、<code>concludesTurn</code> 和 <code>turn-stopping</code> 协调队列与事件。Pi 把决策点交给调用方，DSH 把决策过程写进持久状态。</p>
 <h2 id="四个控制点的逐项对比">四个控制点的逐项对比</h2>
-<p><img alt="图 3：控制点放在哪里，决定故障后的答案" src="img-003-4d72101a.png"></p>
+<p><img alt="图 3：控制点放在哪里，决定故障后的答案" src="../assets/img/img-003-4d72101a-86a3c229c8.png"></p>
 <p>图 3：控制点放在哪里，决定故障后的答案</p>
 <p>图 3：控制点放在哪里，决定故障后的答案</p>
 <ul><li><strong>输入归属</strong></li></ul>
@@ -519,7 +519,7 @@
 <p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p>
 <p>架构师</p>
 <p>我们都是架构师！</p>
-<p><img alt="图片" src="img-004-d5828126.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-d5828126-2a154d8e81.png"></p>
 <p>关注架构师(JiaGouX)，添加“星标”</p>
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>

@@ -415,7 +415,7 @@
 <p>这些问题的答案往往只有几个选项。假如每一步都调用聊天模型，再从一段生成结果里取出 JSON，整个链路就容易变成“为了几个标签，反复启动生成流程”。</p>
 <p>Jev 关注的正是这类任务。TypeSafe 把它归入 System One 模型：输入业务状态和有类型的问题，输出程序能够直接消费的决策结果与概率信息，而不是自由文本。^intro</p>
 <p>理解它最实用的一句话是：<strong>让模型判断语义，让代码决定流程，把需要写作和复杂推理的部分继续留给生成式模型。</strong></p>
-<p><img alt="TypeSafe 官网首页：Jev 的产品定位" src="../../_assets/20260921-jev-deep-dive/img-001-5e40e43a.png"></p>
+<p><img alt="TypeSafe 官网首页：Jev 的产品定位" src="../assets/img/img-001-5e40e43a-592df80773.png"></p>
 <p>TypeSafe 官网首页：Jev 的产品定位</p>
 <p><em>TypeSafe 官网将 Jev 定位为面向软件的 System One 决策模型。页面截图来自 Flavio Copes 的教程。</em>普通聊天接口的使用习惯是“给一段上下文，要求模型回答”。Jev 的接口更像一个可配置的判断函数：</p>
 <h4 id="一-Jev-到底是什么-不是更会写-JSON-而是不把任务当成写作">一、Jev 到底是什么：不是更会写 JSON，而是不把任务当成写作</h4>
@@ -423,7 +423,7 @@
 业务材料 + 问题及候选答案 → 标签、概率、等级分数</code></pre>
 <p>这里的 <code>state</code> 是待判断的材料，可以是文本，也可以是组织好的 JSON；<code>questions</code> 则定义要判断什么，以及允许哪些答案。Jev 当前主要提供三种问题类型。[^api]</p>
 <table><thead><tr><th>类型</th><th>适合回答的问题</th><th>主要返回值</th></tr></thead><tbody><tr><td><code>choice</code></td><td>“应该交给哪个团队？”</td><td>选中的标签、所有选项的概率、<code>confidence</code></td></tr><tr><td><code>noul</code></td><td>“用户现在是否明确要求退款？”</td><td>命题为真的概率 <code>noul</code>，取值 0～1</td></tr><tr><td><code>score</code></td><td>“用户表达的不满有多强烈？”</td><td>有序等级的加权分数、等级概率、<code>confidence</code></td></tr></tbody></table>
-<p><img alt="Choice / Score / Noul：三种问题类型" src="../../_assets/20260921-jev-deep-dive/img-002-382f1a0e.png"></p>
+<p><img alt="Choice / Score / Noul：三种问题类型" src="../assets/img/img-002-382f1a0e-eee4600084.png"></p>
 <p>Choice / Score / Noul：三种问题类型</p>
 <p><em>Jev 的三种问题类型：Choice 选择候选项，Score 对有序等级评分，Noul 返回命题为真的概率。来源：LangChain。</em><code>Choice</code> 是固定选项中的单选，不是任意字符串抽取；<code>Noul</code> 判断一个命题是否成立；<code>Score</code> 对应一组有顺序、用文字描述的等级。三者不是同一种输出换了三个名字。</p>
 <p>例如，退款诉求是否存在是一个真假问题，适合 <code>Noul</code>。用户的不满程度是强弱问题，适合 <code>Score</code>。把“不满程度 80%”和“有 80% 概率存在不满”混在一起，后面的业务规则就容易写错。</p>
@@ -439,7 +439,7 @@
 <p>配套材料里的“How Jev works”图，用 Qwen2.5、KV cache、字段后缀和候选 logits 展示了一种理解方式。<strong>它适合帮助理解“共享上下文、对有限选项评分”，不能直接当成 Jev 官方公开的完整网络结构。</strong> 仅凭这张图，无法确认 Jev 的底座、层数、隐藏维度，也不能确认所有情况都是图示中的“一次前向”。发布文并没有披露这些细节。</p>
 <p>普通 LLM 也可以使用原生结构化输出约束格式；官方的对照适配器就支持这类模式。因而，Jev 的比较重点不应是“别人能不能返回 JSON”，而应是决策质量、概率信息、延迟与成本。</p>
 <p>另外，保证输出落在指定类型里，与保证判断正确，是两回事。即使结果严格来自 <code>billing / technical / sales</code>，模型也可能选错。官方也单独列出了 Jev 的能力边界和已知薄弱项，因此不应把“没有自由文本幻觉”理解成“没有业务错误”。</p>
-<p><img alt="TypeSafe Playground：State 与 Questions 编辑界面" src="../../_assets/20260921-jev-deep-dive/img-003-05dda6a4.png"></p>
+<p><img alt="TypeSafe Playground：State 与 Questions 编辑界面" src="../assets/img/img-003-05dda6a4-0aff2849c0.png"></p>
 <p><em>在 Playground 中填写 State，添加 Noul、Score 或 Choice 问题，再运行判断。截图来自 Flavio Copes 的教程。</em></p>
 <h4 id="三-先跑通-把客服分流代码改成可观察的版本">三、先跑通：把客服分流代码改成可观察的版本</h4>
 <p>先安装依赖：</p>
@@ -619,7 +619,7 @@ def choose_route(answers: dict[str, Any]) -&gt; dict[str, Any]:
 <p><strong>识别出“用户要求退款”，不等于“系统允许退款”。</strong> 退款是否可执行，需要核验订单、支付流水、退款状态、账号权限以及业务规则。这个示例只负责分流，不批准退款，也不调用付款或退款工具。</p>
 <p>超时、限流、余额不足、响应结构异常同样不应被解释为“模型判断没问题”。配套 <code>triage()</code> 会把这些情况转入人工复核，而不是返回一个默认的成功标签。</p>
 <h4 id="六-接入-Agent-优先替换固定选项的判断节点">六、接入 Agent：优先替换固定选项的判断节点</h4>
-<p><img alt="官方 Workflow Evals 工作流示例" src="../../_assets/20260921-jev-deep-dive/img-004-7c763fd6.png"></p>
+<p><img alt="官方 Workflow Evals 工作流示例" src="../assets/img/img-004-7c763fd6-61a5d11a2a.png"></p>
 <p>官方 Workflow Evals 工作流示例</p>
 <p><em>官方工作流示例：将业务判断拆解成模型回答与程序规则，再组合为处理流程。来源：TypeSafe。</em>Jev 不必成为整个 Agent 的“大脑”。更合适的接法，是把它放到明确的流程节点上：</p>
 <pre><code>用户输入
@@ -657,7 +657,7 @@ print(results)</code></pre>
 <p>它判断的是<strong>给定证据对结论的支持关系</strong>，不是在互联网上验证事实，更不会凭空补齐缺失资料。网页获取、原文定位、引用身份校验和证据是否可信，仍然属于前置流程。若声称逐字引用，应先用程序核对引文是否出现在规范化后的原文中；OCR 或文本规范化失败也需要单独处理。官方引用校验示例同样将精确匹配与语义判断分开。</p>
 <h4 id="七-什么时候值得用-什么时候不值得">七、什么时候值得用，什么时候不值得？</h4>
 <p>一个实用的筛选条件是：<strong>答案集合能提前定义，但判断过程需要理解语义。</strong> Vercel 的使用指南也以固定结果、语义判断和程序控制之间的分工来讨论 Jev。[^vercel]</p>
-<p><img alt="Meet Jev：产品属性、限制与收益说明" src="../../_assets/20260921-jev-deep-dive/img-005-c2f58f1e.png"></p>
+<p><img alt="Meet Jev：产品属性、限制与收益说明" src="../assets/img/img-005-c2f58f1e-aa8221f526.png"></p>
 <p><em>TypeSafe 的 Meet Jev 欢迎页同时列出产品属性、限制与收益。截图中的速度和成本倍数属于页面宣传口径。</em>结合前面的案例，可以这样选型：</p>
 <table><thead><tr><th>任务</th><th>建议</th></tr></thead><tbody><tr><td>客服意图、工单团队、文档类别</td><td>适合试点，尤其是大量重复判断</td></tr><tr><td>Agent 选择处理路径、模型档位或复核路径</td><td>适合，但先定义允许路径和回退策略</td></tr><tr><td>RAG 段落是否相关、证据支持还是反驳结论</td><td>适合作为独立核验步骤，不代替检索和来源验证</td></tr><tr><td>输入是否包含某类风险信号</td><td>可作为附加信号，不应成为唯一安全屏障</td></tr><tr><td>金额求和、日期比较、权限与库存判断</td><td>优先写代码、查数据库或调用权威系统</td></tr><tr><td>写报告、写邮件、生成代码、解释复杂推理</td><td>继续使用生成式模型</td></tr><tr><td>从原文抽取任意人名、地址、长段引文</td><td>不适合直接当作开放式抽取器，通常需要另一个抽取环节</td></tr></tbody></table>
 <p>固定类别的分类器并不是新概念。对标签稳定、已有大量训练数据、必须本地部署的任务，专用分类器仍然值得比较。Jev 的工程价值，应通过自然语言配置问题的便利性、多判断组合、概率信息及实际成本来验证，而不是默认它一定比所有小模型好。</p>
@@ -665,7 +665,7 @@ print(results)</code></pre>
 <p>上下文限制同样要按接入渠道核对。本文引用的 OpenRouter 模型页列出 32,000 token 上下文，不应把其他渠道的限制直接搬过来。对客服分流这类任务，更值得先控制材料长度，而不是把整段历史、全部政策和所有工具日志都塞进状态。</p>
 <h4 id="八-上线前评什么-不是只看-它便宜了多少">八、上线前评什么：不是只看“它便宜了多少”</h4>
 <p>TypeSafe 的 Workflow Evals 将一些任务组织成工作流进行比较，值得借鉴的是“评整个流程”，而不只是比较一句提示词。它毕竟是厂商提供的评估，不能替代自己的业务验证集。[^evals]</p>
-<p><img alt="官方工作流评测图：效果与成本" src="../../_assets/20260921-jev-deep-dive/img-006-11322c49.png"></p>
+<p><img alt="官方工作流评测图：效果与成本" src="../assets/img/img-006-11322c49-57093e0137.png"></p>
 <p><em>TypeSafe 发布的工作流评测结果。它展示厂商测试设置下的结果，不代表本文实测或所有业务场景的效果。</em>建议至少同时看四个方向：</p>
 <table><thead><tr><th>指标</th><th>要回答的问题</th></tr></thead><tbody><tr><td>分类质量与关键错误</td><td>哪些类别经常混淆？高代价错误有没有漏掉？</td></tr><tr><td>自动化覆盖率与自动处理错误率</td><td>多少请求免人工？这些被自动处理的请求错了多少？</td></tr><tr><td>端到端 P50 / P95 延迟</td><td>接口、重试、回退之后，实际链路多快？</td></tr><tr><td>每次有效处理的总成本</td><td>API、长输入、重试、兜底模型与人工复核一共花多少？</td></tr></tbody></table>
 <p>两个指标建议一起报告：</p>
@@ -685,7 +685,7 @@ print(results)</code></pre>
 python eval_routes.py --cases eval_cases.example.jsonl --out results.jsonl</code></pre>
 <h4 id="九-生态里三个容易混淆的东西">九、生态里三个容易混淆的东西</h4>
 <p><strong>System One Adapter 不是 Jev 的开源权重。</strong> 官方 <code>system-one-adapter-python</code> 的作用，是让其他 LLM API 以类似 System One 的接口参加比较，方便评估成本、速度和结果。普通 LLM 生成了一组概率，再把它们归一化，并不自动获得可靠校准。[^adapter]</p>
-<p><img alt="控制台首页：Cookbooks、Demos 和技能入口" src="../../_assets/20260921-jev-deep-dive/img-007-e710a0e9.png"></p>
+<p><img alt="控制台首页：Cookbooks、Demos 和技能入口" src="../assets/img/img-007-e710a0e9-6f971b6a6a.png"></p>
 <p><em>TypeSafe 控制台首页展示了示例、演示与快速接入入口。截图来自 Flavio Copes 的教程。</em><strong>Agent Skill 不是一个新的推理模型。</strong><code>typesafe-ai/skills</code> 提供的是让编码智能体理解接口、设计工作流和查阅文档的技能说明。官方安装方式之一是：</p>
 <pre><code>npx skills add typesafe-ai/skills --skill typesafe-ai</code></pre>
 <p><strong>OpenJev 也不是 TypeSafe 官方开源版 Jev。</strong> 用户链接中的 <code>AlexWortega/openjev</code> 属于社区项目；模型卡介绍的是基于 Qwen3.5 的交叉编码器，对 premise/hypothesis 做蕴含、矛盾、中立等判断。它可以作为本地语义分类的实验方向，但不能直接假设与官方 Jev 具有相同的架构、接口、校准和性能。</p>

@@ -412,21 +412,21 @@
 <p>让 Coding Agent 修一个 Bug，往往要给它读代码、改文件、装依赖、调用 API 的权限。任务交出去以后，又会惦记另一件事：它会不会读到不该读的文件，把密钥带进某个请求，或者连上一个根本用不着的服务？</p>
 <p>把这些要求写进提示词，执行时仍然需要有人或程序把关。</p>
 <p>这两天， Github 有一个 NVIDIA 开源的项目爆火了，就是解决这些问题的。</p>
-<p><img alt="OpenShell GitHub 仓库" src="../../_assets/NVIDIA又开源了一个顶级Agent项目OpenShell/img-001-6cdce488.png"></p>
+<p><img alt="OpenShell GitHub 仓库" src="../assets/img/img-001-6cdce488-091668b36c.png"></p>
 <p>OpenShell GitHub 仓库</p>
 <p>你用策略规定 Agent 能碰哪些文件、访问哪些服务，<strong>OpenShell</strong> 在实际操作发生时执行这些规则。</p>
 <p>它适合用来运行需要读写文件、执行命令的 Agent。Agent 继续负责理解任务和调用工具，OpenShell 负责约束这些工具在环境里能做什么。</p>
-<p><img alt="OpenShell README 项目介绍" src="../../_assets/NVIDIA又开源了一个顶级Agent项目OpenShell/img-002-ca9f43f8.png"></p>
+<p><img alt="OpenShell README 项目介绍" src="../assets/img/img-002-ca9f43f8-08899a3044.png"></p>
 <p>OpenShell README 项目介绍</p>
 <p>项目地址：<strong>https://github.com/NVIDIA/OpenShell</strong></p>
 <h3 id="一次联网请求-先经过谁">一次联网请求，先经过谁？</h3>
 <p>假设 Agent 正在处理一个代码仓库，需要连接外部服务。按 OpenShell 的实现，请求先经过沙箱，由沙箱识别是哪个程序发起，再交给沙箱外的 <strong>Supervisor</strong> 检查。</p>
 <p>Supervisor 会核对策略，允许后才建立真正的外部连接；需要凭据的请求，还要检查它有没有资格使用对应密钥。</p>
 <p>是否放行由沙箱外的组件判断：Agent 和它启动的程序在受限制的一侧，负责判断是否放行的 Supervisor 在另一侧。Agent 不能靠自己说一句“这个请求很安全”获得访问权。</p>
-<p><img alt="OpenShell 整体架构与策略审批流程" src="../../_assets/NVIDIA又开源了一个顶级Agent项目OpenShell/img-003-bb4d7beb.png"></p>
+<p><img alt="OpenShell 整体架构与策略审批流程" src="../assets/img/img-003-bb4d7beb-ec6f3cc8c3.png"></p>
 <p>OpenShell 整体架构与策略审批流程</p>
 <p>用 Docker 或 Podman 运行时，工作负载容器会关闭网络，通过专用通道连接 Supervisor。部署到 Kubernetes 时，则依靠 NetworkPolicy 限制出站流量，需要集群的网络插件实际执行这套规则。</p>
-<p><img alt="Supervisor 与沙箱之间的通信通道" src="../../_assets/NVIDIA又开源了一个顶级Agent项目OpenShell/img-004-91a92188.png"></p>
+<p><img alt="Supervisor 与沙箱之间的通信通道" src="../assets/img/img-004-91a92188-a43a8079cd.png"></p>
 <p>Supervisor 与沙箱之间的通信通道</p>
 <p>文件访问也有对应的限制。当前 Linux 后端用 Landlock 约束文件系统访问，工作负载以非 root 身份运行，不带 Linux capabilities。哪些目录能读、哪些能写，要在策略中明确。</p>
 <p>文件策略默认采用 <code>best_effort</code>：当列出的路径全部无法应用，或 Landlock 无法执行这些规则时，沙箱可能不应用这些文件规则而继续运行，并记录高严重性告警。设为 <code>hard_requirement</code> 后，这类情况会导致启动失败；但两种模式都会跳过个别缺失或无法打开的路径。这个区别不影响 Landlock ABI v3 等强制内核要求。</p>
@@ -450,7 +450,7 @@
 <p>这里的“形式化验证”有范围限制，只对模型覆盖的策略特性和行为提供保证。独立的策略上限检查遇到目前不支持的 GraphQL、MCP 规则，会报告无法检查。通过检查，也不代表 Agent 接下来写出的代码一定正确，或每个业务操作都值得批准。</p>
 <p>我会保留人工审批，先观察它为一个小任务申请了哪些权限。能看到具体哪个程序要访问哪里，比面对一个笼统的“允许所有操作”更容易判断。</p>
 <p>官方还把执行请求的数据平面和管理沙箱的控制平面分开画了出来，下图标出了两部分各自的扩展位置。</p>
-<p><img alt="OpenShell 数据平面与控制平面的扩展位置" src="../../_assets/NVIDIA又开源了一个顶级Agent项目OpenShell/img-005-de65c9a8.png"></p>
+<p><img alt="OpenShell 数据平面与控制平面的扩展位置" src="../assets/img/img-005-de65c9a8-7eb7a5db96.png"></p>
 <p>OpenShell 数据平面与控制平面的扩展位置</p>
 <h3 id="先用一个空沙箱确认环境">先用一个空沙箱确认环境</h3>
 <p>本文对照 OpenShell 0.1.2 文档，未做本地部署实测。官方平台表列出 Debian / Ubuntu 的 x86_64、arm64，以及使用 Docker Desktop 的 Apple Silicon Mac；Windows 的实验支持覆盖 x86_64，需要 WSL 2 和 Docker Desktop。运行时还支持符合条件的 Linux Podman 和 MicroVM；MicroVM 在 macOS 上使用 Hypervisor.framework，在 Linux 上使用 KVM。</p>
@@ -466,7 +466,7 @@ openshell sandbox create --name demo</code></pre>
 <p>首次尝试可以沿用这个示例，再拿一个没有敏感数据的小项目验证：所需工具能否运行、网络规则是否够用、被拒绝的请求是否容易判断。等这条流程走通，再考虑接入日常仓库。</p>
 <h3 id="总结">总结</h3>
 <p>你可以把 OpenShell 理解成一个专门给 AI Agent 准备的工作环境。Agent 在里面读代码、改文件、跑命令，OpenShell 就按你设好的规则，管住它能访问哪些文件、连接哪些服务，以及怎么使用托管的密钥。想让 Agent 多干点活，又不想一下子把所有权限都交出去，可以看看这个项目。</p>
-<p><img alt="图片" src="../../_assets/NVIDIA又开源了一个顶级Agent项目OpenShell/img-006-c1262e6b.webp"></p>
+<p><img alt="图片" src="../assets/img/img-006-c1262e6b-bacec1f7fc.webp"></p>
 <p><strong>⭐️推荐阅读</strong>:</p>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247555122&amp;idx=1&amp;sn=96278bed8e2b414434398b56785ea2bd&amp;scene=21#wechat_redirect">AIGuide：AI 应用开发、AI 编程实战与面试指南</a>（对标 JavaGuide，完全开源免费）</li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247552140&amp;idx=1&amp;sn=551aeaa2298099436d22ac4983b17c49&amp;scene=21#wechat_redirect">JavaGuide： Java 面试指南和后端通用面试复习资料</a>（Github 157k+ Star）</li></ul>

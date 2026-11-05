@@ -411,7 +411,7 @@
 <ul><li><a href="#全文">全文</a></li><li><a href="#层结构-vs-1-个循环">层结构 vs 1 个循环</a></li><li><a href="#大型组织搭建-agent-的常见问题">大型组织搭建 Agent 的常见问题</a></li><li><a href="#用渐进披露的-agent-循环">用渐进披露的 Agent 循环</a></li><li><a href="#如何把子-agent-并回主-agent-循环">如何把子 Agent 并回主 Agent 循环</a></li><li><a href="#任务完成-evals">任务完成 evals</a></li><li><a href="#逐步减少子-agent">逐步减少子 Agent</a></li><li><a href="#合并领域-agent">合并领域 Agent</a></li><li><a href="#把子-agent-当作工具调用">把子 Agent 当作工具调用</a></li><li><a href="#通过-skills-和工具并入主-agent">通过 Skills 和工具并入主 Agent</a></li><li><a href="#多个团队如何为同一个-agent-做贡献">多个团队如何为同一个 Agent 做贡献</a></li><li><a href="#mcp-工具">MCP 工具</a></li><li><a href="#skills">Skills</a></li><li><a href="#知识库">知识库</a></li><li><a href="#加速迁移的工具">加速迁移的工具</a></li></ul>
 <p>刚刚，Anthropic 在 Claude 官网发表了一篇 Agent 搭建的最佳实践文章。作者为技术团队的 Diane Sarkis，讲什么时候该把子 Agent 并回主 Agent 循环。</p>
 <p>Applied AI 团队对比了多个企业部署后发现，<strong>一个带 Skills 的单 Agent，在质量上经常同时胜过「一个提示词包揽一切」和「多子 Agent」两种设计，成本和延迟往往还更低</strong>，有客户换成单循环后快了大约 2 倍。</p>
-<p><img alt="原文头图" src="../../_assets/Anthropic谨慎使用子Agent/img-001-782b634e.png"></p>
+<p><img alt="原文头图" src="../assets/img/img-001-782b634e-d2f6729663.png"></p>
 <p>文章点名的反面教材，是大公司里每个团队各做一个子 Agent、平台团队再在上面搭个编排器，最后 Agent 架构成了组织架构图的翻版（康威定律），上下文在交接中丢细节，子 Agent 越堆越多，系统提示词也被拼成了「缝合怪」。</p>
 <p>替代方案是一个模型、一个上下文窗口，通过 Skills 和 tool search 渐进披露上下文和工具，<strong>Claude Code 面向新模型的系统提示词就因此削减了 80% 以上</strong>。子 Agent 并没有被否定，上下文膨胀、需要并行的独立任务、单 Agent 选不准工具，这三种情况下仍然该用，只是要按上下文拆，而不是按问题类型拆。</p>
 <p>迁移上，先构建端到端的任务完成 evals（10 个黄金样例就够起步），再合并经常连着调用的子 Agent，保留下来的改成由主 Agent 当工具调用，最后把子 Agent 的提示词变成 Skills、API 调用变成 MCP 工具，一个一个对比 eval 再定去留。</p>
@@ -432,7 +432,7 @@
 <p>我们还经常看到一些 Agent 设计方案沿着一条熟悉的路线层层叠加，从一个意图分类器开始，再到一条固定的多步推理流水线、按用户群体分桶、各自独立的推荐分支，最上面还要再加一个多 Agent 编排器。</p>
 <p>对这类方案，我们往往会反馈说，这些结构里的大部分都在替模型做它已经不需要别人代劳的事。</p>
 <p><strong>一份清晰的系统提示词、4-5 个轻量的数据工具，再加上严格的输出护栏，就能覆盖大部分用例。</strong></p>
-<p><img alt="5 层结构 vs 1 个循环" src="../../_assets/Anthropic谨慎使用子Agent/img-002-afc752e9.gif"></p>
+<p><img alt="5 层结构 vs 1 个循环" src="../assets/img/img-002-afc752e9-e87a2c7e84.gif"></p>
 <h3 id="层结构-vs-1-个循环">层结构 vs 1 个循环</h3>
 <p>动图左边是常见模式，模型外面包了 5 层结构。</p>
 <p>请求进来后，先经过多 Agent 编排器和意图分类器，再走一条固定的 5 步推理流水线，然后分进不同的用户群体桶和推荐分支，最后才输出答案。</p>
@@ -443,7 +443,7 @@
 <p>•  多个任务需要并行处理，每个任务都要一个全新的上下文窗口，任务完成后就可以丢弃</p>
 <p>•  单个 Agent 难以选对合适的工具，或者系统提示词里存在相互冲突的指令</p>
 <p>但我们也太常看到企业给每个团队、每类问题都单独配一个子 Agent，<strong>最后 Agent 架构成了公司组织架构图的翻版</strong>（这正是康威定律在起作用）。</p>
-<p><img alt="架构照着组织图长" src="../../_assets/Anthropic谨慎使用子Agent/img-003-3f011040.png"></p>
+<p><img alt="架构照着组织图长" src="../assets/img/img-003-3f011040-c7957d6ab9.png"></p>
 <p>架构照着组织图长</p>
 <p>本文结合我们在大型组织里搭建 Agent 的经验，讲讲什么时候该考虑把子 Agent 并回主 Agent 循环，以及其中的最佳实践。</p>
 <h3 id="大型组织搭建-Agent-的常见问题">大型组织搭建 Agent 的常见问题</h3>
@@ -455,7 +455,7 @@
 <p>• <strong>上下文管理</strong>：你得决定 Agent 之间交换哪些上下文，而细节常常就在来回交接中丢掉了。</p>
 <p>• <strong>子 Agent 泛滥</strong>：每个团队都上线自己的子 Agent，最后公司里冒出几百个功能重叠的子 Agent，既没有强制执行的标准，也没有明确的负责人。</p>
 <p>• <strong>缝合怪提示词</strong>（The Frankenprompt）：每个团队都往系统提示词里加一句话，结果规则相互冲突，Agent 说话也没有统一的口吻。</p>
-<p><img alt="每人往里贴一句" src="../../_assets/Anthropic谨慎使用子Agent/img-004-a4d7bd55.png"></p>
+<p><img alt="每人往里贴一句" src="../assets/img/img-004-a4d7bd55-e838018e9a.png"></p>
 <p>每人往里贴一句</p>
 <p>• <strong>未经审核、过度局部的 evals</strong>：每个人都加自己的 evals，而且都针对自己那部分子任务过度优化。没有人负责、也没有人维护整套 evals，管理层只能依据被稀释过、过于局部的分数做决策。</p>
 <p>• <strong>延迟</strong>：多 Agent 架构的复杂度会增加延迟。有一家客户把自己的多 Agent harness 和单 Agent 循环做了对比，<strong>后者的运行速度快了大约 2 倍。</strong></p>
@@ -463,7 +463,7 @@
 <p>03</p>
 <p>上面说的「编排器 + 子 Agent」设计，用来协调跨团队构建的各个专家，是一种合理的做法。</p>
 <p>但更有效的做法往往是：<strong>通过 Skills 渐进披露上下文，通过 tool search 渐进披露工具。</strong> 也就是说，Agent 平时只看到 Skills 和工具的简短描述，需要时才完整加载。</p>
-<p><img alt="用到哪本，翻开哪本" src="../../_assets/Anthropic谨慎使用子Agent/img-005-d2965c8e.png"></p>
+<p><img alt="用到哪本，翻开哪本" src="../assets/img/img-005-d2965c8e-610f996d45.png"></p>
 <p>用到哪本，翻开哪本</p>
 <p>这种做法之所以合理，有三个原因：</p>
 <p>• <strong>共享上下文能得出更好的答案</strong>：对长时间运行的 Agent，我们希望多个不同任务的上下文都待在主上下文窗口里。一个看过之前每一步结果的 Agent，能把它们串起来，得出的输出和洞察，比子 Agent 交回来的一堆摘要更丰富。这也意味着<strong>更少的上下文窗口、更少有损的交接 [5]</strong>。</p>
@@ -475,7 +475,7 @@
 <p>如果你选择多 Agent 路线，就从可能行得通的最简单模式开始（生成器-验证器、编排器-子 Agent 或者其他）。</p>
 <p>拆分边界时，<strong>要按上下文来拆：分给每个子 Agent 的工作，应该很少依赖系统的其他部分，并且只交回一个精简的结果</strong>（合适的候选有相互独立的研究路径、接口清晰的独立组件，或者黑盒验证）。</p>
 <p>如果按问题类型来拆分 Agent，它们就会玩起「传话游戏」，信息来回传递，每交接一次，保真度就降低一次。</p>
-<p><img alt="按问题类型拆 vs 按上下文拆" src="../../_assets/Anthropic谨慎使用子Agent/img-006-9d0b702b.png"></p>
+<p><img alt="按问题类型拆 vs 按上下文拆" src="../assets/img/img-006-9d0b702b-c3ecbfb2c1.png"></p>
 <p>按问题类型拆 vs 按上下文拆</p>
 <p>图的上半部分是按问题类型拆，Agent 1 写功能，交接给 Agent 2 写测试，再交接给 Agent 3 审代码。</p>
 <p>每次交接都会丢失上下文，写测试的 Agent 并不知道当初的实现为什么要这么做。</p>
@@ -493,7 +493,7 @@
 <p>•  执行顺序和领域流程，挪进 <strong>Skills</strong>。</p>
 <p>•  硬性限制（校验、审批关卡），以及对话中途临时需要的东西（比如查询记忆），挪进<strong>工具</strong>。</p>
 <p>•  代码仍然可以用来加载那些成本低、几乎总是用得上的内容（比如实体解析步骤），也可以在循环所调用的工具内部，处理机械性的部分（构造请求体、解析数据流、在澄清提问之后恢复执行）。</p>
-<p><img alt="边拿结果边改计划" src="../../_assets/Anthropic谨慎使用子Agent/img-007-f0f03290.png"></p>
+<p><img alt="边拿结果边改计划" src="../assets/img/img-007-f0f03290-b64f875080.png"></p>
 <p>边拿结果边改计划</p>
 <p>这种单循环设计，也有助于实现很多团队正在追求的最终形态，也就是一个能理解用户的高层目标、并代表用户采取行动的 Agent，因为它把 Agent 学到的一切都保留在同一个上下文里。</p>
 <p>下面的建议，讲的是一个团队如何分阶段从多 Agent 系统过渡到单 Agent 循环，以及在这个过程中，多个团队怎样继续为这个 Agent 做贡献。</p>
@@ -502,7 +502,7 @@
 <p>第一步是建立一套 eval，帮你判断该不该把某个子 Agent 并回主 Agent 循环。</p>
 <p>我们见过的行之有效的 eval 结构，是一套由中央团队负责的共享端到端评测集，再加上各团队随自己的 Skill 一起交付的小型评测集。</p>
 <p><strong>哪怕只有 10 个黄金样例，也足够起步了。</strong></p>
-<p><img alt="十道题就能开考" src="../../_assets/Anthropic谨慎使用子Agent/img-008-f545f382.png"></p>
+<p><img alt="十道题就能开考" src="../assets/img/img-008-f545f382-acb8ba970d.png"></p>
 <p>十道题就能开考</p>
 <p>按照评分标准（rubric）给 Agent 的最终回复打分，是追踪回答质量的一个好起点。</p>
 <p>在还保留编排器的阶段，你还应该追踪路由准确率（它选对子 Agent 了吗？）。</p>
@@ -513,7 +513,7 @@
 <h3 id="逐步减少子-Agent">逐步减少子 Agent</h3>
 <p>06</p>
 <p>走向单 Agent 循环，意味着把子 Agent 并入工具和 Skills，具体可以合并领域子 Agent、把它们当作工具来调用，或者用 Skills 和工具取而代之。</p>
-<p><img alt="减少子 Agent 的三种方式" src="../../_assets/Anthropic谨慎使用子Agent/img-009-56403eed.gif"></p>
+<p><img alt="减少子 Agent 的三种方式" src="../assets/img/img-009-56403eed-ad63aedb6d.gif"></p>
 <p>减少子 Agent 的三种方式</p>
 <p>动图从左到右演示了这三种方式。</p>
 <p>第一种是合并子 Agent，原本挂在主 Agent 下的 A、B、C、D 四个子 Agent，按共享上下文两两合并成「A + B」「C + D」，数量就少了。</p>
@@ -542,7 +542,7 @@
 <p>对比的时候，别只看最终分数，还要看看哪些任务的结果翻转了。</p>
 <p>我们在一个示例客服 Agent 上测试时，把一个子 Agent 并入另一个之后，延迟是降低了，却也让一个原本能通过的流程失败了。</p>
 <p>主 Agent 自己就能调用订单查询工具，于是直接作答，没有去问配送专家要送达日期。</p>
-<p><img alt="配送专家被晾在一边" src="../../_assets/Anthropic谨慎使用子Agent/img-010-5954efa3.png"></p>
+<p><img alt="配送专家被晾在一边" src="../assets/img/img-010-5954efa3-f92f162847.png"></p>
 <p>配送专家被晾在一边</p>
 <p>所以每次改动之前，都要确保 eval 里有对应的任务，覆盖生产环境中每一条会一起运行的 Agent 链路，以及 Agent 绝不能违反的每一条规则。</p>
 <p>每个任务也都要跑不止一次，<strong>因为像这样的故障，两次运行里只出现了一次。</strong></p>
@@ -554,12 +554,12 @@
 <p>11</p>
 <p>当 Agent 需要执行操作、从系统里读取实时数据，或者按固定格式返回结果时，适合用工具。迁移期间，你也可以借助工具继续调用子 Agent。</p>
 <p>我们建议按用户意图来组织工具（而不是一个 API 对应一个工具），因为<strong>一旦系统提示词里的工具定义超过 30-50 个，工具选择的准确性往往就会下降。</strong></p>
-<p><img alt="工具一多就挑花眼" src="../../_assets/Anthropic谨慎使用子Agent/img-011-27ea1ddf.png"></p>
+<p><img alt="工具一多就挑花眼" src="../assets/img/img-011-27ea1ddf-eb19b6914b.png"></p>
 <p>工具一多就挑花眼</p>
 <p>使用带延迟加载的 <strong>tool search [9]</strong>，尽量少设硬性前置条件，必须要有的就挪进工具里。</p>
 <p>比如 Y 需要 X 的输出，那就由 Y 的工具去检查 X 的输出在不在，并返回一条模型能据此行动的指令。</p>
 <p>按用户区分的权限也是同样的做法。每个工具检查调用它的用户能看到什么、能做什么，然后返回一句模型读得懂的拒绝说明。</p>
-<p><img alt="工具自己说不行" src="../../_assets/Anthropic谨慎使用子Agent/img-012-69ceab2e.png"></p>
+<p><img alt="工具自己说不行" src="../assets/img/img-012-69ceab2e-3461ef45b2.png"></p>
 <p>工具自己说不行</p>
 <p>这样一来，同一个循环就能服务权限不同的用户，不需要每个权限级别各配一个 Agent。</p>
 <h3 id="Skills">Skills</h3>
@@ -567,7 +567,7 @@
 <p>当 Agent 需要知道某个团队是怎么做事的，比如过去写在专家子 Agent 提示词里的那些步骤、规则和判断，就适合用 Skills。</p>
 <p>对于不断增长的 Skill 库，我们的做法是把维护工作交还给写 Skill 的人。</p>
 <p><strong>Claude 可以借助一些能构建、测试和精简其他 Skills 的 Skills，承担大部分繁重的工作。</strong></p>
-<p><img alt="没人用的剪掉" src="../../_assets/Anthropic谨慎使用子Agent/img-013-5562c571.png"></p>
+<p><img alt="没人用的剪掉" src="../assets/img/img-013-5562c571-e59fe94d99.png"></p>
 <p>没人用的剪掉</p>
 <p>为了防止 Skill 泛滥，可以让每个团队的 DRI（直接负责人）负责自己的 Skills，确保它们写得好、彼此不重复，并且附带合适的 evals 一起交付。</p>
 <p>• <strong>/skill-creator</strong>：用来编写一开始就结构规范的新 Skill，也能审查已有的 Skill，对它们做精简、去重和重组。</p>
@@ -576,7 +576,7 @@
 <p>13</p>
 <p>知识库适合存放 Agent 只是偶尔才需要的参考资料。</p>
 <p>事实和参考资料（政策、指标定义、产品规格）可以放在一个由模型调用的搜索或查询工具后面，也可以作为参考文件打包进某个 Skill。</p>
-<p><img alt="要用时自己去查" src="../../_assets/Anthropic谨慎使用子Agent/img-014-b3e8fbdc.png"></p>
+<p><img alt="要用时自己去查" src="../assets/img/img-014-b3e8fbdc-76a2cc5b34.png"></p>
 <p>要用时自己去查</p>
 <p><strong>尽量避免</strong>用代码把这些内容检索出来，再贴进提示词 [10]<strong>。</strong></p>
 <h3 id="加速迁移的工具">加速迁移的工具</h3>

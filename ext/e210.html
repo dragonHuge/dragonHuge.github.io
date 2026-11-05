@@ -423,7 +423,7 @@
 <p><strong>封装模块化</strong>。Skill 是独立的外部资产，可以单独编写、版本化、验证和更新，不需要改模型权重或全局 Harness 代码。</p>
 <p><strong>晚绑定动态加载</strong>。Skill 不常驻在上下文里，而是根据当前状态和目标按需加载。系统提示在会话开始时就全部注入，Skill 只在被需要时才出现。</p>
 <p><strong>过程性状态转换</strong>。Skill 编码的是"怎么做"的操作知识，包括错误处理和控制流，而不是记录事实或保存历史。</p>
-<p><img alt="Agent Skill 与 Prompt、Tool、Memory、Harness 的边界" src="../../_assets/20260917-Google-Agentic-Skill综述六元组九阶段/img-001-2fd4656c.png"></p>
+<p><img alt="Agent Skill 与 Prompt、Tool、Memory、Harness 的边界" src="../assets/img/img-001-2fd4656c-b63f03efa7.png"></p>
 <p>Agent Skill 与 Prompt、Tool、Memory、Harness 的边界</p>
 <p>图 1：Skill 夹在上下文、工具、记忆和运行时之间，核心是封装一段可加载、可执行、可验证的过程。自制图。</p>
 <p>用这三条标准去过滤，很多模糊地带就清楚了。一段全局 JSON 格式指令不是 Skill，因为它没有模块化和按需加载；一个搜索 API 不是 Skill，因为它没有过程编排；但一个附带超时重试、缓存降级和 DOM 解析逻辑的 API 封装，就是综述所说的"工具执行技能"。一段对话记录也不是 Skill，因为它不包含执行逻辑。</p>
@@ -442,7 +442,7 @@
 <p>综述把 Skill 的完整生命分成九个阶段：自主发现、编写与表示、记忆存储、动态检索与路由、组合与编排、执行与修复、终身适应、经验评估、安全治理。</p>
 <p>Google 的工程实践覆盖了其中的大部分环节，但在"安全治理"和"终身适应"上还在演进。把它们压缩成运行时视角，这条链路可以写成：</p>
 <blockquote><p>发现与路由 → 按需加载 → 受限执行 → 状态更新 → 结果验证 → 版本治理</p></blockquote>
-<p><img alt="Agentic Skill 九阶段生命周期" src="../../_assets/20260917-Google-Agentic-Skill综述六元组九阶段/img-002-3bbf16b2.png"></p>
+<p><img alt="Agentic Skill 九阶段生命周期" src="../assets/img/img-002-3bbf16b2-a40357abd6.png"></p>
 <p>Agentic Skill 九阶段生命周期</p>
 <p>图 2：综述里的九个阶段，可以归并成“找得到、用得上、跑得完、证明有效、能否放心交给它”五个运行时问题。自制图。</p>
 <p>Harrison Chase 在讨论 Agent 架构时用过一个说法：harness 是"围绕模型的、可编排的执行外壳"，它决定的不是模型能说什么，而是哪些信息在什么时候以什么方式进入模型，以及模型的输出怎样被校验和落地。Skill 的工程化程度，最终取决于这条链路是否闭合，而不在于目录里有多少份 <code>SKILL.md</code>。</p>
@@ -479,7 +479,7 @@
 <h3 id="以后再画架构图">以后再画架构图</h3>
 <p>Google 的实践和这篇综述，一份来自生产线，一份来自学术梳理，但它们指向的方向是一致的。</p>
 <p><strong>以后再画 Agent 架构图，Skill 大概不会再被画成一个孤立的文件图标。它更适合被画在那条不断查找、加载、执行、验证和更新的运行循环里。</strong></p>
-<p><img alt="Skill 进入 Agent Runtime 的闭环" src="../../_assets/20260917-Google-Agentic-Skill综述六元组九阶段/img-003-e822ec75.png"></p>
+<p><img alt="Skill 进入 Agent Runtime 的闭环" src="../assets/img/img-003-e822ec75-d86556139e.png"></p>
 <p>Skill 进入 Agent Runtime 的闭环</p>
 <p>图 3：Skill 提供过程，Tool 执行动作，Memory 保存经验，Harness 把它们接成可恢复的运行时闭环。自制图。</p>
 <p>经验怎样被提炼，知识怎样长期保存，Skill 怎样被路由，状态怎样推进，权限怎样收口，结果怎样验证，失败怎样恢复。这些问题只要缺一块，Skill 就很容易退化成一份"看起来很懂"的提示词。边界接起来以后，Skill 才有机会成为一种真正可复用的工程资产：它能被加载，也能被替换；能带来经验复利，也能在验证失败时回滚；能帮助模型做事，但不会把权限、事实和完成标准一起交给模型决定。</p>
@@ -501,7 +501,7 @@
 <p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p>
 <p>架构师</p>
 <p>我们都是架构师！</p>
-<p><img alt="图片" src="../../_assets/20260917-Google-Agentic-Skill综述六元组九阶段/img-004-b6ff84fd.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-b6ff84fd-a384b411bd.png"></p>
 <p>关注架构师(JiaGouX)，添加“星标”</p>
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>

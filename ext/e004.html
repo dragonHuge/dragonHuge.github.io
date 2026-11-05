@@ -411,16 +411,16 @@
 <ul><li><a href="#1-harness模型之外的那层作战系统">1. Harness：模型之外的那层作战系统</a></li><li><a href="#agent--model--harness">Agent = Model + Harness</a></li><li><a href="#2-harness-zero把外挂能力蒸馏进模型">2. Harness-Zero：把外挂能力蒸馏进模型</a></li><li><a href="#4-实验结果不是多跑几次那么简单">4. 实验结果：不是多跑几次那么简单</a></li><li><a href="#5-两条路线一个负责内化一个负责应变">5. 两条路线：一个负责内化，一个负责应变</a></li><li><a href="#6-harness-正在变成新的可学习层">6. Harness 正在变成新的可学习层</a></li></ul>
 <p>大家好，我是PaperAgent，不是Agent！</p>
 <p>过去两年，Agent 性能的很大一部分提升并不来自模型权重，而是来自模型外面的 <strong>Harness</strong>：提示词、工具接口、记忆、技能、子代理与中间件。<a href="https://mp.weixin.qq.com/s?__biz=Mzk0MTYzMzMxMA==&amp;mid=2247513014&amp;idx=1&amp;sn=b2768db5e1d492e4b51d5c429691122a&amp;scene=21#wechat_redirect">重塑Agentic框架：最新前沿综述</a></p>
-<p><img alt="图片" src="../../_assets/从Harness到Harness²Google自进化新突破/img-001-3227507c.jpg"></p>
-<p><img alt="图片" src="../../_assets/从Harness到Harness²Google自进化新突破/img-002-35b1a298.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-001-3227507c-52c2f01c77.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-002-35b1a298-f5deb80e67.jpg"></p>
 <p>Google两篇新论文把这件事推向了下一阶段：<strong>Harness-Zero</strong> 想把 Harness 的能力蒸馏进模型；谷歌 Cloud AI Research 的 <strong>Harness²</strong> 则让 Harness 在开放世界中递归进化。</p>
-<p><img alt="图片" src="../../_assets/从Harness到Harness²Google自进化新突破/img-003-12b65e3d.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-003-12b65e3d-f8fb118912.jpg"></p>
 <p>它们一个向内，一个向外，共同回答同一个问题：当模型本身冻结时，Agent 还能怎样持续变强？<a href="https://mp.weixin.qq.com/s?__biz=Mzk0MTYzMzMxMA==&amp;mid=2247513014&amp;idx=2&amp;sn=b58f074a6103308be4ddf866b163f5c2&amp;scene=21#wechat_redirect">谷歌：用了20年的Softmax竟藏了2个Bug</a></p>
 <h3 id="1-Harness-模型之外的那层作战系统">1. Harness：模型之外的那层作战系统</h3>
 <p>可以把 Agent 简化为：</p>
 <h3 id="Agent-Model-Harness">Agent = Model + Harness</h3>
 <p>模型负责推理，Harness 决定模型看到什么、能调用什么、何时停下来、如何拆任务、如何保存经验。Harness² 将其拆成 8 类组件：系统提示、护栏、长期记忆、技能、工具说明、脚本、子代理和中间件插件。</p>
-<p><img alt="Harness的8个组件：Harness 不是一句 prompt，而是一整套运行时系统" src="../../_assets/从Harness到Harness²Google自进化新突破/img-004-d748837f.jpg"></p>
+<p><img alt="Harness的8个组件：Harness 不是一句 prompt，而是一整套运行时系统" src="../assets/img/img-004-d748837f-c29ec0e56d.jpg"></p>
 <p>Harness的8个组件：Harness 不是一句 prompt，而是一整套运行时系统</p>
 <p>这意味着：同一个模型，换一个 Harness，可能就像换了“工作流程”和“团队配置”。论文的主线也因此从“怎么写好提示词”，转向“怎么让这套系统自动优化”。</p>
 <h3 id="2-Harness-Zero-把外挂能力蒸馏进模型">2. Harness-Zero：把外挂能力蒸馏进模型</h3>
@@ -429,10 +429,10 @@
 <ul><li>先在训练任务上进化出优化 Harness（h*）；</li></ul>
 <ul><li>再把 h* 改写成“审查代理”可用的私有参考 Harness（K）；</li></ul>
 <ul><li>最后让审查代理逐轮修改学生模型的回复，用这些轨迹做 SFT。部署时，只保留学生模型和最小 Harness。</li></ul>
-<p><img alt="Harness-Zero 的三阶段流程" src="../../_assets/从Harness到Harness²Google自进化新突破/img-005-8a0ba13e.jpg"></p>
+<p><img alt="Harness-Zero 的三阶段流程" src="../assets/img/img-005-8a0ba13e-6af32e7c32.jpg"></p>
 <p>Harness-Zero 的三阶段流程</p>
 <p>关键结果很直接：Qwen3.5-9B 在最小 Harness 下，三域平均分从 23.3 提升到 44.3，超过“继续挂着优化 Harness”的 41.7。</p>
-<p><img alt="Harness-Zero 论文 Table 2" src="../../_assets/从Harness到Harness²Google自进化新突破/img-006-04a0980e.jpg"></p>
+<p><img alt="Harness-Zero 论文 Table 2" src="../assets/img/img-006-04a0980e-bc40d5d10e.jpg"></p>
 <p>Harness-Zero 论文 Table 2</p>
 <p>更有意思的是，蒸馏后模型恢复了 28 类 Harness 专属行为的 82.3%。也就是说，它学到的不只是答案，还有“先检查、再编辑、最后验证”这类过程性习惯。</p>
 <h3 id="3-Harness²-不只优化-Harness-还优化-优化-Harness-的方法">3. Harness²：不只优化 Harness，还优化“优化 Harness 的方法”</h3>
@@ -440,10 +440,10 @@
 <p>它提出双层递归：</p>
 <ol><li><strong>任务级递归</strong>：围绕当前任务执行 Propose—Probe—Compose。先提出“通用缺陷”和“领域缺陷”两类修改，再实际运行候选 Harness，通过行为对比决定保留哪些改动。</li></ol>
 <ol><li><strong>Harnessing 级递归</strong>：任务结束后，反思本次哪些修改有效、为什么有效，把可复用组件和经验写入 improvement library，用于下一个任务。</li></ol>
-<p><img alt="Harness² 的双层递归流程：当前任务的优化过程，会成为后续任务的优化经验" src="../../_assets/从Harness到Harness²Google自进化新突破/img-007-203eca63.jpg"></p>
+<p><img alt="Harness² 的双层递归流程：当前任务的优化过程，会成为后续任务的优化经验" src="../assets/img/img-007-203eca63-3b51ccecf9.jpg"></p>
 <p>Harness² 的双层递归流程：当前任务的优化过程，会成为后续任务的优化经验</p>
 <p>消融实验说明，这不是堆概念：经验库、分角色提案、结果组合缺一不可。</p>
-<p><img alt="Harness² 论文 Table 3" src="../../_assets/从Harness到Harness²Google自进化新突破/img-008-5e79964e.jpg"></p>
+<p><img alt="Harness² 论文 Table 3" src="../assets/img/img-008-5e79964e-be1a1ca6d3.jpg"></p>
 <p>Harness² 论文 Table 3</p>
 <h3 id="4-实验结果-不是多跑几次那么简单">4. 实验结果：不是多跑几次那么简单</h3>
 <p>Harness² 在 WorkBuddy-Bench、JobBench 和法律基准 LAB 上测试了 GLM-5 与 Gemini 3.5 Flash，并分别接入 OpenCode、Codex 两种初始 Harness。</p>
@@ -451,23 +451,23 @@
 <ul><li>WorkBuddy-Bench：GLM-5 + OpenCode 平均 <strong>+11.5 分</strong>；</li></ul>
 <ul><li>JobBench：Gemini 3.5 Flash + OpenCode <strong>+4.5 分</strong>；</li></ul>
 <ul><li>LAB：GLM-5 + OpenCode Partial 通过率 <strong>+11.8 个百分点</strong>。</li></ul>
-<p><img alt="Harness² 的总体表现：k=5 时在 Code、Web、Office 三个领域都超过 Meta-Harness" src="../../_assets/从Harness到Harness²Google自进化新突破/img-009-ea116f1e.jpg"></p>
+<p><img alt="Harness² 的总体表现：k=5 时在 Code、Web、Office 三个领域都超过 Meta-Harness" src="../assets/img/img-009-ea116f1e-5a17578f18.jpg"></p>
 <p>Harness² 的总体表现：k=5 时在 Code、Web、Office 三个领域都超过 Meta-Harness</p>
 <p>更重要的是，扩展预算不是简单 Best-of-k。并行递归同时探索多个候选，顺序递归则把上一轮修改和证据带入下一轮，两条曲线在 k=1 到 k=5 间基本持续上升。</p>
-<p><img alt="Harness² 论文 Figure 4 并行递归与顺序递归" src="../../_assets/从Harness到Harness²Google自进化新突破/img-010-ffc28a00.jpg"></p>
+<p><img alt="Harness² 论文 Figure 4 并行递归与顺序递归" src="../assets/img/img-010-ffc28a00-b833a3adf0.jpg"></p>
 <p>Harness² 论文 Figure 4 并行递归与顺序递归</p>
 <h3 id="5-两条路线-一个负责内化-一个负责应变">5. 两条路线：一个负责内化，一个负责应变</h3>
 <p>Harness-Zero 和 Harness² 不是互相替代，而是解决两个相邻问题。</p>
 <ul><li><strong>Harness-Zero</strong> 适合流程相对稳定、可以收集训练轨迹的领域：把已验证的 Harness 经验压进模型，降低部署复杂度。</li></ul>
 <ul><li><strong>Harness²</strong> 适合任务不断变化、无法提前训练的环境：模型权重不动，Harness 在任务流中持续吸收经验。</li></ul>
 <ul><li>两者也可组合：先用 Harness² 在真实任务流中发现有效模式，再用 Harness-Zero 把高频、稳定的模式蒸馏进模型。</li></ul>
-<p><img alt="Harness² 论文 Figure 7：经验库的积累与跨任务迁移" src="../../_assets/从Harness到Harness²Google自进化新突破/img-011-9abb3e2c.jpg"></p>
+<p><img alt="Harness² 论文 Figure 7：经验库的积累与跨任务迁移" src="../assets/img/img-011-9abb3e2c-148c337c29.jpg"></p>
 <p>Harness² 论文 Figure 7：经验库的积累与跨任务迁移</p>
 <p>不过边界也很清楚：Harness-Zero 依赖足够强的审查代理，采集轨迹成本更高；Harness² 则把成本放在测试时递归和多轮执行上，并且开放世界中的行为对比仍可能误判。</p>
 <h3 id="6-Harness-正在变成新的可学习层">6. Harness 正在变成新的可学习层</h3>
 <p>这两篇论文释放出的信号是：Agent 系统的优化对象正在从“模型权重”和“人工提示词”，扩展为模型、Harness、以及改进 Harness 的元过程。</p>
 <p>短期看，Harness 工程仍是 Agent 落地的性能杠杆；中期看，最有效的工程经验会被自动发现、复用、蒸馏；更长期看，Agent 可能不再只是使用工具，而是在运行中持续重组自己的工作系统。</p>
-<p><img alt="递归预算、性能与计算成本" src="../../_assets/从Harness到Harness²Google自进化新突破/img-012-f004cf66.jpg"></p>
+<p><img alt="递归预算、性能与计算成本" src="../assets/img/img-012-f004cf66-175cafd4b5.jpg"></p>
 <p>递归预算、性能与计算成本</p>
 <p>所以，从 Harness 到 Harness² 真正的跃迁，不只是名字多了一个平方：<strong>Agent 的能力边界，开始由模型和它自我改进的外部系统共同决定。</strong></p>
 <pre><code>Harness-Zero: Harness Distillation via Agent-as-Harness

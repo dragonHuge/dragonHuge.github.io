@@ -426,7 +426,7 @@
 <p>CLARIFY</p>
 <h3 id="GBrain-到底不是什么">GBrain 到底不是什么</h3>
 <p>先破除一个误区：GBrain 不是简单的 Markdown 笔记库，也不是又一个 Vector Database，更不能简单理解成“把企业文档丢进去，然后让 LLM 做 RAG”。</p>
-<p><img alt="图片" src="../../_assets/20260922-gbrain-second-brain/img-001-958ffd75.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-958ffd75-b16f00cc2d.png"></p>
 <p>传统 RAG 的思路很直接：用户提问 → Embedding → 进 Vector DB 检索 → 找到 Top-K 相关文档 → 拼进 Context → LLM 生成回答。这套流程解决的其实是一个很单纯的问题——从大量文档里找到和问题相关的内容。</p>
 <p>但 Agent 的长期记忆问题比这复杂得多。“张三负责哪个项目”是关系问题，“这个项目现在谁负责”是当前状态问题，“为什么换成李四负责”是事件和因果问题，“去年这个项目负责人是谁”是时间问题，“销售说能打八折，财务说只能八五折，到底哪个是真的”则是知识冲突问题。真正的 Agent Memory 早就不是单纯的“搜索相似文本”了，它至少要处理 Knowledge、Entity、Fact、Relationship、Time、Source、State这些维度。GBrain 有意思的地方，就在于它试图把这些东西组织成一套可以持续使用的知识体系。</p>
 <p>02</p>
@@ -501,7 +501,7 @@
 <p>PROTOCOL</p>
 <h3 id="真正的-Memory-开关是行为契约-不是-MCP">真正的 Memory 开关是行为契约，不是 MCP</h3>
 <p>我习惯把解决这个问题的方法叫 <strong>Brain-First Protocol</strong>，核心就三条。</p>
-<p><img alt="图片" src="../../_assets/20260922-gbrain-second-brain/img-002-4574c582.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-4574c582-825480919c.png"></p>
 <p>1</p>
 <p><strong>Search-First</strong>：回答之前先查 Brain，尤其涉及项目历史、用户偏好、业务规则、已经做出的决策、过去发生的事实这些内容时，不能完全依赖当前 Context，要先问一下 Brain“过去有没有相关信息”。</p>
 <p>2</p>
@@ -557,7 +557,7 @@
 <p>HYBRID</p>
 <h3 id="更现实的方案-混合架构">更现实的方案：混合架构</h3>
 <p>企业里一个很常见的场景是，产品手册、技术规范、售后政策、培训资料这类东西非常稳定，很适合做 Compiled Knowledge；但与此同时，客户工单、聊天记录、CRM 数据、实时库存、订单状态这些东西变化极快。硬把所有东西都塞进 GBrain 并不是最优解，更合理的架构是让 Agent 同时接入 Compiled Brain 处理稳定知识和关系、RAG 处理实时文档、Enterprise API 拿实时业务状态、Memory Layer 记用户偏好。这才比较接近真实企业 Agent 该有的样子。</p>
-<p><img alt="图片" src="../../_assets/20260922-gbrain-second-brain/img-003-a5a4e40c.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-a5a4e40c-9dfd17f44c.png"></p>
 <p>以后再碰到 Agent Memory 的选型问题，不妨先问自己三个问题。</p>
 <p>1</p>
 <p><strong>要记的是“用户”还是“知识”？</strong>如果主要是用户偏好、用户事实、用户历史，优先看 Memory Layer；如果主要是企业知识、项目资料、人员关系、会议决策、业务规则，就该考虑 Knowledge Brain。</p>
@@ -570,7 +570,7 @@
 <h3 id="写在最后">写在最后</h3>
 <p>回到最开始的问题：我们为什么会觉得 Agent“失忆”这件事很讨厌？因为我们默认它应该像一个同事。一个真正合作了几个月的同事，不会每天早上见到你都说“不好意思，昨天的事情我不记得了”，他该知道项目是什么、谁负责什么、过去做过什么决定、哪些事情已经改过、哪些规则不能碰、哪些信息来自哪里——更重要的是，他应该知道自己为什么知道。</p>
 <p>这其实是企业 Agent 下一阶段很重要的功课：模型 + Context + Tools + Memory + Knowledge + State + Governance，缺一不可。过去我们一直在琢磨怎么让模型“更聪明”，现在冒出来的是另一个问题——怎么让 Agent 拥有一个持续存在的世界，这个世界里有人、有项目、有公司、有知识、有事实、有关系、有事件、有时间、有规则、有决策。</p>
-<p><img alt="图片" src="../../_assets/20260922-gbrain-second-brain/img-004-e92f2670.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-e92f2670-dd37e2b6e7.png"></p>
 <p>Agent 每次打开新 Session，都不该是从零开始，它进入的应该是同一个世界。</p>
 <p>昨天发生的事情还在那里，新的知识可以继续写进去，旧的知识可以被纠正，有争议的知识会被标记出来。最终形成的，不再只是一个“会回答问题的聊天机器人”，而是一个有记忆、有状态、有知识、能持续工作的 Agent。这可能才是 RAG 之后更值得关注的一条路线：从“给 Agent 找资料”，走向“给 Agent 建一个可以长期存在的知识世界”。</p>
 <p>END</p>

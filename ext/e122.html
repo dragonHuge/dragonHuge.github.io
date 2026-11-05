@@ -417,21 +417,21 @@
 <hr>
 <h4 id="背景">背景</h4>
 <p>9 月 15 号的时候，OpenAI 的联合创始人发了一个帖子，这个帖子直接爆火，现在已经干到 3600w 浏览了。</p>
-<p><img alt="image-20260919215829019" src="../../_assets/20260921-jev-viral/img-001-d7dc251c.png"></p>
+<p><img alt="image-20260919215829019" src="../assets/img/img-001-d7dc251c-2c09edb6f8.png"></p>
 <p>这么大的浏览量再加上 Diogo 特殊的身份，直接让 Jev 出圈了。</p>
-<p><img alt="图片" src="../../_assets/20260921-jev-viral/img-002-27edff79.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-27edff79-030c186b53.png"></p>
 <p>Diogo 抛出来一个问题，为什么在 ChatGPT 发布之后，人类聊天模型的 AGI 仍然迟迟没有到来？</p>
 <p>他说过去他们一直在 build 一种隐秘的模型训练方法，这种方法叫 RLCD，基于这套方法训练出来的一种新型模型，叫 <code>Jev</code>。</p>
 <p>Jev 的显著特点是：<strong>速度极快、成本极低</strong>。</p>
 <p>这对于现在大模型市场来说，简直太诱人了。</p>
 <p>就在这套帖子刚发完没过多久，TypeSafe AI 就进入了大家的视野。因为 TypeSafe AI 说了句听起来非常舒服的话。</p>
-<p><img alt="image-20260919223851136" src="../../_assets/20260921-jev-viral/img-003-667cc9ca.png"></p>
+<p><img alt="image-20260919223851136" src="../assets/img/img-003-667cc9ca-ae4d14b7b3.png"></p>
 <table><thead><tr><th>TypeSafe AI 的总部在旧金山，而 Diogo Almeida 是 TypeSafe AI 的创始人。</th></tr></thead><tbody></tbody></table>
 <p>Jev 和普通的大模型有着本质的区别。</p>
 <p>传统模型输入文本、生成文本，而 Jev 会 <strong>完全跳过文本生成</strong>。</p>
 <p>简单来说，Jev 并不是一个用来聊天或者写文章的 Generative AI 大模型，它的定位是一个专门用于机器结构化决策（Programmatic Decision Engine）的底层模型。</p>
 <p>如果借用诺贝尔经济学奖得主丹尼尔·卡尼曼在《思考，快与慢》里的经典理论来解释的话</p>
-<p><img alt="image-20260919231252882" src="../../_assets/20260921-jev-viral/img-004-eb0ccfd7.png"></p>
+<p><img alt="image-20260919231252882" src="../assets/img/img-004-eb0ccfd7-0c5f882d72.png"></p>
 <p>• <strong>现有的传统大模型属于 System 2（慢思考）</strong>：它们像人类一样在脑子里逐词推演、组织长篇大论，能力虽强，但速度慢、延迟高、输出冗长且极其昂贵。</p>
 <p>• <strong>而 Jev 则被定义为首个 System 1（快思考）大模型</strong>：它模拟的是人类大脑那种下意识、直觉式、毫秒级的快速本能判断。</p>
 <table><thead><tr><th>看到这，如果你略微懂点脑科学你就会发现，System 1 + System 2 会完全对应人脑中的理智脑和情绪脑。    而我觉得 System 1 + System 2 结合起来才有可能是未来。（后续会再谈到这个说法）</th></tr></thead><tbody></tbody></table>
@@ -446,7 +446,7 @@
 <p>• <strong>Noul（伯努利二元判断）</strong>：专门处理 Yes/No 问题。它的名字来源于 No 与 Boolean 的缩写，并且隐喻统计学中的<strong>伯努利（Bernoulli）分布</strong>。它不会只输出 true 或 false，而是直接返回一个 <code>0.0 ~ 1.0</code> 之间的精确概率值。</p>
 <p>• <strong>Choice（有限选项分类）</strong>：从预定义的列表中选择最匹配的选项（最多支持 255 个选项）。它不仅返回命中项，还会给出所有选项的全概率分布和整体置信度（Confidence）。</p>
 <p>• <strong>Score（多阶梯度评分）</strong>：根据预定义的评分标准（如 0 到 10 级阶梯），测量输入内容的严重性、紧迫度或相关性，返回带有置信度的连续数值。</p>
-<p><img alt="Jev 的三种决策原语：Noul、Choice、Score" src="../../_assets/20260921-jev-viral/img-005-f0e839f2.png"></p>
+<p><img alt="Jev 的三种决策原语：Noul、Choice、Score" src="../assets/img/img-005-f0e839f2-e1dbe79219.png"></p>
 <h4 id="3-核心训练方法-用RLCD-代替-RLHF">3. 核心训练方法：用RLCD 代替 RLHF</h4>
 <p>前面我们提到了，Diogo Almeida 提出了全新的训练方法 RLCD。因为他非常清楚传统 <strong>RLHF（人类反馈强化学习）</strong> 在工程落地的致命缺陷： RLHF 的目标是迎合人类的<strong>喜好（Preference）</strong>，这导致生成模型常常为了讨好人类而产生严重的<strong>过度自信（Overconfidence）</strong>和<strong>幻觉（Hallucination）</strong>。</p>
 <p>而 RLCD 的优化目标是<strong>认识论上的概率校准（Epistemic Calibration）</strong>。 所谓校准，指的是：<strong>当 Jev 说它有 90% 的把握时，它在真实统计上的准确率就恰好是 90% 左右。</strong> 这种极其诚实的概率分布，让开发者可以非常放心地在软件逻辑中设置自动化阈值（例如：置信度高于 0.85 自动走流水线执行，低于 0.85 自动流转给人工介入）。</p>
@@ -458,12 +458,12 @@
 <p>• <strong>输入 Token</strong>：<strong>$0.042 / 1M tokens</strong>（每百万 Token 仅 0.042 美元，换算下来十亿 Token 只要 42 美元！）。</p>
 <p>• <strong>输出 Token</strong>：<strong>完全免费（Free）！</strong> 官方直接表示输出成本低到无需计量（too cheap to meter）。</p>
 <p>我们可以横向对比一下当下主流的 Frontier 旗舰大模型：</p>
-<p><img alt="图片" src="../../_assets/20260921-jev-viral/img-006-5b36f9d3.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-5b36f9d3-bf0f3034b3.png"></p>
 <p>• 当下当红的旗舰模型（如 <strong>GPT-6 Astra</strong>、<strong>Claude Fable 5.1</strong>），输入通常在 <strong>$10 / 1M tokens</strong>，输出更是高达 <strong>$50 / 1M tokens</strong>。</p>
 <p>• 相比之下，单单看输入成本，Jev 就直接便宜了 <strong>238 倍</strong>；</p>
 <p>• 如果再算上 Jev <strong>完全免费的输出</strong>，在真实的分类、路由与结构化微决策场景中，综合成本比当前的顶级大模型便宜了近 <strong>500 到 1000 倍</strong>。即便是对比轻量级的日常主力模型，也有近百倍的成本优势。</p>
 <p>顺带一提，Jev 这个名字正是致敬了经济学上著名的<strong>杰文斯悖论（Jevons Paradox）</strong>。</p>
-<p><img alt="image-20260919233236113" src="../../_assets/20260921-jev-viral/img-007-76624750.png"></p>
+<p><img alt="image-20260919233236113" src="../assets/img/img-007-76624750-f91906f769.png"></p>
 <table><thead><tr><th>杰文斯悖论指出：当某项技术让一种资源的消耗效率提升、成本大幅降低时，这项资源的总消耗量不但不会减少，反而会迎来指数级的爆发。TypeSafe AI 起这个名字，就是笃定随着机器决策成本无限逼近于 0，整个软件世界对 AI 自动化决策的需求将被彻底引爆。</th></tr></thead><tbody></tbody></table>
 <h4 id="技术方面">技术方面</h4>
 <p>除了极致的便宜，Jev 在工程与架构层面解决了一大批困扰全行业很久的痛点：</p>
@@ -484,32 +484,32 @@ else:
 <p>一个当年亲手缔造了当今对话模型基石的大佬，如今亲自跳出来复盘 RLHF 在工程落地的弊端，带着豪华团队提出 RLCD 和全新的 System one 架构，这种技术说服力和反思精神在整个硅谷和开发者圈直接拉满。</p>
 <p>而在生态合作上，Jev 的动作也是教科书级的：</p>
 <p>• <strong>Vercel AI SDK 首日原生支持</strong>：Vercel CEO Guillermo Rauch 亲自站台力挺，宣布全面接入。Jev 在发布第一天就通过 Vercel AI Gateway 和 AI SDK 的 <code>experimental_evaluate</code> 提供了原生支持，数以百万计的 Next.js 和 Node/TS 开发者不需要折腾复杂的底层网络协议，直接就能在生产项目中开箱即用。</p>
-<p><img alt="image-20260919234006565" src="../../_assets/20260921-jev-viral/img-008-0ec50b3a.png"></p>
+<p><img alt="image-20260919234006565" src="../assets/img/img-008-0ec50b3a-f7d46cf70f.png"></p>
 <p>• <strong>全平台 SDK 齐备</strong>：官方第一时间上线了面向 Python 的 <code>typesafe-sdk</code> 和面向 Node/TypeScript 的 <code>@typesafe-ai/sdk</code>，同时开放了 OpenRouter 等聚合平台的统一路由接入。</p>
-<p><img alt="image-20260919235408734" src="../../_assets/20260921-jev-viral/img-009-a49b08f8.png"></p>
+<p><img alt="image-20260919235408734" src="../assets/img/img-009-a49b08f8-2fb28a315f.png"></p>
 <p>• <strong>主流科技媒体集中爆破</strong>：TechCrunch、Forbes、Business Wire 等顶级科技媒体密集报道，直接形成了一场现象级的技术出圈事件。</p>
 <h4 id="Demo-很吸引人">Demo 很吸引人</h4>
 <p>光讲理论可能还不够直观，Jev 之所以在开发者群体中瞬间引爆，是因为社区和官方发布的几个实时 Demo 实在太有冲击力了：</p>
 <h4 id="实时敏捷游戏智能体-玩-Minecraft-和-地铁跑酷">实时敏捷游戏智能体：玩 Minecraft 和《地铁跑酷》</h4>
 <p>这是目前在各大技术圈转疯了的两个 Demo：</p>
 <p>• <strong>Minecraft 实时生存 Agent</strong>：以往用 LLM 控制游戏角色，因为通常有 1~3 秒的推理延迟，往往僵尸都走到脸上了角色还在“思考”。而用 Jev 搭建的 Minecraft Bot，每隔几十毫秒实时捕获周围的环境状态（当前血量、有无僵尸、光线亮度、手中方块），瞬间并行输出多个动作决策与风险评分。在毫无任何硬编码规则的情况下，能够做到实时灵活走位、躲避怪物，并在夜幕降临或残血时精准寻找庇护所。</p>
-<p><img alt="图片" src="../../_assets/20260921-jev-viral/img-010-b3d3dd7f.png"></p>
+<p><img alt="图片" src="../assets/img/img-010-b3d3dd7f-c72b9e868b.png"></p>
 <p>• <strong>《地铁跑酷》毫秒级避障</strong>：高频反应类敏捷游戏一直是大模型的绝对禁区。开发者用 Jev 实现了一个高频毫秒级决策闭环，针对每一帧游戏画面的状态，Jev 在极短时间内输出 <code>[Jump, Duck, MoveLeft, MoveRight]</code> 的置信概率，角色在铁轨上行云流水般跳跃滑铲、躲避迎面而来的列车，让人第一次直观感受到了 System 1 神经反射的威力。</p>
-<p><img alt="image-20260919235034691" src="../../_assets/20260921-jev-viral/img-011-7f02db1b.png"></p>
+<p><img alt="image-20260919235034691" src="../assets/img/img-011-7f02db1b-a05e071107.png"></p>
 <h4 id="社区自发聚合站-Jevable-com">社区自发聚合站 Jevable.com</h4>
 <p>由于社区开发者开发的应用和 Demo 涌现得太快，大家甚至在几天内就自发上线了专门的生态导航站 <strong>Jevable.com</strong>，集中收录全球开发者基于 Jev 打造的各类智能体决策流、代码审查微工具、客服自动化管道和仿真实验，足以看出其强劲的社区生命力。</p>
-<p><img alt="图片" src="../../_assets/20260921-jev-viral/img-012-040f47f4.png"></p>
+<p><img alt="图片" src="../assets/img/img-012-040f47f4-8a06cbee94.png"></p>
 <p>而且我才看到 Vercel 发了一个统计，Jev 的采用速度比 AI Gateway 历史上任何其他模型都要快。</p>
-<p><img alt="image-20260919235715899" src="../../_assets/20260921-jev-viral/img-013-f0473fa4.png"></p>
+<p><img alt="image-20260919235715899" src="../assets/img/img-013-f0473fa4-e5a107cbc5.png"></p>
 <hr>
 <h4 id="使用方式">使用方式</h4>
 <p>目前 Jev 的使用方式仍旧是通过<strong>白名单</strong>的方式，</p>
 <p>打开 TypeSafe AI 官方，输入邮箱，然后 Join waitlist 。</p>
-<p><img alt="image-20260919220651863" src="../../_assets/20260921-jev-viral/img-014-b264ad4c.png"></p>
+<p><img alt="image-20260919220651863" src="../assets/img/img-014-b264ad4c-f8379708fa.png"></p>
 <p>基本上时间不用等太久，今天申请的明天就通过了，我就是这样。</p>
-<p><img alt="image-20260919220720131" src="../../_assets/20260921-jev-viral/img-015-f0c002e4.png"></p>
+<p><img alt="image-20260919220720131" src="../assets/img/img-015-f0c002e4-3567771ee2.png"></p>
 <p>官网长这样</p>
-<p><img alt="image-20260919221041378" src="../../_assets/20260921-jev-viral/img-016-bbfe3f78.png"></p>
+<p><img alt="image-20260919221041378" src="../assets/img/img-016-bbfe3f78-efc3d79530.png"></p>
 <p>初始是有 5$ 的额度，虽然看起来不多，但是真的能用很久，因为我们传统认识中的大模型输出，在这里是免费的。</p>
 <hr>
 <h4 id="写在最后-我的几点预测">写在最后：我的几点预测</h4>
@@ -519,7 +519,7 @@ else:
 <p>• System 2（当代旗舰生成模型）负责攻坚：只在需要深度长链推理、开放式综合创作、复杂代码架构时才被使用。</p>
 <ol><li>开源社区很快会迎来一批开源版 Jev。</li></ol>
 <p>说是很快迎来，其实已经迎来了。</p>
-<p><img alt="image-20260920203918819" src="../../_assets/20260921-jev-viral/img-017-f76ee428.png"></p>
+<p><img alt="image-20260920203918819" src="../assets/img/img-017-f76ee428-01d92a313e.png"></p>
 <p>上面截图里正是 Bespoke Labs 刚刚火速开源的 <strong>Bespoke Nimble</strong>——他们基于 Qwen3.5-9B 底座，完全开源了数据、权重和训练配方，打响了开源复刻 Jev 的第一枪。</p>
 <p>Diogo 和 TypeSafe AI 最大的贡献，我觉得是把 <strong>非自回归决策模型 + RLCD 校准概率</strong>这条被行业忽略的赛道彻底打通了。 既然技术路径已经清晰，在接下来的几个月内，开源社区（如 Hugging Face、vLLM 等生态）一定会迅速跟进，推出各种基于轻量基座微调的开源强类型决策小模型，本地私有化部署微决策的成本还会进一步下探。</p>
 <h3 id="AI-应用开发将从-Prompt-玄学回归正统软件工程">AI 应用开发将从 Prompt 玄学回归正统软件工程</h3>

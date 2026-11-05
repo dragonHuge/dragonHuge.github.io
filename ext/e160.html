@@ -434,7 +434,7 @@
 <p>长时间其实不太难，用类似 ralph loop 的方式就能轻松做到。但高质量就没那么简单了，这好比强化学习中需要一个 Reward Model：模型能力再强，需要有靠谱的、无幻觉的奖励信号告诉它「什么算好」。</p>
 <p>所以我现在的做法是：<strong>在给 AI 下指令之前，会先把「如何检验任务是否完成」这个条件好不小的时间准备好。</strong></p>
 <p>验证先行，且裁判和运动员尽可能隔离。然后就可以让 AI 在反复的迭代中，逼近目标。</p>
-<p><img alt="图片" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-001-d3bd99f0.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-d3bd99f0-f5bfbf34f0.png"></p>
 <p>四要素循环</p>
 <p>这也属于是某种形式的 <strong>Harness</strong> 了：目标定义 + 验证接口 + 迭代协议 + 安全护栏，组合在一起后，就可能让 Agent 能连续跑几个小时甚至几天。</p>
 <p>02</p>
@@ -442,17 +442,17 @@
 <p>我想，我应该把这个方案让更多人可以更简单的方式就能用上，从而轻松让自己的 AI 工作数小时之久，且能保证质量。</p>
 <p>于是在跟 Claude Code 讨论了好几轮之后，得到了一份初版方案文档。</p>
 <p>这个文档一共有 300 多行，把我喂它的两篇 Anthropic 博客的核心发现也梳理了一遍，对照了自己的工作流，还设计了一个 <code>/harness</code> Skill 的完整框架。</p>
-<p><img alt="初版草稿的局限" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-002-9883a1db.png"></p>
+<p><img alt="初版草稿的局限" src="../assets/img/img-002-9883a1db-428c8a79f5.png"></p>
 <p>初版草稿的局限</p>
 <p>但说实话，这只是个比较初级的版本。它跟我自己的项目业务耦合得还是太紧了，同团队的人都不一定好用，更别说分享给其他人了。而且我看下来，里面也还是有不少欠考虑的地方。</p>
 <p>于是我想把这个思路给团队的同学们 share 和讨论一下，听听他们的诉求和反馈，看能不能做得更通用一些。</p>
 <p>03</p>
 <h3 id="交接-VS-协作">交接 VS 协作</h3>
 <p>我之前做过一个叫 <a href="https://mp.weixin.qq.com/s?__biz=MzA4NzgzMjA4MQ==&amp;mid=2453481579&amp;idx=1&amp;sn=ede0512ec9c0d0a36092650f24f57e58&amp;scene=21#wechat_redirect">cc-go-on 的开源项目</a>，能把 Claude Code 的会话加密导出，让别人不只是 show me the markdown，还能是 <strong>show me the prompt</strong> 来更好地了解和 AI 协作的过程。</p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4NzgzMjA4MQ==&amp;mid=2453481579&amp;idx=1&amp;sn=ede0512ec9c0d0a36092650f24f57e58&amp;scene=21#wechat_redirect"><img alt="图片" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-003-bc570804.webp"></a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzA4NzgzMjA4MQ==&amp;mid=2453481579&amp;idx=1&amp;sn=ede0512ec9c0d0a36092650f24f57e58&amp;scene=21#wechat_redirect"><img alt="图片" src="../assets/img/img-003-bc570804-286cf0d33c.webp"></a></p>
 <p>但说实话，cc-go-on 主要还是用来做干了一半的工作交接，查看、修改和协作方面，还是太欠缺了。</p>
 <p>而上面说的事儿，大约是我月初时候的想法了。</p>
-<p><img alt="交接 vs 协作" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-004-bbbd1fb7.png"></p>
+<p><img alt="交接 vs 协作" src="../assets/img/img-004-bbbd1fb7-f04b39345b.png"></p>
 <p>交接 vs 协作</p>
 <p>正好这个周末有点时间，我想着要不再往前推一步。但用什么方式能和其他人更好地协作呢？怎么让 AI 能从不同的视角和出发点来 review、给我指指点点呢？</p>
 <p>当然可以用各种 spec 工具，也可以搞一个 AI 团队来做这件事。但我个人习惯用的，还有一个比较重要的方法，叫做「<strong>六顶思考帽</strong>」。</p>
@@ -460,7 +460,7 @@
 <h3 id="六顶思考帽">六顶思考帽</h3>
 <p>这是 Edward de Bono 在 1985 年提出的思维方法：</p>
 <p>六种颜色的「帽子」代表六种思维角色，强迫自己从完全不同的角度审视同一个问题。</p>
-<p><img alt="六顶思考帽" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-005-68d68b84.png"></p>
+<p><img alt="六顶思考帽" src="../assets/img/img-005-68d68b84-69b8e9dc7e.png"></p>
 <p>六顶思考帽</p>
 <p>白色看事实，红色看直觉，黑色挑毛病，黄色找价值，绿色想替代方案，蓝色负责主持收尾。</p>
 <p>几年前，对于许多靠谱或不靠谱的想法，我都会用六顶思考帽进行分析，能让我对事情的判断更全面一些，只是……每次都分析一轮还挺费脑子的。</p>
@@ -470,10 +470,10 @@
 <h3 id="Moxt">Moxt</h3>
 <p>我让 Claude Code 帮我来调研 AI 协作产品。我想的是，如果没有人把这事做好，那不行，或许我可以自己用一个周末来撸上一个。</p>
 <p>不过我显然是高估了自己的创意，Claude Code 给了我一些项目和推荐理由，我分别点开看了下，最终锁定了一个叫 Moxt 的产品：</p>
-<p><img alt="图片" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-006-313e1ff3.gif"></p>
+<p><img alt="图片" src="../assets/img/img-006-313e1ff3-70971c3ff3.gif"></p>
 <p>Moxt 我有些印象，我记得在 X 上刷到过。Claude Code 对它的介绍是「The Agent-Native Workspace」，核心卖点是 AI Teammates：</p>
 <p><strong>你可以在一个工作空间里创建多个 AI 同事，每个有自己的名字、头像、角色定义、记忆，还有共享的文件空间。</strong></p>
-<p><img alt="Moxt 首页" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-007-ccf65590.png"></p>
+<p><img alt="Moxt 首页" src="../assets/img/img-007-ccf65590-3a4295a02b.png"></p>
 <p>Moxt 首页</p>
 <p>而要说我为什么最终选了它……一开始也许，只是因为颜值吧。</p>
 <p>而且它的 UI 和 UX 很能给我一种舒服感，完全不像我自己用 AI 整出来的钢铁 UI。当然最吸引我的，是「AI Teammates 共享 Team Space」这个设定，完全符合我的场景需求。</p>
@@ -482,12 +482,12 @@
 <p>06</p>
 <h3 id="搭舞台">搭舞台</h3>
 <p>在 Moxt 里创建 AI Teammate 的流程很简单：填个名字，写句描述，点 Create。</p>
-<p><img alt="图片" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-008-806a5061.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-806a5061-4380025562.png"></p>
 <p>其中有一个细节是：每个 Teammate 创建后会自动做一轮 onboarding，去读工作空间里的 AGENTS.md（角色说明文件），然后主动问我「你希望我怎么沟通？我能做什么？」</p>
 <p>像新员工入职先问几个问题，而不是冷启动给一个空白聊天框。</p>
 <p>我一共创建了 6 个 Teammate，分别叫蓝帽、白帽、红帽、黑帽、黄帽、绿帽。</p>
 <p>Moxt 自动给每个配了跟角色气质匹配的 emoji 头像：红帽是激情红脸，黑帽是严肃暗绿脸，黄帽竖着大拇指。</p>
-<p><img alt="图片" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-009-afbdf9cc.png"></p>
+<p><img alt="图片" src="../assets/img/img-009-afbdf9cc-224c42b0b8.png"></p>
 <h3 id="位-AI-同事就位">位 AI 同事就位</h3>
 <p>接下来，我把 harness_draft.md 上传到了 Team Space，让所有帽子 Agent 们都能读到这份草稿。</p>
 <p>然后我给每顶帽子发了一份角色 brief。以蓝帽举例，发的是这样的：</p>
@@ -496,11 +496,11 @@
 <p>07</p>
 <h3 id="并行开工">并行开工</h3>
 <p>蓝帽做为主持大局的人，它先是读了一遍草稿，然后写了一份《评审议程》：5 个关键问题、5 个争议点，以及其他帽子的发言顺序。</p>
-<p><img alt="蓝帽写的评审议程" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-010-264c010b.jpg"></p>
+<p><img alt="蓝帽写的评审议程" src="../assets/img/img-010-264c010b-42d0e54e1d.jpg"></p>
 <p>蓝帽写的评审议程</p>
 <p>然后，其他的 5 顶帽子同时启动了。</p>
 <p>而且是真的同时跑：6 个 chat 各跑各的，互不阻塞。并且 Moxt 里的 6 个 Teammate 各有各的聊天历史，各有各的角色记忆。</p>
-<p><img alt="Team Space 全貌" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-011-03d71ca4.jpg"></p>
+<p><img alt="Team Space 全貌" src="../assets/img/img-011-03d71ca4-4d84f09211.jpg"></p>
 <p>Team Space 全貌</p>
 <p>这里更为重要的一点是：<strong>它们通过共享的 Team Space 文件来协作。</strong></p>
 <p>草稿就放在共享空间里，所有帽子都能读到。而它们写的评审输出也都回到共享空间，别的帽子同样看得到。</p>
@@ -509,29 +509,29 @@
 <h3 id="顶帽子最终交了-7-份文档-蓝帽出了两份-开头的议程和最后的综合-全文太长了不适合人类阅读-适合-AI-有几个印象深刻的点">顶帽子最终交了 7 份文档（蓝帽出了两份：开头的议程和最后的综合）。全文太长了不适合人类阅读（适合 AI），有几个印象深刻的点：</h3>
 <h3 id="红帽-直觉-的第一反应">红帽（直觉）的第一反应：</h3>
 <blockquote><p>“ 我有一种「给还没出生的孩子写育儿手册」的感觉。所有东西都完整、工整，但我不确定它是从真实的疼痛里长出来的，还是从理论推演里画出来的。</p></blockquote>
-<p><img alt="红帽的评审" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-012-0b558edc.jpg"></p>
+<p><img alt="红帽的评审" src="../assets/img/img-012-0b558edc-5fa8ef158f.jpg"></p>
 <p>红帽的评审</p>
 <p>这句话属于还是，有点扎心了……</p>
 <h3 id="黑帽-风险-挑了个结构性的逻辑漏洞">黑帽（风险）挑了个结构性的逻辑漏洞：</h3>
 <p>它发现我的草稿自己花了大量篇幅论证「模型自评会系统性偏高」，转头又在方案选择时说「单 Agent 自评够用了」。</p>
 <blockquote><p>“ 自评偏高的 Agent 恰恰无法发现自己在自评偏高。你不能指望一个系统性乐观的评审者告诉你「我太乐观了」。</p></blockquote>
-<p><img alt="黑帽的评审" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-013-e46fa1dc.jpg"></p>
+<p><img alt="黑帽的评审" src="../assets/img/img-013-e46fa1dc-2c53e94e01.jpg"></p>
 <p>黑帽的评审</p>
 <p>这个矛盾我还真是完全没注意到。但凡你有过和 AI 多次交流后写文档的经验，你就会知道这种情况是非常常见的。</p>
 <h3 id="黄帽-收益-换了个角度看">黄帽（收益）换了个角度看：</h3>
 <blockquote><p>“ 厨具都有了。能部署、能查数据库、能操作浏览器、能跑测试。HARNESS.md 就是一份食谱，把这些现成的工具串成一条链就好。</p></blockquote>
-<p><img alt="黄帽的评审" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-014-56b5d026.jpg"></p>
+<p><img alt="黄帽的评审" src="../assets/img/img-014-56b5d026-8f237d8e87.jpg"></p>
 <p>黄帽的评审</p>
 <h3 id="绿帽-别误会-它负责的是创意-提了个我压根没想到的方向">绿帽（别误会……它负责的是创意）提了个我压根没想到的方向：</h3>
 <p>每个 HARNESS.md 跑完后，把「成功路径」提取为一份精炼的「经验卡」。下次遇到类似任务，先检索经验池来预填模板。</p>
 <p><strong>越跑越多，经验池越丰富，新 Harness 质量越高，又产出更好的经验卡。</strong></p>
-<p><img alt="绿帽的评审" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-015-86206a6b.jpg"></p>
+<p><img alt="绿帽的评审" src="../assets/img/img-015-86206a6b-3495438861.jpg"></p>
 <p>绿帽的评审</p>
 <p>这不就是自我进化了吗，真的还得是 AI，比我想的更 AI……</p>
 <p>我的初版里压根没想到这一层。</p>
 <h3 id="最后-蓝帽做了最终综合">最后，蓝帽做了最终综合：</h3>
 <p>11 条具体修改建议，3 个需要我拍板的分歧点，8 个按优先级排序的 TODO。</p>
-<p><img alt="蓝帽综合报告" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-016-b88fac5e.jpg"></p>
+<p><img alt="蓝帽综合报告" src="../assets/img/img-016-b88fac5e-971d9ac581.jpg"></p>
 <p>蓝帽综合报告</p>
 <p>其中有一条建议我特别认同：草稿的定位应该从「调研报告」转为「试点计划」。</p>
 <p><strong>红帽说了，有理论有结构有模板，但没有故事。那就去跑一个真实任务，让案例本身成为故事。</strong></p>
@@ -542,7 +542,7 @@
 <p>不过，在整个 Moxt 的使用过程中值得我关注的，倒不是哪顶帽子说了什么惊人的话，而是 <strong>6 个 Agent 之间确实在实时通过文件协作</strong>。</p>
 <p>黑帽挑毛病的时候，引用了白帽验证过的事实：「白帽已确认该项目实际主语言是 Shell 和 Go」。</p>
 <p>蓝帽做综合的时候，标注了每条建议的出处：「综合黑帽结构性盲区质疑 + 绿帽 AI 同事作为 Evaluator 创意 + 黄帽低成本启动原则」。</p>
-<p><img alt="六顶帽子通过 Team Space 协作" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-017-92351f5b.png"></p>
+<p><img alt="六顶帽子通过 Team Space 协作" src="../assets/img/img-017-92351f5b-7315fcf213.png"></p>
 <p>六顶帽子通过 Team Space 协作</p>
 <p>它们并非各写各的，而是在实时读取对方的产出，然后在自己的输出里引用、回应、反驳。</p>
 <p><strong>这才是 Workspace 的意义：给一组 AI 一张共享的工作台，而不只是一个聊天窗口。</strong></p>
@@ -554,7 +554,7 @@
 <p>不过 Moxt 也有些使用上的小问题。</p>
 <p><strong>不能回滚：</strong>我第一次给帽子发 brief 的时候，本来想写多行文字，结果不小心敲了个回车（应该用 Shift+Enter 换行），结果就直接发送了。虽然可以中止，但我没找到怎么取消重来。</p>
 <p><strong>CLI 没有 API Key 入口：</strong>我让 Claude Code 找到 Moxt 有个 CLI 工具（<code>@moxt-ai/cli</code>），用它需要 API Key，但在它的网站里里找不到这个 Key 在哪，不知道是我不会找，还是光做了个工具……但钥匙没配好（我推测是正在开发快上线，没想到被我的 AI 找到了）。</p>
-<p><img alt="Enter 误发与 CLI 钥匙" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-018-2f9a57e3.png"></p>
+<p><img alt="Enter 误发与 CLI 钥匙" src="../assets/img/img-018-2f9a57e3-85c52dc790.png"></p>
 <p>Enter 误发与 CLI 钥匙</p>
 <p>前一个还好不太碍事，后一个有点不太符合我爱在终端里用的习惯……</p>
 <p>11</p>
@@ -562,7 +562,7 @@
 <p>Moxt 联创张昊然在其<a href="https://mp.weixin.qq.com/s?__biz=MzI0ODM2MzEzOQ==&amp;mid=2247484050&amp;idx=1&amp;sn=15879dd6f41da222121540ac69df701f&amp;scene=21#wechat_redirect">公众号文章</a>中，提到了一个概念：零摩擦。</p>
 <p>AI 处理信息的速率太快、带宽太大，哪怕只有 1% 的非原生损耗，在复杂任务的 n 次操作后也会被指数级放大。</p>
 <p>所以 Moxt 把所有内容都转成了 .md、.csv、.html 这些 AI 原生的格式，知识组织用的是文件系统的目录结构。</p>
-<p><img alt="AI 原生格式 vs 传统格式" src="../../_assets/20260511-Harness四要素循环与六顶思考帽-验证先行让Agent跑几小时/img-019-1af12ea7.png"></p>
+<p><img alt="AI 原生格式 vs 传统格式" src="../assets/img/img-019-1af12ea7-b52d1621dd.png"></p>
 <p>AI 原生格式 vs 传统格式</p>
 <p>回头看我这次为什么六顶思考帽能跑得通，也正是因为 AI 读写的就是最原生的 Markdown，存放在它们完全理解的目录里，所以才能更好的互相引用和回应。</p>
 <p>Moxt 看起来还很早期，功能也在完善中。它的方向是：给 AI 一个真正适合它们工作的环境，而不只是在旧工具上加个聊天框。</p>

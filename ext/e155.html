@@ -427,7 +427,7 @@
 <p>Pi 少做的是内置工作流，不是放弃运行时工程。它的 <code>Session</code>、<code>Operation</code>、<code>Lane</code> 和 <code>AgentHarness</code>，都在处理长任务、恢复和状态记录。默认入口很薄，底下的实现并不简单。</p>
 <p>核心代码只管几件事</p>
 <p>Pi 的 monorepo 分得很清楚。<code>pi-ai</code> 处理不同模型提供方的接口，<code>pi-agent-core</code> 处理 Agent 消息、工具调用和事件，<code>pi-coding-agent</code> 组合编码场景，<code>pi-tui</code> 负责终端界面，其他能力再由应用层和扩展接上。</p>
-<p><img alt="Pi 的包结构与运行时分层" src="../../_assets/20260910-从Pi看Agent-Harness设计取舍/img-001-c28ce626.png"></p>
+<p><img alt="Pi 的包结构与运行时分层" src="../assets/img/img-001-c28ce626-76aee1bf51.png"></p>
 <p>Pi 的包结构与运行时分层</p>
 <p>图 1：模型接口、Agent Loop、编码场景和终端界面分别落在不同的包里。</p>
 <p>这几个包可以单独拿出来使用。只想统一模型接口，可以停在 <code>pi-ai</code>；需要一个 Agent Loop，可以使用 <code>pi-agent-core</code>；要完整的终端编码体验，再进入 <code>coding-agent</code>。上层的工作流没有反过来污染底层契约，这比“所有功能都可配置”更能说明它为什么容易嵌入别的产品。</p>
@@ -439,11 +439,11 @@
 <p>另外还有 <code>nextRun</code>，它消费的是下一次运行才处理的输入。<code>steer</code>、<code>followUp</code> 和 <code>nextRun</code> 分开以后，“现在改方向”“做完当前任务再继续”和“下次启动时再处理”不会挤在同一个队列里。</p>
 <p>模型内部使用的是 <code>AgentMessage</code>。真正调用 Provider 前，Pi 会经过 <code>convertToLlm</code>，把带有运行时信息的内部消息转换成模型接口能理解的消息格式；Provider 的差异留在适配层，Loop 和工具不需要知道每家 API 的细节。</p>
 <p>工具批次可以并行执行，但结果落盘仍按模型给出的顺序处理。事件通过事件流发出去，终端界面只负责订阅和渲染。这样的安排让 <code>pi-tui</code> 不必把业务状态再实现一遍。</p>
-<p><img alt="Pi 的 Trace 与 Turn 嵌套" src="../../_assets/20260910-从Pi看Agent-Harness设计取舍/img-002-7eb4ea83.png"></p>
+<p><img alt="Pi 的 Trace 与 Turn 嵌套" src="../assets/img/img-002-7eb4ea83-0128ed5a40.png"></p>
 <p>Pi 的 Trace 与 Turn 嵌套</p>
 <p>图 2：一次运行包含多个 Turn，只有模型继续返回工具调用时才进入下一轮。</p>
 <p>Loop 里最值得看的，不是“用了两层循环”，而是停止条件写得很清楚：没有工具调用时自然结束，模型报错或被中止时收尾，工具或 Hook 可以请求终止，当前批次的工具结果也可能触发结束，内层结束后还要检查 <code>followUp</code> 是否为空。</p>
-<p><img alt="Pi 根据 stopReason 决定继续或停止" src="../../_assets/20260910-从Pi看Agent-Harness设计取舍/img-003-4068e29c.png"></p>
+<p><img alt="Pi 根据 stopReason 决定继续或停止" src="../assets/img/img-003-4068e29c-994482e567.png"></p>
 <p>Pi 根据 stopReason 决定继续或停止</p>
 <p>图 3：<code>toolUse</code> 继续进入工具执行，<code>stop</code> 正常结束，<code>error</code> 和 <code>aborted</code> 进入失败收尾。</p>
 <p>用户按下 Ctrl+C 时，已经完成的工具结果仍会先写入历史，后面的模型请求再沿统一的中止路径结束。这个细节能避免会话停在一个只有半截结果的状态。</p>
@@ -453,10 +453,10 @@
 <p>同时，Operation 记录运行过程：一次运行何时开始和结束，某个步骤尝试过几次，工具何时启动，队列何时入列或取消，延迟写入是否完成，以及本次用量。这两类记录放在一起，才能同时回答“发生过什么”和“这次是怎么走到这里的”。</p>
 <p>模型下一轮真正看到的内容，是从当前分支投影出来的工作集。<code>buildSessionContext</code> 沿着当前路径读取 Entry，恢复模型、思考等级和活动工具状态，再把消息、压缩摘要、分支摘要和扩展内容拼成上下文。</p>
 <p><strong>完整历史留下来，当前工作集按需生成。</strong>这是 Pi 会话树的关键。用 <code>/tree</code> 回到旧节点，或者从某个节点 <code>/fork</code>，并不是把一段文本复制成新对话，而是在同一份历史上换一条路径继续走。</p>
-<p><img alt="Pi Agent 的 Memory 分层" src="../../_assets/20260910-从Pi看Agent-Harness设计取舍/img-004-6f41668c.png"></p>
+<p><img alt="Pi Agent 的 Memory 分层" src="../assets/img/img-004-6f41668c-9babb2e7b9.png"></p>
 <p>Pi Agent 的 Memory 分层</p>
 <p>图 4：Session 保存原始记录，上下文只装入当前任务需要的部分。</p>
-<p><img alt="Pi 的上下文组装流程" src="../../_assets/20260910-从Pi看Agent-Harness设计取舍/img-005-6f879b32.png"></p>
+<p><img alt="Pi 的上下文组装流程" src="../assets/img/img-005-6f879b32-7c8195b235.png"></p>
 <p>Pi 的上下文组装流程</p>
 <p>图 5：分支、资源、压缩摘要和扩展内容经过整理、转换后再发给模型。</p>
 <p>这和 Codex 的 <code>notes</code>、<code>history</code>、新窗口是两种不同的实现。Pi 把分支、Entry 和摘要放在同一棵会话树里；Codex 的实验路径把交接信息和历史回查拆得更开。它们面对的是同一个现实：模型眼前的上下文可以重建，任务已经产生的事实不能只靠模型记住。</p>
@@ -527,7 +527,7 @@ Anthropic工程师：我们日常如何使用Claude Code
 <blockquote><p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p></blockquote>
 <h3 id="架构师">架构师</h3>
 <p>我们都是架构师！</p>
-<p><img alt="图片" src="../../_assets/20260910-从Pi看Agent-Harness设计取舍/img-006-e42ccfbe.webp"></p>
+<p><img alt="图片" src="../assets/img/img-006-e42ccfbe-667a56850f.webp"></p>
 <h3 id="关注架构师-JiaGouX-添加-星标">关注架构师(JiaGouX)，添加“星标”</h3>
 <h3 id="获取每天技术干货-一起成为牛逼架构师">获取每天技术干货，一起成为牛逼架构师</h3>
 <h3 id="技术群请加若飞-1321113940-进架构师群">技术群请加若飞：1321113940 进架构师群</h3>

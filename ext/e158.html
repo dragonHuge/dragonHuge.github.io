@@ -473,52 +473,52 @@
 <p>我尝试用一些实验，来回答：</p>
 <p>这么多模型，到底哪些 harness 是必需的？拿掉什么会翻车？加什么能救命？</p>
 <p>是不是一定要思考程度拉满？ 结果发现，做好关键harness，小模型同样可以做到好效果&amp;省钱。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-001-d0abeea6.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-d0abeea6-9b41977a5c.png"></p>
 <h3 id="准备工作">准备工作</h3>
 <p>这个月龙虾的订阅，买的是阶跃星辰的Step Plan（几个月的订阅比较下来，最后发现还是喜欢这种文本、语音、图像 全模态all in one的订阅。）</p>
 <p>而且这个订阅，关于文本模型就有好几种： step-3.5-flash（196B MoE，11B 激活，高速推理）、step-3.5-flash-2603（基于 flash 做了 agent 场景强化）、step-router-v1（自动在 deepseek-v4-pro 和 step-3.5-flash 之间路由）。不同尺寸，有agent特调版本，可以指定不同思考深度，非常适合来做这个验证。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-002-b26a339c.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-b26a339c-21b98e4cc0.png"></p>
 <p>@LawrenceW_Zen 最近发了一份挺完整的 coding agent 调研，分享了一个 hero-coding 的开源 Go 框架，大约 400 行代码。 我直接复用了 hero-coding，做了 Windows 适配，接入了 Step Plan。</p>
 <p>Opus 4.7给我准备了3个任务，三个梯度的任务。 最简单的修一行 bug，中等的加功能写测试，最难的 us-003 是从零实现一个完整的多范围解析器，设置了很多条件，12 条验收标准。</p>
 <p>简单和中等任务没什么好说的，两个模型全过。step-3.5-flash反而是最快的，30 次工具调用 48 秒搞定中等任务。</p>
 <p>这其实非常符合Boris说的，在很多场景下，你可能不需要什么 harness 了。 甚至小尺寸的worker模型照样可以完成的很好，速度更快，更便宜。只需要把复杂的规划任务交给大尺寸的模型就可以了。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-003-7de241f0.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-7de241f0-f7d6d3fdc6.png"></p>
 <p>但 us-003 的结果就很有意思了。。。</p>
 <p>我一开始用 step-3.5-flash， 裸跑这个任务的时候，没有任何harness的时候。</p>
 <p>flash根本停不下来，它做了267次工具调用。 round1 做了91次撞了5分钟条件限制，Round 2 做了 23 次自然停下来但代码编译不过，Round 3 又做了 153 次再次撞墙。三轮跑满，gave_up。</p>
 <p>但其实有一个特讽刺的事情，flash 其实写对了代码。</p>
 <p>它把功能全实现了，测试也写了，代码逻辑是对的。但它不知道自己写对了。写完之后继续改，改出新 bug，又改，又出新 bug，循环往复直到超时。</p>
 <p>所以第一个护栏特简单，给一个工具调用上限，80次就够了。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-004-ebafce60.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-ebafce60-caa781d7a6.png"></p>
 <p>但是直接限制次数不够，因为架构设计。 被 kill 的时候代码已经写好了，但没 commit。kill 之后工作区重置，代码还是丢了。所以还需要第二个东西，auto-rescue commit。在 worker 被 kill 之后，工作区重置之前，自动执行一次 <code>git add -A &amp;amp;&amp;amp; git commit</code>。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-005-db8907f7.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-db8907f7-5730bebd5c.png"></p>
 <p>就这2个护栏，加上之后，step-3.5-flash就可以在151s内成功通过us-003了。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-006-cddeb224.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-cddeb224-a4dc19a898.png"></p>
 <p>所以，harness其实可能不会是什么高端、顶级的trick操作，只需要观察模型行为，补充一些让模型行为轨迹正确的操作就够了。</p>
 <p>但从上图可以看出来，step-3.5-flash-2603在这个case上还是失败了，同样的harness，但是输给了基础版本。</p>
 <p>我分析了一下日志。step-3.5-flash-2603的agent优化，表现上会更谨慎，模型改了一些就跑一次测试。简单任务，这样可以更快确认。但是在复杂任务上，每步验证就把工具调用额度用完。</p>
 <p>OpenAI 说「Scaffolding is coping, not scaling」， step-3.5-flash-2603恰好反过来，它内化了太多 scaffolding 行为，在有限 budget 下反而丧失了效率。但其实它真正的原因是反馈失效了，原始的hero-coding框架，judge提供给worker的反馈缺失了详细的完整验证堆栈信息。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-007-c7733587.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-c7733587-eb4d042a96.png"></p>
 <p>就这么一行代码。 step-3.5-flash-2603 ，一轮就过了。 这可能就是harness的魅力！</p>
 <p>日常，我们选择模型的时候，还会选择，用不用thinking，用什么程度的thinking。</p>
 <p>其实真的没必要什么都用最顶级，最大，最高推理的模型。同样用us-003测试了下，在low推理下。step-3.5-flash-2603 全场最快，一轮通过。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-008-909e2cb5.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-909e2cb5-0968e6ddd6.png"></p>
 <p>在低推理模式下模型每次输出更短、更聚焦，不花 token 犹豫。而好的 feedback 替代了内部推理，代码有 bug 时不需要模型自己推理出问题在哪，harness 直接告诉它。</p>
 <p>Harness 不是模型的拐杖，是模型的杠杆。</p>
 <p>但是harness不是随便抄过去都是有用的，错误的 harness 可能比没有 harness 更危险。</p>
 <p>我测试在prompt层面，给step-3.5-flash-2603 加一个结构化 Planning Prompt，先读代码，写计划，再执行。</p>
 <p>结果，整个系统钻了个judge漏洞，没有做任何代码更新。。。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-009-03568b89.png"></p>
+<p><img alt="图片" src="../assets/img/img-009-03568b89-fc4893e513.png"></p>
 <p>Cognition 的博客，也谈过类似的话题，对于Agent壳子来说，最大的失败模式不是模型写错代码，而是系统层面的设计错误，给了不该给的约束，或者没给该给的信号。</p>
 <p>问题来了，加规则，结果失败了，那这个合理吗？ 其实不合理，现在比较成熟的Agent架构，基本都可以收敛到下面这张图。有思考的脑子，有干活的手，持续的循环迭代。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-010-63330787.png"></p>
+<p><img alt="图片" src="../assets/img/img-010-63330787-ee6f13fdf5.png"></p>
 <p>所以，Agent系统的脑子，手，完全可以用不同的模型。前面的一些护栏都是围绕单一模型，但前面的数据也可以观察到 step-router-v1，大多时候只要给够时间，都能通过，唯一的问题就是慢。</p>
 <p>可以进一步考虑干活用更快的模型，但是做规划，做Judge用更大更好的模型。</p>
 <p>我在us-003，做了进一步的对照。让step-router-v1负责思考统筹， step-3.5-flash-2603做快速执行，这样会不会又快又好了？ 结果是的，在前面最好的基础上，进一步取得了巨大的进步，只花了step-3.5-flash-2603 一半的时间，就达标了。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-011-b91a83d0.png"></p>
+<p><img alt="图片" src="../assets/img/img-011-b91a83d0-34fb656233.png"></p>
 <p>更关键的是，除了耗时变成一半，token消耗可能只有1/3。 Worker / Judge 用不同模型，在cognition的博客里边称为 “smart friend routing”。</p>
 <p>Scale AI的数据说，harness 对 SWE-bench 分数贡献在 5-15 个百分点。而且这些百分点会越来越集中在“模型无法自己做到的事”，比如物理约束、确定性验证... 所以这可能才是harness今天爆火主要原因吧。</p>
-<p><img alt="图片" src="../../_assets/20260512-最小必需Harness实验-工具调用上限+auto-rescue-commit+smart-frien/img-012-728cec72.png"></p>
+<p><img alt="图片" src="../assets/img/img-012-728cec72-4f70784c43.png"></p>
 <h3 id="写在最后">写在最后</h3>
 <p>从前面测试来看，像 step-3.5-flash 这种 200b 左右的模型，完全可以扛住日常高频的 coding 任务，速度极快，30 次调用搞定别人 50+ 次的事。</p>
 <p>甚至，step-3.5-flash-2603 配了简单的护栏，在低推理模式下，跑出了最好的表现。 实际体验下来，日常用 step-3.5-flash 做 worker，复杂规划交给 step-router-v1 动态路由到 deepseek-v4-pro，这种分工方式配上 harness，token 能省到很夸张。</p>

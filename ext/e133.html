@@ -413,10 +413,10 @@
 <p>在这背后，是在 <code>10万</code> 张国产芯片提供的推理算力基础上，进一步<strong>加大对 Infra 侧的投入与推理优化</strong></p>
 <h3 id="GLM-的-Infra-由-GLM-构建">GLM 的 Infra，由 GLM 构建</h3>
 <p>跑 Flash 的这套 Infra，是由 GLM-5.3 驱动 Agent 构建的，从模型适配一路做到生产上线，前后不到两周，端到端吞吐做到了初始基线的 <strong>3 倍</strong></p>
-<p><img alt="GLM-5.3-Flash 从首次运行到正式上线的性能演进" src="../../_assets/20260918-GLM-5.3-FlashX上线200tokens每秒/img-001-9a99d3b1.jpg"></p>
+<p><img alt="GLM-5.3-Flash 从首次运行到正式上线的性能演进" src="../assets/img/img-001-9a99d3b1-36c7c0b861.jpg"></p>
 <p>GLM-5.3-Flash 从首次运行到正式上线的性能演进</p>
 <p>在构建的过程中，人负责定目标、设边界，搭好反馈环境，以及关键的修改审核 而对于测试、日志、Trace、微基准都接给 Agent，它自己查问题、改代码、跑实验，局部验证通过，再放回完整服务里验收，完成「<strong>稠密反馈</strong>」</p>
-<p><img alt="基于稠密反馈的 Infra Agent 优化闭环" src="../../_assets/20260918-GLM-5.3-FlashX上线200tokens每秒/img-002-07faaba9.png"></p>
+<p><img alt="基于稠密反馈的 Infra Agent 优化闭环" src="../assets/img/img-002-07faaba9-c2cf48d4ec.png"></p>
 <p>基于稠密反馈的 Infra Agent 优化闭环</p>
 <p>下面是构建、优化这套推理系统时的三个案例。</p>
 <h3 id="案例一-输入是-FP32-计算却用了-TF32">案例一：输入是 FP32，计算却用了 TF32</h3>
@@ -425,12 +425,12 @@
 <h3 id="案例二-KV-Transfer-被-GIL-卡住了">案例二：KV Transfer 被 GIL 卡住了</h3>
 <p>同样的 workload，Prefill 加上传输后，与单独 Prefill 的性能差距要求不超过 <strong>5%</strong>，测试却跑出了 <strong>20% 以上</strong>。Agent 翻看 Trace，发现 KV Transfer 的 Python 侧执行，始终没能和 DeepEP 的 dispatch/combine 调用重叠。</p>
 <p>再往下查，DeepEP v1.2.1 的两处 C++ 调用没有释放 GIL，负责 Mooncake Transfer 的 Python 线程拿不到锁，传输任务迟迟交不出去。改完，同样测试条件下，性能差距降到了 <strong>1% 以内</strong>。</p>
-<p><img alt="KV Transfer 并发瓶颈的排查与修复" src="../../_assets/20260918-GLM-5.3-FlashX上线200tokens每秒/img-003-737a0da4.jpg"></p>
+<p><img alt="KV Transfer 并发瓶颈的排查与修复" src="../assets/img/img-003-737a0da4-fb776bdfe9.jpg"></p>
 <p>KV Transfer 并发瓶颈的排查与修复</p>
 <h3 id="案例三-同一组计算-做了四遍">案例三：同一组计算，做了四遍</h3>
 <p>KDA Decode 沿 V 维度分块，同一组 FP32 归一化和门控计算，被不同分块重复做了四遍。</p>
 <p>Agent 把这些分块合到同一线程块里，提前批量计算，共享中间结果。并行度少了一些，重复计算也去掉了；这一步，算子性能提高到优化前的 <strong>1.71 倍</strong>。</p>
-<p><img alt="KDA Decode 算子从基础实现到生产版本的性能演进" src="../../_assets/20260918-GLM-5.3-FlashX上线200tokens每秒/img-004-a7e55849.png"></p>
+<p><img alt="KDA Decode 算子从基础实现到生产版本的性能演进" src="../assets/img/img-004-a7e55849-597b25b092.png"></p>
 <p>KDA Decode 算子从基础实现到生产版本的性能演进</p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>

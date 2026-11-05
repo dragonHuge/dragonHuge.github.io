@@ -494,11 +494,11 @@ pi</code></pre>
 <p>2026 年了，人人都想造一个自己的 AI Agent。</p>
 <p>不需要从零开始踩坑，不需要从头造轮子。</p>
 <p>今天推荐的开源项目已经把 Agent 底层架构打磨得非常干净了。如果你想开发属于自己的 Agent，这个项目值得研究透彻。</p>
-<p><img alt="图片" src="../../_assets/20260427-pi-mono-OpenClaw底层极简Agent运行时与7包模块化架构/img-001-0326ee50.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-0326ee50-a82f00596f.png"></p>
 <p>它就是 pi-mono。</p>
 <p>OpenClaw 的核心运行时，就是基于 Pi 的 SDK 构建的。</p>
 <p>OpenClaw 的 README 里直接写了：特别感谢 Mario Zechner 的支持以及 pi-mono。</p>
-<p><img alt="图片" src="../../_assets/20260427-pi-mono-OpenClaw底层极简Agent运行时与7包模块化架构/img-002-57c4da1d.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-57c4da1d-81d51b090c.png"></p>
 <p>Pi-mono 也借 OpenClaw 的成功一路冲到了 4 万 GitHub Star。</p>
 <p>对于一个底层工具链项目来说已经很猛了。</p>
 <p>那 OpenClaw 为什么选 Pi 做底层？</p>
@@ -507,11 +507,11 @@ pi</code></pre>
 <h3 id="项目简介">项目简介</h3>
 <p>pi-mono 是一个 TypeScript 单仓项目，专门用来构建 AI Agent 和管理 LLM 部署。</p>
 <p>核心产品叫 Pi，是一个跑在终端里的编程 Agent，你可以在项目目录里直接用它读文件、写文件、编辑代码、执行命令。</p>
-<p><img alt="图片" src="../../_assets/20260427-pi-mono-OpenClaw底层极简Agent运行时与7包模块化架构/img-003-0ba7e9b3.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-0ba7e9b3-39e3654147.png"></p>
 <p>它的作者是 Mario Zechner，网名 badlogic，libGDX 游戏框架的作者。他在 AI Engineer London 上做过一个演讲。</p>
 <p>标题就叫：我讨厌每一个 Coding Agent，所以我自己写了一个。</p>
 <p>挺霸气的。</p>
-<p><img alt="图片" src="../../_assets/20260427-pi-mono-OpenClaw底层极简Agent运行时与7包模块化架构/img-004-d33347c7.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-d33347c7-6d3b6d9ef8.png"></p>
 <p>-</p>
 <pre><code>开源地址：github.com/badlogic/pi-mono</code></pre>
 <p>02</p>
@@ -534,7 +534,7 @@ pi</code></pre>
 <p>这也是为什么 OpenClaw 选了它，底层足够干净，上面才能搭出足够复杂的东西。</p>
 <p>03</p>
 <h3 id="架构拆解-七个包各司其职">架构拆解，七个包各司其职</h3>
-<p><img alt="图片" src="../../_assets/20260427-pi-mono-OpenClaw底层极简Agent运行时与7包模块化架构/img-005-f9be0b4a.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-f9be0b4a-74cbc7a122.png"></p>
 <p>pi-mono 把 Agent 开发需要的每一层都拆成了独立的 npm 包，你需要哪层用哪层：</p>
 <p><strong>pi-ai</strong>：统一的多提供商 LLM API。</p>
 <p>一个接口对接 20 多个 LLM 提供商，包括 OpenAI、Anthropic、Google、Azure、Kimi、MiniMax、Hugging Face 等等。</p>
@@ -542,7 +542,7 @@ pi</code></pre>
 <p>这个包完全可以单独拿出来用。</p>
 <p><strong>pi-agent-core</strong>：Agent 运行时。</p>
 <p>负责工具调用循环、状态管理、上下文维护这些核心逻辑。只依赖 pi-ai，非常轻量。</p>
-<p><img alt="图片" src="../../_assets/20260427-pi-mono-OpenClaw底层极简Agent运行时与7包模块化架构/img-006-b1cec1e3.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-b1cec1e3-166186d10d.png"></p>
 <p><strong>pi-coding-agent</strong>：终端编程 Agent 主产品。</p>
 <p>就是那个 <code>pi</code> 命令行工具，包含完整的会话管理、扩展系统、UI 渲染。</p>
 <p>它也暴露了 SDK，OpenClaw 就是通过这个 SDK 把 Pi 嵌入到自己的网关里的。</p>
@@ -612,12 +612,12 @@ pi install git:github.com/user/repo</code></pre>
 <p>贡献机制很独特，新贡献者的 Issue 和 PR 默认自动关闭，维护者每天审核后重新打开有价值的。</p>
 <p>通过 lgtmi 和 lgtm 两个等级晋升，拿到 lgtm 才能提交 PR。</p>
 <p>唯一的规则就一条：你必须理解你的代码。用 AI 写代码可以，但不理解就提交不行。</p>
-<p><img alt="图片" src="../../_assets/20260427-pi-mono-OpenClaw底层极简Agent运行时与7包模块化架构/img-007-2208dd32.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-2208dd32-e5715118b8.png"></p>
 <p>还有 OSS Session 分享计划。</p>
 <p>Mario 鼓励用户把真实的编程会话数据发布到 Hugging Face，包含完整的工具调用、失败和修复过程。</p>
 <p>他认为这种真实数据比玩具基准测试有价值得多。</p>
 <p>他自己也在 Hugging Face 上公开了 627 条以上的 pi-mono 工作会话。</p>
-<p><img alt="图片" src="../../_assets/20260427-pi-mono-OpenClaw底层极简Agent运行时与7包模块化架构/img-008-883d6e5f.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-883d6e5f-3782553558.png"></p>
 <p>Pi-mono 把核心做到极致精简，然后通过扩展机制让生态自然生长。</p>
 <p>OpenClaw 的成功就是最好的证明。</p>
 <p>最简洁的底层，支撑起了最复杂的应用。</p>
@@ -627,7 +627,7 @@ pi install git:github.com/user/repo</code></pre>
 <p>07</p>
 <h3 id="点击下方卡片-关注逛逛-GitHub">点击下方卡片，关注逛逛 GitHub</h3>
 <p>这个公众号历史发布过很多有趣的开源项目，如果你懒得翻文章一个个找，你直接关注微信公众号：逛逛 GitHub ，后台对话聊天就行了：</p>
-<p><img alt="图片" src="../../_assets/20260427-pi-mono-OpenClaw底层极简Agent运行时与7包模块化架构/img-009-c5446809.webp"></p>
+<p><img alt="图片" src="../assets/img/img-009-c5446809-4c1a6ce76d.webp"></p>
 <p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>

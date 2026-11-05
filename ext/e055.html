@@ -415,13 +415,13 @@
 <p>上一篇讲了 <strong>企微气泡：显示坏了先查展示层</strong>——出口怎么把事件变成用户看得懂的东西。</p>
 <p>今天回到内核。真正跑 Agent 的是 Code 类 Agent SDK 加命令行进程，网页、IM 与 IDE 都只是宿主。这句话我是在踩过坑之后才真正接受的：有一次我们讨论「IM 里的工具清单为什么和 IDE 对不上」，我坚持认为是两个团队各写了一份能力，花了一周去对表。最后发现内核是同一套，工具栏不一样只是因为宿主策略没对齐——该对的表在宿主层，我却带着人去内核层找。</p>
 <p>产品名不等于架构。分不清这两件事，排障时三拨人会分别去查网关、查模型配额、查气泡，然后谁也说服不了谁。</p>
-<p><img alt="封面：双面宿主" src="img-001-b5f0423f.png"></p>
+<p><img alt="封面：双面宿主" src="../assets/img/img-001-b5f0423f-6148269c2a.png"></p>
 <h2 id="先花一分钟对齐几个词">先花一分钟对齐几个词</h2>
 <table><thead><tr><th>词</th><th>说人话是什么意思</th></tr></thead><tbody><tr><td><strong>Agent SDK + 命令行进程</strong></td><td>真正跑工具循环的内核，负责调用工具、迭代消息块</td></tr><tr><td><strong>宿主</strong></td><td>把内核接进某个使用环境的外壳：网页 / IM / IDE 各是一个宿主</td></tr><tr><td><strong>有 UI 宿主 / 无头宿主</strong></td><td>前者有弹窗可以问人（IDE），后者没有（网页、IM、自动化）</td></tr><tr><td><strong>消息块流</strong></td><td>SDK 吐出来的是一个个消息块，不是一个越来越长的字符串</td></tr><tr><td><strong>呈现</strong></td><td>宿主把消息块翻译成自己出口能表达的事件</td></tr><tr><td><strong>人机确认通道</strong></td><td>工具需要人拍板时，人能从哪里看到并回应</td></tr><tr><td><strong>文本降级</strong></td><td>没有弹窗时，用选项文本把问题回喂给模型与用户</td></tr><tr><td><strong>产物旁路</strong></td><td>生成的文件不塞进事件流，走独立下载通道</td></tr></tbody></table>
 <p>（<code>CLI</code>、<code>SSE</code>、<code>SDK</code>、<code>MCP</code>、<code>Modal</code>、<code>Hook</code>、<code>MIME</code> 这类通用名词就不解释了。）</p>
 <hr>
 <h2 id="01-三种-接了却说不清">01 | 三种「接了却说不清」</h2>
-<p><img alt="三种迷路" src="img-002-3176bf35.png"></p>
+<p><img alt="三种迷路" src="../assets/img/img-002-3176bf35-0ee0980e9a.png"></p>
 <p>把内核和宿主的关系想成<strong>同一位厨师，同时做堂食和外带</strong>：</p>
 <table><thead><tr><th></th><th>堂食</th><th>外带</th></tr></thead><tbody><tr><td><strong>谁做菜</strong></td><td>同一位厨师</td><td>同一位厨师</td></tr><tr><td><strong>能不能当面问客人</strong></td><td>能，走到桌边问「要辣吗」</td><td>不能，只能在订单上印选项</td></tr><tr><td><strong>客人怎么回应</strong></td><td>当场点头</td><td>打电话或按选项回复</td></tr><tr><td><strong>汤和面怎么装</strong></td><td>一碗端上来</td><td><strong>分盒装</strong>  ，不能把汤倒进面袋</td></tr><tr><td><strong>服务员要做什么</strong></td><td>摆盘、上菜、传话</td><td>打包、贴标签、写清食用说明</td></tr></tbody></table>
 <p><strong>厨师就是内核（SDK + 命令行进程），服务员就是宿主。</strong> 两边共用同一个厨房，但服务方式必须分开设计。</p>
@@ -441,14 +441,14 @@
 <p><strong>同一套内核，有 UI 与无 UI 的宿主各自要多做哪几件事，才不会把能力做成事故——这就是本篇要回答的。</strong></p>
 <hr>
 <h2 id="02-Agent-接入的几种姿势">02 | Agent 接入的几种姿势</h2>
-<p><img alt="接入姿势横评" src="img-003-976ceca4.png"></p>
+<p><img alt="接入姿势横评" src="../assets/img/img-003-976ceca4-5c2c9b98cb.png"></p>
 <p>横评之前先问清楚：你要的是「会回答」，还是「会在工作区里干活」？</p>
 <table><thead><tr><th>姿势</th><th>形态</th><th>强项</th><th>短板</th><th>适合</th></tr></thead><tbody><tr><td>透传到模型</td><td>无本地工具循环</td><td>简单、首字快</td><td>带不动工作区里的 Agent</td><td>纯问答</td></tr><tr><td>自研工具循环</td><td>完全可控</td><td>协议可裁剪</td><td>成本极高，容易与生态脱节</td><td>强定制平台</td></tr><tr><td>官方 SDK + 命令行进程</td><td>复用成熟的工具与 MCP</td><td>工程默认选项</td><td>要懂宿主适配</td><td>大多数「能干活」的产品</td></tr><tr><td>仅 IDE 扩展内嵌</td><td>有界面、有工作区</td><td>确认体验好</td><td>覆盖不了 IM 与 API</td><td>开发态</td></tr><tr><td>仅无头服务</td><td>事件流，无弹窗</td><td>覆盖网页 / IM / 自动化</td><td>人机确认必须降级</td><td>使用态</td></tr></tbody></table>
 <p>摘要：能复用 SDK 就别自研第二套循环，那是巨大的浪费。但<strong>宿主策略必须分开设计</strong>——有弹窗的确认通道，抄不到没有弹窗的场景上。</p>
 <p><strong>偷</strong>三样：官方 SDK 的工具循环、消息块流、权限回调入口；IDE 侧的弹窗产品感；无头侧的文本降级思路。 <strong>拒</strong>三样：为了「统一体验」在无头宿主假装有弹窗；为了「两边独立」维护两套分叉的内核；把大文件塞进事件流当成「简单处理」。</p>
 <hr>
 <h2 id="03-内核一个-宿主两套">03 | 内核一个，宿主两套</h2>
-<p><img alt="SDK 内核与双宿主" src="img-004-a0f9f1e9.png"></p>
+<p><img alt="SDK 内核与双宿主" src="../assets/img/img-004-a0f9f1e9-7f7735b203.png"></p>
 <p>工具循环、MCP 调用、消息块迭代是同构能力，所以内核应该共享同一套 SDK 加命令行进程，而不是各写一套编排。网页与 IM 没有可靠的弹窗而 IDE 有，所以人机确认必须按宿主分流，不能两边抄同一份。出口形态也不同——有的是事件流，有的是编辑器里的块，有的是气泡——所以呈现是宿主的义务，不是 SDK 的义务。</p>
 <table><thead><tr><th>面</th><th>形态</th><th>典型用户</th><th>宿主多做什么</th></tr></thead><tbody><tr><td><strong>无头服务宿主</strong></td><td>事件流，进程内连接池</td><td>网页 / IM / 对外接口</td><td>鉴权选路、池化与取消作用域、事件呈现、文本降级、产物旁路</td></tr><tr><td><strong>IDE 插件宿主</strong></td><td>扩展 + 内嵌界面，随包命令行进程</td><td>开发态</td><td>权限弹窗、多会话管理、工作区上下文、进程与持久化</td></tr></tbody></table>
 <pre><code>                 ┌──────────────────────┐
@@ -468,7 +468,7 @@
 <blockquote><p>先问 Agent SDK 宿主是谁，再问产品叫什么。</p></blockquote>
 <hr>
 <h2 id="04-流式吃的是事件-不是裸-token">04 | 流式吃的是事件，不是裸 token</h2>
-<p><img alt="事件流投影" src="img-005-55e8445f.png"></p>
+<p><img alt="事件流投影" src="../assets/img/img-005-55e8445f-5a7afa3e25.png"></p>
 <h3 id="不变量">不变量</h3>
 <p>SDK 吐出来的是<strong>消息块流</strong>，不是一个越来越长的字符串。宿主必须把它翻译成自己出口协议能表达的事件。</p>
 <p>无头侧常见的事件类型（示意）：</p>
@@ -512,7 +512,7 @@ async def project_stream(blocks: AsyncIterator[dict]) -&gt; AsyncIterator[Dict
 <p>IDE 通常按内容块渲染，连续的只读操作可以合并，复制给用户时丢掉过程块。文件更常直接落进工作区，但仍建议保留「产物声明」事件，方便界面展示。</p>
 <hr>
 <h2 id="05-人机确认取决于有没有通道">05 | 人机确认取决于有没有通道</h2>
-<p><img alt="Modal vs Hook 降级" src="img-006-7acb705f.png"></p>
+<p><img alt="Modal vs Hook 降级" src="../assets/img/img-006-7acb705f-b6ce900d40.png"></p>
 <p>这是两面差异最大的一个维度。</p>
 <p>IDE 有内嵌界面可以弹窗，所以权限请求、问卷类工具、模式切换可以走真正的人机回路。IM 与无头链路没有终端界面，所以同一个工具触发时必须拒绝并回喂可选项文本，或者走引导面板——否则就是人看不见的死等。</p>
 <p>这里有个实现上的坑值得单说：<strong>「拒绝并回喂选项文本」这条通路，光写代码是不够的</strong>。软拒绝的回调已经实现了，但只要这类工具还在默认的禁用清单里，命令行工具会在更前面就从协议层把它剔掉，模型压根看不到这个工具，也就拿不到回喂的选项。所以正确的顺序是<strong>先把这类工具从禁用清单里放出来，再谈回喂</strong>——只实现回喂而不放开，等于做了个永远不会被调用的分支。</p>
@@ -544,7 +544,7 @@ async def pre_tool_use(name: str, payload: dict) -&gt; dict:
 <p>生成文件可以用双通道感知（SDK 钩子加系统层文件监视），但上报必须旁路，不能堵在主事件循环上。</p>
 <hr>
 <h2 id="06-网页问一句并产出文件-走一遍全过程">06 | 网页问一句并产出文件，走一遍全过程</h2>
-<p><img alt="全过程" src="img-007-c886b8a7.png"></p>
+<p><img alt="全过程" src="../assets/img/img-007-c886b8a7-380a6d9ff6.png"></p>
 <p>端到端走一遍，带决策点。</p>
 <ol><li><strong>鉴权选路</strong> — 决策：进沙箱工作区还是开发工作区？未授权就发引导面板事件，而不是假装已登录去干等终端界面。</li></ol>
 <ol><li><strong>打开流式对话</strong> — 领取或冷启连接。决策：命中预热就合流，失败就冷启——提速手段不是开聊的前提。</li></ol>
@@ -556,7 +556,7 @@ async def pre_tool_use(name: str, payload: dict) -&gt; dict:
 <p>如果当初按「到处都有界面」来设计无头侧，第 4 步会变成用户看不见的死等；如果大文件进了事件流，第 5 步会把事件循环撑爆。两面共享内核，但绝不共享「到处都有弹窗」这个幻觉。</p>
 <hr>
 <h2 id="07-选型-五种接法怎么挑">07 | 选型：五种接法怎么挑</h2>
-<p><img alt="五维矩阵" src="img-008-3bd99a3c.png"></p>
+<p><img alt="五维矩阵" src="../assets/img/img-008-3bd99a3c-bc776c7cd2.png"></p>
 <table><thead><tr><th>维度</th><th>透传到模型</th><th>SDK + 无头宿主</th><th>SDK + IDE 宿主</th><th>自研工具循环</th><th>仅 IDE 内嵌</th></tr></thead><tbody><tr><td>工具与 MCP 能力</td><td>弱</td><td>强</td><td>强</td><td>强</td><td>视实现</td></tr><tr><td>人机确认</td><td>弱</td><td>文本降级</td><td>弹窗 + 产品模式</td><td>自定义</td><td>通常有界面</td></tr><tr><td>复用生态成本</td><td>低</td><td>中</td><td>中</td><td>高</td><td>中</td></tr><tr><td>两面分叉风险</td><td>—</td><td>低（共享内核）</td><td>低</td><td>高</td><td>高（与无头难对齐）</td></tr><tr><td>推荐场景</td><td>纯问答</td><td>使用态网页与 IM</td><td>开发态</td><td>强定制且有编制</td><td>单机插件</td></tr></tbody></table>
 <p>什么时候选谁：</p>
 <ul><li><strong>SDK + 双宿主</strong>：要同时服务 IM、网页与 IDE，又希望工具能力一致——默认架构。</li></ul>
@@ -565,7 +565,7 @@ async def pre_tool_use(name: str, payload: dict) -&gt; dict:
 <ul><li><strong>只做 IDE</strong>：入口永远是编辑器；但一旦要接企微，还是会回到双宿主问题。</li></ul>
 <hr>
 <h2 id="08-四个坑与一个额外误判">08 | 四个坑与一个额外误判</h2>
-<p><img alt="四个坑" src="img-009-22950249.png"></p>
+<p><img alt="四个坑" src="../assets/img/img-009-22950249-f83b3a51a0.png"></p>
 <h3 id="坑-1-产品名当架构">坑 1：产品名当架构</h3>
 <p><strong>诱因</strong>：对外品牌好记，对内图省事就用品牌称呼整条链路。 <strong>错解药</strong>：再接一个「备用模型」——层都没找对。 <strong>正解药</strong>：先画清内核与宿主的图：谁拉起命令行进程、谁翻译事件、谁做人机确认。口述不清就先别开工。</p>
 <h3 id="坑-2-无头侧沿用弹窗假设">坑 2：无头侧沿用弹窗假设</h3>

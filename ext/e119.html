@@ -409,7 +409,7 @@
 <h2 id="原文沉淀">原文沉淀</h2>
 <h3 id="目录">目录</h3>
 <ul><li><a href="#一jev-是什么把生成问题改成判断问题">一、Jev 是什么：把生成问题改成判断问题</a></li><li><a href="#二为什么-agent-需要一个快判断层">二、为什么 Agent 需要一个快判断层</a></li><li><a href="#第一层生成成本和判断需求不匹配">第一层：生成成本和判断需求不匹配</a></li><li><a href="#第二层摘要会破坏可复核性">第二层：摘要会破坏可复核性</a></li><li><a href="#第三层置信度没有进入代码分支">第三层：置信度没有进入代码分支</a></li><li><a href="#三fast-jev-compaction不做摘要只做保留决策">三、fast-jev-compaction：不做摘要，只做保留决策</a></li><li><a href="#四demo-实现拆解从历史消息到压缩决策">四、Demo 实现拆解：从历史消息到压缩决策</a></li><li><a href="#41-工具调用配对先把tool_use和tool_result绑定">4.1 工具调用配对：先把 tool_use 和 tool_result 绑定</a></li><li><a href="#42-state-构造只给-jev-判断所需信息">4.2 state 构造：只给 Jev 判断所需信息</a></li><li><a href="#43-fitstate预算不够时逐级降级">4.3 fitState：预算不够时逐级降级</a></li><li><a href="#44-两个-noul拆出三种压缩动作">4.4 两个 Noul：拆出三种压缩动作</a></li><li><a href="#这个工具调用本身是否还重要">这个工具调用本身是否还重要？</a></li><li><a href="#这个工具结果全文是否还需要保留">这个工具结果全文是否还需要保留？</a></li><li><a href="#45-分批请求与失败回退">4.5 分批请求与失败回退</a></li><li><a href="#五demo-跑出来了什么">五、Demo 跑出来了什么</a></li><li><a href="#六怎么选型jevstructured-output-和传统分类器">六、怎么选型：Jev、Structured Output 和传统分类器</a></li><li><a href="#七从项目-demo-到工程模式">七、从项目 Demo 到工程模式</a></li><li><a href="#八结语">八、结语</a></li></ul>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-001-d910c04f.gif"></p>
+<p><img alt="图片" src="../assets/img/img-001-d910c04f-7310d7e9a9.gif"></p>
 <p>作者：daryl，高级前端开发</p>
 <blockquote><p>丨 导语 从 TypeSafe AI 的 System One Model，到 <code>fast-jev-compaction</code> 的上下文剪枝，再到一个可运行的本地尝试</p></blockquote>
 <p>最近 Jev 很火。它的传播路径很典型：先是 TypeSafe AI 发布一个听起来有点反常识的新模型，再是 Hacker News、知乎、Reddit 开始争论，接着 GitHub 上很快出现一批 Demo。有人拿它玩 Doom，有人拿它跑 Mario，也有人拿它接进浏览器自动化、代码审查、Agent 路由和上下文压缩里。</p>
@@ -417,12 +417,12 @@
 <p>把几篇资料看完，再读 <code>fast-jev-compaction</code>，最后自己仿写了一个小 Demo 之后，我觉得它最值得聊的不是“模型本身有多神”，而是一个更具体的工程问题：</p>
 <p>Agent 里很多模型调用不是为了生成答案，而是为了替代码做一次判断。</p>
 <p>这句话如果成立，Jev 就不是“更便宜的 GPT”。它更像 Agent 系统里缺了很久的一个零件：快判断层。</p>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-002-a7f3b30b.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-a7f3b30b-71a9705961.png"></p>
 <h3 id="一-Jev-是什么-把生成问题改成判断问题">一、Jev 是什么：把生成问题改成判断问题</h3>
 <p>Jev 是 TypeSafe AI 发布的 System One Model。它和我们熟悉的聊天模型不太一样：聊天模型擅长生成文本，Jev 则刻意放弃文本生成，只返回类型化的概率决策。</p>
 <p>换句话说，它不是让模型“说一段话”，而是让模型回答一个程序能直接使用的问题：选哪个、打几分、是不是。</p>
 <p>它的输入可以比较杂：用户目标、页面状态、工具结果摘要、业务字段、候选动作。它的输出必须很窄：选择哪个、打几分、某个命题成立的概率是多少。</p>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-003-4b1d5bfa.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-4b1d5bfa-ffeb69c8e5.png"></p>
 <p>它主要有三种原语：</p>
 <table><thead><tr><th>原语</th><th>中文理解</th><th>输出形态</th><th>适合场景</th></tr></thead><tbody><tr><td>Choice</td><td>单选题</td><td>选项 + 每个选项概率 + confidence</td><td>工具路由、动作选择、分类</td></tr><tr><td>Score</td><td>打分题</td><td>连续分数 + 概率分布 + confidence</td><td>风险评分、质量评分、相关性评分</td></tr><tr><td>Noul</td><td>判断题</td><td>0 ~ 1 的概率</td><td>是否保留、是否危险、是否达成目标</td></tr></tbody></table>
 <p>举个最贴近开发的例子。</p>
@@ -443,7 +443,7 @@
 }</code></pre>
 <p>这就是 Jev 最核心的变化：<strong>把模型输出从“文本”变成“可执行的概率判断”。</strong></p>
 <p>和 GPT / Claude 的 structured output 相比，Jev 的差别不是“能不能返回 JSON”。现在大模型都能返回 JSON。真正的差别是：Jev 从一开始就放弃自由文本生成，只做封闭输出空间里的概率判断。</p>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-004-d0c89a91.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-d0c89a91-73cae9b1ab.png"></p>
 <p>这带来一个很适合 Agent 的架构分工：</p>
 <table><thead><tr><th>层次</th><th>职责</th><th>典型组件</th></tr></thead><tbody><tr><td>慢思考层</td><td>规划、解释、生成、复杂推理</td><td>GPT / Claude / Gemini</td></tr><tr><td>快判断层</td><td>路由、筛选、评分、门禁</td><td>Jev / Jev-like 模型</td></tr><tr><td>确定性层</td><td>权限、状态、副作用、回滚</td><td>普通代码</td></tr><tr><td>兜底层</td><td>高风险或低置信度处理</td><td>人工 / 更强模型</td></tr></tbody></table>
 <p>需要注意的是，Jev 不是“更便宜的 GPT”。它不适合写文章、解释复杂代码，也不适合做长链路规划。它更适合放在 Agent 内部，处理那些输出空间固定、调用频率高、又需要语义理解的小判断。</p>
@@ -461,7 +461,7 @@
 <ol><li>再跑测试；</li></ol>
 <ol><li>如果失败，继续循环。</li></ol>
 <p>每一步都会往历史里塞内容。用户约束、助手推理、工具调用、工具结果、错误日志、文件片段，全都堆进一个 context 里。</p>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-005-039814f9.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-039814f9-1e6e3c39bf.png"></p>
 <p>真正撑爆上下文的，往往不是用户说的话，也不是助手说的话，而是工具结果。</p>
 <table><thead><tr><th>内容类型</th><th>是否经常很长</th><th>是否必须全文保留</th><th>典型风险</th></tr></thead><tbody><tr><td>用户需求</td><td>否</td><td>是</td><td>删掉会丢约束</td></tr><tr><td>助手回复</td><td>中</td><td>通常要保留</td><td>删掉会丢计划和承诺</td></tr><tr><td>read_file 结果</td><td>是</td><td>看情况</td><td>文件全文可能过期或可重读</td></tr><tr><td>search_content 结果</td><td>是</td><td>看情况</td><td>很多匹配只是探索痕迹</td></tr><tr><td>execute_command 日志</td><td>是</td><td>看情况</td><td>失败栈重要，成功日志可能无用</td></tr><tr><td>list_dir 结果</td><td>是</td><td>通常不需要全文</td><td>目录树容易占空间</td></tr></tbody></table>
 <p>这里有一个很具体的例子。</p>
@@ -508,7 +508,7 @@ Expected authorization header to be preserved.</code></pre>
 <ul><li>工具调用和工具结果配对处理；</li></ul>
 <ul><li>旧工具结果要么完整保留，要么截断，要么删除；</li></ul>
 <ul><li>如果 Jev 失败或压缩收益不够，可以回退到原来的 summary 流程。</li></ul>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-006-a4bf94e1.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-a4bf94e1-6409a13f15.png"></p>
 <p>这和传统 summary 是两条不同路线。</p>
 <p>传统 summary 的做法是把旧历史改写成一段短文本。优点是省 token，缺点是路径、错误码、命令参数这类细节可能被“概括掉”。<code>fast-jev-compaction</code> 的做法是保留原文的精确性：重要的原样留下，不重要的直接删，中间态就保留调用并截断结果。</p>
 <p>它真正有意思的地方在于，它没有沿用“让大模型总结历史”的惯性，而是把上下文压缩拆成两个判断题：</p>
@@ -519,12 +519,12 @@ keepResult：这个工具结果全文还需要保留吗？</code></pre>
 <p>它的核心约束是：<strong>用户文本和助手文本不改写；只处理工具调用和工具结果。</strong></p>
 <p>这个约束很重要。用户文本里通常有原始需求和硬约束，助手文本里有已承诺的计划和正在执行的思路，这两类内容被摘要改写后容易变味。工具结果不同：它们占空间最大，也最容易过期，而且很多内容可以重新读取或重新执行。</p>
 <p>所以 <code>fast-jev-compaction</code> 不是“总结器”，而是“工具历史清理器”。它做的不是把历史改写成一段更短的话，而是在每个工具调用上做一次保留价值判断。</p>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-007-b798f02d.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-b798f02d-e832d44f2d.png"></p>
 <p>它的设计可以拆成三层：</p>
 <table><thead><tr><th>层次</th><th>做什么</th><th>为什么重要</th></tr></thead><tbody><tr><td>对象层</td><td>把 tool_use 和 tool_result 配成一组</td><td>避免留下孤立调用或孤立结果</td></tr><tr><td>判断层</td><td>为每组工具历史生成 keepCall / keepResult 两个问题</td><td>把复合压缩任务拆成两个窄判断</td></tr><tr><td>执行层</td><td>根据阈值执行 keep / drop_result / drop_call</td><td>让压缩动作可测试、可回退、可统计</td></tr></tbody></table>
 <p>这个项目很适合用来理解 Jev，因为它把 Jev 的优势落到了一个真实问题上：高频、封闭、可回退、需要概率，但不需要生成。</p>
 <h3 id="四-Demo-实现拆解-从历史消息到压缩决策">四、Demo 实现拆解：从历史消息到压缩决策</h3>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-008-7dc25fee.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-7dc25fee-7aba97ef52.png"></p>
 <p>它的主流程可以拆成 6 步：</p>
 <ol><li>收集历史里的 <code>tool_use</code> 和 <code>tool_result</code>；</li></ol>
 <ol><li>按 <code>tool_use_id</code> 配对；</li></ol>
@@ -638,7 +638,7 @@ error, 830 chars (omitted)</code></pre>
     history: entries,
   });</code></pre>
 <p>核心降级链路是：</p>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-009-78d87cfb.png"></p>
+<p><img alt="图片" src="../assets/img/img-009-78d87cfb-014dae6cea.png"></p>
 <table><thead><tr><th>阶段</th><th>做什么</th><th>损失程度</th></tr></thead><tbody><tr><td>full</td><td>工具输入最多 1000 字符</td><td>低</td></tr><tr><td>inputs&lt;=200</td><td>工具输入降到 200 字符</td><td>低</td></tr><tr><td>inputs&lt;=60</td><td>工具输入降到 60 字符</td><td>中</td></tr><tr><td>texts abridged</td><td>长文本保留头尾</td><td>中</td></tr><tr><td>old messages collapsed</td><td>旧文本折成省略说明</td><td>高</td></tr><tr><td>old calls compacted</td><td>旧工具调用压成单行</td><td>高</td></tr><tr><td>old messages left out</td><td>删除旧的纯文本消息</td><td>很高</td></tr><tr><td>old calls merged</td><td>合并连续旧工具调用</td><td>很高</td></tr></tbody></table>
 <p>这套顺序很有讲究：先削弱细节，再删除内容；先处理旧消息，再处理最近消息；先保护任务连续性，再追求压缩率。</p>
 <p>在我们的测试里，小 transcript 可以停在 <code>full</code>，而当 <code>maxStateTokens</code> 压到 <code>600</code> 时，会进入降级阶段并成功 fit。</p>
@@ -667,7 +667,7 @@ requests: 1</code></pre>
     },
     [`result_${call.id}`]: {</code></pre>
 <p>两个概率进入决策树：</p>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-010-3fa0938a.png"></p>
+<p><img alt="图片" src="../assets/img/img-010-3fa0938a-0da677d32a.png"></p>
 <p>📍 来源：src/compact.js 第 131-149 行</p>
 <pre><code>export function decideCall(call, answer, options) {
   const threshold = options.keepThreshold ?? DEFAULT_OPTIONS.keepThreshold;
@@ -782,7 +782,7 @@ t4  read_file        drop_call     0.47      0.00</code></pre>
 <p>生成负责表达，判断负责分流，代码负责执行。</p>
 <p>这个分工一旦成立，Jev 就不只是一个新模型，而是一种新的 Agent 组件设计方式。</p>
 <h3 id="八-结语">八、结语</h3>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-011-ad10af27.png"></p>
+<p><img alt="图片" src="../assets/img/img-011-ad10af27-365eb78ab1.png"></p>
 <p>Jev 不神秘。它的很多技术零件以前就有：分类、约束输出、logits 打分、概率校准、判别式路线。</p>
 <p>但它把这些东西组合成了一个清晰的开发者接口。这个接口真正有价值的地方，是提醒我们重新拆分 Agent：哪些地方需要生成，哪些地方只是判断，哪些地方应该交给确定性代码。</p>
 <p><code>fast-jev-compaction</code> 是一个很好的切口。它没有试图让 Jev 变成另一个全能模型，而是把它放在一个很窄、很真实的位置上：判断工具历史还要不要留。</p>
@@ -790,7 +790,7 @@ t4  read_file        drop_call     0.47      0.00</code></pre>
 <p>把生成留给需要表达的地方，把判断交给可控的接口，把执行还给确定性代码。这套模式不只适用于上下文压缩，也适用于所有高频、封闭、可回退的 Agent 内部决策。</p>
 <p>今晚19:00直播Jev实测不见不散！</p>
 <p>一分钟视频速递！</p>
-<p><img alt="图片" src="../../_assets/20260921-一万字Jev工程实践长文把Agent的判断题从大模型里拆出来/img-012-4966ce0d.gif"></p>
+<p><img alt="图片" src="../assets/img/img-012-4966ce0d-4f74303f8f.gif"></p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>

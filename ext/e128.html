@@ -428,9 +428,9 @@
 <h3 id="真正的差异化-输出的不是-Markdown">真正的差异化：输出的不是 Markdown</h3>
 <p>这一点是 Docling 和其他解析工具最本质的分界。</p>
 <p>多数工具输出的是一段 Markdown 字符串。Docling 输出的是一个对象——<strong>DoclingDocument</strong>，每个元素都带类型（标题 / 段落 / 表格 / 图 / 公式 / 图注）、页码、坐标框（bbox）和章节路径。</p>
-<p><img alt="DoclingDocument 层级结构" src="../../_assets/20260921-知识库答不准可能真不是模型的锅66.6Kstar的Docling到底解决/img-001-039fc88a.png"></p>
+<p><img alt="DoclingDocument 层级结构" src="../assets/img/img-001-039fc88a-fe61f8c325.png"></p>
 <p>文档被解析成的层级结构（一）</p>
-<p><img alt="DoclingDocument 层级结构二" src="../../_assets/20260921-知识库答不准可能真不是模型的锅66.6Kstar的Docling到底解决/img-002-5e09e6a3.png"></p>
+<p><img alt="DoclingDocument 层级结构二" src="../assets/img/img-002-5e09e6a3-ba96f71dbb.png"></p>
 <p>文档被解析成的层级结构（二）</p>
 <p>这个差别在落地时会立刻显现出来：</p>
 <p>有坐标，才能做溯源</p>
@@ -439,7 +439,7 @@
 <p>它自带的 HybridChunker 会保护表格不被切断、按章节分割、保留标题路径元数据。这一点比想象中重要——很多 RAG 效果差，不是解析精度不够，而是<strong>按固定 token 数盲目切块</strong>，把一张表劈成两半、把标题和正文割裂。</p>
 <p>有专门格式，才能对接专业场景</p>
 <p>除了 Markdown、HTML、无损 JSON，它还能导出 DocLang、DocTags，以及 <strong>USPTO 专利、JATS 学术文章、XBRL 财务报告</strong>这几种行业 XML 规范。</p>
-<p><img alt="元素级置信度评分" src="../../_assets/20260921-知识库答不准可能真不是模型的锅66.6Kstar的Docling到底解决/img-003-9ef93c1e.png"></p>
+<p><img alt="元素级置信度评分" src="../assets/img/img-003-9ef93c1e-9ec5d16b7f.png"></p>
 <p>元素级的置信度评分</p>
 <p>它真正想做的，是把"文档解析"变成一件标准化的事：解析结果可交换、可组合、可复用到别的系统里，而不是一堆只有人能看的文本。</p>
 <h3 id="格式覆盖面比你想的宽">格式覆盖面比你想的宽</h3>
@@ -447,12 +447,12 @@
 <p>PDF、DOCX、PPTX、XLSX、HTML、EPUB、Apple Pages、LaTeX、纯文本、Markdown 超集，Office 三件套的开放格式（ODT / ODS / ODP），邮件（EML / MSG），图片（PNG / TIFF / JPEG），扫描件，以及 <strong>XBRL 财务报告</strong>。</p>
 <p>还有一个容易被忽略的：<strong>音视频</strong>。WAV、MP3 能转，MP4、AVI、MOV、MKV、WebM 也能转——自动语音识别转写加关键帧提取。在开源解析工具里，原生支持视频输入的并不多。</p>
 <p>输出侧，除了上面提到的那些格式，还有 WebVTT 字幕格式。另外它能把柱状图、饼图、折线图转成表格或代码，并附一段描述。</p>
-<p><img alt="图片区域的标注与描述" src="../../_assets/20260921-知识库答不准可能真不是模型的锅66.6Kstar的Docling到底解决/img-004-f4a084d2.png"></p>
+<p><img alt="图片区域的标注与描述" src="../assets/img/img-004-f4a084d2-a5ce2093d2.png"></p>
 <p>图片区域的标注与描述</p>
 <h3 id="工程与合规-小团队最该看的一节">工程与合规：小团队最该看的一节</h3>
 <p><strong>先说跑得动吗。</strong>它可以纯 CPU 跑，笔记本就能用，Apple Silicon 有 MLX 加速。真要上量，官方给了 NVIDIA RTX 的 GPU 加速路径，宣称最高 6 倍于纯 CPU；再往上可以用 Ray Data 加 KubeRay 扩到 10 到 100 个 Kubernetes 节点。它还和 Red Hat 一起出了 OpenShift Operator，明确瞄准银行这类场景。</p>
 <p><strong>再说那几个配套件。</strong>Granite-Docling-258M 是个只有 2.58 亿参数的视觉语言模型，Apache 2.0 协议，能一次成图地把整页转出来；官方 MCP Server 让 Agent 直接调用解析能力；还有个 docling-serve 可以当 API 服务跑。生态里有 8 个仓库，集成侧原生支持 LangChain、LlamaIndex、Crew AI、Haystack。</p>
-<p><img alt="Docling 生态组成" src="../../_assets/20260921-知识库答不准可能真不是模型的锅66.6Kstar的Docling到底解决/img-005-34233e38.png"></p>
+<p><img alt="Docling 生态组成" src="../assets/img/img-005-34233e38-d22922d7d3.png"></p>
 <p>Docling 的生态组成</p>
 <p><strong>最后是那个容易踩的坑——许可证。</strong>很多人选型只看精度，最后栽在协议上。这三个常被一起比的开源方案，协议差别很大：</p>
 <table><thead><tr><th>项目</th><th>许可证</th><th>商用门槛</th></tr></thead><tbody><tr><td><strong>Docling</strong></td><td>MIT</td><td>无门槛，可直接用在商业产品里</td></tr><tr><td>Marker</td><td>GPL-3.0 + RAIL-M</td><td>营收或融资超 200 万美元，禁止免费商用</td></tr><tr><td>MinerU</td><td>基础宽松 + 额外约束</td><td>无硬性收入门槛，但需法务过一遍</td></tr></tbody></table>

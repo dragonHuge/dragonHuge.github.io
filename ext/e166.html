@@ -454,40 +454,40 @@
 <p>短短几个月，Hermes、Claude Code、OpenClaw 这些名字你大概率都不陌生。但真用下来，几个毛病躲不掉：</p>
 <p>一句 "Hello" 发过去，账单先跳出来，系统提示词吃掉几万 token；装了二十个Skill，越装越慢，连最基本的事都开始卡；上周刚教会的操作，这周又忘了，每次都像第一次见面。</p>
 <p>Generic Agent（GA）把这个问题解得很漂亮，只用一条原则：<strong>上下文信息密度最大化</strong>。不追求上下文有多长，只追求每一个 token 都在为当前决策服务。</p>
-<p><img alt="图片" src="../../_assets/20260423-Generic-Agent中文教程-比Hermes省10倍Token/img-001-e9ac9172.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-e9ac9172-c2327651dc.png"></p>
 <p>这个项目最近特别火：半个月涨了 5k star，登上了 GitHub trending 第一。但中文社区几乎没有文档，新手想上手只能啃源码、翻 Issue、泡社区，大量时间花在"搞清楚怎么用"上，而不是真正用它解决问题。</p>
 <p>好工具值得一份好教程。于是我们把这段时间的使用经验梳理了一遍，整理出从安装到原理的完整最佳实践，帮每一位想上手的人跳过踩坑阶段！** **</p>
-<p><img alt="图片" src="../../_assets/20260423-Generic-Agent中文教程-比Hermes省10倍Token/img-002-80752adc.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-80752adc-fe2658a3f8.png"></p>
 <p>开源地址：https://datawhalechina.github.io/hello-generic-agent/</p>
 <h3 id="Generic-Agent-比-Hermes-省-10-倍-Token">Generic Agent：比 Hermes 省 10 倍 Token</h3>
 <p>先说 Generic Agent 是什么。</p>
 <p>它是一个极简、可自我进化的自主 Agent 框架，核心代码大约 3K 行，9 个原子工具，Agent Loop 只有 100 行左右。就这么点东西，能赋予任意一个大模型对本地计算机的系统级控制——浏览器、终端、文件系统、键鼠输入、屏幕视觉，连移动设备都能接。</p>
 <p>听起来不太可能，但它真能做到。秘密就在开源初心里提到的那条原则：上下文信息密度最大化。</p>
 <p>效果有多夸张？同样装了 20 个技能，对一个最简单的 "Hello" 请求：</p>
-<p><img alt="图片" src="../../_assets/20260423-Generic-Agent中文教程-比Hermes省10倍Token/img-003-6cbff1c8.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-6cbff1c8-ca580c12a9.png"></p>
 <p>别人的起步价是 1 万 7，GA 只要 2 千。</p>
 <p>差 10 倍，是整个设计哲学层面的 10 倍，不是只靠优化出来的。别人还在给 Agent 加瑞士军刀，GA 一直在做减法，把每个 token 的价值榨到最高。</p>
 <h3 id="教程全览-理解背后的-Harness-Engineering">教程全览：理解背后的 Harness Engineering</h3>
 <p>教程分为三大部分，像一座阶梯，带你从会用到懂原理再到能实战。</p>
-<p><img alt="图片" src="../../_assets/20260423-Generic-Agent中文教程-比Hermes省10倍Token/img-004-7fa9e6f3.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-7fa9e6f3-f868a25529.png"></p>
 <p>Part 1 · 应用指南：零门槛上手</p>
 <h3 id="章内容-覆盖从安装到精通的完整路径">章内容，覆盖从安装到精通的完整路径：</h3>
-<p><img alt="图片" src="../../_assets/20260423-Generic-Agent中文教程-比Hermes省10倍Token/img-005-06d9cd78.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-06d9cd78-4eb48b71f3.png"></p>
 <p>不需要有任何编程基础，跟着教程一步步走，就能拥有一个能帮你操作浏览器、自动执行任务、还能接入微信和飞书的专属 AI 助手。</p>
 <p>Part 2 · 原理篇：拆解背后的 Harness 哲学</p>
 <p>7 章深度解析，带你理解 Generic Agent 为什么能用 1/10 的资源做到同样甚至更好的效果。</p>
-<p><img alt="图片" src="../../_assets/20260423-Generic-Agent中文教程-比Hermes省10倍Token/img-006-0460cefe.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-0460cefe-e4e9395246.png"></p>
 <p>这部分是整个教程的重点。Part 1 是教你用，Part 2 是告诉你它为什么能这么用。顺着这七章读下去，你会慢慢看懂一件事——<strong>怎么给 LLM 搭一副刚刚好的骨架，让它既能干事，又不被自己的工具和上下文拖垮</strong>。这件事有个名字，叫 Harness Engineering。</p>
 <h3 id="三大核心看点">三大核心看点</h3>
 <p><strong>1. 9 个工具打天下。</strong>Claude Code 有 53 个工具，80% 的调用集中在 3 个上，剩下 50 个每轮白白吃上下文预算。GA 只保留 9 个原子工具，覆盖文件操作、代码执行、网页交互、记忆管理、人机协作，任务成功率 100%。</p>
 <p><strong>2. 三阶进化，Token 省 89.6%。</strong>同一个任务执行 9 轮，全程无人干预：</p>
-<p><img alt="图片" src="../../_assets/20260423-Generic-Agent中文教程-比Hermes省10倍Token/img-007-0ade6083.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-0ade6083-ea061e4783.png"></p>
 <ol><li>3300 行代码涌现出一切。没有子 Agent 管理器、事件总线、调度守护进程，但子 Agent 分发、看门狗监控、定时任务调度全都能做。Agent Loop 核心代码只有 92 行！</li></ol>
 <p>Part 3 · 案例篇（即将上线 🚧）</p>
 <p>手把手教你用 GA 办公、娱乐、挖宝——把前两部分学到的知识融会贯通。</p>
 <p>写在最后：好的工具值得一份好的教程</p>
 <p>2026 年 4 月，Datawhale 正式开源「Hello Generic Agent」。</p>
-<p><img alt="图片" src="../../_assets/20260423-Generic-Agent中文教程-比Hermes省10倍Token/img-008-77fc6a61.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-77fc6a61-55805e306a.png"></p>
 <p>📖 在线阅读：</p>
 <p>https://datawhalechina.github.io/hello-generic-agent/</p>
 <p>⭐ GitHub：</p>
@@ -497,7 +497,7 @@
 <p>真正激励我们的，从来不是 GA 本身能做什么。</p>
 <p>而是当你第一次看到自己的 Agent，用 2000 个 token 完成了别人 20000 个 token 才能启动的任务时，那种「原来还能这样」的惊喜。</p>
 <p>好的工具值得一份好的教程。如果这个项目对你有帮助，请给我们一个 ⭐ Star。</p>
-<p><img alt="图片" src="../../_assets/20260423-Generic-Agent中文教程-比Hermes省10倍Token/img-009-dfb95077.webp"></p>
+<p><img alt="图片" src="../assets/img/img-009-dfb95077-5ffd3d072d.webp"></p>
 <p>开源贡献，<strong>点</strong><strong>赞</strong>在看↓</p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>

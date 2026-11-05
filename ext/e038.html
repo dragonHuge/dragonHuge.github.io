@@ -415,7 +415,7 @@
 <p>开发者公众号专属群聊</p>
 <p>扫码加入获取更多一手教程、科技前沿报告</p>
 <p>端到端 AI 交付工作流已贯通需求到发布，但模型在执行过程中既有自发的工程失效风险，也会面临外部的输入攻击。我们把安全边界外置到 Harness，按事前（隔离、授权）、事中（循环封顶、人机分级、哨兵熔断）、事后（门禁、审计、自迭代）分层设防，搭建一套"就算模型犯错也兜得住"的工程化安全护栏。</p>
-<p><img alt="图片" src="img-004-76af1f74.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-76af1f74-b2e7bb562a.png"></p>
 <h2 id="01">01</h2>
 <p>问题与动机</p>
 <p>Agent 获得工具调用、代码执行和文件操作权限后，能力和风险一起上升。<strong>Harness 连接模型、工具和真实执行环境，既是执行层也是安全边界</strong>——它决定攻击面有多大、出事损失有多高。</p>
@@ -430,11 +430,11 @@
 <ul><li><strong>上下文漂移 / 长任务失焦（Context Drift）</strong>：多轮交互后被历史对话带偏、忘了原始目标，越跑越偏。对策是最小知识 + 精确回退到责任阶段，把上下文收敛回当前任务。</li></ul>
 <p><strong> 1.2 攻击面</strong></p>
 <p>这类风险来自恶意输入或不可信组件，是传统安全意义上的攻击面：</p>
-<p><img alt="图片" src="img-005-c27bd7e7.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-c27bd7e7-400fd12728.png"></p>
 <p>其中，一些注意点解释下：</p>
 <blockquote><p>注入 vs 越狱：注入攻的是&amp;quot;应用把可信 Prompt 与不可信输入拼接&amp;quot;这一层，越狱攻的是模型自身对齐——只做越狱防护挡不住 IPI。  DPI vs IPI：直接注入在用户输入框；间接注入把指令藏进网页/PDF/代码注释/工具描述/知识库，等 Agent 读到才触发。   ChatBot → Agent：模型只回答时注入最多污染输出；进入 Agent Loop 并拥有工具权限后，注入升级为系统安全问题（影响行为、数据流向、权限边界）。  长期挑战：注入“可能永远无法完全缓解”。目标不是 100% 消除，而是持续压低成功率、锁死损失上限；单点检测器会被编码/零宽字符/语义改写绕过，必须纵深分层。</p></blockquote>
 <p>两类风险合起来才是完整清单：<strong>工程侧失效模式</strong>靠质量门、角色隔离、成本包络（Cost Envelope）兜底；<strong>攻击面</strong>靠四层纵深防御 + 门禁层 + 配套机制层层设防。风险与防御层的对应关系如下：</p>
-<p><img alt="图片" src="img-006-c869f941.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-c869f941-2f7b7e8c2f.png"></p>
 <h2 id="02">02</h2>
 <p>核心思想</p>
 <p>Harness 安全的核心逻辑是 <strong>Never Trust, Always Verify（永不信任，持续验证）</strong>：默认不信任任何输入、任何中间产物、任何工具调用，在生命周期的每一环持续校验。落地靠两个方法论：</p>
@@ -446,7 +446,7 @@
 <ul><li><strong>状态变更动作必须可中断、可恢复、可逆</strong>：这是后文配套机制的依据。</li></ul>
 <ul><li><strong>边界要设在模型改不动的地方</strong>：提示词、hooks、配置文件都是 Agent 能读、极端情况下能改写或无视的"软约束"；真正的强制点应落在网络/会话/系统层这类 Agent 绕不过的<strong>执行点(enforcement point)</strong>上。</li></ul>
 <p><strong>体系总览</strong>：外部输入沿请求路径穿过四层防御；高破坏动作还要过<strong>门禁层</strong>才算放行；配套机制在全程做快照、回滚、审计，并用观测 + 评测做自迭代。箭头是一次调用的穿过顺序，不是日历时序。</p>
-<p><img alt="图片" src="img-007-d4b2fa81.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-d4b2fa81-7bdeb691f2.png"></p>
 <h2 id="03">03</h2>
 <p>纵深防御</p>
 <p>四层防御（信息边界/工具系统/执行编排/系统隔离）加门禁层，并非并列摆放，而是落在一条时间轴的三个窗口上；三项配套机制（纠偏回滚/全链路审计/自迭代）贯穿始终，主兜底时刻分别落在事中/事后：</p>
@@ -454,7 +454,7 @@
 <ul><li><strong>事中 · 控</strong>：Agent 已在跑、软约束可能被绕过，用运行时校验、循环封顶、人工介入，在坏动作产生副作用前掐断。</li></ul>
 <ul><li><strong>事后 · 兜</strong>：产物已生成，用可程序化验证的门禁做裁决、用审计链回答"发生了什么"，再用观测 + 评测把结论沉淀成下一轮规约与门禁。</li></ul>
 <blockquote><p>说明：这里的“事前/事中/事后”是护栏相对某个危险动作的时机（安全时序），与后文研发流水线阶段（需求/设计/实现/交付）是两套分类——同一个“编码阶段”里，既有事前注入的规则，也有事中的循环封顶。别把二者混为一谈。</p></blockquote>
-<p><img alt="图片" src="img-008-4e08f5f4.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-4e08f5f4-bcfe19f90e.png"></p>
 <p><strong> 3.1 事前 ·防</strong></p>
 <p><strong>事前是成本最低、收益最高的窗口。</strong></p>
 <p>** **</p>
@@ -513,8 +513,8 @@
 <ul><li>每个阶段 subagent 声明一张 <code>allowed_tools</code> 清单（如 CODING 阶段只声明"读写工作区 + 编译"，不含 MR/投产）。当被注入内容诱导它去发 MR 时，请求不在声明内 → <strong>直接 denied</strong>，而不是靠判断"这个 MR 合不合理"。</li></ul>
 <p><strong>② 成本包络（Cost Envelope）：每个循环都有天花板</strong></p>
 <ul><li><strong>理论</strong>：给每一类循环装天花板，触顶就喊停，防 Doom Loop。<strong>修复类循环的上限（如统一取3）</strong>：软件研发里修复轮数遵循<strong>衰减收益曲线</strong>，前几轮解决绝大多数问题，越往后边际收益越低、越修越乱概率越高。触顶后不硬闯，自动暂停发 🟡 卡把"继续/改方向/终止"交回人；检测到循环也不直接 kill，而是注入反思给自纠机会。各阶段上限如下：</li></ul>
-<p><img alt="图片" src="img-009-c2fb24f7.png"></p>
-<p><img alt="图片" src="img-010-81c65253.png"></p>
+<p><img alt="图片" src="../assets/img/img-009-c2fb24f7-a66dfd2392.png"></p>
+<p><img alt="图片" src="../assets/img/img-010-81c65253-6967a3c805.png"></p>
 <ul><li>✅ <strong>典型实践（循环≤3 触顶交人）</strong>：</li></ul>
 <ul><li>CLARIFICATION 按 🔴/🟡/🟢 优先级分批、单轮 ≤5；</li></ul>
 <ul><li>REVIEW 带着具体问题回退 DESIGN 重做，<strong>第二轮即过（2/3，未触顶）</strong>；</li></ul>
@@ -525,12 +525,12 @@
 <ul><li>🔴 <strong>红卡 · 必须人确认</strong>：force push、删库、投产等<strong>不可逆</strong>动作，以及拦住流程的必填项——人不点头卡住不执行；</li></ul>
 <ul><li>🟡 <strong>黄卡 · 需人决策</strong>：成本包络<strong>触顶</strong>、评审分歧、模型降级 → 暂停，让人选继续/改向/终止；</li></ul>
 <ul><li>🟢 <strong>绿卡 · 自动流转</strong>：阶段间常规交接自动推进，不打扰人，记录进 <code>records.json</code>。</li></ul>
-<p><img alt="图片" src="img-011-9a0e6623.png"></p>
+<p><img alt="图片" src="../assets/img/img-011-9a0e6623-4d13e5d317.png"></p>
 <ul><li>✅ <strong>典型实践（三色卡分级拦人）</strong>：</li></ul>
 <ul><li>🔴 重复需求、release 投产前、澄清红题；</li></ul>
 <ul><li>🟡 CR 时发现问题，用户选择回退 CODING 还是先忽略；</li></ul>
 <ul><li>🟢 阶段间常规交接自动流转、留痕 <code>records.json</code>。</li></ul>
-<p><img alt="图片" src="img-012-ef3c08ee.png"></p>
+<p><img alt="图片" src="../assets/img/img-012-ef3c08ee-28f344bc0d.png"></p>
 <p><strong>④ 哨兵（Trip Wire）+ 兜底熔断：异常吹哨而非闷声跑，超阈则全局止损</strong></p>
 <ul><li><strong>理论</strong>：</li></ul>
 <ul><li>① <strong>哨兵吹哨而非直接 kill</strong>：独立盯着异常，一旦偏离正常区间就报警，遵循"记录 → 提醒 → 暂停"的渐进部署；同一主体重复违规达阈值才处置，避免误杀。</li></ul>
@@ -540,7 +540,7 @@
 <p>** **</p>
 <p><strong>⑤ 状态纠偏与回滚（配套 · 事中兜底）</strong>：对中间状态/记忆/检查点持续打<strong>快照</strong>，污染或异常时<strong>回滚到最近安全检查点</strong>，防污染顺流水线放大；本流水线每步落 <code>records.json</code> 支持可中断续做 + 带来源回档（第 4 节“状态纠偏与回滚”展开）。</p>
 <p><strong> 3.3 事后 ·兜</strong></p>
-<p><img alt="图片" src="img-013-01afe31b.png"></p>
+<p><img alt="图片" src="../assets/img/img-013-01afe31b-62dc2dc3cf.png"></p>
 <p>动作已落地、产物已生成：核心是门禁层做最后裁决——<strong>硬门禁拦"确定错的"、软门禁捕"可能差的"，二者互补</strong>；配全链路审计让一切可追溯，再用观测 + 评测驱动自迭代。可验证 = 机器能判 + 人/独立 Agent 能判 + 部署后能闭环确认。</p>
 <p><strong>① 硬门禁：质量门 + 安全门 + 准入 AND + 策略即代码</strong></p>
 <ul><li><strong>理论</strong>：<strong>质量门</strong>=连续指标、可分级（逐步逼近目标）；<strong>安全门</strong>=二元事件、必须 fail-safe（命中即拦）；<strong>准入条件 AND</strong>（缺一不可）；<strong>策略即代码</strong>——门禁脚本本身也写单测纳入 CI 回归，防提示词/模型迁移引入安全回归。准入三条件分别对应<strong>模型自检 外部检查 自定义规则</strong>三个维度（规则涵盖框架、语言、业务、安全、资金等约束）。</li></ul>
@@ -555,7 +555,7 @@
 <ul><li>④ <strong>非对称权重</strong>：重罚漏判、轻罚误判——"宁可误杀不可放过"，对齐到安全优先。</li></ul>
 <ul><li>✅ <strong>典型实践（独立评审）</strong>：换独立 subagent 按 rubric 评审（如方案评审首轮报出 2 Critical/6 Major）→ 带着具体问题精确回退到责任阶段，而非"打个警告就放过去"。</li></ul>
 <blockquote><p><strong>实现详解 —— 可程序化验证</strong>：AI 无法可靠遵守数字阈值（写到第 49 行不会主动停，因为它不会数行数），所以把每道闸门都落成 CI 里能跑、能 <code>exit</code> 的脚本。<strong>软约束（Agent Skill/注入 rules）让代码先天合规，硬约束（CI lint/扫描）做最后兜底。</strong></p></blockquote>
-<p><img alt="图片" src="img-014-aee8366d.png"></p>
+<p><img alt="图片" src="../assets/img/img-014-aee8366d-80486acab1.png"></p>
 <p>一条实践经验：门禁尽量看<strong>骗不过的客观信号</strong>——CodeCC 真实评分、build 状态、测试流水线 <code>SUCCEED</code>（<code>check: command</code>），而非"文件存不存在"（<code>check: exists</code>）。</p>
 <p><strong>风险提示：明确操作/强校验参数必须固化为程序化校验，别交给"自然语言自觉"</strong>。 凡是<strong>语义明确、参数/规则可枚举</strong>的动作（尤其是有副作用、不可逆、影响面大的），都要把校验<strong>固化成脚本或程序化前置断言</strong>，而不是靠提示词提醒 AI"记得校验"。反面案例：<strong>投产开始时要发企微消息推送</strong>——若不强校验推送目标，AI 一旦漏传/误解 <code>target</code> 为空，底层接口很可能<strong>默认群发</strong>，把内部发布通知推给全员甚至外部群。正确做法是在发送动作前加一道程序化闸门：<code>assert target ∈ 已登记白名单 &amp;amp;&amp;amp; target ≠ 空 &amp;amp;&amp;amp; 非&quot;@all&quot;</code>，缺参直接 <code>exit</code> 拒发、绝不"缺省即广播"。同类高危默认值还有：删除未带 <code>where</code> 条件、批量操作未设 <code>limit</code>、灰度未指定范围即全量。<strong>判据</strong>：只要一个动作"参数写错就会造成不可逆或大范围影响"，它的合法性就必须由确定性代码把关，而非模型意图。</p>
 <p><strong>策略即代码（Policy-as-code + CI 回归）</strong>：门禁脚本本身也是资产，同样要防腐化。业界有些做法是把安全策略当<strong>软件契约</strong>——为每条策略写单测并纳入 CI 回归，确保<strong>提示词更新或模型迁移不会引入安全回归</strong>（例如换模型后某道注入防护失效）。这与后文"Dry Run 空跑"是同一逻辑的两种形态：Dry Run 用虚拟需求跑全流程测试，Policy-as-code 用单测为每道闸门上锁，两者都让"护栏本身"也处在被持续验证之中。</p>
@@ -585,13 +585,13 @@
 <ul><li><strong>门禁调整</strong>：抬/降阈值、加断言（如 <code>TOTAL&amp;gt;0</code>）、改 AND 条件、补回退映射或成本包络上限。</li></ul>
 <p>** **</p>
 <p><strong>工程实践</strong>：流程结束后，<code>知识沉淀</code>节点写回 <code>lessons/&amp;lt;module&amp;gt;.md</code>，<strong>下次同类需求自动注入历史经验</strong>。 例如，一个案例真实沉淀：测试零用例假绿 → 门禁需要补 <code>TOTAL&amp;gt;0</code>。</p>
-<p><img alt="图片" src="img-015-810e634b.png"></p>
+<p><img alt="图片" src="../assets/img/img-015-810e634b-65a25ec68e.png"></p>
 <p>审计提供观测，评测给出对错，自迭代把二者沉淀成规约与门禁。</p>
 <h2 id="05">05</h2>
 <p>研发流水线</p>
-<p><img alt="图片" src="img-016-c4c1c91b.png"></p>
+<p><img alt="图片" src="../assets/img/img-016-c4c1c91b-ecd3441b39.png"></p>
 <p>前面讲的是<strong>安全时序</strong>（事前/事中/事后）。本节换一套分类——<strong>研发交付阶段（SDLC）</strong>：把这套护栏挂到一条真实的 10 阶段流水线上，看它在需求/设计/实现/交付各阶段如何生效、失败如何精确回退。</p>
-<p><img alt="图片" src="img-017-6239a300.png"></p>
+<p><img alt="图片" src="../assets/img/img-017-6239a300-451f30e9fd.png"></p>
 <p><strong> 5.1 流水线执行流程拦截</strong></p>
 <p>前面按事前/事中/事后拆开写，容易看成散点。我们基于一个真实案例出发，按一个需求从接入到投产，看每个阶段碰到哪道护栏。</p>
 <p><strong>① 需求接入 INTAKE</strong></p>
@@ -634,7 +634,7 @@
 <ul><li><strong>场景</strong>：最后一步投产——全流程唯一不可逆、影响真实资金对账的动作，绝不能让 AI 自动按发布键。</li></ul>
 <ul><li><strong>命中护栏</strong>：<strong>🔴 红卡强制人工确认</strong>，发布只经受控的发布工具触发。发布要发企微通知——推送目标这类<strong>强校验参数</strong>由程序化闸门把关：<code>target</code> 缺省即拒发、绝不"缺省群发"；正文与 <code>records.json</code> 落盘前再过<strong>输出脱敏</strong>。全链留档，可追溯。拦截与门禁结果进入<strong>评测</strong>，<code>知识沉淀</code> 写回 <code>lessons/&amp;lt;module&amp;gt;.md</code>，把规约/门禁调整沉淀进下一轮 Harness——自迭代闭合。（<em>事后 · HITL 红卡 + 受控通道 + 参数强校验 + 输出脱敏 + 全链审计 + 自迭代</em>）</li></ul>
 <p>串起来看：同一个需求，事前锁死攻击面、事中及时掐断跑偏、事后用可程序化的门禁裁决加全链审计回答"凭什么可信"，再用自迭代改下一轮 Harness。下面这张自检表把全文安全策略逐条落到剧情里，确认没有漏项：</p>
-<p><img alt="图片" src="img-018-90ad1f7d.png"></p>
+<p><img alt="图片" src="../assets/img/img-018-90ad1f7d-f63e28cf9c.png"></p>
 <p><strong> 5.2 规则注入</strong></p>
 <p><strong>规则不能只是一份文档、指望 AI 自觉去看</strong>。本流水线用 <code>rules/</code> 注册表声明"哪条规则在哪个阶段生效"，这是<strong>软约束</strong>——提高先天合规率，但 Agent 仍可能无视；真正兜底的是沙箱与白名单通道以及 CI lint/门禁脚本。</p>
 <p>例如，<code>coding-conventions-go</code>（编码阶段的 <code>go vet</code>/<code>gofmt</code> 可执行校验规则）、<code>code-review-checklist</code>（CR 阶段的规则）、<code>self-investigation-priority</code>（自检查规则）、<code>cost-envelope</code>（循环上限规则）。</p>
@@ -645,11 +645,11 @@
 <ul><li><strong>信任边界</strong>：跨越信任边界、引入 untrusted 外部输入时换——如接入外部需求、消费第三方 MCP 返回之后，用新 subagent 隔断注入与污染。</li></ul>
 <ul><li><strong>上下文健康</strong>：上下文将超载或已疑似被污染时换——长阶段末尾、注入疑似发生后，做一次"上下文卫生"重置。</li></ul>
 <p>反之，<strong>强连续、同一心智、上下文可控的相邻子步可以复用</strong>同一 subagent（如"详设→任务拆解"、同一 bug 的多轮修复），用"工件 + 结构化摘要"做压缩式交接即可，不必清空重来。落地上再叠一层 triage 分级：standard 需求走严格隔离，quick 需求合并阶段、复用 subagent 更划算。一句话——<strong>评审必换、边界必换、上下文脏了就换；其余能连续就连续。</strong></p>
-<p><img alt="图片" src="img-019-b5c2cfb5.png"></p>
+<p><img alt="图片" src="../assets/img/img-019-b5c2cfb5-68d82902e4.png"></p>
 <p><strong> 5.4 精确回退路径</strong></p>
 <p>失败不是"从头再来"，而是回退到最近的责任阶段（编号与上图 10 阶段同一套）：</p>
-<p><img alt="图片" src="img-020-7e169063.png"></p>
-<p><img alt="图片" src="img-021-bcf988b5.png"></p>
+<p><img alt="图片" src="../assets/img/img-020-7e169063-d67f88ded1.png"></p>
+<p><img alt="图片" src="../assets/img/img-021-bcf988b5-03fee23a95.png"></p>
 <p><strong>迭代上限</strong>与成本包络 <strong>同一套</strong>——各类循环 ≤3，触顶发 🟡 卡交人，不另设“编码/测试评审 ≤2”。本案例 REVIEW/CR 均在 3 轮内收敛，<strong>没有触顶</strong>。</p>
 <p><strong> 5.5 Dry Run</strong></p>
 <p><strong>Dry Run（空跑/试运行）</strong>在软件测试里指：<strong>不触发真实副作用</strong>（不真正合入、不投产、不发通知、不写生产库）的前提下，用一份<strong>虚拟需求</strong>把流程完整走一遍，验证编排逻辑、门禁脚本与产物流转是否正确——相当于流水线"带电前的通电自检"，验证对象是 <strong>Harness 本身</strong>而非业务代码。</p>
@@ -682,22 +682,22 @@
 <table><thead><tr><th>纵向 · 层次</th><th>典型问题</th><th>对策/护栏</th><th>工程实现</th><th>时序</th></tr></thead><tbody><tr><td><strong>信息边界层</strong></td><td>指令/上下文注入（DPI/IPI）</td><td>归一化 + 来源隔离 + 检测分级</td><td>解码隐形字符；trusted/untrusted 分槽；规则+模型分级处置</td><td>🔴 事前</td></tr><tr><td><strong>信息边界层</strong></td><td>知识库被当可信内参/条目投毒</td><td>入库前审核 + 检索仍净化</td><td>团队库先审后入；命中项标 <code>untrusted</code>，口径以澄清为准</td><td>🔴 事前</td></tr><tr><td><strong>信息边界层</strong></td><td>敏感信息明文进上下文/随日志外泄</td><td>I/O 双向脱敏（程序化掩码）</td><td>密钥/卡号进上下文前掩码；<code>records</code>/企微/lessons 落盘前再脱</td><td>🔴 事前/🟢 事后</td></tr><tr><td><strong>信息边界层</strong></td><td>敏感信息过度暴露/自我确认偏差</td><td>最小知识 + 角色隔离 Subagent</td><td>按信号换 subagent，只拿本阶段工件；CR 首句“你没写过这段代码”</td><td>🔴 事前</td></tr><tr><td><strong>工具系统层</strong></td><td>插件/供应链、恶意组件</td><td>默认拒绝 + 白名单 + 工具描述校验</td><td>高危动作只走白名单通道；<code>mcp-lockfile</code> 哈希比对</td><td>🔴 事前</td></tr><tr><td><strong>工具系统层</strong></td><td>权限过大/越权提权</td><td>细粒度权限（只读/写/执行/网络）+ 最小权限</td><td>有副作用收窄到会话+仓库，高破坏默认关</td><td>🔴 事前</td></tr><tr><td><strong>执行编排层</strong></td><td>需求带歧义/不该开工</td><td>澄清上限 + 待决议确认；业务去重闸门</td><td>澄清单轮 ≤5（本案 20 题分批）；INTAKE 重复需求 → 🔴 卡</td><td>🔴 事前</td></tr><tr><td><strong>执行编排层</strong></td><td>偏离任务的异常调用</td><td>按声明授权 + 动作合理性验证</td><td>阶段 <code>allowed_tools</code> 声明外即 denied</td><td>🟡 事中</td></tr><tr><td><strong>执行编排层</strong></td><td>风险累积/异常行为</td><td>动态降级与拦截</td><td>CodeCC 退化转受限修复循环（本案例循环未触顶）</td><td>🟡 事中</td></tr><tr><td><strong>执行编排层</strong></td><td>失控循环 Doom Loop</td><td>成本包络（每类循环 ≤3）</td><td>触顶才暂停发 🟡 卡</td><td>🟡 事中</td></tr><tr><td><strong>执行编排层</strong></td><td>什么都问 = 审批疲劳/漏拦</td><td>HITL 三色卡按破坏力/阻塞性分级</td><td>🔴 必确认/🟡 需决策/🟢 自动流转</td><td>🟡 事中</td></tr><tr><td><strong>执行编排层</strong></td><td>闷声跑偏、不报警</td><td>Trip Wire 哨兵</td><td>event 吹哨报警而非直接 kill；同主体重复违规三振处置</td><td>🟡 事中</td></tr><tr><td><strong>执行编排层</strong></td><td>前层失效/被劫持后疯狂试探</td><td>兜底熔断（全局止损）</td><td>单任务触高危阈值或超阈违规 → 转人工/冻结工具权限</td><td>🟡 事中</td></tr><tr><td><strong>系统隔离层</strong></td><td>高权限执行危及宿主机</td><td>沙箱隔离（OS 层）</td><td>云研发 CDE 一人一盒子、挂载目录内读写</td><td>🔴 事前</td></tr><tr><td><strong>系统隔离层</strong></td><td>凭证泄露</td><td>环境隔离</td><td>凭证留沙箱外，doctor fail-closed</td><td>🔴 事前</td></tr><tr><td><strong>门禁层</strong></td><td>代码腐化/质量退化</td><td>质量门（可分级，两档）</td><td>退化基线 93 卡住 → 修到准入 100</td><td>🟢 事后</td></tr><tr><td><strong>门禁层</strong></td><td>secret/漏洞/新增告警</td><td>安全门（二元阻断）</td><td>gitleaks/trivy 为通用范例，命中即 fail</td><td>🟢 事后</td></tr><tr><td><strong>门禁层</strong></td><td>自评不可信/带病放行</td><td>准入三条件 AND（模型自检/外部检查/自定义规则）</td><td>self_check ∧ CodeCC100 ∧ CR resolved</td><td>🟢 事后</td></tr><tr><td><strong>门禁层</strong></td><td>逻辑合理但方案次优（"可能差的"）</td><td>软门禁：角色隔离 + rubric + 跨模型交叉 + 非对称权重</td><td>CR 独立评审按 rubric 出清单；重罚漏判轻罚误判</td><td>🟢 事后</td></tr><tr><td><strong>配套机制</strong></td><td>状态/记忆污染持续放大</td><td>状态纠偏与回滚</td><td>records 快照，回滚到最近安全检查点</td><td>🟡 事中</td></tr><tr><td><strong>配套机制</strong></td><td>出事无法溯源</td><td>全链路审计</td><td>records 全链可追溯，落盘前脱敏</td><td>🟢 事后</td></tr><tr><td><strong>配套机制</strong></td><td>护栏不升级、重复踩坑</td><td>自迭代（观测 + 评测）</td><td>lessons 沉淀；改规约/调门禁/补断言</td><td>🟢 事后</td></tr><tr><td><strong>流程健壮性</strong></td><td>出问题只能从头来</td><td>精确回退路径</td><td>评审 FAIL→③设计；CR/编译/CodeCC→⑤编码；0/0→⑧测试；需求不符→②澄清</td><td>🟡 事中</td></tr><tr><td><strong>流程健壮性</strong></td><td>无限自我修改循环</td><td>迭代上限 Iteration Cap</td><td>与成本包络相同：各类循环 ≤3</td><td>🟡 事中</td></tr><tr><td><strong>流程健壮性</strong></td><td>缺陷到真实需求才暴露</td><td>Dry Run 空跑</td><td>虚拟需求跑全流程排雷，修 Harness</td><td>🔴 事前</td></tr></tbody></table>
 <p>层次与时序是两个正交轴：上表按层次排，下一张图只按时序排（不再画第三张“层次×时序”叠图，避免箭头被读成日历顺序）。</p>
 <p>同样一批护栏，换按时序归类——三条泳道即护栏相对危险动作的三个时刻：</p>
-<p><img alt="图片" src="img-022-f00ce00d.png"></p>
+<p><img alt="图片" src="../assets/img/img-022-f00ce00d-b2e7bb562a.png"></p>
 <h3 id="术语表">术语表</h3>
-<p><img alt="图片" src="img-023-f813d3e6.png"></p>
+<p><img alt="图片" src="../assets/img/img-023-f813d3e6-328f53f9bd.png"></p>
 <p>-End-</p>
 <p>原创作者｜徐鑫</p>
 <p>感谢你读到这里，不如关注一下？👇</p>
 <p><img alt="图片" src="img-024-c1433aab.webp"></p>
 <p>📢📢来抢开发者限席名额！点击下方图片直达👇</p>
-<p><img alt="图片" src="img-025-3094f780.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-025-3094f780-4cc0ed129d.jpg"></p>
 <p><img alt="图片" src="img-026-42a0e4da.webp"></p>
 <p>扫码领取腾讯云开发者专属服务器代金券！</p>
 <p><img alt="图片" src="img-027-8942c147.webp"></p>
 <p><img alt="图片" src="img-028-567607e1.webp"></p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697254&amp;idx=1&amp;sn=4c6c7051662b7a92a77ce80bec68af16&amp;scene=21#wechat_redirect"><img alt="图片" src="img-029-dbd3f25c.png"></a></p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697030&amp;idx=1&amp;sn=961b696054ae4d9c0f9eda068564203e&amp;scene=21#wechat_redirect"><img alt="图片" src="img-030-b1827df3.png"></a></p>
-<p><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697260&amp;idx=1&amp;sn=bbda847cb4e895e1ea99caf5acec9923&amp;scene=21#wechat_redirect"><img alt="图片" src="img-031-ac950894.png"></a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697254&amp;idx=1&amp;sn=4c6c7051662b7a92a77ce80bec68af16&amp;scene=21#wechat_redirect"><img alt="图片" src="../assets/img/img-029-dbd3f25c-78c52835fb.png"></a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697030&amp;idx=1&amp;sn=961b696054ae4d9c0f9eda068564203e&amp;scene=21#wechat_redirect"><img alt="图片" src="../assets/img/img-030-b1827df3-da79b64e29.png"></a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzI2NDU4OTExOQ==&amp;mid=2247697260&amp;idx=1&amp;sn=bbda847cb4e895e1ea99caf5acec9923&amp;scene=21#wechat_redirect"><img alt="图片" src="../assets/img/img-031-ac950894-6280ea9de1.png"></a></p>
 <p><img alt="图片" src="img-032-be100d1e.webp"></p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>

@@ -413,23 +413,23 @@
 <p>量子位 | 公众号 QbitAI</p>
 <p>什么情况？小米新模型的强化学习训练，直接开了现场直播。</p>
 <p>点进去一看，这哪是训练现场啊，这就是烧钱现场，一眨眼就是10美刀，一分钟就是4000多元人民币出去了。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-001-52812a1c.gif"></p>
+<p><img alt="图片" src="../assets/img/img-001-52812a1c-98d0b76d8e.gif"></p>
 <p>当然烧钱的速度可能不是均匀的，从pro模型开始训练算起36小时，两款模型已经花了超过108万美元，<strong>平均每小时3万美元</strong>。</p>
 <p>要是别人干这事得喊一句误闯天家，但是小米干这事只能喊一句误闯米家了。</p>
 <p>在这个页面上，训练花了多少钱、跑了多少步、奖励曲线涨没涨、哪个节点的显卡出了故障，全部公开可查。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-002-be0eb8ef.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-be0eb8ef-c8d5cab08c.png"></p>
 <p>见过开放权重、开放训练代码和开放训练数据的，开放训练过程的还真是没见过，围观群众纷纷大呼过瘾。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-003-87985c2e.png"></p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-004-d8b488af.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-87985c2e-ecd4b6caa9.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-d8b488af-52e7dcf3a0.png"></p>
 <p>那么目前MiMo-V2.6的Flash和Pro两款模型训练得怎么样了？</p>
 <p>其实还在初期，毕竟刚开始训练1天多一点。</p>
 <p>不过已经能看出两者在RL过程中都有了比较明显的能力提升：</p>
 <p>Pro的dynsam/avg@n从第1步的约0.565提升至0.614，Flash则从约0.514提升至0.603；最新公开的DeepSWE v1.1离线评测中，Pro和Flash分别达到<strong>62.24和60.77</strong>。（对比DeepSeek-Flash v1.1是74.2%）</p>
 <p>Flash从更低的起点快速追近，Pro目前只保持小幅领先。不过Pro训练完一个Step更慢，所以最新的评分还没出来。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-005-ccfab2c6.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-ccfab2c6-8675f1c82a.png"></p>
 <p>自4月份开源MiMo-v2.5后，小米沉默了近半年。</p>
 <p>现在负责人罗福莉出来解释，这期间只研究了一件事：<strong>强化学习能扩展到多远</strong>。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-006-be3bda4f.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-be3bda4f-b51230c384.png"></p>
 <h3 id="小米公开如何Scaling强化学习">小米公开如何Scaling强化学习</h3>
 <p>传统的预训练scaling很容易理解：<strong>更多数据 × 更多参数 × 更多算力 → 更强模型</strong></p>
 <p>现在前沿模型越来越关注<strong>RL能不能也这样scaling？</strong></p>
@@ -441,19 +441,19 @@
 <p>MiMo-V2.6系列每个训练Step大约会处理<strong>20亿Token</strong>，配置为<strong>1568个Prompt × 每个Prompt 16条Rollout</strong>。</p>
 <p>也就是说，同一道题并不是只让模型回答一次，而是让它尝试多条不同的解题和行动轨迹，再从这些尝试中获得强化学习信号。</p>
 <p>1568×16意味着一轮就可能产生超过2.5万条Rollout。而对于Agent任务来说，一条Rollout又远不只是“一问一答”：模型可能要经历几十轮思考、工具调用、环境反馈和再次行动，因此最终一个Step的Token数可以达到数十亿级别。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-007-90d3f6ba.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-90d3f6ba-5865765ef9.png"></p>
 <p>更重要的是，整个系统采用了<strong>Fully Async，也就是完全异步的执行方式</strong>。</p>
 <p>传统意义上可以把一次RL训练想象成一条整齐的流水线：先把所有样本生成完，再统一评分，然后训练模型，最后开始下一轮。</p>
 <p>但大规模Agent RL很难这样等待。</p>
 <p>在MiMo的系统里，不同任务可以同时处于不同阶段：有的Agent还在环境中执行任务，有的已经完成、等待判分，有的正在计算Reward，还有新的任务正在进入系统。生成、执行、评分和训练不再严格排队，而是组成了一套持续运转的异步流水线。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-008-fcae99a3.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-fcae99a3-2bb17c3738.png"></p>
 <h4 id="环境的Scaling">环境的Scaling</h4>
 <p>第二个扩展方向是<strong>Environments and Harnesses，也就是训练环境和执行框架的扩展</strong>。</p>
 <p>MiMo-V2.6做的是Multi-task Agentic RL：代码、通用任务、视觉、Chat等不同类型的任务，可以被混合到同一次RL Run中训练，而且这些任务还可以运行在不同的Harness里。</p>
 <p>例如一个编程Agent的Harness可能允许模型打开终端、修改代码、执行测试、阅读报错，然后继续修改；另一个视觉Agent面对的则可能是一套完全不同的工具、环境反馈和成功条件。</p>
 <p>因此，MiMo想扩展的除了“题目数量”，还有<strong>模型能够进入多少种环境、使用多少种工具、解决多少种类型的问题</strong>。</p>
 <p>这也是为什么直播页面会专门展示Batch Composition：这一栏实际上是在告诉外界，每一个训练Step中，模型正在从什么样的任务和环境里获取经验。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-009-d460899b.png"></p>
+<p><img alt="图片" src="../assets/img/img-009-d460899b-b68894872c.png"></p>
 <h4 id="评分的Scaling">评分的Scaling</h4>
 <p>第三个Scaling方向则更容易被忽略：<strong>Grader Compute，也就是给打分本身增加算力。</strong></p>
 <p>强化学习需要奖励，但复杂Agent任务的奖励 并不像数学选择题那样容易得到。</p>
@@ -465,12 +465,12 @@
 <p>因为模型并不知道：前面的40步中，究竟哪些动作真正帮助了成功？哪些步骤其实毫无必要？哪一次修改扭转了整个任务？又有哪些动作虽然最后没有导致失败，却实际上是不好的选择？</p>
 <p>MiMo在这次训练中特别提到了<strong>Agentic In-group Credit Assignment</strong>。目前还没有公布具体算法，但结合“同一个Prompt生成16条Rollout”的训练方式，可以理解其基本目标：利用同组多条Agent轨迹及其结果，获得比简单的最终成败更加细致的强化学习信号。</p>
 <p>同一组任务尝试，哪些行为应该获得更多鼓励、哪些应该减少鼓励，以及如何把这种判断转成训练信号。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-010-d6818aca.png"></p>
+<p><img alt="图片" src="../assets/img/img-010-d6818aca-ff32cc7f0b.png"></p>
 <p>这样一来，MiMo所说的三个Scaling方向实际上构成了一套完整体系：</p>
 <p><strong>扩展计算量，让模型产生更多经验；扩展环境和Harness，让模型获得更加多样的经验；更多评分计算量，则负责从这些海量经验中提取更加准确的学习信号。</strong></p>
 <p><strong>当预训练的Scaling已经发展多年之后，能否把模型与环境交互、产生经验、评价经验再到学习经验的整个RL循环，也变成一台可以持续扩大规模的机器？</strong></p>
 <p>不过前来围观的大佬ViT大佬给出更直接的翻译：三件事，背后都是算力。</p>
-<p><img alt="图片" src="../../_assets/20260917-小米MiMo-V2.6强化学习训练直播/img-011-afff57a3.png"></p>
+<p><img alt="图片" src="../assets/img/img-011-afff57a3-310f7f5565.png"></p>
 <h3 id="参考链接-1-https-mimo-xiaomi-com-rl">参考链接 [1] https://mimo.xiaomi.com/rl</h3>
 <h3 id="2-https-x-com-LuoFuli-status-2100296686719610932">[2]https://x.com/_LuoFuli/status/2100296686719610932</h3>
 <h3 id="一键三连-点赞-转发-小心心">一键三连「点赞」「转发」「小心心」</h3>

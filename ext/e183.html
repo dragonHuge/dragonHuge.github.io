@@ -415,7 +415,7 @@
 <h2 id="原文沉淀">原文沉淀</h2>
 <h3 id="目录">目录</h3>
 <ul><li><a href="#你的客厅里来了一条龙">你的客厅里来了一条龙</a></li><li><a href="#工程演进提示词上下文驾驭">工程演进：提示词、上下文、驾驭</a></li><li><a href="#4-个案例进一步了解-harness-engineering">4 个案例进一步了解 Harness Engineering</a></li><li><a href="#群体智能企业业务创新的拐点">群体智能：企业业务创新的拐点</a></li></ul>
-<p><img alt="图片" src="../../_assets/20260407-Harness-Engineering驾驭工程第三范式/img-001-a7960c6a.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-001-a7960c6a-b08382c90b.jpg"></p>
 <p>阿里妹导读</p>
 <p>OpenClaw 将 AI 主权从模型厂商转移到了用户手中，但调教 AI 并不是一个简单的事情，甚至让人烦躁。这一背景加速了 Harness 驾驭工程的市场共识。</p>
 <p>📌 <strong>Harness </strong>一词来源于马具。马是强大的 AI 模型，但因其黑盒属性具有不可控性；Harness 是指缰绳、马鞍和护具等，是工程管理学；骑手是人类工程师，明确意图、设计环境和构建反馈回路。</p>
@@ -443,7 +443,7 @@
 <ul><li>核心问题：整个环境应该如何运作？</li></ul>
 <ul><li>人类角色：角色再次从 Agent Builder 手里交还到用户手里。通过设计完整的运行环境，包括约束、反馈回路、自动验证、熵管理、生命周期治理等。</li></ul>
 <ul><li><strong>笔者个人认为，驾驭工程能在这个阶段引发共鸣，和 OpenClaw 的出现，促使 AI 主权从模型厂商转移到用户侧有着紧密的关联。权责对等，拥有了调试 Agent 的权利，也需要学会 Harness，懂得和 Agent 相处。</strong></li></ul>
-<p><img alt="图片" src="../../_assets/20260407-Harness-Engineering驾驭工程第三范式/img-002-00f6d815.webp"></p>
+<p><img alt="图片" src="../assets/img/img-002-00f6d815-91cb1623e8.webp"></p>
 <p>图源：瑶池数据库举办的虾搞数据库杭州站</p>
 <h3 id="4-个案例进一步了解-Harness-Engineering">4 个案例进一步了解 Harness Engineering</h3>
 <p>读到这里，你可能会产生一个合理的怀疑：Harness Engineering 是不是只是把好的软件工程实践重新包装了一下？写好文档、做好反馈链路、跑好 CI，这些事情我们不是一直在做吗？这个怀疑值得认真对待。我们先来看 4 个真实案例。</p>
@@ -451,7 +451,7 @@
 <p>来源：Can Duruk, "I Improved 15 LLMs at Coding in One Afternoon", 2026.02<strong>[</strong><strong>2]</strong></p>
 <p>独立开发者 Can Duruk 维护着一个开源编码 Agent 框架。他发现一个被很多人忽视的问题：Agent 修改代码文件的编辑工具本身就是一个巨大的失败源。</p>
 <p>当前业界主流的编辑方式有三种：OpenAI 的 apply_patch（要求模型生成特定格式的 diff）、Claude Code 的 str_replace（要求模型精确复现旧文本的每一个字符）、以及 Cursor 训练的专用 70B 合并模型。每种方式都有严重缺陷，Grok 4 使用 patch 格式的失败率高达 50.7%。</p>
-<p><img alt="图片" src="../../_assets/20260407-Harness-Engineering驾驭工程第三范式/img-003-2acc6a04.webp"></p>
+<p><img alt="图片" src="../assets/img/img-003-2acc6a04-ab26641749.webp"></p>
 <p>他设计了一种叫 <strong>Hashline</strong> 的新方案：当模型读取文件时，每一行都附带一个 2-3 字符的内容哈希标签。模型编辑时只需引用这些标签，而非复现原始文本。</p>
 <p>- - - - - -</p>
 <pre><code>// 模型看到的文件：
@@ -479,7 +479,7 @@
 <p>来源：HumanLayer, "Skill Issue: Harness Engineering for Coding Agents", 2026.03<strong>[</strong><strong>3]</strong></p>
 <p>HumanLayer 团队在大量企业级棕地项目中发现了一个核心问题：Agent 的上下文窗口会随着工作推进而“腐烂”。每一次工具调用、每一次文件读取、每一次 grep 结果，都会在上下文中留下残留。当上下文膨胀到一定程度，Agent 就进入了他们所说的“笨蛋区”，即使是简单任务也开始出错。</p>
 <p>该研究提供了实证支撑：18 个模型在 Terminal Bench 2.0 的测试用例上的表现随上下文长度增加而显著下降，且当上下文中存在低语义相关性的干扰信息时，退化更加陡峭。</p>
-<p><img alt="图片" src="../../_assets/20260407-Harness-Engineering驾驭工程第三范式/img-004-eed60f95.webp"></p>
+<p><img alt="图片" src="../assets/img/img-004-eed60f95-3f7afc6d46.webp"></p>
 <p>HumanLayer 的解决方案不是“加大上下文窗口”，而是引入子 Agent 作为“上下文防火墙”：</p>
 <ul><li>父 Agent 负责规划和编排，使用昂贵的高推理模型（如 Opus）。</li></ul>
 <ul><li>子 Agent 在隔离的上下文窗口中执行具体任务，使用便宜的快速模型（如 Sonnet）。</li></ul>
@@ -494,7 +494,7 @@
 <p>他们为 Claude Code 编写了一个 Hook 脚本：当 Agent 停止工作时，自动运行格式化检查和 TypeScript 类型检查。如果一切通过，完全静默，不向上下文注入任何内容。如果失败，则只输出错误信息，并用退出码告诉 Harness 重新激活 Agent 去修复问题。</p>
 <p>LangChain 的实践更进一步：他们设计了 PreCompletionChecklistMiddleware，在 Agent 试图交卷时拦截它，强制它对照任务规格做一次验证。同时用 LoopDetectionMiddleware 追踪对同一文件的重复编辑次数，在 N 次后注入“也许你该换个思路”的提示，帮助 Agent 跳出死循环。</p>
 <p>结果是，LangChain 的编码代理在 Terminal Bench 2.0 测试中从前 30 名跃升至前 5 名。</p>
-<p><img alt="图片" src="../../_assets/20260407-Harness-Engineering驾驭工程第三范式/img-005-519e6407.webp"></p>
+<p><img alt="图片" src="../assets/img/img-005-519e6407-887aa25369.webp"></p>
 <p>传统 CI/CD 的反馈回路是为人类设计的：测试报告越详细越好，因为人类需要理解失败原因。但 Agent 的反馈回路需要对上下文窗口友好，信息量必须精确控制，成功信号要压缩到零，失败信号要精炼到最小可操作单元。更独特的是“循环检测”和“强制验证”，而人类工程师是不需要被提醒“你已经改了同一个文件 10 次了”，也不需要被强制在提交前对照需求文档检查一遍。这些是专门为非人类认知体的行为缺陷设计的补偿机制。</p>
 <p>同一个模型，不同的 Harness，截然不同的结果。这 4 个案例说明了：Agent 竞争优势除了在你用了哪个模型，也在于你构建了怎样的 Harness。Harness 成了护城河，不只是 Agent Builder 们的护城河，更是 Agent User 们的护城河。</p>
 <h3 id="群体智能-企业业务创新的拐点">群体智能：企业业务创新的拐点</h3>
@@ -520,11 +520,11 @@
 <ul><li><strong>每个 Agent 支持自定义：OpenClaw、Copaw、NanoClaw、ZeroClaw 以及企业自建的 Agent，从养虾到开虾场，每个 Agent 可以自由配置后端模型，例如代码生成使用百炼 Coding Plan、文本撰写使用本地 Qwen 开源模型，助力 FinOps。</strong></li></ul>
 <ul><li><strong>引入 MinIO 共享文件系统：用于 Agent 之间的信息共享，大幅降低多 Agent 协作带来的 Token 消耗。</strong></li></ul>
 <ul><li><strong>引入 Higress AI Gateway：实现</strong>鉴权路由（每个龙虾只能访问受控资源），凭证和访问安全（集中管理用户各类凭证、安全护栏），后端稳定（多模型接入和模型 fallback、限流和降级），Skills 统一管理，防止被恶意或不当使用，入口监控（QPS、鉴权失败率、Token 配额消耗、MCP 服务延迟）、安全审计（请求记录、操作日志记录等）。<strong>AI Gateway 的重要性见下图。</strong></li></ul>
-<p><img alt="图片" src="../../_assets/20260407-Harness-Engineering驾驭工程第三范式/img-006-062f7c51.webp"></p>
+<p><img alt="图片" src="../assets/img/img-006-062f7c51-b531859488.webp"></p>
 <p>我们来看一个基于 HiClaw 构建的群体智能的实践案例。一家汽车生产商，计划生产一款 700w 的豪车，通过设计 N 个角色，由他们进行 100 次的讨论，给出一个结果。</p>
-<p><img alt="图片" src="../../_assets/20260407-Harness-Engineering驾驭工程第三范式/img-007-3034c69a.webp"></p>
+<p><img alt="图片" src="../assets/img/img-007-3034c69a-85731b9612.webp"></p>
 <p>案例中，我们选择了 3 位不同身份的目标用户，由他们进行自由讨论，在这 100 轮对话中，他们分别从品牌认知、舒适需求、安全隐私、品牌社交、软价值等多个方面进行激烈讨论。</p>
-<p><img alt="图片" src="../../_assets/20260407-Harness-Engineering驾驭工程第三范式/img-008-b29cd95e.webp"></p>
+<p><img alt="图片" src="../assets/img/img-008-b29cd95e-c9ce103620.webp"></p>
 <p>由于内容较多，感兴趣的朋友，可以去以下地址进行围观。</p>
 <p>https://github.com/alibaba/hiclaw/issues</p>
 <p>Harness Engineering 是让企业拥有一支可编排、可治理、可持续进化的数字化智能团队。个人效率的提升是线性的，而群体智能的涌现是指数级的。CLI-Anything、HiClaw 这类开源项目正是 Harness Engineering 在群体智能下的探索和实践。</p>

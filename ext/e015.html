@@ -415,22 +415,22 @@
 <p>为了不再丢，我写了一个 skill、两个 hook 和一段对账脚本守着 <code>settings.json</code>，来解决供应商配置回退的问题。</p>
 <blockquote><p>CC Switch 4.0[1] 已经把写回改成只替换几个字段，写入前还会检查文件有没有被别处改过。</p></blockquote>
 <p>国庆节那会，我偶然看到 magpie，决定暂停 CC Switch，换上试试。这篇文章记录这段时间的使用感受，以及我对 magpie 的一些看法。</p>
-<p><img alt="图片" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-001-8685a96e.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-8685a96e-6f27718492.png"></p>
 <h3 id="我不用再手动切供应商">我不用再手动切供应商</h3>
 <p>装完 magpie，机器上会多一个网关，地址是 <code>127.0.0.1:3425</code>。它能在 OpenAI 的 Chat Completions 和 Responses、Anthropic Messages、Google Gemini 这几种 API 格式之间转换。CC Switch 也有协议转换功能，具体支持的转换方向要看接入的客户端和上游接口。</p>
 <p>让我省事的是模型列表。以前我用 CC Switch 时，习惯进页面手动切供应商；现在在 magpie 里，各家供应商的模型摆在一起，Claude Code 的模型列表里也能选。不过 CC Switch 4.0 也增加了类似的聚合模式。</p>
-<p><img alt="CC 模型列表展示" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-002-b1b84b0e.png"></p>
+<p><img alt="CC 模型列表展示" src="../assets/img/img-002-b1b84b0e-d4cdb11250.png"></p>
 <p>CC 模型列表展示</p>
 <p>magpie 给 Claude Code 的 opus、sonnet、haiku、fable 四档各留了一个下拉框。可以四档指向同一个模型，也可以给 opus 挑个贵的、给 haiku 挑个快的，也可以单独给子 Agent 指一个。</p>
-<p><img alt="claude code模型配置" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-003-16ad8ea5.png"></p>
+<p><img alt="claude code模型配置" src="../assets/img/img-003-16ad8ea5-401d960f02.png"></p>
 <p>claude code模型配置</p>
 <p>添加也很简单，内置预设都在“添加供应商”里，预设里没有的可以自定义。</p>
-<p><img alt="供应商配置展示" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-004-45306429.png"></p>
+<p><img alt="供应商配置展示" src="../assets/img/img-004-45306429-af3e8ec6d0.png"></p>
 <p>供应商配置展示</p>
-<p><img alt="供应商配置界面" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-005-00a3624b.png"></p>
+<p><img alt="供应商配置界面" src="../assets/img/img-005-00a3624b-4e16d7c80a.png"></p>
 <p>供应商配置界面</p>
 <p>需要额外登录或请求逻辑的供应商，还可以用插件接入。插件可以来自 npm 包、git 仓库或者本地文件夹，可以用别人写好的，也可以自己定制。比如浏览器授权、设备码登录、定期刷新 token 这些场景，就可以交给插件。</p>
-<p><img alt="插件" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-006-42337b21.png"></p>
+<p><img alt="插件" src="../assets/img/img-006-42337b21-431ffba76b.png"></p>
 <p>插件</p>
 <h3 id="它替我挑供应商-也替我挑账号">它替我挑供应商，也替我挑账号</h3>
 <p>开启“自动创建路由组”后，多个供应商提供的同名模型会自动组成一个组。我的截图里就有一个 <code>group/auto-deepseek-v4-1-flash</code>，底下是 OpenCode Go 和火山引擎两个来源。当前文档把自动组写作 <code>auto/&amp;lt;模型 ID&amp;gt;</code>，旧的 <code>group/auto-…</code> 名称仍兼容。也可以手动建组，把不同模型放在一起。在 Agent 里选中这个组之后，请求才会按组里的策略分给这些来源。</p>
@@ -440,41 +440,41 @@
 <p>路由策略决定重新选择时的顺序；是否重新选择，还要看下面的会话保持设置。</p>
 <p>拿默认的智能举例，假如两个账号的额度都还充足，一个周额度明天重置，一个下周重置，它先用前者，快到期的不用就浪费了。只有 5 小时窗没有周窗的账号，比如 Claude 企业版，按 5 小时算，排在所有周窗更晚重置的前面。相关额度窗口已用到 90% 或以上的账号会靠后，先让额度充足的账号回答。</p>
 <p>策略下面还有一项叫“被限流时”，可以选“保持原位”或者“排到最后”。另外额度用完的账号会休息到额度重置，欠费停用的歇半小时等人充值，厂商限流的按它给的 Retry-After 跳过，报错的账号退避，越错越久。这类故障转移的前提是回复尚未发给 Agent：前一个没答成，可以转给下一个；不能理解成回复已经发到一半，也能无缝换账号接着答。这类失败切换 CC Switch 也有；magpie 在这些之上多做了一件事，它提前替你安排账号的使用顺序。</p>
-<p><img alt="路由页面" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-007-9f249016.png"></p>
+<p><img alt="路由页面" src="../assets/img/img-007-9f249016-2210bf3297.png"></p>
 <p>路由页面</p>
 <p>选完策略，接着要定一次选择保持多久。Agent 收到你一条消息，往往会连着调好几次工具，每次把结果发回来都可能产生新请求。这些请求要是不断换账号或模型，前面对话的缓存优势可能就丢了，有些厂商还不接受别家模型写出来的 reasoning。所以还有一组会话保持的设置，下面列出截图中的四项。</p>
 <table><thead><tr><th>设置</th><th>保持多久</th></tr></thead><tbody><tr><td>自动（默认）</td><td>同一轮内保持；跨轮时看厂商缓存的那部分还值不值得留</td></tr><tr><td>整个会话</td><td>只要还能正常响应，整个会话都用同一个</td></tr><tr><td>一轮之内</td><td>这一轮的工具调用保持不变，你再次发言时重新选</td></tr><tr><td>关闭</td><td>每次请求都重新选</td></tr></tbody></table>
 <p>这里的一轮是从你发出消息开始，到 Agent 回完为止。保持也有例外，当前账号答不了还是会换人，上下文涨过当前模型能装的上限也会挪给容量更大的那个。</p>
 <p>账号之外，还能按请求本身的样子分流。一个模型组里的规则可以看长度（token 数超过多少）、有没有带图、要不要 reasoning、来自哪个 Agent、是不是在压缩上下文，以及意图，还能限定在哪些时段、星期几、哪些文件夹（或排除某些文件夹）生效。</p>
 <p>比如遇到不能识图的模型时，可以让一个识图模型把图片描述给它；不能联网搜索时，可以指定用哪个搜索 API 或哪个模型代它去搜，再把结果交给它，不用撞上了再手动换。还有我以前常遇到 Agent 陷入死循环：思考或正文反复绕着同样几句打转，就是不往下走。magpie 对这种也做了防御，检测到就把这一条回复结束掉，交回一个 Agent 可以重试的错误。</p>
-<p><img alt="图模型设置、搜索和循环打断" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-008-0da3c4e7.png"></p>
+<p><img alt="图模型设置、搜索和循环打断" src="../assets/img/img-008-0da3c4e7-a175cb24ff.png"></p>
 <p>图模型设置、搜索和循环打断</p>
 <p>意图路由则是让一个判断模型来决定请求属于哪一类，比如简单问答、写测试，再优先交给你为这一类指定的模型。我还没给自己配意图规则，下面只说明它的机制，没有实际检验过分类效果。</p>
 <p>按 v0.1.1564 的实现[2]，判断模型会看到最新用户消息，以及经过截断的上一条用户消息和其后助手最后一条文字回复，用来理解“继续”“修一下”这类追问。系统提示、思考内容、工具调用参数和工具结果不会一起发过去，Claude Code 添加的 <code>system-reminder</code> 也会被剥掉。</p>
 <p>判断默认最多等 8 秒，可在设置里调长，最高 60 秒。调用出错、超时或回答无效时，如果上一轮的意图仍在本轮候选中，就沿用它；没有可沿用的意图，才按其他规则或默认策略走。这一点以当前版本的失败处理逻辑[3]为准。判断需要额外的模型调用，用量页能看到；也可以用 Ollama 或 LM Studio 上的本地模型来判断。</p>
-<p><img alt="路由组编辑" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-009-1632edcb.png"></p>
+<p><img alt="路由组编辑" src="../assets/img/img-009-1632edcb-feed2bf949.png"></p>
 <p>路由组编辑</p>
-<p><img alt="路由组编辑（2）" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-010-4cd29dc2.png"></p>
+<p><img alt="路由组编辑（2）" src="../assets/img/img-010-4cd29dc2-eadb73a645.png"></p>
 <p>路由组编辑（2）</p>
 <p>组不用从零写。路由页面没有自己的组时，会给出三个模板，点一下就能建好。“难题给强模型，简单的给便宜模型”把难活交给强模型，压缩之类的杂活交给便宜的；“便宜优先”先用便宜模型，需要高推理或者便宜的都不行了再交给强的；“永不卡住”让各家供应商最强的模型依次给对方当后备。这些组也能从命令行创建和调整。</p>
-<p><img alt="路由组模板" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-011-cbd7839e.png"></p>
+<p><img alt="路由组模板" src="../assets/img/img-011-cbd7839e-9fafa48ee4.png"></p>
 <p>路由组模板</p>
 <h3 id="它做了什么-我看得见">它做了什么，我看得见</h3>
 <p>magpie 让我能看到本机网关的请求状态，以及它对 Agent 配置做了哪些修改。</p>
 <p>在 Agent 的模型配置界面，magpie 会给你展示它改了什么，比如 Claude Code：</p>
-<p><img alt="claude code settings 修改提示" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-012-82db57fb.png"></p>
+<p><img alt="claude code settings 修改提示" src="../assets/img/img-012-82db57fb-e7e2ff57c2.png"></p>
 <p>claude code settings 修改提示</p>
 <p>用量页按模型和账号统计 token 数、缓存命中率和折算出来的费用，还可以看账号的明细，显示尝试、应答、失败、已用额度和多久重置。</p>
-<p><img alt="用量页面" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-013-bf8e4201.png"></p>
+<p><img alt="用量页面" src="../assets/img/img-013-bf8e4201-4a4424eef4.png"></p>
 <p>用量页面</p>
 <p>在路由页面顶上是一条流水，Agent 经 magpie 发出的每个请求都列在这里：由谁应答、为何选它，以及每次尝试。</p>
-<p><img alt="路由页顶部实时状态" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-014-55f5a062.png"></p>
+<p><img alt="路由页顶部实时状态" src="../assets/img/img-014-55f5a062-1e99b49521.png"></p>
 <p>路由页顶部实时状态</p>
 <p>下面还能看到请求的实时状态，比如上下文、缓存命中、时间和费用。</p>
-<p><img alt="路由请求实时界面" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-015-e0f73907.png"></p>
+<p><img alt="路由请求实时界面" src="../assets/img/img-015-e0f73907-afbbb6f562.png"></p>
 <p>路由请求实时界面</p>
 <p>这些记录让我排查路由问题时有据可查。在网关页，还能查看结构化展示的最近调用的原始消息。</p>
-<p><img alt="网关" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-016-19b3ab97.png"></p>
+<p><img alt="网关" src="../assets/img/img-016-19b3ab97-529b77087b.png"></p>
 <p>网关</p>
 <h3 id="参数可以细调-接入配置可以还原">参数可以细调，接入配置可以还原</h3>
 <p>供应商详情里的参数可以按模型覆盖。上下文窗口、单次最大输出、压缩阈值都能自己填，还能写成 <code>deepseek-v4-flash=272k</code> 这样按模型分别指定。上下文窗口和最大输出留空时按厂商和 models.dev 的数据补全；压缩阈值留空时则跟随设置里的“长对话”选项。</p>
@@ -486,13 +486,13 @@
 <p><strong>第一眼是界面</strong>，我觉得 magpie 的 UI 做得比 CC Switch 舒服，看久了不累。</p>
 <p><strong>托盘也值得说</strong>。magpie 只留一个图标，鼠标指上去就能看到所选订阅还剩多少额度，点开是快捷面板，也能设成直接开主窗口，不用把主窗口翻出来。</p>
 <p>对支持重置卡的订阅，magpie 的卡片里会写还剩几张、什么时候过期，还可以打开<strong>自动使用重置卡</strong>。有可用卡时，它会自动尝试重置额度，减少手动处理和等待。</p>
-<p><img alt="托盘" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-017-71bf3c1d.png"></p>
+<p><img alt="托盘" src="../assets/img/img-017-71bf3c1d-88749b0abf.png"></p>
 <p>托盘</p>
 <p>对按首次请求启动 5 小时窗口的订阅，设置里有两项能提前启动计时：<strong>窗口重置时预热</strong>会在窗口重置后发一条极小的请求，让下一个窗口开始计时；<strong>每日定时预热</strong>则在每天指定的时间，为各账号启动窗口。这样，早上打开电脑时，窗口可能已经跑了一段。如果工作时段刚好跨过重置点，就能先后使用前后两个窗口的额度；每个窗口的额度上限仍由厂商决定。</p>
-<p><img alt="窗口预热" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-018-bdafccb1.png"></p>
+<p><img alt="窗口预热" src="../assets/img/img-018-bdafccb1-e84dc64c2e.png"></p>
 <p>窗口预热</p>
 <p>隐私页还提供了脱敏和掩码设置，具体选项可以在界面里查看。</p>
-<p><img alt="隐私" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-019-281bebee.png"></p>
+<p><img alt="隐私" src="../assets/img/img-019-281bebee-02b47ea44a.png"></p>
 <p>隐私</p>
 <h3 id="总结">总结</h3>
 <p>CC Switch 4.0 已经修复了我当时遇到的配置写回问题，也增加了模型聚合。不过在我目前的多供应商、多账号用法里，magpie 的自动路由和额度安排更合我的习惯，所以暂时没有换回去的打算。</p>
@@ -510,7 +510,7 @@
 <p>官方中文文档: <em>https://usemagpie.ai/docs/zh/</em></p>
 <p>[5]</p>
 <p>官方仓库: <em>https://github.com/farion1231/cc-switch</em></p>
-<p><img alt="图片" src="../../_assets/替代CC-Switch的这个项目已斩获20K-Star/img-020-c1262e6b.webp"></p>
+<p><img alt="图片" src="../assets/img/img-020-c1262e6b-bacec1f7fc.webp"></p>
 <p><strong>⭐️推荐阅读</strong>:</p>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247555122&amp;idx=1&amp;sn=96278bed8e2b414434398b56785ea2bd&amp;scene=21#wechat_redirect">AIGuide：AI 应用开发、AI 编程实战与面试指南</a>（对标 JavaGuide，完全开源免费）</li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247552140&amp;idx=1&amp;sn=551aeaa2298099436d22ac4983b17c49&amp;scene=21#wechat_redirect">JavaGuide： Java 面试指南和后端通用面试复习资料</a>（Github 157k+ Star）</li></ul>

@@ -414,25 +414,25 @@
 <p>最近，X 上一个名为 Jev 的模型持续引发关注。</p>
 <p>我们此前已经对 Jev 做过详细介绍《<a href="https://mp.weixin.qq.com/s?__biz=MjM5ODExNDA2MA==&amp;mid=2450016547&amp;idx=2&amp;sn=abe7c0f505700f79a540c9355e6d4a15&amp;scene=21#wechat_redirect">ChatGPT核心研发者推出新模型：不生成文字，输出Token免费！</a>》。</p>
 <p>与 GPT、Claude 等大语言模型不同，Jev 并不以文本生成为主要任务，而面向高频决策场景，将输入状态映射为预先定义的结构化选项，并输出对应的决策结果与置信度。</p>
-<p><img alt="图片" src="../../_assets/20260921-基于Jev的浏览器Agent插件开源狂揽12.1kstar/img-001-12779461.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-12779461-1e3ee6df09.png"></p>
 <p>这种模型的核心价值不在于生成长文本，而在于以更低的延迟和成本完成大量高频、离散的判断任务。</p>
 <p>Browser-Use 围绕 Jev 开源了 jev-ultrafast 项目，将其用于浏览器 Agent 的高频动作决策。</p>
 <p>与传统 Browser Agent 通过截图理解网页、再调用大模型决定下一步操作的方式不同，jev-ultrafast 直接读取浏览器 DOM，将网页中的可交互元素转换成结构化状态，再让 Jev 决定执行什么操作，以及操作哪个元素。</p>
-<p><img alt="图片" src="../../_assets/20260921-基于Jev的浏览器Agent插件开源狂揽12.1kstar/img-002-1eeeec6a.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-1eeeec6a-4ea843f46b.png"></p>
 <p>项目目前已经获得 12.1k GitHub Stars。</p>
 <p>从公开演示来看，jev-ultrafast 可以在约 7 秒内完成一次苏黎世到伦敦的航班检索，同时显著减少浏览器协议调用次数和模型调用成本。</p>
 <p>更值得关注的是，它并非简单地把一个“更快的模型”接入现有 Agent，而是重新设计了浏览器 Agent 的决策链路。</p>
-<p><img alt="图片" src="../../_assets/20260921-基于Jev的浏览器Agent插件开源狂揽12.1kstar/img-003-c58070b0.png"></p>
-<p><img alt="图片" src="../../_assets/20260921-基于Jev的浏览器Agent插件开源狂揽12.1kstar/img-004-ff202d43.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-c58070b0-f1c6f2a880.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-ff202d43-33d647c01f.png"></p>
 <h3 id="Browser-Use-把它塞进了">Browser-Use 把它塞进了</h3>
 <p>**浏览器 agent **</p>
 <p>传统 Browser Aent 通常采用：截图 → 视觉理解 → 推理 → 决策 → 执行 → 再截图。</p>
 <p>这种方案具有较强的通用性，但每一轮操作都可能涉及截图、视觉编码、大模型推理以及浏览器通信。当任务需要连续执行多个点击、输入和页面跳转时，延迟会不断累积。</p>
 <p>jev-ultrafast 采用的是另一种路径：读取 DOM → 结构化页面状态 → Jev 决策 → 执行 → 校验。不再让模型“看截图”，转而直接读取 DOM。</p>
-<p><img alt="图片" src="../../_assets/20260921-基于Jev的浏览器Agent插件开源狂揽12.1kstar/img-005-d1f5f1e2.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-d1f5f1e2-1ca6fbace5.png"></p>
 <p>网页本身已经包含大量结构化信息，按钮、输入框、下拉菜单、链接等交互元素都存在于 DOM 和 ARIA 结构中。对于浏览器操作而言，这些信息比截图中的像素更加直接。</p>
 <p>因此，jev-ultrafast 会首先读取当前页面，并生成一个带索引的动态 Action Space，例如：</p>
-<p><img alt="图片" src="../../_assets/20260921-基于Jev的浏览器Agent插件开源狂揽12.1kstar/img-006-84a591e2.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-84a591e2-63796abea5.png"></p>
 <p>模型看到的不再是一张网页截图，是一组结构化的可操作元素。</p>
 <p>这样一来，Agent 的任务就从“理解整张网页”转变为“在当前状态下选择正确动作”。一次请求，同时决定“做什么”和“对谁做”。</p>
 <p>在传统 Agent 中，一个动作可能需要先判断操作类型，再确定具体目标。</p>
@@ -462,18 +462,18 @@ target = [3]</code></pre>
 <p>在 Google Flights 示例中，Agent 接收到：</p>
 <p>Find one-way flights from Zurich to London on September 20, 2026, for one adult in economy.</p>
 <p>从打开页面到显示符合条件的航班结果，整个任务耗时约 7.073 秒。</p>
-<p><img alt="图片" src="../../_assets/20260921-基于Jev的浏览器Agent插件开源狂揽12.1kstar/img-007-027da1a1.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-027da1a1-6721f41201.png"></p>
 <p>另外两个公开示例中，打开 Wikipedia 上的 Gödel 不完备定理页面2.798 秒，搜索并筛选酒店1.896 秒。</p>
 <p>这些结果体现的并不仅仅是 Jev 本身的推理速度，实为整个浏览器 Agent Loop 的压缩。</p>
 <ul><li>任务耗时降低约 25%</li></ul>
 <p>在相同任务和浏览器环境下进行对比测试：任务中位耗时从9.450 秒到7.092 秒耗时下降约 25%。</p>
-<p><img alt="图片" src="../../_assets/20260921-基于Jev的浏览器Agent插件开源狂揽12.1kstar/img-008-5fa7b0a3.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-5fa7b0a3-905452627b.png"></p>
 <p>与此同时浏览器协议调用次数从1092 次 到101 次调用次数减少超过一个数量级。</p>
 <p>这意味着性能提升来自页面状态获取、模型调用、动作执行和浏览器通信的整体优化。</p>
 <ul><li>单次任务成本低至 0.0039 美元</li></ul>
 <p>以公开的苏黎世—伦敦航班任务为例，整个任务的 API 调用成本约为$0.0039也就是不到半美分。</p>
 <p>其中，Jev 的输入价格为每百万 tokens 0.042 美元，输出不收费；而文本生成任务则由额外的小型文本模型完成。</p>
-<p><img alt="图片" src="../../_assets/20260921-基于Jev的浏览器Agent插件开源狂揽12.1kstar/img-009-2ed02ad2.png"></p>
+<p><img alt="图片" src="../assets/img/img-009-2ed02ad2-4a38d54e43.png"></p>
 <p>因此，在大量简单浏览器操作中，将高频决策从通用大模型中拆分出来，可以显著降低整体调用成本。</p>
 <p>但这些数据并非通用 Benchmark，这些性能数字来自项目当前公开的实验和 Demo。</p>
 <p>官方说明，这些测试主要在相同任务、相同浏览器环境下重复运行，并不等同于覆盖各种网站和复杂操作的通用 Browser Agent Benchmark。</p>
