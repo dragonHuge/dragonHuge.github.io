@@ -99,7 +99,11 @@
         for (var j = 0; j < items.length; j++) items[j].classList.toggle("act", j === act);
       } else if (e.key === "Enter") {
         var kw = q.value.trim();
-        if (act >= 0 && items[act]) { location.href = items[act].href; }
+        if (act >= 0 && items[act]) {
+          var _h = items[act].href;
+          if (/^https?:/.test(_h)) { window.open(_h, "_blank", "noopener"); }
+          else { location.href = _h; }
+        }
         else if (kw) { location.href = PREFIX + "search.html?q=" + encodeURIComponent(kw); }
       } else if (e.key === "Escape") { hideSug(); q.blur(); }
     });
