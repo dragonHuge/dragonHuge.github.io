@@ -410,7 +410,7 @@
 <h3 id="目录">目录</h3>
 <ul><li><a href="#差别一四类记忆把证据和推断分开存">差别一：四类记忆，把「证据」和「推断」分开存</a></li><li><a href="#差别二观察会被精炼不会被覆盖">差别二：观察会被「精炼」，不会被覆盖</a></li><li><a href="#差别三心智模型读一次就是一次数据库读">差别三：心智模型读一次，就是一次数据库读</a></li><li><a href="#回到标题检索它其实也做了">回到标题：检索它其实也做了</a></li><li><a href="#最实用的一节该用哪个模型来做记忆">最实用的一节：该用哪个模型来做记忆</a></li><li><a href="#接得上才算数">接得上才算数</a></li></ul>
 <p>摘要 上周交代过的规范这周全忘了，同一个坑它踩了三次——我们给 Agent 加记忆，多半只是让它「记得住」，而不是「学得到」。开源项目 Hindsight 在 LongMemEval 上把成绩从 60.2% 拉到 94.6%，卖点却不在检索。本文拆解它的四类记忆结构、观察精炼机制，以及那张能帮你省钱的模型选型榜。</p>
-<p><img alt="Hindsight 品牌图：Agent Memory That Learns" src="../assets/img/img-001-cfa598c2-09499fb385.png"></p>
+<p><img alt="Hindsight 品牌图：Agent Memory That Learns" src="../assets/img/img-001-cfa598c2-09499fb38570.png"></p>
 <p>先说一个常见误会</p>
 <p>「你的知识库答不准？换个更好的向量库。」——这句话在过去两年被说了无数遍，但大多数情况下，问题不在检索那一层。</p>
 <p>检索只是个捞东西的动作。<strong>捞上来的东西本身是什么形态，才决定了你能捞到什么。</strong></p>
@@ -424,7 +424,7 @@
 <table><thead><tr><th>指标</th><th>数值</th></tr></thead><tbody><tr><td>Star / Fork</td><td>39,120 / 5,155</td></tr><tr><td>关注人数 / 开放 issue</td><td>88 / 182</td></tr><tr><td>创建时间</td><td>2025 年 10 月 30 日</td></tr><tr><td>最新版本</td><td>v0.10.1（2026 年 9 月 21 日）</td></tr><tr><td>协议 / 主语言</td><td>MIT / Python</td></tr></tbody></table>
 <p>另外一个细节能说明它的状态：抓取那天（9 月 28 日）它的仓库<strong>还有新的代码推送</strong>。</p>
 <p>而在成绩上，它拿出的数字确实很有冲击力：</p>
-<p><img alt="LongMemEval 总体成绩条形图" src="../assets/img/img-002-245a8504-9aeb5b5142.png"></p>
+<p><img alt="LongMemEval 总体成绩条形图" src="../assets/img/img-002-245a8504-9aeb5b5142c4.png"></p>
 <p>LongMemEval 总体成绩：Hindsight 94.6%、SuperMemory 85.92%、Zep 71.2%、GPT-4o 60.2%</p>
 <p>在 LongMemEval 这个衡量长期记忆的基准上，Hindsight 是 <strong>94.6%</strong>，同一张榜单上 SuperMemory 是 85.92%、Zep 是 71.2%、GPT-4o 是 60.2%。</p>
 <p>这里还有一层信息比分数更重要：<strong>这组成绩由弗吉尼亚理工的 Sanghani 人工智能与数据分析中心以及华盛顿邮报独立复现过</strong>，而榜单上其他厂商的分数都是自报的。在一个所有人都在报自己分数的领域里，「被第三方复现」本身就是一种稀缺。</p>
@@ -438,7 +438,7 @@
 <p>看清楚这里的层次：前两类是<strong>原料</strong>，后两类是<strong>结论</strong>。原料和结论分开存，好处是——当一条结论出错时，你能沿着链条退回去查到它是从哪几条事实推出来的。</p>
 <p>记忆被写进来的时候，会先走一遍「世界事实」或「经历」这两条通路，然后被表示为<strong>实体、关系和时间序列的组合</strong>，同时带上稀疏与稠密两种向量表示，供后面的召回使用。</p>
 <p>↓ 三大操作与四类记忆网络的关系</p>
-<p><img alt="Hindsight 的三大操作与四类记忆网络" src="../assets/img/img-003-c10b0dc4-29ac747081.jpg"></p>
+<p><img alt="Hindsight 的三大操作与四类记忆网络" src="../assets/img/img-003-c10b0dc4-29ac7470814c.jpg"></p>
 <p>Agent 通过 retain 把信息推入记忆网络，通过 recall 从观察层取回内容，通过 reflect 在已有记忆上推理、生成新洞见——三者构成一个循环</p>
 <p>这张图把整体关系讲清了：Agent 通过 retain 把信息推入记忆网络，通过 recall 从观察层取回相关内容，通过 reflect 在已有记忆上做推理、生成新的洞见——三者构成一个循环。</p>
 <h3 id="差别二-观察会被-精炼-不会被覆盖">差别二：观察会被「精炼」，不会被覆盖</h3>
@@ -477,7 +477,7 @@
 <p>记忆系统有个隐藏成本：<strong>它不是只在对话时花钱。</strong>retain 要调 LLM 抽取事实，观察合并要调 LLM，reflect 更要调 LLM。你等于给每一次交互又叠了一层模型开销。很多人算 Agent 成本时只算了回答那一次，漏掉的正是这里。</p>
 <p>Hindsight 的做法是把这件事变成一个可以查表的问题。官方基准站上放了一张 <strong>Retain Leaderboard</strong>，专门回答「做 retain 和观察合并，我该用哪个模型」，按<strong>质量 + 速度 + 成本 + 可靠性</strong>四项加权排名：</p>
 <p>↓ Retain Leaderboard：按质量+速度+成本+可靠性排名</p>
-<p><img alt="Retain Leaderboard 排行榜" src="../assets/img/img-004-22402e3d-b52ed4615c.png"></p>
+<p><img alt="Retain Leaderboard 排行榜" src="../assets/img/img-004-22402e3d-b52ed4615cec.png"></p>
 <p>榜首是 openai/gpt-oss-20b（跑在 Groq 上），总分 81.2：<strong>LoCoMo 准确率 84%、延迟 7.5 秒、每百万 token 成本 0.05 / 0.08 美元、模式一致性 50/50 全对</strong>。后面依次是 gpt-4.1-nano、gpt-oss-120b、gpt-4o-mini……</p>
 <p>这张表传达的信息很明确：<strong>记忆这一步不需要最贵的模型。</strong>用一个 20B 的开源模型，就能把准确率做到 84%，成本压到每百万 token 五分钱。把最强的模型留给真正需要推理的环节，钱花在刀刃上。</p>
 <p>顺带说，它一共支持 <strong>25 种以上的模型提供方</strong>，包括本地跑的（Ollama、LM Studio、llama.cpp）、任何 OpenAI 兼容端点、以及网关。还有一个容易被低估的设计：<strong>它支持你已有的订阅</strong>——ChatGPT Plus/Pro、Claude Pro/Max、Cursor、GitHub Copilot 都能直接用，不需要额外 API key。</p>

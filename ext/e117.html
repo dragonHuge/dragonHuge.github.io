@@ -411,7 +411,7 @@
 <ul><li><a href="#先玩起来的那一拨">先玩起来的那一拨：</a></li><li><a href="#然后是真正进生产的那一拨">然后是真正进生产的那一拨：</a></li></ul>
 <p>摘要 2026 年 9 月 21 日，TypeSafe AI 宣布 Jev 向所有人开放，不再需要候补名单。发布不到一周，社区用它跑出二十多种玩法。它不生成文字、不聊天、不写代码，只做一件事：把你给的选项排出概率。本文讲清它的三种提问方式、<strong>便宜三个数量级</strong>的原因，以及那个被写在官方 Limitations 里的代价。</p>
 <p>↓ Jev 正式向所有人开放</p>
-<p><img alt="TypeSafe AI 公告截图" src="../assets/img/img-001-0b412d2b-ae7c05b484.jpg"></p>
+<p><img alt="TypeSafe AI 公告截图" src="../assets/img/img-001-0b412d2b-ae7c05b484b8.jpg"></p>
 <p>TypeSafe AI 于 2026 年 9 月 21 日发布公告：Jev 向所有人开放，无需候补名单；新用户初始有 5 美元额度，约合 1.2 亿 token</p>
 <p>2026 年 9 月 21 日凌晨 5 点 30 分，TypeSafe AI 在 X 上发了一条公告：<strong>Jev is now available to everyone. No waitlist.</strong></p>
 <p>截至写稿时，这条帖子有 62.5 万次查看。公告底下补了一句更实在的：所有用户初始都有 5 美元额度，大约相当于 1.2 亿 token。</p>
@@ -429,7 +429,7 @@
 <p>这一点是后面所有争论的起点，我们先记住它。</p>
 <p>三种提问方式</p>
 <p>官方给了一张很清楚的图，Jev 只接受三种问题类型：</p>
-<p><img alt="三种向 Jev 提问的方式" src="../assets/img/img-002-fab32f7f-417a538b20.jpg"></p>
+<p><img alt="三种向 Jev 提问的方式" src="../assets/img/img-002-fab32f7f-417a538b20f6.jpg"></p>
 <p>官方示意图：三种向 Jev 提问的方式 —— Choice 选一个、Noul 判断真假、Score 打分评级</p>
 <p>用一个例子串起来。假设你告诉它这样一段现状：</p>
 <p>"Checkout payments are timing out. Twelve orders failed in the last hour."</p>
@@ -439,14 +439,14 @@
 <p>•<strong>Score（什么级别）</strong>：影响有多严重？选项是 minor、degraded、blocked。它返回一个等级，以及一个分布。适用场景是<strong>你要按评分标准设一个阈值</strong>。</p>
 <p>三种类型对应三种代码结构——分支、条件、阈值。</p>
 <p>同一个 state 可以同时提交多个问题，Jev 会分别回答，<strong>前一个结果不会影响后一个</strong>。这个隔离性很关键：它意味着你可以把它当成一个纯函数嵌进现有流程，业务逻辑继续由代码控制，Jev 只负责其中一个范围明确的判断。</p>
-<p><img alt="TypeSafe Playground 界面" src="../assets/img/img-003-3bfb9d81-486ea6fd3f.jpg"></p>
+<p><img alt="TypeSafe Playground 界面" src="../assets/img/img-003-3bfb9d81-486ea6fd3f5e.jpg"></p>
 <p>TypeSafe Playground 界面：左侧填写 state 和问题，右侧是三种 primitive 的官方示例与真实用例</p>
 <p>为什么能便宜三个数量级</p>
 <p>先看官方给的数字。在 "Meet Jev" 的介绍页上，Benefits 一栏写着两句很硬的话：</p>
 <p>•<strong>20–200× faster</strong>（快 20 到 200 倍）</p>
 <p>•<strong>40–1,000× cheaper</strong>（便宜 40 到 1000 倍）</p>
 <p>同一页的 Properties 栏解释了它为什么能做到：结构化、机器原生的输出，并行采样，以及<strong>校准过的概率结果</strong>——"Jev 会告诉你它什么时候不确定，这个置信度你可以直接用在代码里。"</p>
-<p><img alt="TypeSafe 官方 Meet Jev 页面" src="../assets/img/img-004-146f9139-c8c69066e8.jpg"></p>
+<p><img alt="TypeSafe 官方 Meet Jev 页面" src="../assets/img/img-004-146f9139-c8c69066e829.jpg"></p>
 <p>TypeSafe 官方 Meet Jev 页面：System One model 的定位、能力与 Limitations 都写在明面上</p>
 <p>性能数字是官方口径，没有公开的第三方复测条件，按惯例打个折扣看。但便宜这件事本身有结构性原因，不只是工程优化。</p>
 <p>原因在于<strong>任务性质变了</strong>。生成式大模型每输出一个 token 就要过一次前向计算，写满 500 字就是几千次；而 Jev 做完一次判断就返回结果，输出是结构化的，没有"逐词生成"这个环节。前面那个 5 美元换 1.2 亿 token 的反推也印证了这一点——如果输出要按量计费，这个账根本算不平。</p>
@@ -458,22 +458,22 @@
 <h3 id="先玩起来的那一拨">先玩起来的那一拨：</h3>
 <p>官方自己先下场，让 Jev 玩初代《毁灭战士》，每秒大约做 10 次动作决策，实时控制走位和开火。连续跑一小时，花了大约 7 美元。这个 demo 的意义不在好玩，在于验证了<strong>高频实时决策</strong>这条路走得通。</p>
 <p>然后是那个刷屏的 Minecraft。开发者 Ronak Malde 让 Jev 和一个叫 Astra 的模型配合，8 分 43 秒打倒末影龙，总成本不到 1 美元——其中 Jev 只花了 0.01 美元，Astra 花了 0.96 美元。代码已经开源。</p>
-<p><img alt="Ronak Malde 的 Minecraft 实测帖" src="../assets/img/img-005-e7312c73-9d2a26e8ba.jpg"></p>
+<p><img alt="Ronak Malde 的 Minecraft 实测帖" src="../assets/img/img-005-e7312c73-9d2a26e8ba26.jpg"></p>
 <p>开发者 Ronak Malde 的实测帖：Jev + Astra 用 8 分 43 秒打倒末影龙，总成本不到 1 美元，其中 Jev 只占 0.01 美元</p>
 <p>注意这个成本结构：真正贵的是那个"聪明"的模型，便宜的是那个"反应快"的模型。这大概是整波讨论里最有产业含义的一组数字。</p>
 <p>还有更夸张的：开发者 Max Blade 让 Jev 同时控制 50 局《地铁跑酷》——变道、跳跃、下滑全是单次小判断，调用量叠得非常快，50 局跑完总费用不到 1 美分。</p>
-<p><img alt="Max Blade 的 50 局地铁跑酷实测" src="../assets/img/img-006-37351d89-70b9b4dc96.jpg"></p>
+<p><img alt="Max Blade 的 50 局地铁跑酷实测" src="../assets/img/img-006-37351d89-70b9b4dc964b.jpg"></p>
 <p>开发者 Max Blade 的实测：Jev 同时跑 50 局《地铁跑酷》，"super human speed"，总花费不到 1 美分</p>
 <p>中文开发者 paulwei 拿它打《杀戮尖塔 2》。以前用大模型打牌，单步思考肉眼可见地卡；换成 Jev 之后单次出牌决策 0.7 秒，人类还没看清出牌动画，下一步指令已经给出。</p>
 <h3 id="然后是真正进生产的那一拨">然后是真正进生产的那一拨：</h3>
 <p>Vercel 的工程师把内部一个 Shell 命令安全审查分类器从大模型换成了 Jev，处理速度提升 5 到 18 倍。更有意思的是后半句：因为误判率下降，<strong>实际准确率反而更高了</strong>。</p>
 <p>Browser Use 团队在 Jev 发布三天内推出官方集成库 jev-ultrafast，两天拿了 2700 颗 star。它把网页操作抽象成"操作"和"目标"两组选择题，<strong>全程不截图、不消耗多模态 token</strong>，一次往返输出两个决策。创始人放出的实测视频里，Jev 驱动浏览器在真实航司官网完成一次单程航班查询，耗时 7 秒，花费 0.0039 美元。</p>
 <p>Justin Schroeder 用不到一小时重建了一套特斯拉 FSD 的仿真版本——车在 3D 城市里行驶，Jev 根据路况判断行驶方向，车辆移动后把新状态传回。他自己的评价是"This model is a total unlock"。</p>
-<p><img alt="Justin Schroeder 的 FSD 仿真实测" src="../assets/img/img-007-4a026fe1-add973e26a.jpg"></p>
+<p><img alt="Justin Schroeder 的 FSD 仿真实测" src="../assets/img/img-007-4a026fe1-add973e26a49.jpg"></p>
 <p>开发者 Justin Schroeder 的实测：用 Jev 在不到一小时内重建了一套 Tesla FSD 仿真，帖子 67.3 万次查看</p>
 <p>还有一类是新长出来的工具：jev-mcp 用 Jev 做多来源事实核验和 Prompt Injection 检测；fast-jev-compaction 用它判断每一轮工具调用的日志该不该保留，做长上下文压缩；Jev Codex Router 在任务发起前预判代码改动的复杂度，简单改动路由到便宜的小模型，复杂重构才激活大模型，整体开销压降 60% 以上。</p>
 <p>LangChain 官方还专门发了篇博客，标题就叫《Building a Harness with Jev》，核心观点是：以前 Agent 框架里的分类决策逻辑往往深埋在闭源系统的定制代码里，现在有了通用、便宜、校准过的分类模型，这套决策层可以被推广到每一个开源 Agent。</p>
-<p><img alt="Jev Trader 的 dry run 界面动图" src="../assets/img/img-008-652f2862-ad514c4aa7.png"></p>
+<p><img alt="Jev Trader 的 dry run 界面动图" src="../assets/img/img-008-652f2862-ad514c4aa77d.png"></p>
 <p>Jev Trader 的 dry run 界面动图：每个区块输出 BUY/SELL 与置信度，单次决策延迟 90ms 左右</p>
 <p>顺便说一句其中最危险的玩法：有 Web3 开发者把 Jev 接进去中心化交易所，高频读订单簿深度，只输出买入／卖出／观望三个动作。有网友晒出自己用一个晚上加一个早上搭完的实时交易机器人，目前亏损 31680 美元。</p>
 <p>但它的概率靠谱吗</p>
@@ -490,13 +490,13 @@
 <p>而这件事要真正生效，你得自己做后处理、自己设阈值、自己留人工兜底。这活儿是你的，不是它的。</p>
 <p><strong>还有一场没吵完的架：它到底该叫什么。</strong></p>
 <p>Sebastian Raschka 说，简单把 Jev 看成分类器会低估它：</p>
-<p><img alt="Sebastian Raschka 对 Jev 的评价" src="../assets/img/img-009-ba323c9b-0d1e7845c5.jpg"></p>
+<p><img alt="Sebastian Raschka 对 Jev 的评价" src="../assets/img/img-009-ba323c9b-0d1e7845c5f6.jpg"></p>
 <p>Sebastian Raschka 的评价：Jev 的突破在于泛化能力，秘密可能更多在数据而不是训练算法</p>
 <p>但社区里也有很硬的反对意见：</p>
-<p><img alt="开发者对 Jev 技术归类的质疑" src="../assets/img/img-010-84d609a0-9a44b6b326.jpg"></p>
+<p><img alt="开发者对 Jev 技术归类的质疑" src="../assets/img/img-010-84d609a0-9a44b6b326cf.jpg"></p>
 <p>开发者的技术质疑：如果是 encoder-style 分类器，按定义标签嵌在模型里就无法泛化；能泛化到运行时标签，那应该是 cross-encoder / LLM-ranker 加采样技巧</p>
 <p>还有人给出了机制上的猜测：把上下文的嵌入向量、问题的嵌入向量、选项的嵌入向量放在一起，输出的就是分数。</p>
-<p><img alt="Jev 工作机制的另一种解读" src="../assets/img/img-011-33c3f0e7-87263518e8.jpg"></p>
+<p><img alt="Jev 工作机制的另一种解读" src="../assets/img/img-011-33c3f0e7-87263518e8a9.jpg"></p>
 <p>另一种机制解读：Jev 接收上下文嵌入 + 选项嵌入，输出置信度分数，而不是从固定类别集里挑一个标签</p>
 <p>这场争论目前没有定论。但它本身说明了一件事：Jev 的产品形态已经超出了传统分类器的使用方式，而现有的技术词汇还没给它找到一个准确的名字。</p>
 <p>怎么用上</p>

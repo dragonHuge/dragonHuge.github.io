@@ -419,15 +419,15 @@
 <p>画外音：与旁路缓存对应的，是穿透缓存。</p>
 <h3 id="读实践是怎么样的">读实践是怎么样的？</h3>
 <p>对于读请求：</p>
-<p><img alt="图片" src="../assets/img/img-001-6fa21268-acb9f3a221.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-6fa21268-acb9f3a2218b.png"></p>
 <ol><li>先读cache，再读db；</li><li>如果cache hit，直接返回数据；</li><li>如果cache miss，访问db，并把数据set回缓存。</li></ol>
 <h3 id="写实践是怎么样的">写实践是怎么样的？</h3>
-<p><img alt="图片" src="../assets/img/img-002-8621749e-8000f6b3e6.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-8621749e-8000f6b3e6e4.png"></p>
 <h3 id="对于写请求">对于写请求：</h3>
 <ol><li>淘汰缓存，而不是更新缓存；</li><li>先操作数据库，再淘汰缓存。</li></ol>
 <h3 id="为什么建议淘汰缓存-而不是更新缓存">为什么建议淘汰缓存，而不是更新缓存？</h3>
 <p>如果更新缓存，并发写时，可能出现数据不一致。</p>
-<p><img alt="图片" src="../assets/img/img-003-a5c6033f-c22f972785.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-a5c6033f-c22f97278525.png"></p>
 <p>如上图，假设采用set缓存。</p>
 <p>1和2两个并发写发生时，由于无法保证时序，不管先操作缓存还是先操作数据库，都可能出现：</p>
 <ol><li>请求1先操作数据库，请求2后操作数据库；</li><li>请求2先set了缓存，请求1后set了缓存。</li></ol>
@@ -435,7 +435,7 @@
 <p>所以，Cache Aside Pattern建议，delete缓存，而不是set缓存。</p>
 <h3 id="为什么建议先操作数据库-再操作缓存">为什么建议先操作数据库，再操作缓存？</h3>
 <p>如果先操作缓存，读写并发时，可能出现数据不一致。</p>
-<p><img alt="图片" src="../assets/img/img-004-403cfc0d-757a610678.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-403cfc0d-757a61067850.png"></p>
 <p>如上图，假设先操作缓存。</p>
 <p>1和2并发读写发生时，由于无法保证时序，可能出现：</p>
 <ol><li>写请求淘汰了缓存；</li><li>写请求操作了数据库（主从同步还没完成）；</li><li>读请求读了缓存（cache miss）；</li><li>读请求读了从库（读了一个旧数据）；</li><li>读请求set回缓存（set了一个旧数据）；</li><li>数据库主从同步完成。</li></ol>
@@ -452,7 +452,7 @@
 <p><strong>变了的部分：我们不再逐行写缓存代码了。我们干的活，是把这套模式写成spec，让AI按spec去写。第一讲和第三讲聊过spec的事，不展开，今天直接给一份能用的。</strong></p>
 <p>** **</p>
 <p><strong>一份Cache Aside的spec，至少写清四件事。</strong></p>
-<p><img alt="图片" src="../assets/img/img-005-4f877e72-4644eceb9f.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-4f877e72-4644eceb9f45.png"></p>
 <ol><li>模式声明：明确告诉AI用Cache Aside——读，先cache后db，miss回源并set；写，先操作DB，再delete缓存。模式有名字就报名字，AI训练语料里全是它；</li></ol>
 <ol><li>红线约束：禁止set方式更新缓存，只允许delete；禁止先操作缓存；cache key规范写清；TTL必须显式给。红线，就是"不许AI自由发挥"的地方；</li></ol>
 <ol><li>异常与降级：缓存挂了怎么办——直接读DB，但要注意限流；淘汰缓存失败怎么办——重试、告警、补偿。前面说的"潜在问题"，就得在这里兜底；</li></ol>

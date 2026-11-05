@@ -409,9 +409,9 @@
 <h2 id="原文沉淀">原文沉淀</h2>
 <h3 id="目录">目录</h3>
 <ul><li><a href="#摘要">摘要</a></li><li><a href="#概念界定先把-loop-说清楚">概念界定：先把 loop 说清楚</a></li><li><a href="#研究背景与相关工作">研究背景与相关工作：</a></li><li><a href="#系统构成六个组件">系统构成：六个组件</a></li><li><a href="#41-automations心跳不是大脑">▐  4.1 Automations：心跳，不是大脑</a></li><li><a href="#42-worktrees并行之前先隔离">▐  4.2 Worktrees：并行之前先隔离</a></li><li><a href="#43-skills把项目知识写到系统外面">▐  4.3 Skills：把项目知识写到系统外面</a></li><li><a href="#45-sub-agentsmaker-和-checker-分开">▐  4.5 Sub-agents：maker 和 checker 分开</a></li><li><a href="#46-memory状态必须在对话之外">▐  4.6 Memory：状态必须在对话之外</a></li><li><a href="#方法示例一个真实可用的-loop">方法示例：一个真实可用的 loop</a></li><li><a href="#自动化判定标准">自动化判定标准：</a></li><li><a href="#风险分析loop-的几个失败模式">风险分析：loop 的几个失败模式</a></li><li><a href="#71-目标函数太粗">▐  7.1 目标函数太粗</a></li><li><a href="#72-验证被-agent-自己吞掉">▐  7.2 验证被 agent 自己吞掉</a></li><li><a href="#73-状态文件没人读">▐  7.3 状态文件没人读</a></li><li><a href="#74-并行制造理解债">▐  7.4 并行制造理解债</a></li><li><a href="#75-成本没有上限">▐  7.5 成本没有上限</a></li><li><a href="#工程责任工程师还剩什么">工程责任：工程师还剩什么</a></li><li><a href="#结论">结论</a></li><li><a href="#附录">附录</a></li><li><a href="#团队介绍">团队介绍</a></li><li><a href="#拓展阅读">¤ 拓展阅读 ¤</a></li></ul>
-<p><img alt="图片" src="../assets/img/img-001-bf9f3706-2bbee367f5.gif"></p>
+<p><img alt="图片" src="../assets/img/img-001-bf9f3706-2bbee367f511.gif"></p>
 <p>本文探讨了“Loop engineering”这一理念，即工程师不再逐轮提示agent，而是设计包含读取状态、判断任务、执行操作、验证结果、记录状态和判断停止条件的自动化循环系统。文章详细拆解了支撑该系统的六大组件：负责唤醒的自动化机制、隔离并行的worktrees、沉淀项目知识的skills、接入外部工具的插件、分离读写职责的子agent以及确保状态持久化的记忆层。作者强调，loop engineering并非盲目追求全自动，而是通过明确输入输出、严格权限分层与成本控制来保障工程可靠性。工程师的角色从单轮操作者转变为循环机制的设计者与最终责任人，其核心价值在于利用可控的自动化杠杆加深对系统的理解，而非单纯甩锅给AI以逃避责任。</p>
-<p><img alt="图片" src="../assets/img/img-002-f37fdf1e-720edd640c.webp"></p>
+<p><img alt="图片" src="../assets/img/img-002-f37fdf1e-720edd640c36.webp"></p>
 <h3 id="摘要">摘要</h3>
 <p>最近，coding agent 圈子里有一句话传得很快：不要再只是提示 agent，要设计提示 agent 的 loop。</p>
 <p>这句话容易被误读成一个新名词。其实它说的是一个老问题：当工具开始能自己读代码、改代码、跑测试、开 PR 以后，工程师的工作重心会往哪里移？</p>
@@ -431,7 +431,7 @@
 <p>少了第 5 步，它只是一次会话。少了第 6 步，它就是烧 token 的定时器。</p>
 <p>这也是为什么 Addy Osmani 在《Loop Engineering》[1]里把它放在 agent harness 之上。Harness 解决的是一个 agent 在什么环境里运行；loop 解决的是这些 agent 什么时候被唤醒、拿什么上下文、做哪类事、由谁检查、状态放在哪里。</p>
 <p>这里还要补一层。Birgitta Böckeler 在 Martin Fowler 网站上的《Harness engineering for coding agent users》[2]把 harness 拆成两类控制：事前的 guides，事后的 sensors。前者把规则、架构约束、技能文档和上下文喂给 agent；后者用测试、lint、日志、浏览器、review agent 或安全扫描让 agent 自我修正。放到 loop 里看，harness 是控制件，loop 是调度和闭环。只有调度，没有控制件，就是定时犯错；只有控制件，没有循环，就还是一次性工具。</p>
-<p><img alt="harness-overview.png" src="../assets/img/img-003-176fe286-0cc8a96976.png"></p>
+<p><img alt="harness-overview.png" src="../assets/img/img-003-176fe286-0cc8a969760c.png"></p>
 <h3 id="图-1-Harness-engineering-overview-来源-Harness-engineering-for-coding-agent-users-3">图 1. Harness engineering overview。来源：Harness engineering for coding agent users [3]。</h3>
 <p>更直白地说：prompt engineering 关心一句话怎么写。context engineering 关心给模型什么材料。harness engineering 关心工具、权限和运行环境。loop engineering 关心这些东西如何持续运转。</p>
 <h3 id="研究背景与相关工作">研究背景与相关工作：</h3>
@@ -442,7 +442,7 @@
 <p>这不表示两个工具完全等价。权限、持久化、审计和执行环境的差异会影响能不能放到生产流程里。但从工程模式看，大家都在往同一个方向走：agent 不再只是聊天框里的代码助手，它开始被放进持续运行的工程流程。</p>
 <p>OpenAI Cookbook 里的 agent improvement loop 也在讲类似思路：真实 traces 是输入证据，人工和模型反馈负责诊断，eval 变成可复用验收，handoff artifact 把下一轮要改什么写下来，最后再交给 Codex 修改 agent 或 harness。它有价值的地方不在"让 AI 改 AI"，而在于把反馈、验证、状态和权限边界接到同一个流程里。</p>
 <p>Amplitude 的 Ralph loop 实验[4]更激进。它把产品数据、机会生成、浏览器验证和 coding agent 接在一起：每轮先构建下一个 opportunity，再用浏览器点通新功能，生成新的机会队列。作者还让 agent 给自己产出的功能埋点，下一轮就能看到哪些路径被用过、哪里卡住；每个 PR 附一个浏览器录制的 GIF，当作验证证据。到后期，他只允许少数低风险机会类型自动合并，涉及用户数据的改动仍然保留人工判断。</p>
-<p><img alt="ralph-loop.jpeg" src="../assets/img/img-004-a56f72a6-f1bd2bfba1.jpg"></p>
+<p><img alt="ralph-loop.jpeg" src="../assets/img/img-004-a56f72a6-f1bd2bfba164.jpg"></p>
 <h3 id="图-2-Ralph-Loop-来源-What-I-Learned-Pointing-a-Ralph-Loop-at-My-Product-for-a-Week-5">图 2. Ralph Loop。来源：What I Learned Pointing a Ralph Loop at My Product for a Week[5]。</h3>
 <p>最近的研究也在拆这个问题。论文《Engineering Robustness into Personal Agents with the AI Workflow Store》[6]盯着 on-the-fly agent loop 的弱点：agent 临场合成计划、临场串工具，速度很快，但很容易跳过软件工程里那些麻烦却必要的步骤，比如迭代设计、严格测试、对抗评估和分阶段发布。它的答案不是让 agent 更会即兴发挥，而是把可靠流程沉淀成可复用、受约束的 workflow。</p>
 <p>另一篇《EurekAgent》[7]说得更像工程实践：权限、artifact、预算和 human-in-the-loop 不只是配套设施，它们会直接改变 agent 做事的方式。这两篇都不是在说"loop 越自动越好"，而是在说 loop 要能复用、能审计、能限制。</p>
@@ -454,7 +454,7 @@
 <p>Hooks[9] 处在另一个位置。它不是定时器，而是生命周期事件上的确定性控制。Claude Code 的 hooks 可以在编辑后格式化代码，在工具调用前阻断敏感文件修改，在需要输入时发通知，也可以把上下文重新注入会话。放在 loop 里看，hooks 更像护栏：它不决定做什么任务，但能限制 agent 在执行过程中不能越过哪些边界。</p>
 <p>这里最容易犯的错，是把 automation 当成智能本身。它只负责把任务按时唤醒，不负责替你定义判断标准。</p>
 <p>所以 automation prompt 里最好同时写 feedforward 和 feedback。Feedforward 是 agent 开始前必须知道的约束：只看哪个 PR、不能碰哪些目录、什么风险必须停。Feedback 是它做完后必须接受的传感器：跑哪个测试、看哪个日志、贴哪个浏览器录制、让哪个 reviewer 读 diff。没有 feedforward，agent 会到处试；没有 feedback，它会把"我觉得可以"当成完成。</p>
-<p><img alt="harness-change-lifecycle-examples.png" src="../assets/img/img-005-39e2169b-8bfb6657da.png"></p>
+<p><img alt="harness-change-lifecycle-examples.png" src="../assets/img/img-005-39e2169b-8bfb6657da7c.png"></p>
 <h3 id="图-3-Change-lifecycle-来源-Harness-engineering-for-coding-agent-users-10">图 3. Change lifecycle。来源：Harness engineering for coding agent users[10]。</h3>
 <p>一个好的 automation prompt 应该写得像操作规程，而不是愿望清单：</p>
 <p>- - - - - - -</p>

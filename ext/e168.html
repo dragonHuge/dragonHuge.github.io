@@ -419,7 +419,7 @@
 <h3 id="目录">目录</h3>
 <ul><li><a href="#一为什么-ai-系统会需要工作流">一、为什么 AI 系统会需要工作流</a></li><li><a href="#二工作流是什么从传统-workflow-到-ai-workflow">二、工作流是什么：从传统 Workflow 到 AI Workflow</a></li><li><a href="#21-传统工作流在做什么">2.1 传统工作流：在做什么？</a></li><li><a href="#22-ai-工作流为什么一定会走向-graphloop">2.2 AI 工作流：为什么一定会走向 Graph、Loop</a></li><li><a href="#三graph图是工作流的结构表达重要">三、Graph（图）是工作流的结构表达（重要）</a></li><li><a href="#四loop-是-graph-上的回溯能力重要">四、Loop 是 Graph 上的回溯能力（重要）</a></li><li><a href="#五概念整合把-workflowgraphloop-串起来">五、概念整合：把 Workflow、Graph、Loop 串起来</a></li><li><a href="#六从概念到实现框架映射与代码示例">六、从概念到实现：框架映射与代码示例</a></li><li><a href="#概念映射表">概念映射表</a></li><li><a href="#实现示例用-spring-ai-alibaba-构建文章审核工作流">实现示例：用 Spring AI Alibaba 构建文章审核工作流</a></li><li><a href="#第一步定义状态和更新策略">第一步：定义状态和更新策略</a></li><li><a href="#第二步实现节点">第二步：实现节点</a></li><li><a href="#第三步组装-graph">第三步：组装 Graph</a></li><li><a href="#七工作流设计的分水岭抽象能力">七、工作流设计的分水岭：抽象能力</a></li><li><a href="#八设计工作流时的注意事项">八、设计工作流时的注意事项</a></li><li><a href="#1-state-设计的粒度">1. State 设计的粒度</a></li><li><a href="#2-循环终止条件避免死循环">2. 循环终止条件（避免死循环）</a></li><li><a href="#3-错误处理与-fallback">3. 错误处理与 fallback</a></li><li><a href="#4-token-消耗与成本控制">4. Token 消耗与成本控制</a></li><li><a href="#5-节点间数据传递格式">5. 节点间数据传递格式</a></li><li><a href="#九总结">九、总结</a></li></ul>
 <p>今天分享的内容还是蛮重要的，我和一位朋友断断续续写了快两周。不论是后端还是对AI应用开发感兴趣，都建议看看。</p>
-<p><img alt="图片" src="../assets/img/img-001-62649af1-185fd6d086.webp"></p>
+<p><img alt="图片" src="../assets/img/img-001-62649af1-185fd6d08613.webp"></p>
 <p>很多刚上手 AI 工作流的开发者都有过类似的困惑：这不就是传统工作流换了个壳吗？为什么不用 Camunda、Temporal 这些成熟引擎？甚至觉得把几个 Prompt 用 if-else 串起来就算“工作流”了。</p>
 <p>但真正上手做项目后，这些想法很快会被现实打脸。LLM 的输出天然不确定，单次生成往往不达标，工具调用随时可能失败，上下文窗口还有硬上限。光“跑一遍就完事”的线性流程不够用，你需要的是一套能<strong>动态决策、自动修正、可控收敛</strong>的执行机制。</p>
 <p>今天这篇文章就来梳理 AI 工作流中三个核心概念——<strong>Workflow、Graph、Loop</strong>，帮你建立从概念到实现的完整认知。本文约 1.3w 字，建议收藏，通过本文你将搞懂：</p>
@@ -439,7 +439,7 @@
 <p>以一个简单例子来看：当我们让 AI 写一篇文章时，一次生成的结果往往不够理想。直觉做法是手动复制结果，再附加新要求继续提问，但这种方式既不高效，也会快速消耗上下文。如果将这一过程结构化为“<strong>审查 → 修改 → 再审查</strong>”的循环，并设定停止条件（如达到质量标准或触达迭代上限），就能显著提升稳定性。</p>
 <p>说到底，工作流就是把一次性的生成过程，变成一个<strong>可迭代、可收敛、可控制</strong>的系统化流程。</p>
 <h3 id="二-工作流是什么-从传统-Workflow-到-AI-Workflow">二、工作流是什么：从传统 Workflow 到 AI Workflow</h3>
-<p><img alt="传统 Workflow 与 AI Workflow 对比" src="../assets/img/img-002-169c908a-1d50ec744b.svg"></p>
+<p><img alt="传统 Workflow 与 AI Workflow 对比" src="../assets/img/img-002-169c908a-1d50ec744b29.svg"></p>
 <p>传统 Workflow 与 AI Workflow 对比</p>
 <p>上图可以直观看到两类工作流的差异：传统 Workflow 更偏向“固定步骤 + 明确分支”的过程编排；AI Workflow 则更依赖运行时的状态（State）来动态决定下一步，并通过循环（Loop）把“生成—评估—修正”变成可收敛的过程。</p>
 <h3 id="2-1-传统工作流-在做什么">2.1 传统工作流：在做什么？</h3>
@@ -473,7 +473,7 @@
 <h3 id="四-Loop-是-Graph-上的回溯能力-重要">四、Loop 是 Graph 上的回溯能力（重要）</h3>
 <p>在同一套「文章审核」里：<strong>审核不通过</strong>时，控制流不应结束，而应沿某条边回到「修改」或「重新生成」——这就是 Loop 在业务上的含义。技术上，它表现为图上的<strong>回边（Back Edge）</strong>。</p>
 <blockquote><p>需要区分本文的 Loop 与 Agent 基础篇中的 <strong>Agent Loop</strong>。Agent Loop 是 Agent 的顶层运行引擎——整个 Agent 在一个 while 循环中反复执行“推理 → 行动 → 观察”直到任务完成。而本文的 Loop 是 Graph 内部的控制模式——特定节点子集通过回边形成的迭代修正循环。两者的关系是：Agent Loop 是外层循环，Graph Loop 可以嵌套在其中的某个节点或子图内。</p></blockquote>
-<p><img alt="Loop 概览：循环机制示意" src="../assets/img/img-003-b2d1f2aa-d304f8b85a.svg"></p>
+<p><img alt="Loop 概览：循环机制示意" src="../assets/img/img-003-b2d1f2aa-d304f8b85a13.svg"></p>
 <p>Loop 概览：循环机制示意</p>
 <p>很多人第一次接触 AI 工作流时，会把 <code>Loop</code> 理解成“多跑几次”。这不算错，但还不够准确。更准确地说：<strong>Loop 是图结构上的一种控制模式</strong>。当某条边根据当前状态把控制流送回到先前节点时，就形成了 Loop，正如上图所示，重点在判断是否达标，在循环的内部 LLM 会根据提示词的要求对结果进行“评分”，如果满足就会输出，否则“打回重写”。</p>
 <p>常见的 Loop 主要有两种：</p>
@@ -488,7 +488,7 @@
 <p>如果没有这些约束，Loop 很容易从“自我修正”变成“无限打转”。</p>
 <p>仍然放回文章审核的例子里，Loop 不只是“多试几次”，它是“审核结论驱动下一跳”。只有当评分未达标、且还没超过最大轮次时，流程才会从 <code>ReviewNode</code> 回到 <code>ReviseNode</code>；一旦达到阈值或触发边界条件，就应该退出并给出结果。到这里，循环已经变成了一种可控的回溯机制。</p>
 <h3 id="五-概念整合-把-Workflow-Graph-Loop-串起来">五、概念整合：把 Workflow、Graph、Loop 串起来</h3>
-<p><img alt="Workflow、Graph、Loop 三者关系概览" src="../assets/img/img-004-fe8a2135-c718b9904f.svg"></p>
+<p><img alt="Workflow、Graph、Loop 三者关系概览" src="../assets/img/img-004-fe8a2135-c718b9904f1f.svg"></p>
 <p>Workflow、Graph、Loop 三者关系概览</p>
 <p>可以用一句话收束三者的层次关系：<strong>Workflow 是目标与过程，Graph 是结构与载体，Loop 是图上的控制模式。</strong></p>
 <p>继续沿用同一个“写文章并审核”的例子：</p>
@@ -658,7 +658,7 @@ publicstaticclass ExitNode implements NodeAction {
 <p>在这个实现中，可以看到：每个 Node 只做自己名字说的事（DraftNode 负责生成、ReviewNode 负责评估、ReviseNode 负责根据反馈修正），Edge（条件边）控制路由，State（<code>next_node</code>、<code>iteration_count</code>、<code>review_score</code>）驱动决策。Loop 通过 <code>review → revise → review</code> 的回边实现（审核不通过则由 ReviseNode 修正内容后重新进入审核），安全边界由 <code>iteration_count &amp;gt;= 3</code> 保证。持久化配置确保流程中断后可以从最近的 checkpoint 恢复，而不是从头开始——这对包含 Loop 的长时间运行工作流尤为重要：如果一个已迭代 2 轮的审核流程在第 3 轮中断，恢复后应该继续第 3 轮而不是重新从第 1 轮开始。</p>
 <blockquote><p>更完整的示例（包括人机协同、持久化、流式输出）可参考 Spring AI Alibaba Graph 官方文档。</p></blockquote>
 <h3 id="七-工作流设计的分水岭-抽象能力">七、工作流设计的分水岭：抽象能力</h3>
-<p><img alt="高抽象与低抽象工作流对比" src="../assets/img/img-005-10ffc5a7-f931ea6d60.svg"></p>
+<p><img alt="高抽象与低抽象工作流对比" src="../assets/img/img-005-10ffc5a7-f931ea6d6073.svg"></p>
 <p>高抽象与低抽象工作流对比</p>
 <p>上图可以看到高抽象工作流将四个判断节点抽象成一个判断节点：评估是否达标。如果使用低抽象，那么当我们需要减少/添加新的判断节点时，需要花费时间去阅读源码寻找对应的节点。好的工作流关键看 Node、Edge、State 的抽象能否经得起复用与扩展，和步骤多少关系不大。</p>
 <p>很多初学者设计工作流时，容易把每一步都写成具体动作，例如：调用模型生成文案；检查标题长度；检查语气是否合适；判断是否需要补资料；再调用模型修改。这样做短期可用，但流程会越来越碎，复用性也很差。更成熟的方式是把流程抽象到更稳定的结构层：</p>
@@ -670,7 +670,7 @@ publicstaticclass ExitNode implements NodeAction {
 <ul><li><code>ReviewNode</code>：负责评估当前结果是否达标。</li></ul>
 <ul><li><code>ReviseNode</code>：负责根据反馈修正内容。</li></ul>
 <ul><li><code>ExitNode</code>：负责在满足条件时输出最终结果。</li></ul>
-<p><img alt="Graph 核心元素：Node、Edge、State" src="../assets/img/img-006-0e64fbbb-4225d6abec.svg"></p>
+<p><img alt="Graph 核心元素：Node、Edge、State" src="../assets/img/img-006-0e64fbbb-4225d6abec04.svg"></p>
 <p>Graph 核心元素：Node、Edge、State</p>
 <h3 id="八-设计工作流时的注意事项">八、设计工作流时的注意事项</h3>
 <p>真正把工作流落地时，问题往往不出在“图不会画”，而出在细节没有提前设计好。下面这些是实践里最常见的坑。</p>
@@ -717,8 +717,8 @@ publicstaticclass ExitNode implements NodeAction {
 <p>工作流框架会更新换代，但「图结构 + 状态 + 可控循环」这层抽象基本不会变。理解这套底层机制，比追各种具体框架更有价值一些。</p>
 <p><strong>AI 时代，语言已经越来越被弱化了。你只需要理解这些核心思想就够了，至于具体用什么语言，要看具体场景，具体编码的活都交给 AI。</strong></p>
 <p><strong>⭐️</strong>后端 + AI 应用开发实战和面试指南（155k+ Star）：javaguide.cn</p>
-<p><img alt="图片" src="../assets/img/img-007-d516d453-f5b7a30eb7.webp"></p>
-<p><img alt="图片" src="../assets/img/img-008-c1262e6b-bacec1f7fc.webp"></p>
+<p><img alt="图片" src="../assets/img/img-007-d516d453-f5b7a30eb7de.webp"></p>
+<p><img alt="图片" src="../assets/img/img-008-c1262e6b-bacec1f7fcfb.webp"></p>
 <p><strong>⭐️推荐阅读</strong>:</p>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247552320&amp;idx=1&amp;sn=a7e4e5a8d957446e6bb032d78b2fa5fb&amp;scene=21#wechat_redirect">《SpringAI 智能面试平台》（2.0 版本已开源）</a></li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247553896&amp;idx=1&amp;sn=667131f89f74ba561c418ab316aadc7d&amp;scene=21#wechat_redirect">GLM-5.1 发布，实测两周，太猛了！</a></li></ul>

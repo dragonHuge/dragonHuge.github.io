@@ -415,7 +415,7 @@
 <p>我习惯用真实工程说话。这周我们把 Jev 接入了 ShipSite。主模型没有换，业务链路没有改，敏感权限全都不放给它。这篇文章不搬运新闻通稿，也不兜售技术焦虑，我就用第一手的接入代码、真实的验收测试数据，以及工程防护边界，聊聊 Jev 到底是什么、怎么用，以及它真正的价值与局限。</p>
 <h3 id="Jev-到底是什么">Jev 到底是什么</h3>
 <p>9 月 15 日，TypeSafe AI 正式发布了 Jev，官方给它的定位是世界上第一个“System One Model”（系统一模型）。</p>
-<p><img alt="TypeSafe官方发布截图" src="../assets/img/img-001-fb34760e-b2bbd6d7d3.png"></p>
+<p><img alt="TypeSafe官方发布截图" src="../assets/img/img-001-fb34760e-b2bbd6d7d39a.png"></p>
 <p>借用认知心理学里“快思考与慢思考”的隐喻：如果说现在的 GPT-4、Claude 这类生成式大语言模型是负责深思熟虑、一步步长推理的“系统二”（System Two），那么 Jev 想扮演的就是那个凭直觉、毫秒级响应、专门做瞬时反应的“系统一”。</p>
 <p>在传统意义上，我们调用 LLM 时，不管是在前端做 JSON 结构化输出，还是用 Tool Calling，底层是自回归地逐字生成文本。你问它“这句话是在抱怨还是在咨询”，它要在内部推理一遍，然后吐出 <code>{&quot;type&quot;: &quot;complaint&quot;}</code>。</p>
 <p>Jev 完全抛弃了这种交互机制：</p>
@@ -426,11 +426,11 @@
 <h3 id="训练方式不同">训练方式不同</h3>
 <p>：它采用 RLCD（Reinforcement Learning for Calibrated Decisions，校准决策强化学习）训练，目标不是让文本更像人话，而是让结构化决策的选择更准确。</p>
 <p>官方定价为 $42 per billion input tokens（也就是每百万 input tokens 只要 $0.042），并且由于不生成长文本，输出直接免费。模型路由挂在 <code>jev-latest</code>，当前生产版本是 <code>jev-1.13.0</code>，调用接口是专门的 <code>POST /v1/systemone</code>。</p>
-<p><img alt="官方模型定价与输入限制" src="../assets/img/img-002-5e65a330-684fd78ccf.png"></p>
+<p><img alt="官方模型定价与输入限制" src="../assets/img/img-002-5e65a330-684fd78ccf42.png"></p>
 <p>官方宣称 Jev 比传统 LLM 快两个数量级，成本大幅下降。不过需要冷静指出的是：官方宣称...可能偏向乐观，并不代表我们的实测结论。</p>
 <h3 id="为什么它最近这么热">为什么它最近这么热</h3>
 <p>Jev 上线后在 Hacker News 上获得了 1917 points 和超过 500 条评论，同时 LangChain 也在第一时间发布了 Jev harness 的集成指南。</p>
-<p><img alt="LangChain公开集成指南" src="../assets/img/img-003-c081d2ca-747cd5824e.png"></p>
+<p><img alt="LangChain公开集成指南" src="../assets/img/img-003-c081d2ca-747cd5824e0a.png"></p>
 <p>它之所以能引爆讨论，核心击中了当前大模型落地应用的一大痛点：<strong>杀鸡在用牛刀，而且牛刀既贵又慢还容易卡顿。</strong></p>
 <p>现在大家都在做 AI Agent、自动化流水线。在整个链路中，真正需要写文案、写代码、多步规划的只是少数关键环节；大部分环节其实是高频小判断：</p>
 <ul><li>“这个用户需求到底属于修 Bug 还是加功能？”</li></ul>
@@ -443,7 +443,7 @@
 <h3 id="它和-LLM-的本质区别">它和 LLM 的本质区别</h3>
 <p>为了让大家更清晰地建立心智模型，我们可以把 Jev 与传统 LLM 做一个直观的对照：</p>
 <table><thead><tr><th>维度</th><th>传统生成式 LLM（System Two）</th><th>Jev（System One）</th></tr></thead><tbody><tr><td><strong>主要定位</strong></td><td>内容生成、复杂长推理、多步规划</td><td>高频判定、分支路由、类型归类</td></tr><tr><td><strong>输入</strong></td><td>文本 Prompt、多模态上下文</td><td>非结构化状态 + 强类型 Schema 定义</td></tr><tr><td><strong>输出</strong></td><td>文本流、逐字生成的 JSON 字符串</td><td>预定义数据类型、概率与置信度数值</td></tr><tr><td><strong>底层消耗</strong></td><td>随输出 Token 长度线性增长</td><td>近乎单步决断，耗时极短，输出免费（官方定价策略）</td></tr><tr><td><strong>幻觉表现</strong></td><td>语法错误、事实编造、格式漂移</td><td>结构绝对合法，但仍可能选错类别</td></tr><tr><td><strong>下游消费方式</strong></td><td>代码通常需要正则或解析器二次反序列化</td><td>原生结构体，代码直接 <code>switch-case</code> 消费</td></tr></tbody></table>
-<p><img alt="官方API响应示例，非本人实测" src="../assets/img/img-004-ad757262-cab6d38e2e.png"></p>
+<p><img alt="官方API响应示例，非本人实测" src="../assets/img/img-004-ad757262-cab6d38e2eff.png"></p>
 <p>我认为 Jev 真正的价值并不单纯是速度，而是<strong>它逼你在架构设计阶段，就把代码里的决策意图给形式化地写清楚</strong>。</p>
 <p>在过去，很多工程师偷懒，把一整段含混不清的 Prompt 丢给 LLM，“帮我看着办”。而 Jev 强制要求你给出确定性的 Schema 和有限的决策空间。很多时候，一旦你把逻辑空间整理清晰，大部分所谓的智能判断，原本就不需要大模型来猜。</p>
 <h3 id="我把它接进了-ShipSite-的哪里">我把它接进了 ShipSite 的哪里</h3>
@@ -478,7 +478,7 @@
 <ul><li>1 条因为是极短词，在前置长度规则阶段就被排除，根本没进入模型。</li></ul>
 <p>必须强调：<strong>这 45/48 只是受限合成用例下的表现，绝不能等同于生产环境的准确率。</strong> 在紧随其后的真实 API 验收测试中，22 条需要模型处理的样例标签完全匹配，另有 2 条被确定性规则直接分流。这是发布版本的真实 API 验收，不是自然业务流量。</p>
 <p>而在更广阔的线上真实世界里：<strong>截至目前，ShipSite 的自然业务工作流中尚未观察到任何真实命中。</strong> 我们不会为了做演示去冒充触发了自然工作流，更不会伪造生产流量。实事求是，是工程落地的应有底色。</p>
-<p><img alt="官方confidence分布示意，不是实际准确率" src="../assets/img/img-005-fd7a9cb1-7a23036440.png"></p>
+<p><img alt="官方confidence分布示意，不是实际准确率" src="../assets/img/img-005-fd7a9cb1-7a230364408c.png"></p>
 <h3 id="什么任务适合-Jev-什么不适合">什么任务适合 Jev，什么不适合</h3>
 <p>结合这次接入实践与深入测试，如果你的团队也在评估是否跟进 Jev 或类似 System One 模型，可以参考以下这个决策框架：</p>
 <p>非常适合 Jev 的任务</p>

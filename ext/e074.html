@@ -470,7 +470,7 @@ WriteLock(m_lock[index]); // 超级大内存，一条记录一个锁，锁行锁
 Array[index] = info; // driver_id就是Array下标
 UnWriteLock(m_lock[index]); // 解锁行锁
 }</code></pre>
-<p><img alt="图片" src="../assets/img/img-001-faa2a955-6fa5b80666.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-faa2a955-6fa5b80666ba.png"></p>
 <p>这个方案锁冲突降到最低，但锁资源大增。数据量非常大时，内存往往装不下。</p>
 <p>画外音：数据量比较小的时候，可以一个元素一把锁。典型的是连接池，每个连接一把锁，表示连接是否可用。</p>
 <h3 id="还有没有办法-进一步降低锁冲突">还有没有办法，进一步降低锁冲突？</h3>
@@ -481,7 +481,7 @@ UnWriteLock(m_lock[index]); // 解锁行锁
 <p>画外音：作为缓存，允许cache miss，却不允许读脏数据。</p>
 <h3 id="脏数据-是如何产生的">脏数据，是如何产生的？</h3>
 <p>不加锁，多线程并发写时，可能出现这种情况：</p>
-<p><img alt="图片" src="../assets/img/img-002-5ebfa14c-ba0a11f366.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-5ebfa14c-ba0a11f3660c.png"></p>
 <ol><li>线程1对缓存操作，对key想写入value1；</li><li>线程2对缓存操作，对key想写入value2；</li><li>不加锁，两个线程对同一个定长区域并发写，可能各写成功一半——最终结果既不是value1也不是value2，而是一个乱七八糟、不符合预期的value-unexpected。</li></ol>
 <h3 id="脏数据问题-怎么解决">脏数据问题，怎么解决？</h3>
 <p>本质上，这是一个数据完整性问题。并发写入的分别是value1和value2，读出的是value-unexpected。数据被篡改了，本质是数据完整性问题。</p>
@@ -490,7 +490,7 @@ UnWriteLock(m_lock[index]); // 解锁行锁
 <p>又例如：即时通讯中，如何保证接收方收到的消息，就是发送方发出的消息？发送方除了发送消息本身，还要发送消息的签名；接收方收到后校验签名，确保消息完整、未被篡改。</p>
 <p>"签名"，是常见的保证数据完整性的方案。</p>
 <h3 id="加入签名之后-读写流程要如何升级">加入签名之后，读写流程要如何升级？</h3>
-<p><img alt="图片" src="../assets/img/img-003-2c0ac9ae-db82f1a3d4.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-2c0ac9ae-db82f1a3d4b2.png"></p>
 <p>加上签名之后，缓存不但写入定长value本身，还要写入定长签名（例如16bit CRC校验）：</p>
 <ol><li>线程1对key想写入value1，写入签名v1-sign；</li><li>线程2对key想写入value2，写入签名v2-sign；</li><li>不加锁并发写，可能各写成功一半，结果仍是value-unexpected——但签名，一定是v1-sign或v2-sign中的一个；</li><li>读取时，不但取出value，还要像消息接收方一样校验签名。签名不一致，缓存返回NULL，即cache miss。</li></ol>
 <p>画外音：16bit/32bit的写，可以保证原子性。</p>

@@ -516,7 +516,7 @@ exit 0</code></pre>
 <ul><li>• custom commands 已经向 skills 收敛。源码里 <code>loadSkillsDir.ts</code> 仍然保留 legacy <code>/commands/</code> loader，但 <code>/skills/&amp;lt;name&amp;gt;/SKILL.md</code> 才是更完整的能力包形态。</li></ul>
 <ul><li>• subagent 的核心价值不是"多几个角色"，而是独立上下文、独立工具权限，以及把支线探索从主上下文里隔出去。</li></ul>
 <p>下面这张图，是我理解 <code>.claude/</code> 时最想先放在脑子里的版本。</p>
-<p><img alt="图片" src="../assets/img/img-001-5278406d-ead5f901b1.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-5278406d-ead5f901b141.png"></p>
 <p>这张图的重点不是目录齐全。</p>
 <p>我自己看这张图最大的感受是分层：规则归规则，权限归权限，动作归动作，流程归流程，个人偏好别混进团队契约。</p>
 <p>我自己一开始就是把这几层搅在一起，后来才慢慢拆清楚的。</p>
@@ -543,7 +543,7 @@ exit 0</code></pre>
 <p>很多教程一上来就讲项目根目录的 <code>.claude/</code>，容易让人以为只有一个。</p>
 <p>实际上有两个层面：</p>
 <table><thead><tr><th>层面</th><th>路径</th><th>作用</th></tr></thead><tbody><tr><td>项目级</td><td><code>&amp;lt;project-root&amp;gt;/.claude/</code></td><td>团队共享的规则、权限、hooks、skills、agents，通常提交到 Git</td></tr><tr><td>用户级</td><td><code>~/.claude/</code></td><td>个人偏好、跨项目通用的 CLAUDE.md、个人 skills/agents、会话历史</td></tr></tbody></table>
-<p><img alt="图片" src="../assets/img/img-002-b0390fe1-f7fdd0707e.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-b0390fe1-f7fdd0707e50.png"></p>
 <p>图：CLAUDE.md 加载优先级</p>
 <p>这张图画得很清楚。Claude Code 启动时，会从多个层级合并配置，优先级从高到低大致是：</p>
 <h3 id="1-CLAUDE-local-md-个人项目覆盖-gitignored">1. <code>CLAUDE.local.md</code>（个人项目覆盖，gitignored）</h3>
@@ -629,7 +629,7 @@ exit 0</code></pre>
 <ul><li>• 能机器验证的规则：放测试、lint、CI、hook</li></ul>
 <p>这背后其实是一条从上下文管理那篇延续下来的感受：上下文不是越多越好，关键是每层各放各的东西。</p>
 <p>如果压成一张执行链路的图，大概是这样：</p>
-<p><img alt="图片" src="../assets/img/img-003-e5f2b8a5-14719c0e2c.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-e5f2b8a5-14719c0e2c9f.png"></p>
 <p>这张图里我最在意的不是 Claude 会调用多少工具。</p>
 <p>而是这条链路：项目规则进入上下文，权限配置参与裁决，hooks 参与拦截和验证，最后工具结果再回到会话里。</p>
 <p>说直白点，这就是从"会聊天"走向"能在项目里干活"的差别。</p>
@@ -677,7 +677,7 @@ exit 0</code></pre>
 <ul><li>• 文件写完后，自动跑 formatter；</li></ul>
 <ul><li>• Claude 准备结束时，跑一组最小测试；</li></ul>
 <ul><li>• 用户提交提示词时，补充必要上下文或拦截不合规请求。</li></ul>
-<p><img alt="图片" src="../assets/img/img-004-9ab7ec6e-3559029952.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-9ab7ec6e-355902995244.png"></p>
 <p>图：Claude Hooks 生命周期</p>
 <p>这张图最值得记住的不是流程，而是 <strong>exit code 的含义</strong>：</p>
 <table><thead><tr><th>Exit Code</th><th>含义</th><th>效果</th></tr></thead><tbody><tr><td><code>exit 0</code></td><td>成功</td><td>继续执行</td></tr><tr><td><code>exit 1</code></td><td>错误</td><td>但<strong>不阻止</strong>，工作流继续</td></tr><tr><td><code>exit 2</code></td><td>阻止</td><td><strong>真正拦住执行</strong>  ，stderr 发回给 Claude 做自我修正</td></tr></tbody></table>
@@ -812,7 +812,7 @@ Reference @DETAILED_GUIDE.md for our security standards.</code></pre>
 <p><code>.claude/agents/</code> 很容易被讲成"多 Agent 团队"。</p>
 <p>之前写多 Agent 那篇的时候我就有一个感受：多 Agent 的难点不在给模型分几个角色，而在上下文边界怎么切、信息怎么流、系统什么时候停。</p>
 <p>Subagent 也是同一个逻辑。说白了就是：把某些支线任务丢到独立上下文里做，主线程只拿结果。</p>
-<p><img alt="图片" src="../assets/img/img-005-057c8462-cf5a5b0226.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-057c8462-cf5a5b022667.png"></p>
 <p>图：Subagent 隔离上下文</p>
 <p>这张图说得很清楚。</p>
 <p>代码审查、安全审计、性能排查这类任务，通常会产生大量中间过程：读文件、grep、失败假设、临时判断、长日志。</p>
@@ -954,7 +954,7 @@ When reviewing code:
 <p><code>.claude/</code> 就是这件事很小、但很关键的入口。</p>
 <p>后面如果有时间，想再聊聊 CLAUDE.md 实际写坏的几种典型模式，以及 hooks 在 CI 流程里怎么配合。如果你在配 <code>.claude/</code> 的过程中踩过什么坑，欢迎留言聊聊，很多好的工程经验都是从坑里长出来的。</p>
 <p>末了，如果有兴趣或者正在手搓 Agent的话，可以看看这个《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409091&amp;idx=1&amp;sn=3c40343aefdf11fdb208588a44033e14&amp;scene=21#wechat_redirect">30分钟手搓 Agent：LLM + Tools + Loop + Memory 跑通最小闭环</a>》或者购买这个课程《<a href="https://mp.weixin.qq.com/s?__biz=MzAwNjQwNzU2NQ==&amp;mid=2650409115&amp;idx=1&amp;sn=4dd35acccc98b8e800a46283ee19d9b0&amp;scene=21#wechat_redirect">为什么你的Agent总是"不听话"？</a>》</p>
-<p><img alt="图片" src="../assets/img/img-006-387e5bea-ac4cab4e5d.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-387e5bea-ac4cab4e5d5c.png"></p>
 <hr>
 <h3 id="参考资料">参考资料</h3>
 <ul><li>• Akshay Pachaar：Anatomy of the <code>.claude/</code> folder[1]</li></ul>
@@ -1008,7 +1008,7 @@ Claude Code 内部工具开源 code-simplifier：终结 AI 屎山代码的终极
 <blockquote><p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p></blockquote>
 <h3 id="架构师">架构师</h3>
 <p>我们都是架构师！</p>
-<p><img alt="图片" src="../assets/img/img-007-5ae8c7ba-667a56850f.webp"></p>
+<p><img alt="图片" src="../assets/img/img-007-5ae8c7ba-667a56850f89.webp"></p>
 <p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>

@@ -413,13 +413,13 @@
 <p>上一篇讲了 <strong>容器回收</strong>——占着的实例谁该放、何时放、放了数据怎么办。该放的放掉，池子干净了，回到「秒级能聊」，还剩一笔时间账要算。</p>
 <p>今天钻进连接层：进入页面时已经打了预热，用户转头就发首句，这两条路径怎么合到一起？合不上的时候为什么必须走冷启，而不是把人卡住？</p>
 <p>先看一次真实的值班现场。某天有用户反馈「聊天越来越慢」。查监控，进入页面时预热接口一片 202，成功率 99%，看起来毫无问题；可用户第一次发消息，还是老老实实等了一次冷启动。两边的日志都在说「成功」，就是合不上。折腾半天才发现：预热的接口图省事只带了 Agent 标识和用户，漏了来源标识——钥匙少了一环，锁当然打不开。预热不是没做，是做在另一把钥匙上。</p>
-<p><img alt="封面：预热合流" src="../assets/img/img-001-01ac504a-d7e64993eb.png"></p>
+<p><img alt="封面：预热合流" src="../assets/img/img-001-01ac504a-d7e64993ebf9.png"></p>
 <h3 id="先花一分钟对齐几个词">先花一分钟对齐几个词</h3>
 <table><thead><tr><th>词</th><th>说人话是什么意思</th></tr></thead><tbody><tr><td><strong>槽位</strong></td><td>连接池里预先准备好、可以被领走的一条可用连接</td></tr><tr><td><strong>预热 blank（新会话）</strong></td><td>给还没建会话的用户领的空连接</td></tr><tr><td><strong>预热 resume（续聊）</strong></td><td>带真实会话键、要接回上一轮历史的连接</td></tr><tr><td><strong>匹配键</strong></td><td>决定这一轮能不能领到同一条连接的那组字段：代理身份 + 用户 + 来源 +（续聊）会话键，此外还有启动来源、原始 Agent 标识、增量开关等；预热与正式开聊必须完全一致</td></tr><tr><td><strong>合流</strong></td><td>首聊到达时预热还在跑，服务端短等一下再领；不是让用户等</td></tr><tr><td><strong>冷启</strong></td><td>没等到现成连接，现起一条，慢但一定可用</td></tr><tr><td><strong>supersede（踢旧）</strong></td><td>同一会话来了新请求，把上一轮踢掉并停干净</td></tr><tr><td><strong>启动规格</strong></td><td>容器与工作区来源的组合；规格变了，旧预热的连接就不能再注册进池</td></tr></tbody></table>
 <p>（<code>CLI</code>、<code>SSE</code>、<code>202</code>、<code>stdin</code>、<code>fail-closed</code> 这类通用名词就不解释了。）</p>
 <hr>
 <h3 id="01-预热做了-首句还是冷的">01 | 预热做了，首句还是冷的</h3>
-<p><img alt="三种预热失效" src="../assets/img/img-002-db77d948-01acc84501.png"></p>
+<p><img alt="三种预热失效" src="../assets/img/img-002-db77d948-01acc84501d2.png"></p>
 <p>把预热想成<strong>出门前提前叫的网约车</strong>：</p>
 <table><thead><tr><th>叫车</th><th>预热里对应什么</th></tr></thead><tbody><tr><td><strong>提前叫车</strong></td><td>进入页面时异步发起预热</td></tr><tr><td><strong>车已经在楼下等你</strong></td><td>预热就绪，首句直接领走（合流）</td></tr><tr><td><strong>车还在路上</strong></td><td>预热进行中，服务端短等一下</td></tr><tr><td><strong>司机没来，你重新打一辆</strong></td><td>冷启：慢，但一定可用</td></tr><tr><td><strong>车牌号 + 手机号后四位</strong></td><td>匹配键——少一位就上不去车</td></tr><tr><td><strong>你又叫了一辆，得取消前一辆</strong></td><td>supersede 踢旧</td></tr><tr><td><strong>司机不能为了接单率假装你已上车</strong></td><td>禁止空消息占坑</td></tr></tbody></table>
 <p>这个类比把本篇三个最反直觉的判断一次讲清：</p>
@@ -438,7 +438,7 @@
 <p>回放时固定一个顺序：先对匹配键，再看预热有没有被做成开聊的前提，最后查旧一轮有没有真的终止。顺序反了，日志会把你带进三条死胡同。键对了才谈合流，合流通了才谈停干净。</p>
 <hr>
 <h3 id="02-五类做法横评-偷什么-拒什么">02 | 五类做法横评：偷什么，拒什么</h3>
-<p><img alt="预热策略横评" src="../assets/img/img-003-e48207af-94c8fe55ac.png"></p>
+<p><img alt="预热策略横评" src="../assets/img/img-003-e48207af-94c8fe55aca1.png"></p>
 <p>各家做「快点开始聊」的姿势不同。横评五类，比的是「谁等谁」和「失败之后怎么办」。</p>
 <table><thead><tr><th>做法</th><th>谁等谁</th><th>强项</th><th>短板</th></tr></thead><tbody><tr><td>前端死等预热再开聊</td><td>用户等预热</td><td>实现简单</td><td>预热失败就等于不能聊</td></tr><tr><td>只缓存模型 / 暖推理</td><td>不管命令行进程</td><td>SaaS 轻问答够用</td><td>带工具链的 Agent 场景不够</td></tr><tr><td>服务端连接池 + 合流</td><td>首聊可先发</td><td>提速手段可丢，主路径不堵</td><td>竞态与匹配键复杂</td></tr><tr><td>每次冷启</td><td>无预热</td><td>稳、逻辑直</td><td>秒级账单每轮都付</td></tr><tr><td>预热写空 prompt 进真会话</td><td>「占坑」保活</td><td>看起来槽位永远热</td><td>污染真实会话，应禁止</td></tr></tbody></table>
 <p>我们<strong>偷</strong>三样：从「服务端连接池 + 合流」偷「首聊可以立刻发，合流是服务端的责任」；从「每次冷启」偷「失败兜底路径必须完整，预热不是正确性的前提」；从本机常驻的体验偷「打开就能打字」这个产品目标——实现上用异步预热逼近，而不是阻塞界面。</p>
@@ -447,7 +447,7 @@
 <p>偷拒清单收束成四条产品原则：打开就能打字；合不上就冷启；停就要停干净；绝不拿真实会话当预热的化妆台。</p>
 <hr>
 <h3 id="03-blank-与-resume-分槽-合流与踢旧互不干扰">03 | blank 与 resume 分槽，合流与踢旧互不干扰</h3>
-<p><img alt="blank 与 resume 槽位" src="../assets/img/img-004-9ef788a6-209444d200.png"></p>
+<p><img alt="blank 与 resume 槽位" src="../assets/img/img-004-9ef788a6-209444d2007f.png"></p>
 <p>新会话与续聊要的连接不一样——一个还没有会话键，一个必须接回同一条会话历史。所以槽位分成两套：blank（无会话键）给新会话领空连接，resume（带会话键）给续聊接回历史。</p>
 <p>预热容量有限，昂贵的准备不该无限排队。所以槽位满时可以跳过预热，聊天仍走冷启，而不是把用户堵在预热队列里——提速手段反而变成最长的阻塞，是最讽刺的翻车方式。</p>
 <p>合流与踢旧是两个互不干扰的问题：一个解决「有没有现成连接」，一个解决「同一条连接上会不会双开」。</p>
@@ -458,7 +458,7 @@
 <p>页面侧的最小正确用法，也可以当成设计推论的一部分：进入页面时发一次就不管了（fire-and-forget）；失败只告警；续聊时把真实会话键<strong>同时</strong>传给预热和开聊；来源字面量两边必须一致。少做任一条，后面的合流代码写得再漂亮也合不上。</p>
 <hr>
 <h3 id="04-实现-四种状态都允许立刻聊">04 | 实现：四种状态都允许立刻聊</h3>
-<p><img alt="预热状态均可开聊" src="../assets/img/img-005-a1a24211-abefa92c01.png"></p>
+<p><img alt="预热状态均可开聊" src="../assets/img/img-005-a1a24211-abefa92c0170.png"></p>
 <p>先讲不变量。预热是提速手段，无论返回的是已接受（含「跳过昂贵准备」的变体）、正在预热还是已就绪，前端都该能输入。业务侧还有一个「跳过」状态，但它只在部分宿主类型里出现，池侧不产出。轮询预热状态当开门条件，等于把「必须先预热才能聊」从后门又塞回来。</p>
 <p>用户完全可能在预热返回之前就发出首句，所以合流必须发生在服务端：匹配得上就短等领取，匹配不上就冷启。前端多轮询一次，只是把「必须先预热才能聊」偷偷加回来而已。</p>
 <table><thead><tr><th>状态（示意）</th><th>含义</th><th>可否立刻聊</th></tr></thead><tbody><tr><td><code>accepted</code></td><td>接受后台预热（或跳过昂贵准备）</td><td>是</td></tr><tr><td><code>already_warming</code></td><td>同会话的续聊连接已在建</td><td>是</td></tr><tr><td><code>ready</code></td><td>同会话已有健康连接</td><td>是</td></tr><tr><td><code>skipped</code></td><td>业务上跳过（仅部分宿主类型产出，池侧不返回）</td><td>是</td></tr></tbody></table>
@@ -501,7 +501,7 @@ async def acquire_turn(key: str, new_task) -&gt; None:
 <ul><li>页面侧：中断上一次预热、发一次就不管、异常只告警。</li></ul>
 <hr>
 <h3 id="05-实现-规格冲突与四条禁止">05 | 实现：规格冲突与四条禁止</h3>
-<p><img alt="规格冲突与禁止写空 prompt" src="../assets/img/img-006-c09f6d80-80ab0f4f9e.png"></p>
+<p><img alt="规格冲突与禁止写空 prompt" src="../assets/img/img-006-c09f6d80-80ab0f4f9e60.png"></p>
 <p>晚到的错误规格连接一旦注册进池，会话快照就会错乱。所以遇到启动规格冲突，做法是作废旧预热、禁止晚到的错误连接注册，本轮聊天用自己的规格冷启。<strong>注意这条只覆盖续聊</strong>：只有带着真实会话键的续聊才会去扫描冲突、把旧那一轮置为「已被替代」并取消；新会话没有这条路径，不兼容的空闲连接由后台补充连接池时直接淘汰。</p>
 <p>「预热成功率」好看不等于用户安全。所以预热撞上已有健康连接时直接跳过，<strong>绝不</strong>用「发一条空消息」去污染真实会话。</p>
 <p>四条禁止项：</p>
@@ -532,7 +532,7 @@ async def maybe_prewarm(key: str, has_healthy: bool) -&gt; str:
 <p>再补一条面向用户的表达原则：用户侧可以说「正在连接」，不要说「预热失败，暂时不能聊」。前者承认提速手段有时未命中，后者把提速手段做成了门禁——<strong>叫不到车你会换别的办法走，不会因为没叫到车就不出门。</strong></p>
 <hr>
 <h3 id="06-完整生命周期-进入页面时立刻开聊">06 | 完整生命周期：进入页面时立刻开聊</h3>
-<p><img alt="合流时间线" src="../assets/img/img-007-7b4eeb9e-7659b6c322.png"></p>
+<p><img alt="合流时间线" src="../assets/img/img-007-7b4eeb9e-7659b6c32200.png"></p>
 <p>串一次最常见的快乐路径，外加几条分叉。每步都带决策点。</p>
 <ol><li><strong>打开对话页</strong> → 异步发起 blank 预热（无会话键）→ Agent 前置网关确认容器 → 申请 blank 槽 → 返回 202。决策点：失败只告警，输入框照开。</li></ol>
 <ol><li><strong>200 毫秒后发出「你好」</strong> → 开聊发现 blank 还没好 → <strong>服务端等合流</strong> → 领取 → 查询。决策点：谁等谁？用户不等，服务端短等预热。</li></ol>
@@ -549,7 +549,7 @@ async def maybe_prewarm(key: str, has_healthy: bool) -&gt; str:
 <p>一次「进入页面时立刻开聊」，成功时用户无感，失败时用户仍能聊。无感与可聊，比预热命中率好看更重要。</p>
 <hr>
 <h3 id="07-这套设计的代价与选型">07 | 这套设计的代价与选型</h3>
-<p><img alt="五维矩阵" src="../assets/img/img-008-2bc49f15-71d3b24bc2.png"></p>
+<p><img alt="五维矩阵" src="../assets/img/img-008-2bc49f15-71d3b24bc22e.png"></p>
 <p>五维横评：首句可立即发、失败仍可聊、会话安全、实现复杂度、推荐度。</p>
 <table><thead><tr><th>维度</th><th>前端死等</th><th>服务端合流</th><th>每次冷启</th><th>空消息占坑</th><th>合流 + 冷启兜底（我们）</th></tr></thead><tbody><tr><td>首句可立即发</td><td>否</td><td>是</td><td>是</td><td>是（有毒）</td><td>是</td></tr><tr><td>失败仍可聊</td><td>难</td><td>是</td><td>是</td><td>是</td><td>是</td></tr><tr><td>会话安全</td><td>中</td><td>强</td><td>强</td><td>弱</td><td>强</td></tr><tr><td>实现复杂度</td><td>低</td><td>高</td><td>低</td><td>低</td><td>高但可控</td></tr><tr><td>推荐</td><td>否</td><td>是</td><td>兜底</td><td>禁止</td><td>是</td></tr></tbody></table>
 <p>什么时候选谁：</p>
@@ -560,7 +560,7 @@ async def maybe_prewarm(key: str, has_healthy: bool) -&gt; str:
 <p>最后提醒一句：矩阵里「实现复杂度高」本身不是缺点。复杂度应该花在服务端的竞态与停干净上，不应该花在前端死等和空消息化妆上。</p>
 <hr>
 <h3 id="08-四个坑">08 | 四个坑</h3>
-<p><img alt="四个坑" src="../assets/img/img-009-f3ef105f-cebbecbfae.png"></p>
+<p><img alt="四个坑" src="../assets/img/img-009-f3ef105f-cebbecbfae2f.png"></p>
 <h3 id="坑-1-匹配键少传来源或会话键">坑 1：匹配键少传来源或会话键</h3>
 <p><strong>诱因</strong>：预热接口图省事；续聊时只在开聊带会话键，预热忘了带；两边来源字面量不一致。 <strong>错解药</strong>：再打一次预热「补救」——钥匙还是错的，永远合不上。 <strong>正解药</strong>：预热与开聊共用同一个键生成函数；对不齐就冷启，同时去修键。回到网约车：<strong>再叫一次车没用，因为你报的车牌号本身就是错的</strong>——得先把号码改对。</p>
 <h3 id="坑-2-预热失败就锁界面">坑 2：预热失败就锁界面</h3>

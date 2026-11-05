@@ -411,13 +411,13 @@
 <ul><li><a href="#pi-是什么">Pi 是什么</a></li><li><a href="#pi-和其他-coding-agent-最大的不同">Pi 和其他 coding agent 最大的不同</a></li><li><a href="#最小工具集">最小工具集</a></li><li><a href="#扩展层">扩展层</a></li><li><a href="#pi-和-deepseek-harness-的设计理念有什么不同">Pi 和 DeepSeek Harness 的设计理念有什么不同？</a></li><li><a href="#pi-用起来最特别的地方">Pi 用起来最特别的地方</a></li><li><a href="#树形会话">树形会话</a></li><li><a href="#权限边界">权限边界</a></li><li><a href="#上下文加载">上下文加载</a></li><li><a href="#一个小实战">一个小实战</a></li><li><a href="#pi-适合谁">Pi 适合谁？</a></li><li><a href="#总结">总结</a></li></ul>
 <p>之前写过两篇关于 <a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247555932&amp;idx=1&amp;sn=e933cb94a42d05b66e3eaf487ec48ceb&amp;scene=21#wechat_redirect">OMP</a>的文章，一篇聊使用，一篇聊接 DeepSeek。OMP 其实是 Pi 的一个 fork，在使用 OMP 的时候，我也一直在用 Pi。</p>
 <p>Pi 的 harness 相比于 Claude Code、Codex 这些比较成熟的 AI Coding 工具来说会显得十分小巧，但其设计却是十分精妙，从 GitHub 的 star 数也可以看出它做的非常优秀。今天我们就回到 Pi 本身，看它究竟有什么好的地方。</p>
-<p><img alt="图片" src="../assets/img/img-001-124b412a-53085e708b.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-124b412a-53085e708b68.png"></p>
 <p>stars</p>
 <h4 id="Pi-是什么">Pi 是什么</h4>
 <p>按 Pi 官网的定义，Pi 的定位是 <code>minimal agent harness</code>。它组织模型、工具、上下文、会话和终端交互，让 agent 具备在项目中工作的基本能力，使用者再根据自己的工作流调整这个 harness。</p>
 <p>官网用两句话概括这套设计。<code>Primitives, not features</code> 强调基础构件优先，尽量少预置功能；<code>Adapt Pi to your workflows, not the other way around</code> 表示工作流应该决定 Pi 的形态。</p>
 <p>安装也很简单，首先去官网首页[1]选择适合自己环境的安装方式，安装完成后，在终端输入 <code>pi</code> 启动。</p>
-<p><img alt="Pi下载" src="../assets/img/img-002-52242ed9-0900185fb5.png"></p>
+<p><img alt="Pi下载" src="../assets/img/img-002-52242ed9-0900185fb5b9.png"></p>
 <p>Pi下载</p>
 <p>接下来我们就来简单看看 Pi 的设计思想，来看看为什么 Pi 能有这么好的表现。</p>
 <h4 id="Pi-和其他-coding-agent-最大的不同">Pi 和其他 coding agent 最大的不同</h4>
@@ -426,13 +426,13 @@
 <p>Pi 有多简单呢？在 coding agent 形态下，Pi 默认只给模型 <code>read</code>、<code>write</code>、<code>edit</code>、<code>bash</code> 四个工具。</p>
 <p>我最开始也很震惊，四个工具够用吗？</p>
 <p>Composio 和 Databricks 的评测，刚好可以给出问题的答案。</p>
-<p><img alt="Composio 在 26 个任务上的成功率" src="../assets/img/img-003-6ab96697-1b30e31644.png"></p>
+<p><img alt="Composio 在 26 个任务上的成功率" src="../assets/img/img-003-6ab96697-1b30e3164437.png"></p>
 <p><em>图 1，Composio 7 月 31 日在 X 发布的 Kimi K3 测试成功率，图 2、3 同源。</em></p>
-<p><img alt="Composio 每任务平均成本" src="../assets/img/img-004-bc4cca8e-90bd72fac4.png"></p>
+<p><img alt="Composio 每任务平均成本" src="../assets/img/img-004-bc4cca8e-90bd72fac4d4.png"></p>
 <p><em>图 2，每任务平均成本。</em></p>
-<p><img alt="Composio 每任务中位耗时" src="../assets/img/img-005-a9617653-5f63370f95.png"></p>
+<p><img alt="Composio 每任务中位耗时" src="../assets/img/img-005-a9617653-5f63370f9541.png"></p>
 <p><em>图 3，每任务中位耗时。</em></p>
-<p><img alt="Databricks coding agent 成本与成功率图" src="../assets/img/img-006-376d2e7b-ac8a812cdf.png"></p>
+<p><img alt="Databricks coding agent 成本与成功率图" src="../assets/img/img-006-376d2e7b-ac8a812cdf48.png"></p>
 <p><em>图 4，Databricks benchmark 的成本与成功率分布。横轴是每任务平均成本，纵轴是总体通过率。</em></p>
 <p>只看评测结果的话，Pi 可谓是相当亮眼，它在一些任务上的表现能和 Codex 和 Claude Code 掰掰手腕甚至是超越。</p>
 <p><code>grep</code>、<code>find</code>、<code>ls</code> 也是内置工具，只是不默认开启。</p>
@@ -442,7 +442,7 @@
 <p>还能用 <code>--exclude-tools</code> 禁用单个工具，用 <code>--no-builtin-tools</code> 关掉全部内置工具，同时保留 extension 和自定义工具。</p>
 <p>我没看到官方解释为什么 <code>grep</code>、<code>find</code>、<code>ls</code> 不默认开。我的猜测是默认的 <code>bash</code> 已经覆盖了大部分 shell 能力，这三个专用工具和它有重叠。</p>
 <p>这个选择和我最近读到的一本书里对工具设计的讨论很接近。（书名是 AI Agents in Depth[2]，感兴趣可以读一下）</p>
-<p><img alt="书籍-通用工具" src="../assets/img/img-007-4fb7773e-79e4120b32.png"></p>
+<p><img alt="书籍-通用工具" src="../assets/img/img-007-4fb7773e-79e4120b3209.png"></p>
 <p>书籍-通用工具</p>
 <p><code>read</code>、<code>write</code>、<code>edit</code>、<code>bash</code> 足够基础与通用，模型可以结合自己的代码元能力去编排它们来完成搜索、修改和验证等各种任务。从前面的评测结果也可以看出，即使 Pi 只有这些工具，也能够成功完成任务。</p>
 <p>四个工具只是 Pi 的默认起点，真正的差异还在于能力如何继续扩展。</p>
@@ -466,13 +466,13 @@
 <p>首先我们先了解一下 Pi 允许我们怎么控制会话。Pi 把会话写成 JSONL，每条记录带 <code>id</code> 和 <code>parentId</code>，这些字段让历史形成树。<code>/tree</code> 可以在同一个会话文件里跳回历史节点并继续，原来的后续记录仍然保留。需要生成独立会话时用 <code>/fork</code>，它从用户消息创建新的会话文件；<code>/clone</code> 则复制当前活动分支，适合把当前状态完整带到另一份会话里。有了这些命令，我们就可以根据需求来灵活的控制会话。</p>
 <table><thead><tr><th>命令</th><th>结果</th></tr></thead><tbody><tr><td><code>/tree</code></td><td>在同一会话文件中跳转历史节点并继续</td></tr><tr><td><code>/fork</code></td><td>从用户消息创建新的会话文件</td></tr><tr><td><code>/clone</code></td><td>复制当前活动分支到新的会话文件</td></tr><tr><td><code>/export</code></td><td>导出 HTML 或 JSONL</td></tr><tr><td><code>/share</code></td><td>上传为私有 GitHub Gist 并生成分享链接</td></tr></tbody></table>
 <p>Pi 默认开启自动 compact，也支持手动执行 <code>/compact</code>。虽然压缩会丢失一部分上下文，但完整历史仍保存在 JSONL 文件中。压缩后的会话适合继续当前任务，想重新检查被压缩掉的细节时，可以用 /tree 回到历史节点查看。</p>
-<p><img alt="tree" src="../assets/img/img-008-8526dbb1-ffb354a9b5.png"></p>
+<p><img alt="tree" src="../assets/img/img-008-8526dbb1-ffb354a9b532.png"></p>
 <p><em>图 5，<code>/tree</code> 打开的 Session Tree。</em></p>
 <p>比如在这次示例会话中，我选中 <code>user：你在跑什么</code> 这条历史消息，然后按回车。Pi 先弹出 <code>Summarize branch?</code>，让用户在 <code>No summary</code>、<code>Summarize</code> 和 <code>Summarize with custom prompt</code> 之间选择。回退前多了一步确认，因为选中节点后，原节点后面的内容会成为待处理的分支。会话很长时，是否摘要会影响接下来能看到的上下文，不能顺手跳过。</p>
-<p><img alt="tree（2）" src="../assets/img/img-009-59db3eaf-24d94097ce.png"></p>
+<p><img alt="tree（2）" src="../assets/img/img-009-59db3eaf-24d94097ce49.png"></p>
 <p><em>图 6，选中历史节点后出现分支摘要选项。</em></p>
 <p>接下来输入的新消息会从这里继续，原来节点后面的记录仍然保留。</p>
-<p><img alt="tree（3）" src="../assets/img/img-010-9454fbb5-0c59fc42be.png"></p>
+<p><img alt="tree（3）" src="../assets/img/img-010-9454fbb5-0c59fc42be8c.png"></p>
 <p><em>图 7，导航回历史节点后的会话界面。</em></p>
 <p>这样就可以先保留第一种实现，再从“你在跑什么”这个节点继续试第二种方案。两条路径都留在同一个会话文件里，后面还能通过 <code>/tree</code> 来回切换。若想彻底分开成新会话，再用 <code>/fork</code>；需要复制当前活动分支时，用 <code>/clone</code>。树形会话适合 agent 反复试错，回退不会让原来的探索记录消失。</p>
 <p>树形会话解决的是探索路径问题，但自由度越高，用户承担的边界管理也越多。</p>
@@ -498,21 +498,21 @@
 <h4 id="一个小实战">一个小实战</h4>
 <p>下面看一次真实的配置和使用过程。</p>
 <p>开始时，我先去 Pi 官方的 packages 安装页面按自己的工作流装了 MCP 适配、网络搜索等基本能力（注意 package 里的 extension 会以本机进程权限运行，安装前要检查来源、维护状态和源码，没必要为了“功能完整”一次装很多），装了自己需要的 extension、skill 和 MCP，其中包括让 Pi 持续运行的 <code>pi-goal</code>。</p>
-<p><img alt="packages下载" src="../assets/img/img-011-90e9adb1-8ae7924c6e.png"></p>
+<p><img alt="packages下载" src="../assets/img/img-011-90e9adb1-8ae7924c6ef4.png"></p>
 <p>packages下载</p>
 <p>需要的扩展装好后，我让 Pi 配合 DeepSeek V4 Flash 做一个简单的番茄钟。我先用 Matt Pocock 的 grill-me skill 理清需求，拿到最终的 goal prompt 后再交给 Pi 直接执行。</p>
-<p><img alt="Pi实战(1)" src="../assets/img/img-012-c6d3552a-9edcca342b.png"></p>
+<p><img alt="Pi实战(1)" src="../assets/img/img-012-c6d3552a-9edcca342b5e.png"></p>
 <p>Pi实战(1)</p>
 <p>执行过程中，可以看到左下角显示的缓存命中率很高，有时甚至会到 100%。</p>
-<p><img alt="Pi实战(2)" src="../assets/img/img-013-e99b68a4-729f7238f2.png"></p>
+<p><img alt="Pi实战(2)" src="../assets/img/img-013-e99b68a4-729f7238f26b.png"></p>
 <p>Pi实战(2)</p>
 <p>整个过程大约 20 分钟。第一次 goal 得到的前端效果不太理想，但功能完成得还不错。</p>
-<p><img alt="Pi实战(3)" src="../assets/img/img-014-aa4f8ae5-a47e5f9d01.png"></p>
+<p><img alt="Pi实战(3)" src="../assets/img/img-014-aa4f8ae5-a47e5f9d01f7.png"></p>
 <p>Pi实战(3)</p>
 <p>接下来我让 Pi 用 taste skill 优化前端。</p>
-<p><img alt="Pi实战(4)" src="../assets/img/img-015-7ab91ba0-adac105760.png"></p>
+<p><img alt="Pi实战(4)" src="../assets/img/img-015-7ab91ba0-adac1057600f.png"></p>
 <p>Pi实战(4)</p>
-<p><img alt="Pi实战(5)" src="../assets/img/img-016-34edae7a-d27a61aff3.png"></p>
+<p><img alt="Pi实战(5)" src="../assets/img/img-016-34edae7a-d27a61aff344.png"></p>
 <p>Pi实战(5)</p>
 <p>整个流程不需要太复杂，和使用 Claude Code 和 Codex 时其实差不多。真正的差异落在配置责任上，Pi 需要自己挑选并维护扩展能力。</p>
 <p>这次体验也反映了一个前置条件。使用者最好理解 harness 的基本构成，并且已经形成自己的 AI coding 工作流。否则，面对一个很小的默认核心，很难判断该加什么、该信任哪些第三方 package。</p>
@@ -530,7 +530,7 @@
 <p>官网首页: <em>https://pi.dev/</em></p>
 <p>[2]</p>
 <p>AI Agents in Depth: <em>https://bojieli.github.io/ai-agent-book/book/chapter4/</em></p>
-<p><img alt="图片" src="../assets/img/img-017-c1262e6b-bacec1f7fc.webp"></p>
+<p><img alt="图片" src="../assets/img/img-017-c1262e6b-bacec1f7fcfb.webp"></p>
 <p><strong>⭐️推荐阅读</strong>:</p>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247555122&amp;idx=1&amp;sn=96278bed8e2b414434398b56785ea2bd&amp;scene=21#wechat_redirect">AIGuide：AI 应用开发、AI 编程实战与面试指南</a>（对标 JavaGuide，完全开源免费）</li></ul>
 <ul><li><a href="https://mp.weixin.qq.com/s?__biz=Mzg2OTA0Njk0OA==&amp;mid=2247552140&amp;idx=1&amp;sn=551aeaa2298099436d22ac4983b17c49&amp;scene=21#wechat_redirect">JavaGuide： Java 面试指南和后端通用面试复习资料</a>（Github 157k+ Star）</li></ul>

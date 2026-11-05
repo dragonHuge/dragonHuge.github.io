@@ -420,7 +420,7 @@
 <h2 id="原文沉淀">原文沉淀</h2>
 <h3 id="目录">目录</h3>
 <ul><li><a href="#01-claude-code-记忆拆解">01 Claude Code 记忆拆解</a></li><li><a href="#第一层claudemd用户写给-agent-的规矩">第一层：CLAUDE.md，用户写给 agent 的规矩</a></li><li><a href="#第二层auto-memoryagent-自己记笔记">第二层：Auto Memory，agent 自己记笔记</a></li><li><a href="#第三层auto-dream让-agent-做梦整理记忆">第三层：Auto Dream，让 agent 做梦整理记忆</a></li><li><a href="#第四层kairos泄露代码里还没上线的野心">第四层：KAIROS，泄露代码里还没上线的野心</a></li><li><a href="#02-这套体系的天花板在哪">02 这套体系的天花板在哪？</a></li><li><a href="#03-memsearch记忆应该比任何一个-agent-都活得更长">03 memsearch：记忆应该比任何一个 agent 都活得更长</a></li><li><a href="#安装两条命令搞定">安装：两条命令搞定</a></li><li><a href="#自动记忆全量记忆按需回忆">自动记忆，全量记忆，按需回忆</a></li><li><a href="#检索不只是向量搜索">检索：不只是向量搜索</a></li><li><a href="#l1语义搜索">L1：语义搜索</a></li><li><a href="#l2上下文展开">L2：上下文展开</a></li><li><a href="#l3原始对话">L3：原始对话</a></li><li><a href="#跨-agent-共享真正的永久记忆">跨 agent 共享：真正的永久记忆</a></li><li><a href="#给开发者的接口">给开发者的接口</a></li><li><a href="#尾声">尾声</a></li></ul>
-<p><img alt="图片" src="../assets/img/img-001-23d1ca9c-e722ec7ed8.webp"></p>
+<p><img alt="图片" src="../assets/img/img-001-23d1ca9c-e722ec7ed87e.webp"></p>
 <p>Claude Code 源码泄露的事，大家应该都知道了。npm 包里多带了一个 <code>.map</code> 文件，512,000 行 TypeScript 就这么公开了。</p>
 <p>研究完他的源码后，我们的结论是：Claude Code 的记忆系统，比想象中初级。</p>
 <p>它确实做了不少工作，分了好几层，甚至搞了一个让 agent做梦的机制来整理记忆。听起来很高级。但扒开来看，本质上还是在一个 agent 的沙盒里打转，记忆出不去，也活不长。</p>
@@ -456,7 +456,7 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 <p>Auto Dream 模拟的是人脑在睡眠中做的事：整理和巩固记忆。</p>
 <p>它扫描现有记忆文件，翻阅历史会话记录，找到用户的反馈和反复提到的话题，然后做整合：把相对时间换成绝对日期，合并矛盾条目，剔除过时内容，最终把 <code>MEMORY.md</code> 控制在 200 行以内。</p>
 <p>触发条件两个同时满足：距离上次整合超过 24 小时，且积累了 5 次以上新会话。也可以手动输入“dream”触发。整个过程跑在后台的子 agent 里，不阻塞主会话。</p>
-<p><img alt="图片" src="../assets/img/img-002-20317afb-1c06c0a3ed.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-002-20317afb-1c06c0a3ed72.jpg"></p>
 <h3 id="第四层-KAIROS-泄露代码里还没上线的野心">第四层：KAIROS，泄露代码里还没上线的野心</h3>
 <p>前面三个都是已经上线或正在灰度的功能。泄露的代码里还藏着一个更大的东西。</p>
 <p>KAIROS 在源码中出现了超过 150 次。这是一个后台守护进程模式，想把 Claude Code 从被动响应的工具变成主动观察的自治体。</p>
@@ -471,11 +471,11 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 <ul><li><strong>层层修补的复杂度</strong>。CLAUDE.md 不够加 Auto Memory，Auto Memory 乱了加 Auto Dream，Dream 不够又搞 KAIROS。每一层都是在补上一层的问题，越叠越复杂，但根上的限制没变。</li></ul>
 <ul><li><strong>跨工具不通</strong><strong>用</strong>。记忆锁在 Claude Code 一个工具里。换到 OpenCode、Codex CLI，从零开始。</li></ul>
 <ul><li><strong>终究是短期记忆</strong>。不管做不做梦，本质还是会话粒度的东西。「上周讨论的 Redis 配置最后怎么处理的」「三个月前的 auth 重构到哪一步了」，这类长跨度的回溯基本无望。</li></ul>
-<p><img alt="图片" src="../assets/img/img-003-1c8b371d-ae80aa830b.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-003-1c8b371d-ae80aa830b41.jpg"></p>
 <p>这不是 Claude Code 的设计失误。单 agent、会话粒度、本地存储，架构走到这里，天花板就在这。</p>
 <h3 id="03-memsearch-记忆应该比任何一个-agent-都活得更长">03 memsearch：记忆应该比任何一个 agent 都活得更长</h3>
 <p>这是我们做 memsearch 的核心想法。</p>
-<p><img alt="图片" src="../assets/img/img-004-c8e1379c-056ebf879f.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-c8e1379c-056ebf879f8a.png"></p>
 <p>agent 会换，工具会换，但你在项目里积累的知识不应该跟着消失。memsearch 把记忆从 agent 里抽出来，放到一个独立的持久层。agent 来来去去，记忆一直在。</p>
 <p>整体架构：</p>
 <pre><code>┌─────────────────────────────────────────┐
@@ -510,7 +510,7 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 <p>装好之后，memsearch 通过 shell hook 接入 agent 的生命周期。</p>
 <p><strong>自动记忆，全量记忆。</strong> 每轮对话结束时，对话被 Haiku 模型自动总结要点，被追加到当天的记忆Markdown文件，再异步向量化进索引。后台完成，用户无感。且不会漏任何对话轮次，历史所有操作都有记忆，永不遗忘。</p>
 <p><strong>记忆召回通过 skill 机制触发。</strong> memsearch 注册了一个 <code>memory-recall</code> skill，Claude 可以主动调用，也可以在判断用户问题需要历史上下文时被动触发。skill 跑在 fork 出来的子 agent 里（<code>context: fork</code>），不会把搜索工具的定义塞进主会话的 context，零 token 开销。</p>
-<p><img alt="图片" src="../assets/img/img-005-03b309d5-a379f405a1.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-03b309d5-a379f405a120.png"></p>
 <p>记忆文件的目录结构长这样：</p>
 <pre><code>.memsearch/
 └── memory/
@@ -586,7 +586,7 @@ MEMORY.md 内容示例（每行 ≤150 字符）：
 <p>Claude Code 的记忆锁在自己一个工具里。你用 OpenCode、OpenClaw、Codex CLI，得各自从零开始。<code>MEMORY.md</code> 存在本地，绑定单个用户、单个 agent，天然就是一座孤岛。</p>
 <p>memsearch 目前支持四个主流 coding agent：Claude Code、OpenClaw、OpenCode、Codex CLI。它们共享同一套 Markdown 记忆格式，和同一个Milvus collection。</p>
 <p>不管从哪个 agent 写入的记忆，其他 agent 都能搜到。</p>
-<p><img alt="图片" src="../assets/img/img-006-edd897c0-940c7285ca.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-edd897c0-940c7285ca55.png"></p>
 <p>举两个实际场景。</p>
 <p>第一个：你在 Claude Code 里花了一下午搞清楚项目的部署流程，踩了几个坑。对话被自动总结、索引。第二天切到 OpenCode 继续开发，问「昨天部署时那个端口冲突怎么解决的」。OpenCode 直接搜到昨天在 Claude Code 里的记忆，给你正确答案。</p>
 <p>第二个：团队协作。把 Milvus 后端指向 Zilliz Cloud，多个开发者在不同机器上、用不同 agent，读写同一份项目记忆。新人加入，不用翻几个月的 Slack 和文档，agent 自己就知道项目的历史上下文。</p>
@@ -618,7 +618,7 @@ await mem.watch()                          # 文件变动自动索
 <p>Claude Code 的记忆设计有它的价值。KAIROS 和 autoDream 的思路也值得关注。</p>
 <p>但单 agent 内部的记忆优化，走到头也就是这样了。记忆应该比任何一个 agent 都活得更长。</p>
 <p>项目地址：https://github.com/zilliztech/memsearch</p>
-<p><img alt="图片" src="../assets/img/img-007-60a996c2-691934878d.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-60a996c2-691934878d94.png"></p>
 <pre><code>作者介绍
 
 张晨
@@ -630,8 +630,8 @@ Zilliz Algorithm Engineer
 2026 年，Embedding要怎么选？（实测Gemini 、jina、Qwen、BGE、OpenAI十大模型）
 教程：OpenClaw + Milvus + LLM，如何避免GEO批量生文变AI投毒 | 一线实战
 养虾实战教程：我用OpenClaw做了个能盯盘，也能深度复盘的投资agent</code></pre>
-<p><img alt="图片" src="../assets/img/img-008-fb1f94a0-76160eea14.webp"></p>
-<p><img alt="图片" src="../assets/img/img-009-db83ade0-7eb6231b07.webp"></p>
+<p><img alt="图片" src="../assets/img/img-008-fb1f94a0-76160eea1467.webp"></p>
+<p><img alt="图片" src="../assets/img/img-009-db83ade0-7eb6231b074b.webp"></p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>

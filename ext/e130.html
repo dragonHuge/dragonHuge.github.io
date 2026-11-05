@@ -409,12 +409,12 @@
 <h2 id="原文沉淀">原文沉淀</h2>
 <h3 id="目录">目录</h3>
 <ul><li><a href="#作者masonprincipal-research-leader">作者：mason，Principal Research Leader</a></li><li><a href="#一老惯例先看看jev-到底是什么">一、老惯例，先看看Jev 到底是什么？</a></li><li><a href="#用-codebuddy-简单做了一个调用的demo">用 Codebuddy 简单做了一个调用的demo</a></li><li><a href="#观看更多">观看更多</a></li><li><a href="#全屏">全屏</a></li><li><a href="#二在看看几个社区的-demo理解它能做什么">二、在看看几个社区的 Demo，理解它能做什么</a></li><li><a href="#三相比较自回归的大模型它这个的优势在哪">三、相比较自回归的大模型，它这个的优势在哪？</a></li><li><a href="#为什么还要专门做一个-jev">为什么还要专门做一个 Jev？</a></li><li><a href="#4-多指令并行解析-command-parsing">4. 多指令并行解析 (Command Parsing)</a></li><li><a href="#四未来前景咋看">四、未来前景咋看</a></li><li><a href="#1需求增长不只来自替换现有大模型">1、需求增长不只来自替换现有大模型</a></li><li><a href="#2能替代多少大模型调用取决于系统设计">2、能替代多少大模型调用，取决于系统设计</a></li><li><a href="#3最大的竞争压力来自两边">3、最大的竞争压力来自两边</a></li><li><a href="#观看更多">观看更多</a></li><li><a href="#全屏">全屏</a></li></ul>
-<p><img alt="图片" src="../assets/img/img-001-d910c04f-7310d7e9a9.gif"></p>
+<p><img alt="图片" src="../assets/img/img-001-d910c04f-7310d7e9a90b.gif"></p>
 <h3 id="作者-mason-Principal-Research-Leader">作者：mason，Principal Research Leader</h3>
 <blockquote><p>丨 导语 最近看到了一个挺有意思的东西，就是TypeSafe AI 做的 Jev。Reddit 上很多人用它玩 DOOM，也有人拿它玩 Mario。我申请之后，拿到 API Key 后，也做了一个网页小游戏，想看看它到底在里面起什么作用。一开始，我最想弄清楚的其实很简单：同样是让 AI 操作游戏，为什么要用 Jev？GPT 不能做吗？当然能。做完这个 demo，再看了一圈资料，我觉得可能值得讨论的是另一个问题：我们现在搭 Agent，经常让一个通用大模型反复决定下一步。这里面有多少事情，真的需要大模型完整的生成和推理能力？</p></blockquote>
 <h3 id="一-老惯例-先看看Jev-到底是什么">一、老惯例，先看看Jev 到底是什么？</h3>
 <p>Jev 是 <a href="http://url.com">TypeSafe AI</a>在 9 月份推出的决策模型。创始人是 Diogo Almeida ，他曾在 OpenAI 参与过让语言模型更会听指令、跟人对话的相关研究。</p>
-<p><img alt="图片" src="../assets/img/img-002-5394c988-c5d2ce6790.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-5394c988-c5d2ce67900e.png"></p>
 <p>TypeSafe 默默开发了两年，发布一个官方称为 <strong>System One Models</strong>的模型。使用方式简单可以理解成：把当前情况和问题给它，让它返回程序能直接使用的结果。其实本质上是分类模型。<a href="https://docs.typesafe.ai/introduction">官方介绍</a></p>
 <p>接口主要有三种类型：</p>
 <table><thead><tr><th>类型</th><th>问什么</th><th>返回什么</th></tr></thead><tbody><tr><td><strong>Choice：选择</strong></td><td>玩家这句话在叫谁？</td><td>一个选项、各选项的概率，以及 confidence</td></tr><tr><td><strong>Score：评分</strong></td><td>这段内容的风险处于哪个等级？</td><td>按定义的等级评分、概率分布，以及 confidence</td></tr><tr><td><strong>Noul：是非判断</strong></td><td>这条请求需要转人工吗？</td><td>“是”的概率，取值 0—1，不单独返回 confidence</td></tr></tbody></table>
@@ -461,11 +461,11 @@
 <p>视频详情</p>
 <p>视频故意在每一步多停留了几秒，方便看清右侧的三个部分：<strong>它看到了什么、选了哪个动作、执行后发生了什么。</strong> 停留时间是为了演示，不是模型响应时间。</p>
 <p>这一局里，Jev 先攻击挡路的怪物，再往右移动，拿到金币，最后走到出口，一共 6 次真实 API 调用。第一步返回的“攻击”概率约为 95%，界面上的置信度约为 93%。这是两个不同的数，也都不是“这局有多大概率能赢”。 这个视频能说明：模型的选择确实驱动了游戏，响应也足够支持这种回合制交互。它还不能说明 Jev 比 GPT 更会玩。我们已经搭了相同地图、相同规则的对比版本，但目前没有完成有效的双模型实测，所以这里不放胜负和性能结论。 还有一次低血量测试挺有意思：角色只剩 20 点血时，Jev 第一手选了攻击，怪物反击后剩 5 点血。这个动作是不是最优，要看后续局面，不能只凭“没喝药”就下结论。它至少提醒我，<strong>模型会作出自己的取舍，演示不应该把结果改成我们预先想看的答案。</strong></p>
-<p><img alt="图片" src="../assets/img/img-003-e97a8526-7c113ac4a7.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-e97a8526-7c113ac4a774.png"></p>
 <p>图 1：我们这个 demo 的实际分工。地图、伤害、碰撞由游戏代码处理；每一步按哪个键，由 Jev 返回。 这里我觉得最容易理解的一句话是：<strong>Jev 是拿手柄的玩家，普通代码是游戏本身。</strong> 它没有负责画地图，也没有生成整个游戏。我们也没有给勇者写一条自动通关路线。代码把局面整理成文字和数据，再把模型选出的动作交给游戏引擎执行。它看到的是状态描述，不是屏幕截图。</p>
 <h3 id="二-在看看几个社区的-Demo-理解它能做什么">二、在看看几个社区的 Demo，理解它能做什么</h3>
 <p>可以先看 Browser Use 做的这个航班查询例子，这个例子 它把“判断”和“生成”分得挺直观的。</p>
-<p><img alt="图片" src="../assets/img/img-004-c36b67fe-e3c704fad7.gif"></p>
+<p><img alt="图片" src="../assets/img/img-004-c36b67fe-e3c704fad75d.gif"></p>
 <p><strong><a href="https://github.com/browser-use/jev-ultrafast/blob/main/docs/demo.mp4">▶ 查看浏览器演示</a></strong> · <a href="https://github.com/browser-use/jev-ultrafast">项目代码</a> · <a href="https://github.com/browser-use/jev-ultrafast/blob/main/docs/performance.md">测试记录</a></p>
 <p><em>动图与视频来自 Browser Use / jev-ultrafast。</em></p>
 <p>页面先被整理成带编号的元素，Jev 决定操作什么、点哪个目标。需要填写城市名称时，再调用生成模型产生文字。</p>
@@ -556,8 +556,8 @@
 <p>视频详情</p>
 <p><a href="https://github.com/kyle-pena-nlp/jevchat/">https://github.com/kyle-pena-nlp/jevchat/</a></p>
 <p>大家什么感受，又回到了 Language model 的最初的开始！</p>
-<p><img alt="图片" src="../assets/img/img-005-1c87ab1a-4f74303f8f.gif"></p>
-<p><img alt="图片" src="../assets/img/img-006-3430ef59-a70a3b2768.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-1c87ab1a-4f74303f8f98.gif"></p>
+<p><img alt="图片" src="../assets/img/img-006-3430ef59-a70a3b2768bb.png"></p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>

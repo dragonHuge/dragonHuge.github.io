@@ -411,58 +411,58 @@
 <hr>
 <p>大家好，我是PaperAgent，不是Agent！</p>
 <p>Anthropic官宣：开发者的新家 <strong>claude.dev</strong> 正式上线：<strong>有工程深挖、Claude Code 与 API 指南，以及来自打造 Claude 的团队的一线经验</strong>。<a href="https://mp.weixin.qq.com/s?__biz=Mzk0MTYzMzMxMA==&amp;mid=2247512303&amp;idx=1&amp;sn=7ad1e6733cdde9be2a60937a02b7b2e3&amp;scene=21#wechat_redirect">近期大火的Personal Agent被这篇综述讲透了</a></p>
-<p><img alt="图片" src="../assets/img/img-001-d48c47d2-345bec53ec.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-001-d48c47d2-345bec53ec4f.jpg"></p>
 <p>Anthropic 把过去两年内部怎么用 Claude、怎么让 Claude 从<strong>单兵</strong>进化成<strong>协同智能体团队</strong>的方法论，系统性公开了。</p>
-<p><img alt="图片" src="../assets/img/img-002-62265da1-1e90e96e7a.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-002-62265da1-1e90e96e7a09.jpg"></p>
 <p>全站内容分成四个栏目，恰好对应 Agent 工程的四个层面：</p>
-<p><img alt="图片" src="../assets/img/img-003-1a1d3ff7-4552d3f81e.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-003-1a1d3ff7-4552d3f81eda.jpg"></p>
 <ul><li><strong>AGENTS</strong>：怎么编排多智能体</li></ul>
 <ul><li><strong>SKILLS</strong>：怎么沉淀和分发能力</li></ul>
 <ul><li><strong>ENGINEERING</strong>：怎么做新模型时代的上下文工程</li></ul>
 <ul><li><strong>PLAYBOOKS</strong>：怎么用 eval 把改进变成可测量的数字</li></ul>
 <ul><li><strong>TUTORIALS</strong>：指导开发者使用 Claude 的各项功能的指南</li></ul>
 <h2 id="AGENTS-Claude-现场给自己写作战编队">AGENTS：Claude 现场给自己写作战编队</h2>
-<p><img alt="A harness for every task: dynamic workflows in Claude Code" src="../assets/img/img-004-981a59f4-8b78a3929d.jpg"></p>
+<p><img alt="A harness for every task: dynamic workflows in Claude Code" src="../assets/img/img-004-981a59f4-8b78a3929dfe.jpg"></p>
 <p>A harness for every task: dynamic workflows in Claude Code</p>
 <p>过去想让多个 Claude 协同，得人事先写好固定流程（静态 harness），对所有任务一视同仁。Claude Code的能力是：<strong>Claude 现在可以为眼前这个任务，现场编写并指挥一支定制的多智能体团队</strong>——这就是 dynamic workflows。</p>
-<p><img alt="静态 harness 与动态 workflow 的对比_" src="../assets/img/img-005-71cc13c3-4f6b43c35f.jpg"></p>
+<p><img alt="静态 harness 与动态 workflow 的对比_" src="../assets/img/img-005-71cc13c3-4f6b43c35f09.jpg"></p>
 <p>静态 harness 与动态 workflow 的对比_</p>
 <p>为什么要多智能体？单上下文窗口的三大失败模式：</p>
 <ul><li><strong>Agentic laziness</strong>：安全审查 50 项，做到 35 项就宣布"完成"</li></ul>
 <ul><li><strong>自我偏好偏差</strong>：让 Claude 给自己的结果打分，它总会手下留情</li></ul>
 <ul><li><strong>目标漂移</strong>：长任务反复压缩上下文后，"别做 X"这类约束悄悄丢失</li></ul>
-<p><img alt="图片" src="../assets/img/img-006-57e4cce5-c17ac5893f.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-006-57e4cce5-c17ac5893fd5.jpg"></p>
 <p>解法是三个积木：<code>agent()</code> 派生一个子智能体，<code>parallel()</code> 扇出并发，<code>pipeline()</code> 流水线串联。每个子智能体拥有<strong>独立、干净的上下文窗口</strong>，目标单一，互不污染。</p>
-<p><img alt="Claude 组合使用的六种工作流模式" src="../assets/img/img-007-de21e9c5-5ea7f4b3b7.jpg"></p>
+<p><img alt="Claude 组合使用的六种工作流模式" src="../assets/img/img-007-de21e9c5-5ea7f4b3b765.jpg"></p>
 <p>Claude 组合使用的六种工作流模式</p>
 <p>Anthropic给出六种可组合的模式：分类路由、扇出-综合、<strong>对抗验证</strong>（每个干活的智能体配一个唱反调的）、生成-过滤、锦标赛排序、循环直到收敛。Bun 从 Zig 到 Rust 的整体重写，就是用这套编队完成的。</p>
-<p><img alt="图片" src="../assets/img/img-008-e7e6e73f-d597030910.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-008-e7e6e73f-d597030910cc.jpg"></p>
 <p>安全设计也被结构化地考虑进去了：处理不可信内容（比如公开渠道的用户反馈）时，<strong>reader 智能体只有只读权限，actor 智能体永远只看摘要</strong>，这道"隔离区"防线是架构级的，而不是靠提示词叮嘱。配合 <code>/loop</code> 可以让分拣团队 7×24 小时值班。</p>
-<p><img alt="图片" src="../assets/img/img-009-96aa3883-2004bbe73a.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-009-96aa3883-2004bbe73a49.jpg"></p>
 <p>当然也有代价。作者明确提醒：<strong>workflows 烧 token 明显更多，适合复杂、高价值的任务</strong>；一次深度研究跑到 22 个智能体、110 万 token 是常态。</p>
-<p><img alt="图片" src="../assets/img/img-010-d2a414a9-3ffbddb5df.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-010-d2a414a9-3ffbddb5df2c.jpg"></p>
 <p>一句话总结这个栏目：<strong>并行与专业化必须挣回它们的协调成本</strong>——不是所有任务都配拥有一支团队。</p>
 <h2 id="SKILLS-数百个内部技能压出的九类清单">SKILLS：数百个内部技能压出的九类清单</h2>
-<p><img alt="Lessons from building Claude Code: How we use skills" src="../assets/img/img-011-84e8fe65-055d6ffee2.jpg"></p>
+<p><img alt="Lessons from building Claude Code: How we use skills" src="../assets/img/img-011-84e8fe65-055d6ffee2fd.jpg"></p>
 <p>Lessons from building Claude Code: How we use skills</p>
 <p>Anthropic 内部正在活跃使用的 skill 有<strong>数百个</strong>。团队把它们全部盘点一遍，发现干干净净落入<strong>九个类别</strong>：库与 API 参考、产品验证、数据获取分析、业务流程自动化、脚手架模板、代码质量评审、CI/CD、值班 runbook、基础设施运维。</p>
-<p><img alt="Anthropic 内部技能的九大类别" src="../assets/img/img-012-b39c9ada-8d682c6910.jpg"></p>
+<p><img alt="Anthropic 内部技能的九大类别" src="../assets/img/img-012-b39c9ada-8d682c6910bb.jpg"></p>
 <p>Anthropic 内部技能的九大类别</p>
 <p>有几个判断相当反直觉：</p>
 <ul><li><strong>验证类技能价值最高</strong>。团队认为值得让一个工程师花整整一周，只为把验证 skill 打磨到极致</li></ul>
 <ul><li><strong>description 不是写给人看的简介，而是写给模型看的触发条件</strong>。模型每次开会话都要扫一遍技能清单决定"这事归谁管"，所以描述里要塞进触发词</li></ul>
 <ul><li><strong>Gotchas（踩坑记录）是任何技能里信号最强的内容</strong>，应该随使用持续累积</li></ul>
-<p><img alt="Gotchas 板块随使用持续生长" src="../assets/img/img-013-df127381-4fa9a19644.jpg"></p>
+<p><img alt="Gotchas 板块随使用持续生长" src="../assets/img/img-013-df127381-4fa9a1964408.jpg"></p>
 <p>Gotchas 板块随使用持续生长</p>
 <p>另一个要点是别把 skill 当"一个 markdown 文件"：它是一个文件夹，SKILL.md 只做枢纽，具体情况指向具体文件——<strong>整个文件系统都是渐进式披露的上下文工程</strong>。</p>
-<p><img alt="图片" src="../assets/img/img-014-0b6eba2d-8d01e99194.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-014-0b6eba2d-8d01e991946c.jpg"></p>
 <p>分发和治理也有完整答案：小团队直接把 skills 提交进仓库的 <code>.claude/skills</code>；规模上来以后改用<strong>内部插件市场</strong>，让团队按需安装。</p>
 <h2 id="ENGINEERING-删掉-80-系统提示词-模型反而更强">ENGINEERING：删掉 80% 系统提示词，模型反而更强</h2>
-<p><img alt="The new rules of context engineering for Claude 5 generation models" src="../assets/img/img-015-12ca705a-a51f9c92c0.jpg"></p>
+<p><img alt="The new rules of context engineering for Claude 5 generation models" src="../assets/img/img-015-12ca705a-a51f9c92c0f2.jpg"></p>
 <p>The new rules of context engineering for Claude 5 generation models</p>
 <p>这可能是全站最"炸裂"的一个数字：面向 Claude 5 这一代模型，Anthropic <strong>删掉了 Claude Code 超过 80% 的系统提示词，编码评测没有任何可测量的损失</strong>。</p>
 <p>原因很扎心：很多旧规则是在给老模型"打石膏"。比如旧提示词强硬规定"永远不要写多行注释"，因为老模型会写错；新模型有判断力了，石膏反而成了束缚。内部 transcript 里甚至能看到系统提示、skill、用户请求三方指令互相打架。</p>
-<p><img alt="六条旧规则与新规则的对照" src="../assets/img/img-016-24731a2c-10ab32421b.jpg"></p>
+<p><img alt="六条旧规则与新规则的对照" src="../assets/img/img-016-24731a2c-10ab32421bbb.jpg"></p>
 <p>六条旧规则与新规则的对照</p>
 <p>给出六条"过去→现在"的翻转，每一条都值得抄下来：</p>
 <ul><li>给规则 → <strong>给判断力</strong></li></ul>
@@ -471,23 +471,23 @@
 <ul><li>反复强调 → <strong>简洁的工具描述</strong></li></ul>
 <ul><li>CLAUDE.md 当记忆 → <strong>自动记忆</strong></li></ul>
 <ul><li>简单规格 → <strong>富引用</strong>（HTML mockup、测试套件、rubric 都可以是规格）</li></ul>
-<p><img alt="组装后的上下文分层" src="../assets/img/img-017-c3b92002-2c364ae395.jpg"></p>
+<p><img alt="组装后的上下文分层" src="../assets/img/img-017-c3b92002-2c364ae3952a.jpg"></p>
 <p>组装后的上下文分层</p>
 <p>落到你的项目上，文章的建议是：CLAUDE.md 保持轻量，token 主要花在代码库特有的"坑"上；系统提示词绑定产品语境，自建 harness 时最值得投入；引用优先用代码而不是自然语言描述——<strong>一个 HTML mockup 传达的设计，胜过一段文字或一张截图</strong>。</p>
 <p>配套动作也很实在：Claude Code 里跑 <code>/doctor</code>，它会帮你给 CLAUDE.md 和 skills "瘦身"。</p>
 <h2 id="PLAYBOOKS-把感觉变好了变成数字">PLAYBOOKS：把感觉变好了变成数字</h2>
-<p><img alt="Automating eval design and hillclimbing with Claude" src="../assets/img/img-018-28b1c500-c81fc5e716.jpg"></p>
+<p><img alt="Automating eval design and hillclimbing with Claude" src="../assets/img/img-018-28b1c500-c81fc5e716df.jpg"></p>
 <p>Automating eval design and hillclimbing with Claude</p>
 <p>前面三个栏目讲的都是"怎么做"，这个栏目回答"怎么证明做对了"。文章给出好 eval 的四要素：<strong>任务分布贴生产、更强模型得分更高、前沿模型仍有headroom、多次运行方差低</strong>。</p>
 <p>还有一个容易踩的坑叫对抗采样：<strong>因为"今天的模型做错"而挑选的case，测的其实是这个模型的失败指纹</strong>，而不是任务本身的难度。正确姿势是人能说出"这题为什么难"再收录，case 来自生产流量、bug 报告和工单。打分器则按输出空间选择：封闭输出用程序化校验，开放输出用 LLM-as-judge，且<strong>裁判模型不能是被测模型</strong>。</p>
-<p><img alt="好 eval 的四个要素" src="../assets/img/img-019-e1ad28a3-030ac9fefd.jpg"></p>
+<p><img alt="好 eval 的四个要素" src="../assets/img/img-019-e1ad28a3-030ac9fefd3c.jpg"></p>
 <p>好 eval 的四个要素</p>
 <p>更精彩的是 hillclimbing（爬山法）的防自欺机制：评估集切成 train/test，<strong>train 涨、test 平就判过拟合、回滚补丁</strong>；永远不把失败样例原文粘进提示词，防止模型"奖励黑客"。</p>
 <p>实战数字相当能打。内部客服 benchmark 上，从 Opus 4.8 高 effort 起步（74.4% 准确率、每单 4.6 美分），爬山法一路降模型、降 effort、改提示词，最终在<strong>从未见过的 held-out 集上拿到 90.5% 准确率，成本只有原来的约五分之一</strong>。</p>
-<p><img alt="面向成本的爬山过程" src="../assets/img/img-020-41f0ead3-a084021e6f.jpg"></p>
+<p><img alt="面向成本的爬山过程" src="../assets/img/img-020-41f0ead3-a084021e6f76.jpg"></p>
 <p>面向成本的爬山过程</p>
 <p>连 claude-api skill 自己也被爬了一遍：通过率从 <strong>66</strong> %一路爬到约 <strong>88</strong>%，中途还顺手抓出两个"任务本身写错了"的评估 bug。</p>
-<p><img alt="还有很多Featured videos，很不错，推荐" src="../assets/img/img-021-8d83ea79-45d8122c92.jpg"></p>
+<p><img alt="还有很多Featured videos，很不错，推荐" src="../assets/img/img-021-8d83ea79-45d8122c928c.jpg"></p>
 <p>还有很多Featured videos，很不错，推荐</p>
 <h2 id="写在最后">写在最后</h2>
 <p>Anthropic 的方法论其实是一条闭环：<strong>用 workflows 组队干活，用 skills 沉淀经验，用新上下文工程给模型松绑，用 eval 验证每一步</strong>。Claude 进化成协同智能体团队的背后，不是某个单点突破，而是这套可以复利的工程纪律。</p>

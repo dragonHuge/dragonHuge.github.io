@@ -415,15 +415,15 @@
 <p>• <strong>动态适应机制</strong>：建立"执行→反馈→自我调整→执行"闭环机制，使智能体能在运行过程中根据环境变化或内部信号主动改进。</p>
 <p>• <strong>多维进化对象</strong>：进化不仅限于模型参数更新，还涵盖上下文（prompt 与记忆）、工具及系统架构等非参数化组件，有较大的灵活性。</p>
 <p>• <strong>自主性与自驱力</strong>：强调智能体具备主动探索、自我反思及评估能力，可基于交互反馈优化。</p>
-<p><img alt="image.png" src="../assets/img/img-001-9c807eac-daa5a82797.png"></p>
+<p><img alt="image.png" src="../assets/img/img-001-9c807eac-daa5a82797f8.png"></p>
 <h3 id="2-自进化核心机制">2. 自进化核心机制</h3>
 <p>自我进化两个核心问题：进化什么、如何进化。</p>
 <h3 id="2-1-进化什么">2.1. 进化什么</h3>
 <p>自进化可以针对智能体系统的不同层级：</p>
 <p>• <strong>Agent </strong><strong>系统进化</strong>——Skill、Harness、Memory、Aflow、Environment 等进化。</p>
 <p>• <strong>模型参数进化</strong>（将经验内化为模型权重）——基于反馈进行微调/强化学习、自我归因、自蒸馏。</p>
-<p><img alt="image.png" src="../assets/img/img-002-2b45d5e8-f1318118f8.png"></p>
-<p><img alt="image.png" src="../assets/img/img-003-8228a2c3-9171feadb6.png"></p>
+<p><img alt="image.png" src="../assets/img/img-002-2b45d5e8-f1318118f837.png"></p>
+<p><img alt="image.png" src="../assets/img/img-003-8228a2c3-9171feadb678.png"></p>
 <h3 id="2-2-如何进化">2.2. 如何进化</h3>
 <h4 id="2-2-1-Agent-系统进化">2.2.1. Agent 系统进化</h4>
 <h4 id="2-2-1-1-Skill-进化">2.2.1.1. Skill 进化</h4>
@@ -434,8 +434,8 @@
 <p>• <strong>并行多智能体补丁提议</strong>：调度一组分析子智能体，并行处理每条轨迹并生成技能修改补丁，互不干扰。让 Agent 通过 ReAct 的方式在一批用户任务上运行，产生大量的执行轨迹。这个过程是完全可以并行的，效率会比较高，比如，在实践中，使用一个 122B 参数的 LLM 生成 200 条包含 50+ 个轮次的 Agent 轨迹，所需时间不到两个小时。</p>
 <p>• <strong>无冲突补丁整合</strong>：通过分层合并 + 归纳推理，把海量补丁整合成一套无冲突、通用的技能。</p>
 <p>该方法强调先观察、后总结的批处理式知识沉淀，避免单点更新导致的方向偏差，适用于需要从大量实践中提炼通用解决方案的场景。</p>
-<p><img alt="image.png" src="../assets/img/img-004-6a171906-ab4adc2799.png"></p>
-<p><img alt="image.png" src="../assets/img/img-005-eea19d78-6ba09cb221.png"></p>
+<p><img alt="image.png" src="../assets/img/img-004-6a171906-ab4adc2799bf.png"></p>
+<p><img alt="image.png" src="../assets/img/img-005-eea19d78-6ba09cb2212f.png"></p>
 <h4 id="2-2-1-1-2-Skill-群体进化">2.2.1.1.2. Skill 群体进化</h4>
 <h3 id="2-1-1-2-1-EvoSkill">2.1.1.2.1. EvoSkill</h3>
 <p>EvoSkill 通过"执行→提案→构建→验证"闭环机制，实现 Agent 在能正向提升的方向上自进化。EvoSkill 核心原理是将传统的手工调试过程转化为由三个专用子智能体协同工作的系统，让它们相互协作、互相验证，自动完成 Skill 的分析和进化：</p>
@@ -443,14 +443,14 @@
 <p>• <strong>提案者（Proposer</strong><strong>）</strong>：深入分析执行者产生的轨迹，判断结果是否正确。如果失败，需要精准定位问题根源，并提出具体的优化方向和改进提案；如果成功，它也会总结有效模式。</p>
 <p>• <strong>搭建者（Builder</strong><strong>）</strong>：接收分析师提出的优化建议，真正动手编写或修改 Skill 文档，将其落实为可执行的代码或指令规则。</p>
 <p>这种设计使 Skill 进化具备明确的方向性，避免盲目修改导致性能退化，实现基于量化反馈的可持续优化，为构建具备长期自主进化能力的智能体系统提供了可落地的范式。</p>
-<p><img alt="image.png" src="../assets/img/img-006-23aeb2cc-00c8be5c2a.png"></p>
+<p><img alt="image.png" src="../assets/img/img-006-23aeb2cc-00c8be5c2a47.png"></p>
 <h3 id="2-1-1-2-2-SkillOpt">2.1.1.2.2. SkillOpt</h3>
 <p>SkillOpt 将 Skill 的优化过程类比为深度学习中的模型训练，把 Skill 文本视为"可训练的外部参数"，通过构建一个闭环的文本空间训练流程实现 Skill 的系统性、可控化自进化。SkillOpt 核心原理如下：</p>
 <p>• 首先使用目标模型执行任务并收集轨迹，然后由专门的"优化器 Agent"对成功与失败案例进行小批量反思，生成结构化的编辑操作（如添加、删除、替换），并引入类似学习率的约束控制每次更新的幅度。</p>
 <p>• 同时所有修改必须经过独立验证集的严格门控测试，只有性能显著提升的候选 Skill 才被接受，否则作为负反馈存入缓冲区用于后续学习。</p>
 <p>• 同步引入动量机制和元更新策略，在多轮迭代中保留长期趋势，并维护一个仅对优化器可见的"元记忆"来指导自身优化策略的演进。</p>
 <p>SkillOpt 实现了类似 SGD 优化神经网络权重的精细化文本调优，使 Skill 进化具备明确方向性、稳定性与可解释性，推动提示工程从经验主义走向科学化训练范式。</p>
-<p><img alt="image.png" src="../assets/img/img-007-ca023999-53fb0b3edb.png"></p>
+<p><img alt="image.png" src="../assets/img/img-007-ca023999-53fb0b3edb35.png"></p>
 <h4 id="2-2-1-1-3-Skill-评估更新">2.2.1.1.3. Skill 评估更新</h4>
 <h3 id="2-1-1-3-1-coEvoSkill">2.1.1.3.1. coEvoSkill</h3>
 <p>coEvoSkill 通过多智能体协同与竞争机制，实现 Skill 的集体演化和持续优化。它把 Skill 进化设计成一个生成者与验证者的双边闭环：生成器负责改 Skill，验证器负责出题、诊断、升级测试，真实环境再提供黑盒 pass/fail，把自进化从单边自省变成了带对抗性的共同进化。其关键机制如下：</p>
@@ -459,7 +459,7 @@
 <p>• 所有交互轨迹被持续记录并用于后续的离线分析，通过归纳成功模式与失败根因，驱动新一轮的技能迭代。</p>
 <p>• 基于共享经验池与元控制器协调知识流动，并支持 Skill 能的组合、拆解与迁移。</p>
 <p>该系统实现"个体优化-群体协同-整体进化"的闭环，使 Skill 不仅能够自我改进，还能在协作中涌现出更高阶的能力，推动智能体系统向更灵活、鲁棒和自适应的方向发展。</p>
-<p><img alt="image.png" src="../assets/img/img-008-b3f0c1d3-f639f1c4fa.png"></p>
+<p><img alt="image.png" src="../assets/img/img-008-b3f0c1d3-f639f1c4fa45.png"></p>
 <h4 id="2-2-1-1-4-SkillRL-协同进化">2.2.1.1.4. SkillRL 协同进化</h4>
 <h3 id="2-1-1-4-1-SkillRL">2.1.1.4.1. SkillRL</h3>
 <p>SkillRL 将强化学习与 Skills 进化深度融合，在 RL 训练过程中一边用奖励信号更新 LLM 模型，一边从失败案例中蒸馏新知识实时扩充和优化 Skill 库——两者互相促进，形成"递归共进化循环"。SkillRL 的核心原理是将强化学习与 Skill 库动态进化深度融合，实现策略优化与知识沉淀协同演进：</p>
@@ -467,7 +467,7 @@
 <p>• 这些 Skill 被组织成一个分层结构的 Skill Bank，包含通用 Skill、任务特定 Skill 和常见错误三类，支持高效检索与按需注入。</p>
 <p>• 创新性提出递归演化机制——在 RL 训练过程中，系统定期评估性能，对低效任务类别触发新一轮分析，生成新技能并加入 Skill Bank，使后续策略训练能基于最新知识进行决策。这种"策略提升→暴露深层问题→技能进化→策略再提升"的闭环，实现了 Skill 与模型能力的共同成长。</p>
 <p>SkillRL 方案结合基于语义相似度的检索注入机制和强化学习框架，构建了会自我教学、持续进化的智能体系统，解决静态 Skill 库无法跟上策略演进而导致知识滞后的根本问题。</p>
-<p><img alt="image.png" src="../assets/img/img-009-714c09b3-2d4c46dff6.png"></p>
+<p><img alt="image.png" src="../assets/img/img-009-714c09b3-2d4c46dff6b1.png"></p>
 <h3 id="2-1-1-4-2-D2Skill">2.1.1.4.2. D2Skill</h3>
 <p>D2Skill 核心原理是通过双粒度技能建模 + 对比驱动效用评估 + 动态闭环管理，实现策略与 Skill 库协同进化：</p>
 <p>• <strong>双粒度技能</strong>：任务技能指导全局规划，步骤技能纠正局部操作，覆盖全决策链。</p>
@@ -475,7 +475,7 @@
 <p>• <strong>反思生成技能</strong>：失败触发轨迹对比分析，自动提炼新 Skill 注入知识库。</p>
 <p>• <strong>动态管理闭环</strong>：语义 + 效用两阶段检索，定期剪枝低效 Skill，确保 Skill 库高质可用。</p>
 <p>该框架让技能可生长、可评估、可复用，推动智能体从参数学习迈向经验沉淀的持续进化。</p>
-<p><img alt="image.png" src="../assets/img/img-010-78876344-0c65bbb3a9.png"></p>
+<p><img alt="image.png" src="../assets/img/img-010-78876344-0c65bbb3a967.png"></p>
 <h3 id="2-1-1-4-3-GIGPO-算法">2.1.1.4.3. GIGPO 算法</h3>
 <p>SkillRL 和 D2Skill 框架都用到了 GiGPO 算法。GiGPO（Group-in-Group Policy Optimization）的核心创新在于保留 GRPO "Critic-free" 特性的同时，通过数据挖掘引入Step-level 优势估计。它不需要额外的 Value Model，而是利用 Rollout 数据中天然存在的状态重复现象来构建细粒度奖励信号，信号由两层 Advantage 加权融合而成：</p>
 <h3 id="第一层-Episode-level-Advantage-轨迹级">第一层：Episode-level Advantage（轨迹级）</h3>
@@ -486,7 +486,7 @@
 <p>• 局部比较：在同一个 Anchor State 组内，计算折扣奖励并进行归一化。</p>
 <p>• 作用：提供局部的动作优劣排序，告诉模型"在当前这个具体状态下，哪个动作比另一个更好"，解决了长序列中的 Credit Assignment 难题。</p>
 <p><strong>融合优化</strong>：将两层优势按权重线性叠加，得到每一步的最终优势，再直接代入 Clipped PPO Objective 进行更新。默认两层权重各占 50%</p>
-<p><img alt="image.png" src="../assets/img/img-011-dab3f583-9cb3fcb4fd.png"></p>
+<p><img alt="image.png" src="../assets/img/img-011-dab3f583-9cb3fcb4fd37.png"></p>
 <p>其中 A<em>episode <strong>为轨迹级（Group-wise </strong>归一化的整条轨迹回报），A</em>step 为同一 Anchor State 组内折扣奖励归一化后的步级优势。</p>
 <table><thead><tr><th>维度</th><th>GRPO</th><th>GiGPO</th></tr></thead><tbody><tr><td>优势估计粒度</td><td>粗粒度：仅 Episode-level（整条轨迹对比）</td><td>双层粒度：Episode-level + Step-level（同状态下动作对比）</td></tr><tr><td>Credit Assignment</td><td>困难：稀疏奖励下，难以区分长轨迹中哪一步导致了成功/失败</td><td>精准：利用 Anchor State 将长期回报分解到具体决策点</td></tr><tr><td>额外开销</td><td>无 Critic，低显存</td><td>几乎零额外开销（无 Critic，无额外 Forward，但需离线 Hash 分组）</td></tr><tr><td>数据利用率</td><td>仅利用轨迹间的方差</td><td>同时利用轨迹间方差 + 同一状态下的动作方差</td></tr><tr><td>收敛特性</td><td>在长序列/稀疏奖励任务中易抖动、收敛慢</td><td>提供更密集的梯度信号，收敛更稳、更快</td></tr><tr><td>核心依赖</td><td>依赖同一 Prompt 下的多次采样</td><td>依赖环境状态的可重复访问性（Revisitable States）</td></tr></tbody></table>
 <p><strong>为什么 GiGPO </strong><strong>极度适配 Agentic </strong><strong>场景？</strong> GiGPO 专门针对 LLM Agent 在多轮、长序列、交互式环境中的痛点而设计：</p>
@@ -504,24 +504,24 @@
 <p>• <strong>工作流拓扑</strong>：用 AFlow 搜索 Agent 间的连接方式。</p>
 <p>• <strong>配置参数</strong>：用 MIPRO 优化工具选择和参数设定。</p>
 <p>三条线并行进化，每一代的最优方案保留，变异出新方案，再评估、再筛选。</p>
-<p><img alt="image.png" src="../assets/img/img-012-f67911f5-0bb5c6852d.png"></p>
+<p><img alt="image.png" src="../assets/img/img-012-f67911f5-0bb5c6852d3a.png"></p>
 <p>######</p>
 <h4 id="2-2-1-2-2-元进化智能体">2.2.1.2.2. 元进化智能体</h4>
 <p>当改进过程本身成为优化对象时，就进入了元进化（Meta-Evolution）regime。HyperAgents 系统由 Task Agent（干活 Agent）和 Meta Agent（改进 Agent）两部分组成，统一写在可编辑程序中。Meta Agent 不仅能改 Task Agent 的代码，还能改自己的代码，改进策略本身也在进化。</p>
 <p>同时实验发现系统自己发明了持久化记忆和性能追踪机制，没人预设这些改进功能，Agent 判断用这种方式改进效率更高，就写代码给自己改进了。</p>
 <p>同时，该方案跨领域迁移性强：把在论文审稿和机器人任务上进化出的 HyperAgent，直接拿去做 IMO 数学评分，原版 DGM 的迁移效果约等于 0，而 DGM-H 的 imp@50 达 0.630。原因在于 HyperAgents 学到通用改进策略，如持久化记忆、趋势分析等，这些在新领域仍然管用。</p>
-<p><img alt="image.png" src="../assets/img/img-013-9af64f67-f2979cd1bc.png"></p>
+<p><img alt="image.png" src="../assets/img/img-013-9af64f67-f2979cd1bc47.png"></p>
 <h4 id="2-2-2-模型参数进化">2.2.2. 模型参数进化</h4>
 <p>当 Harness 经验变得稳定且通用时，需要考虑参数路径——将经验内化为模型权重：</p>
 <p>• <strong>Internalize priors</strong>：内外经验，避免重复支付上下文编排开销。</p>
 <p>• <strong>Transfer beyond context</strong>：策略更新可跨任务、会话、用户迁移。</p>
 <p>• <strong>Collective evolution</strong>：集体进化、协同更新，让单个智能体经验成为共享先验。</p>
-<p><img alt="image.png" src="../assets/img/img-014-9d911fc5-9171feadb6.png"></p>
+<p><img alt="image.png" src="../assets/img/img-014-9d911fc5-9171feadb678.png"></p>
 <h4 id="2-2-2-1-反馈进化">2.2.2.1. 反馈进化</h4>
 <p>• <strong>邮件生成后训练</strong>：基于人工修正后回复数据，进行基于 GRPO 的验证奖励后训练。</p>
 <p>• <strong>邮件评估后训练</strong>：基于业务标注反馈数据，进行基于强化学习的对抗奖励后训练。</p>
-<p><img alt="image.png" src="../assets/img/img-015-86b6b6aa-2c916d82da.png"></p>
-<p><img alt="image.png" src="../assets/img/img-016-0db8bc74-c2d8d286fb.png"></p>
+<p><img alt="image.png" src="../assets/img/img-015-86b6b6aa-2c916d82da3b.png"></p>
+<p><img alt="image.png" src="../assets/img/img-016-0db8bc74-c2d8d286fb6b.png"></p>
 <h4 id="2-2-2-2-自我归因">2.2.2.2. 自我归因</h4>
 <p>AgentEvolver通过 LLM 回溯评估每步贡献，精准区分关键决策与无效步骤，它把进化分三个阶段：</p>
 <p>• <strong>自我提问（Self-Questioning</strong><strong>）</strong>：Agent 自主探索环境，自己生成训练任务，无需人工准备数据。</p>
@@ -531,7 +531,7 @@
 <p>• <strong>第一步：LLM </strong><strong>回溯评估，给步骤"</strong><strong>打分"</strong>。智能体将"任务描述、完整轨迹、最终得分"输入 LLM，让 LLM 按规则评估每个步骤的贡献：若最终成功，"促进任务的步骤"标为 GOOD，"无关/有害步骤"标为 BAD；若最终失败，"纠正错误的步骤"标为 GOOD，"导致错误的步骤"标为 BAD。这种二进制标签无需复杂校准，却能清晰区分步骤价值。</p>
 <p>• <strong>第二步：融合过程与结果，构建复合奖励</strong>。先将 GOOD/BAD 标签量化为 +1/-1 的"过程奖励"，并按轨迹级标准化（避免长轨迹主导统计）；再结合"结果奖励"（如任务完成与否的终端奖励），通过公式融合——其中α控制过程奖励的权重，既保证智能体关注步骤正确性，又不偏离最终目标。</p>
 <p>这种设计让样本利用率大幅提升：在 AppWorld 中，智能体达到传统 RL 基线 90% 的性能，所需训练步骤减少 55%；在 BFCL-v3 中更是减少 67%（如表 6）——这意味着同样的样本量，自归因能让智能体学到更多。</p>
-<p><img alt="image.png" src="../assets/img/img-017-f4da3c91-c6ad4cf964.png"></p>
+<p><img alt="image.png" src="../assets/img/img-017-f4da3c91-c6ad4cf96422.png"></p>
 <h4 id="2-2-2-3-自蒸馏">2.2.2.3. 自蒸馏</h4>
 <p>论文 OPSD《Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models》提出了名为 On-Policy Self-Distillation 的训练新范式，其核心是让同一个模型"自己教自己"——用它看到正确答案后的更强判断力，去指导它在没有答案时的生成过程。</p>
 <table><thead><tr><th>角色</th><th>输入</th><th>行为</th><th>作用</th></tr></thead><tbody><tr><td>学生策略（Student Policy）</td><td>仅题目</td><td>正常采样生成回答</td><td>模拟真实推理过程（on-policy 轨迹）</td></tr><tr><td>教师策略（Teacher Policy）</td><td>题目 + 答案</td><td>对学生的每一步输出进行评估，给出更优的 token 分布</td><td>提供细粒度监督信号</td></tr></tbody></table>
@@ -539,7 +539,7 @@
 <p>• <strong>采样</strong>：学生模型基于题目生成一条完整回复轨迹</p>
 <p>• <strong>评估</strong>：学生计算自己每步输出 token 的概率分布；教师在同一上下文中，结合标准答案，预测每个位置应输出的 token 分布</p>
 <p>• <strong>优化目标</strong>：最小化两者之间的 Jensen-Shannon Divergence (JSD)，实现 token 级别的知识迁移。梯度仅回传给学生模型，教师模型作为目标网络（可使用初始模型或移动平均）</p>
-<p><img alt="image.png" src="../assets/img/img-018-1b20d8b1-32835c2166.png"></p>
+<p><img alt="image.png" src="../assets/img/img-018-1b20d8b1-32835c2166bc.png"></p>
 <h3 id="3-有效自进化">3. 有效自进化</h3>
 <p>以上我们探讨了自进化的核心机制，然而，理论上的"可进化"到落地上的"有效进化"，还有比较长的路要走！自进化机制在落地时也存在不少问题：</p>
 <p>• <strong>方向不可控（过拟合风险）</strong>：单轮对话轨迹往往带有偶然性、特异性甚至极端 Case。若直接基于单次轨迹更新，Skill 极易为了迎合个别 Badcase 而变得臃肿、发散，导致"顾此失彼"，泛化能力大幅下降，出现"越优化越差"的现象。</p>
@@ -558,7 +558,7 @@
 <h3 id="AgentEvolver-Towards-Efficient-Self-Evolving-Agent-System">AgentEvolver: Towards Efficient Self-Evolving Agent System</h3>
 <ol><li>Self-Distilled Reasoner: On-Policy Self-Distillation for Large Language Models</li></ol>
 <hr>
-<p><img alt="图片" src="../assets/img/img-019-ccc13537-261b408781.png"></p>
+<p><img alt="图片" src="../assets/img/img-019-ccc13537-261b408781bc.png"></p>
 <p>欢迎大家评论区留言交流</p>
 <p>归属：[[02-输入/按主题/AI与效率/_index|AI与效率]]</p></div></article></div></main>
 </div>

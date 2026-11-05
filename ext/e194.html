@@ -418,7 +418,7 @@
 <p>RAGFlow 愿意付这个代价，是因为它发现了一件更要紧的事——</p>
 <p><strong>它的用户，正在从人变成 Agent。</strong></p>
 <p>（Agent，就是能自己拆解任务、自己调工具去干的 AI 程序。你说"帮我查一下"，它会自己决定查哪里、查几次。）</p>
-<p><img alt="RAGFlow GitHub 仓库首页，star 数 91.7k" src="../assets/img/img-001-bcfb5c13-5b309e4f23.jpg"></p>
+<p><img alt="RAGFlow GitHub 仓库首页，star 数 91.7k" src="../assets/img/img-001-bcfb5c13-5b309e4f23ad.jpg"></p>
 <p>图 1 · RAGFlow GitHub 仓库首页，star 数 91.7k，仓库标签里已有 agent-harness、knowledge-compilation</p>
 <p>先说清楚 RAGFlow 是什么</p>
 <p>一句话：它是个给 AI 用的"资料室管理员"。</p>
@@ -426,7 +426,7 @@
 <p>RAGFlow 干的是同一件事，只是它的"员工"是 AI。它把 Word、PDF、扫描件、网页这些格式乱七八糟的资料吃进去，解析、切分、建索引；你提问时，它把最相关的原文片段找出来交给大模型，让模型"照着材料回答"，而不是凭空发挥。</p>
 <p>技术上说，这类系统叫 <strong>RAG</strong>（Retrieval-Augmented Generation，检索增强生成），是目前让大模型少胡说的主流办法之一：模型不负责记，只负责说；记忆交给检索系统。</p>
 <p>RAGFlow 由 InfiniFlow 团队开发，2024 年 4 月 1 日开源，Apache-2.0 许可，可商用。到 2024 年底它已有 2.6 万 star；2026 年 10 月，这个数字是 <strong>91.7k</strong>。</p>
-<p><img alt="RAGFlow 官网首页" src="../assets/img/img-002-20193894-8e84ee2805.jpg"></p>
+<p><img alt="RAGFlow 官网首页" src="../assets/img/img-002-20193894-8e84ee2805e9.jpg"></p>
 <p>图 2 · RAGFlow 官网首页，官方把自己定位为"面向 AI 智能体的上下文层"</p>
 <p>还有个细节。早期 RAGFlow 的自我定位是"RAG 引擎"，官网现在第一句话却是"给 AI 智能体构建更好的上下文层"（Build a superior context layer for AI agents）。</p>
 <p>定位的变化，就是后面所有架构改动的起点。</p>
@@ -436,7 +436,7 @@
 <p>现在用检索系统的，越来越多是 Agent，而 Agent 太会搜了。它不会客气，一个问题拆成十几个子问题轮着问，查不到就换个说法再查一遍，直到凑齐它认为足够的证据。</p>
 <p>官方的判断是：Agent 发起的搜索请求量，可能比人类用户高出 <strong>两个数量级</strong>。</p>
 <p>两个数量级就是一百倍。这不是优化空间的问题，是量级的问题。</p>
-<p><img alt="RAGFlow 官方博客解释 Go 重写的原因" src="../assets/img/img-003-765642c2-475df2bc77.jpg"></p>
+<p><img alt="RAGFlow 官方博客解释 Go 重写的原因" src="../assets/img/img-003-765642c2-475df2bc7770.jpg"></p>
 <p>图 3 · 官方博客解释为什么要把服务层用 Go 重写：Python 的性能瓶颈随着调用规模扩大越来越突出</p>
 <p>而 RAGFlow 的后端是用 <strong>Python</strong> 写的。</p>
 <p>官方对 Python 的评价很有意思，没有贬低，反而先肯定：</p>
@@ -450,7 +450,7 @@
 <p><strong>第一，服务合并了。</strong>以前 API、Admin、Ingestor、Syncer 是几个分散的服务，现在由一个统一的 Go 服务提供。文档解析的核心模块 DeepDoc 也被收进同一个进程，负责版面分析、OCR（把图片和扫描件里的字认出来）和表格识别。</p>
 <p><strong>第二，底层组件换血。</strong>消息队列从 Redis 换成 NATS，缓存和断点记录改用 Kvrocks。官方的总结是：把原来那套"重"的部署模型换成轻量架构，系统资源消耗有明显下降。</p>
 <p>⚠️ 注意这里要说句实话：官方并没有公布 Go 版和 Python 版的具体资源占用对比数字。"大幅下降"是官方口径，没给测试环境、对比基准和百分比，所以只能当方向看，不能当结论用。</p>
-<p><img alt="v1.0.0-rc1 的 Release 说明" src="../assets/img/img-004-573d1383-89ea9e4787.jpg"></p>
+<p><img alt="v1.0.0-rc1 的 Release 说明" src="../assets/img/img-004-573d1383-89ea9e4787d1.jpg"></p>
 <p>图 4 · v1.0.0-rc1 的 Release 说明：Go 全量重写、架构变更与升级注意事项</p>
 <p>比换语言更大的改动：把文档"编译"成知识</p>
 <p>如果说换语言是"换发动机"，那 0.27 版本引入的<strong>知识编译（Knowledge Compilation）</strong>，相当于换了整套工作方式。</p>
@@ -468,7 +468,7 @@
 <p>官方说这个概念的灵感来自 Karpathy 提过的"LLM Wiki"，但在 RAGFlow 里范围更宽。它要达到的效果是：把"处理一次就完了"的解析结果，变成长期可搜索、可复用的知识资产。</p>
 <p>跟它配套的是 <strong>Agentic 检索</strong>。传统 RAG 是一条固定的线：提问 → 检索一次 → 拿到片段 → 生成答案。Agentic 检索换成了会思考的流程：分析问题 → 制定检索策略 → 执行检索 → 判断证据够不够 → 不够就换个问法再来一轮 → 最后综合信息作答。</p>
 <p>官方 README 里列了四档思考模式：Low、Medium、High、Ultra，档位越高，拆解和验证越深。有意思的是，官方博客里还有第五档 Naive——就是原来的传统流程。两处口径对档位数的说法不完全一致，但方向是清楚的：<strong>让检索深度可以调，简单问题别浪费算力，复杂问题多花几轮。</strong></p>
-<p><img alt="RAGFlow 官方博客介绍知识编译" src="../assets/img/img-005-b804d2a8-34d541fd38.jpg"></p>
+<p><img alt="RAGFlow 官方博客介绍知识编译" src="../assets/img/img-005-b804d2a8-34d541fd389c.jpg"></p>
 <p>图 5 · 官方博客介绍 0.27 的知识编译与 Agentic 检索，文中写明这是最后一个 Python 后端版本</p>
 <p>顺带说一个信号。0.27 把早前引入的 <strong>GraphRAG</strong> 和 <strong>RAPTOR</strong> 从界面上移除了，标注为"已弃用"。这两个是 RAGFlow 2024 年就集成进去、并且对外宣传过的技术。</p>
 <p>移除它们、换上知识编译，说明团队认为"图"和"递归摘要"这类单点技术，应该被收进一个更统一的框架，而不是各自摆在功能列表上。</p>

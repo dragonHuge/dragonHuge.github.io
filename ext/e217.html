@@ -409,31 +409,31 @@
 <h2 id="原文沉淀">原文沉淀</h2>
 <h3 id="目录">目录</h3>
 <ul><li><a href="#观看更多">观看更多</a></li><li><a href="#全屏">全屏</a></li></ul>
-<p><img alt="图片" src="../assets/img/img-001-33cfaf50-a0616056b9.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-33cfaf50-a0616056b948.png"></p>
 <p>编辑｜Panda</p>
 <p>前两天，<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651056088&amp;idx=1&amp;sn=040b43776b998fe8b345c91a17134c25&amp;scene=21#wechat_redirect">DeepSeek V4.1 Flash 正式上线</a>，又快又强，引发了广泛关注和测试热潮。</p>
-<p><img alt="图片" src="../assets/img/img-002-ad4bc64e-2a7671c2fd.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-ad4bc64e-2a7671c2fd91.png"></p>
 <p>比如著名测试机构 Artificial Analysis 对 V4.1 Flash 进行了非常充分的测试后，给出了 40 分的指数评分，超过了 DeepSeek 家参数量大得多的 V4 Pro。</p>
-<p><img alt="图片" src="../assets/img/img-003-cadac6e9-a5725e74e5.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-cadac6e9-a5725e74e519.png"></p>
 <p>当然，这并不意外，毕竟 DeepSeek 自己也得出了这一结论，并表示会让 V4 Pro 下线并将相关请求直接路由的 V4.1 Flash。顺带一提，DeepSeek 已经连续两次修改决定，先是延迟下线 V4 Pro：</p>
-<p><img alt="图片" src="../assets/img/img-004-894910fd-05e242d4a3.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-894910fd-05e242d4a386.png"></p>
 <p>然后又放弃下线 V4 Pro 并继续提供 API 调用服务：</p>
-<p><img alt="图片" src="../assets/img/img-005-4f0f2d01-5234b15a57.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-4f0f2d01-5234b15a57ab.png"></p>
 <p>此外，Artificial Analysis 的系统评测中还有另一些看点：</p>
 <ul><li>DeepSeek V4.1 Flash 在智能体能力和长上下文推理方面进步明显。</li></ul>
 <ul><li>DeepSeek V4.1 Flash 以 69% 在 AutomationBench-AA 上排名第一，与 GPT-6 Astra（69%）持平，略高于 Grok 4.6（67%）。</li></ul>
 <ul><li>DeepSeek V4.1 Flash 是其测得的冗长度最高的模型之一，每个 Intelligence Index 任务 89k Tokens。</li></ul>
 <ul><li>尽管如此冗长，DeepSeek V4.1 Flash 每个 Intelligence Index 任务仍仅花费 0.27 美元。这主要得益于其低定价。</li></ul>
 <p>Sebastian Raschka 甚至认为 DeepSeek V4.1 Flash 创新之大，应该叫它 DeepSeek V5。</p>
-<p><img alt="图片" src="../assets/img/img-006-535ca45a-d8044b694a.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-535ca45a-d8044b694a67.png"></p>
 <p>那么，DeepSeek V4.1 Flash 究竟是如何做到的呢？如何以 552B 参数的小肥鱼超越了 Pro 的 1.6T 参数大肥鱼？下面我们就基于其官方技术报告来进行一番解读。</p>
-<p><img alt="图片" src="../assets/img/img-007-023c340c-4d5710f7e7.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-023c340c-4d5710f7e7e5.png"></p>
 <p>报告地址：https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/main/DeepSeek_V41_Tech_Report.pdf</p>
 <p>这是一篇围绕 KV 缓存写的报告</p>
 <p>先看技术报告的标题：「DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression」。推进 KV 缓存压缩之极限。翻完架构章节，我们发现，这不是一个修辞，几乎每一处设计都能回溯到同一个目标：把 KV 缓存压下去。</p>
 <p>先看几个数字。V4.1-Flash 的全局 KV 缓存（始终常驻 HBM 的那部分）被压到每 token 890 字节，约为 V4-Flash 的 1/4；如果拉到 DeepSeek-V1 的 389,120 字节来看，这是 437 倍的差距。持久化 KV 缓存（落在 SSD 或主机内存里、用于前缀复用的那部分）则被压到 V4-Flash 的约 1/8。</p>
 <p>模型本身是 552B 主干参数外加 196B Engram 参数的多模态 MoE，原生支持 100 万 token 上下文，在 45T token 的多模态语料上预训练，prefill 阶段每 token 只激活 8B 参数，decode 阶段激活 16B。</p>
-<p><img alt="图片" src="../assets/img/img-008-764967fc-4b580a5610.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-764967fc-4b580a561045.png"></p>
 <p>DeepSeek 历代模型每 token 全局 KV 缓存大小对比</p>
 <p>这套数字组合起来，才是「552B 干掉 1.6T」的真正含义：比较的核心是同样一次 agent 调用里，模型要占多少显存、要从 SSD 搬多少数据、要重算多少次 prefill。</p>
 <p>稀疏注意力之后，贵的地方是存和搬</p>
@@ -448,7 +448,7 @@
 <p>三个问题合起来，决定了一个 agent 服务的吞吐上限和单位成本。V4 时代 DeepSeek 已经把 CSA 与 HCA 混合起来做序列维度的压缩，V4.1-Flash 则选择在架构、精度、部署三个层次上同时下手。</p>
 <p>CED：把一半的 prefill 计算直接砍掉</p>
 <p>V4.1-Flash 的语言主干是 40 层，但被切成了两半：前 20 层是因果编码器（Causal Encoder），后 20 层是解码器。这个结构叫 Causal Encoder-Decoder，简称 CED。这也是 DeepSeek 官方发布页上「输入激活 8B、输出激活 16B」这条不对称设计的来源。</p>
-<p><img alt="图片" src="../assets/img/img-009-5e336d61-f6361a26bc.png"></p>
+<p><img alt="图片" src="../assets/img/img-009-5e336d61-f6361a26bcfd.png"></p>
 <p>有趣的是，Arena 的 Peter Gostev 还让 Astra 阅读了 DeepSeek v4.1 Flash 的论文，用 3D 将其架构与原始 Transformer 架构进行了非常直观的对比。他还将其分享了出来，你可以放大并排查看每一个元素：</p>
 <p>https://transformer-architecture.petergostev.chatgpt.site/</p>
 <p>已关注</p>
@@ -506,7 +506,7 @@
 <ul><li>Full 模式自己算 main KV 和索引器 Q，从 main KV 投影出索引器 K，跑完整的索引流程产出新鲜的 Top-K 索引。</li></ul>
 <ul><li>Reindex 模式复用前面某层的 main KV 和索引器 K，但用自己的索引器 Q 重新打分、选出属于自己的 Top-K——缓存共享了，选择还是自己的。</li></ul>
 <ul><li>Reuse 模式最省，main KV 和 Top-K 索引全部沿用，直接做稀疏注意力，连索引器 Q 都不算。</li></ul>
-<p><img alt="图片" src="../assets/img/img-010-167a86aa-b3fb11840e.png"></p>
+<p><img alt="图片" src="../assets/img/img-010-167a86aa-b3fb11840e36.png"></p>
 <p>三种模式的共同点是，每层仍然保留自己的全局 Q 和 SWA KV，所以层与层之间的表达能力并没有被抹平。具体配置参见原报告。</p>
 <p>FP4 与 Bounded Replay</p>
 <p>架构之外，还有两刀。</p>
@@ -516,7 +516,7 @@
 <p>于是 V4.1-Flash 把 SWA KV 整个移出持久化缓存，改放进由每台机器 10% 主机 DRAM 组成的分布式内存池，TTL 只有几分钟，靠高周转服务绝大多数并发会话；全局 KV 继续留在 SSD 上，保证至少 72 小时的生命周期。</p>
 <p>偶尔出现全局 KV 命中而 SWA KV 未命中的请求，就用 bounded replay 重算 n_win 个 token 兜底。报告称这把一次灾难性的缓存未命中变成了一次廉价的优雅降级，持久化 KV 缓存也因此降到 V4-Flash 的约 1/8。</p>
 <p>所有这些加在一起的效果：上下文从 4K 拉到 1M、放大 256 倍，V4.1-Flash 的单 token decode FLOPs 只增加了 1/4。</p>
-<p><img alt="图片" src="../assets/img/img-011-297fe28b-c1613308c4.png"></p>
+<p><img alt="图片" src="../assets/img/img-011-297fe28b-c1613308c42b.png"></p>
 <p>各代 DeepSeek 模型单 token decode FLOPs 随上下文长度的变化</p>
 <p>Single-Pass mHC、Engram 与 DSpark</p>
 <p>熟悉 DeepSeek 这一年论文节奏的读者，会在架构章节里看到不少老面孔。</p>
@@ -535,15 +535,15 @@
 <p>训练时把一个 1 到 100 的标量 effort 显式写进系统提示，同一 effort 下的多个采样构成一个子组，组内做奖励中心化，而长度惩罚系数随 effort 指数衰减：effort 每增加一个特征尺度，惩罚系数乘以 1/e。这样一来，同一份权重就能在成本-质量曲线上滑动。DeepSeek API 暴露的 max、high、low 三档，对应的正是 b=100、75、50。</p>
 <p>这也顺带解释了开头 Artificial Analysis 那条「最冗长模型之一」的观察：它测的是 max 档，而 max 档在设计上就是这条曲线最右端的点。</p>
 <p>报告给出的数据是，effort 从 25 提到 100，八个推理密集型基准的平均 Pass@1 从 67.1% 升到 76.3%，DeepSWE v1.1 从 66.0% 到 74.2%，Terminal-Bench 2.1 从 82.4% 到 90.6%，代价是约 2.5 倍的输出 token。</p>
-<p><img alt="图片" src="../assets/img/img-012-565e4efc-ad5c12385a.png"></p>
+<p><img alt="图片" src="../assets/img/img-012-565e4efc-ad5c12385acd.png"></p>
 <p>性能与输出长度随 reasoning effort 的变化</p>
 <p>但收益是前置的——60 到 80 这一档已经能用不到一半的 token 预算拿到接近满档的准确率，而从 80 走到 100 会让 agent 轨迹再长 1.6 到 1.8 倍，换来的只是边际提升。报告的建议是把 max 留给最难的任务。</p>
-<p><img alt="图片" src="../assets/img/img-013-6c14eb05-5461d53719.png"></p>
+<p><img alt="图片" src="../assets/img/img-013-6c14eb05-5461d53719ee.png"></p>
 <p>结语</p>
 <p>把这份报告读完，会发现它最值得注意的是三个层次被拧在同一个方向上：架构层用 CED 砍掉一半 prefill、用 CSA2 把跨层复用做到三个维度全覆盖，精度层把 main KV 压到 FP4，部署层则用 bounded replay 把 SWA KV 整个赶出持久化缓存。</p>
 <p>任何单独一项都只能带来百分之几十的改善，叠在一起才效果显著。</p>
 <p>顺带一提，DeepSeek 还开源了一些新的代码仓库，方便更容易地部署 V4.1 Flash 以及后续的开源模型：</p>
-<p><img alt="图片" src="../assets/img/img-014-00cadb6e-06719818ff.png"></p>
+<p><img alt="图片" src="../assets/img/img-014-00cadb6e-06719818ff06.png"></p>
 <ul><li>deepseek-recipe：是一组 Rust 库和 Python bindings，可将不同格式的 API 请求统一转换为 Conversation 格式，将其编码为 DeepSeek 模型的提示，并将模型输出转换为相应格式的响应。使用这些组件将推理后端连接到支持多种格式的 API 服务。</li></ul>
 <p>https://github.com/deepseek-ai/deepseek-recipe</p>
 <ul><li>DeepJIT：一个轻量级、仅头文件的 C++20 JIT 运行时，面向 NVIDIA CUDA GPU 和华为昇腾 NPU。它为 C++/Python 扩展作者提供了一个共享接口，用于在运行时编译内核源代码、缓存生成的二进制文件、将其加载到设备上，并使用后端特定的选项启动它们。</li></ul>
@@ -588,7 +588,7 @@
 <p>****已同步到看一看写下你的评论</p>
 <p>**</p>
 <p>视频详情</p>
-<p><img alt="图片" src="../assets/img/img-015-72b28683-9f18e1a6a7.png"></p>
+<p><img alt="图片" src="../assets/img/img-015-72b28683-9f18e1a6a74b.png"></p>
 <p>© THE END</p>
 <p>转载请联系本公众号获得授权</p>
 <p>投稿或寻求报道：liyazhou@jiqizhixin.com</p>

@@ -429,7 +429,7 @@
 <p>公开规格还包括百万 token 上下文，以及文本、图像、视频输入。这些能力适合支撑多轮工具调用，却不能替代运行时的状态、权限和恢复机制。</p>
 <p>一百万 token 的窗口也不等于一百万 token 的长期记忆。Harness 和控制面还要决定三件事：哪些内容进入当前工作集，哪些结果写入目标或记忆。</p>
 <p>它们还要确认哪些动作已经产生外部副作用。</p>
-<p><img alt="Muse 个人执行环境的总体架构" src="../assets/img/img-001-ce398ec8-6492c706a9.png"></p>
+<p><img alt="Muse 个人执行环境的总体架构" src="../assets/img/img-001-ce398ec8-6492c706a9f5.png"></p>
 <p>Muse 个人执行环境的总体架构</p>
 <p>图 1：Muse 把模型、工作区、连接器、授权和长期状态放进同一套个人执行环境。</p>
 <h3 id="先用一次任务看清边界">先用一次任务看清边界</h3>
@@ -471,7 +471,7 @@ Runtime Cell 或浏览器执行
 <p>调用方身份由 <code>SO_PEERCRED</code> 和 peer ACL 等机制校验。</p>
 <p>这样的分层让模型驱动的工作区和高权限服务使用不同的进程、文件和通信边界。</p>
 <p>这和把所有工具都注册到一个进程里差别很大。工具 schema 只能校验参数形状。它决定不了一段代码能否读取宿主机文件、访问内网，或把结果发到任意地址。真正的安全边界要落在进程、文件、网络和凭证这些系统对象上。</p>
-<p><img alt="Muse 的 Runtime Cell 与安全服务边界" src="../assets/img/img-002-72109fa4-ea173dbc92.png"></p>
+<p><img alt="Muse 的 Runtime Cell 与安全服务边界" src="../assets/img/img-002-72109fa4-ea173dbc9233.png"></p>
 <p>Muse 的 Runtime Cell 与安全服务边界</p>
 <p>图 2：Runtime Cell 承担模型驱动的工作，凭证、授权和安全检测留在 Cell 外。</p>
 <h3 id="Sentinel-模型可以提议-授权由控制面决定">Sentinel：模型可以提议，授权由控制面决定</h3>
@@ -482,7 +482,7 @@ Runtime Cell 或浏览器执行
 <p>Sentinel 可以检查 hostname、DNS 解析后的最终 IP、端口和协议。它还会检查 HTTP 方法、路径和解码后的请求。</p>
 <p>一个看似正常的公网域名，如果解析结果落到内部地址，也会触发 SSRF 防护。</p>
 <p>这套做法把“模型想做什么”和“系统允许影响什么”分开了。模型仍然要负责规划，Harness 仍然要负责执行。授权决定则放在一个模型无法改写的控制面里。</p>
-<p><img alt="Sentinel 的 allow、deny、ask 审批路径" src="../assets/img/img-003-a888a617-49ba4dc899.png"></p>
+<p><img alt="Sentinel 的 allow、deny、ask 审批路径" src="../assets/img/img-003-a888a617-49ba4dc8997f.png"></p>
 <p>Sentinel 的 allow、deny、ask 审批路径</p>
 <p>图 3：连接器请求先经过 Sentinel，需确认的动作才进入客户端的确定性审批界面。</p>
 <h3 id="凭证代理-Agent-使用能力-却拿不到秘密">凭证代理：Agent 使用能力，却拿不到秘密</h3>
@@ -491,7 +491,7 @@ Runtime Cell 或浏览器执行
 <p>模型即使被诱导执行“把密钥打印出来”，手上也没有可打印的真实密钥。</p>
 <p>这条链路里有三种职责。<code>privsep</code> 约束凭证相关代码运行在哪个受限进程。<code>authd</code> 决定经过认证的调用者能拿到哪类凭证材料。Sentinel 决定当前动作是否获得授权。它们彼此配合，却没有一个组件同时掌握全部权限。</p>
 <p>浏览器里的人工输入也遵循相同思路。用户在客户端或安全 UI 中输入密码，凭证直接进入受保护的存储；浏览器自动化只在需要的时刻获得一次受限的注入能力，主 Agent 看不到原文。</p>
-<p><img alt="Muse 的 surrogate token 与凭证注入链路" src="../assets/img/img-004-522e52b3-04890af832.png"></p>
+<p><img alt="Muse 的 surrogate token 与凭证注入链路" src="../assets/img/img-004-522e52b3-04890af8327f.png"></p>
 <p>Muse 的 surrogate token 与凭证注入链路</p>
 <p>图 4：Agent 只拿到 surrogate token，真实凭证在授权后的网络边界被注入请求。</p>
 <h3 id="Tainted-egress-读取过私有数据-出网就要更谨慎">Tainted egress：读取过私有数据，出网就要更谨慎</h3>
@@ -552,7 +552,7 @@ Runtime Cell 或浏览器执行
 <p>下一轮模型实际看到的工作集。</p>
 <p>DSH 的开发者预览提供了一个很有参考价值的对照。它把 Session 做成只追加的事件事实层。Agent Loop、工具和权限通过 Profile、Bundle 及事件钩子装配。</p>
 <p>DSH 会在模型请求前、顶层工具副作用前和下一步开始前设置检查点。冷恢复时，如果工具结果缺失，它会记录未知结果，不替系统猜一个成功或失败。</p>
-<p><img alt="Muse 长任务的状态与恢复路径" src="../assets/img/img-005-3226ab36-ccbe660197.png"></p>
+<p><img alt="Muse 长任务的状态与恢复路径" src="../assets/img/img-005-3226ab36-ccbe660197a5.png"></p>
 <p>Muse 长任务的状态与恢复路径</p>
 <p>图 5：当前上下文可以重建，外部副作用需要回到权威系统确认。</p>
 <p>这个设计说明了事件日志和运行状态的价值，也提醒我们一件事：事件可回放，不等于外部副作用天然 exactly once。</p>
@@ -628,7 +628,7 @@ Runtime Cell 或浏览器执行
 <p>版权申明：内容来源网络，仅供学习研究，版权归原创者所有。如有侵权烦请告知，我们会立即删除并表示歉意。谢谢!</p>
 <p>架构师</p>
 <p>我们都是架构师！</p>
-<p><img alt="图片" src="../assets/img/img-006-8557bdf4-2a154d8e81.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-8557bdf4-2a154d8e816e.png"></p>
 <p>关注架构师(JiaGouX)，添加“星标”</p>
 <p>获取每天技术干货，一起成为牛逼架构师</p>
 <p>技术群请加若飞：1321113940 进架构师群</p>

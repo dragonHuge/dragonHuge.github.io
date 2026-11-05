@@ -411,46 +411,46 @@
 <ul><li><a href="#一agent-架构长成了组织架构图">一、agent 架构长成了组织架构图</a></li><li><a href="#二解法单-agent-loop-加渐进式披露">二、解法：单 Agent Loop 加渐进式披露</a></li><li><a href="#三落地评估先行一次只折叠一个">三、落地：评估先行，一次只折叠一个</a></li><li><a href="#最后">最后</a></li></ul>
 <p>大家好，我是PaperAgent，不是Agent！</p>
 <p><strong>Anthropic</strong>官网发了一篇很不错的Agent工程实践blog，主题只有一个：<strong>subagent 不是越多越好</strong>。<a href="https://mp.weixin.qq.com/s?__biz=Mzk0MTYzMzMxMA==&amp;mid=2247512942&amp;idx=2&amp;sn=295a3e81ba8fc8b579d98bc59f6b4592&amp;scene=21#wechat_redirect">Agent记忆的尽头尽然是RAG</a></p>
-<p><img alt="图片" src="../assets/img/img-001-c06e8c67-0dfdeee27f.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-001-c06e8c67-0dfdeee27f81.jpg"></p>
 <p>在多个企业级部署的对比中，「<strong>一个主 Agent Loop + 渐进式披露的 skills 与 tools</strong>」在质量上同时跑赢了「一个 prompt 包打天下」和「多 subagent 编排」两种设计，而且<strong>成本和延迟往往更低</strong>。</p>
-<p><img alt="多 subagent 架构与单 Loop 的对比示意" src="../assets/img/img-002-1ff5a134-fb3d06a378.jpg"></p>
+<p><img alt="多 subagent 架构与单 Loop 的对比示意" src="../assets/img/img-002-1ff5a134-fb3d06a378c9.jpg"></p>
 <p>多 subagent 架构与单 Loop 的对比示意</p>
 <p>有一家公司甚至发现，自家客服 agent 里的十几个专员 subagent，让统一的品牌体验几乎无法维持，延迟还在伤害用户体验。</p>
 <h3 id="一-agent-架构长成了组织架构图">一、agent 架构长成了组织架构图</h3>
 <p>先复盘了大型组织建 agent 的经典路径：每个团队各自做一个 agent，中央平台团队再在上面盖一个 orchestrator。看起来最省事，实则立刻引入一堆麻烦：</p>
-<p><img alt="图片" src="../assets/img/img-003-7f0ac32e-9998fa61c6.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-003-7f0ac32e-9998fa61c611.jpg"></p>
 <ul><li><strong>上下文管理</strong>：agent 之间来回传话，细节在交接中丢失；</li></ul>
 <ul><li><strong>subagent 泛滥</strong>：每个团队都发布自己的 subagent，最后上百个互相重叠、没有标准、没人认领；</li></ul>
 <ul><li><strong>Frankenprompt</strong>：每个团队往系统提示词里加一句话，规则互相打架，语气前后不一；</li></ul>
 <ul><li><strong>评估各做各的</strong>：每个团队只优化自己那块子任务，没人对整体质量负责，领导层看到的是被稀释的分数；</li></ul>
 <ul><li><strong>延迟</strong>：有客户把多 agent 框架和单 agent loop 放在一起实测，后者<strong>运行速度快了约 2 倍</strong>。</li></ul>
-<p><img alt="图片" src="../assets/img/img-004-f540a8a9-88e6248ae2.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-004-f540a8a9-88e6248ae217.jpg"></p>
 <p>Anthropic 把这种现象归结为康威定律在 agent 领域的复现：<strong>agent 架构变成了组织架构图的复印件</strong>。更常见的设计草案是一套熟悉的老五样——意图分类器、固定多步推理流水线、用户分群、独立推荐分支、再叠一个多 agent 编排器。</p>
-<p><img alt="图片" src="../assets/img/img-005-84649108-a5a25b0c21.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-005-84649108-a5a25b0c21fe.jpg"></p>
 <p>而反馈往往是：这些结构做的大部分工作，模型已经不需要别人替它做了，<strong>一个清晰的系统提示词、4 到 5 个薄薄的数据工具、加上严格的输出护栏</strong>，就能覆盖绝大多数场景。</p>
 <h3 id="二-解法-单-Agent-Loop-加渐进式披露">二、解法：单 Agent Loop 加渐进式披露</h3>
 <p>那正确的姿势是什么？文章的答案是<strong>渐进式披露</strong>：上下文通过 skills 渐进加载，工具通过 tool search 渐进加载——agent 平时只看到简短描述，真正需要时才完整载入。</p>
-<p><img alt="按问题类型拆分 agent 会陷入「传话游戏」，每次交接都损失信息保真度" src="../assets/img/img-006-79a78cc9-77ab9c4b47.jpg"></p>
+<p><img alt="按问题类型拆分 agent 会陷入「传话游戏」，每次交接都损失信息保真度" src="../assets/img/img-006-79a78cc9-77ab9c4b4792.jpg"></p>
 <p>按问题类型拆分 agent 会陷入「传话游戏」，每次交接都损失信息保真度</p>
 <p>支撑这个方案的有三个理由：</p>
 <ul><li><strong>共享上下文产出更好的答案</strong>：长运行的 agent 把多个任务的上下文放在同一个窗口里，能看到每一步结果的模型可以把它们串起来，比 subagent 递回来的一堆摘要丰富得多；</li></ul>
 <ul><li><strong>渐进式披露治上下文膨胀</strong>：不必把所有东西塞进一个超长系统提示词，当初拆分 subagent 的主要理由随之消失——Anthropic 透露，Claude Code 面向更强模型的系统提示词<strong>砍掉了超过 80%</strong>，其中就包括 skills 与 tools 的渐进披露改造；</li></ul>
-<p><img alt="图片" src="../assets/img/img-007-925aac71-8670c9e3f0.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-007-925aac71-8670c9e3f0c0.jpg"></p>
 <ul><li><strong>模型本身变强了</strong>：从 Opus 4.5 开始，单 Loop 能管的事远超多数团队的预期；Opus 5.5 和 Fable 5.1 的思考无法关闭，新一代模型边做边自述进度、边自查，让框架里的不少组件变得多余。</li></ul>
 <p>单 Loop 的具体形态也很明确：<strong>一个模型、一个上下文窗口，跑开放式 tool loop</strong>，harness 只管预算——轮次上限、成本上限、写操作门禁。</p>
-<p><img alt="图片" src="../assets/img/img-008-ba4aa729-aa0702dc92.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-008-ba4aa729-aa0702dc92e6.jpg"></p>
 <p>每一轮模型批量发出 tool call，harness 并行执行后把原始结果还给同一个模型，由它决定下一步：再来一批、问用户、还是给答案。计划由模型在第一轮写进上下文，并随结果随时修订——<strong>写计划的模型就是执行计划的模型</strong>，这是与 orchestrator 方案最本质的区别。</p>
-<p><img alt="图片" src="../assets/img/img-009-b2167e11-fd88d48cf5.jpg"></p>
+<p><img alt="图片" src="../assets/img/img-009-b2167e11-fd88d48cf53b.jpg"></p>
 <p>当然，subagent 并非一无是处。给了三条该保留的情形：<strong>单 Loop 因上下文膨胀出现可测量的性能退化</strong>；<strong>多个任务需要并行、且用完即弃的干净上下文</strong>；<strong>单个 agent 选不对工具或系统提示词里指令互相冲突</strong>。研究前沿场景同样适用。</p>
 <h3 id="三-落地-评估先行-一次只折叠一个">三、落地：评估先行，一次只折叠一个</h3>
 <p>已经有一堆 subagent 在生产上跑着怎么办？文章给出的迁移路径突出一个「稳」字。</p>
-<p><img alt="把 subagent 逐步折叠为 tools 与 skills 的过程" src="../assets/img/img-010-9a2115db-dd4046c196.jpg"></p>
+<p><img alt="把 subagent 逐步折叠为 tools 与 skills 的过程" src="../assets/img/img-010-9a2115db-dd4046c19602.jpg"></p>
 <p>把 subagent 逐步折叠为 tools 与 skills 的过程</p>
 <p><strong>第一步永远是建评估。</strong> 一套由中央团队拥有的端到端 eval 集，加上每个 skill 自带的小评估集，哪怕只有 <strong>10 条黄金样本</strong>也够起步。还在用 orchestrator 时追踪路由准确率；折叠之后，改看 agent 是否加载了正确的 skill、调用了正确的工具。</p>
 <p><strong>然后是三种折叠姿势，按深度递进</strong>：先合并耦合紧的领域 agent——串行调用、碰同一份数据、经常一起被调用的专员，合成一个；再把保留的 subagent 当 tool 调用，主 agent 始终握着与用户的对话；最后彻底把 prompt 变成 skill、把 API 调用变成 MCP tool。</p>
 <p><strong>节奏上，一次只折一个，折完做对比。</strong> 文章举了个很实在的反面案例：在一个客服 agent 样本上，折叠确实降了延迟，却搞坏了一个本来能通过的流程——主 agent 拿着订单查询工具自己就把答案编出来了，没有去问物流专员确认送达日期。更麻烦的是，<strong>这个问题跑两次只出现一次</strong>，所以每个评估任务都要多跑几遍。</p>
 <p>多团队共建的模式也随之改变：各团队的所有权<strong>从 agent 转移到 skills 和 tools</strong>，中央一个小团队守住系统提示词和端到端质量。工具要<strong>按用户意图分组</strong>而不是一个 API 一个 tool，因为系统提示词里工具定义一旦超过 <strong>30 到 50 个</strong>，工具选择就开始退化。配套还有一串开箱即用的工具链：<strong>migration kit</strong> 把评估与迁移串成引导式工作流，<strong>/claude-api build-eval</strong> 建评估集，<strong>prompt-audit</strong> 找出为旧模型写的过时指令，<strong>hillclimb</strong> 对着 eval 迭代改进，<strong>cost-optimize</strong> 逐项压成本。</p>
-<p><img alt="Image" src="../assets/img/img-011-b328b168-42cf450e30.jpg"></p>
+<p><img alt="Image" src="../assets/img/img-011-b328b168-42cf450e303a.jpg"></p>
 <h3 id="最后">最后</h3>
 <p><strong>比起任何一种架构，更重要的是架构背后的原则——测量，一次只改一处，留下经得起检验的。</strong> 随着模型变强、agent 跑得越来越长，越来越多的 subagent 可以变成 skills 和 tools，但这件事不必一步到位：建一个小评估，折叠一个 subagent，分数变差就留它继续当 subagent，然后循环往复。</p>
 <pre><code>Building agents: When to fold subagents into your main agent loop

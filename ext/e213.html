@@ -419,9 +419,9 @@
 <h2 id="原文沉淀">原文沉淀</h2>
 <h3 id="目录">目录</h3>
 <ul><li><a href="#背景为什么要做这件事">背景：为什么要做这件事</a></li><li><a href="#11-现状痛点prompt缺乏自进化的调优闭环">▐  1.1 现状痛点：prompt缺乏自进化的调优闭环</a></li><li><a href="#12-业务挑战评估器存在两大对齐难题">▐  1.2 业务挑战：评估器存在两大对齐难题</a></li><li><a href="#13-技术调研从论文到方案">▐  1.3 技术调研：从论文到方案</a></li><li>[图1 GEPA迭代进化与帕累托采样流程[1]](#图1-gepa迭代进化与帕累托采样流程1)</li><li><a href="#图2-基于gepa的prompt自进化架构图">图2 基于GEPA的prompt自进化架构图</a></li><li><a href="#目标">目标</a></li><li><a href="#21-核心目标">▐  2.1 核心目标</a></li><li><a href="#自动化--建立标准化的-prompt-自动迭代流程替代人工调优">自动化 — 建立标准化的 Prompt 自动迭代流程，替代人工调优</a></li><li><a href="#零配置--用户只需提供标注数据--任务目标系统自动推断配置">零配置 — 用户只需提供标注数据 + 任务目标，系统自动推断配置</a></li><li><a href="#可解释--每轮优化有明确的错误归因和改进方向非盲目搜索">可解释 — 每轮优化有明确的错误归因和改进方向，非盲目搜索</a></li><li><a href="#22-可覆盖的场景">▐  2.2 可覆盖的场景</a></li><li><a href="#整体架构设计">整体架构设计</a></li><li><a href="#31-gepa主循环系统架构总览">▐  3.1 GEPA主循环系统架构总览</a></li><li>[图3 GEPA优化主循环示意图[1]](#图3-gepa优化主循环示意图1)</li><li><a href="#32-核心工作流设计五步法">▐  3.2 核心工作流设计（五步法）</a></li><li><a href="#图4-gepa使用流程示意">图4 GEPA使用流程示意</a></li><li><a href="#33-代码架构">▐  3.3 代码架构</a></li><li><a href="#技术实现细节">技术实现细节</a></li><li><a href="#41-配置层让人配不错">▐  4.1 配置层：让人“配不错”</a></li><li><a href="#411-配置模型configpy">4.1.1 配置模型（config.py）</a></li><li><a href="#配置顶层是taskconfig向下聚合各环节的子配置">配置顶层是 TaskConfig，向下聚合各环节的子配置：</a></li><li><a href="#412-安全配置构建器config_factorypy">4.1.2 安全配置构建器（config_factory.py）</a></li><li><a href="#42-核心引擎层把任务跑起来">▐  4.2 核心引擎层：把任务跑起来</a></li><li><a href="#421-核心引擎enginepy">4.2.1 核心引擎（engine.py）</a></li><li><a href="#422-通用适配器adapterpy">4.2.2 通用适配器（adapter.py）</a></li><li><a href="#批量推理--把候选-prompt自动拼上输出格式指令与用户消息发给任务模型">批量推理 — 把候选 prompt（自动拼上输出格式指令）与用户消息发给任务模型</a></li><li><a href="#批次评分--计算批次级分数这就是-gepa-的优化目标">批次评分 — 计算批次级分数，这就是 GEPA 的优化目标</a></li><li><a href="#423-内部编排runpy">4.2.3 内部编排（run.py）</a></li><li><a href="#43-组件层可插拔的六个模块">▐  4.3 组件层：可插拔的六个模块</a></li><li><a href="#431-数据加载与切分datapy">4.3.1 数据加载与切分（data.py）</a></li><li><a href="#432-零配置推断inspectorpy">4.3.2 零配置推断（inspector.py）</a></li><li><a href="#图5-数据集智能分析示意工作流">图5 数据集智能分析示意工作流</a></li><li><a href="#433-模型调用与输出解析llmpyparserspy">4.3.3 模型调用与输出解析（llm.py / parsers.py）</a></li><li><a href="#435-反馈引擎feedbackpy">4.3.5 反馈引擎（feedback.py）</a></li><li><a href="#436-扩展协议protocolspy">4.3.6 扩展协议（protocols.py）</a></li><li><a href="#44-服务层三种用法">▐  4.4 服务层：三种用法</a></li><li><a href="#skill-使用流程和提升效果">Skill 使用流程和提升效果</a></li><li><a href="#51-安装">▐  5.1 安装</a></li><li><a href="#52-执行示例">▐  5.2 执行示例</a></li><li><a href="#收集信息--提供带标注的数据集--一句话任务目标">收集信息 — 提供带标注的数据集 + 一句话任务目标</a></li><li><a href="#分析数据--inspector-自动推断任务配置任务类型字段模板">分析数据 — Inspector 自动推断任务配置（任务类型、字段、模板）</a></li><li><a href="#确认配置--调整评分方式和参数确认数据切分比例">确认配置 — 调整评分方式和参数，确认数据切分比例</a></li><li><a href="#执行优化--后台运行约-15-30-分钟通过-jsonl-实时报告进度">执行优化 — 后台运行约 15-30 分钟，通过 JSONL 实时报告进度</a></li><li><a href="#报告结果--展示得分提升优化后提示词与原始提示词的差异后续建议">报告结果 — 展示得分提升、优化后提示词、与原始提示词的差异、后续建议</a></li><li><a href="#521-输入说明">5.2.1 输入说明</a></li><li><a href="#带标注的数据集">带标注的数据集</a></li><li><a href="#初始提示词">初始提示词</a></li><li><a href="#交互式用户输入">交互式用户输入</a></li><li><a href="#图6-和skill交互示意图">图6 和skill交互示意图</a></li><li><a href="#522-实际提升效果">5.2.2 实际提升效果</a></li><li><a href="#优化完成后gepa-在run_dir目录下产出以下文件示例">优化完成后，GEPA 在 run_dir目录下产出以下文件，示例：</a></li><li><a href="#53-评判偏好速查表">▐  5.3 评判偏好速查表</a></li><li><a href="#未来展望与思考">未来展望与思考</a></li><li><a href="#61-冻结区不是所有内容都该被改">▐  6.1 冻结区：不是所有内容都该被改</a></li><li><a href="#62-提示词膨胀目标是更准且不更长">▐  6.2 提示词膨胀：目标是"更准，且不更长"</a></li><li><a href="#63-无-ground-truth-场景的prompt自进化">▐  6.3 无 Ground Truth 场景的prompt自进化</a></li><li><a href="#图8-双通道gepa优化框架设想">图8 双通道GEPA优化框架设想</a></li><li><a href="#参考文献">参考文献</a></li><li><a href="#团队介绍">团队介绍</a></li><li><a href="#拓展阅读">¤ 拓展阅读 ¤</a></li></ul>
-<p><img alt="图片" src="../assets/img/img-001-bf9f3706-2bbee367f5.gif"></p>
+<p><img alt="图片" src="../assets/img/img-001-bf9f3706-2bbee367f511.gif"></p>
 <p>本文基于GEPA（Genetic-Pareto，Reflective Prompt Evolution）[1]算法，设计并实现了一套Prompt 自进化系统，解决当前Prompt优化依赖人工经验导致的盲目性高、难以复制、缺乏权衡机制等痛点。该系统构建"推理→评分→反思→选择"的自动化闭环，通过数据驱动的反思式变异机制，让LLM自动分析Badcase、归因至Prompt具体规则、生成候选变体，并基于帕累托前沿进行多目标择优，避免单点优化引发的指标对抗性退化[1]。系统采用任务无关架构，支持二分类、多分类、评分等多种场景，通过零配置设计实现自动数据集分析与配置推断，同时提供可解释的优化过程。GEPA将Prompt优化从人工试错转变为有量化依据的自动化寻优，显著提升与人工标注及线上业务效果的对齐能力，为AI评估器提供可持续进化的技术底座。</p>
-<p><img alt="图片" src="../assets/img/img-002-f37fdf1e-720edd640c.webp"></p>
+<p><img alt="图片" src="../assets/img/img-002-f37fdf1e-720edd640c36.webp"></p>
 <h3 id="背景-为什么要做这件事">背景：为什么要做这件事</h3>
 <p>##</p>
 <h3 id="1-1-现状痛点-prompt缺乏自进化的调优闭环">▐  1.1 现状痛点：prompt缺乏自进化的调优闭环</h3>
@@ -444,7 +444,7 @@
 <p>##</p>
 <p>基于上述痛点，我们深入调研了 Reflective Prompt Evolution 类前沿工作。其中，ICLR 2026 收录的《GEPA: Reflective Prompt Evolution Can Outperform Reinforcement Learning》 提供了核心技术路径。该论文提出反思式变异（Reflective Mutation）机制，构建持续进化闭环：LLM 自动分析 Badcase -&gt; 归因至 Prompt 具体规则 -&gt; 生成候选变体 -&gt; 基于帕累托前沿（Pareto Frontier）多目标择优[1]。其中，GEPA 隶属于斯坦福大学提出的 DSPy（Declarative Self-improving Python）[2] 生态，旨在将大模型应用开发从手工提示工程转化为系统化的算法优化范式。</p>
 <p>##</p>
-<p><img alt="图片" src="../assets/img/img-003-bca19864-582d4492dd.png"></p>
+<p><img alt="图片" src="../assets/img/img-003-bca19864-582d4492ddcc.png"></p>
 <h3 id="图1-GEPA迭代进化与帕累托采样流程-1">图1 GEPA迭代进化与帕累托采样流程[1]</h3>
 <p>##</p>
 <p>该论文的启发：</p>
@@ -455,7 +455,7 @@
 <p>3）如何实现从“学术原型”到“业务引擎”的工程跨越</p>
 <p>原生的框架缺乏对复杂业务流的支持，这启示我们不能仅作浅层调用，必须构建和任务无关的适配层，将诊断先验与通用接口沉淀为标准流水线，"每个场景都要写代码"变成"填配置就能用"，解决规模化复用难题。构想如下：</p>
 <p>##</p>
-<p><img alt="图片" src="../assets/img/img-004-f8331b87-18f1f3e91f.png"></p>
+<p><img alt="图片" src="../assets/img/img-004-f8331b87-18f1f3e91ffa.png"></p>
 <h3 id="图2-基于GEPA的prompt自进化架构图">图2 基于GEPA的prompt自进化架构图</h3>
 <p>##</p>
 <h3 id="目标">目标</h3>
@@ -481,7 +481,7 @@
 <p>##</p>
 <p>GEPA 的优化主循环由四个核心环节组成，形成"推理 → 评分 → 反思 → 选择"的闭环：</p>
 <p>##</p>
-<p><img alt="图片" src="../assets/img/img-005-a8b68969-77648a9a6e.png"></p>
+<p><img alt="图片" src="../assets/img/img-005-a8b68969-77648a9a6e6c.png"></p>
 <h3 id="图3-GEPA优化主循环示意图-1">图3 GEPA优化主循环示意图[1]</h3>
 <p>##</p>
 <p>各环节详细说明：</p>
@@ -515,7 +515,7 @@
 <p>##</p>
 <p>最初我们为每个业务场景单独编写 Adapter，n个场景n套代码，每接入一个新场景，需要从零写 Adapter（数据加载、输出解析、评分函数、反馈生成全部定制），无法复用。在2.0版本，GEPA Service 将共性逻辑抽象为 n 种任务类型，通过配置驱动，不再需要为每个场景写 Adapter。具体工作流如下：</p>
 <p>##</p>
-<p><img alt="图片" src="../assets/img/img-006-d1fc2129-22ea298267.png"></p>
+<p><img alt="图片" src="../assets/img/img-006-d1fc2129-22ea29826711.png"></p>
 <h3 id="图4-GEPA使用流程示意">图4 GEPA使用流程示意</h3>
 <p>##</p>
 <h3 id="3-3-代码架构">▐  3.3 代码架构</h3>
@@ -617,7 +617,7 @@
 <p>##</p>
 <p>传统框架需要用户手动配置十余项参数，Inspector 能自动分析数据集结构。工作流程如下图所示：</p>
 <p>##</p>
-<p><img alt="图片" src="../assets/img/img-007-40bb2765-e3c8727939.png"></p>
+<p><img alt="图片" src="../assets/img/img-007-40bb2765-e3c872793958.png"></p>
 <h3 id="图5-数据集智能分析示意工作流">图5 数据集智能分析示意工作流</h3>
 <p>##</p>
 <p>它先给每个字段做画像（数据类型、唯一值数量、是否二值/分类/长文本/URL、平均长度、缺失率），再据此并行推断三件事：哪个字段是标注、这是什么任务、哪些字段是输入，最后给出一个置信度评估，产物是 <code>DatasetProfile</code>，包含任务类型、字段划分、建议模板、建议种子提示词、枚举值/分数范围等完整配置建议。</p>
@@ -699,7 +699,7 @@ export DASHSCOPE_API_KEY=&quot;your-key-here&quot;  # 或 OPENAI_API_KEY</cod
 <h3 id="交互式用户输入">交互式用户输入</h3>
 <p>触发 Skill 后，系统会逐步收集以下信息：</p>
 <p>##</p>
-<p><img alt="图片" src="../assets/img/img-008-1100f572-8bfe63b6f0.png"></p>
+<p><img alt="图片" src="../assets/img/img-008-1100f572-8bfe63b6f028.png"></p>
 <h3 id="图6-和skill交互示意图">图6 和skill交互示意图</h3>
 <p>##</p>
 <ul><li>数据与任务</li></ul>
@@ -738,7 +738,7 @@ export DASHSCOPE_API_KEY=&quot;your-key-here&quot;  # 或 OPENAI_API_KEY</cod
 <p>##</p>
 <p>并且在聊天框内输出简略报告结果：</p>
 <p>##</p>
-<p><img alt="图片" src="../assets/img/img-009-45084e50-164f66fba6.png"></p>
+<p><img alt="图片" src="../assets/img/img-009-45084e50-164f66fba635.png"></p>
 <h3 id="图7-优化完毕后模型会输出报告-包括验证集和测试集指标-后者用来反映泛化能力-模型还会输出提示词的主要优化点-并提出后续建议">图7 优化完毕后模型会输出报告，包括验证集和测试集指标，后者用来反映泛化能力。模型还会输出提示词的主要优化点，并提出后续建议。</h3>
 <p>##</p>
 <h3 id="5-3-评判偏好速查表">▐  5.3 评判偏好速查表</h3>
@@ -785,7 +785,7 @@ export DASHSCOPE_API_KEY=&quot;your-key-here&quot;  # 或 OPENAI_API_KEY</cod
 <ul><li>变异方向：原生 GEPA 自由探索偏随机。接上离线评测指标/线上业务效果汇总的归因分析作文本梯度，再补一层 prompt 结构缺陷诊断，把"业务上错在哪"翻译成"哪一段该改"，即变为定向变异，方向更明确。</li></ul>
 <ul><li>对错判据：一是用已有的离线评测指标当 judge，把候选跑出的结果算成分数，构造对抗双目标（该做的没做 / 不该做的做了）；二是历史策略回溯预测，把候选决策溯源到历史相似场景，对比同类最优历史的业务指标。回溯预测只用于排序与否决，不回流反思，否则“改得越少 -&gt; 匹配越多 -&gt; 分越高”会把搜索拖向保守。</li></ul>
 <p>##</p>
-<p><img alt="图片" src="../assets/img/img-010-e8bcbfa7-43dc93f8f6.png"></p>
+<p><img alt="图片" src="../assets/img/img-010-e8bcbfa7-43dc93f8f6d5.png"></p>
 <h3 id="图8-双通道GEPA优化框架设想">图8 双通道GEPA优化框架设想</h3>
 <p>##</p>
 <h3 id="参考文献">参考文献</h3>

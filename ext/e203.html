@@ -418,48 +418,48 @@
 <p>它是什么：一个知识库，三种用法</p>
 <p>大多数开源 RAG 项目解决的是"能不能答对"。WeKnora 的定位是"答完之后怎么办"。它把三种能力放在同一个知识库上。</p>
 <p>↓ 一图看懂它的整体结构</p>
-<p><img alt="WeKnora v0.8.0 架构总览" src="../assets/img/img-001-1b27f378-3cf079a766.png"></p>
+<p><img alt="WeKnora v0.8.0 架构总览" src="../assets/img/img-001-1b27f378-3cf079a766b0.png"></p>
 <p>WeKnora v0.8.0 架构：输入渠道 / 核心引擎 / 存储 / 外部服务</p>
 <p>01 · RAG 问答：日常查资料</p>
 <p>混合检索（关键词 BM25 + 语义稠密检索）、GraphRAG、父子分块都用上了，向量检索走 HNSW 加速的 pgvector；回答带来源引用，能打开原文核对。</p>
-<p><img alt="智能问答界面" src="../assets/img/img-002-55bdd655-74ded64914.png"></p>
+<p><img alt="智能问答界面" src="../assets/img/img-002-55bdd655-74ded649146f.png"></p>
 <p>智能问答：回答带引用，可打开原文核对</p>
 <p>02 · ReAct Agent：处理多步任务</p>
 <p>Agent 自己编排知识检索、MCP 工具、技能和网络搜索，在沙箱里读写文件、跑脚本。</p>
-<p><img alt="Agent 检索知识库并写入沙箱文件" src="../assets/img/img-003-95eba2d6-9ee9c5bf54.png"></p>
+<p><img alt="Agent 检索知识库并写入沙箱文件" src="../assets/img/img-003-95eba2d6-9ee9c5bf54b4.png"></p>
 <p>Agent 模式：检索知识库 → 读取技能 → 写沙箱脚本</p>
 <p>03 · 自动 Wiki：把知识沉淀下来</p>
 <p>Agent 把原始文档提炼成互相链接的 Markdown 知识库，配一张可交互的知识图谱，支持浏览器内编辑、修订历史、行级 diff 和一键回滚。</p>
-<p><img alt="Wiki 浏览界面" src="../assets/img/img-004-08554f2d-a16aa0d00b.png"></p>
+<p><img alt="Wiki 浏览界面" src="../assets/img/img-004-08554f2d-a16aa0d00bcc.png"></p>
 <p>Wiki 浏览器：自动生成的互链知识页</p>
-<p><img alt="Wiki 知识图谱" src="../assets/img/img-005-64053ea9-a6198f6b09.png"></p>
+<p><img alt="Wiki 知识图谱" src="../assets/img/img-005-64053ea9-a6198f6b09a8.png"></p>
 <p>交互式知识图谱：看到知识之间的关联</p>
 <p>三种能力共享同一个知识库，这一点是关键。你在问答里确认过的结论，可以直接沉淀进 Wiki；Wiki 里的页面，又能被下一轮检索调用。知识不是只进不出的黑洞。</p>
 <p>知识治理这一层它也没省。上传时保留原始目录结构，侧栏是树形文件夹视图，文件可以重新归档；检索分块能直接在界面里编辑，改完有版本快照和 diff，不满意一键回滚；文档还能挂自定义元数据，解析后自动匹配知识库里已有的标签。</p>
-<p><img alt="知识库文件夹树与批量操作" src="../assets/img/img-006-d22c2108-f3d88e4c89.png"></p>
+<p><img alt="知识库文件夹树与批量操作" src="../assets/img/img-006-d22c2108-f3d88e4c8909.png"></p>
 <p>树形文件夹视图：保留上传时的目录结构</p>
-<p><img alt="分块编辑与修订历史" src="../assets/img/img-007-73667681-ed25097255.png"></p>
+<p><img alt="分块编辑与修订历史" src="../assets/img/img-007-73667681-ed2509725537.png"></p>
 <p>分块编辑 + 修订历史：检索片段也能像文档一样 diff 和回滚</p>
 <p>这些东西看着琐碎，但决定了一个知识库长期用下来会不会失控。</p>
 <p>为什么"自动 Wiki"这件事不常见</p>
 <p>把这三种能力排一下序就明白了。</p>
 <p>做第一层（RAG 问答）的项目很多，开源方案一抓一把；做第二层（Agent 推理）的少一些，而且通常会引入一个尴尬：Agent 要干活就得有权限，直接操作宿主机又是企业最不能接受的；做到第三层（自动 Wiki）的，目前在这条赛道里确实少见。</p>
 <p>原因不难理解。让模型"生成一份文档"很容易，难的是这份文档要可维护——有版本、能回滚、能追溯改了什么、错了能退回上一版。</p>
-<p><img alt="Wiki 页面修订历史与回滚" src="../assets/img/img-008-8cdff5d6-4cfc05e016.png"></p>
+<p><img alt="Wiki 页面修订历史与回滚" src="../assets/img/img-008-8cdff5d6-4cfc05e016f9.png"></p>
 <p>Wiki 页面的修订历史与一键回滚</p>
 <p>WeKnora 把版本快照、diff 和一键回滚做进了 Wiki 的常规操作里，这是它和"让 AI 写一篇总结"之间最根本的差别。它其实是把 AI 生成的内容，当成了需要版本管理的生产资产，而不是一次性的输出。</p>
 <p>做过内容治理的人都懂：<strong>知识库最难的不是答对，是别烂。</strong>这句话听着像运营问题，其实是个工程问题。</p>
 <p>v0.8.0 的取舍：为了安全，主动关掉便利</p>
 <p>最新版本 v0.8.0（GitHub Releases 记录为 2026 年 9 月 3 日）最值得看的不是新增了什么，而是它默认关闭了什么。</p>
 <p>技能执行搬进了<strong>会话级沙箱</strong>，提供 Docker、E2B、Cube 三种后端。同一个会话里的多轮任务共用一个沙箱工作区，脚本执行、文件读写、产物收集都落在同一个 workspace，生成的文件可以在对话里直接预览和下载。</p>
-<p><img alt="技能沙箱对话中生成并预览 Word 文件" src="../assets/img/img-009-5c6e2da2-f1c5feaf4a.png"></p>
+<p><img alt="技能沙箱对话中生成并预览 Word 文件" src="../assets/img/img-009-5c6e2da2-f1c5feaf4a39.png"></p>
 <p>沙箱里生成 Word 文件，在对话中直接预览</p>
 <p>配套的三个动作更能说明态度：</p>
 <p>1.<strong>本地宿主进程后端被移除</strong>。Agent 不再有"直接在你机器上跑"的选项。</p>
 <p>2.<strong>Docker 后端默认关闭</strong>，需要显式开启。</p>
 <p>3.<strong>默认拒绝出网</strong>，按租户配置网络策略。</p>
 <p>技能本身也有了正经的来源管理：工作区的技能目录支持从 ClawHub、SkillHub、Git 仓库或 ZIP 包安装，带实时安装进度、按沙箱快照，技能文件可以在界面里浏览和编辑，还支持个人和工作区两级环境变量。</p>
-<p><img alt="工作区技能目录" src="../assets/img/img-010-aa6b0e01-1bce764607.png"></p>
+<p><img alt="工作区技能目录" src="../assets/img/img-010-aa6b0e01-1bce764607f9.png"></p>
 <p>技能目录：把技能装到沙箱里复用</p>
 <p>同一版里，跨会话<strong>长期记忆</strong>上线了，分成画像、偏好、事实、任务、兴趣五类，自动提取后需要你确认才生效，也可以随时管理或关闭。这个"要用户点头"的设计，和上面那套收紧的默认值是同一种思路。</p>
 <p>另外还有一批工程细节值得记一笔：上下文压缩、适配各家服务商的 prompt 缓存标记、对话产物与问题大纲、文档自动打标签、OIDC 的 JWKS 验证、可选的强密码策略，以及 Exa 和 Metaso 两个新的联网搜索源。</p>
@@ -475,7 +475,7 @@
 <p>想把问答能力发布到外部网站，可以用官方的嵌入组件，配域名白名单和速率限制；面向程序化集成，它提供作用域 API key——能限定能力范围和可访问的知识库，带限流，还能追踪最后使用时间。</p>
 <p>它还把一份技能发布到了 ClawHub（第三方技能平台）。装上之后，Agent 可以直接通过 REST API 干三件事：文档导入（文件 / URL / Markdown）、跨知识库混合检索（向量 + 关键词）、知识条目的列表浏览与增删改。</p>
 <p>企业关心的那部分也没落下：工作区四级 RBAC（Owner / Admin / Contributor / Viewer）、按知识库的资源归属、按工作区审计日志、API key 与凭证 AES-256-GCM 静态加密、集成 Langfuse 追踪 Agent 的推理循环与 token 消耗。系统管理员另有一个运行时任务队列仪表盘，能看到各阶段 worker 池的负载情况。</p>
-<p><img alt="Langfuse 可观测性追踪" src="../assets/img/img-011-67f7a5d2-db6e730448.png"></p>
+<p><img alt="Langfuse 可观测性追踪" src="../assets/img/img-011-67f7a5d2-db6e7304489f.png"></p>
 <p>内置 Langfuse 追踪：推理循环、token 与流水线全程可视</p>
 <p>最后是部署侧的一句话：模型、向量库、存储后端都能替换，所以它既能跑在本地，也能进私有云，数据不出你的环境——官方把这叫做<strong>"完整的数据主权"</strong>。</p>
 <p>三种模式，什么场景用哪个</p>

@@ -413,7 +413,7 @@
 <blockquote><p>论文：Why is AI-generated language so hard to understand?[1]</p></blockquote>
 <p>每个词都认识，连起来却得读两遍；句子看着利落，意思却挤在一起。这篇论文试着解释这种阅读体验，并提出一个值得关注的猜想：<strong>模型在训练中追求答对、少用 token，可能逐渐学出一种压缩表达的习惯，把理解的负担留给读者。</strong></p>
 <p>下面是一个模型输出的例子，量化场景下，对于小白来说，还是很拗口的：</p>
-<p><img alt="图片" src="../assets/img/img-001-a1a9ff1d-9f06e28109.png"></p>
+<p><img alt="图片" src="../assets/img/img-001-a1a9ff1d-9f06e281092f.png"></p>
 <p>大家认为现在模型出现了认知负荷了，AI文本中的逻辑密度和概念密度太高，模型输出对于普通人理解越来越有难度了。</p>
 <h3 id="研究背景">研究背景</h3>
 <p>论文把“AI 的话难懂”转化成两个可检验的问题：当前模型是否更常使用那些已知会增加人类理解负担的语言结构？训练中的信息压缩压力，能否推动模型偏向这类表达？</p>
@@ -424,31 +424,31 @@
 <h3 id="核心方法">核心方法</h3>
 <p>研究先收集聊天、代码修复交流和议论文，统计六类现象：省略关系词的宾语关系从句、名词转作动词、无生命主语搭配通常由有生命主体执行的动作、多个名词连叠、较长的句法依存关系，以及罕见的词语搭配。例如，英语里的“calendar it”把名词直接当动词；“the book the professor wrote”省掉了可选的 that。这些写法本身可以成立，研究关注的是模型是否过度偏爱它们。</p>
 <p>除了与人类文本比较，作者还用 NLLB-200 把同一句话从英语翻成日语，再翻回英语。往返翻译大致保留语义，同时改变措辞。若某种特征在翻译后明显减少，就说明原模型存在其他表达选择，而它偏爱了原来的写法。这种对照也有局限，翻译会产生自己的语言偏好，无法严格保证语义完全一致。</p>
-<p><img alt="图片" src="../assets/img/img-002-327e9262-244e8f2689.png"></p>
+<p><img alt="图片" src="../assets/img/img-002-327e9262-244e8f268993.png"></p>
 <p><em>上半部分是数据构成，下半部分展示了论文检测的语言现象。</em></p>
 <p>随后，作者用 Qwen2.5-1.5B-Instruct 做机制实验，让模型把结构化事件写成一句英文，并通过 GRPO 微调。相同事件可以有长短两种正确说法，比如“He sent us a photo.”为 6 个 token，“He sent a photo to us.”为 7 个 token。奖励写成：</p>
-<p><img alt="R(x,y)=c(x,y)f(y)-lambda |y|." src="../assets/img/img-003-ed3ebde1-37ec86ba42.png"></p>
+<p><img alt="R(x,y)=c(x,y)f(y)-lambda |y|." src="../assets/img/img-003-ed3ebde1-37ec86ba4276.png"></p>
 <p>其中，</p>
-<p><img alt="c" src="../assets/img/img-004-b04395e1-198572b9df.png"></p>
+<p><img alt="c" src="../assets/img/img-004-b04395e1-198572b9df24.png"></p>
 <p>检查内容是否正确，</p>
-<p><img alt="f" src="../assets/img/img-005-ca63df39-efdea7c948.png"></p>
+<p><img alt="f" src="../assets/img/img-005-ca63df39-efdea7c94882.png"></p>
 <p>检查格式，两者均取 0 或 1；</p>
-<p><img alt="|y|" src="../assets/img/img-006-359eeacc-065cfef5c6.png"></p>
+<p><img alt="|y|" src="../assets/img/img-006-359eeacc-065cfef5c613.png"></p>
 <p>是输出的 token 数，</p>
-<p><img alt="lambda" src="../assets/img/img-007-1e7b1c3a-9fae85afa0.png"></p>
+<p><img alt="lambda" src="../assets/img/img-007-1e7b1c3a-9fae85afa0a2.png"></p>
 <p>控制长度惩罚。训练目标还可以加入 KL 约束：</p>
 <p>![J(theta)=mathbb{E}_{x,y}[R(x,y)] -betamathbb{E}_x!left[D_{mathrm{KL}}!left(pi_theta(cdot|x)Vertpi_{mathrm{ref}}(cdot|x)right)right].](https://mmbiz.qpic.cn/mmbiz_png/4Zfl6dmm5Yd1zL2kgXVVibelv74IsJ3CyzicklY8jTSbnDHfR5kh02kibbjgzMoblxI0oicaHxGcic4PHic5apUMTjn7NKjHYG4FWCS0dNqtWz1BM/640?wx_fmt=png&amp;from=appmsg#imgIndex=7)</p>
 <p>直观地说，</p>
-<p><img alt="lambda" src="../assets/img/img-008-1cea9ad9-9fae85afa0.png"></p>
+<p><img alt="lambda" src="../assets/img/img-008-1cea9ad9-9fae85afa0a2.png"></p>
 <p>鼓励模型少用 token，</p>
-<p><img alt="beta" src="../assets/img/img-009-c75c08da-ae4bd36bb8.png"></p>
+<p><img alt="beta" src="../assets/img/img-009-c75c08da-ae4bd36bb876.png"></p>
 <p>则限制它偏离微调前的模型。实验没有直接要求模型“省略 that”，而是观察这种语法偏好会不会被奖励诱导出来。</p>
 <h3 id="实验效果">实验效果</h3>
 <p>语料分析覆盖 14 个模型，包括 9 个前沿或近前沿模型和 5 个较小模型版本，共有 120 段聊天、45 次代码修复会话、980 篇议论文。作文部分还有 2,934 篇同题高分学生作文作对照。</p>
 <p><strong>最稳定的差异，是陌生的词语搭配，以及让无生命事物执行通常由有生命主体执行的动作。</strong> 在可直接比较的作文中，9 个前沿或近前沿模型都比学生更常使用这两类表达；与往返翻译版本相比，相关差异也普遍存在。聊天和代码交流中，多数前沿模型还更偏爱省略关系词、名词连叠和较长的依存关系，但作文中的后两项差异较弱。</p>
 <p>模型之间也有明显区别。Olmo Think 的表现更接近前沿模型，基础版本的变化较小；同一模型家族内，Opus 5.5 相比 Opus 5，在 21 个可比指标中有 19 个难度相关指标更低。这说明表达风格会随模型和训练方式变化，无法简单归结为“模型越强，语言越难懂”。</p>
 <p><strong>机制实验中，长度惩罚确实改变了语法选择。</strong> 不加 KL 约束时，只要设置了正的长度惩罚，两个参与训练、允许省略 that 的结构中，正确输出选择短式的比例都超过 98%。这种偏好还能迁移到训练中没出现过的“sure (that)”和“so (that)”结构。KL 约束会缓和这种偏移；更远的迁移则有限，四类结构中只有所有格在无 KL 条件下出现了相应变化。</p>
-<p><img alt="图片" src="../assets/img/img-010-880b72df-044d5924f7.png"></p>
+<p><img alt="图片" src="../assets/img/img-010-880b72df-044d5924f75c.png"></p>
 <p><em>横轴为长度惩罚强度，纵轴为短式的选择比例或概率；橙色表示无 KL 约束，蓝色表示加入 KL 约束。</em></p>
 <p>这些结果支持“压缩压力可能改变表达习惯”这一机制。论文测量的是与理解困难相关的语言特征，没有直接测试读者的阅读速度或理解准确率，也没有追踪前沿模型的真实训练过程；分析仅覆盖英语，结论还不能直接推广到中文。</p>
 <h3 id="论文总结">论文总结</h3>
