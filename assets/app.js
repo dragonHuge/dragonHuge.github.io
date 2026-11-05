@@ -19,6 +19,15 @@
       if (e.target.tagName === "A") close();
     });
   }
+  /* 窄屏：抽屉初始不自动展开长列表（手机上找文章走模块列表页更短路径） */
+  try {
+    if (window.matchMedia && window.matchMedia("(max-width: 760px)").matches) {
+      [].forEach.call(document.querySelectorAll(".side-nav details[open]"), function (d) {
+        d.removeAttribute("open");
+      });
+      side && side.scrollTop && (side.scrollTop = 0);
+    }
+  } catch (e) {}
   /* 侧栏当前文章滚进可视区（只动侧栏容器，不动页面） */
   var act = document.querySelector(".side-nav a.art.active");
   if (act && act.scrollIntoView) {

@@ -76,6 +76,7 @@ h1, h2, h3, .res-t { text-wrap: pretty; }
   cursor: pointer; font-weight: 600; font-size: 14.5px;
   padding: 8px 10px; border-radius: 7px; list-style: none;
   user-select: none;
+  display: flex; align-items: center; gap: 4px;
 }
 .side-nav summary::-webkit-details-marker { display: none; }
 .side-nav summary::before { content: "▸ "; color: var(--muted); font-size: 12px; }
@@ -87,21 +88,32 @@ h1, h2, h3, .res-t { text-wrap: pretty; }
 }
 .side-nav details.cat { margin-left: 10px; }
 .side-nav details.cat > summary { font-size: 13.5px; font-weight: 600; color: #374151; }
+.side-nav .mod-go {
+  margin-left: auto; padding: 5px 8px; margin-right: -6px;
+  color: var(--muted); font-weight: 700; font-size: 14px;
+  border-radius: 6px; line-height: 1;
+  transition: color .15s, background .15s;
+}
+.side-nav .mod-go:hover { color: var(--accent); background: var(--accent-soft); text-decoration: none; }
 .side-nav .grp {
   font-size: 11.5px; color: var(--muted);
   padding: 8px 10px 2px; font-weight: 600; letter-spacing: .02em;
 }
-.sidebar a.side-link {
+.side-quick {
   position: sticky; top: -16px; z-index: 3;
-  display: block; padding: 10px 12px; margin: -8px -6px 8px;
-  font-weight: 600; font-size: 14.5px; color: var(--text);
+  display: flex; gap: 6px; margin: -10px -6px 8px; padding: 10px 6px;
   background: var(--panel); border-bottom: 1px solid var(--line);
-  border-radius: 7px 7px 0 0;
 }
-.sidebar a.side-link::before { content: "▸ "; color: var(--muted); font-size: 12px; }
-.sidebar a.side-link:hover { background: var(--accent-soft); text-decoration: none; }
-.sidebar a.side-link.active { color: var(--accent); }
-.sidebar a.side-link.active::before { content: "▾ "; color: var(--accent); }
+.side-quick a {
+  flex: 1 1 0; min-width: 0; text-align: center;
+  font-size: 12.5px; font-weight: 600; color: var(--text);
+  background: var(--bg); border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 2px; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.side-quick a:hover { border-color: var(--accent); color: var(--accent); text-decoration: none; }
+.side-quick a.on { background: var(--accent-soft); color: var(--accent); border-color: transparent; }
 .side-nav a.art {
   display: block; padding: 5px 10px 5px 22px;
   font-size: 13.5px; color: #374151; border-radius: 6px;
@@ -235,6 +247,9 @@ article h1 {
     border-top: 1px solid var(--line); padding-top: 6px;
   }
   .topnav a { padding: 5px 10px; font-size: 13px; }
+  .side-nav summary { padding: 12px 10px; font-size: 15px; }
+  .side-nav .mod-go { padding: 10px 10px; }
+  .side-quick a { padding: 9px 2px; }
   .sidebar {
     position: fixed; left: 0; top: var(--topbar-h); z-index: 25;
     height: calc(100vh - var(--topbar-h));
