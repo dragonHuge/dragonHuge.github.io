@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Superpowers：将工程纪律编码进 AI 工作流的元框架 · DragonHuge · 知识花园</title>
+<title>MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立 · DragonHuge · 知识花园</title>
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -30,7 +30,7 @@
 <div class="layout">
   <aside class="sidebar" id="sidebar"><div class="side-quick"><a href="../index.html" class="">🏠 首页</a><a href="../search.html">🔍 搜索</a><a href="../aihot.html">📰 AI 热点</a></div>
 <nav class="side-nav">
-<a class="art side-docs" href="../docs/index.html">📄 飞书文档 <span class="cnt">26</span><span class="mod-go">→</span></a>
+<a class="art side-docs" href="../docs/index.html">📄 飞书文档 <span class="cnt">27</span><span class="mod-go">→</span></a>
 <details class="mod"><summary>日常知识库沉淀 <span class="cnt">21</span><a class="mod-go" href="../daily/index.html" aria-label="进入日常列表页">→</a></summary>
 <div class="grp">灵感火花</div>
 <a class="art" href="../daily/d001.html">2026-10-24</a>
@@ -102,597 +102,474 @@
 <a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
 </details>
 </details>
-<details class="mod" open><summary>外部沉淀 <span class="cnt">299</span><a class="mod-go" href="../ext/index.html" aria-label="进入外部沉淀列表页">→</a></summary>
-<details class="cat"><summary>AI与效率 <span class="cnt">209</span><a class="mod-go" href="../ext/index.html#c0" aria-label="进入分类列表">→</a></summary>
-<a class="art" href="../ext/e001.html">2026年 AI Coding 最佳实践综述</a>
-<a class="art" href="../ext/e002.html">5 千星的 OpenBot，把 Codex 和 Claude 变成会互相交接的同事</a>
-<a class="art" href="../ext/e003.html">AgentCore + Codex 构建生产级 Agent 的原理与实践</a>
-<a class="art" href="../ext/e004.html">Claude 官方：学会批判性思维</a>
-<a class="art" href="../ext/e005.html">Cloudflare 开源了一个干掉漏洞的顶级 Skill!</a>
-<a class="art" href="../ext/e006.html">DeepSeek Super-agent 上手：从 GitHub Issue 到 PR</a>
-<a class="art" href="../ext/e007.html">Sam Altman最新访谈：下一代 AI 的核心是智能体团队！</a>
-<a class="art" href="../ext/e008.html">Skill 路由优化实战：基于真实业务请求的 description 自进化</a>
-<a class="art" href="../ext/e009.html">Super-agent 设计探索：迈向更自主的 Agent 系统</a>
-<a class="art" href="../ext/e010.html">一小时不发版就算事故：这家十人公司怎样用 Agent 工作？</a>
-<a class="art" href="../ext/e011.html">一文搞懂MCP开发</a>
-<a class="art" href="../ext/e012.html">从OpenClaw，怎么走到了Super Agent？</a>
-<a class="art" href="../ext/e013.html">刚刚！首个成体系的Agentic RL中文项目来了！</a>
-<a class="art" href="../ext/e014.html">又一个 Agent 工作台火了：统一管理 Codex、Claude Code，DeepSeek Harness 也能接入！</a>
-<a class="art" href="../ext/e015.html">奉劝大家不要用国产机翻墙,不要在国产机上安卓境外APP</a>
-<a class="art" href="../ext/e016.html">如果你做了一个垂直Agent，如何评估它的好坏？（9/12）</a>
-<a class="art" href="../ext/e017.html">开源我这折腾了1年的「Agent自动化系统」，愿所有人都能感受Agent的魅力。</a>
-<a class="art" href="../ext/e018.html">拆解了一下 LobeHub 架构，竟然和 Super-Agent 出奇一致</a>
-<a class="art" href="../ext/e019.html">架构拆解：DeepSeek 刚发布的 Super-agent</a>
-<a class="art" href="../ext/e020.html">腾讯微信提出skills持续进化框架：让每一次优化都有迹可循</a>
-<a class="art" href="../ext/e021.html">自产自销：如何让 Agent 自己写自己查？</a>
-<a class="art" href="../ext/e022.html">让改进有迹可循：Storage Agent Family Eval 工程实践</a>
-<a class="art" href="../ext/e023.html">通了个宵，终于把 Super-Agent 架构玩明白了</a>
-<a class="art" href="../ext/e024.html">重磅！DeepSeek 开源超级 Agent</a>
-<a class="art" href="../ext/e025.html">阿里版 Codex ，再次惊艳到我了！</a>
-<a class="art" href="../ext/e026.html">风控决策系统决策流，策略模式，权重、顺序、投票、最坏</a>
-<a class="art" href="../ext/e027.html">风控决策系统扩展点，自定义函数配置</a>
-<a class="art" href="../ext/e028.html">Anthropic：子Agent拆多了，为什么反而更慢</a>
-<a class="art" href="../ext/e029.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a>
-<a class="art" href="../ext/e030.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a>
-<a class="art" href="../ext/e031.html">从Harness到Harness²，Google自进化新突破</a>
-<a class="art" href="../ext/e032.html">深度解析 Codex Harness 架构及其全新上下文压缩记忆体系的设计思路</a>
-<a class="art" href="../ext/e033.html">让Agent可评可控可迭代：业务效果导向的评测体系与场景实践</a>
-<a class="art" href="../ext/e034.html">Agent时代的输入法：80亿token打磨的效率工具即将开源</a>
-<a class="art" href="../ext/e035.html">Anthropic最新长文：请谨慎使用子智能体</a>
-<a class="art" href="../ext/e036.html">Anthropic长文详解Claude Duet安全设计：密码永远不经过模型</a>
-<a class="art" href="../ext/e037.html">Codex核心团队复盘：从30秒一次反馈到放手跑几小时</a>
-<a class="art" href="../ext/e038.html">一篇多模态Agentic框架最新前沿综述</a>
-<a class="art" href="../ext/e039.html">为什么现在的top大模型说话越来越拗口难懂了</a>
-<a class="art" href="../ext/e040.html">你的Personal Agent如何真正跑起来？Agent实战指南</a>
-<a class="art" href="../ext/e041.html">“大家用 AI 胆子还不够大！”Anthropic 工程经理亲授 4 种顶级用法</a>
-<a class="art" href="../ext/e042.html">实测最近爆火的Teamily，是真有东西啊</a>
-<a class="art" href="../ext/e043.html">替代CC Switch的这个项目已斩获20K Star</a>
-<a class="art" href="../ext/e044.html">维基百科编辑抓AI的清单，被反着做成了6万多star的skill</a>
-<a class="art" href="../ext/e045.html">刚刚，Anthropic公开内部Sub-Agent+Loop最佳实践</a>
-<a class="art" href="../ext/e046.html">刚刚！斯坦福CS336中文教程发布了</a>
-<a class="art" href="../ext/e047.html">Agent的长期记忆要怎么做？RAG是不是最好的选择（4/12）</a>
-<a class="art" href="../ext/e048.html">Uber的合同审阅Agent工程实践和拆解</a>
-<a class="art" href="../ext/e049.html">6.3万星开源求职流水线：69份简历拿下20轮面试</a>
-<a class="art" href="../ext/e050.html">Agent如何自己变强：从Skill到模型权重的进化全景图</a>
-<a class="art" href="../ext/e051.html">Anthropic：谨慎使用子Agent</a>
-<a class="art" href="../ext/e052.html">Jev创始人访谈：Jev是面向智能的SQL，软件设计需回到工作流为中心</a>
-<a class="art" href="../ext/e053.html">MCP解决连接RAG解决知识，那谁来解决业务理解：企业AI的本体论</a>
-<a class="art" href="../ext/e054.html">OpenAI：FDE的目标是让自己失业</a>
-<a class="art" href="../ext/e055.html">去年教的85%全扔掉！斯坦福最新AI神课：200行写Claude Code</a>
-<a class="art" href="../ext/e056.html">唐杰团队RSI新作：让Agent越改越强，执行成本反降26%</a>
-<a class="art" href="../ext/e057.html">在上海听了一天AI论坛，我学到新的AI焚诀了</a>
-<a class="art" href="../ext/e058.html">大家用AI胆子还不够大！Claude工程负责人亲授顶级用法</a>
-<a class="art" href="../ext/e059.html">3篇NeurIPS顶会Skill，很精彩</a>
-<a class="art" href="../ext/e060.html">刚刚，Anthropic推出个人智能体Claude Duet：opus 5.5 驱动</a>
-<a class="art" href="../ext/e061.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
-<a class="art" href="../ext/e062.html">Meta的智能体工程经验：轻量编排与专业分工</a>
-<a class="art" href="../ext/e063.html">分享8个让我最近很惊艳的Claude Opus 5.5玩法</a>
-<a class="art" href="../ext/e064.html">坏了，真给openai从deepseek那学到真的了</a>
-<a class="art" href="../ext/e065.html">天猫数字员工：研发暗物质与AI Native组织协作</a>
-<a class="art" href="../ext/e066.html">AI工程化防翻车指南</a>
-<a class="art" href="../ext/e067.html">Anthropic最新就业报告公开：AI时代，新人何去何从?</a>
-<a class="art" href="../ext/e068.html">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</a>
-<a class="art" href="../ext/e069.html">从 BERT、GPT 到 Jev：一文看懂大模型架构的演进与分化</a>
-<a class="art" href="../ext/e070.html">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a>
-<a class="art" href="../ext/e071.html">面试官皱眉：“你知道Codex多Agent实现机制吗？ ”我笑了：“独立会话、上下文交接、异步通信、任务调度，你想先听哪块？”</a>
-<a class="art" href="../ext/e072.html">把逆向工程交给 Agent：一文拆解爆火的 REA 技术原理</a>
-<a class="art" href="../ext/e073.html">为什么说 DeepSeek Harness 的灵魂是一切皆插件？</a>
-<a class="art" href="../ext/e074.html">拆开 Pi：Agent Harness 的极简设计</a>
-<a class="art" href="../ext/e075.html">AI时代架构设计，给AI的4条缓存红线（9/100）</a>
-<a class="art" href="../ext/e076.html">四大多 Agent 架构详解（三）：Hierarchical 如何解决一个 Supervisor 管不过来的问题</a>
-<a class="art" href="../ext/e077.html">CLAUDE.md 还是 AGENTS.md？Anthropic 的答案是：以后都不用</a>
-<a class="art" href="../ext/e078.html">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</a>
-<a class="art" href="../ext/e079.html">huashu-art-motion发布！可能是最有审美的动画skill。</a>
-<a class="art" href="../ext/e080.html">1024个Agent协同，微软Loop工程杀疯了</a>
-<a class="art" href="../ext/e081.html">AI让写代码变便宜了，但没让架构变便宜</a>
-<a class="art" href="../ext/e082.html">Agent SDK 双面宿主：有 UI 与无 UI 不是两套 Agent</a>
-<a class="art" href="../ext/e083.html">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a>
-<a class="art" href="../ext/e084.html">Claude Code Mods 入门指南：从零做一个 Mod</a>
-<a class="art" href="../ext/e085.html">Agent、Harness、Loop 到底是什么关系？一文讲透 AI 系统的分层架构</a>
-<a class="art" href="../ext/e086.html">Claude.dev 的四篇工程文章：Agent 怎样才算真的改进</a>
-<a class="art" href="../ext/e087.html">Google：首篇词元（Token）技术全景综述</a>
-<a class="art" href="../ext/e088.html">解读 Jev 的 4 种应用方式</a>
-<a class="art" href="../ext/e089.html">重磅！Anthropic公开内部Claude进化最佳实践</a>
-<a class="art" href="../ext/e090.html">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a>
-<a class="art" href="../ext/e091.html">从生成到决策：Jev正在改变LLM应用的开发范式</a>
-<a class="art" href="../ext/e092.html">AI Coding卷到现在，真正卡脖子的东西没人提</a>
-<a class="art" href="../ext/e093.html">Agent不只烧Token：为什么Agent Sandbox正在变得重要</a>
-<a class="art" href="../ext/e094.html">NVIDIA又开源了一个顶级Agent项目：OpenShell</a>
-<a class="art" href="../ext/e095.html">公司规定所有接口都用POST请求，为什么</a>
-<a class="art" href="../ext/e096.html">碾压GPT-4o！94.6%准确率的开源Agent记忆Hindsight来了</a>
-<a class="art" href="../ext/e097.html">风控这个行业，入行10年，迷茫十年</a>
-<a class="art" href="../ext/e098.html">Jev Skill技能包来了！全球开发者砸出500个开源项目</a>
-<a class="art" href="../ext/e099.html">当Agent开始做梦：Dream-RSI如何改进探索策略</a>
-<a class="art" href="../ext/e100.html">预热合流：进了页面也预热了，为什么首句仍可能冷启</a>
-<a class="art" href="../ext/e101.html">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</a>
-<a class="art" href="../ext/e102.html">Anthropic：effort已不再是思考强度开关了</a>
-<a class="art" href="../ext/e103.html">Meta Muse架构深度解析：到底有何不同</a>
-<a class="art" href="../ext/e104.html">Plan Mode之死？Agent需要一条可验证的工作回路</a>
-<a class="art" href="../ext/e105.html">从Harness，走向受控RSI</a>
-<a class="art" href="../ext/e106.html">开源一个Vibe Coding最佳伴侣：口喷鸡</a>
-<a class="art" href="../ext/e107.html">改变世界前先认识世界：Ontology决策结构化实践</a>
-<a class="art" href="../ext/e108.html">本地复刻Jev范式！APUS开源全新浏览器Agent Skill</a>
-<a class="art" href="../ext/e109.html">谷歌RSI新作，让Agent Harness自进化不跑偏！</a>
-<a class="art" href="../ext/e110.html">长程Agent也能“倒带重来”！中科院自动化所联合提出运行时恢复框架AgentRewind</a>
-<a class="art" href="../ext/e111.html">Graph的尽头是自进化Ontology</a>
-<a class="art" href="../ext/e112.html">万字详解10道AI Agent高频面试题</a>
-<a class="art" href="../ext/e113.html">从一次LLM调用到完整Harness：系统理解Agent如何工作</a>
-<a class="art" href="../ext/e114.html">把多语种Laya微调成中文决策模型，代码评估全开源</a>
-<a class="art" href="../ext/e115.html">来了！DeepSeek又发新作DSec</a>
-<a class="art" href="../ext/e116.html">耗时1h！打造属于你自己的Jev，喂饭级教程来了</a>
-<a class="art" href="../ext/e117.html">腾讯开源BrowserSkill：让AI用你的账号上网</a>
-<a class="art" href="../ext/e118.html">谷歌重磅发布Dream-RSI，最新RSI研究！</a>
-<a class="art" href="../ext/e119.html">2万Star开源项目作者入职Hugging Face，副业变全职</a>
-<a class="art" href="../ext/e120.html">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</a>
-<a class="art" href="../ext/e121.html">微软 186k Star 的 markitdown：它凭什么这么火，又在哪会让你踩坑？</a>
-<a class="art" href="../ext/e122.html">错误码排查从 3～8 小时到分钟级，Agent怎么做到的？</a>
-<a class="art" href="../ext/e123.html">给项目建Agent知识库，一套完整方法来了！</a>
-<a class="art" href="../ext/e124.html">AI写得快 ≠ 真正提效：一文讲清Harness&quot;记忆&quot;和&quot;验证闭环</a>
-<a class="art" href="../ext/e125.html">一个字都不会写的 Jev，凭什么成为 ChatGPT 之后最火的模型？</a>
-<a class="art" href="../ext/e126.html">我替大家先试了一把 Jev：一个不写代码、不聊天，只负责&quot;做决定&quot;的奇葩模型</a>
-<a class="art" href="../ext/e127.html">阿里文征：面向Agent全面升级模型服务、Agent服务、AI应用</a>
-<a class="art" href="../ext/e128.html">Agent时代，RAG怎么选？这份指南一次讲清！</a>
-<a class="art" href="../ext/e129.html">Jev 深度解析：从生成式模型到语义决策引擎</a>
-<a class="art" href="../ext/e130.html">Jev 爆火全网，有人把 200+ 个社区案例攒成了开源案例墙，已经 1 亿浏览了！</a>
-<a class="art" href="../ext/e131.html">RAG解决不了的问题，GBrain想解决：给AI Agent装一个能记事的&#x27;第二大脑</a>
-<a class="art" href="../ext/e132.html">开源版 Jev 发布了！</a>
-<a class="art" href="../ext/e133.html">终于有人把数据指标体系讲明白了：指标怎么定、怎么分、怎么用一次讲透</a>
-<a class="art" href="../ext/e134.html">腾讯15年资深后台工程师，转战大模型推理的抉择</a>
-<a class="art" href="../ext/e135.html">腾讯音乐的 MusicBuddy 上线了，Buddy 家族凑够七个</a>
-<a class="art" href="../ext/e136.html">这是一篇把&quot;Jev模型&quot;讲明白的科普级解读！</a>
-<a class="art" href="../ext/e137.html">重磅！从 Agent 开发到 Agent 算法，进阶指南来了</a>
-<a class="art" href="../ext/e138.html">AI时代，让AI写缓存，spec怎么写（5/100）</a>
-<a class="art" href="../ext/e139.html">Agents成新一代造王者，开发者正在快速失去技术决定权</a>
-<a class="art" href="../ext/e140.html">Harness RSI框架来了，登上Hugging Face日榜第二！</a>
-<a class="art" href="../ext/e141.html">Jev Search 开源！当 Jev 遇上搜索引擎：这个开源项目让你用大白话搜遍全网！</a>
-<a class="art" href="../ext/e142.html">Jev是什么AI模型？不做自然语言生成为何引发热议</a>
-<a class="art" href="../ext/e143.html">Jev是分类器吗？今天向所有人开放，送1.2亿token</a>
-<a class="art" href="../ext/e144.html">Jev 爆火：一个不做生成的 AI，凭什么让半个技术圈熬夜跑 Demo？</a>
-<a class="art" href="../ext/e145.html">Loop engineering：把 agent 放进工程循环</a>
-<a class="art" href="../ext/e146.html">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</a>
-<a class="art" href="../ext/e147.html">一文详解Jev：把 Agent 里的“小判断”，从大模型调用改成结构化决策</a>
-<a class="art" href="../ext/e148.html">不会聊天的 AI，彻底爆火：Jev 保姆级教程来了！</a>
-<a class="art" href="../ext/e149.html">为啥 Jev 突然就全网爆火了？</a>
-<a class="art" href="../ext/e150.html">什么是 Jev？</a>
-<a class="art" href="../ext/e151.html">四大多 Agent 架构详解（一）：Workflow 如何把固定流程变成可回放的系统</a>
-<a class="art" href="../ext/e152.html">基于Jev的浏览器Agent插件开源，狂揽12.1k star！</a>
-<a class="art" href="../ext/e153.html">怎样构建一个 Agent-friendly 的网站</a>
-<a class="art" href="../ext/e154.html">整理了最新Jev模型的全网22个爆火玩法！</a>
-<a class="art" href="../ext/e155.html">知识库答不准，可能真不是模型的锅，66.6K star的Docling 到底解决了什么</a>
-<a class="art" href="../ext/e156.html">简单讲讲 Agent 的工作原理</a>
-<a class="art" href="../ext/e157.html">聊聊最近爆火的Jev 模型，到底是个啥？</a>
-<a class="art" href="../ext/e158.html">刚刚，Anthropic公开内部RSI落地方法论</a>
-<a class="art" href="../ext/e159.html">Anthropic 公开「递归自我改进」核心数据：3 万 Agent 正在研发下一代 Claude</a>
-<a class="art" href="../ext/e160.html">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a>
-<a class="art" href="../ext/e161.html">Jev：只会做选择题的 System One 模型，TypeSafe AI 的高频决策分类器</a>
-<a class="art" href="../ext/e162.html">什么是 RSI：2026 年最贵的三个字母（递归自我改进科普）</a>
-<a class="art" href="../ext/e163.html">小米 MiMo-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a>
-<a class="art" href="../ext/e164.html">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a>
-<a class="art" href="../ext/e165.html">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a>
-<a class="art" href="../ext/e166.html">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a>
-<a class="art" href="../ext/e167.html">本地该怎么做 RSI？与 StartLux CTO 郭权玮聊本地自我改进</a>
-<a class="art" href="../ext/e168.html">货拉拉 AI Coding 落地实践：个人提效攒不成组织提效</a>
-<a class="art" href="../ext/e169.html">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</a>
-<a class="art" href="../ext/e170.html">别再只卷 Prompt 了：Context Engineering 才是 Agent 差距所在</a>
-<a class="art" href="../ext/e171.html">面试官：讲一讲多 Agent 协作如何保持一致性</a>
-<a class="art" href="../ext/e172.html">Codex想让Harness消失，Claude Code却要把它做成承重墙</a>
-<a class="art" href="../ext/e173.html">OpenAI首席科学家发布长文：《An Alien Mind》（异星心智）</a>
-<a class="art" href="../ext/e174.html">让Agent像人一样记忆：本地长期记忆系统HL-Mem的设计与取舍</a>
-<a class="art" href="../ext/e175.html">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</a>
-<a class="art" href="../ext/e176.html">DeepSeek Harness背后的心脏：Cordis到底是什么</a>
-<a class="art" href="../ext/e177.html">Multi-Agent已死！Anthropic这次完全反着做</a>
-<a class="art" href="../ext/e178.html">个人自进化知识库完整搭建教程</a>
-<a class="art" href="../ext/e179.html">从一次 LLM 调用到完整 Harness，Agent 到底经历了什么？</a>
-<a class="art" href="../ext/e180.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a>
-<a class="art" href="../ext/e181.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a>
-<a class="art" href="../ext/e182.html">字节一天连发3篇自进化Agent，彻底杀疯了</a>
-<a class="art" href="../ext/e183.html">Hermes-Agent-The-Complete-Guide-v260407</a>
-<a class="art" href="../ext/e184.html">Hermes-Agent-从入门到精通-v260407</a>
-<a class="art" href="../ext/e185.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a>
-<a class="art" href="../ext/e186.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a>
-<a class="art" href="../ext/e187.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a>
-<a class="art" href="../ext/e188.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a>
-<a class="art" href="../ext/e189.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a>
-<a class="art" href="../ext/e190.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a>
-<a class="art" href="../ext/e191.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a>
-<a class="art" href="../ext/e192.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a>
-<a class="art" href="../ext/e193.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a>
-<a class="art" href="../ext/e194.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a>
-<a class="art" href="../ext/e195.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a>
-<a class="art" href="../ext/e196.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a>
-<a class="art" href="../ext/e197.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a>
-<a class="art" href="../ext/e198.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a>
-<a class="art" href="../ext/e199.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a>
-<a class="art" href="../ext/e200.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a>
-<a class="art" href="../ext/e201.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a>
-<a class="art" href="../ext/e202.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a>
-<a class="art" href="../ext/e203.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a>
-<a class="art" href="../ext/e204.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a>
-<a class="art" href="../ext/e205.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a>
-<a class="art" href="../ext/e206.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a>
-<a class="art" href="../ext/e207.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a>
-<a class="art" href="../ext/e208.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a>
-<a class="art" href="../ext/e209.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a>
+<details class="mod" open><summary>外部沉淀 <span class="cnt">303</span><a class="mod-go" href="../ext/index.html" aria-label="进入外部沉淀列表页">→</a></summary>
+<details class="cat"><summary>AI与效率 <span class="cnt">213</span><a class="mod-go" href="../ext/index.html#c0" aria-label="进入分类列表">→</a></summary>
+<span class="art-row"><a class="art" href="../ext/e001.html">Anthropic：AI 能让科学快几倍？</a><a class="art-x" href="https://mp.weixin.qq.com/s/uBXjMl8rOSpMChuf2W4BgQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e002.html">Harness 已经很准了，为什么还需要一个 Agent Native Database</a><a class="art-x" href="https://mp.weixin.qq.com/s/e59b93IR-W8lEOgQbxaShA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e003.html">从AI写代码到AI重构交付——国际物流技术 Multi AI Native 的 AI 交付转型之路</a><a class="art-x" href="https://mp.weixin.qq.com/s/RNsEho35Eyu9Astiep2QKA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e004.html">口喷鸡新功能：语音输入只识别你的声音，自动过滤旁人声音</a><a class="art-x" href="https://mp.weixin.qq.com/s/ekOF67qhApyvqGKu6JfkYA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e005.html">2026年 AI Coding 最佳实践综述</a><a class="art-x" href="https://mp.weixin.qq.com/s/IifH1iVcawNyzBU3IMHGCQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e006.html">5 千星的 OpenBot，把 Codex 和 Claude 变成会互相交接的同事</a><a class="art-x" href="https://mp.weixin.qq.com/s/LMDHuL3sBunDNsy1e6Ty9g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e007.html">AgentCore + Codex 构建生产级 Agent 的原理与实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/truZRvXkzIj6ZZoCLQ_vOQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e008.html">Claude 官方：学会批判性思维</a><a class="art-x" href="https://mp.weixin.qq.com/s/X_5z5cYTsMnBl1sQMb3zsw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e009.html">Cloudflare 开源了一个干掉漏洞的顶级 Skill!</a><a class="art-x" href="https://mp.weixin.qq.com/s/PorgH-41eSfELXaoDloSWA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e010.html">DeepSeek Super-agent 上手：从 GitHub Issue 到 PR</a><a class="art-x" href="https://mp.weixin.qq.com/s/1aR5yZSL01oQ0ms4L_486A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e011.html">Sam Altman最新访谈：下一代 AI 的核心是智能体团队！</a><a class="art-x" href="https://mp.weixin.qq.com/s/6v7ViIMddOLPE5cBhtUdrA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e012.html">Skill 路由优化实战：基于真实业务请求的 description 自进化</a><a class="art-x" href="https://mp.weixin.qq.com/s/K9Eh1zezOx_idgh8bzFvMA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e013.html">Super-agent 设计探索：迈向更自主的 Agent 系统</a><a class="art-x" href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e014.html">一小时不发版就算事故：这家十人公司怎样用 Agent 工作？</a><a class="art-x" href="https://mp.weixin.qq.com/s/JAtDHI0y2Op-6cCkQfgRJw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e015.html">一文搞懂MCP开发</a><a class="art-x" href="https://mp.weixin.qq.com/s/8qB8xcp8d3yYXnGZNlutEA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e016.html">从OpenClaw，怎么走到了Super Agent？</a><a class="art-x" href="https://mp.weixin.qq.com/s/R8v1fxHpErVHq1o6euSroA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e017.html">刚刚！首个成体系的Agentic RL中文项目来了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/43kyLBeJVDpRWTY5ACCafg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e018.html">又一个 Agent 工作台火了：统一管理 Codex、Claude Code，DeepSeek Harness 也能接入！</a><a class="art-x" href="https://mp.weixin.qq.com/s/0ACV8o-ivIR6FAUMYxgSWQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e019.html">奉劝大家不要用国产机翻墙,不要在国产机上安卓境外APP</a><a class="art-x" href="https://mp.weixin.qq.com/s/aySuQKjdDLsVfj1CHpJJxw?from=groupmessage&amp;scene=1&amp;subscene=10000&amp;sessionid=1793865987&amp;clicktime=1793873708&amp;enterid=1793873708&amp;ascene=1&amp;realreporttime=1793873708449&amp;forceh5=1" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e020.html">如果你做了一个垂直Agent，如何评估它的好坏？（9/12）</a><a class="art-x" href="https://mp.weixin.qq.com/s/crzdS2in0OFdHhOI_f3FnQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e021.html">开源我这折腾了1年的「Agent自动化系统」，愿所有人都能感受Agent的魅力。</a><a class="art-x" href="https://mp.weixin.qq.com/s/T9_acg247gxzUNL4j5zrCw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e022.html">拆解了一下 LobeHub 架构，竟然和 Super-Agent 出奇一致</a><a class="art-x" href="https://mp.weixin.qq.com/s/VW615fFeCmD-YXTzb2FPUQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e023.html">架构拆解：DeepSeek 刚发布的 Super-agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/cxfdWtDRfVunY5FU75oQGA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e024.html">腾讯微信提出skills持续进化框架：让每一次优化都有迹可循</a><a class="art-x" href="https://mp.weixin.qq.com/s/F2qm-KvQwvS4MqRvVMkYfg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e025.html">自产自销：如何让 Agent 自己写自己查？</a><a class="art-x" href="https://mp.weixin.qq.com/s/EKWeDlHLbJYuqEALERJnpQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e026.html">让改进有迹可循：Storage Agent Family Eval 工程实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/pjSP60ycITOafaJwXxW23g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e027.html">通了个宵，终于把 Super-Agent 架构玩明白了</a><a class="art-x" href="https://mp.weixin.qq.com/s/vt2qgHGAmzpqY-CXBWAj0g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e028.html">重磅！DeepSeek 开源超级 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/RJIxPjI7SrSVhgT_D8Baig" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e029.html">阿里版 Codex ，再次惊艳到我了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/EqgXV3am0dv9WCdagMejMA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e030.html">风控决策系统决策流，策略模式，权重、顺序、投票、最坏</a><a class="art-x" href="https://mp.weixin.qq.com/s/s0yPVx1sOgSFKbSv19S2BQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e031.html">风控决策系统扩展点，自定义函数配置</a><a class="art-x" href="https://mp.weixin.qq.com/s/mwLugxygEjtN70UrbZbQQw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e032.html">Anthropic：子Agent拆多了，为什么反而更慢</a><a class="art-x" href="https://mp.weixin.qq.com/s/Y9wCwP24aFWN1jRs1rhJXQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e033.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a><a class="art-x" href="https://mp.weixin.qq.com/s/mK6emVZ4O9GLHBVjC6wqXg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e034.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a><a class="art-x" href="https://mp.weixin.qq.com/s/hBEAqF7-2777nQmbvcBS3Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e035.html">从Harness到Harness²，Google自进化新突破</a><a class="art-x" href="https://mp.weixin.qq.com/s/jNVb5syfIHeeQfe8E0PJhQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e036.html">深度解析 Codex Harness 架构及其全新上下文压缩记忆体系的设计思路</a><a class="art-x" href="https://mp.weixin.qq.com/s/IM-zakQ9Bnog54NdYiJSqA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e037.html">让Agent可评可控可迭代：业务效果导向的评测体系与场景实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/RigE8BekIOjSEuvPXxVv5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e038.html">Agent时代的输入法：80亿token打磨的效率工具即将开源</a><a class="art-x" href="https://mp.weixin.qq.com/s/ck8WDkuKfPHlp_CRLsqq7A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e039.html">Anthropic最新长文：请谨慎使用子智能体</a><a class="art-x" href="https://mp.weixin.qq.com/s/5KpcSM4VmM4xbFr8x_B3LQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e040.html">Anthropic长文详解Claude Duet安全设计：密码永远不经过模型</a><a class="art-x" href="https://mp.weixin.qq.com/s/1Iu4gM3il8x1hM-HZvjqDQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e041.html">Codex核心团队复盘：从30秒一次反馈到放手跑几小时</a><a class="art-x" href="https://mp.weixin.qq.com/s/rTyr9o2r2VMdp0MVfZf2tw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e042.html">一篇多模态Agentic框架最新前沿综述</a><a class="art-x" href="https://mp.weixin.qq.com/s/pu87whwukj2jNaW0nQSwAA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e043.html">为什么现在的top大模型说话越来越拗口难懂了</a><a class="art-x" href="https://mp.weixin.qq.com/s/7sEZE1dTfqK8bbF6tcmOyA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e044.html">你的Personal Agent如何真正跑起来？Agent实战指南</a><a class="art-x" href="https://mp.weixin.qq.com/s/Nh-uiZ4N5C1qO9Uf9Im4bg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e045.html">“大家用 AI 胆子还不够大！”Anthropic 工程经理亲授 4 种顶级用法</a><a class="art-x" href="https://mp.weixin.qq.com/s/MIarQhuGQPUlEEI-D4ffAw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e046.html">实测最近爆火的Teamily，是真有东西啊</a><a class="art-x" href="https://mp.weixin.qq.com/s/oLcfMMJpWI_fQ5B4JeAMWg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e047.html">替代CC Switch的这个项目已斩获20K Star</a><a class="art-x" href="https://mp.weixin.qq.com/s/kJW4zJ8RCco9lajBGumj_Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e048.html">维基百科编辑抓AI的清单，被反着做成了6万多star的skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/1xSLOhvac4FC8-pkr-xpYg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e049.html">刚刚，Anthropic公开内部Sub-Agent+Loop最佳实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/5ej9Jipiibz107qRzfrOZw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e050.html">刚刚！斯坦福CS336中文教程发布了</a><a class="art-x" href="https://mp.weixin.qq.com/s/iot0LIrh2R5s5a17emBhJQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e051.html">Agent的长期记忆要怎么做？RAG是不是最好的选择（4/12）</a><a class="art-x" href="https://mp.weixin.qq.com/s/IiOPrsmLetMhez5haRvNQA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e052.html">Uber的合同审阅Agent工程实践和拆解</a><a class="art-x" href="https://mp.weixin.qq.com/s/RbvuDRNlFQ12BtF4_BnFfg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e053.html">6.3万星开源求职流水线：69份简历拿下20轮面试</a><a class="art-x" href="https://mp.weixin.qq.com/s/X-Jrcaskr-DhG3V5CBIPoQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e054.html">Agent如何自己变强：从Skill到模型权重的进化全景图</a><a class="art-x" href="https://mp.weixin.qq.com/s/AKvtr7IQ9oCGf5xldKeBNw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e055.html">Anthropic：谨慎使用子Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ec4UJeYBnVqcVnOSzduWxQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e056.html">Jev创始人访谈：Jev是面向智能的SQL，软件设计需回到工作流为中心</a><a class="art-x" href="https://mp.weixin.qq.com/s/MzGKpWD1SUEQI0nQlfAUaw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e057.html">MCP解决连接RAG解决知识，那谁来解决业务理解：企业AI的本体论</a><a class="art-x" href="https://mp.weixin.qq.com/s/6yVwaWZgJOaS7Q3cZyI7mA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e058.html">OpenAI：FDE的目标是让自己失业</a><a class="art-x" href="https://mp.weixin.qq.com/s/xku4E2vENNPl09ZyOyGBlw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e059.html">去年教的85%全扔掉！斯坦福最新AI神课：200行写Claude Code</a><a class="art-x" href="https://mp.weixin.qq.com/s/8qsWbLV1BCDW9RGYSRK-yA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e060.html">唐杰团队RSI新作：让Agent越改越强，执行成本反降26%</a><a class="art-x" href="https://mp.weixin.qq.com/s/TtjRoi5vYL5zrY0NZFbi5w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e061.html">在上海听了一天AI论坛，我学到新的AI焚诀了</a><a class="art-x" href="https://mp.weixin.qq.com/s/rDFhZkCgioA_rnik2tOTwQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e062.html">大家用AI胆子还不够大！Claude工程负责人亲授顶级用法</a><a class="art-x" href="https://mp.weixin.qq.com/s/GrXmCxESkjQm-bovv0bZ3w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e063.html">3篇NeurIPS顶会Skill，很精彩</a><a class="art-x" href="https://mp.weixin.qq.com/s/HH-Q0txZGjMLIiUz63wQ3Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e064.html">刚刚，Anthropic推出个人智能体Claude Duet：opus 5.5 驱动</a><a class="art-x" href="https://mp.weixin.qq.com/s/yZ7W_E8N5ZC-JyxfXoUumQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e065.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a><a class="art-x" href="https://mp.weixin.qq.com/s/YApF633agE1PZFKLck_b4Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e066.html">Meta的智能体工程经验：轻量编排与专业分工</a><a class="art-x" href="https://mp.weixin.qq.com/s/fjNfXpy7q6VMDZPeeoDgOw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e067.html">分享8个让我最近很惊艳的Claude Opus 5.5玩法</a><a class="art-x" href="https://mp.weixin.qq.com/s/K8Ank_6ySIupl8XyHCzqFw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e068.html">坏了，真给openai从deepseek那学到真的了</a><a class="art-x" href="https://mp.weixin.qq.com/s/O_QELn9CRP4DxGbn2pnJ7Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e069.html">天猫数字员工：研发暗物质与AI Native组织协作</a><a class="art-x" href="https://mp.weixin.qq.com/s/o_y-WjIFV2Qoa8lpHKR4BQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e070.html">AI工程化防翻车指南</a><a class="art-x" href="https://mp.weixin.qq.com/s/5zhFeM48-ipqDyIAPvRj9A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e071.html">Anthropic最新就业报告公开：AI时代，新人何去何从?</a><a class="art-x" href="https://mp.weixin.qq.com/s/Pz-E-_Eo5ivEPISTBdLs9w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e072.html">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</a><a class="art-x" href="https://mp.weixin.qq.com/s/6e27GknVlBJ-XoRlnAakLg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e073.html">从 BERT、GPT 到 Jev：一文看懂大模型架构的演进与分化</a><a class="art-x" href="https://mp.weixin.qq.com/s/AciT5C6ypT35FaGOoEum5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e074.html">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a><a class="art-x" href="https://mp.weixin.qq.com/s/hsRucmrbY8h98di-rXVzww" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e075.html">面试官皱眉：“你知道Codex多Agent实现机制吗？ ”我笑了：“独立会话、上下文交接、异步通信、任务调度，你想先听哪块？”</a><a class="art-x" href="https://mp.weixin.qq.com/s/_EgLSCc4dj0gt-09Uaw7eA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e076.html">把逆向工程交给 Agent：一文拆解爆火的 REA 技术原理</a><a class="art-x" href="https://mp.weixin.qq.com/s/IGu2tfumq3rbnra9yfgAQw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e077.html">为什么说 DeepSeek Harness 的灵魂是一切皆插件？</a><a class="art-x" href="https://mp.weixin.qq.com/s/sya9rCbTm4zDp2qEKMo2_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e078.html">拆开 Pi：Agent Harness 的极简设计</a><a class="art-x" href="https://mp.weixin.qq.com/s/43_tnAQrXV8Tri6PDaRsmQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e079.html">AI时代架构设计，给AI的4条缓存红线（9/100）</a><a class="art-x" href="https://mp.weixin.qq.com/s/rp5tRNJZKzXMuHeXg47fww" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e080.html">四大多 Agent 架构详解（三）：Hierarchical 如何解决一个 Supervisor 管不过来的问题</a><a class="art-x" href="https://mp.weixin.qq.com/s/wCCICgF8f6DjViVTUBpR9g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e081.html">CLAUDE.md 还是 AGENTS.md？Anthropic 的答案是：以后都不用</a><a class="art-x" href="https://mp.weixin.qq.com/s/b979KA65CA2E54cXban_Mw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e082.html">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</a><a class="art-x" href="https://mp.weixin.qq.com/s/vOiidxV8rURYXoDP1ZmWng" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e083.html">huashu-art-motion发布！可能是最有审美的动画skill。</a><a class="art-x" href="https://mp.weixin.qq.com/s/iViOvBLlH0gfxE2z_GoiCQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e084.html">1024个Agent协同，微软Loop工程杀疯了</a><a class="art-x" href="https://mp.weixin.qq.com/s/vovje32_tAc8nOnNwJHlcw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e085.html">AI让写代码变便宜了，但没让架构变便宜</a><a class="art-x" href="https://mp.weixin.qq.com/s/aeGHJWKgGFqtJGhiQQLYUw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e086.html">Agent SDK 双面宿主：有 UI 与无 UI 不是两套 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/X8C9tJ41TtOBgVSNod7sYg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e087.html">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a><a class="art-x" href="https://mp.weixin.qq.com/s/5SXa7vHTiGYTQNSIR6a-Pg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e088.html">Claude Code Mods 入门指南：从零做一个 Mod</a><a class="art-x" href="https://mp.weixin.qq.com/s/ch3z43AKlArK3q0QmAT4vw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e089.html">Agent、Harness、Loop 到底是什么关系？一文讲透 AI 系统的分层架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/vqCA4v_U-aq4bGr9wiNMYg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e090.html">Claude.dev 的四篇工程文章：Agent 怎样才算真的改进</a><a class="art-x" href="https://mp.weixin.qq.com/s/JcT_AGq1ewrp7_B-Z_QINg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e091.html">Google：首篇词元（Token）技术全景综述</a><a class="art-x" href="https://mp.weixin.qq.com/s/K89rgSJi-VPKkWDDAHR2gg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e092.html">解读 Jev 的 4 种应用方式</a><a class="art-x" href="https://mp.weixin.qq.com/s/wzJ9ZcKpfnJc2IEfraqvrw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e093.html">重磅！Anthropic公开内部Claude进化最佳实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/l_x8onQiJ81p23fJrBG_MQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e094.html">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ahefqqn9Q6znv5gnKIL4DQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e095.html">从生成到决策：Jev正在改变LLM应用的开发范式</a><a class="art-x" href="https://mp.weixin.qq.com/s/dIYmR9Q5I3gJKTF4fsI6BQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e096.html">AI Coding卷到现在，真正卡脖子的东西没人提</a><a class="art-x" href="https://mp.weixin.qq.com/s/GRg7vKONnQQNNTpCayoEoQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e097.html">Agent不只烧Token：为什么Agent Sandbox正在变得重要</a><a class="art-x" href="https://mp.weixin.qq.com/s/nhNOlMcjCTtB86wtjZn1Jg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e098.html">NVIDIA又开源了一个顶级Agent项目：OpenShell</a><a class="art-x" href="https://mp.weixin.qq.com/s/vxcy2Wy0rTDBtkYJdExluA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e099.html">公司规定所有接口都用POST请求，为什么</a><a class="art-x" href="https://mp.weixin.qq.com/s/oqWWR_zzWC0slDBvuuMppg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e100.html">碾压GPT-4o！94.6%准确率的开源Agent记忆Hindsight来了</a><a class="art-x" href="https://mp.weixin.qq.com/s/XjfjqZGGetFCJfif2Sz44w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e101.html">风控这个行业，入行10年，迷茫十年</a><a class="art-x" href="https://mp.weixin.qq.com/s/KsWcpLiDQZ1izYtWGCAysQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e102.html">Jev Skill技能包来了！全球开发者砸出500个开源项目</a><a class="art-x" href="https://mp.weixin.qq.com/s/SSVs6c8mELMqIf7UiL7RiA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e103.html">当Agent开始做梦：Dream-RSI如何改进探索策略</a><a class="art-x" href="https://mp.weixin.qq.com/s/PgiEWS57zBlimaz5x-QC9g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e104.html">预热合流：进了页面也预热了，为什么首句仍可能冷启</a><a class="art-x" href="https://mp.weixin.qq.com/s/9uMpljqNQtGwW8AuxSV_ag" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e105.html">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</a><a class="art-x" href="https://mp.weixin.qq.com/s/aPWGu38sAz-pQXOvis1I0g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e106.html">Anthropic：effort已不再是思考强度开关了</a><a class="art-x" href="https://mp.weixin.qq.com/s/dFx_dq1Xf8m83PeIY9oFtg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e107.html">Meta Muse架构深度解析：到底有何不同</a><a class="art-x" href="https://mp.weixin.qq.com/s/nQTi_u4O0PnzaqEA_ukNww" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e108.html">Plan Mode之死？Agent需要一条可验证的工作回路</a><a class="art-x" href="https://mp.weixin.qq.com/s/KG_kG3QvXCRQgtbdcmLxXQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e109.html">从Harness，走向受控RSI</a><a class="art-x" href="https://mp.weixin.qq.com/s/7lGot6JQtWkKhEeW4UtiTg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e110.html">开源一个Vibe Coding最佳伴侣：口喷鸡</a><a class="art-x" href="https://mp.weixin.qq.com/s/sTiMM91hB5DXc-isMO4J9Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e111.html">改变世界前先认识世界：Ontology决策结构化实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/Z3jgUawIT4ZY9lBb-trBuQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e112.html">本地复刻Jev范式！APUS开源全新浏览器Agent Skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/6qS9gumuQ-tUWdw1cFM4qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e113.html">谷歌RSI新作，让Agent Harness自进化不跑偏！</a><a class="art-x" href="https://mp.weixin.qq.com/s/uR9oELwZk8ATNnRHl86PhQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e114.html">长程Agent也能“倒带重来”！中科院自动化所联合提出运行时恢复框架AgentRewind</a><a class="art-x" href="https://mp.weixin.qq.com/s/-iIpIcgW-6taUcokI1DpKw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e115.html">Graph的尽头是自进化Ontology</a><a class="art-x" href="https://mp.weixin.qq.com/s/E0GJfYjzSs8fBIcn8jhHtA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e116.html">万字详解10道AI Agent高频面试题</a><a class="art-x" href="https://mp.weixin.qq.com/s/0TQ_cRoQO8sqJgYL4Z7nCQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e117.html">从一次LLM调用到完整Harness：系统理解Agent如何工作</a><a class="art-x" href="https://mp.weixin.qq.com/s/G0sCFNdVzTAiOpSRMxmzaA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e118.html">把多语种Laya微调成中文决策模型，代码评估全开源</a><a class="art-x" href="https://mp.weixin.qq.com/s/Bw8XQJdM-469NGbCuuh9zw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e119.html">来了！DeepSeek又发新作DSec</a><a class="art-x" href="https://mp.weixin.qq.com/s/Di54RybghrHcRkL6aSi-LQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e120.html">耗时1h！打造属于你自己的Jev，喂饭级教程来了</a><a class="art-x" href="https://mp.weixin.qq.com/s/F7i83rn8oDzQ-sg13MKwWA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e121.html">腾讯开源BrowserSkill：让AI用你的账号上网</a><a class="art-x" href="https://mp.weixin.qq.com/s/Xb6X9jUATAyZdYryg9ZZHA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e122.html">谷歌重磅发布Dream-RSI，最新RSI研究！</a><a class="art-x" href="https://mp.weixin.qq.com/s/wfVfFHb-47bkRc_HwkznQQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e123.html">2万Star开源项目作者入职Hugging Face，副业变全职</a><a class="art-x" href="https://mp.weixin.qq.com/s/NyLY6cGuXtSnc34UPnlmOw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e124.html">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</a><a class="art-x" href="https://mp.weixin.qq.com/s/uJr6Bb8OrNMDySXs3m7CpQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e125.html">微软 186k Star 的 markitdown：它凭什么这么火，又在哪会让你踩坑？</a><a class="art-x" href="https://mp.weixin.qq.com/s/VW2LG8jXGi45UR1Vd3H5AQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e126.html">错误码排查从 3～8 小时到分钟级，Agent怎么做到的？</a><a class="art-x" href="https://mp.weixin.qq.com/s/0QSAGGgffJoaG3iO6wItng" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e127.html">给项目建Agent知识库，一套完整方法来了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/307ZX4doB9hoTP-u6hVDDw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e128.html">AI写得快 ≠ 真正提效：一文讲清Harness&quot;记忆&quot;和&quot;验证闭环</a><a class="art-x" href="https://mp.weixin.qq.com/s/SVm_GONXEElhEsX6CXylKg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e129.html">一个字都不会写的 Jev，凭什么成为 ChatGPT 之后最火的模型？</a><a class="art-x" href="https://mp.weixin.qq.com/s/uJw0J1DWW9RCfaxsO9NRvw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e130.html">我替大家先试了一把 Jev：一个不写代码、不聊天，只负责&quot;做决定&quot;的奇葩模型</a><a class="art-x" href="https://mp.weixin.qq.com/s/P1nQ9FwFypiYkMThJVftgw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e131.html">阿里文征：面向Agent全面升级模型服务、Agent服务、AI应用</a><a class="art-x" href="https://mp.weixin.qq.com/s/Z_jEFVtkUtml9PmoLSIfhw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e132.html">Agent时代，RAG怎么选？这份指南一次讲清！</a><a class="art-x" href="https://mp.weixin.qq.com/s/4XGijn-_H1KH05op--1kBg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e133.html">Jev 深度解析：从生成式模型到语义决策引擎</a><a class="art-x" href="https://mp.weixin.qq.com/s/G1bIlmDTSDuy6NIcVkzKlg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e134.html">Jev 爆火全网，有人把 200+ 个社区案例攒成了开源案例墙，已经 1 亿浏览了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/-Nvv_W3n6QnBG32BcFIR4w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e135.html">RAG解决不了的问题，GBrain想解决：给AI Agent装一个能记事的&#x27;第二大脑</a><a class="art-x" href="https://mp.weixin.qq.com/s/RbXvKKBgteyucvHoFUPTQg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e136.html">开源版 Jev 发布了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/8CaOLr99qL3RamtQtXJ6tQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e137.html">终于有人把数据指标体系讲明白了：指标怎么定、怎么分、怎么用一次讲透</a><a class="art-x" href="https://mp.weixin.qq.com/s/GZvrnX2nGm0-EjokJZzLMg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e138.html">腾讯15年资深后台工程师，转战大模型推理的抉择</a><a class="art-x" href="https://mp.weixin.qq.com/s/g2xZZuqM55AqhbgtKyqM2g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e139.html">腾讯音乐的 MusicBuddy 上线了，Buddy 家族凑够七个</a><a class="art-x" href="https://mp.weixin.qq.com/s/SKLX9boQbOY0YqO-ZirRag" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e140.html">这是一篇把&quot;Jev模型&quot;讲明白的科普级解读！</a><a class="art-x" href="https://mp.weixin.qq.com/s/ynHlQijihuEZ3cqkQtXvrA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e141.html">重磅！从 Agent 开发到 Agent 算法，进阶指南来了</a><a class="art-x" href="https://mp.weixin.qq.com/s/0YFG-J2ZWwRO4lTP7f1JDA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e142.html">AI时代，让AI写缓存，spec怎么写（5/100）</a><a class="art-x" href="https://mp.weixin.qq.com/s/pXAznRuoQKr5qgbPzeBDIQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e143.html">Agents成新一代造王者，开发者正在快速失去技术决定权</a><a class="art-x" href="https://mp.weixin.qq.com/s/_dD0zV4PGt955hQMRskftw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e144.html">Harness RSI框架来了，登上Hugging Face日榜第二！</a><a class="art-x" href="https://mp.weixin.qq.com/s/Jnfb_vdsDSBuxW1VxRyfNw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e145.html">Jev Search 开源！当 Jev 遇上搜索引擎：这个开源项目让你用大白话搜遍全网！</a><a class="art-x" href="https://mp.weixin.qq.com/s/MyoQCRv2MXCqxhwT0sp4qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e146.html">Jev是什么AI模型？不做自然语言生成为何引发热议</a><a class="art-x" href="https://mp.weixin.qq.com/s/eOPz4k6RlKp1rwmc0b-ZWw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e147.html">Jev是分类器吗？今天向所有人开放，送1.2亿token</a><a class="art-x" href="https://mp.weixin.qq.com/s/0gMnhFvovw9783eWcaRLgA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e148.html">Jev 爆火：一个不做生成的 AI，凭什么让半个技术圈熬夜跑 Demo？</a><a class="art-x" href="https://mp.weixin.qq.com/s/zW6U89TQDqeZemxqCj7U-Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e149.html">Loop engineering：把 agent 放进工程循环</a><a class="art-x" href="https://mp.weixin.qq.com/s/RxRzTsRvmZJMmtQjQM79_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e150.html">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</a><a class="art-x" href="https://mp.weixin.qq.com/s/D1La4jMoVZ5Ip_RrVY1kPw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e151.html">一文详解Jev：把 Agent 里的“小判断”，从大模型调用改成结构化决策</a><a class="art-x" href="https://mp.weixin.qq.com/s/EFqwedRAaDXpBTUpaJ6T5g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e152.html">不会聊天的 AI，彻底爆火：Jev 保姆级教程来了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/X5i5gZo1XRQ9DJeEXn5zmg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e153.html">为啥 Jev 突然就全网爆火了？</a><a class="art-x" href="https://mp.weixin.qq.com/s/3GH_Os7qjSd_i2Nq8sVReA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e154.html">什么是 Jev？</a><a class="art-x" href="https://mp.weixin.qq.com/s/hdhaju_rMJKbkQonOefswQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e155.html">四大多 Agent 架构详解（一）：Workflow 如何把固定流程变成可回放的系统</a><a class="art-x" href="https://mp.weixin.qq.com/s/xSNQGIKzDoEEEmYA3mIHtw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e156.html">基于Jev的浏览器Agent插件开源，狂揽12.1k star！</a><a class="art-x" href="https://mp.weixin.qq.com/s/t-hqq3hGlkeWlFxjBMsr2w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e157.html">怎样构建一个 Agent-friendly 的网站</a><a class="art-x" href="https://mp.weixin.qq.com/s/h3nRQaemvc4_YaTAgOh3sg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e158.html">整理了最新Jev模型的全网22个爆火玩法！</a><a class="art-x" href="https://mp.weixin.qq.com/s/XI7veC5NSNkjVmTApTS-AA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e159.html">知识库答不准，可能真不是模型的锅，66.6K star的Docling 到底解决了什么</a><a class="art-x" href="https://mp.weixin.qq.com/s/wjEWh0gJJus6Jpg_2RQ79g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e160.html">简单讲讲 Agent 的工作原理</a><a class="art-x" href="https://mp.weixin.qq.com/s/EQMPyo5FVCFvy0mndcBkMQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e161.html">聊聊最近爆火的Jev 模型，到底是个啥？</a><a class="art-x" href="https://mp.weixin.qq.com/s/w4kDVSF_beVA7CVhL_Xohw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e162.html">刚刚，Anthropic公开内部RSI落地方法论</a><a class="art-x" href="https://mp.weixin.qq.com/s/3Qg8E9eoPX2rfYepvPSJ3w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e163.html">Anthropic 公开「递归自我改进」核心数据：3 万 Agent 正在研发下一代 Claude</a><a class="art-x" href="https://mp.weixin.qq.com/s/3bAMvHBUlEIfOrR0vdRREQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e164.html">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a><a class="art-x" href="https://mp.weixin.qq.com/s/f4_O_ZpWiXpGyUiVwvGggg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e165.html">Jev：只会做选择题的 System One 模型，TypeSafe AI 的高频决策分类器</a><a class="art-x" href="https://mp.weixin.qq.com/s/Nj7Y3DXibE28up0SvhJ67Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e166.html">什么是 RSI：2026 年最贵的三个字母（递归自我改进科普）</a><a class="art-x" href="https://mp.weixin.qq.com/s/MS5Dzg1AjWiFAUE9aAFnzw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e167.html">小米 MiMo-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a><a class="art-x" href="https://mp.weixin.qq.com/s/3QZ2TU7Y5xss_jjxIYjfNw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e168.html">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a><a class="art-x" href="https://mp.weixin.qq.com/s/fsVJiorPBN4ylGjUYBcIPw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e169.html">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a><a class="art-x" href="https://mp.weixin.qq.com/s/WkQXscLAkpdo_ygqaNnuYw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e170.html">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a><a class="art-x" href="https://mp.weixin.qq.com/s/lyjKtDPyOLavVJZBHmOcVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e171.html">本地该怎么做 RSI？与 StartLux CTO 郭权玮聊本地自我改进</a><a class="art-x" href="https://mp.weixin.qq.com/s/ogGTNepYRtf9PmI2WyYPRQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e172.html">货拉拉 AI Coding 落地实践：个人提效攒不成组织提效</a><a class="art-x" href="https://mp.weixin.qq.com/s/TPsMa8kj9SThzeVyrx7lLQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e173.html">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</a><a class="art-x" href="https://mp.weixin.qq.com/s/baj-Fo_NbzrR-MtXGPlo4A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e174.html">别再只卷 Prompt 了：Context Engineering 才是 Agent 差距所在</a><a class="art-x" href="https://mp.weixin.qq.com/s/mbU0bE6BV5YfAsTmoY4H3A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e175.html">面试官：讲一讲多 Agent 协作如何保持一致性</a><a class="art-x" href="https://mp.weixin.qq.com/s/XnSQdFpG-MdbctvLtHiMMA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e176.html">Codex想让Harness消失，Claude Code却要把它做成承重墙</a><a class="art-x" href="https://mp.weixin.qq.com/s/TZtWia_xf-aaUPacXi4AxA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e177.html">OpenAI首席科学家发布长文：《An Alien Mind》（异星心智）</a><a class="art-x" href="https://mp.weixin.qq.com/s/U5nT7Oleq90YPrVWdr-hnw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e178.html">让Agent像人一样记忆：本地长期记忆系统HL-Mem的设计与取舍</a><a class="art-x" href="https://mp.weixin.qq.com/s/kNUoqHRWapbDYVtlej_bzg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e179.html">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/Vy2HpOyr7wVmPTVWa3mGig" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e180.html">DeepSeek Harness背后的心脏：Cordis到底是什么</a><a class="art-x" href="https://mp.weixin.qq.com/s/3vtCkp6EbA5MhRERD6f17A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e181.html">Multi-Agent已死！Anthropic这次完全反着做</a><a class="art-x" href="https://mp.weixin.qq.com/s/sSeiJsPBRD99LIG-okgDXQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e182.html">个人自进化知识库完整搭建教程</a><a class="art-x" href="https://www.xiaohongshu.com/discovery/item/6a82b410000000000600641d" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e183.html">从一次 LLM 调用到完整 Harness，Agent 到底经历了什么？</a><a class="art-x" href="https://mp.weixin.qq.com/s/kZZac-VBgnQIZeookE9Y8g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e184.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a><a class="art-x" href="https://mp.weixin.qq.com/s/JpDdN21Qe_pN8mhpqWlm9w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e185.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a><a class="art-x" href="https://mp.weixin.qq.com/s/NBvHFehnn7aR0yHdB9hvtA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e186.html">字节一天连发3篇自进化Agent，彻底杀疯了</a><a class="art-x" href="https://mp.weixin.qq.com/s/L6pY-3rDUy6pLQ96DcOFyg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e187.html">Hermes-Agent-The-Complete-Guide-v260407</a>
+<a class="art" href="../ext/e188.html">Hermes-Agent-从入门到精通-v260407</a>
+<span class="art-row"><a class="art" href="../ext/e189.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a><a class="art-x" href="https://mp.weixin.qq.com/s/jBOGCtoLytPCjR9EQrRhAQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e190.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a><a class="art-x" href="https://mp.weixin.qq.com/s/GhTOhZO_zj8NfR1vPmPVww" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e191.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a><a class="art-x" href="https://mp.weixin.qq.com/s/L1Xb8-MpeWtQfjY3ngrBYA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e192.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a><a class="art-x" href="https://mp.weixin.qq.com/s/NtsksL2gkMtMqkILi4xvRg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e193.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a><a class="art-x" href="https://mp.weixin.qq.com/s/JV4-oPP0jjsBCZ4tW3Gy1g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e194.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a><a class="art-x" href="https://mp.weixin.qq.com/s/aoNwyY5ZkCRMkZirn1rElQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e195.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a><a class="art-x" href="https://mp.weixin.qq.com/s/h49UiGERvz8BMkMW0_4Gwg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e196.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a><a class="art-x" href="https://mp.weixin.qq.com/s/D76ipiGcg__56Lx0Rjs4Iw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e197.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a><a class="art-x" href="https://github.com/snarktank/ralph" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e198.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a><a class="art-x" href="https://mp.weixin.qq.com/s/JPV2-6rWK46Mj971fwwvgA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e199.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a><a class="art-x" href="https://mp.weixin.qq.com/s/VJgVPeJ5GZhVwbRtneEk_Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e200.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a><a class="art-x" href="https://mp.weixin.qq.com/s/fLiyW2t4CBOnWjx2Km8d8g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e201.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a><a class="art-x" href="https://openclaw.ai/install.sh" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e202.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a><a class="art-x" href="https://github.com/alchaincyf/hermes-agent-orange-book" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e203.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a><a class="art-x" href="https://mp.weixin.qq.com/s/N0OBBlPIdUKJzRU0ZCciFg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e204.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a><a class="art-x" href="https://mp.weixin.qq.com/s/_vkAHlPoBiPc9KImMkY5OA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e205.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a><a class="art-x" href="https://mp.weixin.qq.com/s/iBCNkORwkff3PL1EZD3zqw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e206.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/bl77_Mb85C4AKe8h4__V6Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e207.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a><a class="art-x" href="https://mp.weixin.qq.com/s/GjZ-tFBVwfJwK11F1lP5TQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e208.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a><a class="art-x" href="https://mp.weixin.qq.com/s/EPCkbXD0KMB-jnOZC4CamQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e209.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a><a class="art-x" href="https://www.xiaohongshu.com/discovery/item/69d23c0f0000000022003812" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e210.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a><a class="art-x" href="https://mp.weixin.qq.com/s/p3nJlwmgEfEyVnwy3fPfnQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e211.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a><a class="art-x" href="https://mp.weixin.qq.com/s/UJSwqTh3Lf1smlnx_dELdA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e212.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a><a class="art-x" href="https://mp.weixin.qq.com/s/h_bnt6YFaLHSDgKSoFb6SA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e213.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a><a class="art-x" href="https://mp.weixin.qq.com/s/BMmw_z8tjxCETvUQQHLfhw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 </details>
 <details class="cat" open><summary>工具与技术 <span class="cnt">59</span><a class="mod-go" href="../ext/index.html#c1" aria-label="进入分类列表">→</a></summary>
-<a class="art" href="../ext/e210.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
-<a class="art" href="../ext/e211.html">火山引擎大模型应用防火墙文档指南</a>
-<a class="art" href="../ext/e212.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
-<a class="art" href="../ext/e213.html">EasySync、OpenPlug、Resojot三件套</a>
-<a class="art" href="../ext/e214.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a>
-<a class="art" href="../ext/e215.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a>
-<a class="art" href="../ext/e216.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a>
-<a class="art" href="../ext/e217.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a>
-<a class="art" href="../ext/e218.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a>
-<a class="art" href="../ext/e219.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a>
-<a class="art" href="../ext/e220.html">FID：小米设备不变的硬件标识</a>
-<a class="art" href="../ext/e221.html">防重放攻击Nonce机制</a>
-<a class="art" href="../ext/e222.html">Claude Code Thariq：如何设置不同模型的 effort？</a>
-<a class="art" href="../ext/e223.html">手推Transformer（3）架构图解</a>
-<a class="art" href="../ext/e224.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a>
-<a class="art" href="../ext/e225.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a>
-<a class="art" href="../ext/e226.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a>
-<a class="art" href="../ext/e227.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a>
-<a class="art" href="../ext/e228.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a>
-<a class="art" href="../ext/e229.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a>
-<a class="art" href="../ext/e230.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a>
-<a class="art" href="../ext/e231.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a>
-<a class="art" href="../ext/e232.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a>
-<a class="art" href="../ext/e233.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a>
-<a class="art" href="../ext/e234.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a>
-<a class="art" href="../ext/e235.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a>
-<a class="art" href="../ext/e236.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a>
-<a class="art" href="../ext/e237.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a>
-<a class="art" href="../ext/e238.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a>
-<a class="art" href="../ext/e239.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a>
-<a class="art" href="../ext/e240.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a>
-<a class="art" href="../ext/e241.html">Archify：AI代码仓库架构可视化开源Skill</a>
-<a class="art" href="../ext/e242.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a>
-<a class="art" href="../ext/e243.html">anything2explainer：一键制作科普视频的开源Skill</a>
-<a class="art" href="../ext/e244.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a>
-<a class="art" href="../ext/e245.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a>
-<a class="art" href="../ext/e246.html">MCP 开发指北(Java) — 组内分享</a>
-<a class="art" href="../ext/e247.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a>
-<a class="art" href="../ext/e248.html">html-anything — Agent 时代的 HTML 编辑器</a>
-<a class="art" href="../ext/e249.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a>
-<a class="art" href="../ext/e250.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a>
-<a class="art" href="../ext/e251.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a>
-<a class="art" href="../ext/e252.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a>
-<a class="art" href="../ext/e253.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a>
-<a class="art" href="../ext/e254.html">Claude Code Prompt Cache 配置实战</a>
-<a class="art" href="../ext/e255.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a>
-<a class="art" href="../ext/e256.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a>
-<a class="art" href="../ext/e257.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a>
-<a class="art" href="../ext/e258.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a>
-<a class="art" href="../ext/e259.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a>
-<a class="art" href="../ext/e260.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a>
-<a class="art active" href="../ext/e261.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a>
-<a class="art" href="../ext/e262.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a>
-<a class="art" href="../ext/e263.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a>
-<a class="art" href="../ext/e264.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a>
-<a class="art" href="../ext/e265.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a>
-<a class="art" href="../ext/e266.html">Obsidian 必装的 9 个 AI Agent Skill</a>
-<a class="art" href="../ext/e267.html">大博主常用的 5 个录屏 + 3 个白板工具</a>
-<a class="art" href="../ext/e268.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a>
+<a class="art" href="../ext/e214.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e215.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e216.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e217.html">EasySync、OpenPlug、Resojot三件套</a>
+<span class="art-row"><a class="art" href="../ext/e218.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a><a class="art-x" href="https://mp.weixin.qq.com/s/_92qxY50yrITYDkhnKVv5w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e219.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a><a class="art-x" href="https://mp.weixin.qq.com/s/VuJsVTvyNIK8GRTL95n-Qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e220.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a><a class="art-x" href="https://mp.weixin.qq.com/s/opomqvcruvmcQr4fzTT5Sg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e221.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a><a class="art-x" href="https://mp.weixin.qq.com/s/xyLlUlHJG7zbs32B3ibarw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e222.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/sddXH_qxY0LlPvftJy4rTA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e223.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a><a class="art-x" href="https://mp.weixin.qq.com/s/EGCfOEP4-j0dZ1gV-QBF9Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e224.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e225.html">防重放攻击Nonce机制</a>
+<span class="art-row"><a class="art" href="../ext/e226.html">Claude Code Thariq：如何设置不同模型的 effort？</a><a class="art-x" href="https://mp.weixin.qq.com/s/OtdHHVKZOY28qCNfy99o0A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e227.html">手推Transformer（3）架构图解</a><a class="art-x" href="https://v.douyin.com/QfsCWkmq6Jk/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e228.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/RfCE5yqOrR_b2AWeI530GQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e229.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a><a class="art-x" href="https://mp.weixin.qq.com/s/8KB9H19wTmV9Ttsls2ZQOQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e230.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a><a class="art-x" href="https://mp.weixin.qq.com/s/C06VC_u8ThxoX65GZXD98A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e231.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a><a class="art-x" href="https://mp.weixin.qq.com/s/9k__ghMXA4xAP94aHFh-Gg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e232.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jgwZE6nflPIRkJkrwfz40w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e233.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/gOCMe2lrO8PFGfZoKhUmfA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e234.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a><a class="art-x" href="https://mp.weixin.qq.com/s/JpDAPxDxt8HWdxwuVpOCGg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e235.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a><a class="art-x" href="https://mp.weixin.qq.com/s/6MmevXDynsrlcOoDr3NMEA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e236.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a><a class="art-x" href="https://mp.weixin.qq.com/s/IG1lcRRtIhRePZfLrLZl_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e237.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a><a class="art-x" href="https://mp.weixin.qq.com/s/a35eQqCyxdybODuJlFwBTg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e238.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/z2t4cSkZo3JvXdmnq58MxA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e239.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jf5OKEhBDWkP0228tC5o1w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e240.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a><a class="art-x" href="https://mp.weixin.qq.com/s/_r6om75XRHj2NsgqN6l45A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e241.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a><a class="art-x" href="https://mp.weixin.qq.com/s/pS3UX6_XWcqjNCYxtNzNjA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e242.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a><a class="art-x" href="https://mp.weixin.qq.com/s/INr-j63NxC1JKiBeasTreA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e243.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a><a class="art-x" href="https://mp.weixin.qq.com/s/Zb7TCRf0ULhR6m4gv0T8cg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e244.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a><a class="art-x" href="https://mp.weixin.qq.com/s/ZxhhQlgzm7j7bfesSect4w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e245.html">Archify：AI代码仓库架构可视化开源Skill</a><a class="art-x" href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e246.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a><a class="art-x" href="https://mp.weixin.qq.com/s/6l9eoyAyADd4l4CgdbKFwQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e247.html">anything2explainer：一键制作科普视频的开源Skill</a><a class="art-x" href="https://www.douyin.com/video/7683581072979226340" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e248.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a><a class="art-x" href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e249.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a><a class="art-x" href="https://mp.weixin.qq.com/s/4Wm668hdNhRCSorNEY--Wg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e250.html">MCP 开发指北(Java) — 组内分享</a><a class="art-x" href="https://mi.feishu.cn/wiki/VsmQw2pwSiCmOnknxf0cqzadnHw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e251.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a><a class="art-x" href="https://mi.feishu.cn/wiki/TLkUwSfMoi0YL3kUF75c7Iwin1f" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e252.html">html-anything — Agent 时代的 HTML 编辑器</a><a class="art-x" href="https://mp.weixin.qq.com/s/PdnzdlANDDDrMrTMYhahvw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e253.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ux91m8vFib3GFWY6GqHssA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e254.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a><a class="art-x" href="https://mp.weixin.qq.com/s/8rXk9rn3qoT-_-s8bIEicw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e255.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a><a class="art-x" href="https://mp.weixin.qq.com/s/z1ZreI_TYEsHj2pGIKrmcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e256.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/8kLJvAEgN_qtcGWQAfORvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e257.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a><a class="art-x" href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e258.html">Claude Code Prompt Cache 配置实战</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/（视频" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e259.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e260.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a><a class="art-x" href="https://mp.weixin.qq.com/s/NAqk-Hwpb0kf0ZggDs4TLQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art active" href="../ext/e261.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a><a class="art-x" href="https://mp.weixin.qq.com/s/Sz2hzXiNCyf1YNzPbeUo5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e262.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a><a class="art-x" href="https://mp.weixin.qq.com/s/v6iBuqep2ZCZ9wAwhnHLDA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e263.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a><a class="art-x" href="https://mp.weixin.qq.com/s/3pYESr-ZDD-qM3uktiSIYQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e264.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a><a class="art-x" href="https://mp.weixin.qq.com/s/BCstLeMYEPTk5A4sJp66jA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e265.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a><a class="art-x" href="https://mp.weixin.qq.com/s/-Vb_8UdgglaYj0HnSYPZcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e266.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a><a class="art-x" href="https://bytedance.sg.larkoffice.com/docx/QNsIdi8VFoKm00xY8SRlkXxygve" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e267.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a><a class="art-x" href="https://www.anytocopy.com/xiaohongshu" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e268.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/udSpp7eMqwiRo5yVShRzLw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e269.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a><a class="art-x" href="https://mp.weixin.qq.com/s/PcZVz9Xf2-SFE_9_e41uVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e270.html">Obsidian 必装的 9 个 AI Agent Skill</a><a class="art-x" href="http://xhslink.com/o/4tA9NrR4eXd" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e271.html">大博主常用的 5 个录屏 + 3 个白板工具</a><a class="art-x" href="http://xhslink.com/o/68mgswUWCNA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e272.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a><a class="art-x" href="https://mp.weixin.qq.com/s/OqpljVUwvONVohnk7Sf5hw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 </details>
 <details class="cat"><summary>认知与思维 <span class="cnt">12</span><a class="mod-go" href="../ext/index.html#c2" aria-label="进入分类列表">→</a></summary>
-<a class="art" href="../ext/e269.html">当AI可以逆向一切的时候，我们还剩下些什么？</a>
-<a class="art" href="../ext/e270.html">高性价比人生指南（全书归档）</a>
-<a class="art" href="../ext/e271.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
-<a class="art" href="../ext/e272.html">单Agent思维链惯性与Agent Team挑战者架构</a>
-<a class="art" href="../ext/e273.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a>
-<a class="art" href="../ext/e274.html">AI时代怎么做架构设计：四步法及AI带来的变化</a>
-<a class="art" href="../ext/e275.html">普通人怎样在6-12个月内改变自己</a>
-<a class="art" href="../ext/e276.html">一天一小时，365天后，你的人生会彻底翻篇</a>
-<a class="art" href="../ext/e277.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a>
-<a class="art" href="../ext/e278.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a>
-<a class="art" href="../ext/e279.html">Build-your-own-X：通过从零造轮子真正掌握编程</a>
-<a class="art" href="../ext/e280.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a>
+<span class="art-row"><a class="art" href="../ext/e273.html">当AI可以逆向一切的时候，我们还剩下些什么？</a><a class="art-x" href="https://mp.weixin.qq.com/s/l5RyP8ZVHJiESgS_m-D8CA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e274.html">高性价比人生指南（全书归档）</a><a class="art-x" href="https://github.com/eternity4719/HowToLiveBetter" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e275.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
+<a class="art" href="../ext/e276.html">单Agent思维链惯性与Agent Team挑战者架构</a>
+<span class="art-row"><a class="art" href="../ext/e277.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a><a class="art-x" href="https://mp.weixin.qq.com/s/q3c56lgmLC6YTMov96tLQw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e278.html">AI时代怎么做架构设计：四步法及AI带来的变化</a><a class="art-x" href="https://mp.weixin.qq.com/s/pHZCyEVIQeNnBeNnr_QPdg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e279.html">普通人怎样在6-12个月内改变自己</a><a class="art-x" href="https://v.douyin.com/GOXRZFkXLa4/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e280.html">一天一小时，365天后，你的人生会彻底翻篇</a><a class="art-x" href="https://v.douyin.com/6xiqnchxC99/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e281.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a><a class="art-x" href="https://mp.weixin.qq.com/s/rVOI4KxBzRHwAv3k0osNQQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e282.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a><a class="art-x" href="https://mp.weixin.qq.com/s/p3nJlwmgEfEyVnwy3fPfnQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e283.html">Build-your-own-X：通过从零造轮子真正掌握编程</a><a class="art-x" href="https://v.douyin.com/OYALS7c0BrA/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e284.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a><a class="art-x" href="https://mp.weixin.qq.com/s/2NWvKt6M1ZXUfMFHCr5CtQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 </details>
 <details class="cat"><summary>写作与创作 <span class="cnt">3</span><a class="mod-go" href="../ext/index.html#c3" aria-label="进入分类列表">→</a></summary>
-<a class="art" href="../ext/e281.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a>
-<a class="art" href="../ext/e282.html">全网首发！AI动态漫制作全流程</a>
-<a class="art" href="../ext/e283.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a>
+<span class="art-row"><a class="art" href="../ext/e285.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a><a class="art-x" href="https://www.douyin.com/video/7665017623372926234" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e286.html">全网首发！AI动态漫制作全流程</a><a class="art-x" href="https://www.xiaohongshu.com/discovery/item/6a916c4b000000001803f3d2" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e287.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a><a class="art-x" href="https://mp.weixin.qq.com/s/AtxGrii_K-nzkwUM9SNhEg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 </details>
 <details class="cat"><summary>商业与变现 <span class="cnt">2</span><a class="mod-go" href="../ext/index.html#c4" aria-label="进入分类列表">→</a></summary>
-<a class="art" href="../ext/e284.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a>
-<a class="art" href="../ext/e285.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a>
+<span class="art-row"><a class="art" href="../ext/e288.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a><a class="art-x" href="https://mp.weixin.qq.com/s/yTRfQCybSFsvb5wX0nY51g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e289.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a><a class="art-x" href="https://mp.weixin.qq.com/s/H7-G_vszhDe8tLaNuC4jZA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 </details>
 <details class="cat"><summary>待分拣 <span class="cnt">14</span><a class="mod-go" href="../ext/index.html#c5" aria-label="进入分类列表">→</a></summary>
-<a class="art" href="../ext/e286.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a>
-<a class="art" href="../ext/e287.html">360大模型安全白皮书</a>
-<a class="art" href="../ext/e288.html">AI基础设施安全白皮书</a>
-<a class="art" href="../ext/e289.html">MicrosoftAI安全</a>
-<a class="art" href="../ext/e290.html">华为AI安全白皮书</a>
-<a class="art" href="../ext/e291.html">华为云AI安全解决方案白皮书</a>
-<a class="art" href="../ext/e292.html">华为算力基础设施安全技术白皮书</a>
-<a class="art" href="../ext/e293.html">我用Obsidian搭了一个会自己生长的个人网</a>
-<a class="art" href="../ext/e294.html">AI时代，普通人用Mac mini能干点啥</a>
-<a class="art" href="../ext/e295.html">Dan Koe：用AI做一个自己的人生模型</a>
-<a class="art" href="../ext/e296.html">GitHub技巧｜项目一键可视化</a>
-<a class="art" href="../ext/e297.html">焚诀，提示词模板，思维方式</a>
-<a class="art" href="../ext/e298.html">jev-chat-jarvis：装在手机上的对话副驾</a>
-<a class="art" href="../ext/e299.html">第6集 | 为方便同行洗稿，我公开了我的推文</a>
+<span class="art-row"><a class="art" href="../ext/e290.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a><a class="art-x" href="https://xhslink.cn/o/Anseb9sXHgO" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e291.html">360大模型安全白皮书</a>
+<a class="art" href="../ext/e292.html">AI基础设施安全白皮书</a>
+<a class="art" href="../ext/e293.html">MicrosoftAI安全</a>
+<a class="art" href="../ext/e294.html">华为AI安全白皮书</a>
+<a class="art" href="../ext/e295.html">华为云AI安全解决方案白皮书</a>
+<a class="art" href="../ext/e296.html">华为算力基础设施安全技术白皮书</a>
+<span class="art-row"><a class="art" href="../ext/e297.html">我用Obsidian搭了一个会自己生长的个人网</a><a class="art-x" href="https://xhslink.cn/o/1iytNspS23q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e298.html">AI时代，普通人用Mac mini能干点啥</a><a class="art-x" href="https://xhslink.cn/o/9Ur6avLUQO7" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e299.html">Dan Koe：用AI做一个自己的人生模型</a><a class="art-x" href="https://v.douyin.com/wU7DQ2m_Hpg/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e300.html">GitHub技巧｜项目一键可视化</a><a class="art-x" href="https://xhslink.cn/o/7pHluEVC2Iq" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e301.html">焚诀，提示词模板，思维方式</a><a class="art-x" href="https://xhslink.cn/o/4uoGIx5okPf" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e302.html">jev-chat-jarvis：装在手机上的对话副驾</a><a class="art-x" href="https://github.com/jev-chat/jev-chat-jarvis" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e303.html">第6集 | 为方便同行洗稿，我公开了我的推文</a><a class="art-x" href="https://v.douyin.com/1oSUZbZqCbw/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 </details>
 </details></nav></aside><div class="mask" id="mask"></div>
-  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">58</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#具体步骤">具体步骤</a><a class="tl l2" href="#plugin-命令速查-Claude-Code-插件市场">/plugin 命令速查（Claude Code 插件市场）</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#增量补充-来源-小米技术圈-申涛">增量补充（来源：小米技术圈 · 申涛）</a><a class="tl l3" href="#自动模式-vs-手动模式">自动模式 vs 手动模式</a><a class="tl l3" href="#SuperPower-Hook-机制-一说需求就自动触发的秘密">SuperPower Hook 机制（一说需求就自动触发的秘密）</a><a class="tl l3" href="#brainstorming-详解">brainstorming 详解</a><a class="tl l3" href="#writing-plans-详解-四个核心思想">writing-plans 详解（四个核心思想）</a><a class="tl l3" href="#subagent-driven-development-详解-四个核心思想">subagent-driven-development 详解（四个核心思想）</a><a class="tl l3" href="#requesting-code-review-详解">requesting-code-review 详解</a><a class="tl l3" href="#TDD-详解">TDD 详解</a><a class="tl l3" href="#设计哲学总结-申涛视角">设计哲学总结（申涛视角）</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#为什么-AI-编程需要-规范驱动-从概率生成到契约交付">🔍 为什么 AI 编程需要“规范驱动”？—— 从概率生成到契约交付</a><a class="tl l3" href="#传统开发的认知优势">传统开发的认知优势</a><a class="tl l3" href="#大模型的固有局限">大模型的固有局限</a><a class="tl l3" href="#Spec-Driven-Development-的本质">Spec-Driven Development 的本质</a><a class="tl l3" href="#快速开始-安装与部署策略">🛠️ 快速开始：安装与部署策略</a><a class="tl l3" href="#安装范围选择-定义技能的-作用半径">安装范围选择：定义技能的“作用半径”</a><a class="tl l3" href="#验证安装">验证安装</a><a class="tl l3" href="#技能全景图-从离散工具到自动化流水线">🧰 技能全景图：从离散工具到自动化流水线</a><a class="tl l3" href="#实战演练-B-站视频抓取工具的开发旅程">🎬 实战演练：B 站视频抓取工具的开发旅程</a><a class="tl l3" href="#第一阶段-需求收敛-brainstorming">🔹 第一阶段：需求收敛（brainstorming）</a><a class="tl l3" href="#第二阶段-环境隔离与任务拆解">🔹 第二阶段：环境隔离与任务拆解</a><a class="tl l4" href="#2-1-using-git-worktrees-构建物理隔离沙箱">2.1 using-git-worktrees：构建物理隔离沙箱</a><a class="tl l3" href="#1-智能选址-优先-worktrees-读取-CLAUDE-md-配置-询问用户偏好">1. 智能选址：优先 .worktrees/ → 读取 CLAUDE.md 配置 → 询问用户偏好</a><a class="tl l3" href="#2-安全校验-强制检查-gitignore-防止隔离目录被意外提交">2. 安全校验：强制检查 .gitignore，防止隔离目录被意外提交</a><a class="tl l3" href="#3-环境初始化-识别项目类型-自动执行依赖安装与基线测试">3. 环境初始化：识别项目类型，自动执行依赖安装与基线测试</a><a class="tl l3" href="#4-无缝衔接-为后续子代理提供干净-独立的执行上下文">4. 无缝衔接：为后续子代理提供干净、独立的执行上下文</a><a class="tl l4" href="#2-2-writing-plans-将蓝图转化为施工图">2.2 writing-plans：将蓝图转化为施工图</a><a class="tl l3" href="#第三阶段-执行模式选择">🔹 第三阶段：执行模式选择</a><a class="tl l3" href="#第四阶段-自动化执行与人工守望">🔹 第四阶段：自动化执行与人工守望</a><a class="tl l3" href="#架构透视-三层约束机制">🏗️ 架构透视：三层约束机制</a><a class="tl l3" href="#Layer-1-认知层-Cognitive-Constraints">Layer 1：认知层（Cognitive Constraints）</a><a class="tl l3" href="#Layer-2-流程层-Workflow-Orchestration">Layer 2：流程层（Workflow Orchestration）</a><a class="tl l3" href="#Layer-3-验证层-Verification-Gates">Layer 3：验证层（Verification Gates）</a><a class="tl l3" href="#核心技能深度解析">🔬 核心技能深度解析</a><a class="tl l3" href="#Spec-的三层抽象-从意图到行为契约">📐 Spec 的三层抽象：从意图到行为契约</a><a class="tl l3" href="#TDD-测试是需求的数学表达">🧪 TDD：测试是需求的数学表达</a><a class="tl l3" href="#systematic-debugging-科学实验式排错">🔍 systematic-debugging：科学实验式排错</a><a class="tl l3" href="#verification-before-completion-证据主义交付">✅ verification-before-completion：证据主义交付</a><a class="tl l3" href="#Superpowers-OpenSpec-宪法与司法的协同">🔗 Superpowers + OpenSpec：宪法与司法的协同</a><a class="tl l3" href="#集成工作流">集成工作流</a><a class="tl l3" href="#工程边界与适用场景">⚠️ 工程边界与适用场景</a><a class="tl l3" href="#1-软约束的局限性">1. 软约束的局限性</a><a class="tl l3" href="#2-Token-经济学考量">2. Token 经济学考量</a><a class="tl l3" href="#3-环境就绪假设">3. 环境就绪假设</a><a class="tl l3" href="#场景适配矩阵">🎯 场景适配矩阵</a><a class="tl l3" href="#结语-工具的价值-在于放大而非替代">🌟 结语：工具的价值，在于放大而非替代</a><a class="tl l3" href="#1-定义正确问题的能力-精准的需求边界与验收标准">1. 定义正确问题的能力（精准的需求边界与验收标准）</a><a class="tl l3" href="#2-设计可演进架构的能力-在-YAGNI-与扩展性之间取得平衡">2. 设计可演进架构的能力（在 YAGNI 与扩展性之间取得平衡）</a><a class="tl l3" href="#3-在不确定性中做决策的能力-契约与实现的冲突仲裁">3. 在不确定性中做决策的能力（契约与实现的冲突仲裁）</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>Superpowers：将工程纪律编码进 AI 工作流的元框架</h1><div class="meta">2026-04-20 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/-Vb_8UdgglaYj0HnSYPZcA" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">工具与技术/20260420-Superpowers深度指南-工程纪律编码进AI工作流.md</span></div><div class="md"><blockquote><p>来源：微信公众号 归档日期：2026-04-20 抓取状态：成功 原文字符：11310｜配图：11 张</p></blockquote>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">23</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#为什么有用">为什么有用</a><a class="tl l2" href="#适用-不适用场景">适用 / 不适用场景</a><a class="tl l2" href="#原文-AGI-Hunt">原文：AGI Hunt</a><a class="tl l3" href="#社区对-MCP-的三大批评">社区对 MCP 的三大批评</a><a class="tl l3" href="#Anthropic-的三条路框架">Anthropic 的三条路框架</a><a class="tl l3" href="#解法一-Tool-Search-按需加载">解法一：Tool Search（按需加载）</a><a class="tl l3" href="#解法二-程序化工具调用">解法二：程序化工具调用</a><a class="tl l3" href="#Cloudflare-代码编排案例">Cloudflare 代码编排案例</a><a class="tl l3" href="#MCP-Skills-官方认可">MCP + Skills 官方认可</a><a class="tl l3" href="#结论-最终图景">结论：最终图景</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#之前聊过什么">之前聊过什么</a><a class="tl l3" href="#Anthropic-的回应">Anthropic 的回应</a><a class="tl l3" href="#三条路对比-API-vs-CLI-vs-MCP">三条路对比：API vs CLI vs MCP</a><a class="tl l3" href="#Token-解法">Token 解法</a><a class="tl l3" href="#Cloudflare-的实践">Cloudflare 的实践</a><a class="tl l3" href="#Skills-转正">Skills 转正</a><a class="tl l3" href="#MCP-的地盘">MCP 的地盘</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</h1><div class="meta">2026-04-24 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/Sz2hzXiNCyf1YNzPbeUo5Q" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">工具与技术/20260424-MCP对比CLI与Anthropic官方回应Tool-Search解法.md</span></div><div class="md"><blockquote><p>来源：微信公众号 归档日期：2026-04-24 抓取状态：成功 原文字符：7968｜配图：14 张</p></blockquote>
 <h2 id="摘要速览">摘要速览</h2>
-<p>无约束的 AI 编码存在三大失效模式：上下文衰减导致实现偏离需求、概率性输出导致相同提示词产出不同架构、目标函数错位导致代码通顺但不可维护。Superpowers 通过把工程最佳实践转化为自动触发的约束，让 AI 从"概率补全引擎"变成"有工程纪律的协作者"。</p>
+<p>MCP 因为"token 贵/schema 臃肿/不可组合"三个问题被社区批评，CLI+Skills 被认为是更好的 Agent 接入方式——Anthropic 官方博客正面回应并给出具体解法。</p>
 <h2 id="核心内容">核心内容</h2>
-<ol><li><strong>三重机制</strong>：Spec-Driven（规范驱动）+ TDD（测试驱动）+ Systematic Workflow（系统化流程）。核心命题是：在写任何实现代码之前，先让"做什么"和"做到什么程度"变成可验证的契约，并将 Spec 从静态文档升维为动态提示词约束。</li></ol>
-<ol><li><strong>9 个内置 Skill（按流程串联）</strong>：</li><ul><li><code>brainstorming</code> → 苏格拉底式需求收敛，输出 design.md（单一事实源）</li><li><code>using-git-worktrees</code> → 自动创建物理隔离沙箱</li><li><code>writing-plans</code> → 将设计拆解为 2-5 分钟可验证的微任务，输出 tasks.md</li><li><code>test-driven-development</code> → 强制 Red-Green-Refactor，测试未通过禁止写实现</li><li><code>subagent-driven-development</code> → 每个任务派发独立子 Agent，完成后自动双阶段审查</li><li><code>executing-plans</code> → 批量线性执行，适合简单重复任务</li><li><code>code-review</code> → 设计符合性审查 + 代码质量评估</li><li><code>systematic-debugging</code> → 四阶段科学排错：根因→模式→假设→修复</li><li><code>verification-before-completion</code> → 证据主义交付，拒绝无验证的"完成"声明</li></ul></ol>
-<ol><li><strong>三层约束机制</strong>：</li><ul><li>认知层（Cognitive）：SKILL.md 内的元认知规则，植入 System Prompt 作为硬性约束</li><li>流程层（Workflow）：基于状态机的自动路由，开发者只需在关键节点确认</li><li>验证层（Verification）：四个门禁点——设计确认、代码实现、任务完成、宣称完成，失败则阻塞下游</li></ul></ol>
-<ol><li><strong>两种执行模式对比</strong>：</li><ul><li>Subagent-Driven：1 实现者 + 2 审查者 = 3 个全新会话，TDD 契合度最高，适合复杂多模块任务</li><li>Inline Execution：当前会话内线性执行，适合简单脚本和快速验证</li></ul></ol>
-<ol><li><strong>与 OpenSpec 的协同</strong>：OpenSpec 是规范层（宪法），Superpowers 是执行层（司法）。OpenSpec 提供结构化契约和变更追溯，Superpowers 提供自动触发和质量门禁。</li></ol>
+<ul><li><strong>MCP 三大原罪</strong>（社区批评）：GitHub MCP 43 个工具定义占 55,000 tokens；Perplexity CTO 称 72% 上下文被 MCP 占掉；CLI 操作同样任务 token 消耗是 MCP 的 1/32</li><li><strong>解法一：Tool Search（按需加载）</strong>：Agent 先描述意图，运行时只拉取匹配的几个工具，而非塞入全部工具定义 → 工具定义 token 减少 85%+，工具选择准确率不下降；工具要按意图分组，不按 API 分</li><li><strong>解法二：程序化工具调用</strong>：工具返回结果不直接塞回上下文，而是在代码执行沙箱里循环/过滤/聚合，只把最终结果返回 → 复杂多步工作流减少约 37% token</li><li><strong>Cloudflare 案例</strong>：2,500 个 API 端点，只暴露 2 个工具（search + execute），整个工具定义仅占约 1K tokens——把 CLI 的哲学搬进了 MCP 协议（"代码编排"模式）</li><li><strong>两者定位明确</strong>：本地开发环境 → CLI + Skills（轻量、快速、上下文干净）；云端生产环境（Managed Agents/移动端/Web 端，无文件系统）→ MCP + Skills（标准化、跨平台）；简单场景 → 直连 API</li><li><strong>MCP + Skills 打包</strong>：Anthropic 官方认可 Skills 的地位，MCP 管"能力"，Skills 管"编排"；部分第三方服务商已经开始同时发布 MCP server 和配套 Skills</li></ul>
 <h2 id="可执行启发">可执行启发</h2>
 <p>（待补充）</p>
 <h2 id="我的想法">我的想法</h2>
-<p>（留给你补充）</p>
-<h2 id="为什么有用">为什么有用</h2>
-<p>这是目前见过的最完整的 AI 编程工程化框架描述——它不是提示词技巧，而是将人类工程师的隐性经验（TDD、代码审查、规范优先）显性化为可自动执行的约束。对于需要长期维护的项目，这套框架能系统性地防止 AI 编程中最常见的质量退化问题。</p>
-<h2 id="具体步骤">具体步骤</h2>
-<ol><li>安装（推荐 user scope 全局安装，工程方法论跨项目通用）</li><li><code>/superpowers:brainstorming</code> → 苏格拉底式提问收敛需求 → 确认 design.md</li><li>框架自动触发 git-worktrees（沙箱）+ writing-plans（任务拆解）</li><li>选择执行模式：复杂任务选 subagent-driven，简单任务选 executing-plans</li><li>自动驾驶执行：开发者只需在关键节点确认 + 审阅测试覆盖率 + 处理审查反馈</li><li>交付物：design.md + tasks.md + 测试用例 + 实现代码 + 审查记录</li></ol>
-<h2 id="plugin-命令速查-Claude-Code-插件市场"><code>/plugin</code> 命令速查（Claude Code 插件市场）</h2>
-<p>Claude Code 通过 <code>/plugin</code> 命令管理插件市场（Marketplace）和插件（Skills/Agents/Hooks/MCP）。</p>
-<pre><code># 查看已安装插件和市场
-/plugin
-
-# 添加官方插件市场（下载 CC 后通常自带）
-/plugin marketplace add anthropics/claude-code
-
-# 添加 Superpowers 插件市场
-/plugin marketplace add obra/superpowers-marketplace
-
-# 移除插件市场
-/plugin marketplace remove &lt;marketplace-name&gt;
-
-# 安装插件（@后为来源市场名）
-/plugin install superpowers@superpowers-marketplace
-
-# 刷新当前 session，获取最新插件信息（安装后必执行）
-/reload-plugins</code></pre>
-<p><strong>操作流程</strong>：添加市场 → <code>/reload-plugins</code> → Discover 栏查看可用插件 → 安装 → <code>/reload-plugins</code></p>
-<blockquote><p>来源补充：微信公众号（未署名）· https://mp.weixin.qq.com/s/AyfnT2ikS1-3ddTcyKrBlg · 2026-05-12</p></blockquote>
-<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
-<ul><li>适用：长期维护的核心项目、初涉 AI 编程的团队、需要可审计交付记录的场景</li><li>不适用：快速原型/一次性脚本（流程开销抵消效率）、已有成熟 CI/CD 的团队（可能与现有门禁冲突）</li></ul>
+<p>（待补充——1. SXL 的 Skills 体系是否也存在"按 API 而非按意图分组"的问题，导致某些 Skill 调用时带入了太多不相关上下文？2. Cloudflare 的"2 个工具覆盖 2500 端点"模式，是否可以作为设计新 Skill 的参考范式？）</p>
 <hr>
-<h2 id="增量补充-来源-小米技术圈-申涛">增量补充（来源：小米技术圈 · 申涛）</h2>
-<h3 id="自动模式-vs-手动模式">自动模式 vs 手动模式</h3>
-<ul><li><strong>自动模式</strong>：说需求就自动触发，Superpowers 在 using-superpowers/SKILL.md 里写了 <code>brainstorming</code> 直接触发，包含完整链路</li><li><strong>手动模式</strong>：用 <code>/brainstorming</code>、<code>/write-plan</code>、<code>/execute-plan</code> 等单独调用，可按需选用</li><li><strong>大需求 vs 小需求</strong>：大需求走完整流程（brainstorm → plan → subagent → TDD → review）；小需求（快速验证类）可直接用 <code>/executing-plans</code> 跳过 brainstorm</li></ul>
-<h3 id="SuperPower-Hook-机制-一说需求就自动触发的秘密">SuperPower Hook 机制（一说需求就自动触发的秘密）</h3>
-<p>工作原理：Claude Code 启动时加载 <code>session-start hook</code>，注入 <code>using-superpowers/SKILL.md</code> 全文内容到 Agent 上下文，其中包含关键触发逻辑：</p>
-<pre><code>&lt;EXTREMELY_IMPORTANT&gt;
-You have superpowers.
-Below is the full content of your &#x27;superpowers-using-superpowers&#x27; skill:
-[using-superpowers/SKILL.md 的完整内容]
-&lt;/EXTREMELY_IMPORTANT&gt;</code></pre>
-<p>因此 Agent 知道：有 Superpowers（有系统）、应该用 skills、如何组合这些 skills。</p>
-<p>执行流程：<code>startup/clear/compact</code> → <code>Claude Code 触发 SessionStart hook</code> → <code>执行 run-hook.cmd session-start</code> → <code>run-hook.cmd 调 bash 并行执行</code> → <code>session-start 组建 JSON 输出 stdout</code> → <code>Claude Code 读取 stdout</code> → <code>注入 Agent 上下文</code> → <code>Agent 知 &quot;You have superpowers&quot;</code></p>
-<p>触发时机（matcher）：Superpowers 使用 <code>SessionStart</code> hook，每次会话启动自动注入。</p>
-<p>Hook 极简主义哲学：Hook 本身不做任何业务逻辑，只做一件事——把 SKILL.md 内容注入上下文。技能执行逻辑完全在 SKILL.md 里，Hook 只是"搬运工"。</p>
-<h3 id="brainstorming-详解">brainstorming 详解</h3>
-<ul><li><strong>苏格拉底式提问</strong>：一次一个问题，不淹没用户；设定目标让用户聚焦；提问后生成 AI Claude Objects（即 <code>design.md</code>），提供直观的可视化比较，帮助用户在设计上不做错误选择</li><li><strong>隐藏功能（截止 v5.0.7）</strong>：brainstorming 输出的 design.md 同时用于作为 visual comparison 的输入，通过 AI 对比不同设计选项；Superpowers brainstorming 在 Claude 里可触发"苏格拉底式提问"（<code>-i claude</code> 模式）完成需求收敛，再写到 design.md</li></ul>
-<h3 id="writing-plans-详解-四个核心思想">writing-plans 详解（四个核心思想）</h3>
-<ol><li><strong>假设最差情况</strong>：面向"零上下文初级工程师"设计计划，任何步骤都要明确到让最差情况也能执行</li><li><strong>小步骤拆分：2-5 分钟粒度</strong>：每个任务只做一件事，失败后易于定位</li><li><strong>TDD 思想</strong>：每个任务遵循红-绿-重构循环（先写测试→写实现→重构）</li><li><strong>状态文件约定</strong>：<code>tasks.md</code> 是任务状态的单一事实源，每个任务有明确的 Done/In-Progress/TODO 标记</li></ol>
-<h3 id="subagent-driven-development-详解-四个核心思想">subagent-driven-development 详解（四个核心思想）</h3>
-<ol><li><strong>上下文隔离</strong>：每个子任务启动全新会话（<code>--dangerouslySkipPermissions</code>），不继承主 Agent 的上下文污染</li><li><strong>两阶段 Review</strong>：第一阶段——子 Agent 自我 Review（<code>spec self-review</code>），对照 design.md 检查；第二阶段——独立 Review 子 Agent，外部视角验收</li><li><strong>模型分级</strong>：实现用 Sonnet，Review 用 Opus（成本与质量的权衡）</li><li><strong>状态契约与上报机制</strong>：子 Agent 执行完毕必须向主 Agent 报告 <code>{status: done/failed, evidence: ...}</code>，主 Agent 不盲信"完成"声明</li></ol>
-<h3 id="requesting-code-review-详解">requesting-code-review 详解</h3>
-<ul><li>两个核心思想：上下文隔离审查（独立 subagent 做 review，不受实现者思维污染）+ 早 Review 常 Review（不要等全部完成再 review，每个任务完成即 review）</li><li>Anthropic 参考做法：使用 <code>spec self-review</code> 格式的 review prompt，检查实现与 spec 的符合度</li><li>实战发现（@仝超）：Superpower 在处理复杂任务时有可能卡住，可 disable 该 plugin 后让 CC 按照 Superpower 产出的文档手动继续执行</li><li>实战发现（@贺滔）：gstack + superpowers 组合很好用</li></ul>
-<h3 id="TDD-详解">TDD 详解</h3>
-<ul><li><strong>The Two Law</strong>：① 不允许写生产代码，除非是为了让失败的测试通过；② 写的生产代码不能超过让测试通过所必需的量</li><li><strong>Red-Green-Refactor 三法则</strong>：红（写失败测试）→ 绿（写最少代码让测试通过）→ 重构（改善代码但不改变行为）</li><li><strong>核心价值</strong>：测试先行锁定"行为契约"，不锁定实现细节。实现可以重构，但行为必须保持</li></ul>
-<h3 id="设计哲学总结-申涛视角">设计哲学总结（申涛视角）</h3>
-<p>Superpowers 最反直觉的设计：<strong>提高 AI 生成代码能力，靠的不是增强能力，而是约束行为。</strong></p>
-<p>从"该做什么"到"不能做什么"的转变：</p>
-<ol><li>工程纪律硬编码，而非靠 AI 自觉——把"最佳实践"变成"强制约束"</li><li>上下文隔离 + 小步验证——防止长上下文导致的方向漂移</li><li>TDD：先有失败测试，才有生产代码</li><li>假设最差情况：面向"零上下文初级工程师"设计计划</li><li>早审查、常审查、证据至上——拒绝"我觉得完成了"的声明</li><li>工具而非枷锁——可按需选用，不强制所有场景走完整流程</li></ol>
-<p><strong>感悟</strong>：Jesse Vincent 把十几年开源工程习惯提炼成 SKILL.md，意味着工程经验本身才是 AI 时代真正的 Superpower——AI 能写代码，但不会天然拥有工程纪律；工程经验决定了 AI 输出的上限。</p>
+<h2 id="为什么有用">为什么有用</h2>
+<p>SXL 当前体系用 CLI + Skills，这篇明确了边界：本地场景继续 CLI，若未来有云端部署的 Agent（如 Managed Agents），MCP + Skills 是对应方案。Tool Search 的"按意图分组工具"思路，也可以用来优化 SXL 现有 Skills 的结构设计。</p>
+<h2 id="适用-不适用场景">适用 / 不适用场景</h2>
+<ul><li>适用：需要 Agent 连接外部系统的架构决策、云端 Agent 部署场景、优化现有 MCP server 的 token 消耗</li><li>不适用：完全本地环境（CLI + Skills 够用，不需要 MCP）</li></ul>
+<h2 id="原文-AGI-Hunt">原文：AGI Hunt</h2>
+<p>Anthropic 最新发了篇博客《Building agents that reach production systems with MCP》。</p>
+<h3 id="社区对-MCP-的三大批评">社区对 MCP 的三大批评</h3>
+<ol><li><strong>token 贵</strong>：ScaleKit benchmark，GitHub MCP vs gh CLI 跑 75 轮，CLI 每月 3.2 美元 vs MCP 55.2 美元，差 17 倍；CLI 完成同一任务 1,365 tokens vs MCP 44,026 tokens，差 32 倍</li><li><strong>schema 臃肿</strong>：GitHub MCP 43 个工具定义全塞进上下文，一个工具定义就占 4,026 tokens；Perplexity CTO：72% 上下文窗口被 MCP 占掉</li><li><strong>不可组合</strong>：OpenClaw 之父 Peter：MCP 默认污染上下文，大部分 MCP 做得不好</li></ol>
+<h3 id="Anthropic-的三条路框架">Anthropic 的三条路框架</h3>
+<table><thead><tr><th>方式</th><th>适合场景</th></tr></thead><tbody><tr><td>直连 API</td><td>简单一对一场景</td></tr><tr><td>CLI</td><td>本地/沙箱环境，Agent 天生说命令行语言</td></tr><tr><td>MCP</td><td>云端生产环境（无本地文件系统），标准化远程服务器，一个 server 通吃所有客户端</td></tr></tbody></table>
+<h3 id="解法一-Tool-Search-按需加载">解法一：Tool Search（按需加载）</h3>
+<ul><li>传统：43 个工具全塞进上下文，55,000 tokens，没开始干活就堆满说明书</li><li>Tool Search：Agent 描述意图 → 运行时搜索匹配工具 → 只拉取相关几个</li><li>效果：工具定义 token 减少 85%+；工具按意图分组（不按 API 分）</li></ul>
+<p>叠加 Tool Search 后，MCP 的 token 消耗从 CLI 的 32 倍差距缩小到约 7 倍（还是贵，但不是数量级差距了）。</p>
+<h3 id="解法二-程序化工具调用">解法二：程序化工具调用</h3>
+<p>工具返回结果 → 代码执行沙箱里处理（循环/过滤/聚合）→ 只返回最终结果到上下文。</p>
+<p>效果：复杂多步工作流减少约 37% token 消耗。</p>
+<h3 id="Cloudflare-代码编排案例">Cloudflare 代码编排案例</h3>
+<p>2,500 个 API 端点 → 只暴露 <code>search</code> 和 <code>execute</code> 两个工具：</p>
+<ol><li>Agent 用 <code>search</code> 找到需要的 API</li><li>写一段脚本通过 <code>execute</code> 在服务端沙箱里跑</li></ol>
+<p>整个工具定义仅约 1K tokens。这是"把 CLI 哲学搬进 MCP"。</p>
+<h3 id="MCP-Skills-官方认可">MCP + Skills 官方认可</h3>
+<p>Anthropic 官方博客把 Skills 写进了实践方案：</p>
+<ul><li>MCP：管"能力"（连接 Snowflake/Databricks/BigQuery 等）</li><li>Skills：管"编排"（告诉 Agent 怎么用这些连接完成具体任务）</li></ul>
+<p>Claude 数据插件案例：10 个 Skills + 8 个 MCP servers 打包，覆盖多个数据平台。</p>
+<h3 id="结论-最终图景">结论：最终图景</h3>
+<ul><li><strong>本地开发环境</strong> → CLI + Skills，轻量、快速、上下文干净</li><li><strong>云端生产环境</strong> → MCP + Skills，标准化、跨平台、认证完备</li><li><strong>简单场景</strong> → 直连 API，别瞎折腾</li></ul>
 <h2 id="原文沉淀">原文沉淀</h2>
 <h3 id="目录">目录</h3>
-<ul><li><a href="#为什么-ai-编程需要规范驱动-从概率生成到契约交付">🔍 为什么 AI 编程需要“规范驱动”？—— 从概率生成到契约交付</a></li><li><a href="#传统开发的认知优势">传统开发的认知优势</a></li><li><a href="#大模型的固有局限">大模型的固有局限</a></li><li><a href="#spec-driven-development-的本质">Spec-Driven Development 的本质</a></li><li><a href="#快速开始安装与部署策略">🛠️ 快速开始：安装与部署策略</a></li><li><a href="#安装范围选择定义技能的作用半径">安装范围选择：定义技能的“作用半径”</a></li><li><a href="#验证安装">验证安装</a></li><li><a href="#技能全景图从离散工具到自动化流水线">🧰 技能全景图：从离散工具到自动化流水线</a></li><li><a href="#实战演练b-站视频抓取工具的开发旅程">🎬 实战演练：B 站视频抓取工具的开发旅程</a></li><li><a href="#第一阶段需求收敛brainstorming">🔹 第一阶段：需求收敛（brainstorming）</a></li><li><a href="#第二阶段环境隔离与任务拆解">🔹 第二阶段：环境隔离与任务拆解</a></li><li><a href="#21using-git-worktrees构建物理隔离沙箱">2.1 using-git-worktrees：构建物理隔离沙箱</a></li><li><a href="#2-安全校验强制检查-gitignore防止隔离目录被意外提交">2. 安全校验：强制检查 <code>.gitignore</code>，防止隔离目录被意外提交</a></li><li><a href="#3-环境初始化识别项目类型自动执行依赖安装与基线测试">3. 环境初始化：识别项目类型，自动执行依赖安装与基线测试</a></li><li><a href="#4-无缝衔接为后续子代理提供干净独立的执行上下文">4. 无缝衔接：为后续子代理提供干净、独立的执行上下文</a></li><li><a href="#22writing-plans将蓝图转化为施工图">2.2 writing-plans：将蓝图转化为施工图</a></li><li><a href="#第三阶段执行模式选择">🔹 第三阶段：执行模式选择</a></li><li><a href="#第四阶段自动化执行与人工守望">🔹 第四阶段：自动化执行与人工守望</a></li><li><a href="#架构透视三层约束机制">🏗️ 架构透视：三层约束机制</a></li><li><a href="#layer-1认知层cognitive-constraints">Layer 1：认知层（Cognitive Constraints）</a></li><li><a href="#layer-2流程层workflow-orchestration">Layer 2：流程层（Workflow Orchestration）</a></li><li><a href="#layer-3验证层verification-gates">Layer 3：验证层（Verification Gates）</a></li><li><a href="#核心技能深度解析">🔬 核心技能深度解析</a></li><li><a href="#spec-的三层抽象从意图到行为契约">📐 Spec 的三层抽象：从意图到行为契约</a></li><li><a href="#tdd测试是需求的数学表达">🧪 TDD：测试是需求的数学表达</a></li><li><a href="#systematic-debugging科学实验式排错">🔍 systematic-debugging：科学实验式排错</a></li><li><a href="#verification-before-completion证据主义交付">✅ verification-before-completion：证据主义交付</a></li><li><a href="#superpowers--openspec宪法与司法的协同">🔗 Superpowers + OpenSpec：宪法与司法的协同</a></li><li><a href="#集成工作流">集成工作流</a></li><li><a href="#工程边界与适用场景">⚠️ 工程边界与适用场景</a></li><li><a href="#1-软约束的局限性">1. 软约束的局限性</a></li><li><a href="#2-token-经济学考量">2. Token 经济学考量</a></li><li><a href="#3-环境就绪假设">3. 环境就绪假设</a></li><li><a href="#场景适配矩阵">🎯 场景适配矩阵</a></li><li><a href="#结语工具的价值在于放大而非替代">🌟 结语：工具的价值，在于放大而非替代</a></li><li><a href="#1-定义正确问题的能力精准的需求边界与验收标准">1. 定义正确问题的能力（精准的需求边界与验收标准）</a></li><li><a href="#2-设计可演进架构的能力在-yagni-与扩展性之间取得平衡">2. 设计可演进架构的能力（在 YAGNI 与扩展性之间取得平衡）</a></li><li><a href="#3-在不确定性中做决策的能力契约与实现的冲突仲裁">3. 在不确定性中做决策的能力（契约与实现的冲突仲裁）</a></li></ul>
-<blockquote><p>Superpowers 并非追求“更快的代码生成”，而是一套<strong>将软件工程最佳实践转化为可执行约束</strong>的元框架。它通过 Spec-Driven（规范驱动）、TDD（测试驱动）与 Systematic Workflow（系统化流程）的三重机制，将大模型从“概率性补全引擎”重塑为“具备工程纪律的协作者”。</p></blockquote>
-<hr>
-<h3 id="为什么-AI-编程需要-规范驱动-从概率生成到契约交付">🔍 为什么 AI 编程需要“规范驱动”？—— 从概率生成到契约交付</h3>
-<h3 id="传统开发的认知优势">传统开发的认知优势</h3>
-<p>人类工程师之所以能交付可靠系统，依赖于三项隐性能力：</p>
-<ul><li>• <strong>长期上下文记忆</strong>：能追溯历史决策与技术债务</li></ul>
-<ul><li>• <strong>抽象与收敛能力</strong>：能在需求、架构、实现之间精准切换粒度</li></ul>
-<ul><li>• <strong>意图对齐机制</strong>：能主动澄清模糊边界，避免过度设计或遗漏核心场景</li></ul>
-<h3 id="大模型的固有局限">大模型的固有局限</h3>
-<p>无约束的 AI 编码往往呈现以下特征：</p>
-<table><thead><tr><th>现象</th><th>根源</th><th>工程后果</th></tr></thead><tbody><tr><td><strong>上下文衰减</strong></td><td>对话窗口有限，早期决策被稀释</td><td>实现偏离初始需求</td></tr><tr><td><strong>概率性输出</strong></td><td>基于统计模式补全，缺乏确定性约束</td><td>相同提示词产出不同架构</td></tr><tr><td><strong>目标函数错位</strong></td><td>优化“代码完整性”而非“需求正确性”</td><td>逻辑通顺但缺乏可维护性</td></tr></tbody></table>
-<h3 id="Spec-Driven-Development-的本质">Spec-Driven Development 的本质</h3>
-<blockquote><p><strong>SDD 的核心命题</strong>：在敲击任何一行实现代码之前，先让“做什么”与“做到什么程度”成为<strong>可验证、可追溯、可执行的契约</strong>。</p></blockquote>
-<pre><code>传统路径：模糊需求 → 自由发挥 → 事后测试 → 频繁返工
-SDD 路径：需求澄清 → 规范契约 → 测试先行 → 验证交付</code></pre>
-<p>Superpowers 的创新在于：<strong>它将 Spec 从“静态文档”升维为“动态提示词约束”</strong>，使 AI 在生成每一行代码时，都能自动回溯设计契约进行自我校验。</p>
-<hr>
-<h3 id="快速开始-安装与部署策略">🛠️ 快速开始：安装与部署策略</h3>
-<p>Superpowers 支持 Claude Code、Cursor、Codex、OpenCode 等主流 AI 编码平台。以下以 <strong>Claude Code</strong> 为例：</p>
-<pre><code># 1. 安装 Claude Code（如未安装）
-npm install -g @anthropic-ai/claude-code
-
-# 2. 注册 Superpowers 插件市场
-/plugin marketplace add obra/superpowers-marketplace
-
-# 3. 安装插件
-/plugin install superpowers@superpowers-marketplace</code></pre>
-<h3 id="安装范围选择-定义技能的-作用半径">安装范围选择：定义技能的“作用半径”</h3>
-<table><thead><tr><th>选项</th><th>作用范围</th><th>适用场景</th></tr></thead><tbody><tr><td><strong>Install for you (user scope)</strong></td><td>🔹 <strong>全局生效</strong>。任意目录启动 Claude Code 均可调用。</td><td>✅ <strong>强烈推荐</strong>：工程方法论具备跨项目通用性，一次部署，随处复用</td></tr><tr><td><strong>Install for all collaborators (project scope)</strong></td><td>🔹 <strong>项目级共享</strong>。配置写入仓库，团队成员拉取后自动同步。</td><td>团队需统一开发范式与质量门禁</td></tr><tr><td><strong>Install for you, in this repo only (local scope)</strong></td><td>🔹 <strong>目录级隔离</strong>。仅限当前路径生效。</td><td>临时验证或沙箱测试</td></tr></tbody></table>
-<blockquote><p>💡 <strong>为何推荐 UserScope？</strong> Superpowers 的核心价值在于方法论沉淀。TDD、Code Review、Spec-Driven 等实践不依赖特定技术栈，全局安装可避免重复配置，形成个人工程习惯的“数字肌肉记忆”。</p></blockquote>
-<h3 id="验证安装">验证安装</h3>
-<pre><code>/plugin list
-# 或
-/plugin
-
-# 输出中包含 superpowers 即表示加载成功</code></pre>
-<p><img alt="验证安装成功" src="../assets/img/img-001-0cf400eb-27e4d00b2ec9.png"></p>
-<p>验证安装成功</p>
-<hr>
-<h3 id="技能全景图-从离散工具到自动化流水线">🧰 技能全景图：从离散工具到自动化流水线</h3>
-<p>Superpowers 内置的技能并非孤立命令，而是<strong>基于上下文状态自动触发的工程节点</strong>：</p>
-<table><thead><tr><th>技能名称</th><th>触发机制</th><th>核心职责</th></tr></thead><tbody><tr><td><strong>brainstorming</strong></td><td>手动 <code>/superpowers:brainstorming</code></td><td>渐进式需求收敛，输出结构化设计文档</td></tr><tr><td><strong>using-git-worktrees</strong></td><td>自动（设计确认后）</td><td>创建物理隔离的开发沙箱，避免主分支污染</td></tr><tr><td><strong>writing-plans</strong></td><td>自动（设计确认后）</td><td>将宏观设计拆解为 2-5 分钟可验证的微观任务</td></tr><tr><td><strong>executing-plans</strong></td><td>自动/手动</td><td>批量执行标准化任务，适用于逻辑简单、重复性高的场景</td></tr><tr><td><strong>test-driven-development</strong></td><td>自动（编码阶段）</td><td>强制 Red-Green-Refactor 循环，测试未通过禁止写实现</td></tr><tr><td><strong>subagent-driven-development</strong></td><td>自动（执行计划时）</td><td>为每个任务派发独立子代理，完成后自动执行双阶段审查</td></tr><tr><td><strong>code-review</strong></td><td>自动（任务完成后）</td><td>设计符合性审查 + 代码质量评估</td></tr><tr><td><strong>systematic-debugging</strong></td><td>按需触发</td><td>四阶段科学排错：根因定位 → 模式对比 → 假设验证 → 修复确认</td></tr><tr><td><strong>verification-before-completion</strong></td><td>自动（宣称完成时）</td><td>证据驱动交付，拒绝无验证的“经验主义宣称”</td></tr></tbody></table>
-<blockquote><p>🔗 <strong>关键洞察</strong>：技能间通过隐式状态机串联。开发者只需在关键决策点确认，其余环节由框架自动流转，形成“需求→规范→计划→实现→验证”的闭环流水线。</p></blockquote>
-<hr>
-<h3 id="实战演练-B-站视频抓取工具的开发旅程">🎬 实战演练：B 站视频抓取工具的开发旅程</h3>
-<h3 id="第一阶段-需求收敛-brainstorming">🔹 第一阶段：需求收敛（brainstorming）</h3>
-<pre><code>/superpowers:brainstorming 需要开发一个小功能，输入目标网址，抓取网页上的视频，比如 bilibili。请分析潜在挑战和设计细节</code></pre>
-<p>AI 将以<strong>苏格拉底式提问</strong>引导需求澄清，每次仅聚焦一个维度：</p>
-<p><img alt="brainstorming 渐进式提问 1" src="../assets/img/img-002-d930668f-1fb22f4c15db.png"></p>
-<p>brainstorming 渐进式提问 1</p>
-<p><img alt="brainstorming 渐进式提问 2" src="../assets/img/img-003-7f682243-1b78c04c404f.png"></p>
-<p>brainstorming 渐进式提问 2</p>
-<p><strong>核心设计原则</strong>：<code>YAGNI（You Ain&#x27;t Gonna Need It）</code>——在设计阶段执行精准剪枝，避免将“未来可能用到”的功能提前纳入架构。</p>
-<blockquote><p>📜 <code>skills/brainstorming/SKILL.md</code> 中的约束规则：    ``` ## Key Principles - One question at a time          # 控制认知负荷 - Multiple choice preferred       # 降低回答熵值 - YAGNI ruthlessly                # 主动剔除冗余特性 - Explore alternatives            # 强制多方案对比 - Incremental validation          # 小步确认，降低决策风险 - Be flexible                     # 发现矛盾时主动回溯 ```</p></blockquote>
-<p>设计收敛后，框架自动生成 <code>design.md</code>，作为后续所有开发的<strong>唯一事实源（Single Source of Truth）</strong>。</p>
-<hr>
-<h3 id="第二阶段-环境隔离与任务拆解">🔹 第二阶段：环境隔离与任务拆解</h3>
-<p>设计确认后，自动触发两项关键技能：</p>
-<h4 id="2-1-using-git-worktrees-构建物理隔离沙箱">2.1 using-git-worktrees：构建物理隔离沙箱</h4>
-<p>若项目未初始化 Git，框架会智能跳过：</p>
-<p><img alt="Worktree 自动跳过提示" src="../assets/img/img-004-e51f61c2-c77f68b9ce63.png"></p>
-<p>Worktree 自动跳过提示</p>
-<p>若已存在 Git 仓库，技能将：</p>
-<h3 id="1-智能选址-优先-worktrees-读取-CLAUDE-md-配置-询问用户偏好">1. 智能选址：优先 <code>.worktrees/</code> → 读取 <code>CLAUDE.md</code> 配置 → 询问用户偏好</h3>
-<h3 id="2-安全校验-强制检查-gitignore-防止隔离目录被意外提交">2. 安全校验：强制检查 <code>.gitignore</code>，防止隔离目录被意外提交</h3>
-<h3 id="3-环境初始化-识别项目类型-自动执行依赖安装与基线测试">3. 环境初始化：识别项目类型，自动执行依赖安装与基线测试</h3>
-<h3 id="4-无缝衔接-为后续子代理提供干净-独立的执行上下文">4. 无缝衔接：为后续子代理提供干净、独立的执行上下文</h3>
-<h4 id="2-2-writing-plans-将蓝图转化为施工图">2.2 writing-plans：将蓝图转化为施工图</h4>
-<p><img alt="确认生成执行计划" src="../assets/img/img-005-712d9db3-a695104c4475.png"></p>
-<p>确认生成执行计划</p>
-<p><img alt="计划生成中" src="../assets/img/img-006-1e4b8ad3-3dcebaa24141.png"></p>
-<p>计划生成中</p>
-<p><img alt="计划生成完成" src="../assets/img/img-007-db6af802-1a41433895a3.png"></p>
-<p>计划生成完成</p>
-<p>输出的 <code>tasks.md</code> 具备高度可执行性：</p>
-<pre><code>## Task 2: B 站解析模块
-- [ ] 2.1 实现 URL 正则校验
-- [ ] 2.2 编写视频 ID 提取函数
-- [ ] 2.3 添加单元测试覆盖边界情况（含错误码 100007）</code></pre>
-<hr>
-<h3 id="第三阶段-执行模式选择">🔹 第三阶段：执行模式选择</h3>
-<p>框架提供两种执行策略，开发者可根据任务复杂度权衡：</p>
-<table><thead><tr><th>维度</th><th><strong>Subagent-Driven（微服务化编排）</strong></th><th><strong>Inline Execution（单体式线性执行）</strong></th></tr></thead><tbody><tr><td><strong>工作模式</strong></td><td>主代理派发子任务，每步完成后自动触发双阶段审查</td><td>当前会话内按顺序执行，内置批量检查点</td></tr><tr><td><strong>TDD 契合度</strong></td><td>⭐⭐⭐⭐⭐ 测试写完即可介入审查，确保断言覆盖设计规范</td><td>⭐⭐⭐⭐ 需手动确认测试完整性</td></tr><tr><td><strong>上下文掌控</strong></td><td>高。可清晰追踪子代理对签名算法、URL 编码的处理逻辑</td><td>中。上下文连贯但细节可能被批量折叠</td></tr><tr><td><strong>适用场景</strong></td><td>逻辑复杂、需精细控制、多模块协同的任务</td><td>简单脚本、快速验证、低耦合功能</td></tr></tbody></table>
-<p><strong>本例选择 Subagent-Driven</strong>：</p>
-<p><img alt="选择子代理驱动模式" src="../assets/img/img-008-f61d39aa-fc1ecf945c85.png"></p>
-<p>选择子代理驱动模式</p>
-<p><img alt="子代理启动与任务分发" src="../assets/img/img-009-6bcc325a-ceea5f78138b.png"></p>
-<p>子代理启动与任务分发</p>
-<hr>
-<h3 id="第四阶段-自动化执行与人工守望">🔹 第四阶段：自动化执行与人工守望</h3>
-<p>选定模式后，流程进入<strong>自动驾驶状态</strong>。开发者仅需扮演“导航员”角色：</p>
-<ul><li>• 确认关键设计节点</li></ul>
-<ul><li>• 审阅测试覆盖率报告</li></ul>
-<ul><li>• 处理审查反馈（如有）</li></ul>
-<p><strong>最终收尾阶段</strong>，<code>verification-before-completion</code>自动激活：</p>
-<p><img alt="收尾验证阶段 1" src="../assets/img/img-010-81e1e45b-33acfd0569d6.png"></p>
-<p>收尾验证阶段 1</p>
-<p><img alt="收尾验证阶段 2" src="../assets/img/img-011-5857de32-d9c015b24eb6.png"></p>
-<p>收尾验证阶段 2</p>
-<blockquote><p>📦 <strong>完整交付物</strong>：<code>design.md</code>（契约） + <code>tasks.md</code>（路径） + 测试用例（验证） + 实现代码（产物） + 审查记录（审计轨迹）</p></blockquote>
-<hr>
-<h3 id="架构透视-三层约束机制">🏗️ 架构透视：三层约束机制</h3>
-<h3 id="Layer-1-认知层-Cognitive-Constraints">Layer 1：认知层（Cognitive Constraints）</h3>
-<p>每个 <code>SKILL.md</code> 本质上是一组<strong>元认知规则</strong>，用于校正 AI 的思考路径。例如 <code>brainstorming</code> 中的 <code>One question at a time</code> 并非建议，而是通过 System Prompt 植入的硬性约束，防止模型因信息过载而偏离主线。</p>
-<h3 id="Layer-2-流程层-Workflow-Orchestration">Layer 2：流程层（Workflow Orchestration）</h3>
-<p>Superpowers 的工作流并非线性管道，而是<strong>基于状态机的自动路由系统</strong>：</p>
-<pre><code>stateDiagram-v2
-    [*] --&gt; brainstorming
-    brainstorming --&gt; design_approved: 用户确认 design.md
-    design_approved --&gt; using-git-worktrees
-    using-git-worktrees --&gt; writing-plans
-    writing-plans --&gt; execution_mode: 策略选择
-
-    state execution_mode &lt;&lt;choice&gt;&gt;
-    execution_mode --&gt; subagent-driven
-    execution_mode --&gt; inline-execution
-
-    subagent-driven --&gt; test-driven-development
-    inline-execution --&gt; test-driven-development
-
-    test-driven-development --&gt; code-review
-    code-review --&gt; verification-before-completion
-    verification-before-completion --&gt; [*]</code></pre>
-<h3 id="Layer-3-验证层-Verification-Gates">Layer 3：验证层（Verification Gates）</h3>
-<p>质量保障不依赖“自觉”，而依赖<strong>可自动执行的门禁</strong>：</p>
-<table><thead><tr><th>门禁点</th><th>验证方式</th><th>失败策略</th></tr></thead><tbody><tr><td>设计确认</td><td>用户审阅 <code>design.md</code></td><td>退回 brainstorming 迭代</td></tr><tr><td>代码实现</td><td>RED-GREEN-REFACTOR 循环</td><td>删除未测试代码，强制从测试重启</td></tr><tr><td>任务完成</td><td>双阶段审查（符合性+质量）</td><td>阻塞下游，要求修正</td></tr><tr><td>宣称完成</td><td>执行验证命令并解析输出</td><td>拒绝无证据的“完成”声明</td></tr></tbody></table>
-<hr>
-<h3 id="核心技能深度解析">🔬 核心技能深度解析</h3>
-<h3 id="Spec-的三层抽象-从意图到行为契约">📐 Spec 的三层抽象：从意图到行为契约</h3>
-<p>Superpowers 引导用户将需求逐级具象化：</p>
-<pre><code>Level 1: Intent Spec → &quot;用户能上传视频并生成字幕&quot;
-Level 2: Design Spec → 接口定义、错误码、数据流图、边界条件
-Level 3: Behavioral Spec → Given/When/Then 场景化用例</code></pre>
-<blockquote><p>🔑 <strong>关键原则</strong>：Spec 不是“写给人看的文档”，而是<strong>写给下一个 Agent 的执行指令</strong>。每一行必须足够精确，使无上下文的新代理也能正确实现。</p></blockquote>
-<h3 id="TDD-测试是需求的数学表达">🧪 TDD：测试是需求的数学表达</h3>
-<p>铁律：<strong>没有先写测试，就不能写实现。</strong></p>
-<pre><code># 🔴 RED: 先立靶心
-def test_fetch_video_invalid_url():
-    with pytest.raises(InvalidURLError) as e:
-        fetch_video(&quot;not-a-url&quot;)
-    assert e.value.code == 100007
-
-# 🟢 GREEN: 最小实现
-def fetch_video(url):
-    if not is_valid_url(url):
-        raise InvalidURLError(code=100007)
-
-# 🔧 REFACTOR: 结构优化
-def fetch_video(url):
-    validator = URLValidator()
-    validator.raise_if_invalid(url)</code></pre>
-<blockquote><p>⚠️ <strong>反模式警示</strong>：若测试写完即通过，需警惕：1) 实现已存在（违反 TDD） 2) 测试验证了错误行为。Superpowers 强制要求：先补测试，再删实现，重新走通循环。</p></blockquote>
-<h3 id="systematic-debugging-科学实验式排错">🔍 systematic-debugging：科学实验式排错</h3>
-<table><thead><tr><th>阶段</th><th>核心动作</th><th>交付物</th></tr></thead><tbody><tr><td><strong>1. 根因调查</strong></td><td>稳定复现 + <code>git diff</code> + 边界日志</td><td>问题定位报告</td></tr><tr><td><strong>2. 模式分析</strong></td><td>对照正常实现 + 查阅设计契约</td><td>差异分析矩阵</td></tr><tr><td><strong>3. 假设验证</strong></td><td>提出假设 → 单变量修改 → 观察结果</td><td>验证记录</td></tr><tr><td><strong>4. 修复确认</strong></td><td>编写复现测试 → 修复 → 回归验证</td><td>修复证明</td></tr></tbody></table>
-<blockquote><p>🚨 <strong>三次法则</strong>：同一 Bug 修复三次未解决，应暂停反思：是否误判根因？是否在与原有设计架构冲突？</p></blockquote>
-<h3 id="verification-before-completion-证据主义交付">✅ verification-before-completion：证据主义交付</h3>
-<blockquote><p><strong>宣称完成却不加验证，是工程实践中的伪交付。</strong></p></blockquote>
-<table><thead><tr><th>宣称</th><th>必须提供的证据</th></tr></thead><tbody><tr><td>“测试通过”</td><td>终端输出，0 Failure</td></tr><tr><td>“构建成功”</td><td><code>exit code 0</code>   截图或日志</td></tr><tr><td>“Bug 已修复”</td><td>原始症状复现失败记录</td></tr><tr><td>“子代理完成任务”</td><td><code>git diff</code>   实际变更对比</td></tr></tbody></table>
-<p>🚩 <strong>危险信号</strong>：出现“应该”“大概”“似乎”等模糊表述，或交付前产生“这次不验证了吧”的念头时，<strong>立即暂停</strong>。</p>
-<hr>
-<h3 id="Superpowers-OpenSpec-宪法与司法的协同">🔗 Superpowers + OpenSpec：宪法与司法的协同</h3>
-<table><thead><tr><th>工具</th><th>定位</th><th>优势</th><th>局限</th></tr></thead><tbody><tr><td><strong>OpenSpec</strong></td><td>规范层（Constitution）</td><td>结构化契约、变更可追溯、活文档</td><td>无执行强制力</td></tr><tr><td><strong>Superpowers</strong></td><td>执行层（Judiciary）</td><td>自动触发、TDD 门禁、质量审查</td><td>对话上下文易流失</td></tr></tbody></table>
-<h3 id="集成工作流">集成工作流</h3>
-<pre><code>brainstorming
-OpenSpec: propose
-生成 tasks.md
-OpenSpec: apply
-Superpowers: writing-plans
-Subagent + TDD 执行
-OpenSpec: archive</code></pre>
-<blockquote><p>📌 <strong>渐进式原则</strong>：简单任务直接对齐 <code>tasks.md</code>；复杂场景才展开 <code>design.md</code> 与行为用例。修 Bug、调配置等轻量操作可直接跳过提案阶段。</p></blockquote>
-<hr>
-<h3 id="工程边界与适用场景">⚠️ 工程边界与适用场景</h3>
-<h3 id="1-软约束的局限性">1. 软约束的局限性</h3>
-<p>Superpowers 依赖提示词工程构建行为边界，<strong>无沙箱或 Git Hook 强制拦截</strong>。AI 仍可能“理性绕行”。 <strong>缓解策略</strong>：关键节点人工确认 + <code>verification-before-completion</code> 证据审查 + 定期 <code>git log</code> 审计。</p>
-<h3 id="2-Token-经济学考量">2. Token 经济学考量</h3>
-<p><code>subagent-driven</code> 模式下，单任务 = 1 实现者 + 2 审查者 = 3 个全新会话。50 个任务将产生显著上下文膨胀。 <strong>优化路径</strong>：简单任务走 <code>executing-plans</code> 批量执行；定期归档已完成任务；提取高频逻辑为共享技能。</p>
-<h3 id="3-环境就绪假设">3. 环境就绪假设</h3>
-<p>框架默认：Git 已配置、测试框架已就绪、构建命令已定义。若项目缺乏这些基础设施，需额外适配。</p>
-<h3 id="场景适配矩阵">🎯 场景适配矩阵</h3>
-<table><thead><tr><th>场景</th><th>推荐度</th><th>依据</th></tr></thead><tbody><tr><td>长期维护的核心项目</td><td>✅ 强烈推荐</td><td>强制流程沉淀质量，技术债务可控</td></tr><tr><td>初涉 AI 编程的团队</td><td>✅ 推荐</td><td>建立工程范式，避免“氛围式编码”</td></tr><tr><td>快速原型/一次性脚本</td><td>⚠️ 谨慎使用</td><td>流程开销可能抵消效率收益</td></tr><tr><td>已有成熟 CI/CD 规范的团队</td><td>❌ 评估后使用</td><td>可能与现有门禁冲突，暂不支持深度自定义</td></tr></tbody></table>
-<hr>
-<h3 id="结语-工具的价值-在于放大而非替代">🌟 结语：工具的价值，在于放大而非替代</h3>
-<pre><code>传统模式：
-工程师 = 需求对齐 + 架构设计 + 编码实现 + 测试编写 + 缺陷排查 + 沟通同步
-         ↓
-      认知资源被低维重复劳动稀释
-
-Superpowers 模式：
-工程师 = 意图定义 + 契约评审 + 关键决策 + 质量仲裁
-         ↓
-      聚焦高维判断，执行层交由自动化流水线</code></pre>
-<p>Superpowers 并非“一键生成完美代码”的魔法，而是一套<strong>可复用的工程思维框架</strong>。它将隐性经验显性化，将个人手感系统化，将事后修补前置为事前验证。</p>
-<p>当 AI 能够自动完成编码、测试、审查时，工程师的核心竞争力将转向：</p>
-<h3 id="1-定义正确问题的能力-精准的需求边界与验收标准">1. 定义正确问题的能力（精准的需求边界与验收标准）</h3>
-<h3 id="2-设计可演进架构的能力-在-YAGNI-与扩展性之间取得平衡">2. 设计可演进架构的能力（在 YAGNI 与扩展性之间取得平衡）</h3>
-<h3 id="3-在不确定性中做决策的能力-契约与实现的冲突仲裁">3. 在不确定性中做决策的能力（契约与实现的冲突仲裁）</h3>
-<p>工具会迭代，范式会演进，但工程纪律与系统思维永恒。</p>
-<hr>
-<p>🔗 <strong>资源索引</strong></p>
-<ul><li>• <strong>项目仓库</strong>：https://github.com/obra/superpowers</li></ul>
-<ul><li>• <strong>技能文档</strong>：<code>skills/*/SKILL.md</code>（每个文件都是可研读的工程模式）</li></ul>
-<ul><li>• <strong>生态对比</strong>：OpenSpec | Spec-Kit</li></ul>
-<ul><li>• <strong>实践建议</strong>：从 2-3 天工作量的功能起步 → 关键节点保留人工确认 → 用缺陷率与返工周期衡量 ROI → 逐步沉淀团队规范</li></ul>
-<blockquote><p>📜 <strong>最后箴言</strong>：最好的工具不会替你思考，而是让你把思考用在更值得的地方。Superpowers 交付的不是代码，而是<strong>可验证的工程确定性</strong>。</p></blockquote>
+<ul><li><a href="#之前聊过什么">之前聊过什么</a></li><li><a href="#anthropic-的回应">Anthropic 的回应</a></li><li><a href="#三条路对比api-vs-cli-vs-mcp">三条路对比：API vs CLI vs MCP</a></li><li><a href="#token-解法">Token 解法</a></li><li><a href="#cloudflare-的实践">Cloudflare 的实践</a></li><li><a href="#skills-转正">Skills 转正</a></li><li><a href="#mcp-的地盘">MCP 的地盘</a></li></ul>
+<p>Anthropic 最新发了篇博客，标题叫《Building agents that reach production systems with MCP》，翻译过来是：《构建能触达生产系统的 Agent：MCP 实践指南》。</p>
+<p><img alt="图片" src="../assets/img/img-001-433883d8-141ac533c191.png"></p>
+<p>MCP 最新博客</p>
+<p>在我去年 11 月的文章《<a href="https://mp.weixin.qq.com/s?__biz=MzA4NzgzMjA4MQ==&amp;mid=2453479107&amp;idx=1&amp;sn=0c2fe03df0734b044084d42da43334ac&amp;scene=21#wechat_redirect">MCP 或将成弃子</a>》和上个月的文章《<a href="https://mp.weixin.qq.com/s?__biz=MzA4NzgzMjA4MQ==&amp;mid=2453481182&amp;idx=1&amp;sn=61787514e168c0bb09c21ef441ff0f5e&amp;scene=21#wechat_redirect">一切软件，都将为 Agent 重写</a>》、《<a href="https://mp.weixin.qq.com/s?__biz=MzA4NzgzMjA4MQ==&amp;mid=2453481939&amp;idx=1&amp;sn=18cbd02ea060830a89c20486fe8fc02f&amp;scene=21#wechat_redirect">钉钉飞书集体抛弃 MCP，CLI 才是 Agent 的终局</a>》中，我一直在阐述一个观点：</p>
+<p>CLI + Skills 才是 Agent 连接外部系统的正道，因为 MCP 又贵又慢还占上下文。</p>
+<p>但今天，MCP 的亲爹 Anthropic 自己出来再一次为 MCP 说话了。</p>
+<p>它倒不是说「你们错了」，它说的是：「你们提的那些问题，我们有答案了。」</p>
+<p>01</p>
+<h3 id="之前聊过什么">之前聊过什么</h3>
+<p>这里来补一下前情提要。</p>
+<p>过去一个多月，社区对 MCP 的批评集中在三件事上。</p>
+<p>ScaleKit 做了一组严格的 benchmark，拿 GitHub 官方 MCP 服务器和 <code>gh</code> CLI 做对照，跑了 75 轮实验。</p>
+<p>结果是 CLI 在 token 消耗上便宜 <strong>10 到 32 倍</strong>，按月算，每月 1 万次操作，CLI 大约 3.2 美元，MCP 大约 55.2 美元。<strong>17 倍的成本差距。</strong></p>
+<p><img alt="成本与可靠性对比" src="../assets/img/img-002-f5d629e2-abd2f8775609.webp"></p>
+<p>成本与可靠性对比</p>
+<p>问题出在 schema 膨胀上。</p>
+<p>GitHub 的 MCP 服务器带了 43 个工具定义，每次对话都得把这 43 个工具的完整描述全塞进上下文。你只是想查个仓库语言，但模型得先读完所有 43 个工具的说明书。光是一个工具的定义就占了 4,026 tokens。</p>
+<p>Perplexity 的 CTO Denis Yarats 也表态称：Perplexity 内部正在远离 MCP，原因是 <strong>72% 的上下文窗口被 MCP 占掉了</strong>。</p>
+<p>龙虾之父 Peter 也在播客里对痛批 MCP：</p>
+<blockquote><p>“ MCP 默认污染你的上下文，加上大部分 MCP 做得不好，总体来说不是一个很有用的范式。</p></blockquote>
+<p>而钉钉和飞书也是不约而同绕开 MCP，直接把产品「压扁」成了 CLI。在旧金山街头的随机调查里，CLI 得了 17 票，MCP 仅有 3 票。</p>
+<p>当时我们的结论是：<strong>MCP 倒是不会死，但它会退到它该待的地方。</strong></p>
+<p><strong>而 CLI，将成为 Agent 操作一切软件的默认界面。接下来，整个 SaaS 的 API surface，将全都暴露成 CLI。</strong></p>
+<p>02</p>
+<h3 id="Anthropic-的回应">Anthropic 的回应</h3>
+<p>而今天的这篇博客，则是 Anthropic 在重新定义什么是 MCP「该待的地方」。</p>
+<p>博客开篇先摆了一个框架：Agent 连接外部系统有三条路，直连 API、CLI、MCP，<strong>各有各的适用场景</strong>。</p>
+<p><img alt="三条路" src="../assets/img/img-003-ee49a15f-d46e4b04d7b9.png"></p>
+<p>三条路</p>
+<p>直连 API 适合简单的、一对一的场景。但如果你有 10 个 Agent 要接 10 个服务，那就是 100 个不同的集成方案，每个都要单独搞认证和工具描述。这就是经典的 M×N 问题。</p>
+<p><img alt="M×N 噩梦 vs 标准化" src="../assets/img/img-004-63dc7ee7-fe35ad6798d3.png"></p>
+<p>M×N 噩梦 vs 标准化</p>
+<p>CLI 在本地和沙箱环境里确实更合适。Agent 天生就说命令行语言，<code>--help</code> 就能自描述，<code>jq</code> 就能过滤，pipe 就能组合。这一点 Anthropic 是承认的。</p>
+<p>但博客里话锋一转：**生产级 Agent 越来越多的，正在跑在云上。</p>
+<p><img alt="三条路对比：API vs CLI vs MCP" src="../assets/img/img-005-95addd87-9042f6714d58.png"></p>
+<p>**</p>
+<h3 id="三条路对比-API-vs-CLI-vs-MCP">三条路对比：API vs CLI vs MCP</h3>
+<p>Claude Cowork、Claude Managed Agents、移动端、Web 端……这些环境里没有本地文件系统，跑不了 CLI。而 MCP 的定位，则恰恰就是为这个场景服务的：<strong>一个远程服务器，通吃所有客户端</strong>。</p>
+<p>Claude、ChatGPT、Cursor、VS Code，一个 MCP 服务器全覆盖。</p>
+<p>博客里给出的一个数据是：<strong>MCP SDK 的月下载量从年初的 1 亿涨到了 3 亿。</strong></p>
+<p>社区怎么争论是一回事，但事实上则是：用脚投票的人越来越多了。</p>
+<p>03</p>
+<h3 id="Token-解法">Token 解法</h3>
+<p>这应该算是整篇博客中，最为关键的部分了。</p>
+<p>之前社区骂得最狠的就是 token 膨胀。Anthropic 这次则直接给了两个解法。</p>
+<p>第一个叫 <strong>Tool Search</strong>。</p>
+<p><img alt="Context Usage 传统方式 vs Tool Search 对比" src="../assets/img/img-006-7d00ae92-f9ea0aae716b.jpg"></p>
+<p>Context Usage 传统方式 vs Tool Search 对比</p>
+<p>之前的做法是把所有工具定义一股脑塞进上下文。43 个工具，55,000 tokens，还没开始干活，工作台就被说明书堆满了。</p>
+<p><img alt="图片" src="../assets/img/img-007-a46daed4-80dafc829e97.webp"></p>
+<p>现在的做法是按需加载。Agent 先描述它想做什么，系统在运行时搜索相关工具，只把匹配的几个拉进来。</p>
+<p><img alt="Tool Search 效果" src="../assets/img/img-008-c41c2e1b-35439921e0da.png"></p>
+<p>Tool Search 效果</p>
+<p>博客给出的测试数据是：<strong>工具定义的 token 消耗减少了 85% 以上，工具选择的准确率没有下降。</strong></p>
+<p><strong>工具要按意图分组，别按 API 分。</strong></p>
+<p><img alt="按意图分组：细粒度工具 vs 意图级工具" src="../assets/img/img-009-2d9cc35f-73a744d97ad1.png"></p>
+<p>按意图分组：细粒度工具 vs 意图级工具</p>
+<p>而之前 ScaleKit 测出来 GitHub MCP 查仓库语言要 44,026 tokens，CLI 只要 1,365 tokens，差 32 倍。如果 Tool Search 能砍掉 85% 的工具定义 token，那 MCP 的总消耗大概能降到 10,000 tokens 左右。</p>
+<p><img alt="ScaleKit Token 消耗对比" src="../assets/img/img-010-95e8e998-edb055d6b244.png"></p>
+<p>ScaleKit Token 消耗对比</p>
+<p>跟 CLI 的差距，从 32 倍缩到了大约 7 倍。</p>
+<p>还是比 CLI 贵，但至少不是一个数量级的差距了。</p>
+<p>第二个解法叫<strong>程序化工具调用</strong>。</p>
+<p>这个思路其实跟《<a href="https://mp.weixin.qq.com/s?__biz=MzA4NzgzMjA4MQ==&amp;mid=2453479107&amp;idx=1&amp;sn=0c2fe03df0734b044084d42da43334ac&amp;scene=21#wechat_redirect">MCP 或将成弃子</a>》中的核心洞察算得上是一脉相承：<strong>别让模型当搬运工，让它写代码。</strong></p>
+<p>工具返回的结果不再直接丢回给模型，而是在代码执行沙箱里处理。Agent 可以在沙箱里循环、过滤、聚合，只把最终结果返回到上下文。</p>
+<p><img alt="图片" src="../assets/img/img-011-a2bc65ea-5d32da0e4dde.png"></p>
+<p>博客里说这个方案，在复杂多步工作流上<strong>减少了约 37% 的 token 消耗</strong>。</p>
+<p>两个方案叠加起来，MCP 的 token 问题虽然没有彻底解决，但确实离 CLI 差的并不太多了。</p>
+<p>04</p>
+<h3 id="Cloudflare-的实践">Cloudflare 的实践</h3>
+<p>博客里有个关于 Cloudflare 的案例，我们可以来看一下。</p>
+<p>Cloudflare 的 MCP 服务器，覆盖了大约 <strong>2,500 个 API 端点</strong>。如果按传统方式，把这 2,500 个端点的工具定义全塞进上下文，那画面简直就是美到不忍直视了……</p>
+<p>而 Cloudflare 的做法是只暴露 <strong>2 个工具</strong>：search 和 execute。</p>
+<p><img alt="Cloudflare 代码编排" src="../assets/img/img-012-b7cd20ae-6b837f61de4d.png"></p>
+<p>Cloudflare 代码编排</p>
+<p>Agent 先用 search 找到需要的 API，然后写一段简短的脚本，通过 execute 在服务端沙箱里跑。整个工具定义，只占<strong>大约 1K tokens</strong>。</p>
+<p>这个模式叫「代码编排」。</p>
+<p>相较而言，CLI + Skill 的思路是：Skill 告诉 Agent「怎么干」，CLI 提供「用什么干」，Agent 写代码调用，中间数据不经过上下文。而 Cloudflare 这个 MCP 方案，也可以说是把 CLI 的哲学搬进了 MCP 协议里。</p>
+<p>区别在于：它跑在云端，走的是 MCP 协议，而不是本地的命令行。</p>
+<p>所以，Anthropic 真正想说是：<strong>MCP 和 CLI 不是对立的，好的 MCP 服务器应该像 CLI 一样设计。</strong></p>
+<p>05</p>
+<h3 id="Skills-转正">Skills 转正</h3>
+<p>博客专门有一节讲 MCP 和 Skills 的关系。</p>
+<p>Anthropic 的说法是：MCP 管「能力」，Skills 管「编排」。</p>
+<p>MCP 让 Agent 能连上 Snowflake、Databricks、BigQuery 这些服务，Skills 告诉 Agent 该怎么用这些连接来完成具体任务。</p>
+<p><img alt="MCP + Skills" src="../assets/img/img-013-62b9e776-b8aaa1c78686.png"></p>
+<p>MCP + Skills</p>
+<p>Claude 的数据插件就是一个例子：<strong>10 个 Skills + 8 个 MCP servers</strong> 打包在一起，覆盖了 Snowflake、Databricks、BigQuery、Hex 等平台。</p>
+<p>而值得留意的是，Canva、Notion、Sentry 这些第三方服务商，已经开始在发布 MCP 服务器的同时附带 Skills 了。</p>
+<p>MCP 社区甚至在开发一个扩展，让 Skills 可以直接从 MCP 服务器分发，API 升级的时候 Skills 自动跟着更新版本。</p>
+<p>回看 Peter 在播客里说的：</p>
+<blockquote><p>“ MCP 推动了很多公司去做 API，这是好的。我现在可以看一个 MCP 然后把它做成 CLI。</p></blockquote>
+<p>而现在 Anthropic 的态度是：你说得对，Skills 确实不可或缺。但 MCP 不需要被替换掉，它可以和 Skills 一起发布、共存。</p>
+<p>06</p>
+<h3 id="MCP-的地盘">MCP 的地盘</h3>
+<p>把这篇博客和我们之前的文章一起来看，其实也并不矛盾。</p>
+<p>我们说 MCP 有三个问题：token 贵、schema 臃肿、不可组合。</p>
+<p>Anthropic 这篇博客给了三个对应的回答：Tool Search 解决 schema 臃肿（减 85%），程序化调用解决不可组合（让 Agent 写代码处理），代码编排模式解决 token 贵（Cloudflare 的 2 个工具覆盖 2500 端点）。</p>
+<p>我们说 CLI + Skills 才是正道。Anthropic 也并不反驳，而是把 Skills 写进了官方的实践博客中，还给出了 MCP + Skills 的打包方案。</p>
+<p>但 Anthropic 加了一条不一样的点：<strong>当 Agent 跑在云上，CLI 够不到的地方，MCP 是唯一的选择。</strong></p>
+<p>你的 Agent 跑在 Claude Cowork 里，跑在 Managed Agents 里，跑在手机上，它没有终端，没有文件系统，没法 <code>pip install</code> 一个 CLI。这时候一个标准化的远程 MCP 服务器，加上 OAuth 认证和 Vaults 凭证管理，确实是更为通用和合理的方案。</p>
+<p><img alt="MCP 的地盘" src="../assets/img/img-014-d2796ad0-d91a2bb362ed.png"></p>
+<p>发展图景</p>
+<p>所以目前来看，接下来的图景大概是这样：</p>
+<p><strong>本地开发环境</strong> → CLI + Skills，轻量、快速、上下文干净。</p>
+<p><strong>云端生产环境</strong> → MCP + Skills，标准化、跨平台、认证完备。</p>
+<p><strong>简单场景</strong> → 直连 API，别瞎折腾。</p>
+<p>所以，MCP 并没有死。</p>
+<p>它当然并非万能方案，但它正在成为云端 Agent 的标准化接入层。</p>
+<p>◇ ◆ ◇</p>
+<p>相关链接：</p>
+<p>•  Anthropic 博客原文：https://claude.com/blog/building-agents-that-reach-production-systems-with-mcp</p>
 <p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
