@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vibe Coding指南-AI编辑器全栈开发-附实战和视频 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="菜单">☰</button>
+    <a class="brand" href="../index.html">🐉 DragonHuge · 知识花园</a>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+    <nav class="topnav">
+      <a href="../index.html" class="">首页</a>
+      <a href="../daily/index.html" class="">日常</a>
+      <a href="../tech/index.html" class="">技术文章</a>
+      <a href="../ext/index.html" class="on">外部沉淀</a>
+      <a href="../requirements/index.html" class="">需求</a>
+      <a href="../docs/index.html" class="">飞书文档</a>
+      <a href="../aihot.html" class="">AI 热点</a>
+    </nav>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar"><div class="side-quick"><a href="../index.html" class="">🏠 首页</a><a href="../search.html">🔍 搜索</a><a href="../aihot.html">📰 AI 热点</a></div>
+<nav class="side-nav">
+<a class="art side-docs" href="../docs/index.html">📄 飞书文档 <span class="cnt">27</span><span class="mod-go">→</span></a>
+<details class="mod"><summary>日常知识库沉淀 <span class="cnt">22</span><a class="mod-go" href="../daily/index.html" aria-label="进入日常列表页">→</a></summary>
+<div class="grp">灵感火花</div>
+<a class="art" href="../daily/d001.html">2026-10-31</a>
+<a class="art" href="../daily/d002.html">2026-10-24</a>
+<a class="art" href="../daily/d003.html">2026-10-17</a>
+<a class="art" href="../daily/d004.html">2026-09-27</a>
+<a class="art" href="../daily/d005.html">2026-09-19</a>
+<a class="art" href="../daily/d006.html">2026-09-12</a>
+<div class="grp">2026 · Q2 · 第7周(05.11-05.17)</div>
+<a class="art" href="../daily/d007.html">2026-05-15</a>
+<a class="art" href="../daily/d008.html">2026-05-13</a>
+<a class="art" href="../daily/d009.html">2026-05-12</a>
+<a class="art" href="../daily/d010.html">2026-05-11</a>
+<div class="grp">2026 · Q2 · 第6周(05.04-05.10)</div>
+<a class="art" href="../daily/d011.html">2026-05-09</a>
+<a class="art" href="../daily/d012.html">2026-05-08</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d013.html">2026-04-28</a>
+<a class="art" href="../daily/d014.html">2026-04-27</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d015.html">2026-04-26</a>
+<a class="art" href="../daily/d016.html">2026-04-25 周六无事</a>
+<div class="grp">2026 · Q2 · 第2周(04.06-04.12)</div>
+<a class="art" href="../daily/d017.html">2026-04-12 随记</a>
+<a class="art" href="../daily/d018.html">2026-04-07 随记</a>
+<a class="art" href="../daily/d019.html">2026-04-06</a>
+<div class="grp">2026 · Q2 · 第1周(03.30-04.05)</div>
+<a class="art" href="../daily/d020.html">2026-04-04</a>
+<div class="grp">2026 · Q2 · 第5周(04.27-05.03)</div>
+<a class="art" href="../daily/d021.html">第5周(04.27-05.03) 周报</a>
+<div class="grp">2026 · Q2 · 第4周(04.20-04.26)</div>
+<a class="art" href="../daily/d022.html">第4周(04.20-04.26) 周报</a>
+</details>
+<details class="mod"><summary>技术文章 <span class="cnt">22</span><a class="mod-go" href="../tech/index.html" aria-label="进入技术文章列表页">→</a></summary>
+<details class="cat" open><summary>AI底层原理</summary>
+<a class="art" href="../tech/t001.html">AI 底层原理 — 资料来源</a>
+<a class="art" href="../tech/t002.html">AI 底层原理 — 感悟日志</a>
+<a class="art" href="../tech/t003.html">LLM Agent 工程原理 — 学习笔记</a>
+</details>
+<details class="cat" open><summary>Agent应用开发</summary>
+<a class="art" href="../tech/t004.html">DeepSeek dsh-superagent 技术方案分析（学习版）</a>
+<a class="art" href="../tech/t005.html">Agent 应用开发 — 知识点全景图</a>
+<a class="art" href="../tech/t006.html">Agent 应用开发 — 五阶段学习计划</a>
+</details>
+<details class="cat" open><summary>安全风控</summary>
+<a class="art" href="../tech/t007.html">H5 活动风控 · 技术学习问答笔记（龙老板提问 → 小墨答复）</a>
+<a class="art" href="../tech/t008.html">H5 活动风控完整技术调研（小白友好汇总版）：需求还原 · 核心概念 · 行业方案 · 落地路线</a>
+<a class="art" href="../tech/t009.html">H5 活动风控第二轮调研：业界设备指纹落地、WebAuthn 边界、黑产攻击面与落地方案</a>
+<a class="art" href="../tech/t010.html">JS 虚拟化保护（防守侧）第一轮调研：原理、实现与 ZCode 风控重叠度</a>
+</details>
+<details class="cat" open><summary>投资理财</summary>
+<a class="art" href="../tech/t011.html">投资理财 — 资料来源</a>
+<a class="art" href="../tech/t012.html">投资理财 — 知识库组织规范</a>
+<a class="art" href="../tech/t013.html">投资理财 — 四阶段学习路径</a>
+<div class="grp">实践记录</div>
+<a class="art" href="../tech/t014.html">决策日志</a>
+<a class="art" href="../tech/t015.html">定投记录</a>
+<div class="grp">知识卡/01-基础概念</div>
+<a class="art" href="../tech/t016.html">风险与收益</a>
+<a class="art" href="../tech/t017.html">通胀</a>
+<a class="art" href="../tech/t018.html">复利</a>
+<div class="grp">配置方案</div>
+<a class="art" href="../tech/t019.html">退休目标测算</a>
+<a class="art" href="../tech/t020.html">财务地基自查</a>
+</details>
+<details class="cat" open><summary>日常问答</summary>
+<a class="art" href="../tech/t021.html">日常问答沉淀 · 2026-09</a>
+</details>
+<details class="cat" open><summary>综合文章</summary>
+<a class="art" href="../tech/t022.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a>
+</details>
+</details>
+<details class="mod" open><summary>外部沉淀 <span class="cnt">353</span><a class="mod-go" href="../ext/index.html" aria-label="进入外部沉淀列表页">→</a></summary>
+<details class="cat"><summary>AI与效率 <span class="cnt">231</span><a class="mod-go" href="../ext/index.html#c0" aria-label="进入分类列表">→</a></summary>
+<span class="art-row"><a class="art" href="../ext/e001.html">Anthropic 让 Claude“做梦”，纠正了一条错误笔记</a><a class="art-x" href="https://mp.weixin.qq.com/s/mpdNCPGlVSMzLDvUo6-EzA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e002.html">Anthropic聊Agent记忆:记忆靠“做梦整理”</a><a class="art-x" href="https://mp.weixin.qq.com/s/JeeV1wdwpVNeoN4xq3SItQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e003.html">Seata 宣布正式拥抱 AI</a><a class="art-x" href="https://mp.weixin.qq.com/s/jbRqxO5m-7chpGVcPG8TQA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e004.html">从 RAG、MCP、Skills 到 Ontology First：如何搭建企业 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/FdV-Y_E33Cze33N4bBk4WQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e005.html">构建专属的飞书群开发助手，AgentKit Studio 一键部署 DeepSeek Harness Super-Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/coKH9GxIk6dWUrUaEE05mg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e006.html">爆红的 Jev 决策模型，解决不了 RAG 的核心矛盾</a><a class="art-x" href="https://mp.weixin.qq.com/s/Lou_kXkU6oS9l24Q_tAKQw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e007.html">给Jev装上眼睛！多模态Jev部署教程发布！</a><a class="art-x" href="https://mp.weixin.qq.com/s/tabPKzFy73bTmTBs9OyUVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e008.html">Claude 做梦机制详解</a><a class="art-x" href="https://mp.weixin.qq.com/s/e7JR0ncUWzG7f_AOpLxjSw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e009.html">刚刚，Anthropic公开Claude记忆架构：模仿人脑机制，后台“做梦”改错</a><a class="art-x" href="https://mp.weixin.qq.com/s/w-GWahEmeSUDwvD1apgc_w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e010.html">如何用一张验收清单，评估一个真实的Agent系统？（11/12）</a><a class="art-x" href="https://mp.weixin.qq.com/s/CP7vt_mZ167_lLaS4uGeTA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e011.html">小红书推荐系统评测 Agent：上下文驱动的 LLM-as-Judge 实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/333qmTTiNsFp9m8h49Slgg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e012.html">让 Agent 学会判断：从 JEV 接入到完整 Harness 决策流程</a><a class="art-x" href="https://mp.weixin.qq.com/s/XEZN19EJD-zneoX3NSwDDw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e013.html">AI 写得越来越快，我们还解释得清自己的代码吗？</a><a class="art-x" href="https://mp.weixin.qq.com/s/sncGU4QQVsfMTdL73pi1rw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e014.html">AI这个新时代，当下我们唯一能做的就是疯狂犯错</a><a class="art-x" href="https://mp.weixin.qq.com/s/lmkG5aK3gysC9EMWSoZimQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e015.html">Anthropic：AI 能让科学快几倍？</a><a class="art-x" href="https://mp.weixin.qq.com/s/uBXjMl8rOSpMChuf2W4BgQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e016.html">Harness 已经很准了，为什么还需要一个 Agent Native Database</a><a class="art-x" href="https://mp.weixin.qq.com/s/e59b93IR-W8lEOgQbxaShA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e017.html">人大&amp;美团2篇Agent自进化新范式，很惊喜</a><a class="art-x" href="https://mp.weixin.qq.com/s/KWkNzjmD0R4wHvuqDVI8ow" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e018.html">从AI写代码到AI重构交付——国际物流技术 Multi AI Native 的 AI 交付转型之路</a><a class="art-x" href="https://mp.weixin.qq.com/s/RNsEho35Eyu9Astiep2QKA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e019.html">从LLM到Ontology：本体驱动的AI数据研发原理与最佳实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/OX9XTa_V13uZoc_CGvaBPg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e020.html">口喷鸡新功能：语音输入只识别你的声音，自动过滤旁人声音</a><a class="art-x" href="https://mp.weixin.qq.com/s/ekOF67qhApyvqGKu6JfkYA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e021.html">多Agent协作的下一场竞争，不在模型，而在上下文</a><a class="art-x" href="https://mp.weixin.qq.com/s/L7WgswCBgMGUF7mD7pcYfw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e022.html">开源版Super-agent降临，狂揽8万星！已跑通24小时全自动运营公司</a><a class="art-x" href="https://mp.weixin.qq.com/s/cb5v8TBZLJIXjL09c8Ic3A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e023.html">2026年 AI Coding 最佳实践综述</a><a class="art-x" href="https://mp.weixin.qq.com/s/IifH1iVcawNyzBU3IMHGCQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e024.html">5 千星的 OpenBot，把 Codex 和 Claude 变成会互相交接的同事</a><a class="art-x" href="https://mp.weixin.qq.com/s/LMDHuL3sBunDNsy1e6Ty9g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e025.html">AgentCore + Codex 构建生产级 Agent 的原理与实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/truZRvXkzIj6ZZoCLQ_vOQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e026.html">Claude 官方：学会批判性思维</a><a class="art-x" href="https://mp.weixin.qq.com/s/X_5z5cYTsMnBl1sQMb3zsw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e027.html">Cloudflare 开源了一个干掉漏洞的顶级 Skill!</a><a class="art-x" href="https://mp.weixin.qq.com/s/PorgH-41eSfELXaoDloSWA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e028.html">DeepSeek Super-agent 上手：从 GitHub Issue 到 PR</a><a class="art-x" href="https://mp.weixin.qq.com/s/1aR5yZSL01oQ0ms4L_486A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e029.html">Sam Altman最新访谈：下一代 AI 的核心是智能体团队！</a><a class="art-x" href="https://mp.weixin.qq.com/s/6v7ViIMddOLPE5cBhtUdrA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e030.html">Skill 路由优化实战：基于真实业务请求的 description 自进化</a><a class="art-x" href="https://mp.weixin.qq.com/s/K9Eh1zezOx_idgh8bzFvMA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e031.html">Super-agent 设计探索：迈向更自主的 Agent 系统</a><a class="art-x" href="https://mp.weixin.qq.com/s/zoS7GlReWPhfCjENGxXCdg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e032.html">一小时不发版就算事故：这家十人公司怎样用 Agent 工作？</a><a class="art-x" href="https://mp.weixin.qq.com/s/JAtDHI0y2Op-6cCkQfgRJw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e033.html">一文搞懂MCP开发</a><a class="art-x" href="https://mp.weixin.qq.com/s/8qB8xcp8d3yYXnGZNlutEA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e034.html">从OpenClaw，怎么走到了Super Agent？</a><a class="art-x" href="https://mp.weixin.qq.com/s/R8v1fxHpErVHq1o6euSroA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e035.html">刚刚！首个成体系的Agentic RL中文项目来了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/43kyLBeJVDpRWTY5ACCafg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e036.html">又一个 Agent 工作台火了：统一管理 Codex、Claude Code，DeepSeek Harness 也能接入！</a><a class="art-x" href="https://mp.weixin.qq.com/s/0ACV8o-ivIR6FAUMYxgSWQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e037.html">奉劝大家不要用国产机翻墙,不要在国产机上安卓境外APP</a><a class="art-x" href="https://mp.weixin.qq.com/s/aySuQKjdDLsVfj1CHpJJxw?from=groupmessage&amp;scene=1&amp;subscene=10000&amp;sessionid=1793865987&amp;clicktime=1793873708&amp;enterid=1793873708&amp;ascene=1&amp;realreporttime=1793873708449&amp;forceh5=1" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e038.html">如果你做了一个垂直Agent，如何评估它的好坏？（9/12）</a><a class="art-x" href="https://mp.weixin.qq.com/s/crzdS2in0OFdHhOI_f3FnQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e039.html">开源我这折腾了1年的「Agent自动化系统」，愿所有人都能感受Agent的魅力。</a><a class="art-x" href="https://mp.weixin.qq.com/s/T9_acg247gxzUNL4j5zrCw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e040.html">拆解了一下 LobeHub 架构，竟然和 Super-Agent 出奇一致</a><a class="art-x" href="https://mp.weixin.qq.com/s/VW615fFeCmD-YXTzb2FPUQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e041.html">架构拆解：DeepSeek 刚发布的 Super-agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/cxfdWtDRfVunY5FU75oQGA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e042.html">腾讯微信提出skills持续进化框架：让每一次优化都有迹可循</a><a class="art-x" href="https://mp.weixin.qq.com/s/F2qm-KvQwvS4MqRvVMkYfg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e043.html">自产自销：如何让 Agent 自己写自己查？</a><a class="art-x" href="https://mp.weixin.qq.com/s/EKWeDlHLbJYuqEALERJnpQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e044.html">让改进有迹可循：Storage Agent Family Eval 工程实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/pjSP60ycITOafaJwXxW23g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e045.html">通了个宵，终于把 Super-Agent 架构玩明白了</a><a class="art-x" href="https://mp.weixin.qq.com/s/vt2qgHGAmzpqY-CXBWAj0g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e046.html">重磅！DeepSeek 开源超级 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/RJIxPjI7SrSVhgT_D8Baig" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e047.html">阿里版 Codex ，再次惊艳到我了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/EqgXV3am0dv9WCdagMejMA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e048.html">风控决策系统决策流，策略模式，权重、顺序、投票、最坏</a><a class="art-x" href="https://mp.weixin.qq.com/s/s0yPVx1sOgSFKbSv19S2BQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e049.html">风控决策系统扩展点，自定义函数配置</a><a class="art-x" href="https://mp.weixin.qq.com/s/mwLugxygEjtN70UrbZbQQw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e050.html">Anthropic：子Agent拆多了，为什么反而更慢</a><a class="art-x" href="https://mp.weixin.qq.com/s/Y9wCwP24aFWN1jRs1rhJXQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e051.html">Kimi K3.1已移除攻击能力，DeepSeek也将剥离安全能力？国产模型网安约束时代来临</a><a class="art-x" href="https://mp.weixin.qq.com/s/mK6emVZ4O9GLHBVjC6wqXg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e052.html">Anthropic取消编程面试：新人第一次有机会直接和资深工程师竞争</a><a class="art-x" href="https://mp.weixin.qq.com/s/hBEAqF7-2777nQmbvcBS3Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e053.html">从Harness到Harness²，Google自进化新突破</a><a class="art-x" href="https://mp.weixin.qq.com/s/jNVb5syfIHeeQfe8E0PJhQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e054.html">深度解析 Codex Harness 架构及其全新上下文压缩记忆体系的设计思路</a><a class="art-x" href="https://mp.weixin.qq.com/s/IM-zakQ9Bnog54NdYiJSqA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e055.html">让Agent可评可控可迭代：业务效果导向的评测体系与场景实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/RigE8BekIOjSEuvPXxVv5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e056.html">Agent时代的输入法：80亿token打磨的效率工具即将开源</a><a class="art-x" href="https://mp.weixin.qq.com/s/ck8WDkuKfPHlp_CRLsqq7A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e057.html">Anthropic最新长文：请谨慎使用子智能体</a><a class="art-x" href="https://mp.weixin.qq.com/s/5KpcSM4VmM4xbFr8x_B3LQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e058.html">Anthropic长文详解Claude Duet安全设计：密码永远不经过模型</a><a class="art-x" href="https://mp.weixin.qq.com/s/1Iu4gM3il8x1hM-HZvjqDQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e059.html">Codex核心团队复盘：从30秒一次反馈到放手跑几小时</a><a class="art-x" href="https://mp.weixin.qq.com/s/rTyr9o2r2VMdp0MVfZf2tw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e060.html">一篇多模态Agentic框架最新前沿综述</a><a class="art-x" href="https://mp.weixin.qq.com/s/pu87whwukj2jNaW0nQSwAA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e061.html">为什么现在的top大模型说话越来越拗口难懂了</a><a class="art-x" href="https://mp.weixin.qq.com/s/7sEZE1dTfqK8bbF6tcmOyA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e062.html">你的Personal Agent如何真正跑起来？Agent实战指南</a><a class="art-x" href="https://mp.weixin.qq.com/s/Nh-uiZ4N5C1qO9Uf9Im4bg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e063.html">“大家用 AI 胆子还不够大！”Anthropic 工程经理亲授 4 种顶级用法</a><a class="art-x" href="https://mp.weixin.qq.com/s/MIarQhuGQPUlEEI-D4ffAw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e064.html">实测最近爆火的Teamily，是真有东西啊</a><a class="art-x" href="https://mp.weixin.qq.com/s/oLcfMMJpWI_fQ5B4JeAMWg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e065.html">替代CC Switch的这个项目已斩获20K Star</a><a class="art-x" href="https://mp.weixin.qq.com/s/kJW4zJ8RCco9lajBGumj_Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e066.html">维基百科编辑抓AI的清单，被反着做成了6万多star的skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/1xSLOhvac4FC8-pkr-xpYg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e067.html">刚刚，Anthropic公开内部Sub-Agent+Loop最佳实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/5ej9Jipiibz107qRzfrOZw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e068.html">刚刚！斯坦福CS336中文教程发布了</a><a class="art-x" href="https://mp.weixin.qq.com/s/iot0LIrh2R5s5a17emBhJQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e069.html">Agent的长期记忆要怎么做？RAG是不是最好的选择（4/12）</a><a class="art-x" href="https://mp.weixin.qq.com/s/IiOPrsmLetMhez5haRvNQA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e070.html">Uber的合同审阅Agent工程实践和拆解</a><a class="art-x" href="https://mp.weixin.qq.com/s/RbvuDRNlFQ12BtF4_BnFfg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e071.html">6.3万星开源求职流水线：69份简历拿下20轮面试</a><a class="art-x" href="https://mp.weixin.qq.com/s/X-Jrcaskr-DhG3V5CBIPoQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e072.html">Agent如何自己变强：从Skill到模型权重的进化全景图</a><a class="art-x" href="https://mp.weixin.qq.com/s/AKvtr7IQ9oCGf5xldKeBNw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e073.html">Anthropic：谨慎使用子Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ec4UJeYBnVqcVnOSzduWxQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e074.html">Jev创始人访谈：Jev是面向智能的SQL，软件设计需回到工作流为中心</a><a class="art-x" href="https://mp.weixin.qq.com/s/MzGKpWD1SUEQI0nQlfAUaw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e075.html">MCP解决连接RAG解决知识，那谁来解决业务理解：企业AI的本体论</a><a class="art-x" href="https://mp.weixin.qq.com/s/6yVwaWZgJOaS7Q3cZyI7mA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e076.html">OpenAI：FDE的目标是让自己失业</a><a class="art-x" href="https://mp.weixin.qq.com/s/xku4E2vENNPl09ZyOyGBlw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e077.html">去年教的85%全扔掉！斯坦福最新AI神课：200行写Claude Code</a><a class="art-x" href="https://mp.weixin.qq.com/s/8qsWbLV1BCDW9RGYSRK-yA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e078.html">唐杰团队RSI新作：让Agent越改越强，执行成本反降26%</a><a class="art-x" href="https://mp.weixin.qq.com/s/TtjRoi5vYL5zrY0NZFbi5w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e079.html">在上海听了一天AI论坛，我学到新的AI焚诀了</a><a class="art-x" href="https://mp.weixin.qq.com/s/rDFhZkCgioA_rnik2tOTwQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e080.html">大家用AI胆子还不够大！Claude工程负责人亲授顶级用法</a><a class="art-x" href="https://mp.weixin.qq.com/s/GrXmCxESkjQm-bovv0bZ3w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e081.html">3篇NeurIPS顶会Skill，很精彩</a><a class="art-x" href="https://mp.weixin.qq.com/s/HH-Q0txZGjMLIiUz63wQ3Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e082.html">刚刚，Anthropic推出个人智能体Claude Duet：opus 5.5 驱动</a><a class="art-x" href="https://mp.weixin.qq.com/s/yZ7W_E8N5ZC-JyxfXoUumQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e083.html">四大多 Agent 架构详解（四）：Handoff 之后，下一轮到底由谁负责</a><a class="art-x" href="https://mp.weixin.qq.com/s/YApF633agE1PZFKLck_b4Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e084.html">Meta的智能体工程经验：轻量编排与专业分工</a><a class="art-x" href="https://mp.weixin.qq.com/s/fjNfXpy7q6VMDZPeeoDgOw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e085.html">分享8个让我最近很惊艳的Claude Opus 5.5玩法</a><a class="art-x" href="https://mp.weixin.qq.com/s/K8Ank_6ySIupl8XyHCzqFw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e086.html">坏了，真给openai从deepseek那学到真的了</a><a class="art-x" href="https://mp.weixin.qq.com/s/O_QELn9CRP4DxGbn2pnJ7Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e087.html">天猫数字员工：研发暗物质与AI Native组织协作</a><a class="art-x" href="https://mp.weixin.qq.com/s/o_y-WjIFV2Qoa8lpHKR4BQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e088.html">AI工程化防翻车指南</a><a class="art-x" href="https://mp.weixin.qq.com/s/5zhFeM48-ipqDyIAPvRj9A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e089.html">Anthropic最新就业报告公开：AI时代，新人何去何从?</a><a class="art-x" href="https://mp.weixin.qq.com/s/Pz-E-_Eo5ivEPISTBdLs9w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e090.html">Agent、Harness、Loop 到底怎么分？一条运行链看清楚</a><a class="art-x" href="https://mp.weixin.qq.com/s/6e27GknVlBJ-XoRlnAakLg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e091.html">从 BERT、GPT 到 Jev：一文看懂大模型架构的演进与分化</a><a class="art-x" href="https://mp.weixin.qq.com/s/AciT5C6ypT35FaGOoEum5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e092.html">Agent 缺的不是记忆，是“教训”：causal-memory 的设计与实战</a><a class="art-x" href="https://mp.weixin.qq.com/s/hsRucmrbY8h98di-rXVzww" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e093.html">面试官皱眉：“你知道Codex多Agent实现机制吗？ ”我笑了：“独立会话、上下文交接、异步通信、任务调度，你想先听哪块？”</a><a class="art-x" href="https://mp.weixin.qq.com/s/_EgLSCc4dj0gt-09Uaw7eA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e094.html">把逆向工程交给 Agent：一文拆解爆火的 REA 技术原理</a><a class="art-x" href="https://mp.weixin.qq.com/s/IGu2tfumq3rbnra9yfgAQw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e095.html">为什么说 DeepSeek Harness 的灵魂是一切皆插件？</a><a class="art-x" href="https://mp.weixin.qq.com/s/sya9rCbTm4zDp2qEKMo2_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e096.html">拆开 Pi：Agent Harness 的极简设计</a><a class="art-x" href="https://mp.weixin.qq.com/s/43_tnAQrXV8Tri6PDaRsmQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e097.html">AI时代架构设计，给AI的4条缓存红线（9/100）</a><a class="art-x" href="https://mp.weixin.qq.com/s/rp5tRNJZKzXMuHeXg47fww" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e098.html">四大多 Agent 架构详解（三）：Hierarchical 如何解决一个 Supervisor 管不过来的问题</a><a class="art-x" href="https://mp.weixin.qq.com/s/wCCICgF8f6DjViVTUBpR9g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e099.html">CLAUDE.md 还是 AGENTS.md？Anthropic 的答案是：以后都不用</a><a class="art-x" href="https://mp.weixin.qq.com/s/b979KA65CA2E54cXban_Mw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e100.html">Codex Harness 源码拆解：Agent 控制面如何嵌进业务系统</a><a class="art-x" href="https://mp.weixin.qq.com/s/vOiidxV8rURYXoDP1ZmWng" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e101.html">huashu-art-motion发布！可能是最有审美的动画skill。</a><a class="art-x" href="https://mp.weixin.qq.com/s/iViOvBLlH0gfxE2z_GoiCQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e102.html">1024个Agent协同，微软Loop工程杀疯了</a><a class="art-x" href="https://mp.weixin.qq.com/s/vovje32_tAc8nOnNwJHlcw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e103.html">AI让写代码变便宜了，但没让架构变便宜</a><a class="art-x" href="https://mp.weixin.qq.com/s/aeGHJWKgGFqtJGhiQQLYUw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e104.html">Agent SDK 双面宿主：有 UI 与无 UI 不是两套 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/X8C9tJ41TtOBgVSNod7sYg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e105.html">AI Agent 架构全链路拆解：从 Planner、Tool、MCP 到 Memory 和 Reflection</a><a class="art-x" href="https://mp.weixin.qq.com/s/5SXa7vHTiGYTQNSIR6a-Pg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e106.html">Claude Code Mods 入门指南：从零做一个 Mod</a><a class="art-x" href="https://mp.weixin.qq.com/s/ch3z43AKlArK3q0QmAT4vw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e107.html">Agent、Harness、Loop 到底是什么关系？一文讲透 AI 系统的分层架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/vqCA4v_U-aq4bGr9wiNMYg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e108.html">Claude.dev 的四篇工程文章：Agent 怎样才算真的改进</a><a class="art-x" href="https://mp.weixin.qq.com/s/JcT_AGq1ewrp7_B-Z_QINg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e109.html">Google：首篇词元（Token）技术全景综述</a><a class="art-x" href="https://mp.weixin.qq.com/s/K89rgSJi-VPKkWDDAHR2gg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e110.html">解读 Jev 的 4 种应用方式</a><a class="art-x" href="https://mp.weixin.qq.com/s/wzJ9ZcKpfnJc2IEfraqvrw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e111.html">重磅！Anthropic公开内部Claude进化最佳实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/l_x8onQiJ81p23fJrBG_MQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e112.html">Pi 与 DeepSeek Harness 架构对比：Agent Loop 如何处理继续、收口与恢复</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ahefqqn9Q6znv5gnKIL4DQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e113.html">从生成到决策：Jev正在改变LLM应用的开发范式</a><a class="art-x" href="https://mp.weixin.qq.com/s/dIYmR9Q5I3gJKTF4fsI6BQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e114.html">AI Coding卷到现在，真正卡脖子的东西没人提</a><a class="art-x" href="https://mp.weixin.qq.com/s/GRg7vKONnQQNNTpCayoEoQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e115.html">Agent不只烧Token：为什么Agent Sandbox正在变得重要</a><a class="art-x" href="https://mp.weixin.qq.com/s/nhNOlMcjCTtB86wtjZn1Jg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e116.html">NVIDIA又开源了一个顶级Agent项目：OpenShell</a><a class="art-x" href="https://mp.weixin.qq.com/s/vxcy2Wy0rTDBtkYJdExluA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e117.html">公司规定所有接口都用POST请求，为什么</a><a class="art-x" href="https://mp.weixin.qq.com/s/oqWWR_zzWC0slDBvuuMppg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e118.html">碾压GPT-4o！94.6%准确率的开源Agent记忆Hindsight来了</a><a class="art-x" href="https://mp.weixin.qq.com/s/XjfjqZGGetFCJfif2Sz44w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e119.html">风控这个行业，入行10年，迷茫十年</a><a class="art-x" href="https://mp.weixin.qq.com/s/KsWcpLiDQZ1izYtWGCAysQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e120.html">Jev Skill技能包来了！全球开发者砸出500个开源项目</a><a class="art-x" href="https://mp.weixin.qq.com/s/SSVs6c8mELMqIf7UiL7RiA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e121.html">当Agent开始做梦：Dream-RSI如何改进探索策略</a><a class="art-x" href="https://mp.weixin.qq.com/s/PgiEWS57zBlimaz5x-QC9g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e122.html">预热合流：进了页面也预热了，为什么首句仍可能冷启</a><a class="art-x" href="https://mp.weixin.qq.com/s/9uMpljqNQtGwW8AuxSV_ag" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e123.html">AI时代，每秒10W并发无锁缓存，spec怎么写（7/100）</a><a class="art-x" href="https://mp.weixin.qq.com/s/aPWGu38sAz-pQXOvis1I0g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e124.html">Anthropic：effort已不再是思考强度开关了</a><a class="art-x" href="https://mp.weixin.qq.com/s/dFx_dq1Xf8m83PeIY9oFtg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e125.html">Meta Muse架构深度解析：到底有何不同</a><a class="art-x" href="https://mp.weixin.qq.com/s/nQTi_u4O0PnzaqEA_ukNww" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e126.html">Plan Mode之死？Agent需要一条可验证的工作回路</a><a class="art-x" href="https://mp.weixin.qq.com/s/KG_kG3QvXCRQgtbdcmLxXQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e127.html">从Harness，走向受控RSI</a><a class="art-x" href="https://mp.weixin.qq.com/s/7lGot6JQtWkKhEeW4UtiTg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e128.html">开源一个Vibe Coding最佳伴侣：口喷鸡</a><a class="art-x" href="https://mp.weixin.qq.com/s/sTiMM91hB5DXc-isMO4J9Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e129.html">改变世界前先认识世界：Ontology决策结构化实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/Z3jgUawIT4ZY9lBb-trBuQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e130.html">本地复刻Jev范式！APUS开源全新浏览器Agent Skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/6qS9gumuQ-tUWdw1cFM4qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e131.html">谷歌RSI新作，让Agent Harness自进化不跑偏！</a><a class="art-x" href="https://mp.weixin.qq.com/s/uR9oELwZk8ATNnRHl86PhQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e132.html">长程Agent也能“倒带重来”！中科院自动化所联合提出运行时恢复框架AgentRewind</a><a class="art-x" href="https://mp.weixin.qq.com/s/-iIpIcgW-6taUcokI1DpKw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e133.html">Graph的尽头是自进化Ontology</a><a class="art-x" href="https://mp.weixin.qq.com/s/E0GJfYjzSs8fBIcn8jhHtA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e134.html">万字详解10道AI Agent高频面试题</a><a class="art-x" href="https://mp.weixin.qq.com/s/0TQ_cRoQO8sqJgYL4Z7nCQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e135.html">从一次LLM调用到完整Harness：系统理解Agent如何工作</a><a class="art-x" href="https://mp.weixin.qq.com/s/G0sCFNdVzTAiOpSRMxmzaA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e136.html">把多语种Laya微调成中文决策模型，代码评估全开源</a><a class="art-x" href="https://mp.weixin.qq.com/s/Bw8XQJdM-469NGbCuuh9zw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e137.html">来了！DeepSeek又发新作DSec</a><a class="art-x" href="https://mp.weixin.qq.com/s/Di54RybghrHcRkL6aSi-LQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e138.html">耗时1h！打造属于你自己的Jev，喂饭级教程来了</a><a class="art-x" href="https://mp.weixin.qq.com/s/F7i83rn8oDzQ-sg13MKwWA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e139.html">腾讯开源BrowserSkill：让AI用你的账号上网</a><a class="art-x" href="https://mp.weixin.qq.com/s/Xb6X9jUATAyZdYryg9ZZHA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e140.html">谷歌重磅发布Dream-RSI，最新RSI研究！</a><a class="art-x" href="https://mp.weixin.qq.com/s/wfVfFHb-47bkRc_HwkznQQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e141.html">2万Star开源项目作者入职Hugging Face，副业变全职</a><a class="art-x" href="https://mp.weixin.qq.com/s/NyLY6cGuXtSnc34UPnlmOw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e142.html">Agent记忆有了Jev新方案，登上Hugging Face趋势榜！</a><a class="art-x" href="https://mp.weixin.qq.com/s/uJr6Bb8OrNMDySXs3m7CpQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e143.html">微软 186k Star 的 markitdown：它凭什么这么火，又在哪会让你踩坑？</a><a class="art-x" href="https://mp.weixin.qq.com/s/VW2LG8jXGi45UR1Vd3H5AQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e144.html">错误码排查从 3～8 小时到分钟级，Agent怎么做到的？</a><a class="art-x" href="https://mp.weixin.qq.com/s/0QSAGGgffJoaG3iO6wItng" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e145.html">给项目建Agent知识库，一套完整方法来了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/307ZX4doB9hoTP-u6hVDDw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e146.html">AI写得快 ≠ 真正提效：一文讲清Harness&quot;记忆&quot;和&quot;验证闭环</a><a class="art-x" href="https://mp.weixin.qq.com/s/SVm_GONXEElhEsX6CXylKg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e147.html">一个字都不会写的 Jev，凭什么成为 ChatGPT 之后最火的模型？</a><a class="art-x" href="https://mp.weixin.qq.com/s/uJw0J1DWW9RCfaxsO9NRvw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e148.html">我替大家先试了一把 Jev：一个不写代码、不聊天，只负责&quot;做决定&quot;的奇葩模型</a><a class="art-x" href="https://mp.weixin.qq.com/s/P1nQ9FwFypiYkMThJVftgw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e149.html">阿里文征：面向Agent全面升级模型服务、Agent服务、AI应用</a><a class="art-x" href="https://mp.weixin.qq.com/s/Z_jEFVtkUtml9PmoLSIfhw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e150.html">Agent时代，RAG怎么选？这份指南一次讲清！</a><a class="art-x" href="https://mp.weixin.qq.com/s/4XGijn-_H1KH05op--1kBg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e151.html">Jev 深度解析：从生成式模型到语义决策引擎</a><a class="art-x" href="https://mp.weixin.qq.com/s/G1bIlmDTSDuy6NIcVkzKlg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e152.html">Jev 爆火全网，有人把 200+ 个社区案例攒成了开源案例墙，已经 1 亿浏览了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/-Nvv_W3n6QnBG32BcFIR4w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e153.html">RAG解决不了的问题，GBrain想解决：给AI Agent装一个能记事的&#x27;第二大脑</a><a class="art-x" href="https://mp.weixin.qq.com/s/RbXvKKBgteyucvHoFUPTQg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e154.html">开源版 Jev 发布了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/8CaOLr99qL3RamtQtXJ6tQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e155.html">终于有人把数据指标体系讲明白了：指标怎么定、怎么分、怎么用一次讲透</a><a class="art-x" href="https://mp.weixin.qq.com/s/GZvrnX2nGm0-EjokJZzLMg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e156.html">腾讯15年资深后台工程师，转战大模型推理的抉择</a><a class="art-x" href="https://mp.weixin.qq.com/s/g2xZZuqM55AqhbgtKyqM2g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e157.html">腾讯音乐的 MusicBuddy 上线了，Buddy 家族凑够七个</a><a class="art-x" href="https://mp.weixin.qq.com/s/SKLX9boQbOY0YqO-ZirRag" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e158.html">这是一篇把&quot;Jev模型&quot;讲明白的科普级解读！</a><a class="art-x" href="https://mp.weixin.qq.com/s/ynHlQijihuEZ3cqkQtXvrA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e159.html">重磅！从 Agent 开发到 Agent 算法，进阶指南来了</a><a class="art-x" href="https://mp.weixin.qq.com/s/0YFG-J2ZWwRO4lTP7f1JDA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e160.html">AI时代，让AI写缓存，spec怎么写（5/100）</a><a class="art-x" href="https://mp.weixin.qq.com/s/pXAznRuoQKr5qgbPzeBDIQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e161.html">Agents成新一代造王者，开发者正在快速失去技术决定权</a><a class="art-x" href="https://mp.weixin.qq.com/s/_dD0zV4PGt955hQMRskftw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e162.html">Harness RSI框架来了，登上Hugging Face日榜第二！</a><a class="art-x" href="https://mp.weixin.qq.com/s/Jnfb_vdsDSBuxW1VxRyfNw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e163.html">Jev Search 开源！当 Jev 遇上搜索引擎：这个开源项目让你用大白话搜遍全网！</a><a class="art-x" href="https://mp.weixin.qq.com/s/MyoQCRv2MXCqxhwT0sp4qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e164.html">Jev是什么AI模型？不做自然语言生成为何引发热议</a><a class="art-x" href="https://mp.weixin.qq.com/s/eOPz4k6RlKp1rwmc0b-ZWw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e165.html">Jev是分类器吗？今天向所有人开放，送1.2亿token</a><a class="art-x" href="https://mp.weixin.qq.com/s/0gMnhFvovw9783eWcaRLgA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e166.html">Jev 爆火：一个不做生成的 AI，凭什么让半个技术圈熬夜跑 Demo？</a><a class="art-x" href="https://mp.weixin.qq.com/s/zW6U89TQDqeZemxqCj7U-Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e167.html">Loop engineering：把 agent 放进工程循环</a><a class="art-x" href="https://mp.weixin.qq.com/s/RxRzTsRvmZJMmtQjQM79_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e168.html">一万字Jev 工程实践长文：把 Agent 的“判断题”从大模型里拆出来</a><a class="art-x" href="https://mp.weixin.qq.com/s/D1La4jMoVZ5Ip_RrVY1kPw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e169.html">一文详解Jev：把 Agent 里的“小判断”，从大模型调用改成结构化决策</a><a class="art-x" href="https://mp.weixin.qq.com/s/EFqwedRAaDXpBTUpaJ6T5g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e170.html">不会聊天的 AI，彻底爆火：Jev 保姆级教程来了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/X5i5gZo1XRQ9DJeEXn5zmg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e171.html">为啥 Jev 突然就全网爆火了？</a><a class="art-x" href="https://mp.weixin.qq.com/s/3GH_Os7qjSd_i2Nq8sVReA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e172.html">什么是 Jev？</a><a class="art-x" href="https://mp.weixin.qq.com/s/hdhaju_rMJKbkQonOefswQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e173.html">四大多 Agent 架构详解（一）：Workflow 如何把固定流程变成可回放的系统</a><a class="art-x" href="https://mp.weixin.qq.com/s/xSNQGIKzDoEEEmYA3mIHtw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e174.html">基于Jev的浏览器Agent插件开源，狂揽12.1k star！</a><a class="art-x" href="https://mp.weixin.qq.com/s/t-hqq3hGlkeWlFxjBMsr2w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e175.html">怎样构建一个 Agent-friendly 的网站</a><a class="art-x" href="https://mp.weixin.qq.com/s/h3nRQaemvc4_YaTAgOh3sg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e176.html">整理了最新Jev模型的全网22个爆火玩法！</a><a class="art-x" href="https://mp.weixin.qq.com/s/XI7veC5NSNkjVmTApTS-AA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e177.html">知识库答不准，可能真不是模型的锅，66.6K star的Docling 到底解决了什么</a><a class="art-x" href="https://mp.weixin.qq.com/s/wjEWh0gJJus6Jpg_2RQ79g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e178.html">简单讲讲 Agent 的工作原理</a><a class="art-x" href="https://mp.weixin.qq.com/s/EQMPyo5FVCFvy0mndcBkMQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e179.html">聊聊最近爆火的Jev 模型，到底是个啥？</a><a class="art-x" href="https://mp.weixin.qq.com/s/w4kDVSF_beVA7CVhL_Xohw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e180.html">刚刚，Anthropic公开内部RSI落地方法论</a><a class="art-x" href="https://mp.weixin.qq.com/s/3Qg8E9eoPX2rfYepvPSJ3w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e181.html">Anthropic 公开「递归自我改进」核心数据：3 万 Agent 正在研发下一代 Claude</a><a class="art-x" href="https://mp.weixin.qq.com/s/3bAMvHBUlEIfOrR0vdRREQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e182.html">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a><a class="art-x" href="https://mp.weixin.qq.com/s/f4_O_ZpWiXpGyUiVwvGggg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e183.html">Jev：只会做选择题的 System One 模型，TypeSafe AI 的高频决策分类器</a><a class="art-x" href="https://mp.weixin.qq.com/s/Nj7Y3DXibE28up0SvhJ67Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e184.html">什么是 RSI：2026 年最贵的三个字母（递归自我改进科普）</a><a class="art-x" href="https://mp.weixin.qq.com/s/MS5Dzg1AjWiFAUE9aAFnzw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e185.html">小米 MiMo-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a><a class="art-x" href="https://mp.weixin.qq.com/s/3QZ2TU7Y5xss_jjxIYjfNw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e186.html">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a><a class="art-x" href="https://mp.weixin.qq.com/s/fsVJiorPBN4ylGjUYBcIPw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e187.html">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a><a class="art-x" href="https://mp.weixin.qq.com/s/WkQXscLAkpdo_ygqaNnuYw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e188.html">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a><a class="art-x" href="https://mp.weixin.qq.com/s/lyjKtDPyOLavVJZBHmOcVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e189.html">本地该怎么做 RSI？与 StartLux CTO 郭权玮聊本地自我改进</a><a class="art-x" href="https://mp.weixin.qq.com/s/ogGTNepYRtf9PmI2WyYPRQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e190.html">货拉拉 AI Coding 落地实践：个人提效攒不成组织提效</a><a class="art-x" href="https://mp.weixin.qq.com/s/TPsMa8kj9SThzeVyrx7lLQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e191.html">Anthropic《AI-Native SDLC Playbook》：AI 原生研发流程怎么改</a><a class="art-x" href="https://mp.weixin.qq.com/s/baj-Fo_NbzrR-MtXGPlo4A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e192.html">别再只卷 Prompt 了：Context Engineering 才是 Agent 差距所在</a><a class="art-x" href="https://mp.weixin.qq.com/s/mbU0bE6BV5YfAsTmoY4H3A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e193.html">面试官：讲一讲多 Agent 协作如何保持一致性</a><a class="art-x" href="https://mp.weixin.qq.com/s/XnSQdFpG-MdbctvLtHiMMA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e194.html">Codex想让Harness消失，Claude Code却要把它做成承重墙</a><a class="art-x" href="https://mp.weixin.qq.com/s/TZtWia_xf-aaUPacXi4AxA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e195.html">OpenAI首席科学家发布长文：《An Alien Mind》（异星心智）</a><a class="art-x" href="https://mp.weixin.qq.com/s/U5nT7Oleq90YPrVWdr-hnw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e196.html">让Agent像人一样记忆：本地长期记忆系统HL-Mem的设计与取舍</a><a class="art-x" href="https://mp.weixin.qq.com/s/kNUoqHRWapbDYVtlej_bzg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e197.html">Agent 长程任务断点续传：从框架 Checkpoint 到跨进程恢复的完整实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/Vy2HpOyr7wVmPTVWa3mGig" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e198.html">DeepSeek Harness背后的心脏：Cordis到底是什么</a><a class="art-x" href="https://mp.weixin.qq.com/s/3vtCkp6EbA5MhRERD6f17A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e199.html">Multi-Agent已死！Anthropic这次完全反着做</a><a class="art-x" href="https://mp.weixin.qq.com/s/sSeiJsPBRD99LIG-okgDXQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e200.html">个人自进化知识库完整搭建教程</a><a class="art-x" href="https://www.xiaohongshu.com/discovery/item/6a82b410000000000600641d" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e201.html">从一次 LLM 调用到完整 Harness，Agent 到底经历了什么？</a><a class="art-x" href="https://mp.weixin.qq.com/s/kZZac-VBgnQIZeookE9Y8g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e202.html">从Pi看Agent Harness：少做功能，怎样换来更可控的运行时</a><a class="art-x" href="https://mp.weixin.qq.com/s/JpDdN21Qe_pN8mhpqWlm9w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e203.html">向量数据库已死？Claude Code、Cursor 为什么都在重做 RAG</a><a class="art-x" href="https://mp.weixin.qq.com/s/NBvHFehnn7aR0yHdB9hvtA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e204.html">字节一天连发3篇自进化Agent，彻底杀疯了</a><a class="art-x" href="https://mp.weixin.qq.com/s/L6pY-3rDUy6pLQ96DcOFyg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e205.html">Hermes-Agent-The-Complete-Guide-v260407</a>
+<a class="art" href="../ext/e206.html">Hermes-Agent-从入门到精通-v260407</a>
+<span class="art-row"><a class="art" href="../ext/e207.html">最小必需 Harness 实验：工具调用上限 + auto-rescue commit + smart friend routing</a><a class="art-x" href="https://mp.weixin.qq.com/s/jBOGCtoLytPCjR9EQrRhAQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e208.html">AI 使用熟练度 10 级体系：可控性 × 广度 × 形态 × 角色四维进阶路径</a><a class="art-x" href="https://mp.weixin.qq.com/s/GhTOhZO_zj8NfR1vPmPVww" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e209.html">Harness 四要素循环 + 验证先行：用六顶思考帽让 Agent 高质量跑几小时</a><a class="art-x" href="https://mp.weixin.qq.com/s/L1Xb8-MpeWtQfjY3ngrBYA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e210.html">Harness Engineering 实战：JK Launcher 从 Prompt 到 Context 到 Harness 三次跃迁 + 五类问题分类法</a><a class="art-x" href="https://mp.weixin.qq.com/s/NtsksL2gkMtMqkILi4xvRg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e211.html">Harness Engineering 的护城河不是工作流，是知识沉淀：腾讯 AI Team 三维知识体系</a><a class="art-x" href="https://mp.weixin.qq.com/s/JV4-oPP0jjsBCZ4tW3Gy1g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e212.html">Agent Skill 五种设计模式：从线性流程到多阶段检查点的完整方法论</a><a class="art-x" href="https://mp.weixin.qq.com/s/aoNwyY5ZkCRMkZirn1rElQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e213.html">Harness 到底是什么：六层承重结构 + 7步循环 + 软件工程复杂性迁移</a><a class="art-x" href="https://mp.weixin.qq.com/s/h49UiGERvz8BMkMW0_4Gwg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e214.html">Generic Agent：极简 9 工具框架，Token 效率比 Hermes 省 10 倍</a><a class="art-x" href="https://mp.weixin.qq.com/s/D76ipiGcg__56Lx0Rjs4Iw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e215.html">Ralph / Claude Code loop / OpenCode：三种自动化 Agent 循环机制对比</a><a class="art-x" href="https://github.com/snarktank/ralph" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e216.html">AI 工作流三核概念：Workflow 是目标、Graph 是结构、Loop 是控制模式</a><a class="art-x" href="https://mp.weixin.qq.com/s/JPV2-6rWK46Mj971fwwvgA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e217.html">腾讯 LEGO 百万行 C++ 实战：Harness Engineering 五层架构 + 多模型对抗式 CR</a><a class="art-x" href="https://mp.weixin.qq.com/s/VJgVPeJ5GZhVwbRtneEk_Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e218.html">腾讯审核团队 AI 全自动化交付实践：从 L1 纯人工到 L3 全自动的三阶段演进</a><a class="art-x" href="https://mp.weixin.qq.com/s/fLiyW2t4CBOnWjx2Km8d8g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e219.html">Hermes Agent vs OpenClaw：自进化个人 Agent 与多渠道生态平台的路线之争</a><a class="art-x" href="https://openclaw.ai/install.sh" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e220.html">Hermes Agent 橙皮书：开源自改进 Agent 框架从入门到精通</a><a class="art-x" href="https://github.com/alchaincyf/hermes-agent-orange-book" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e221.html">Claude Managed Agents 发布：Harness 三层解耦架构，把 Agent 从宠物变成牲畜</a><a class="art-x" href="https://mp.weixin.qq.com/s/N0OBBlPIdUKJzRU0ZCciFg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e222.html">AI 4小时自主攻破全球最安全OS内核，网络进攻能力每5.7个月翻倍</a><a class="art-x" href="https://mp.weixin.qq.com/s/_vkAHlPoBiPc9KImMkY5OA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e223.html">用 Accio Work 搭多Agent团队：三省六部制做OPC一人公司 + AI圆桌多视角讨论</a><a class="art-x" href="https://mp.weixin.qq.com/s/iBCNkORwkff3PL1EZD3zqw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e224.html">Agent Memory 的本质是闭环系统，不是存储：Ledger→Views→Policy 三件套 + 五层架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/bl77_Mb85C4AKe8h4__V6Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e225.html">Claude Code 51 万行源码全拆解：五大设计原则 + 九大核心模块</a><a class="art-x" href="https://mp.weixin.qq.com/s/GjZ-tFBVwfJwK11F1lP5TQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e226.html">Claude Code 记忆系统四层拆解 + memsearch 跨 Agent 永久记忆方案</a><a class="art-x" href="https://mp.weixin.qq.com/s/EPCkbXD0KMB-jnOZC4CamQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e227.html">Codex 接入微信：带时间感知的 AI 生活管家，替代番茄钟</a><a class="art-x" href="https://www.xiaohongshu.com/discovery/item/69d23c0f0000000022003812" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e228.html">ColaOS 产品设计：用情感连接获取用户 Context，而不是用表单</a><a class="art-x" href="https://mp.weixin.qq.com/s/p3nJlwmgEfEyVnwy3fPfnQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e229.html">Gemma 4 手机端本地跑 AI：口袋里的 Gemini 平替，端侧模型冲击云端商业模式</a><a class="art-x" href="https://mp.weixin.qq.com/s/UJSwqTh3Lf1smlnx_dELdA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e230.html">Harness Engineering 驾驭工程：从提示词工程到上下文工程之后的第三范式</a><a class="art-x" href="https://mp.weixin.qq.com/s/h_bnt6YFaLHSDgKSoFb6SA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e231.html">用飞书多维表格当看板，零代码搭出去中心化多Agent协作网络</a><a class="art-x" href="https://mp.weixin.qq.com/s/BMmw_z8tjxCETvUQQHLfhw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+</details>
+<details class="cat"><summary>工具与技术 <span class="cnt">59</span><a class="mod-go" href="../ext/index.html#c1" aria-label="进入分类列表">→</a></summary>
+<a class="art" href="../ext/e232.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e233.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e234.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e235.html">EasySync、OpenPlug、Resojot三件套</a>
+<span class="art-row"><a class="art" href="../ext/e236.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a><a class="art-x" href="https://mp.weixin.qq.com/s/_92qxY50yrITYDkhnKVv5w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e237.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a><a class="art-x" href="https://mp.weixin.qq.com/s/VuJsVTvyNIK8GRTL95n-Qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e238.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a><a class="art-x" href="https://mp.weixin.qq.com/s/opomqvcruvmcQr4fzTT5Sg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e239.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a><a class="art-x" href="https://mp.weixin.qq.com/s/xyLlUlHJG7zbs32B3ibarw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e240.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/sddXH_qxY0LlPvftJy4rTA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e241.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a><a class="art-x" href="https://mp.weixin.qq.com/s/EGCfOEP4-j0dZ1gV-QBF9Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e242.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e243.html">防重放攻击Nonce机制</a>
+<span class="art-row"><a class="art" href="../ext/e244.html">Claude Code Thariq：如何设置不同模型的 effort？</a><a class="art-x" href="https://mp.weixin.qq.com/s/OtdHHVKZOY28qCNfy99o0A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e245.html">手推Transformer（3）架构图解</a><a class="art-x" href="https://v.douyin.com/QfsCWkmq6Jk/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e246.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/RfCE5yqOrR_b2AWeI530GQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e247.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a><a class="art-x" href="https://mp.weixin.qq.com/s/8KB9H19wTmV9Ttsls2ZQOQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e248.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a><a class="art-x" href="https://mp.weixin.qq.com/s/C06VC_u8ThxoX65GZXD98A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e249.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a><a class="art-x" href="https://mp.weixin.qq.com/s/9k__ghMXA4xAP94aHFh-Gg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e250.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jgwZE6nflPIRkJkrwfz40w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e251.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/gOCMe2lrO8PFGfZoKhUmfA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e252.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a><a class="art-x" href="https://mp.weixin.qq.com/s/JpDAPxDxt8HWdxwuVpOCGg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e253.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a><a class="art-x" href="https://mp.weixin.qq.com/s/6MmevXDynsrlcOoDr3NMEA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e254.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a><a class="art-x" href="https://mp.weixin.qq.com/s/IG1lcRRtIhRePZfLrLZl_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e255.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a><a class="art-x" href="https://mp.weixin.qq.com/s/a35eQqCyxdybODuJlFwBTg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e256.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/z2t4cSkZo3JvXdmnq58MxA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e257.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jf5OKEhBDWkP0228tC5o1w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e258.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a><a class="art-x" href="https://mp.weixin.qq.com/s/_r6om75XRHj2NsgqN6l45A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e259.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a><a class="art-x" href="https://mp.weixin.qq.com/s/pS3UX6_XWcqjNCYxtNzNjA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e260.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a><a class="art-x" href="https://mp.weixin.qq.com/s/INr-j63NxC1JKiBeasTreA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e261.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a><a class="art-x" href="https://mp.weixin.qq.com/s/Zb7TCRf0ULhR6m4gv0T8cg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e262.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a><a class="art-x" href="https://mp.weixin.qq.com/s/ZxhhQlgzm7j7bfesSect4w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e263.html">Archify：AI代码仓库架构可视化开源Skill</a><a class="art-x" href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e264.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a><a class="art-x" href="https://mp.weixin.qq.com/s/6l9eoyAyADd4l4CgdbKFwQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e265.html">anything2explainer：一键制作科普视频的开源Skill</a><a class="art-x" href="https://www.douyin.com/video/7683581072979226340" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e266.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a><a class="art-x" href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e267.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a><a class="art-x" href="https://mp.weixin.qq.com/s/4Wm668hdNhRCSorNEY--Wg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e268.html">MCP 开发指北(Java) — 组内分享</a><a class="art-x" href="https://mi.feishu.cn/wiki/VsmQw2pwSiCmOnknxf0cqzadnHw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e269.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a><a class="art-x" href="https://mi.feishu.cn/wiki/TLkUwSfMoi0YL3kUF75c7Iwin1f" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e270.html">html-anything — Agent 时代的 HTML 编辑器</a><a class="art-x" href="https://mp.weixin.qq.com/s/PdnzdlANDDDrMrTMYhahvw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e271.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ux91m8vFib3GFWY6GqHssA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e272.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a><a class="art-x" href="https://mp.weixin.qq.com/s/8rXk9rn3qoT-_-s8bIEicw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e273.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a><a class="art-x" href="https://mp.weixin.qq.com/s/z1ZreI_TYEsHj2pGIKrmcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e274.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/8kLJvAEgN_qtcGWQAfORvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e275.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a><a class="art-x" href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e276.html">Claude Code Prompt Cache 配置实战</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/（视频" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e277.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e278.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a><a class="art-x" href="https://mp.weixin.qq.com/s/NAqk-Hwpb0kf0ZggDs4TLQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e279.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a><a class="art-x" href="https://mp.weixin.qq.com/s/Sz2hzXiNCyf1YNzPbeUo5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e280.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a><a class="art-x" href="https://mp.weixin.qq.com/s/v6iBuqep2ZCZ9wAwhnHLDA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e281.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a><a class="art-x" href="https://mp.weixin.qq.com/s/3pYESr-ZDD-qM3uktiSIYQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e282.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a><a class="art-x" href="https://mp.weixin.qq.com/s/BCstLeMYEPTk5A4sJp66jA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e283.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a><a class="art-x" href="https://mp.weixin.qq.com/s/-Vb_8UdgglaYj0HnSYPZcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e284.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a><a class="art-x" href="https://bytedance.sg.larkoffice.com/docx/QNsIdi8VFoKm00xY8SRlkXxygve" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e285.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a><a class="art-x" href="https://www.anytocopy.com/xiaohongshu" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e286.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/udSpp7eMqwiRo5yVShRzLw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e287.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a><a class="art-x" href="https://mp.weixin.qq.com/s/PcZVz9Xf2-SFE_9_e41uVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e288.html">Obsidian 必装的 9 个 AI Agent Skill</a><a class="art-x" href="http://xhslink.com/o/4tA9NrR4eXd" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e289.html">大博主常用的 5 个录屏 + 3 个白板工具</a><a class="art-x" href="http://xhslink.com/o/68mgswUWCNA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e290.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a><a class="art-x" href="https://mp.weixin.qq.com/s/OqpljVUwvONVohnk7Sf5hw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+</details>
+<details class="cat"><summary>认知与思维 <span class="cnt">12</span><a class="mod-go" href="../ext/index.html#c2" aria-label="进入分类列表">→</a></summary>
+<span class="art-row"><a class="art" href="../ext/e291.html">当AI可以逆向一切的时候，我们还剩下些什么？</a><a class="art-x" href="https://mp.weixin.qq.com/s/l5RyP8ZVHJiESgS_m-D8CA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e292.html">高性价比人生指南（全书归档）</a><a class="art-x" href="https://github.com/eternity4719/HowToLiveBetter" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e293.html">AI 专有名词学习笔记：Agent 评测与训练方法</a>
+<a class="art" href="../ext/e294.html">单Agent思维链惯性与Agent Team挑战者架构</a>
+<span class="art-row"><a class="art" href="../ext/e295.html">「只剩一群用 LLM 的菜鸟」：顶级黑客怒退 PS5 Linux 项目，几个月心血全打水漂</a><a class="art-x" href="https://mp.weixin.qq.com/s/q3c56lgmLC6YTMov96tLQw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e296.html">AI时代怎么做架构设计：四步法及AI带来的变化</a><a class="art-x" href="https://mp.weixin.qq.com/s/pHZCyEVIQeNnBeNnr_QPdg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e297.html">普通人怎样在6-12个月内改变自己</a><a class="art-x" href="https://v.douyin.com/GOXRZFkXLa4/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e298.html">一天一小时，365天后，你的人生会彻底翻篇</a><a class="art-x" href="https://v.douyin.com/6xiqnchxC99/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e299.html">AI 不是效率工具，是心流制造机：心力配置最优化 + 主体性训练</a><a class="art-x" href="https://mp.weixin.qq.com/s/rVOI4KxBzRHwAv3k0osNQQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e300.html">Agent 路线之争：替代人类 vs 增强人类，ColaOS 选了后者</a><a class="art-x" href="https://mp.weixin.qq.com/s/p3nJlwmgEfEyVnwy3fPfnQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e301.html">Build-your-own-X：通过从零造轮子真正掌握编程</a><a class="art-x" href="https://v.douyin.com/OYALS7c0BrA/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e302.html">爱马仕189年的马具哲学：Harness 的设计要跟被约束者对齐</a><a class="art-x" href="https://mp.weixin.qq.com/s/2NWvKt6M1ZXUfMFHCr5CtQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+</details>
+<details class="cat"><summary>写作与创作 <span class="cnt">3</span><a class="mod-go" href="../ext/index.html#c3" aria-label="进入分类列表">→</a></summary>
+<span class="art-row"><a class="art" href="../ext/e303.html">dontbesilent：为方便同行洗稿，我公开了我的推文</a><a class="art-x" href="https://www.douyin.com/video/7665017623372926234" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e304.html">全网首发！AI动态漫制作全流程</a><a class="art-x" href="https://www.xiaohongshu.com/discovery/item/6a916c4b000000001803f3d2" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e305.html">卡兹克开源创作 Skill：构建迭代方法论 + AI辅助创作边界 + 四层自检体系</a><a class="art-x" href="https://mp.weixin.qq.com/s/AtxGrii_K-nzkwUM9SNhEg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+</details>
+<details class="cat"><summary>商业与变现 <span class="cnt">2</span><a class="mod-go" href="../ext/index.html#c4" aria-label="进入分类列表">→</a></summary>
+<span class="art-row"><a class="art" href="../ext/e306.html">什么是FDE？Anthropic大牛这篇讲的可能是目前最好的</a><a class="art-x" href="https://mp.weixin.qq.com/s/yTRfQCybSFsvb5wX0nY51g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e307.html">分析了150条B站视频之后，我发现了做内容做产品的制胜秘籍！</a><a class="art-x" href="https://mp.weixin.qq.com/s/H7-G_vszhDe8tLaNuC4jZA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+</details>
+<details class="cat"><summary>待分拣 <span class="cnt">15</span><a class="mod-go" href="../ext/index.html#c5" aria-label="进入分类列表">→</a></summary>
+<span class="art-row"><a class="art" href="../ext/e308.html">知识管理八大体系横评，哪种适合你？</a><a class="art-x" href="https://xhslink.cn/o/6shrgDIiOu0" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e309.html">拯救代码洁癖！Clean Code之父开源AI Skill ub-mode</a><a class="art-x" href="https://xhslink.cn/o/Anseb9sXHgO" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e310.html">360大模型安全白皮书</a>
+<a class="art" href="../ext/e311.html">AI基础设施安全白皮书</a>
+<a class="art" href="../ext/e312.html">MicrosoftAI安全</a>
+<a class="art" href="../ext/e313.html">华为AI安全白皮书</a>
+<a class="art" href="../ext/e314.html">华为云AI安全解决方案白皮书</a>
+<a class="art" href="../ext/e315.html">华为算力基础设施安全技术白皮书</a>
+<span class="art-row"><a class="art" href="../ext/e316.html">我用Obsidian搭了一个会自己生长的个人网</a><a class="art-x" href="https://xhslink.cn/o/1iytNspS23q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e317.html">AI时代，普通人用Mac mini能干点啥</a><a class="art-x" href="https://xhslink.cn/o/9Ur6avLUQO7" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e318.html">Dan Koe：用AI做一个自己的人生模型</a><a class="art-x" href="https://v.douyin.com/wU7DQ2m_Hpg/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e319.html">GitHub技巧｜项目一键可视化</a><a class="art-x" href="https://xhslink.cn/o/7pHluEVC2Iq" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e320.html">焚诀，提示词模板，思维方式</a><a class="art-x" href="https://xhslink.cn/o/4uoGIx5okPf" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e321.html">jev-chat-jarvis：装在手机上的对话副驾</a><a class="art-x" href="https://github.com/jev-chat/jev-chat-jarvis" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e322.html">第6集 | 为方便同行洗稿，我公开了我的推文</a><a class="art-x" href="https://v.douyin.com/1oSUZbZqCbw/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+</details>
+<details class="cat" open><summary>AI与大模型 <span class="cnt">31</span><a class="mod-go" href="../ext/index.html#c6" aria-label="进入分类列表">→</a></summary>
+<a class="art" href="../ext/e323.html">大模型AI Agent知识从0-1笔记-万字详解版本！</a>
+<a class="art" href="../ext/e324.html">大模型Agent实战从0-1笔记：万字详解【迭代版V2】</a>
+<a class="art" href="../ext/e325.html">大模型Transformer架构从0-1架构深度解析</a>
+<a class="art" href="../ext/e326.html">AI开发基础：Langchain框架从入门到实战开发-附代码</a>
+<a class="art" href="../ext/e327.html">AI开发基础：Langgraph框架从入门到实战开发智能体-附带完整可运行代码</a>
+<a class="art" href="../ext/e328.html">万字详解！AI Harness 入门与实践！一篇博文给你讲透！</a>
+<a class="art" href="../ext/e329.html">RAG知识库助手实战-附带前后端和完整可运行服务</a>
+<a class="art" href="../ext/e330.html">实战智能出行Agent助手-附代码和前后端可视化界面</a>
+<a class="art active" href="../ext/e331.html">Vibe Coding指南-AI编辑器全栈开发-附实战和视频</a>
+<a class="art" href="../ext/e332.html">AI大模型面试题-基础篇</a>
+<a class="art" href="../ext/e333.html">AI应用开发+后端面试题</a>
+<a class="art" href="../ext/e334.html">Codex 从小白到实战高手：大厂工程化实战手册</a>
+<a class="art" href="../ext/e335.html">Claude Code 入门到实战全流程详细版</a>
+<a class="art" href="../ext/e336.html">第一章：快速上手</a>
+<a class="art" href="../ext/e337.html">第二章 Claude Code 入门基础操作</a>
+<a class="art" href="../ext/e338.html">第三章： Claude Code 20个常用斜杠指令速查表</a>
+<a class="art" href="../ext/e339.html">第四章：文本处理与创作</a>
+<a class="art" href="../ext/e340.html">第五章：文档管理与处理</a>
+<a class="art" href="../ext/e341.html">第六章：数据处理与分析</a>
+<a class="art" href="../ext/e342.html">第七章 创建常用模板</a>
+<a class="art" href="../ext/e343.html">第八章：提示词优化技巧</a>
+<a class="art" href="../ext/e344.html">第九章：复用文档解决同类问题</a>
+<a class="art" href="../ext/e345.html">第十章：用编程的思维解决问题</a>
+<a class="art" href="../ext/e346.html">第十一章：Claude 高级功能使用</a>
+<a class="art" href="../ext/e347.html">第十二章：让Claude自动解决问题</a>
+<a class="art" href="../ext/e348.html">Claude Code 实战指南</a>
+<a class="art" href="../ext/e349.html">滴云智能办公丨多Agent协同系统</a>
+<a class="art" href="../ext/e350.html">多Agent项目实战：多Agent协同系统</a>
+<a class="art" href="../ext/e351.html">AI应用开发项目实战知识库-详解版</a>
+<a class="art" href="../ext/e352.html">11-Java全套八股文</a>
+<a class="art" href="../ext/e353.html">AI应用开发：RAG技术从小白到深入理解-详细版</a>
+</details>
+</details></nav></aside><div class="mask" id="mask"></div>
+  <main class="content art-page with-toc"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">36</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#观看方式">观看方式</a><a class="tl l1" href="#新时代神器-AI编辑器Qoder-专题课程">新时代神器！AI编辑器Qoder 专题课程</a><a class="tl l3" href="#第一章-适应时代掌握AI编辑器Qoder-专题课程介绍">第一章 适应时代掌握AI编辑器Qoder 专题课程介绍</a><a class="tl l4" href="#第1集-都2026了还在用传统编辑器-来看AI编辑器Qoder">第1集 都2026了还在用传统编辑器 来看AI编辑器Qoder</a><a class="tl l4" href="#第2集-新时代开发神器-AI编辑器Qodoer-课程大纲你知道多少">第2集 新时代开发神器 AI编辑器Qodoer 课程大纲你知道多少</a><a class="tl l3" href="#第二章-Qoder基础入门与全栈环境搭建">第二章 Qoder基础入门与全栈环境搭建</a><a class="tl l4" href="#第1集-你知道Qoder如何改变Java-Vue全栈开发吗">第1集 你知道Qoder如何改变Java+Vue全栈开发吗</a><a class="tl l4" href="#第2集-快速掌握Qoder的下载安装与全栈环境验证">第2集 快速掌握Qoder的下载安装与全栈环境验证</a><a class="tl l4" href="#第3集-快速完成Qoder账户注册登录以及必要的个性化配置">第3集 快速完成Qoder账户注册登录以及必要的个性化配置</a><a class="tl l4" href="#第4集-一键生成Spring-Boot后端与Vue-3前端项目结构">第4集 一键生成Spring Boot后端与Vue 3前端项目结构</a><a class="tl l4" href="#第5集-玩转启动前后端服务与Qoder的核心AI编码功能">第5集 玩转启动前后端服务与Qoder的核心AI编码功能</a><a class="tl l3" href="#第三章-了解Qoder界面操作与全栈基础功能">第三章 了解Qoder界面操作与全栈基础功能</a><a class="tl l4" href="#第1集-深入解析Qoder界面各面板与高效布局方案">第1集 深入解析Qoder界面各面板与高效布局方案</a><a class="tl l4" href="#第2集-掌握在Qoder中创建打开克隆和管理全栈项目">第2集 掌握在Qoder中创建打开克隆和管理全栈项目</a><a class="tl l4" href="#第3集-带你掌握Qoder核心编辑器功能">第3集 带你掌握Qoder核心编辑器功能</a><a class="tl l3" href="#第四章-全栈开发AI助手核心功能与技巧实战">第四章 全栈开发AI助手核心功能与技巧实战</a><a class="tl l4" href="#第1集-如何掌握NES的智能预测与补全技巧实战">第1集 如何掌握NES的智能预测与补全技巧实战</a><a class="tl l4" href="#第2集-超强上下文内联对话Inline-Chat-该怎么玩">第2集 超强上下文内联对话Inline Chat-该怎么玩</a><a class="tl l4" href="#第3集-你知道Ask模式与Agent模式两者的区别吗">第3集 你知道Ask模式与Agent模式两者的区别吗</a><a class="tl l4" href="#第4集-玩转AI命令与提示词工程-处理问题so-easy">第4集 玩转AI命令与提示词工程 处理问题so easy</a><a class="tl l4" href="#第5集-如何用Qoder生成高质量全栈代码和质量评估">第5集 如何用Qoder生成高质量全栈代码和质量评估</a><a class="tl l3" href="#第五章-掌握Qoder高级功能与Agent模式">第五章 掌握Qoder高级功能与Agent模式</a><a class="tl l4" href="#第1集-玩转Agent模式-掌握其处理复杂全栈任务的流程">第1集 玩转Agent模式 掌握其处理复杂全栈任务的流程</a><a class="tl l4" href="#第2集-除了Agent你知道怎么使用Quest模式吗">第2集 除了Agent你知道怎么使用Quest模式吗</a><a class="tl l3" href="#第六章-企业级全栈项目管理与最佳实践">第六章 企业级全栈项目管理与最佳实践</a><a class="tl l4" href="#第1集-快速掌握Qoder中无缝集成Git实现版本控制集成">第1集 快速掌握Qoder中无缝集成Git实现版本控制集成</a><a class="tl l4" href="#第2集-你知道Qoder中全栈调试工具吗该怎么玩">第2集 你知道Qoder中全栈调试工具吗该怎么玩</a><a class="tl l4" href="#第3集-你知道Qoder怎么扩展插件吗全栈开发都会用到哪些插件">第3集 你知道Qoder怎么扩展插件吗全栈开发都会用到哪些插件</a><a class="tl l4" href="#第4集-带你玩转Repo-Wiki功能一键生成项目文档">第4集 带你玩转Repo Wiki功能一键生成项目文档</a><a class="tl l3" href="#第七章-掌握插件开发与高级集成">第七章 掌握插件开发与高级集成</a><a class="tl l4" href="#第1集-如何在IntelliJ-IDEA中集成Qoder-AI能力">第1集 如何在IntelliJ IDEA中集成Qoder AI能力</a><a class="tl l4" href="#第2集-你知道Model-Context-Protocol吗带你集成实战">第2集 你知道Model Context Protocol吗带你集成实战</a><a class="tl l4" href="#第3集-感觉Qoder不听话胡乱生成带你玩转标准化与自动化治理">第3集 感觉Qoder不听话胡乱生成带你玩转标准化与自动化治理</a><a class="tl l2" href="#12-常见问题及解决方案">12. 常见问题及解决方案</a><a class="tl l3" href="#12-1-代码冲突解决">12.1 代码冲突解决</a><a class="tl l3" href="#12-2-性能优化">12.2 性能优化</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与大模型</div><article><h1>Vibe Coding指南-AI编辑器全栈开发-附实战和视频</h1><div class="meta">2026-11-09 · <span class="m-src">AI与大模型/大模型实战宝典/raw/10-Vibe Coding指南-AI编辑器全栈开发-附实战和视频.md</span></div><div class="md"><p><img alt="@小滴技术团队" src="https://feishu.cn/file/YgqSbblXJonS4qxHnwRcHJuWnye"></p>
+<h1 id="观看方式">观看方式</h1>
+<ul><li><strong>如果需要结合视频实操，联系老师开通权限即可</strong></li></ul>
+<h1 id="新时代神器-AI编辑器Qoder-专题课程">新时代神器！AI编辑器Qoder 专题课程</h1>
+<p><strong>愿景："让编程不再难学，让技术与生活更加有趣"</strong></p>
+<h3 id="第一章-适应时代掌握AI编辑器Qoder-专题课程介绍">第一章 适应时代掌握AI编辑器Qoder 专题课程介绍</h3>
+<h4 id="第1集-都2026了还在用传统编辑器-来看AI编辑器Qoder">第1集 都2026了还在用传统编辑器 来看AI编辑器Qoder</h4>
+<p><strong>简介：讲解AI编辑器Qoder 专题课程介绍</strong></p>
+<ul><li>课程背景与优势</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/MHYYbsrwLoJKJGxAfkicn3aLntg"></p>
+<ul><li>课程学后水平</li></ul>
+<ul><li><strong>掌握Ask模式</strong>，向AI咨询技术问题、分析错误堆栈和获取最佳实践建议。</li><li><strong>掌握Agent模式</strong>，将“创建用户登录模块”等完整开发任务委托给AI执行并审核其计划。</li><li><strong>掌握Quest模式</strong>，发起并管理如“迁移至微服务架构”等复杂多阶段项目任务。</li><li><strong>掌握运用NES智能补全</strong>，在编写Java和Vue代码时获得并接受上下文的智能代码预测。</li><li><strong>掌握使用Inline Chat</strong>，针对编辑器内选中的特定代码块进行实时提问和获得修改建议。</li><li><strong>掌握运用“/”AI命令</strong>，快速对代码执行解释、优化、重构、生成测试和生成文档等标准化操作。</li><li><strong>掌握编写高效提示词</strong>，通过明确角色、提供充足上下文等方式，精准获取AI帮助。</li><li><strong>掌握Qoder生成代码</strong>，从自然语言描述直接生成高质量的函数、模块甚至完整项目结构。</li><li><strong>掌握自动化代码质量评估</strong>，让AI从性能、安全、可读性等维度审查代码并提出改进建议。</li><li><strong>掌握Qoder建全栈项目</strong>，通过AI指令一键生成符合企业规范的Spring Boot + Vue 3项目骨架。</li><li><strong>掌握Qoder进行全栈调试</strong>，在Qoder中同时对Java后端和Vue前端进行断点调试与问题定位。</li><li><strong>掌握Qoder扩展插件</strong>，安装并配置Java、Vue、数据库、API测试等插件以增强开发环境。</li><li><strong>掌握Qoder集成Git</strong>，在Qoder内完成分支管理、提交、推送等版本控制操作。</li><li><strong>掌握Repo Wiki</strong>，一键将代码转换为包含架构图、API文档的立体化项目文档。</li><li><strong>掌握配置MCP服务器</strong>，安全连接GitHub、Redis等外部工具，扩展AI的认知和操作边界。</li><li><strong>掌握制定AI编码规则</strong>，通过项目级规则文件约束Qoder的生成行为，使其符合团队规范。</li><li><strong>主导全栈项目开发</strong>，综合运用Qoder的各项功能，完成从设计到测试的全栈电商平台实战。</li></ul><ul><li>适合人群</li></ul>
+<ul><li>转型或提升效率的全栈/后端开发者</li><li>寻求突破，想从CRUD开发转向系统架构和性能优化的开发者</li><li>希望快速积累项目经验的计算机专业学生</li><li>希望拥抱AI编程时代的任何开发者</li><li>适应AI时代潮流成为AI应用开发工程师的开发者  </li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/DKi6bD8EoooSVsxNT39cgznonIe"></p>
+<h4 id="第2集-新时代开发神器-AI编辑器Qodoer-课程大纲你知道多少">第2集 新时代开发神器 AI编辑器Qodoer 课程大纲你知道多少</h4>
+<p><strong>简介：讲解新时代AI编辑器Qodoer 课程大纲你知道多少</strong></p>
+<ul><li>课程知识点概括和学前基础</li></ul>
+<ul><li>后端学前基础：SpringBoot+Spring+Mybatis</li><li>前端学前基础：Vue3+ElementUI+Axios</li><li>PS:不会上面的基础也没关系，这些基础都有课程，找客服即可</li></ul>
+<ul><li>目录大纲</li></ul>
+<ul><li>课程有配套的源码哈，在每章每集的资料里面，</li><li>如果自己操作的情况和视频不一样，导入课程代码对比验证基本就可以发现问题了</li></ul>
+<p>保持谦虚好学、术业有专攻、在校的学生，有些知识掌握也比工作好几年掌握的人厉害</p>
+<p><strong>愿景："让编程不再难学，让技术与生活更加有趣"</strong></p>
+<h3 id="第二章-Qoder基础入门与全栈环境搭建">第二章 Qoder基础入门与全栈环境搭建</h3>
+<h4 id="第1集-你知道Qoder如何改变Java-Vue全栈开发吗">第1集 你知道Qoder如何改变Java+Vue全栈开发吗</h4>
+<p><strong>简介：讲解对比传统全栈开发流程与Qoder的AI辅助流程，理解其核心价值</strong></p>
+<ul><li>核心概念界定</li></ul>
+<ul><li>传统Java+Vue全栈工作流 VS Qoder AI编辑器</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/RwujbUQQYo3l9Jx87GzcIBzjnjb"></p>
+<h4 id="第2集-快速掌握Qoder的下载安装与全栈环境验证">第2集 快速掌握Qoder的下载安装与全栈环境验证</h4>
+<p><strong>简介：讲解完成Qoder客户端安装，并验证Java、Vue全栈所需的本地基础环境</strong></p>
+<ul><li>核心操作流程</li></ul>
+<ul><li>Qoder客户端下载与安装（Windows/macOS）</li></ul>
+<ul><li>Qoder官方网站<a href="https://qoder.com/download">https://qoder.com/download</a></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/TvpPbtlojoB0w9xv9TUcdTvCnCf"></p>
+<ul><li>本地基础环境验证（在Qoder集成终端中操作）</li><li>打开终端：</li></ul>
+<ul><li>在Qoder中，使用快捷键 Ctrl+`（Windows/Linux）</li><li>Cmd+`（macOS）打开集成终端。</li></ul><ul><li>逐条验证环境，输入以下命令并观察输出：</li><li># 1. 验证Java环境（Spring Boot 3.x需JDK 17+）  </li></ul>
+<p>java -version # 期望输出：包含 “java version “17.x.x”</p>
+<p># 2. 验证Maven（项目管理） mvn -v # 期望输出：包含 “Apache Maven 3.6+” 版本信息</p>
+<p># 3. 验证Node.js（Vue开发） node --version # 期望输出：包含 “v18.x.x” 或更高</p>
+<p># 4. 验证npm包管理器 npm -v</p>
+<p># 5. （可选）验证MySQL服务是否启动 # 可通过系统服务面板（Windows）或 <code>brew services list</code>（macOS）查看</p>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/XspmbQKn0oo0mMxJcZ8cauisnre"></p>
+<ul><li>故障排查：</li></ul>
+<ul><li>若任何命令提示“未找到”，需返回Oracle/OpenJDK、Apache Maven、Node.js官网下载安装</li><li>并确保已正确配置系统环境变量<code>PATH</code>。</li></ul>
+<h4 id="第3集-快速完成Qoder账户注册登录以及必要的个性化配置">第3集 快速完成Qoder账户注册登录以及必要的个性化配置</h4>
+<p><strong>简介：讲解完成Qoder账户注册登录，并进行必要的个性化配置以适应全栈开发</strong></p>
+<ul><li>核心操作流程</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/MKcGbDRG7oA3V4xzQarcPombnuh"></p>
+<ul><li>基础个性化设置 </li></ul>
+<ul><li>切换显示语言为中文（可选但推荐）：</li></ul>
+<ul><li>使用快捷键 <code>Ctrl+Shift+P</code>（Windows/Linux）或 <code>Cmd+Shift+P</code>（macOS）打开命令面板</li><li>输入 “configure language” </li></ul>
+<ul><li>选择 “Configure Display Language”。</li><li>在列表中选择 “zh-cn”（中文简体），等待Qoder重启生效</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/SwOAbj8s4oKqNxx3MLYcntSonM4"></p>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/POIsbUDCco6B5cxwBIpcVyi8nWf"></p>
+<ul><li>配置AI助手语言偏好（可选）：</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/Jm20bkdSFoabHpx2ovtcE3sYnZf"></p>
+<h4 id="第4集-一键生成Spring-Boot后端与Vue-3前端项目结构">第4集 一键生成Spring Boot后端与Vue 3前端项目结构</h4>
+<p><strong>简介：讲解通过AI对话，以Agent模式一键生成标准的Java Spring Boot后端与Vue 3前端项目结构</strong></p>
+<ul><li>核心操作流程</li></ul>
+<ul><li>准备项目目录</li></ul>
+<ul><li>在本地磁盘（如 <code>D:</code> 或你的工作目录）</li></ul>
+<ul><li>新建一个空文件夹，命名为 <code>demo-fullstack</code>。</li><li>在Qoder中，点击顶部菜单 <code>File</code> -&gt; <code>Open Folder...</code></li></ul>
+<ul><li>选择并打开刚刚创建的 <code>demo-fullstack</code> 文件夹</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/Kt97bi9u8oNj6ExvsSycLjmmnqh"></p>
+<ul><li>使用AI Agent生成项目骨架</li></ul>
+<ul><li>打开AI聊天面板：</li></ul>
+<ul><li>使用快捷键 <code>Ctrl+L</code>（Windows/Linux）或 <code>Cmd+L</code>（macOS）打开右侧的AI聊天面板。</li><li>输入明确指令：</li></ul>
+<ul><li>在输入框中清晰描述你的全栈项目需求，例如：</li><li>请使用Agent模式，为我创建一个前后端分离的全栈项目。后端使用Spring Boot 3.x和Java 21，包含一个简单的REST API。前端使用Vue 3和TypeScript，并集成Element Plus UI库。请生成标准的项目结构、基础配置文件和示例代码。</li><li>切换至Agent模式：</li></ul>
+<ul><li>在AI输入框附近，找到模式切换按钮，将默认的 <strong>“Ask”模式</strong> 改为 <strong>“Agent”模式</strong></li><li>此模式允许AI直接操作文件系统</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/IWBlbXItdouXD3xU8ajca5uln0c"></p>
+<ul><li>执行与确认：</li></ul>
+<ul><li>发送指令。</li><li>AI会分析需求，生成一个包含步骤的计划</li></ul>
+<ul><li>如“创建backend目录”、“生成pom.xml”、“创建frontend目录”、“生成vite.config.ts”等，</li><li>并请求你的确认。</li><li>仔细阅读计划后，点击“批准”或“继续”。</li><li>等待执行完成：</li></ul>
+<ul><li>AI将开始自动创建和写入文件</li><li>整个过程会在聊天面板中有进度提示</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/FMIObxFHmoHFFrxWwN0c7LfAnlc"></p>
+<ul><li>验证生成的项目结构</li></ul>
+<ul><li>AI执行完毕后，在Qoder左侧的文件资源管理器中</li><li>检查 <code>demo-fullstack</code> 目录下是否生成了类似如下的结构：</li><li>demo-fullstack/  </li></ul>
+<p>├── backend/                 # Spring Boot后端项目 │   ├── pom.xml              # Maven项目对象模型文件 │   ├── src/ │   │   └── main/ │   │       ├── java/com/example/demo/        # Java源码包 │   │       │   ├── DemoApplication.java      # Spring Boot主类 │   │       │   └── controller/               # 控制器包（可能自动生成示例） │   │       └── resources/ │   │           ├── application.yml           # 应用配置文件 │   │           └── static/ │   └── mvnw, mvnw.cmd       # Maven包装器脚本 └── frontend/                # Vue 3前端项目 ├── package.json         # npm项目配置文件 ├── vite.config.ts       # Vite构建工具配置 ├── src/ │   ├── main.ts          # Vue应用入口文件 │   ├── App.vue          # 根组件 │   ├── components/      # 组件目录 │   └── views/           # 页面视图目录 └── index.html           # HTML入口页面</p>
+<ul><li>此结构表明AI已成功创建了前后端分离的项目基础。</li></ul>
+<h4 id="第5集-玩转启动前后端服务与Qoder的核心AI编码功能">第5集 玩转启动前后端服务与Qoder的核心AI编码功能</h4>
+<p><strong>简介：讲解启动前后端服务，并初步体验Qoder的核心AI编码功能</strong></p>
+<ul><li>核心操作流程</li></ul>
+<ul><li>启动后端Spring Boot服务</li></ul>
+<ul><li>在Qoder的集成终端中，使用 <code>cd</code> 命令进入后端目录。</li><li>cd backend</li><li>使用Maven Wrapper启动Spring Boot应用。</li><li>mvn spring-boot:run</li><li>观察启动日志：</li></ul>
+<ul><li>首次运行会下载所有Maven依赖，请保持网络通畅。</li><li>成功启动后，终端最后几行会显示 <code>Started DemoApplication in X.XXX seconds</code>，</li><li>并标明服务运行在 <code>http://localhost:8080</code></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/AobGbLINTo4MMpxk4uUcsELEnNg"></p>
+<ul><li>启动前端Vue开发服务器</li></ul>
+<ul><li>打开新终端标签页：</li></ul>
+<ul><li>点击Qoder终端面板上的“+”号</li><li>或使用快捷键 <code>Ctrl+Shift+</code> <code>（Windows）或</code>Cmd+Shift+``（macOS）</li><li>打开一个新的终端。</li><li>在新终端中进入前端目录并启动服务</li><li>cd frontend  </li></ul>
+<p>npm install       # 安装Node.js依赖（仅首次需要） npm run dev       # 启动Vite开发服务器</p>
+<ul><li>访问前端页面：</li></ul>
+<ul><li>启动成功后，终端会输出 <code>Local: http://localhost:3000</code></li><li>按住 <code>Ctrl</code> 键并用鼠标点击该链接</li></ul>
+<ul><li>Qoder将在你的默认浏览器中打开该页面</li><li>此时应能看到一个基础的Vue应用</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/SqSDbvgrgoQyU3x0DSec04eQnhb"></p>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/FjwTb1J3voL5ulxDrdFcTLMYnyc"></p>
+<ul><li>体验智能代码补全（NES）</li></ul>
+<ul><li>在Qoder中，导航到 <code>backend/src/main/java/com/example/demo/</code> 路径下</li></ul>
+<ul><li>打开 <code>DemoApplication.java</code> 或任何Java文件。</li><li>在类中任意位置，尝试编写一个简单的REST端点。</li></ul>
+<ul><li>当你输入 <code>@RestController</code> 时，观察代码上方的实时建议</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/QKwDb1NvBo5YAbxhqMNcH5Qgnhc"></p>
+<ul><li>接受建议：</li></ul>
+<ul><li>Qoder会分析上下文，预测你可能想创建一个返回“Hello World”的GET接口</li><li>并高亮显示完整的建议代码块（可能包含 <code>@GetMapping(“/hello”)</code> 注解和方法体）</li><li>按下 <code>Tab</code> 键即可一键接受并插入该段代码。</li><li>保存文件，后端服务将热更新（如果已启用<code>spring-boot-devtools</code>）。</li><li>浏览器或Postman中访问 <code>http://localhost:8080/hello</code> 测试该接口。</li></ul>
+<p><strong>愿景："让编程不再难学，让技术与生活更加有趣"</strong></p>
+<h3 id="第三章-了解Qoder界面操作与全栈基础功能">第三章 了解Qoder界面操作与全栈基础功能</h3>
+<h4 id="第1集-深入解析Qoder界面各面板与高效布局方案">第1集 深入解析Qoder界面各面板与高效布局方案</h4>
+<p><strong>简介：讲解深入解析Qoder界面各面板在全栈开发中的专属功能与高效布局方案</strong></p>
+<ul><li>核心面板功能与布局实操</li></ul>
+<ul><li>界面总览与面板管理</li></ul>
+<ul><li>认识核心工作区：</li></ul>
+<ul><li>启动Qoder并打开一个Java+Vue全栈项目。</li><li>默认界面通常分为五个区域：</li></ul>
+<ul><li>左侧活动栏、主侧边栏、中央编辑区、右侧辅助栏和底部状态面板</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/KCNjbUu8mo9d69xUyrpccaEonVb"></p>
+<ul><li>面板显示/隐藏控制：</li></ul>
+<ul><li>点击<strong>活动栏</strong>（最左侧竖条）上的图标，</li><li>可控制对应功能面板在<strong>主侧边栏</strong>的显示与隐藏</li><li>关键图标包括：</li></ul>
+<ul><li><strong>文件资源管理器</strong>（文档图标）：管理项目文件。</li><li><strong>搜索</strong>（放大镜图标）：全局搜索代码。</li><li><strong>源代码管理</strong>（分支图标）：Git操作。</li><li><strong>Qoder AI</strong>（智能图标）：AI功能入口。</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/JVMTbpdClovGNyx2wjLc59d7nrg"></p>
+<ul><li>使用快捷键 <code>Ctrl+B</code>（Windows/Linux）或 <code>Cmd+B</code>（macOS）</li><li>可以快速显示/隐藏整个主侧边栏</li><li>为全栈开发优化面板布局</li></ul>
+<ul><li><strong>配置左侧主侧边栏</strong>：</li></ul>
+<ul><li><strong>切换项目视图</strong>：</li></ul>
+<ul><li>在文件资源管理器顶部，有一个下拉选择框。</li><li>将其从默认的“资源管理器”切换为 <strong>“Java项目”</strong> 视图。</li><li>此视图会按Maven模块和Java包结构组织，而非纯文件夹，便于定位Java类。</li><li><strong>同时管理前端</strong>：</li></ul>
+<ul><li>保持文件资源管理器打开</li><li>你可以清晰地看到 <code>frontend/src</code> 下的Vue组件结构</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/NfUtbd1nlosBiHxvTUJcTHGinIe"></p>
+<ul><li><strong>启用右侧辅助面板</strong>：</li></ul>
+<ul><li>点击活动栏上的 <strong>“Qoder AI”</strong> 图标，</li></ul>
+<ul><li>确保右侧的AI聊天面板处于打开状态。这是与AI对话的核心区域。</li><li>点击活动栏上的 <strong>“大纲”</strong> 图标（或使用快捷键 <code>Ctrl+Shift+O</code>），</li></ul>
+<ul><li>打开“大纲”面板。当打开一个Java类文件时，此处会显示该类所有的方法和字段；</li><li>打开Vue组件时，会显示模板中的标签和脚本中的函数，便于快速导航</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/YbYGbQJzaoj900x5cYUcZDjCnEg"></p>
+<ul><li><strong>利用底部面板</strong>：</li></ul>
+<ul><li>底部面板汇集了 <strong>“问题”</strong>、<strong>“输出”</strong>、<strong>“调试控制台”</strong> 和 <strong>“终端”</strong>。</li><li>对于全栈开发，最常用的是 <strong>“终端”</strong>。</li><li>你可以点击终端面板右上角的拆分图标（或使用快捷键 Ctrl+`）创建<strong>两个终端实例</strong>。</li><li>将一个重命名为“后端”，用于执行Maven命令；</li><li>另一个重命名为“前端”，用于执行npm命令，实现前后端命令并行执行与观察</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/OirAbuncdovuFcxCXQXczsJnn6g"></p>
+<h4 id="第2集-掌握在Qoder中创建打开克隆和管理全栈项目">第2集 掌握在Qoder中创建打开克隆和管理全栈项目</h4>
+<p><strong>简介：讲解掌握在Qoder中高效创建、打开、克隆和管理Java+Vue全栈项目的完整流程</strong></p>
+<ul><li><strong>核心操作流程</strong></li></ul>
+<ul><li><strong>创建新的Java+Vue全栈项目</strong></li></ul>
+<ul><li><strong>使用AI模板（推荐）</strong>：</li></ul>
+<ul><li>遵循第一章第4集的方法，Agent模式，用自然语言指令创建项目。</li><li>这是最快捷、标准化的方式。</li><li><strong>手动创建标准结构</strong>（备选方案）：</li></ul>
+<ul><li>在Qoder中，点击 <code>文件(File)</code> -&gt; <code>新建文件夹(New Folder)</code>，创建 <code>backend</code> 和 <code>frontend</code> 目录。</li><li>打开集成终端，进入 <code>backend</code> 目录，使用Spring Initializr命令快速生成后端骨架：</li><li>curl https://start.spring.io/starter.zip -d type=maven-project -d language=java -d bootVersion=3.1.0 -d baseDir=backend -d packageName=com.example.demo -d dependencies=web,data-jpa,mysql,lombok -o backend.zip &amp;&amp; unzip backend.zip &amp;&amp; rm backend.zip</li><li>太麻烦啦！我们后面可以直接用插件快速创建Springboot工程！</li><li>进入 <code>frontend</code> 目录，使用Vite创建Vue项目：</li><li>npm create vue@latest . -- --typescript --router --pinia</li><li>最后在Qoder中，右键项目根目录选择 <code>将文件夹添加到工作区(Add Folder to Workspace...)</code></li><li>将前后端目录都加入。</li><li><strong>打开现有本地全栈项目</strong></li></ul>
+<ul><li>点击 <code>文件(File)</code> -&gt; <code>打开文件夹(Open Folder...)</code>。</li><li>在文件选择对话框中，导航到你的全栈项目<strong>根目录</strong></li></ul>
+<ul><li>（即同时包含 <code>backend</code> 和 <code>frontend</code> 文件夹的目录），然后点击“选择文件夹”。</li><li>Qoder会自动加载。</li></ul>
+<ul><li>如果检测到是Maven项目，会开始后台下载依赖和索引。</li><li>观察右下角的状态栏，等待索引完成。</li><li><strong>从Git仓库克隆项目</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/IzzHbjV7CoRLNnxSFrEchLXxnqa"></p>
+<ul><li>点击活动栏上的<strong>“源代码管理”</strong>图标。 </li><li>在源代码管理面板顶部，点击<strong>“克隆存储库(Clone Repository)”</strong>按钮。</li><li>在弹出的输入框中，粘贴你的Git仓库HTTPS或SSH地址</li></ul>
+<ul><li>（例如： https://github.com/username/my-fullstack-app.git ），按回车</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/ZoupbFodFocFY7x15ldcP4PYnBh"></p>
+<ul><li>在弹出的系统对话框中选择本地存储路径。 </li><li>克隆完成后，会提示是否打开。选择 “打开”，Qoder会加载该项目</li></ul>
+<h4 id="第3集-带你掌握Qoder核心编辑器功能">第3集 带你掌握Qoder核心编辑器功能</h4>
+<p><strong>简介：讲解深入掌握针对Java和Vue语言的编辑、导航、搜索等核心编辑器功能</strong></p>
+<ul><li><strong>核心编辑功能实操</strong></li></ul>
+<ul><li><strong>Java语言编辑增强</strong></li></ul>
+<ul><li><strong>智能导入与组织</strong>：</li></ul>
+<ul><li>在Java文件中，直接使用未导入的类（如 <code>LocalDateTime</code>），Qoder会提示错误。</li><li>将光标置于红色波浪线上，点击出现的“快速修复”灯泡图标，</li><li>选择 <strong>“导入类(Import class)”</strong>。</li><li>自动删除未使用的导入并排序。</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/X6j6bUx7sodRouxw1KwcHV6dnHb"></p>
+<ul><li><strong>代码生成</strong>：</li></ul>
+<ul><li>在Java类中右键，选择 <strong>“生成(Generate)...”</strong></li><li>可以选择生成 <strong>Getter和Setter</strong>、<strong>构造函数</strong>、<code>equals()</code> 和 <code>hashCode()</code>、<code>toString()</code> 等方法。</li><li>对于JPA实体，这是必备操作</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/FQAYbglYvo7tTQx4r1UcXUf7nwc"></p>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/NZnsbztOPodjGKxlhejcPIdvnod"></p>
+<ul><li><strong>查看定义与引用</strong>：</li></ul>
+<ul><li>将光标放在任何一个类名、方法名或变量名上，</li></ul>
+<ul><li>右键选择 <strong>“转到定义(Go to Definition)”</strong>（或按 <code>F12</code>）直接跳转到其声明处。</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/ZcHrbshIjoTdz7xN5TScV6U5nde"></p>
+<ul><li>右键选择 <strong>“查找所有引用(Find All References)”</strong>（或按 <code>Shift+F12</code>），</li></ul>
+<ul><li>将在侧边面板列出项目中所有用到该符号的地</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/OyvpbzChGoZW7nxl5o6cxoVEnQf"></p>
+<ul><li><strong>Vue语言编辑增强</strong></li></ul>
+<ul><li><strong>模板语法支持</strong>：</li></ul>
+<ul><li>在Vue文件的 <code>&amp;lt;template&amp;gt;</code> 部分，</li></ul>
+<ul><li>输入 <code>v-</code> 会触发Vue指令的自动补全，如 <code>v-for</code>、<code>v-if</code>、<code>v-bind</code>。</li><li>输入 <code>@</code> 会触发事件监听器的自动补全，如 <code>@click</code>。</li><li><strong>在组件间跳转</strong>：</li></ul>
+<ul><li>在 <code>import</code> 语句或组件标签名上，同样可以使用 <code>F12</code> 跳转到该组件的源文件。</li><li>在 <code>&amp;lt;script setup&amp;gt;</code> 中定义的变量或函数，可以在模板中被识别，并提供补全和跳转。</li><li><strong>Vue专用命令面板</strong>：</li></ul>
+<ul><li>使用 <code>Ctrl+Shift+P</code> 打开命令面板，输入 “Vue”，可以看到一系列Vue相关的命令，</li><li>如 <strong>“Vue: 重新启动VLS”</strong>（重启Vue语言服务器以解决可能的问题）。</li><li><strong>跨语言全局搜索与替换</strong></li></ul>
+<ul><li><strong>项目内全局搜索</strong>：</li></ul>
+<ul><li>点击活动栏的 <strong>“搜索”</strong> 图标（或按 <code>Ctrl+P</code>）。</li><li>在搜索框中输入关键词（如“UserService”）。</li><li><strong>过滤文件类型</strong>：</li></ul>
+<ul><li>在搜索框下方的“要包含的文件”输入框中，</li><li>可以输入 <code>*.java</code> 来只搜索Java文件，或输入 <code>*.vue</code> 来只搜索Vue文件。</li><li><strong>高级正则搜索</strong>：</li></ul>
+<ul><li>点击搜索框右侧的正则表达式图标（<code>.*</code>），</li><li>即可使用正则表达式进行更复杂的模式匹配。</li></ul>
+<p><strong>愿景："让编程不再难学，让技术与生活更加有趣"</strong></p>
+<h3 id="第四章-全栈开发AI助手核心功能与技巧实战">第四章 全栈开发AI助手核心功能与技巧实战</h3>
+<h4 id="第1集-如何掌握NES的智能预测与补全技巧实战">第1集 如何掌握NES的智能预测与补全技巧实战</h4>
+<p><strong>简介：掌握NES功能在编写Java后端与Vue前端代码时的智能预测与补全技巧</strong></p>
+<ul><li><strong>核心功能与激活方式</strong></li></ul>
+<ul><li><strong>NES核心工作机制解析</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/T7uubF1R0o0y0oxoNQxc00Irncg"></p>
+<ul><li><strong>激活与使用NES的标准操作流程</strong></li></ul>
+<ul><li><strong>自动触发</strong>：</li></ul>
+<ul><li>在编辑器中进行常规输入时，</li><li>NES会在光标位置上方或下方以灰色、半透明文本的形式显示预测建议。</li><li>这是它的默认工作状态。</li><li><strong>接受建议</strong>：</li></ul>
+<ul><li>看到满意的预测代码后，按下 <code>Tab</code> 键，该段建议代码将立刻被插入到光标位置。</li><li><strong>忽略建议</strong>：</li></ul>
+<ul><li>如果建议不相关，只需继续输入，预测文本会自动消失。</li></ul><ul><li><strong>全栈开发场景专项实操</strong></li></ul>
+<ul><li><strong>Java后端开发NES实战</strong></li></ul>
+<ul><li><strong>场景一：快速创建JPA实体字段及其Getter/Setter</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>在Java实体类中，在新的一行输入 <code>private String</code>。</li><li>此时，NES可能会预测你将定义一个字段（如 <code>username</code>）。</li><li>按下 <code>Tab</code> 接受字段名补全。</li><li><strong>后续操作</strong>：</li></ul>
+<ul><li>紧接着，在该字段下方一行，右键打开上下文菜单，</li><li>选择 <strong>“生成(Generate)...”</strong>，</li><li>选择生成 <strong>“Getter and Setter”</strong>。</li><li>这虽然不是NES的直接功能，但体现了Qoder的代码生成生态。</li><li><strong>场景二：补全Spring MVC控制器方法</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>在一个带有 <code>@RestController</code> 注解的类中，</li><li>输入 <code>public ResponseEntity&amp;lt;List&amp;lt;Product&amp;gt;&amp;gt; getProducts()</code>。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>NES很可能会预测你需要调用一个 <code>productService.findAll()</code> 方法</li><li>并生成类似 <code>return productService.findAll();</code> 的代码块。</li><li>如果 <code>productService</code> 字段不存在，它甚至可能先建议你声明并注入该字段。</li><li><strong>场景三：环绕处理（Try-Catch）</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>选中一段可能抛出异常的Java代码（例如一段IO操作或数据库查询）。</li><li>直接写try，在弹出菜单中选择 <strong>“try/catch”</strong> 块。</li><li>虽然这是编辑器的内置重构功能，但常与NES的智能提示协同工作。</li><li><strong>Vue前端开发NES实战</strong></li></ul>
+<ul><li><strong>场景一：快速创建Vue组件模板结构</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>在一个新的 <code>.vue</code> 文件的 <code>&amp;lt;template&amp;gt;</code> 部分，</li><li>输入 <code>&amp;lt;el-</code>（假设项目已安装Element Plus）。</li><li>NES会自动提示 <code>el-button</code>、<code>el-input</code>、<code>el-table</code> 等组件列表供你选择</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/Mv8Kbt1SFodWGWxBDogcvRuEnTf"></p>
+<ul><li><strong>进一步操作</strong>：</li></ul>
+<ul><li>选中 <code>el-button</code> 后，输入一个空格，</li><li>NES会继续提示该组件的常用属性（如 <code>type</code>、<code>size</code>、<code>@click</code>）。</li><li><strong>场景二：补全Composition API响应式变量与函数</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>在 <code>&amp;lt;script setup lang=”ts”&amp;gt;</code> 部分，输入 <code>const</code>。</li><li>NES可能会根据当前组件名（如 <code>UserManage</code>）</li><li>预测你要定义一个响应式变量 <code>const userList = ref([])</code>。</li><li>按下 <code>Tab</code> 可快速补全。</li><li><strong>后续操作</strong>：</li></ul>
+<ul><li>在下一行，输入 <code>const handleSave =</code>，</li><li>NES可能会预测一个完整的异步函数结构，用于提交表单数据到后端。</li><li><strong>场景三：自动补全Vue Router导航或Pinia状态管理</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>当你在脚本中键入 <code>router.</code> 时，NES会提示 <code>.push</code>、<code>.go</code> 等方法。</li><li>同样，键入 <code>userStore.</code> 时，会提示该Pinia store中定义的所有 <code>state</code>、<code>actions</code>。</li></ul>
+<h4 id="第2集-超强上下文内联对话Inline-Chat-该怎么玩">第2集 超强上下文内联对话Inline Chat-该怎么玩</h4>
+<p><strong>简介：讲解学习在不离开代码编辑器的情况下，通过内联聊天获取针对当前代码块的实时AI帮助</strong></p>
+<ul><li><strong>核心功能与激活方式</strong></li></ul>
+<ul><li><strong>Inline Chat核心定位</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/DKgUbiVALoRW6UxCJW7cZFKgnXc"></p>
+<ul><li><strong>激活与使用Inline Chat的标准操作流程</strong></li></ul>
+<ul><li><strong>基于选中代码激活</strong>：</li></ul>
+<ul><li>在编辑器中选择一段Java或Vue代码（可以是一行、一个方法或一个代码块）。</li><li>右键单击选中的区域，在上下文菜单中选择 <strong>“Qoder AI: Inline Chat”</strong>。</li><li>或者，使用快捷键 <code>Ctrl+I</code>（Windows/Linux）或 <code>Cmd+I</code>（macOS）。</li><li>一个紧凑的聊天输入框会直接出现在选中代码的下方或侧方。</li><li><strong>基于光标位置激活</strong>：</li></ul>
+<ul><li>将光标置于你想提问的代码行内（无需选中）。</li><li>使用相同的快捷键 <code>Ctrl+I</code> 或 <code>Cmd+I</code>，输入框会出现在光标所在行附近。</li><li><strong>输入问题并执行</strong>：</li></ul>
+<ul><li>在输入框中用自然语言描述你的问题或需求。</li><li>按下 <code>Ctrl+Enter</code>（Windows/Linux）或 <code>Cmd+Enter</code>（macOS）来提交问题。</li><li>AI会分析选中的代码和上下文，给出回答或代码建议。</li><li><strong>应用AI生成的代码</strong>：</li></ul>
+<ul><li>如果AI的建议是代码修改，它会以一个差异对比（diff）视图显示，</li><li>清晰标出新增（绿色）和删除（红色）的部分。</li><li>仔细审查建议的更改，确认无误后，</li><li>点击建议框中的 <strong>“应用(Apply)”</strong> 按钮，更改将自动生效。</li></ul><ul><li><strong>全栈开发场景专项实操</strong></li></ul>
+<ul><li><strong>Java后端开发Inline Chat实战</strong></li></ul>
+<ul><li><strong>解释复杂业务逻辑</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>选中一段涉及多个条件判断和状态转换的业务方法代码。</li><li><strong>激活Inline Chat</strong>并输入：</li></ul>
+<ul><li>“请用中文分步骤解释这段代码的业务逻辑是什么？”</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会逐行或按逻辑块分析代码，</li><li>用通俗的语言解释其功能、流程和可能的状态输出。</li><li><strong>优化数据查询方法</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>选中一个使用了多个 <code>for</code> 循环进行数据拼接和转换的Java方法。</li><li><strong>激活Inline Chat</strong>并输入：</li></ul>
+<ul><li>“这段代码的性能瓶颈可能在哪里？如何使用Stream API进行优化？”</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会指出嵌套循环等问题，</li><li>并提供一个使用Java Stream API重写后的、更简洁高效的代码建议。</li><li><strong>为方法生成Javadoc注释</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>将光标置于一个公有方法的签名行上。</li><li><strong>激活Inline Chat</strong>并输入：</li></ul>
+<ul><li>“为这个方法生成完整的Javadoc注释，包含参数和返回值说明。”</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会根据方法名和参数，生成格式规范、描述清晰的Javadoc注释块。</li><li><strong>Vue前端开发Inline Chat实战</strong></li></ul>
+<ul><li><strong>调试组件渲染问题</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>选中一段模板中绑定了复杂表达式但渲染效果不符合预期的代码。</li><li><strong>激活Inline Chat</strong>并输入：</li></ul>
+<ul><li>“为什么这个计算属性 <code>{{ fullName }}</code> 没有正确更新？可能的原因是什么？”</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会检查响应式数据源、计算属性的依赖关系，</li><li>指出可能是某个源数据不是响应式的，或依赖未被正确追踪。</li><li></li></ul>
+<h4 id="第3集-你知道Ask模式与Agent模式两者的区别吗">第3集 你知道Ask模式与Agent模式两者的区别吗</h4>
+<p><strong>简介：讲解掌握在右侧AI聊天面板中，运用Ask模式与Agent模式处理从代码咨询到项目级任务的各类问题</strong></p>
+<ul><li><strong>核心功能与模式解析</strong></li></ul>
+<ul><li><strong>AI Chat面板基础布局</strong></li></ul>
+<ul><li><strong>打开面板</strong>：</li></ul>
+<ul><li>点击左侧活动栏上的“Qoder AI”图标，或使用快捷键 <code>Ctrl+Alt+B</code>（Windows)，</li><li>打开右侧AI聊天面板。</li><li><strong>面板构成</strong>：</li></ul>
+<ul><li>面板主要分为三部分：</li></ul>
+<ul><li>上方的对话历史记录区、中间的AI回答区、底部的模式选择与输入区。</li><li><strong>对话上下文</strong>：</li></ul>
+<ul><li>面板内的对话具有连续性。</li><li>AI会记住同一会话中之前的问答内容，这对于处理需要多轮对话的复杂任务至关重要。</li><li><strong>Ask模式 vs Agent模式核心区别与选择</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/EilEbzKBfont4XxnUFGcPtJwnOe"></p>
+<ul><li><strong>全栈开发场景专项实操</strong></li></ul>
+<ul><li><strong>Ask模式实战：解决全栈技术问题</strong></li></ul>
+<ul><li><strong>场景一：技术选型咨询</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>在AI Chat面板中输入：</li><li>我正在开发一个电商后台，Spring Boot后端需要生成复杂的Excel报表，请对比一下 <code>EasyExcel</code> 和 <code>Apache POI</code> 的优缺点，并给出选择建议。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会从性能、内存占用、API易用性、社区支持等方面进行详细对比，</li><li>并根据你的场景（电商报表可能数据量大）给出倾向性建议。</li><li><strong>场景二：错误堆栈分析</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>将控制台中出现的一段冗长的Java异常堆栈信息复制到AI Chat面板中，并提问：</li><li>请分析这个 <code>NullPointerException</code> 的根本原因是什么，以及如何修复？</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会定位到堆栈中最可能出错的代码行，分析该处变量为null的原因，</li><li>并提供修复建议（如添加空值检查、检查数据初始化流程）。</li><li><strong>场景三：Vue最佳实践咨询</strong></li></ul>
+<ul><li><strong>操作</strong>：输入：</li></ul>
+<ul><li>在Vue 3的Composition API中，为了更好的逻辑复用，我应该使用自定义Hook还是使用工具函数？它们有什么区别？</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会解释两者概念，说明自定义Hook更侧重于封装有状态的、与组件生命周期相关的逻辑，</li><li>而工具函数是无状态的纯函数，并举例说明各自适用的场景。</li><li><strong>Agent模式实战：委托执行开发任务</strong></li></ul>
+<ul><li><strong>场景一：创建用户登录/注册模块</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>确保AI Chat面板切换至 <strong>“Agent”</strong> 模式。</li><li>输入任务指令：</li><li>请为我的全栈项目创建一个完整的用户登录和注册模块。后端需要包含JWT令牌生成与验证的Spring Security配置、用户实体、注册和登录的API接口。前端需要包含登录页、注册页的表单组件，并实现调用API和令牌存储的逻辑。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会生成一个包含多个步骤的详细计划</li></ul>
+<ul><li>例如：</li></ul>
+<ul><li>创建User实体</li><li>创建JWT工具类</li><li>配置Spring Security</li><li>创建AuthController</li><li>创建Login.vue组件</li><li>...</li><li>你批准后，它将自动创建和修改一系列文件。</li><li><strong>场景二：为现有实体添加审计字段</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>在Agent模式下输入：</li><li>请为项目中所有的JPA实体类（如Product, Order, User）统一添加审计字段，包括 <code>createdBy</code>, <code>createdDate</code>, <code>lastModifiedBy</code>, <code>lastModifiedDate</code>，并确保它们能自动填充。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会先扫描项目找到所有实体类，然后提出修改每个实体的计划，</li><li>并可能建议创建一个抽象的 <code>BaseEntity</code> 类或使用<code>@EntityListeners</code>。</li><li>批准后，它将批量修改这些Java文件。</li><li><strong>场景三：集成第三方API客户端</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>在Agent模式下输入：</li><li>我需要调用一个短信发送API请在后端创建一个SMS服务类，封装对‘云片网’API的调用。需要包含配置项（从<code>application.yml</code>读取）、发送方法以及一个简单的重试机制。同时，在前端的用户管理页面，添加一个‘发送验证码’的按钮和调用逻辑。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会创建或修改后端的配置类、Service类，</li><li>以及前端的Vue组件和相应的状态管理（Pinia）或API调用函数。</li></ul>
+<h4 id="第4集-玩转AI命令与提示词工程-处理问题so-easy">第4集 玩转AI命令与提示词工程 处理问题so easy</h4>
+<p><strong>简介：讲解学习使用预设的AI命令（Commands）和编写有效的提示词（Prompts），以更精准、高效地获取AI帮助</strong></p>
+<ul><li><strong>核心功能与命令体系</strong></li></ul>
+<ul><li><strong>预设AI命令（Commands）及其应用</strong></li></ul>
+<ul><li><strong>命令格式与使用</strong>：</li></ul>
+<ul><li>在AI Chat面板或Inline Chat的输入框中，</li><li>可以输入以斜杠 <code>/</code> 开头的特定命令来触发标准化操作。</li><li><strong>常用命令详解</strong>：</li></ul>
+<ul><li><strong><code>/explain</code> （解释代码）</strong>：</li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>选中一段代码后，在聊天框输入 <code>/explain</code>，</li><li>或直接在聊天框中输入 <code>/explain</code> 然后粘贴代码。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会逐行或分块解释代码的功能、逻辑和关键点。</li><li><strong>在Java+Vue场景下特别适用于理解复杂的业务算法或陌生的第三方库用法。</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/CT8sbfzIGohM7Rxoy5fcL3pDnZc"></p>
+<ul><li><strong><code>/optimize</code> （优化代码）</strong>：</li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>选中一段你认为可以改进的代码，输入 <code>/optimize</code>。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会从性能、可读性、简洁性、安全性等方面提出优化建议，</li><li>并提供优化后的代码示例。</li><li><strong><code>/refactor</code> （重构代码）</strong>：</li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>选中一个庞大的方法或设计不佳的类，输入 <code>/refactor</code>。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会识别出代码坏味道（如过长方法、过大类、重复代码），</li><li>并提出具体的重构建议，例如“提取方法”、“引入参数对象”、“用多态替代条件判断”等，</li><li>并可能提供重构后的代码骨架。</li><li><strong><code>/generate-test</code> （生成测试）</strong>：</li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>将光标置于一个Java方法或Vue组合函数内，输入 <code>/generate-test</code>。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li><strong>对于Java</strong>：</li></ul>
+<ul><li>AI会生成一个基于JUnit 5和Mockito的测试方法，</li><li>包含必要的 <code>@Test</code> 注解、模拟对象设置和断言。</li><li><strong>对于Vue</strong>：</li></ul>
+<ul><li>AI可能会生成基于Vitest或Jest的组件测试或组合函数测试用例。</li><li><strong><code>/document</code> （生成文档）</strong>：</li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>选中代码或聚焦于一个模块，输入 <code>/document</code>。</li><li><strong>预期结果</strong>：</li></ul>
+<ul><li>AI会生成结构化的说明文档，可能包括功能概述、接口列表、使用示例等。</li></ul><ul><li><strong>提示词工程（Prompt Engineering）实战技巧</strong></li></ul>
+<ul><li><strong>编写高效提示词的核心原则</strong></li></ul>
+<ul><li><strong>明确角色</strong>：</li></ul>
+<ul><li>在提问前，先为AI设定一个专业角色，可以大幅提升回答质量。</li><li><strong>示例</strong>：</li><li>你是一个经验丰富的Java架构师，熟悉高并发系统设计。请以这个身份回答：如何设计一个秒杀系统的库存扣减方案？</li><li><strong>提供充足上下文</strong>：给出与问题相关的背景信息、技术栈约束和具体目标。</li></ul>
+<ul><li><strong>差的提示</strong>：</li></ul>
+<ul><li>“怎么做分页？”</li><li><strong>好的提示</strong>：</li><li>在我的Spring Boot 3项目中，使用Spring Data JPA和MySQL。我有一个Product实体，现在需要为ProductController的查询接口实现一个高效的分页查询，要求支持按价格排序和按名称模糊搜索。请给出后端的实现代码示例。</li><li><strong>指定输出格式</strong>：明确要求AI以何种形式回答。</li></ul>
+<ul><li><strong>示例</strong>：</li><li>请将回答组织成以下几个部分：1. 核心思路，2. 关键代码示例（Java后端），3. 注意事项，4. 推荐的进一步学习资料。</li><li><strong>分步引导</strong>：对于复杂任务，将其分解为多个步骤，并逐步与AI交互。</li></ul>
+<ul><li><strong>第一步</strong>：</li></ul>
+<ul><li>“请先帮我设计这个订单状态机的状态枚举和转移规则。”</li><li><strong>第二步（在获得回答后）</strong>：</li></ul>
+<ul><li>“很好，现在请基于这个状态机，为OrderService设计状态变更的方法。”</li><li><strong>全栈开发场景提示词示例</strong></li></ul>
+<ul><li><strong>后端API设计</strong>：</li><li>作为后端开发者，请设计一个RESTful API，用于管理博客文章。需要包含创建、查询（列表+详情）、更新、删除接口。请使用Spring Boot框架，包含Controller层、Service层接口定义，并考虑使用DTO进行前后端数据隔离。在回答中，请先给出API路径和HTTP方法列表，再展示核心的Java代码结构。</li><li><strong>前端组件设计</strong>：</li><li>你是一个Vue 3和Element Plus专家。我需要一个数据表格组件，它具备以下功能：从后端API异步加载数据、支持分页、支持按多列排序、每行带有复选框以进行批量操作。请提供这个组件的完整Vue单文件组件（.vue）代码，使用 <code>&amp;lt;script setup&amp;gt;</code> 语法和TypeScript。</li><li><strong>数据库设计咨询</strong>：</li><li>我需要为在线学习平台设计数据库。核心实体包括：用户、课程、章节、视频、订单。请帮我设计这些表的MySQL 8.0建表语句，并说明表之间的关系（一对一、一对多、多对多）。重点考虑查询性能，在必要的字段上添加索引建议。</li></ul>
+<h4 id="第5集-如何用Qoder生成高质量全栈代码和质量评估">第5集 如何用Qoder生成高质量全栈代码和质量评估</h4>
+<p><strong>简介：学习掌握如何利用Qoder，从自然语言需求描述直接生成高质量、可运行的全栈代码，并对现有代码进行自动化质量评估</strong></p>
+<ul><li><strong>核心功能：需求驱动开发</strong></li></ul>
+<ul><li><strong>从描述生成完整函数/模块</strong></li></ul>
+<ul><li><strong>操作流程</strong>：</li></ul>
+<ul><li><strong>步骤一（清晰描述）</strong>：</li></ul>
+<ul><li>在AI Chat面板的Agent模式下，用尽可能清晰的语言描述你需要的功能。</li></ul>
+<ul><li><strong>示例</strong>：</li><li>请生成一个函数，用于验证用户输入的密码强度。密码必须满足：长度8-20位，包含大小写字母、数字和特殊符号（!@#$%^&amp;*）中的至少三种。函数返回一个布尔值，并附带一个可选的字符串说明（如‘密码强度不足：缺少数字’）。</li><li><strong>步骤二（指定技术栈）</strong>：</li></ul>
+<ul><li>在描述中或后续对话中，明确这是为Java后端还是Vue前端生成，或两者都需要。</li></ul>
+<ul><li><strong>补充</strong>：</li><li>请分别用Java（作为一个Spring Boot Service中的工具方法）和Vue 3的Composition API（作为一个可复用的工具函数）实现上述逻辑。</li><li><strong>步骤三（审查与迭代）</strong>：</li></ul>
+<ul><li>AI生成代码后，仔细审查。如果不符合预期，可以继续对话进行微调：</li><li>请为Java版本的方法添加详细的Javadoc注释。” 或 “Vue函数请改用TypeScript并明确定义返回类型。</li><li><strong>生成范围</strong>：</li></ul>
+<ul><li>此功能不仅可以生成独立的函数</li><li>还可以生成完整的类、接口、Vue组件</li><li>甚至是一组相互关联的文件</li><li><strong>生成样板代码</strong></li></ul>
+<ul><li><strong>识别样板代码</strong>：</li></ul>
+<ul><li>全栈开发中存在大量重复性高的结构代码，例如：</li></ul>
+<ul><li><strong>Java</strong>：</li></ul>
+<ul><li>POJO实体类、Repository接口、基本的CRUD Service实现、Controller层模板。</li><li><strong>Vue</strong>：</li></ul>
+<ul><li>基于Element Plus的表单组件、带有分页和操作的表格组件、模态框组件。</li><li><strong>使用AI加速</strong>：</li></ul>
+<ul><li>不必从零开始编写。可以直接要求AI：</li><li>请生成一个标准的Vue 3组件，用于创建和编辑用户信息，包含表单验证（使用async-validator），表单字段包括：用户名（必填）、邮箱（必填，需验证格式）、角色（下拉选择）。</li><li><strong>结合NES</strong>：</li></ul>
+<ul><li>在编写代码时，NES也会智能地预测并建议插入这些样板结构。</li><li>例如，在Java实体类中键入 <code>@Id</code> 后，NES可能会自动补全 <code>@GeneratedValue</code> 策略。</li></ul><ul><li><strong>核心功能：自动化代码质量评估</strong></li></ul>
+<ul><li><strong>代码质量评估维度</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/I1qpbbfi2o4XIGxtwecc6oGJnDh"></p>
+<ul><li><strong>发起质量评估与解读报告</strong></li></ul>
+<ul><li><strong>操作</strong>：</li></ul>
+<ul><li>选中要评估的代码文件或代码块，在AI Chat面板中输入：</li><li>请对选中的代码进行全面的质量评估，并给出具体的改进建议。</li><li><strong>解读AI报告</strong>：</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/QOyOb3oMNoIvwZxGSDBcEjZCnsc"></p>
+<p><strong>愿景："让编程不再难学，让技术与生活更加有趣"</strong></p>
+<h3 id="第五章-掌握Qoder高级功能与Agent模式">第五章 掌握Qoder高级功能与Agent模式</h3>
+<h4 id="第1集-玩转Agent模式-掌握其处理复杂全栈任务的流程">第1集 玩转Agent模式 掌握其处理复杂全栈任务的流程</h4>
+<p><strong>简介：讲解理解Agent作为“虚拟研发助手”的核心机制，掌握其处理复杂全栈任务的流程。</strong></p>
+<ul><li><strong>核心概念与模式对比</strong></li></ul>
+<ul><li><strong>Agent模式的本质：委托与执行</strong></li></ul>
+<ul><li><strong>超越对话的AI</strong>：</li></ul>
+<ul><li>与仅提供建议的Ask模式不同，Agent模式被授权扮演“开发者”角色。</li><li>你只需描述<strong>任务目标</strong>，Agent会自主决定<strong>实现路径</strong>，并直接修改项目文件。</li><li><strong>全栈任务理解</strong>：</li></ul>
+<ul><li>当接到“添加用户登录功能”指令时，Agent能推断出这是一项全栈任务，</li><li>规划创建Spring Security配置、JWT工具类、登录API以及Vue登录页面和路由守卫。</li><li><strong>Agent模式核心能力三角</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/KChmbz8EFo8sPxxhO7wcFdClnKe"></p>
+<ul><li><strong>标准操作流程</strong></li></ul>
+<ul><li><strong>全栈任务委托实操</strong>：</li><li>请开发商品评论模块，需包含后端的<code>Comment</code>实体、相关API，以及前端的评论列表组件和提交表单。</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/XyOjbmfsTovqQZxOmuxcx4f4n3c"></p>
+<h4 id="第2集-除了Agent你知道怎么使用Quest模式吗">第2集 除了Agent你知道怎么使用Quest模式吗</h4>
+<p><strong>简介：讲解掌握Agent处理多文件协同修改的机制，并了解Quest模式，如何统筹复杂的多目标项目</strong></p>
+<ul><li><strong>核心机制：原子化任务与变更管理</strong></li></ul>
+<ul><li><strong>基于任务描述的自主分解</strong>：</li><li>将用户管理系统改为异步加载模式</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/QfoBbSJwzoTB0qx9uAycMwQ3nRP"></p>
+<ul><li><strong>进阶模式：Quest模式——项目级智能体</strong></li></ul>
+<ul><li><strong>Quest模式核心定位</strong>：</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/STF4btbk9o3je1xLnntcbZGHnRf"></p>
+<ul><li><strong>发起与监控一个Quest</strong>：(很爽！但是token消耗也很炸裂)</li><li>启动‘迁移至微服务架构’Quest，第一阶段目标是将‘用户管理’和‘课程管理’模块拆分为独立Spring Boot服务，并重构前端调用</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/Zt1ubaaHRo6zxexd4uXclprpnOb"></p>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/VLnnblf8CoTxKqxgVRfcRKhHnEc"></p>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/JumBbSSc4oC5tvxTuihc4mnxnQh"></p>
+<ul><li>其他AI编辑器也有相同的功能</li></ul>
+<ul><li>Cursor：</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/R5p6bAxfuonnRIx1c41cedNGnOS"></p>
+<ul><li>Trae：</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/DIfsbvo8SoX3kvxRpyUcuuDZnVe"></p>
+<p><strong>愿景："让编程不再难学，让技术与生活更加有趣"</strong></p>
+<h3 id="第六章-企业级全栈项目管理与最佳实践">第六章 企业级全栈项目管理与最佳实践</h3>
+<h4 id="第1集-快速掌握Qoder中无缝集成Git实现版本控制集成">第1集 快速掌握Qoder中无缝集成Git实现版本控制集成</h4>
+<p><strong>简介：在Qoder中无缝集成Git，掌握适用于全栈项目的团队协作分支策略与代码审查流程</strong></p>
+<ul><li><strong>内置Git工作流与团队协作</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/NMzzbkC4JoAZjrx9tzPcLTWlnef"></p>
+<h4 id="第2集-你知道Qoder中全栈调试工具吗该怎么玩">第2集 你知道Qoder中全栈调试工具吗该怎么玩</h4>
+<p><strong>简介：掌握从Vue组件到Java服务层的完整调试技巧，实现问题的高效定位</strong></p>
+<ul><li><strong>Java与Vue联合调试</strong></li></ul>
+<ul><li><strong>Java后端调试</strong>：</li></ul>
+<ul><li>在“运行和调试”视图中配置并启动Spring Boot应用调试。</li><li>设置断点（支持条件断点），使用<code>F5</code>（跳入）、<code>F6</code>（跳过）、<code>F7</code>（跳出）控制执行，</li><li>在“变量”面板中查看对象状态。</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/GZIbbalVqoKJZXxIuqAcrp6WnFg"></p>
+<ul><li><strong>Vue前端调试</strong>：</li></ul>
+<ul><li>通过浏览器“Vue”开发者工具检查组件状态；</li><li>在“网络”面板查看API请求详情。</li><li>结合后端断点，进行<strong>前后端断点接力</strong>，精准定位全栈问题</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/B5BZbeOQUoUGO8xAGvpckGOWnyf"></p>
+<h4 id="第3集-你知道Qoder怎么扩展插件吗全栈开发都会用到哪些插件">第3集 你知道Qoder怎么扩展插件吗全栈开发都会用到哪些插件</h4>
+<p><strong>简介：讲解深度探索Qoder的扩展市场，系统化安装并配置核心插件，打造个性化开发环境</strong></p>
+<ul><li><strong>核心平台：扩展市场与管理</strong></li></ul>
+<ul><li><strong>插件的探索、安装与管理</strong></li></ul>
+<ul><li><strong>打开扩展视图</strong>：</li></ul>
+<ul><li>点击左侧活动栏底部的“扩展”图标（拼图块形状）</li><li>或使用快捷键 <code>Ctrl+Shift+X</code>（Windows/Linux）/ <code>Cmd+Shift+X</code>（macOS），</li><li>打开扩展市场。</li><li><strong>搜索与发现插件</strong>：</li></ul>
+<ul><li><strong>分类浏览</strong>：</li></ul>
+<ul><li>在侧边栏可查看“推荐”、“热门”或按编程语言分类的列表。</li><li><strong>精准搜索</strong>：</li></ul>
+<ul><li>在顶部搜索框，你可以使用关键词组合搜索，</li><li>如“spring boot”、“vue ui”、“mysql gui”。</li><li><strong>安装与卸载</strong>：</li></ul>
+<ul><li>找到插件后，点击“安装”按钮。</li><li>安装后可在“已安装”列表中管理，进行禁用、更新或卸载操作</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/GSIIbgTj9oglLqx09NUcTGXwncd"></p>
+<ul><li><strong>全栈开发必备插件矩</strong></li></ul>
+<ul><li><strong>后端Java开发增强套件</strong></li></ul>
+<ul><li><strong>Spring Boot Extension Pack</strong>：</li></ul>
+<ul><li>必装。这是一个集合包，包含Spring Boot开发所需的核心工具，</li><li>如智能<code>application.properties/yml</code>提示、Bean定义导航、运行Dashboard等。</li><li><strong>Extension Pack for Java</strong>：</li></ul>
+<ul><li>基础必装。提供Java语言支持、代码导航、重构、调试和测试运行（Maven/Gradle）功能。</li><li><strong>Lombok Annotations Support</strong>：</li></ul>
+<ul><li>若项目使用Lombok，此插件能消除编辑器因未识别<code>@Data</code>等注解而报错的红色波浪线。</li><li><strong>Gradle for Java</strong> 或 <strong>Maven for Java</strong>：</li></ul>
+<ul><li>根据项目构建工具选择，提供更强大的依赖树查看、任务执行和POM文件编辑支持。</li><li><strong>前端Vue 3开发专业套件</strong></li></ul>
+<ul><li><strong>Volar</strong>：</li></ul>
+<ul><li>Vue 3官方语言支持插件，<strong>必须安装</strong>。</li><li>它提供超快的响应、精准的类型推断和语法高亮。</li><li><strong>关键步骤</strong>：安装后，建议在项目设置中禁用旧版的 <strong>Vetur</strong> 插件，避免冲突。</li><li><strong>Vue VSCode Snippets</strong>：</li></ul>
+<ul><li>通过 <code>vbase-3-ts</code> 等前缀，</li><li>快速生成Vue 3 with <code>&amp;lt;script setup&amp;gt;</code> 和 TypeScript的组件骨架，极大提升编码速度。</li><li><strong>Element Plus Helper</strong>：</li></ul>
+<ul><li>如果你使用Element Plus UI库，</li><li>此插件提供组件名称、属性、事件的自动补全和文档悬停提示。</li><li><strong>数据库可视化与管理工具</strong></li></ul>
+<ul><li><strong>MySQL</strong>：</li></ul>
+<ul><li>市场中有多款MySQL管理插件。</li><li>推荐 <strong>“MySQL”</strong> 或 <strong>“Database Client”</strong> 这类多功能插件。</li><li>安装后，通常在活动栏会新增数据库图标。</li><li><strong>配置连接</strong>：</li></ul>
+<ul><li>点击数据库图标，添加新连接，</li><li>输入主机、端口、用户名、密码和数据库名。</li><li><strong>核心功能</strong>：</li></ul>
+<ul><li>在Qoder内直接<strong>浏览表结构、执行SQL查询、预览和编辑表数据</strong></li><li>无需切换至第三方客户端。</li><li><strong>Redis</strong>：搜索安装 <strong>“Redis”</strong> 插件。安装配置后，可以：</li></ul>
+<ul><li><strong>连接Redis服务器</strong>：配置主机、端口、密码。</li><li><strong>树状视图浏览</strong>：以清晰的层级查看所有数据库、键名。</li><li><strong>值查看与编辑</strong>：支持查看字符串、哈希、列表、集合等类型的值，并直接修改。</li><li><strong>执行命令</strong>：内置命令行界面，可直接执行Redis命令。</li><li><strong>API测试与协作工具</strong></li></ul>
+<ul><li><strong>Thunder Client</strong>：</li></ul>
+<ul><li>一个轻量级但功能强大的REST API客户端</li><li><strong>使用</strong>：</li></ul>
+<ul><li>点击活动栏的闪电图标即可打开。</li><li>可以创建请求集合、管理环境变量、查看响应历史，非常适合前后端联调。</li><li><strong>GitLens</strong>：</li></ul>
+<ul><li>超级增强你的Git体验。</li><li>它会在代码行内显示最近的提交信息和作者，</li><li>提供强大的代码 blame 视图、提交图可视化，让版本历史一目了然。</li><li><strong>容器化与远程开发</strong></li></ul>
+<ul><li><strong>Docker</strong>：</li></ul>
+<ul><li>搜索安装Docker官方插件。</li><li>它允许你在Qoder内管理镜像、容器、网络和卷，查看日志，</li><li>甚至附加终端，实现从开发到部署的全流程覆盖。</li><li><strong>Remote - SSH</strong> 或 <strong>WSL</strong>：</li></ul>
+<ul><li>如果你需要在远程服务器或WSL子系统中开发，安装这些插件后，</li><li>你可以使用Qoder直接连接并操作远程环境，获得几乎和本地一致的开发体验。</li></ul><ul><li></li></ul>
+<h4 id="第4集-带你玩转Repo-Wiki功能一键生成项目文档">第4集 带你玩转Repo Wiki功能一键生成项目文档</h4>
+<p><strong>简介：讲解掌握Qoder内置的Repo Wiki功能，一键将代码转换为项目文档，实现文档与代码的同步</strong></p>
+<ul><li><strong>核心概念：代码即文档，自动同步</strong></li></ul>
+<ul><li><strong>Repo Wiki 的核心定位</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/MniWbClrLowOUzx7HklcSeFPnSe"></p>
+<ul><li><strong>标准操作流程：生成与探索Wiki</strong></li></ul>
+<ul><li><strong>生成你的第一个Repo Wiki</strong></li></ul>
+<ul><li><strong>定位功能入口</strong>：</li></ul>
+<ul><li>在Qoder中打开你的Java+Vue全栈项目。</li><li>在左侧活动栏，找到并点击 <strong>“Repo Wiki” 图标</strong>（通常是一本打开的书或地球仪图标）。</li><li>如果未显示，可在活动栏右键，确保其已启用。</li><li><strong>启动生成向导</strong>：</li></ul>
+<ul><li>首次点击时，Wiki面板会显示一个启动按钮，</li></ul>
+<ul><li>如 <strong>“为当前仓库生成Wiki”</strong> 或 <strong>“Initialize Wiki”</strong>。点击它。</li><li>Qoder会开始分析整个项目，这个过程可能需要几分钟，取决于项目大小。</li><li>你可以在底部状态栏看到进度提示。</li><li><strong>浏览生成结果</strong>：</li></ul>
+<ul><li>生成完成后，Wiki面板会变成一个内置的网页浏览器，展示你的项目文档首页。</li><li>通常左侧是导航栏，右侧是内容区。</li><li><strong>标准导航结构通常包括</strong>：</li></ul>
+<ul><li><strong>项目概览 (Overview)</strong>：</li></ul>
+<ul><li>项目描述、技术栈、快速启动指南。</li><li><strong>模块/包说明 (Modules/Packages)</strong>：</li></ul>
+<ul><li>自动按Java包或前端目录结构组织，展示每个模块的职责。</li><li><strong>类与组件目录 (Classes/Components)</strong>：</li></ul>
+<ul><li>列出所有重要的Java类、Vue组件，并附上简要说明。</li><li><strong>API 接口文档</strong>：</li></ul>
+<ul><li>如果检测到Spring Boot的<code>@RestController</code>或前端的路由配置，可能会自动列出API端点。</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/RtPZb3J8Pos7LTx6opMcvhBgn5d"></p>
+<ul><li><strong>利用AI丰富与维护Wiki内容</strong></li></ul>
+<ul><li><strong>为生成的Wiki添加深度</strong>：</li></ul>
+<ul><li>自动生成的Wiki可能缺少业务逻辑描述。</li><li>你可以在Wiki页面中，点击某个类或组件旁的 <strong>“用AI解释”</strong> 按钮（或类似的编辑图标），</li><li>让AI为这段代码生成详细的注释和业务逻辑说明，并更新到Wiki中</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/CQrEb4igioR2t9xt026cmz5Enre"></p>
+<ul><li><strong>同步代码更新</strong>：</li></ul>
+<ul><li>当你完成一次重要的代码提交（例如重构了用户服务模块）后，应<strong>重新生成Wiki</strong>。</li><li>在Repo Wiki面板的顶部，寻找 <strong>“刷新”</strong> 或 <strong>“重新生成”</strong> 按钮。</li><li>点击后，Qoder会基于最新代码更新文档，确保其同步。</li><li><strong>自定义Wiki页面</strong>：</li></ul>
+<ul><li>除了自动生成的内容，你可以在Wiki根目录下添加自定义的Markdown文件</li></ul>
+<ul><li>如<code>部署指南.md</code>、<code>架构决策记录.md</code></li><li>Qoder会将这些文件一并纳入导航。</li><li>你可以使用AI（Ask模式）辅助编写这些文档，</li><li>然后手动放入<code>.qoder/wiki/</code>目录（如果存在）或项目根目录下的指定文件夹。</li></ul><ul><li></li></ul>
+<p><strong>愿景："让编程不再难学，让技术与生活更加有趣"</strong></p>
+<h3 id="第七章-掌握插件开发与高级集成">第七章 掌握插件开发与高级集成</h3>
+<h4 id="第1集-如何在IntelliJ-IDEA中集成Qoder-AI能力">第1集 如何在IntelliJ IDEA中集成Qoder AI能力</h4>
+<p><strong>简介：讲解掌握在传统JetBrains IDE（如IntelliJ IDEA）中集成Qoder AI能力</strong></p>
+<ul><li><strong>核心概念：无缝桥接传统与AI工作流</strong></li></ul>
+<ul><li><strong>Qoder for JetBrains 插件核心定位</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/N9mmbAfxtocyXNxie61cUspSnMd"></p>
+<ul><li><strong>实战操作：安装、配置与使用</strong></li></ul>
+<ul><li><strong>在IntelliJ IDEA中安装与配置插件</strong></li></ul>
+<ul><li><strong>打开插件市场</strong>：</li></ul>
+<ul><li>启动IntelliJ IDEA，进入 <code>File</code> -&gt; <code>Settings</code> -&gt; <code>Plugins</code>。</li><li><strong>搜索与安装</strong>：</li></ul>
+<ul><li>在<code>Marketplace</code>标签页中搜索 “Qoder”，</li><li>找到 “Qoder AI Assistant” 插件，</li><li>点击 <code>Install</code> 进行安装。</li><li>安装完成后需要<strong>重启IDEA</strong>。</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/PFU5bJEO5o23ymxNEF2cL4NnntD"></p>
+<ul><li><strong>登录与激活</strong>：</li></ul>
+<ul><li>重启后，在IDE的右侧边栏或工具窗口中找到Qoder的图标</li><li>点击后打开面板，使用你的Qoder账户登录，完成授权。</li><li><strong>基础配置</strong>：</li></ul>
+<ul><li>在插件设置中，可以指定偏好的AI模型、快捷键以及是否自动启用NES功能。</li><li>建议启用“与编辑器光标同步”，让AI始终感知你的当前位置。</li><li><strong>在IDE中的核心工作流</strong></li></ul>
+<ul><li><strong>并行开发</strong>：</li></ul>
+<ul><li>在IDEA中打开你的Spring Boot后端项目。</li><li>当你编写一个<code>UserController</code>时，可以同时在Qoder插件面板中，</li><li>用Agent模式下达指令：</li><li>请为这个<code>/api/users</code>接口，生成一个对应的Vue 3 + TypeScript的API调用函数，并封装到<code>userApi.ts</code>文件中。” AI会生成可直接复制使用的代码</li><li><strong>利用NES增强补全</strong>：</li></ul>
+<ul><li>在编写代码时，体验与Qoder编辑器一致的NES预测性补全。</li><li>在IDEA的代码编辑器中，同样可以通过<code>Alt+P</code>（Windows）激活建议。</li><li><strong>调试辅助</strong>：</li></ul>
+<ul><li>当遇到复杂的运行时异常时，</li><li>将IDEA控制台中的错误堆栈复制到Qoder插件面板中，</li><li>AI可以快速分析并提供可能的原因和修复方向。</li><li></li></ul>
+<h4 id="第2集-你知道Model-Context-Protocol吗带你集成实战">第2集 你知道Model Context Protocol吗带你集成实战</h4>
+<p><strong>简介：讲解通过实际配置MCP连接GitHub和Redis，掌握如何让Qoder安全地访问并利用外部数据源与工具</strong></p>
+<ul><li><strong>核心概念：扩展AI的认知与行动边界</strong></li></ul>
+<ul><li><strong>MCP 是什么？</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/RJ2jbSYlOopqRAxd4APcpNkHnBd"></p>
+<ul><li><strong>实战配置：连接GitHub与Redis</strong></li></ul>
+<ul><li><strong>准备工作：理解MCP服务器</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/MiETbgOLrorifxxNfCTcEwGAnwc"></p>
+<ul><li><strong>案例一：集成GitHub（获取项目上下文）</strong></li></ul>
+<ul><li><strong>目标</strong>：让AI能访问当前项目的GitHub仓库信息，用于分析开发活动</li><li><strong>配置GitHub MCP服务器</strong>：</li></ul>
+<ul><li><strong>创建GitHub个人访问令牌（PAT）</strong>：</li></ul>
+<ul><li>登录GitHub，</li><li>在 <code>Settings &amp;gt; Developer settings &amp;gt; Personal access tokens</code> 生成一个Token，</li><li>至少授予 <code>repo</code>（访问仓库）权限</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/OqvIb2EZ6oZmQuxMAhIcmMHmnXf"></p>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/PYRVbptp0owDSAxgWrmcvK82n1f"></p>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/SPdEb91ZjoaHrWxU5jWcf85Snzd"></p>
+<ul><li><strong>配置MCP服务器</strong>：</li></ul>
+<ul><li>在Qoder的设置（<code>Settings</code>）中，</li><li>找到 <code>AI Features</code> 或 <code>MCP Servers</code> 配置项。</li><li>添加一个新的MCP服务器配置，通常需要提供：</li><li><strong>服务器类型/脚本路径</strong>：</li></ul>
+<ul><li>指向GitHub MCP服务器的可执行文件或脚本</li></ul>
+<ul><li>例如，一个社区提供的 <code>github-mcp-server</code></li><li><strong>环境变量</strong>：</li></ul>
+<ul><li>设置 <code>GITHUB_TOKEN</code> 为你刚刚创建的PAT，</li><li>并设置 <code>GITHUB_OWNER</code> 和 <code>GITHUB_REPO</code> 为你的仓库信息。</li><li>{  </li></ul>
+<p>"mcpServers": { "github": { "command": "npx", "args": [ "-y", "@modelcontextprotocol/server-github" ], "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "ghp_******" } } }</p>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/PeqlbFdn0oAyI5xc2mEcsNoJnMc"></p>
+<ul><li><strong>在Qoder中验证与使用</strong>：</li></ul>
+<ul><li>配置完成后，重启Qoder或重载MCP配置。</li><li>在AI聊天面板中，你现在可以直接提问：</li><li>我刚更新了代码，请使用MCP中的github提交，之后也使用MCP进行git相关操作</li><li>AI会通过MCP服务器调用GitHub API</li><li><strong>案例二：集成Redis（获取应用运行时数据）</strong></li></ul>
+<ul><li>目标：</li></ul>
+<ul><li>让AI能查询生产或测试环境的Redis缓存，辅助诊断性能问题或优化缓存策略。</li><li><strong>配置Redis MCP服务器</strong>：</li></ul>
+<ul><li><strong>确保网络与权限</strong>：</li></ul>
+<ul><li>确保运行Qoder的机器可以访问目标Redis实例（通常是内网地址），</li><li>并拥有相应的密码（如果需要）。</li><li><strong>配置MCP服务器</strong>：同样在设置中添加一个新的MCP服务器。需要提供：</li></ul>
+<ul><li><strong>服务器类型</strong>：</li></ul>
+<ul><li>例如 <code>redis-mcp-server</code>。</li><li><strong>连接参数</strong>：</li></ul>
+<ul><li>以环境变量或配置文件形式提供 <code>REDIS_HOST</code>、<code>REDIS_PORT</code>、<code>REDIS_PASSWORD</code></li><li>{  </li></ul>
+<p>"mcpServers": { "redis": { "command": "npx", "args": [ "-y", "@modelcontextprotocol/server-redis" ], "env": { "REDIS_HOST": "localhost", "REDIS_PORT": "6379", "REDIS_PASSWORD": "" } } } }</p>
+<ul><li><strong>关键安全限制</strong>：</li></ul>
+<ul><li>在配置中<strong>务必设置只读命令白名单</strong>，</li><li>例如只允许 <code>GET</code>、<code>HGETALL</code>、<code>KEYS</code>（慎用）、<code>INFO</code> 等查询命令，</li><li>禁止 <code>FLUSHDB</code>、<code>DEL</code> 等危险命令。</li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/R76BbmjfcoRXWLxBcWLcVG83n1f"></p>
+<ul><li><strong>在Qoder中进行数据驱动的诊断与优化</strong>：</li></ul>
+<ul><li><strong>场景A：缓存命中率分析</strong></li><li>查询Redis中关于用户会话（<code>session:*</code>）的键数量，并估算总内存占用。根据<code>INFO stats</code>命令的结果，分析当前的缓存命中率是否健康。</li><li><strong>场景B：辅助代码优化</strong></li><li>正在优化 <code>ProductService</code> 中的 <code>getProductDetail</code> 方法。请查询Redis中 <code>product:detail:</code> 前缀的键，分析它们的TTL分布和数据大小，为我建议一个更合理的缓存过期策略。</li></ul><ul><li><strong>安全与治理</strong></li></ul>
+<ul><li><strong>MCP集成的安全考量</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/Hc2ZbFwNYo8VkhxSnvtcV6tUnAh"></p>
+<h4 id="第3集-感觉Qoder不听话胡乱生成带你玩转标准化与自动化治理">第3集 感觉Qoder不听话胡乱生成带你玩转标准化与自动化治理</h4>
+<p><strong>简介：讲解通过项目根目录下的<code>.qoder/rules</code>配置，为AI编码助理设定明确的、项目专属的行为准则与规范</strong></p>
+<ul><li><strong>核心机制：规则即代码</strong></li></ul>
+<ul><li><strong>规则目录与文件结构</strong></li></ul>
+<ul><li><strong>物理位置</strong>：</li></ul>
+<ul><li>在项目的<strong>根目录</strong>下，创建名为<code>.qoder</code>的文件夹，在其内部创建<code>rules</code>子目录</li><li>所有规则文件（JSON、MD或YAML格式）都放置于此</li></ul><ul><li><strong>创建rules规则</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/FAyKbu1JjopYYAxqgCtclKpcnEc"></p>
+<ul><li><strong>让Qoder帮你根据当前工程生成rule规则-快速适应企业规范</strong></li></ul>
+<p><img alt="@小滴技术团队" src="https://feishu.cn/file/FVbnbmAVSosT45xQ40vcy1y4nlb"></p>
+<ul><li><strong>规则定义实战：从编码风格到架构约束</strong></li></ul>
+<pre><code>trigger: always_on
+学习平台项目开发规范
+1. Git 操作规范
+1.1 基本原则
+所有 Git 操作必须使用 MCP 工具完成
+不得直接使用本地 Git 命令进行推送、拉取、合并等操作
+保持本地与远程仓库的一致性
+1.2 分支管理
+主分支：
+master
+功能分支：
+feature/功能名称
+修复分支：
+bugfix/问题描述
+发布分支：
+release/版本号
+1.3 提交规范
+提交信息格式：
+&lt;type&gt;: &lt;description&gt;
+类型包括：
+示例：
+feat: 添加用户登录功能
+2. 代码规范
+2.1 Java 代码规范
+2.1.1 命名规范
+使用 JDK 21
+类名使用 PascalCase：
+UserService
+, 
+CourseController
+方法名和变量名使用 camelCase：
+getUserInfo()
+, 
+courseName
+常量名使用 UPPER_SNAKE_CASE：
+MAX_CONNECTIONS
+, 
+DEFAULT_TIMEOUT
+包名使用小写字母和点号分隔：
+com.xiaodi.learnplatform
+2.1.2 代码结构</code></pre>
+<p>/** 类的 Javadoc 注释 */ public class ExampleService { // 私有常量 private static final String CONSTANT_NAME = "value"; // 成员变量 private String memberVariable; // 构造函数 public ExampleService() { // 初始化代码 } /**</p>
+<ul><li>方法的 Javadoc 注释</li><li>@param param 参数说明</li><li>@return 返回值说明</li></ul>
+<p>*/ public String exampleMethod(String param) { // 方法实现 return "result"; } } 2.1.3 注释规范 每个类必须有 Javadoc 注释 复杂逻辑需要添加行内注释 接口方法必须有注释说明 2.2 Vue 前端规范 2.2.1 组件命名 组件名使用 PascalCase： CourseCard.vue , NavBar.vue 属性名使用 camelCase 模板中使用 kebab-case 遵循 Vue 3 Composition API 规范 2.2.2 组件结构</p>
+<pre><code>&lt;template&gt;
+  &lt;!-- 模板内容 --&gt;
+&lt;/template&gt;
+&lt;script setup&gt;
+// 组合式 API 代码
+&lt;/script&gt;
+&lt;style scoped&gt;
+/* 样式定义 */
+&lt;/style&gt;</code></pre>
+<ol><li>项目结构</li></ol>
+<p>3.1 后端结构</p>
+<pre><code>xd-learn-backend/
+├── src/main/java/com/xiaodi/learnplatform/
+│   ├── controller/     # 控制器层
+│   ├── service/        # 服务层
+│   ├── mapper/         # 数据访问层
+│   ├── entity/         # 实体类
+│   ├── dto/            # 数据传输对象
+│   ├── vo/             # 视图对象
+│   ├── util/           # 工具类
+│   ├── config/         # 配置类
+│   ├── aspect/         # 切面类
+│   └── interceptor/    # 拦截器
+├── src/main/resources/
+│   ├── application.yml # 配置文件
+│   ├── mapper/         # MyBatis 映射文件
+│   └── db/             # 数据库脚本
+└── pom.xml             # 项目依赖配置</code></pre>
+<p>3.2 前端结构</p>
+<pre><code>xd-learn-frontend/
+├── src/
+│   ├── api/            # API 接口
+│   ├── components/     # 组件
+│   ├── views/          # 页面视图
+│   ├── router/         # 路由配置
+│   ├── store/          # 状态管理
+│   └── utils/          # 工具函数
+├── index.html
+├── package.json
+└── vite.config.js</code></pre>
+<ol><li>技术栈规范</li></ol>
+<p>4.1 后端技术栈</p>
+<p>框架 : Spring Boot 3.x</p>
+<p>ORM : MyBatis-Plus</p>
+<p>数据库 : MySQL 8.0+</p>
+<p>缓存 : Redis</p>
+<p>认证 : JWT</p>
+<p>日志 : Logback</p>
+<p>切面 : Spring AOP 4.2 前端技术栈</p>
+<p>框架 : Vue 3</p>
+<p>路由 : Vue Router</p>
+<p>状态管理 : Pinia</p>
+<p>HTTP客户端 : Axios</p>
+<p>构建工具 : Vite 4.3 环境配置</p>
+<p>运行环境 : Java 21</p>
+<p>服务端口 : 8080</p>
+<p>数据库连接池 : HikariCP</p>
+<p>日志级别 : INFO</p>
+<ol><li>数据库规范</li></ol>
+<p>5.1 命名规范 表名使用下划线分隔： user_info , course_type 字段名使用下划线分隔： user_id , create_time 主键统一使用 id 创建时间字段： create_time 更新时间字段： update_time 软删除字段： is_deleted 5.2 设计原则 遵循第三范式 合理使用索引 外键约束 字段类型选择适当</p>
+<ol><li>缓存规范</li></ol>
+<p>6.1 Redis 使用 键名使用冒号分隔： user:123:info 设置合理的过期时间 缓存穿透、雪崩、击穿防护 缓存与数据库一致性保证 6.2 缓存策略 热点数据缓存 会话数据缓存 配置信息缓存</p>
+<ol><li>安全规范</li></ol>
+<p>7.1 认证授权 使用 JWT Token 接口权限控制 密码加密存储（MD5+盐值） 7.2 输入验证 前端后端双重验证 SQL 注入防护 XSS 攻击防护 CSRF 攻击防护</p>
+<ol><li>测试规范</li></ol>
+<p>8.1 单元测试 覆盖率不低于 80% 使用 JUnit 5 Mock 外部依赖 8.2 集成测试 接口测试 数据库测试 缓存测试</p>
+<ol><li>部署规范</li></ol>
+<p>9.1 构建流程 使用 Maven 构建 自动化测试 代码质量检查 9.2 部署环境 开发环境 测试环境 生产环境 配置文件分离</p>
+<ol><li>代码审查规范</li></ol>
+<p>10.1 审查要点 代码逻辑正确性 性能优化 安全性检查 代码规范性 10.2 审查流程 提交 Pull Request 代码审查 自动化测试通过 合并到主分支</p>
+<ol><li>实操示例</li></ol>
+<p>11.1 创建新功能的步骤 从 master 分支创建功能分支 开发功能代码 编写单元测试 本地测试通过 推送到远程分支 创建 Pull Request 代码审查通过 合并到主分支 11.2 修复 Bug 的步骤 从 master 分支创建修复分支 git checkout -b bugfix/issue-description 定位并修复问题</p>
+<p>编写回归测试</p>
+<p>推送修复代码</p>
+<p>创建 Pull Request</p>
+<p>代码审查通过</p>
+<p>合并到主分支</p>
+<h2 id="12-常见问题及解决方案">12. 常见问题及解决方案</h2>
+<h3 id="12-1-代码冲突解决">12.1 代码冲突解决</h3>
+<ul><li>使用 Git 工具进行合并</li><li>优先保留正确的业务逻辑</li><li>测试合并后的代码</li></ul>
+<h3 id="12-2-性能优化">12.2 性能优化</h3>
+<ul><li>数据库查询优化</li><li>缓存策略优化</li><li>前端资源懒加载</li></ul>
+<pre><code>
+
+
+- **不断完善rules**
+
+![@小滴技术团队](https://feishu.cn/file/AAPUbK1mSoELDLx2mhwcjSiFnPe)
+
+- **使用记忆约束Qoder**
+
+![@小滴技术团队](https://feishu.cn/file/UVIBby3FgoyGwVxN52bcHGurnxh)
+
+ **愿景：&quot;让编程不再难学，让技术与生活更加有趣&quot;**  
+
+### 第八章 综合实战之使用Qoder全栈开发电商项目
+
+#### 第1集 使用Qoder创建电商平台前后端工程
+
+**简介：使用Qoder的AI Agent模式，通过自然语言指令一键生成具备标准分层架构的电商平台前后端项目骨架。**
+
+- **核心目标与任务分解**
+
+  - **明确项目需求与技术栈**
+  
+    - **项目形态**：单体应用（Monolithic Application），将所有功能模块部署在一个进程中。
+    - **核心功能范围**：用户认证、商品浏览、购物车、订单管理。
+    - **技术栈确认**：
+    
+      - **后端**：Spring Boot 3.x + Mybaits3.x + MySQL + Spring Security (JWT)。
+      - **前端**：Vue 3 + TypeScript + Vite + Element Plus + Pinia + Vue Router。
+  - **通过AI Agent初始化项目工程**
+  
+    - **创建项目根目录**：
+    
+      - 在本地磁盘（如 `D:\projects`）手动新建文件夹 `ecommerce-monolith`，
+      - 并在Qoder中通过 `文件(File) -&gt; 打开文件夹(Open Folder...)` 打开它。
+    - **唤醒AI并下达精确指令**：
+    
+      - 使用快捷键 `Ctrl+L` 打开AI聊天面板。
+      - **切换模式**：
+      
+        - 将右下角的AI模式从“Ask”改为 **“Agent”**，以授权AI执行文件操作。
+      - 输入以下结构化指令：
+      - 请使用Agent模式，为我创建一个单体架构的电商平台项目。要求如下：  
+        
+      1. \*\*项目结构\*\*：在根目录下创建 \`backend\` (后端) 和 \`frontend\` (前端) 两个文件夹。  
+      2. \*\*后端(Spring Boot)\*\*：  
+         \- 使用Spring Boot 3.1.0 和 Java 21。  
+         \- 添加依赖：\`spring-boot-starter-web\`, \`mybatis\`, \`mysql-connector-j\`, \`spring-boot-starter-security\`, \`jjwt\` (用于JWT), \`lombok\`。  
+         \- 创建标准的Maven项目结构，并配置多环境 \`application.yml\` (dev, prod)。  
+         \- 创建基础的包结构：\`entity\`, \`repository\`, \`service\`, \`controller\`, \`config\`, \`security\`, \`dto\`。  
+      3. \*\*前端(Vue 3)\*\*：  
+         \- 使用Vue 3 with TypeScript，包管理器用npm。  
+         \- 集成：Vue Router、Pinia、Element Plus、Axios。  
+         \- 配置Vite，并设置代理指向本地后端API (\`http://localhost:8080/api\`)。  
+         \- 创建 \`src/api\`、\`src/views\`、\`src/components\`、\`src/store\` 等目录。  
+      4. \*\*配置文件\*\*：生成 \`.gitignore\`、\`README.md\` 
+    - **审查与执行**：
+    
+      - AI会分析指令，并生成一个详细的执行计划列表在聊天框中
+      - 仔细阅读该计划，确认无误后，点击 **“批准”** 或 **“执行”**
+      - AI将开始自动创建所有目录和文件。
+  - **验证生成的项目结构**
+  - ecommerce-monolith/  
+  ├── .qoder/                    # Qoder项目配置（可能自动生成）  
+  ├── backend/  
+  │   ├── pom.xml               # 应包含上述所有依赖  
+  │   ├── src/main/java/com/example/ecommerce/  
+  │   │   ├── EcommerceApplication.java  
+  │   │   ├── config/           # 配置类包  
+  │   │   ├── controller/       # 控制器包  
+  │   │   ├── entity/           # JPA实体包  
+  │   │   ├── repository/       # 数据访问层包  
+  │   │   ├── service/          # 业务逻辑层包  
+  │   │   └── security/         # 安全配置包  
+  │   └── src/main/resources/  
+  │       ├── application.yml   # 主配置  
+  │       └── application-dev.yml # 开发环境配置  
+  ├── frontend/  
+  │   ├── package.json          # 应包含Vue, Element Plus等依赖  
+  │   ├── vite.config.ts        # 应配置了代理  
+  │   ├── src/  
+  │   │   ├── api/              # API请求封装  
+  │   │   ├── router/           # 路由配置  
+  │   │   ├── store/            # Pinia状态管理  
+  │   │   ├── views/            # 页面组件  
+  │   │   └── main.ts  
+  │   └── index.html  
+  └── 
+  - 
+  - **配置数据库与检查依赖**
+  
+    - **修改数据库配置**：
+    
+      - 打开 `backend/src/main/resources/application-dev.yml` 文件，
+      - 找到数据源配置部分。
+      - 将其中的数据库URL、用户名和密码修改为你本地MySQL环境的实际值。
+    - **启动基础设施**：
+    
+      - 确保Mysql服务运行中
+    - **检查后端依赖**：
+    
+      - 在Qoder的终端中，进入 `backend` 目录，
+      - 运行 `./mvnw dependency:resolve` 检查依赖是否能正常下载。
+    - **检查前端依赖**：
+    
+      - 打开另一个终端标签页，进入 `frontend` 目录，
+      - 运行 `npm install` 安装所有Node.js包。
+
+
+
+#### 第2集 神器在手快速实现电商平台核心功能
+
+**简介：利用Qoder的Inline Chat、AI命令和Agent模式，实现用户认证等核心业务**
+
+- **核心功能实现策略**
+
+  - **实现JPA实体与数据库关系（后端起点）**
+  
+    - **使用AI生成核心实体**：
+    
+      - 在 `backend/src/main/java/.../entity/` 目录下
+      - 新建一个Java文件，然后使用 **Inline Chat** (`Ctrl+I`)
+    - **输入指令**：
+    - 请根据电商业务，生成 \`User\`、\`Product\`、\`Order\`、\`OrderItem\` 这四个实体类。要求：  
+      
+    \- 使用 \`@Data\`、\`@Entity\` 等标准注解。  
+    \- 包含基础字段（如User有id, username, password, email；Product有id, name, price, stock等）。  
+    \- 建立正确的关联关系（如 \`Order\` 与 \`User\` 多对一，\`Order\` 与 \`OrderItem\` 一对多）。  
+    \- 字段需添加必要的约束注解如 \`@NotBlank\`、\`@Min\`。
+    - **应用与审查**：
+    
+      - AI将生成代码建议，按 `Ctrl+Enter` 应用。
+      - 随后，在文件资源管理器中右键点击该实体文件，
+      - 使用 **“格式化文档”** 功能（`Shift+Alt+F`）使代码风格统一。
+  - **实现数据访问与业务逻辑层**
+  
+    - **生成Repository**：
+    
+      - 在 `repository` 包内，对每个实体创建对应的接口。
+      - 创建 `ProductRepository.java`，让AI自动生成继承自 `JpaRepository` 的接口，
+      - 并添加一个 `findByNameContaining` 的方法声明。
+    - **生成Service与DTO**：
+    
+      - 在 `service` 包内创建 `ProductService.java`。
+      - 使用Inline Chat指令：
+      - 请为 \`ProductService\` 生成基本的CRUD服务方法。请使用 \`ProductDTO\` 作为数据传输对象，并利用 \`ProductRepository\`。注意业务逻辑，如更新库存。
+      - AI会建议创建 `ProductDTO` 类和 `ProductService` 的实现。确认后应用。
+  - **实现RESTful API控制器**
+  
+    - **生成Controller骨架**：
+    
+      - 在 `controller` 包内创建 `ProductController.java`。
+    - **使用AI命令**：
+    
+      - 输入 `@RestController` 和 `@RequestMapping(“/api/products”)` 后，
+      - 在类体中，使用 **`/generate` 命令**或直接描述：
+      - 生成基于 \`ProductService\` 的RESTful控制器，包含获取商品列表、商品详情、添加商品（需管理员权限）、更新商品的端点。请使用 \`ResponseEntity\` 作为返回类型，并添加基本的Spring Security注解如 \`@PreAuthorize\`。
+    - **生成用户认证API**：
+    
+      - 在 `AuthController` 中实现基于JWT的登录 (`/api/auth/login`) 和注册 (`/api/auth/register`) 端点。
+  - **实现Vue前端页面与逻辑**
+  
+    - **生成商品列表页**：
+    
+      - 在 `frontend/src/views/` 下创建 `ProductListView.vue`。
+    - **使用Inline Chat** (`Ctrl+I`) 输入：
+    - 请生成一个使用Element Plus \`el-table\` 的商品列表页面。要求：  
+      
+    \- 包含搜索框、分页组件。  
+    \- 表格列显示：商品图片、名称、价格、库存、操作按钮（查看、加入购物车）。  
+    \- 使用TypeScript和\`&lt;script setup&gt;\`语法。  
+    \- 通过Axios从 \`/api/products\` 获取数据。
+    - **生成状态管理**：
+    
+      - 在 `frontend/src/store/` 下创建 `cart.ts`
+      - 让AI生成一个Pinia store，包含 `items` 状态
+      - 以及 `addItem`、`removeItem`、`clearCart` 等动作
+    - **配置路由**：
+    
+      - 修改 `router/index.ts`，
+      - 将商品列表页和登录页等路由配置好
+      - 可让AI协助生成路由配置代码
+  - **配置Spring Security与JWT**
+  
+    - 在AI聊天面板（Agent模式）输入：
+    - 请为我配置Spring Security 6.x 与JWT。要求：  
+      
+    \- 对 \`/api/auth/\*\*\` 开放访问。  
+    \- 对 \`/api/products\` 的GET请求开放，POST/PUT/DELETE需要 \`ADMIN\` 角色。  
+    \- 其他 \`/api/\*\*\` 请求都需要认证。  
+    \- 实现一个JWT认证过滤器 (\`JwtAuthenticationFilter\`) 并集成到安全链中。  
+    \- 配置密码编码器为 \`BCryptPasswordEncoder\`。
+    - AI会分析现有代码，并可能创建或修改多个文件（如 `SecurityConfig.java`、`JwtUtils.java`等）。
+    - 审查其更改计划后批准。
+
+
+
+#### 第3集 使用Qoder进行前后端测试与联调
+
+**简介：启动完整应用，进行端到端的功能测试、API调试与常见问题排查，确保项目稳健运行。**
+
+- **全链路启动与验证流程**
+
+  - **分步启动服务并验证**
+  
+    - **启动后端服务**：
+    
+      - 在Qoder的终端1中，进入 `backend` 目录。
+      - 运行 `./mvnw spring-boot:run`。
+      - **关键验证点**：
+      
+        - 观察控制台，确保无编译错误，
+        - 并看到 `Started EcommerceApplication` 日志。
+        - 同时，检查是否有自动生成的数据库表日志（如果设置了 `ddl-auto: update`）。
+    - **启动前端服务**：
+    
+      - 在Qoder的终端2中，进入 `frontend` 目录。
+      - 运行 `npm run dev`。
+      - **关键验证点**：
+      
+        - 看到 `Local: http://localhost:3000` 输出。
+        - 按住 `Ctrl` 键点击该链接，浏览器应成功打开前端页面，无白屏错误。
+  - **使用Qoder内置工具进行API测试**
+  
+    - **打开API测试面板**：
+    
+      - Qoder通常集成了类似Postman的API测试工具。
+      - 在活动栏寻找或通过命令面板 (`Ctrl+Shift+P`) 搜索 “API测试” 打开它。
+    - **测试用户注册**：
+    
+      - 方法：`POST`
+      - URL: `http://localhost:8080/api/auth/register`
+      - Body (JSON):
+      
+        - `{“username”: “test”, “password”: “123456”, “email”: “test@example.com”}`
+      - 验证：响应状态码应为 `200` 或 `201`，并返回成功消息或用户信息。
+    - **测试用户登录并获取Token**：
+    
+      - 方法：`POST`
+      - URL: `http://localhost:8080/api/auth/login`
+      - Body: `{“username”: “test”, “password”: “123456”}`
+      - **关键验证点**：响应中应包含一个 `token` 字段。复制这个JWT令牌。
+    - **测试受保护的API**：
+    
+      - 方法：`GET`
+      - URL: `http://localhost:8080/api/products`
+      - Headers: 添加 `Authorization: Bearer &lt;刚才复制的token&gt;`
+      - 验证：应成功返回商品列表（可能为空数组）。
+  - **前端功能联调与问题排查**
+  
+    - **浏览器开发者工具**：在前端页面按 `F12`，重点观察：
+    
+      - **Console**：
+      
+        - 查看是否有JavaScript错误或API请求报错。
+      - **Network**：
+      
+        - 查看前端发起的API请求，
+        - 检查请求URL、Headers（尤其是Authorization）、响应状态码和Body。
+    - **典型跨域问题排查**：
+    
+      - 如果Network中请求报CORS错误，
+      - 请返回检查 `backend` 的 `SecurityConfig` 
+      - 或 `application.yml` 中是否正确配置了跨域。
+    - **调试Vue组件**：
+    
+      - 在Qoder中打开一个Vue组件，
+      - 使用 `Vue.js devtools` 浏览器扩展
+      - 来检查组件的状态（Pinia store）、Props和发出的事件。
+- 总结：提示词工程心法
+
+![@小滴技术团队](https://feishu.cn/file/WZe0b9g3co24Fcx8EK5cE5nqn6d)
+
+ **愿景：&quot;让编程不再难学，让技术与生活更加有趣&quot;**
+
+### 第九章 AI编辑器Qoder专题课程总结和个人发展路线规划
+
+#### 第1集 AI编辑器Qoder专题课程总结和学习路线推荐
+
+**简介：AI编辑器Qoder专题课程总结和学习路线推荐** 
+
+- 课程总结
+
+  - AI编辑器Qoder的核心操作与全栈环境搭建
+  - 使用Ask、Agent、Quest等AI模式高效解决开发问题的能力
+  - 完成一个Java+Vue全栈项目从生成、开发到调试的完整流程实战
+  - Qoder高级功能（插件、MCP、Repo Wiki）集成到企业开发工作流的方法
+  - 运用规则（Rules）对AI编码助手进行个性化与规范化治理的实践经验
+  - 主导并完成一个AI辅助的综合项目开发
+- 新的方向：
+
+  - AI应用开发工程师，掌握AI大模型和智能体应用，对传统应用升级
+- 高级全栈/java工程师成长路径
+
+  - 初级：
+  
+    - javase -&gt; javaweb -&gt; Mysql -&gt; html/css/js-&gt;
+    - Maven+nexus私有仓库 -&gt; idea -&gt; Linux基础 -&gt; 
+    - 新版SSM+前后端综合实战 -&gt; 微信支付项目实战 -&gt; 
+    - git代码管理+Jenkins持续集成
+  - 中级：
+  
+    - springcloud微服务 -&gt; 分布式缓存Redis一期二期 -&gt; 分布式框架Dubbo+Zookeeper -&gt; 
+    - 分布式消息队列RocketMQ -&gt; Jmeter压力测试 -&gt; 优惠券系统综合实战 -&gt; Shiro权限框架 -&gt;
+  - 高级：
+  
+    - ElasticSearch搜索引擎-&gt;Shell脚本 -&gt; Docker容器-&gt;JDK13-21新特性-&gt;
+    - VM虚拟机-&gt;Netty百万连接实战-&gt;面试专题第一季-&gt;秒杀系统综合实战-&gt;
+    - Nginx高性能服务 -&gt; 服务性能调优实战-&gt;拼团项目实战-&gt;服务监控和自动化扩容
+  - 技术总监：
+  
+    - 网络安全和攻击-&gt;分布式事务实战-&gt;k8s+devops实战-&gt;Serverless无服务-&gt;
+    - 服务网格和云原生-&gt;面试专题第二季 -&gt; 软件架构教程 -&gt; 
+    - 团队合作和OKR考核 -&gt; 产品思维+商业化能力探索
+- 学习靠自律，一定要多做笔记
+- 今天谁也不能阻止我学习
+
+
+
+#### 第2集 全栈开发工程师招聘要求和岗位信息
+
+**简介：  讲解全栈开发工程师招聘要求和岗位信息**
+
+- 全栈开发工程师市场招聘岗位
+
+  - 地址：[https://www.zhipin.com/](https://www.zhipin.com/)
+  - 切换城市和岗位关键词
+- 全栈开发工程师岗位面试准备：推荐刷大厂刷题班的面试题集合
+
+
+
+#### 第3集 导学AI大项目-AI大模型智能化云盘综合实战
+
+**简介： 高级AI项目-AI大模型智能化云盘综合实战**
+
+- **视频内容：需求文档-功能体验-简历编写-面试回答**
+
+![@小滴技术团队](https://feishu.cn/file/TlyxbwjDqoTNjNx15XbcbIHZnAh)
+
+
+
+#### 第4集 高级技术岗成长路线- IT技术人的职场充电站
+
+**简介：高级技术岗成长路线- IT技术人的职场充电站**
+
+- 技术培训的你应该知道的事情
+
+  - 技术是每年一小变，三年一大变，持续学习是关键
+  - 大家也是过来人，小滴课堂-每个技术栈课程不贵，从专题技术到大课，不同阶段你收获也不一样
+  - 市面上技术视频很多，但是与其不如四处搜索，还不错选个靠谱的平台持续学习
+  - 提升自己技术能力 + 不浪费时间 + 涨薪，是超过N倍的收益
+  - 我也在学习每年参加各种技术沙⻰和内部分享会投 入超过6位数，但是我认为是值的，且带来的收益更大
+  - 定时复习专题课程笔记+大课里面的笔记和解决方案
+  - 技术是不断演进的，后端+大数据，小滴课堂也会不断上架新的技术，做好技术储备，就不会被淘汰！！！
+
+  ![@小滴技术团队](https://feishu.cn/file/E6A8bszWqoCMDWxAjFGcbwD1nEf)
+- 啥说免费的才是最贵的，比如【盗版视频】或者【割韭菜的机构】
+
+  - 视频录制时间旧 或者 讲师水平Low，导致学不到技术甚至还【学错了技术】
+  - 课程资料、代码缺少，导致自己花了大量时间去调试最后还不一定解决
+  - 项目源码不规范、思考维度缺少，什么样的老师带出什么样的学生
+  - 正版学习群的关键性
+  
+    - 盗版群里你能结实到什么人员，各种混杂人员，遇到问题卡死，花了几百块还盗版人员跑路不更新
+    - 正版学习群里，不少大厂技术负责人，本身内推和招聘，风气也好、价值观也好
+    - 遇到问题有群里的学霸和讲师帮你解决，也有更多面经分享等
+  -  
+  - 大家计算下自己的时薪、日薪
+  
+    - 月薪20k， 一天8小时，一个月工作22天，你一小时值多少钱、一天值多少钱 ，1千块！！
+    - 还有很多互联网公司，一年14到16个月工资+股票，那一天就是好几千了，阿里P6级别都是30k月薪
+    - 举个跳槽例子
+    
+      - 老王月薪10k，花了2k学了课程，一线城市找到了20k Offer
+      - 入职第一个月月薪的四分之一就回本了，后续都是自己更高的收入
+    - 记住！！！！
+    
+      - 跳槽涨薪不是你说跳就跳的，说涨就涨的
+      - 你需要有让面试官给你这个薪资的理由
+      
+        - 比如你有好项目经历、各种高并发、分布式解决方案
+        - 能给公司和技术团队带来新血液，提升一个档次
+        - 你学了大课，里面N多技术难点解决方案，就可以让你靠这些去跳槽涨薪！！！
+
+ 
+
+- 小滴课堂永久会员 &amp; 小滴课堂年度会员
+
+  - 适合IT人员，零基础就业、在职充电、架构师学习路线-专题技术方向
+  
+    - 包括业界主流技术栈，前端、后端、测试、架构、大数据 等等课程，接近上百套视频，深度+广度
+    - 包括 从零基础到就业班，高级工程师、技术负责人、架构师技术栈 全套学习路线
+    - 永久会员可以观看全部专题IT技术，作为一个终生学习平台，每个月更新多套视频
+    - 如何获取最新路线图，有你想学的多数主流技术栈，持续更新！！！
+  - 学后水平：一线城市 15\~30k
+  - 适合人员：校招、应届生、培训机构出来、工作1\~10年的同学都适合
+- **跳槽涨薪 提升神器：大课综合训练营**
+
+  - 跳槽涨薪不是你说跳就跳的，说涨就涨的，需要有让面试官给你这个薪资的理由
+  - **比如你有好项目经历、跟当前公司需要的岗位匹配，那肯定优先了**
+  - 从毕业到工作多年 学了多个不同领域的项目，就可以包装到简历里面
+  - **简历里面有多个有亮点项目，总比只有一个或者没有的强多了，也可以极大概率避免撞车**
+  - 你学了大课，里面N多技术难点解决方案，就可以让你靠这些去跳槽涨薪！！！
+  - 适合用于专项拔高，校招进大厂/高级工程师/架构师方向发展的训练营，包括多个方向
+  
+    - 综合项目大课训练营 √
+    - 海量数据分库分表项目大课 训练营√
+    - 架构大课十八式大课训练营 √
+    - 小滴云在线教育平台项目大课训练营√
+    - 测试开发平台项目大课训练营 √
+    - 前端低代码平台项目大课训练营 √
+    - 大厂算法刷题大课训练营训练营 √
+    - 分布式云存储-云网盘+AI大模型√
+    - 垂直领域AI大模型智能项目大课训练营【新大课】
+    - AI实时风控系统+规则引擎项目大课训练营【新大课】
+    - 热门技术解决方案多场景设计与实战训练营【新大课】
+    - AI大模型算法和底层优化进阶大课训练营【新大课】
+    - AI大模型+分布式爬虫平台项目大课训练营
+    - 大模型下的用户画像+大数据大课训练营
+    - AI云办公-即时通讯项目大课训练营
+    - AI自动化渗透测试-安全攻防大课训练营
+  -  
+- 技术人的导航站（涵盖我们主流的技术网站、社区、工具等等，即将上线）
+
+  - 地址：open1024.com
+  - 地址：xdclass.net
+-  
+- 后端/前端/测试 一对一小班辅导
+
+  - 适合人员
+  
+    - 计算机专业应届毕业生、非IT专业转行/编程爱好者
+    - 计划往 后端/前端/测试/运维工程师 方向发展并就业的同学
+  - 亮点
+  
+    - 远程解决bug+简历辅导+模拟面试，对标一线城市12\~20K月薪
+    - 7\*12小时在线答疑，问题不过夜
+    - 人员配置：课程讲师+专业技术人员
+  - **不推荐大班课**
+  
+    - 大班课一个班就是几十个人，毕业的时候都是同期毕业，简历模板都是一样
+    - 同个地方毕业，多数人都在当前城市同时投递竞争，投的时候简历一看到这个就很雷同
+    - 而且遇到自己会的知识点，他人不会，讲师就重复讲解，也浪费自己时间
+  - **推荐小班私教课**
+  
+    - **我们的小班课，就是私教课，针对性提高，毕竟每个人的情况不一样**
+    - **包括学历，年纪，是否0基础，目标就业城市等，都是需要调整策略，这样才比较合理**
+    - 更多的内容或者疑惑直接加我即可
+
+![@小滴技术团队](https://feishu.cn/file/HXTUboUEioCsnTxXUoXcdWB5nfJ)</code></pre></div></article></div></main>
+</div>
+<script src="../assets/app.js"></script>
+<script src="../assets/search.js"></script>
+</body>
+</html>
