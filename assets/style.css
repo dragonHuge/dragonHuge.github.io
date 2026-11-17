@@ -628,3 +628,53 @@ html { scroll-behavior: smooth; }
 
 /* V3b: 来源说明弱化 */
 .qa-source{font-size:12px;color:#9ca3af;margin:2px 0 20px}
+
+
+/* ---- NAV_V2: 顶栏毛玻璃 / 左栏全站常驻精修 ---- */
+.topbar {
+  background: color-mix(in srgb, var(--panel) 86%, transparent);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+}
+.topnav a { border-radius: 999px; }
+.topnav a.on {
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: none;
+  font-weight: 600;
+}
+.topnav a:hover { background: var(--accent-soft); color: var(--accent); }
+.sidebar {
+  border-right: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+.side-quick {
+  display: flex; flex-direction: column; gap: 2px;
+  margin: 0 0 12px; padding: 0 0 12px;
+  border-bottom: 1px dashed var(--line);
+}
+.side-quick a {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 12px; border-radius: 8px;
+  color: var(--text); font-size: 14px;
+  transition: background .15s, color .15s;
+}
+.side-quick a:hover { background: var(--accent-soft); color: var(--accent); text-decoration: none; }
+.side-quick a.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.side-nav > a { border-left: 3px solid transparent; }
+.side-nav > a.active, .side-nav > a.active:hover { border-left-color: var(--accent); background: var(--accent-soft); }
+.side-nav summary { border-radius: 8px; transition: background .15s; }
+.side-nav summary:hover { background: var(--accent-soft); }
+.side-nav .cnt { color: var(--muted); font-size: 12px; font-weight: 400; }
+
+
+/* QA_PORTAL_V3c: 有全局左栏后，月页右侧目录改为 >=1280 显示 / 中窄屏抽屉 */
+@media(min-width:1280px){.qa-fab{display:none!important}}
+@media(max-width:1279px){
+  .qa-layout{display:block}
+  .qa-side{position:fixed;top:0;right:0;height:100vh;width:min(320px,86vw);max-height:none;border-radius:0;border-left:1px solid var(--line,#e5e7eb);transform:translateX(105%);transition:transform .25s ease;z-index:80;box-shadow:-8px 0 24px rgba(0,0,0,.18)}
+  .qa-side.open{transform:translateX(0)}
+  .qa-fab{display:flex}
+}
