@@ -2,34 +2,38 @@
   var btn = document.getElementById("menuBtn");
   var side = document.getElementById("sidebar");
   var mask = document.getElementById("mask");
+  var closeBtn = document.getElementById("sidebarClose");
   if (btn && side) {
     function close() {
       side.classList.remove("open");
       if (mask) mask.classList.remove("show");
-      document.body.style.overflow = "";
+      btn.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("nav-open");
     }
     btn.addEventListener("click", function () {
       side.classList.toggle("open");
       var on = side.classList.contains("open");
       if (mask) mask.classList.toggle("show", on);
-      document.body.style.overflow = on ? "hidden" : "";
+      btn.setAttribute("aria-expanded", on ? "true" : "false");
+      document.body.classList.toggle("nav-open", on);
     });
     if (mask) mask.addEventListener("click", close);
+    if (closeBtn) closeBtn.addEventListener("click", close);
     side.addEventListener("click", function (e) {
-      if (e.target.tagName === "A") close();
+      if (e.target.closest && e.target.closest("a")) close();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && side.classList.contains("open")) {
+        close();
+        btn.focus();
+      }
+    });
+    window.addEventListener("resize", function () {
+      if (window.matchMedia && window.matchMedia("(min-width: 1080px)").matches) close();
     });
   }
-  /* 窄屏：抽屉初始不自动展开长列表（手机上找文章走模块列表页更短路径） */
-  try {
-    if (window.matchMedia && window.matchMedia("(max-width: 760px)").matches) {
-      [].forEach.call(document.querySelectorAll(".side-nav details[open]"), function (d) {
-        d.removeAttribute("open");
-      });
-      side && side.scrollTop && (side.scrollTop = 0);
-    }
-  } catch (e) {}
   /* 侧栏当前文章滚进可视区（只动侧栏容器，不动页面） */
-  var act = document.querySelector(".side-nav a.art.active");
+  var act = document.querySelector(".context-nav a.art.active");
   if (act && act.scrollIntoView) {
     try { act.scrollIntoView({ block: "nearest" }); } catch (e) { act.scrollIntoView(false); }
   }
