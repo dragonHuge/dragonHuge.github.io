@@ -6,7 +6,7 @@
 <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
-<title>Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单 · DragonHuge · 知识花园</title>
+<title>DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro · DragonHuge · 知识花园</title>
 <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
@@ -37,7 +37,7 @@
 <div class="nav-group"><div class="nav-label">知识</div>
 <a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
 <a class="nav-link" href="../tech/index.html"><span>技术文章</span><span class="nav-count">21</span></a>
-<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">363</span></a>
+<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">378</span></a>
 <a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">4</span></a>
 </div>
 <div class="nav-group"><div class="nav-label">工作</div>
@@ -47,437 +47,272 @@
 <nav class="context-nav" aria-label="当前栏目目录">
 <div class="context-title">外部沉淀分类</div>
 <a class="context-cat" href="../ext/index.html#c0"><span>AI与大模型</span><span class="nav-count">32</span></a>
-<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">234</span></a>
-<a class="context-cat active" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">59</span></a>
+<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">242</span></a>
+<a class="context-cat active" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">62</span></a>
 <a class="context-cat" href="../ext/index.html#c3"><span>认知与思维</span><span class="nav-count">12</span></a>
-<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">3</span></a>
-<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">2</span></a>
-<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">21</span></a>
+<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">4</span></a>
+<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">3</span></a>
+<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">23</span></a>
 <div class="context-group current">工具与技术文章</div>
-<a class="art" href="../ext/e267.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
-<a class="art" href="../ext/e268.html">火山引擎大模型应用防火墙文档指南</a>
-<a class="art" href="../ext/e269.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
-<a class="art" href="../ext/e270.html">EasySync、OpenPlug、Resojot三件套</a>
-<span class="art-row"><a class="art" href="../ext/e271.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a><a class="art-x" href="https://mp.weixin.qq.com/s/_92qxY50yrITYDkhnKVv5w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e272.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a><a class="art-x" href="https://mp.weixin.qq.com/s/VuJsVTvyNIK8GRTL95n-Qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e273.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a><a class="art-x" href="https://mp.weixin.qq.com/s/opomqvcruvmcQr4fzTT5Sg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e274.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a><a class="art-x" href="https://mp.weixin.qq.com/s/xyLlUlHJG7zbs32B3ibarw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e275.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/sddXH_qxY0LlPvftJy4rTA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e276.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a><a class="art-x" href="https://mp.weixin.qq.com/s/EGCfOEP4-j0dZ1gV-QBF9Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<a class="art" href="../ext/e277.html">FID：小米设备不变的硬件标识</a>
-<a class="art" href="../ext/e278.html">防重放攻击Nonce机制</a>
-<span class="art-row"><a class="art" href="../ext/e279.html">Claude Code Thariq：如何设置不同模型的 effort？</a><a class="art-x" href="https://mp.weixin.qq.com/s/OtdHHVKZOY28qCNfy99o0A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e280.html">手推Transformer（3）架构图解</a><a class="art-x" href="https://v.douyin.com/QfsCWkmq6Jk/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e281.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/RfCE5yqOrR_b2AWeI530GQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e282.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a><a class="art-x" href="https://mp.weixin.qq.com/s/8KB9H19wTmV9Ttsls2ZQOQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e283.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a><a class="art-x" href="https://mp.weixin.qq.com/s/C06VC_u8ThxoX65GZXD98A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e284.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a><a class="art-x" href="https://mp.weixin.qq.com/s/9k__ghMXA4xAP94aHFh-Gg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e285.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jgwZE6nflPIRkJkrwfz40w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e286.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/gOCMe2lrO8PFGfZoKhUmfA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e287.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a><a class="art-x" href="https://mp.weixin.qq.com/s/JpDAPxDxt8HWdxwuVpOCGg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e288.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a><a class="art-x" href="https://mp.weixin.qq.com/s/6MmevXDynsrlcOoDr3NMEA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e289.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a><a class="art-x" href="https://mp.weixin.qq.com/s/IG1lcRRtIhRePZfLrLZl_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e290.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a><a class="art-x" href="https://mp.weixin.qq.com/s/a35eQqCyxdybODuJlFwBTg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e291.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/z2t4cSkZo3JvXdmnq58MxA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e292.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jf5OKEhBDWkP0228tC5o1w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e293.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a><a class="art-x" href="https://mp.weixin.qq.com/s/_r6om75XRHj2NsgqN6l45A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e294.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a><a class="art-x" href="https://mp.weixin.qq.com/s/pS3UX6_XWcqjNCYxtNzNjA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e295.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a><a class="art-x" href="https://mp.weixin.qq.com/s/INr-j63NxC1JKiBeasTreA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e296.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a><a class="art-x" href="https://mp.weixin.qq.com/s/Zb7TCRf0ULhR6m4gv0T8cg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e297.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a><a class="art-x" href="https://mp.weixin.qq.com/s/ZxhhQlgzm7j7bfesSect4w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e298.html">Archify：AI代码仓库架构可视化开源Skill</a><a class="art-x" href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e299.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a><a class="art-x" href="https://mp.weixin.qq.com/s/6l9eoyAyADd4l4CgdbKFwQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e300.html">anything2explainer：一键制作科普视频的开源Skill</a><a class="art-x" href="https://www.douyin.com/video/7683581072979226340" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e301.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a><a class="art-x" href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e302.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a><a class="art-x" href="https://mp.weixin.qq.com/s/4Wm668hdNhRCSorNEY--Wg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e303.html">MCP 开发指北(Java) — 组内分享</a><a class="art-x" href="https://mi.feishu.cn/wiki/VsmQw2pwSiCmOnknxf0cqzadnHw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art active" href="../ext/e304.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a><a class="art-x" href="https://mi.feishu.cn/wiki/TLkUwSfMoi0YL3kUF75c7Iwin1f" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e305.html">html-anything — Agent 时代的 HTML 编辑器</a><a class="art-x" href="https://mp.weixin.qq.com/s/PdnzdlANDDDrMrTMYhahvw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e306.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ux91m8vFib3GFWY6GqHssA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e307.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a><a class="art-x" href="https://mp.weixin.qq.com/s/8rXk9rn3qoT-_-s8bIEicw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e308.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a><a class="art-x" href="https://mp.weixin.qq.com/s/z1ZreI_TYEsHj2pGIKrmcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e309.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/8kLJvAEgN_qtcGWQAfORvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e310.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a><a class="art-x" href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e311.html">Claude Code Prompt Cache 配置实战</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/（视频" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e312.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e313.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a><a class="art-x" href="https://mp.weixin.qq.com/s/NAqk-Hwpb0kf0ZggDs4TLQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e314.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a><a class="art-x" href="https://mp.weixin.qq.com/s/Sz2hzXiNCyf1YNzPbeUo5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e315.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a><a class="art-x" href="https://mp.weixin.qq.com/s/v6iBuqep2ZCZ9wAwhnHLDA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e316.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a><a class="art-x" href="https://mp.weixin.qq.com/s/3pYESr-ZDD-qM3uktiSIYQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e317.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a><a class="art-x" href="https://mp.weixin.qq.com/s/BCstLeMYEPTk5A4sJp66jA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e318.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a><a class="art-x" href="https://mp.weixin.qq.com/s/-Vb_8UdgglaYj0HnSYPZcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e319.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a><a class="art-x" href="https://bytedance.sg.larkoffice.com/docx/QNsIdi8VFoKm00xY8SRlkXxygve" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e320.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a><a class="art-x" href="https://www.anytocopy.com/xiaohongshu" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e321.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/udSpp7eMqwiRo5yVShRzLw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e322.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a><a class="art-x" href="https://mp.weixin.qq.com/s/PcZVz9Xf2-SFE_9_e41uVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e323.html">Obsidian 必装的 9 个 AI Agent Skill</a><a class="art-x" href="http://xhslink.com/o/4tA9NrR4eXd" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e324.html">大博主常用的 5 个录屏 + 3 个白板工具</a><a class="art-x" href="http://xhslink.com/o/68mgswUWCNA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e325.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a><a class="art-x" href="https://mp.weixin.qq.com/s/OqpljVUwvONVohnk7Sf5hw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e275.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e276.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e277.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e278.html">EasySync、OpenPlug、Resojot三件套</a>
+<span class="art-row"><a class="art" href="../ext/e279.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a><a class="art-x" href="https://mp.weixin.qq.com/s/_92qxY50yrITYDkhnKVv5w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e280.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a><a class="art-x" href="https://mp.weixin.qq.com/s/VuJsVTvyNIK8GRTL95n-Qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e281.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a><a class="art-x" href="https://mp.weixin.qq.com/s/opomqvcruvmcQr4fzTT5Sg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e282.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a><a class="art-x" href="https://mp.weixin.qq.com/s/xyLlUlHJG7zbs32B3ibarw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e283.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/sddXH_qxY0LlPvftJy4rTA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e284.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a><a class="art-x" href="https://mp.weixin.qq.com/s/EGCfOEP4-j0dZ1gV-QBF9Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e285.html">FID：小米设备不变的硬件标识</a>
+<a class="art" href="../ext/e286.html">防重放攻击Nonce机制</a>
+<span class="art-row"><a class="art" href="../ext/e287.html">Claude Code Thariq：如何设置不同模型的 effort？</a><a class="art-x" href="https://mp.weixin.qq.com/s/OtdHHVKZOY28qCNfy99o0A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e288.html">手推Transformer（3）架构图解</a><a class="art-x" href="https://v.douyin.com/QfsCWkmq6Jk/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e289.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/RfCE5yqOrR_b2AWeI530GQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e290.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a><a class="art-x" href="https://mp.weixin.qq.com/s/8KB9H19wTmV9Ttsls2ZQOQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e291.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a><a class="art-x" href="https://mp.weixin.qq.com/s/C06VC_u8ThxoX65GZXD98A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e292.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<span class="art-row"><a class="art" href="../ext/e293.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a><a class="art-x" href="https://mp.weixin.qq.com/s/9k__ghMXA4xAP94aHFh-Gg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e294.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jgwZE6nflPIRkJkrwfz40w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e295.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/gOCMe2lrO8PFGfZoKhUmfA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e296.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a><a class="art-x" href="https://mp.weixin.qq.com/s/JpDAPxDxt8HWdxwuVpOCGg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e297.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a><a class="art-x" href="https://mp.weixin.qq.com/s/6MmevXDynsrlcOoDr3NMEA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e298.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a><a class="art-x" href="https://mp.weixin.qq.com/s/IG1lcRRtIhRePZfLrLZl_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e299.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a><a class="art-x" href="https://mp.weixin.qq.com/s/a35eQqCyxdybODuJlFwBTg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e300.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/z2t4cSkZo3JvXdmnq58MxA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e301.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jf5OKEhBDWkP0228tC5o1w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e302.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a><a class="art-x" href="https://mp.weixin.qq.com/s/_r6om75XRHj2NsgqN6l45A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e303.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a><a class="art-x" href="https://mp.weixin.qq.com/s/pS3UX6_XWcqjNCYxtNzNjA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art active" href="../ext/e304.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a><a class="art-x" href="https://mp.weixin.qq.com/s/INr-j63NxC1JKiBeasTreA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e305.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a><a class="art-x" href="https://mp.weixin.qq.com/s/Zb7TCRf0ULhR6m4gv0T8cg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e306.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a><a class="art-x" href="https://mp.weixin.qq.com/s/ZxhhQlgzm7j7bfesSect4w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e307.html">6个Vibe Coding必备宝藏网站</a>
+<span class="art-row"><a class="art" href="../ext/e308.html">Archify：AI代码仓库架构可视化开源Skill</a><a class="art-x" href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e309.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a><a class="art-x" href="https://mp.weixin.qq.com/s/6l9eoyAyADd4l4CgdbKFwQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e310.html">anything2explainer：一键制作科普视频的开源Skill</a><a class="art-x" href="https://www.douyin.com/video/7683581072979226340" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e311.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a><a class="art-x" href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e312.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a><a class="art-x" href="https://mp.weixin.qq.com/s/4Wm668hdNhRCSorNEY--Wg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e313.html">MCP 开发指北(Java) — 组内分享</a><a class="art-x" href="https://mi.feishu.cn/wiki/VsmQw2pwSiCmOnknxf0cqzadnHw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e314.html">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a><a class="art-x" href="https://mi.feishu.cn/wiki/TLkUwSfMoi0YL3kUF75c7Iwin1f" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e315.html">html-anything — Agent 时代的 HTML 编辑器</a><a class="art-x" href="https://mp.weixin.qq.com/s/PdnzdlANDDDrMrTMYhahvw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e316.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ux91m8vFib3GFWY6GqHssA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e317.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a><a class="art-x" href="https://mp.weixin.qq.com/s/8rXk9rn3qoT-_-s8bIEicw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e318.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a><a class="art-x" href="https://mp.weixin.qq.com/s/z1ZreI_TYEsHj2pGIKrmcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e319.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/8kLJvAEgN_qtcGWQAfORvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e320.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a><a class="art-x" href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e321.html">Claude Code Prompt Cache 配置实战</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/（视频" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e322.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e323.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a><a class="art-x" href="https://mp.weixin.qq.com/s/NAqk-Hwpb0kf0ZggDs4TLQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e324.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a><a class="art-x" href="https://mp.weixin.qq.com/s/Sz2hzXiNCyf1YNzPbeUo5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e325.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a><a class="art-x" href="https://mp.weixin.qq.com/s/v6iBuqep2ZCZ9wAwhnHLDA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e326.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a><a class="art-x" href="https://mp.weixin.qq.com/s/3pYESr-ZDD-qM3uktiSIYQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e327.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a><a class="art-x" href="https://mp.weixin.qq.com/s/BCstLeMYEPTk5A4sJp66jA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e328.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a><a class="art-x" href="https://mp.weixin.qq.com/s/-Vb_8UdgglaYj0HnSYPZcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e329.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a><a class="art-x" href="https://bytedance.sg.larkoffice.com/docx/QNsIdi8VFoKm00xY8SRlkXxygve" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e330.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a><a class="art-x" href="https://www.anytocopy.com/xiaohongshu" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e331.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/udSpp7eMqwiRo5yVShRzLw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e332.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a><a class="art-x" href="https://mp.weixin.qq.com/s/PcZVz9Xf2-SFE_9_e41uVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e333.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<span class="art-row"><a class="art" href="../ext/e334.html">Obsidian 必装的 9 个 AI Agent Skill</a><a class="art-x" href="http://xhslink.com/o/4tA9NrR4eXd" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e335.html">大博主常用的 5 个录屏 + 3 个白板工具</a><a class="art-x" href="http://xhslink.com/o/68mgswUWCNA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e336.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a><a class="art-x" href="https://mp.weixin.qq.com/s/OqpljVUwvONVohnk7Sf5hw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 </nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
-  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">70</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#一-背景-从读到写-一步之遥但雷区翻倍">一、背景：从读到写，一步之遥但雷区翻倍</a><a class="tl l2" href="#二-整体技术方案-在-Provider-层做协议适配">二、整体技术方案：在 Provider 层做协议适配</a><a class="tl l3" href="#1-桥接拓扑">1. 桥接拓扑</a><a class="tl l3" href="#2-核心设计决策-5-条-都直接对应踩坑点">2. 核心设计决策（5 条，都直接对应踩坑点）</a><a class="tl l2" href="#三-核心技术点-带源码定位">三、核心技术点（带源码定位）</a><a class="tl l3" href="#1-双注解扫描-RestController-McpTool">1. 双注解扫描（@RestController + @McpTool）</a><a class="tl l3" href="#2-映射注解集合白名单">2. 映射注解集合白名单</a><a class="tl l3" href="#3-JSON-Schema-自动生成-核心-DTO-字段展平">3. JSON Schema 自动生成（核心：DTO 字段展平）</a><a class="tl l3" href="#4-参数解析-双向转换">4. 参数解析（双向转换）</a><a class="tl l3" href="#5-Result-T-统一解包">5. Result&lt;T&gt; 统一解包</a><a class="tl l3" href="#6-审计日志-独立-logger-结构化-JSON">6. 审计日志：独立 logger + 结构化 JSON</a><a class="tl l3" href="#7-鉴权传递-ThreadLocal-模式">7. 鉴权传递（ThreadLocal 模式）</a><a class="tl l2" href="#四-生产级踩坑点-这一节是重点-看-commit-时间线就懂了">四、生产级踩坑点（这一节是重点，看 commit 时间线就懂了）</a><a class="tl l3" href="#坑-1-DTO-字段名-JSON-字段名-commit-7446300">坑 1：DTO 字段名 ≠ JSON 字段名（commit 7446300）</a><a class="tl l3" href="#坑-2-MCP-客户端把数组-对象当成-JSON-字符串传-commit-5201c29">坑 2：MCP 客户端把数组/对象当成 JSON 字符串传（commit 5201c29）</a><a class="tl l3" href="#坑-3-mapJavaTypeToJsonType-类型覆盖不全-同-commit-5201c29">坑 3：mapJavaTypeToJsonType 类型覆盖不全（同 commit 5201c29）</a><a class="tl l3" href="#坑-4-写接口爆炸暴露的红线">坑 4：写接口爆炸暴露的红线</a><a class="tl l3" href="#坑-5-反射调用绕过-Spring-MVC-全套机制">坑 5：反射调用绕过 Spring MVC 全套机制</a><a class="tl l3" href="#坑-6-审计日志的失败路径">坑 6：审计日志的失败路径</a><a class="tl l3" href="#坑-7-snakecase-工具名只-warn-不阻断">坑 7：snakecase 工具名只 warn 不阻断</a><a class="tl l3" href="#坑-8-工具描述-description-是-LLM-调用质量的关键">坑 8：工具描述（description）是 LLM 调用质量的关键</a><a class="tl l2" href="#五-改了哪些文件-按层次分组">五、改了哪些文件（按层次分组）</a><a class="tl l3" href="#协议适配层-核心扩展">协议适配层（核心扩展）</a><a class="tl l3" href="#Controller-标注-业务暴露层">Controller 标注（业务暴露层）</a><a class="tl l3" href="#测试层">测试层</a><a class="tl l3" href="#OpenSpec-流程产物">OpenSpec 流程产物</a><a class="tl l2" href="#六-给学习者的总结清单">六、给学习者的总结清单</a><a class="tl l3" href="#A-协议适配层">A. 协议适配层</a><a class="tl l3" href="#B-安全边界">B. 安全边界</a><a class="tl l3" href="#C-可观测性">C. 可观测性</a><a class="tl l3" href="#D-业务一致性">D. 业务一致性</a><a class="tl l3" href="#E-工具描述质量">E. 工具描述质量</a><a class="tl l3" href="#F-测试覆盖">F. 测试覆盖</a><a class="tl l2" href="#七-一句话回答最初的问题">七、一句话回答最初的问题</a><a class="tl l2" href="#附录-A-部署级踩坑-Streamable-HTTP-多副本下的握手-404">附录 A：部署级踩坑 —— Streamable HTTP 多副本下的握手 404</a><a class="tl l3" href="#1-现象-Symptom">1. 现象（Symptom）</a><a class="tl l3" href="#2-诊断证据">2. 诊断证据</a><a class="tl l3" href="#3-根因-Root-Cause">3. 根因（Root Cause）</a><a class="tl l4" href="#3-1-MCP-Streamable-HTTP-的两种工作模式">3.1 MCP Streamable HTTP 的两种工作模式</a><a class="tl l4" href="#3-2-出问题时的部署形态">3.2 出问题时的部署形态</a><a class="tl l4" href="#3-3-一句话定性">3.3 一句话定性</a><a class="tl l3" href="#4-修复-Fix">4. 修复（Fix）</a><a class="tl l4" href="#4-1-为什么这样能修">4.1 为什么这样能修</a><a class="tl l4" href="#4-2-修复链路对比">4.2 修复链路对比</a><a class="tl l3" href="#5-取舍-Trade-offs">5. 取舍（Trade-offs）</a><a class="tl l3" href="#6-长期建议">6. 长期建议</a><a class="tl l3" href="#7-上线-checklist-沉淀">7. 上线 checklist 沉淀</a><a class="tl l3" href="#8-把这个坑映射回前面的-self-check">8. 把这个坑映射回前面的 self-check</a><a class="tl l2" href="#附录-B-MCP-Spec-2025-06-18-structuredContent-字段缺失导致新版客户端拿">附录 B：MCP Spec 2025-06-18 structuredContent 字段缺失导致新版客户端拿 {}</a><a class="tl l3" href="#1-现象-Symptom-1">1. 现象（Symptom）</a><a class="tl l3" href="#2-诊断证据-1">2. 诊断证据</a><a class="tl l3" href="#3-根因-Root-Cause-1">3. 根因（Root Cause）</a><a class="tl l4" href="#3-1-MCP-spec-2025-06-18-关于-ToolResult-的关键变化">3.1 MCP spec 2025-06-18 关于 ToolResult 的关键变化</a><a class="tl l4" href="#3-2-部分新客户端的偏好读取">3.2 部分新客户端的偏好读取</a><a class="tl l4" href="#3-3-guardians-mcp-server-这一侧">3.3 guardians-mcp server 这一侧</a><a class="tl l4" href="#3-4-一句话定性">3.4 一句话定性</a><a class="tl l3" href="#4-修复-Fix-1">4. 修复（Fix）</a><a class="tl l4" href="#4-1-server-端双写-最优方案">4.1 server 端双写（最优方案）</a><a class="tl l4" href="#4-2-同步-outputSchema-spec-2025-06-18-配套字段">4.2 同步 outputSchema（spec 2025-06-18 配套字段）</a><a class="tl l4" href="#4-3-测试层加一条-case-按本文第六节-F-的-self-check-风格">4.3 测试层加一条 case（按本文第六节 F 的 self-check 风格）</a><a class="tl l3" href="#5-取舍-Trade-offs-1">5. 取舍（Trade-offs）</a><a class="tl l3" href="#6-上线-checklist-沉淀">6. 上线 checklist 沉淀</a><a class="tl l3" href="#7-把这个坑映射回前面的-self-check">7. 把这个坑映射回前面的 self-check</a><a class="tl l3" href="#8-一句话回答">8. 一句话回答</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#Guardians-MCP-写接口落地复盘-生产级-MCP-开发踩坑清单">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</h1><div class="meta">2026-05-19 · <span class="badge">飞书</span> · <a class="src-link" href="https://mi.feishu.cn/wiki/TLkUwSfMoi0YL3kUF75c7Iwin1f" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">工具与技术/20260519-MCP生产级开发踩坑全记录-写接口与部署级坑.md</span></div><div class="md"><blockquote><p>来源：飞书 归档日期：2026-05-19 抓取状态：成功 原文字符：224｜配图：0 张</p></blockquote>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">10</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#观看更多">观看更多</a><a class="tl l3" href="#全屏">全屏</a><a class="tl l3" href="#观看更多-1">观看更多</a><a class="tl l3" href="#全屏-1">全屏</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</h1><div class="meta">2026-09-12 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/INr-j63NxC1JKiBeasTreA" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">工具与技术/20260912-DeepSeekV41Flash技术解读KV缓存压缩如何让Flash逼退Pro.md</span></div><div class="md"><blockquote><p>来源：微信公众号 归档日期：2026-09-12 抓取状态：成功 原文字符：11130｜配图：15 张</p></blockquote>
 <h2 id="摘要速览">摘要速览</h2>
-<ul><li><strong>背景</strong>：Guardians 风控 MCP 从只读（<code>@GetMapping + @RequestParam</code>）扩展到写接口（<code>@PostMapping/@PutMapping/@DeleteMapping + @RequestBody DTO</code>），让 LLM 能改风控配置但不能触发"放量到生产"</li><li><strong>5 大设计决策</strong>：显式 <code>@McpTool</code> 白名单暴露、扩展现有 Provider 而非新建 Controller、同时支持 RequestParam 和 RequestBody、工具名 snake_case + 动词前缀、复用 Service 事务边界（Provider 只做协议适配）</li><li><strong>坑 1</strong>：DTO 字段名 ≠ JSON 字段名 —— <code>@JsonProperty</code> 注解未被 schema 生成器尊重，导致 LLM 按错名传参</li><li><strong>坑 2</strong>：MCP 客户端把数组/对象当 JSON 字符串传 —— 需要 <code>preprocessListFields()</code> 预处理，用 <code>getGenericType()</code> 解泛型</li><li><strong>坑 3</strong>：<code>mapJavaTypeToJsonType</code> 类型覆盖不全 —— List/Set/Array 被 fallthrough 成 "string"，连锁引发坑 2</li><li><strong>坑 4-8</strong>：写接口爆炸暴露红线（必须白名单）、反射调用绕过 Spring MVC 校验链、审计日志失败路径丢失、snake_case 工具名只 warn 不阻断、工具 description 三段式（用途+参数+返回）决定 LLM 调用质量</li><li><strong>附录 A（部署级）</strong>：Streamable HTTP 多副本下握手 404 —— 根因是"应用层有状态 session + 基础设施层无粘性路由"的经典错配，<code>notifications/initialized</code> 路由到没有 session 的兄弟 Pod；修复为切换 STREAMABLE_STATELESS 模式</li><li><strong>附录 B（协议级）</strong>：MCP spec 2025-06-18 <code>structuredContent</code> 字段缺失导致 Claude Code 拿 <code>{}</code> —— 根因是 server 升级了 protocolVersion 声明但 ToolResult builder 没有双写新字段，新客户端优先读空的 structuredContent 不回退 content</li><li><strong>一句话结论</strong>：Demo 阶段接通协议看到一次成功就完了；生产阶段至少得回答清楚鉴权、审计、schema 类型转换、暴露边界、字符串预处理、异常路径审计、description 三段式这 7 个问题</li></ul>
-<hr>
+<ul><li>报告标题《DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression》，几乎所有设计都指向同一目标：把 KV 缓存压下去。</li><li>全局 KV 缓存降至每 token 890 字节，约为 V4-Flash 的 1/4、DeepSeek-V1（389,120 字节）的 1/437；持久化 KV 缓存压到 V4-Flash 的约 1/8。</li><li>模型为 552B 主干 + 196B Engram 参数的多模态 MoE，原生支持 100 万 token 上下文，45T token 预训练，prefill 每 token 激活 8B、decode 激活 16B。</li><li>效果：上下文从 4K 拉到 1M（放大 256 倍），单 token decode FLOPs 只增加 1/4，用 552B 逼退 1.6T 的 V4 Pro。</li><li>评测：Artificial Analysis 给出 40 分指数，超过 V4 Pro；AutomationBench-AA 以 69% 并列第一（与 GPT-6 Astra 持平，略高于 Grok 4.6 的 67%）；每任务成本约 0.27 美元。</li></ul>
 <h2 id="核心内容">核心内容</h2>
-<p>（待补充）</p>
+<ul><li><strong>瓶颈迁移</strong>：从 V3.2 的 DSA 到 V4 的 CSA，稀疏注意力已把长序列计算成本削得足够低。长程 agent 负载的痛点是 input-heavy——每次工具调用都产生新的 prefill，上下文只增不减。于是瓶颈从"算"转向"存"和"搬"，拆成三块：HBM 容量限制并发请求的全局 KV；SSD/主机内存容量限制前缀缓存留存与命中率；IO 与互联带宽限制缓存迁移加载速度。</li><li><strong>CED（Causal Encoder-Decoder）</strong>：语言主干 40 层切成两半——前 20 层因果编码器、后 20 层解码器，这正是不对称的"输入激活 8B、输出激活 16B"来源；解码器各层 KV 通过 Reindex/Reuse 等模式跨层复用，但每层保留自己的全局 Q 与 SWA KV。一把砍掉约一半 prefill 计算。</li><li><strong>精度</strong>：V4 已对索引器 Q/K 做 FP4 量化感知训练，V4.1-Flash 把 FP4 推进到 main KV 缓存，格式为 E2M1 配每 16 通道一个 E4M3 缩放因子（接近 NVFP4 但省掉二级全局缩放）。</li><li><strong>部署（SWA Bounded Replay）</strong>：SWA 依赖逐层累积，精确重建 L 层 SWA KV 需回放 L × n_win 个 token，代价过高，于是接受近似——只回放最近 n_win（=128）个 token。收益显著：V4 部署中 SWA KV 曾占持久化缓存近一半容量，且与长留存策略不匹配；V4.1-Flash 把 SWA KV 整个移出持久化缓存，改放进每台机器 10% 主机 DRAM 组成的分布式内存池（TTL 几分钟，靠高周转服务并发会话），全局 KV 留在 SSD 保证至少 72 小时生命周期。全局 KV 命中而 SWA KV 未命中时用 bounded replay 重算兜底，把灾难性缓存未命中变成廉价优雅降级。</li><li><strong>reasoning effort 设计</strong>：后训练把 1–100 的标量 effort 显式写进系统提示，同 effort 采样构成子组做组内奖励中心化，长度惩罚系数随 effort 指数衰减（每增加一个特征尺度乘 1/e），让同一份权重在成本-质量曲线上滑动；API 的 max/high/low 对应 b=100/75/50。effort 从 25 提到 100，八个推理密集型基准平均 Pass@1 从 67.1% 升到 76.3%，DeepSWE v1.1 从 66.0% 到 74.2%，Terminal-Bench 2.1 从 82.4% 到 90.6%，代价约 2.5 倍输出 token；60–80 档已能用不到一半 token 预算拿到接近满档准确率，80→100 会让 agent 轨迹再长 1.6–1.8 倍只换来边际提升。</li><li><strong>开源配套</strong>：deepseek-recipe（统一 API 请求/响应与 Conversation 格式的 Rust 库 + Python bindings）、DeepJIT（面向 CUDA 与昇腾 NPU 的轻量 header-only C++20 JIT 运行时）、DeepSelect（DSA TopK 内核与采样器高性能实现，较 torch.topk 加速 2–20 倍）。另已开始灰度语音交互。</li></ul>
 <h2 id="可执行启发">可执行启发</h2>
-<p>（待补充）</p>
+<ul><li>部署长上下文 agent 时，先算清瓶颈在"算"还是"存/搬"；上下文超过数十万 token 后，成本大头通常是 KV 的存储与迁移而非 FLOPs。</li><li>分层缓存策略可借鉴：长生命周期、有长尾复用价值的全局 KV 留持久化存储（SSD），短窗口、会话级的 SWA KV 放高周转内存池并允许近似重算兜底。</li><li>调 API 时按任务难度选 reasoning effort：默认用中高档（相当于 b=60–80）可省约一半 token 预算且准确率接近满档，max 档只留给最难任务。</li></ul>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p>
 <h2 id="我的想法">我的想法</h2>
 <p>（待补充）</p>
-<h2 id="一-背景-从读到写-一步之遥但雷区翻倍">一、背景：从读到写，一步之遥但雷区翻倍</h2>
-<p>读 MCP 已经跑通：</p>
-<p><code>McpSpringToolProvider</code> 扫 <code>@RestController</code> 里被 <code>@McpTool</code> 标注的方法，桥接成 Solon <code>FunctionTool</code>。</p>
-<p>但只支持 <code>@GetMapping + @RequestParam</code>，写接口（<code>@PostMapping/@PutMapping/@DeleteMapping</code> + <code>@RequestBody DTO</code>）会被直接跳过。</p>
-<p>业务方需要：通过 MCP 创建/更新/启停/删除 风控配置（规则、规则组、事件、字段、风险码、名单库、字典 …），但<strong>严格不暴露</strong> 规则上线 / 规则发布 / 上线审批 这类有副作用的接口。</p>
-<blockquote><p>一句话总结：让 LLM 能改风控配置，但改不了"放量到生产"这一步。</p></blockquote>
-<hr>
-<h2 id="二-整体技术方案-在-Provider-层做协议适配">二、整体技术方案：在 Provider 层做协议适配</h2>
-<h3 id="1-桥接拓扑">1. 桥接拓扑</h3>
-<pre><code>LLM/Cursor/Claude ──MCP JSON-RPC──▶ Solon MCP Server
-                                       │
-                                       ▼
-                               McpSpringToolProvider  ◀── 反射桥接层（本次扩展）
-                                       │
-                                       ▼
-                               Spring @RestController（既有业务接口，0 改动业务逻辑）
-                                       │
-                                       ▼
-                               Service / Mapper / Holo / Redis（既有事务边界）</code></pre>
-<h3 id="2-核心设计决策-5-条-都直接对应踩坑点">2. 核心设计决策（5 条，都直接对应踩坑点）</h3>
-<table><thead><tr><th>#</th><th>决策</th><th>否决方案</th><th>否决原因</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>1</td><td>显式 <code>@McpTool</code> 白名单暴露</td><td>自动暴露所有 POST/PUT/DELETE</td><td>写接口风险高，<strong>自动暴露 = 内部接口裸奔</strong></td></tr><tr><td>2</td><td>扩展现有 Provider，不新建 MCP 专用 Controller</td><td>新建一套 MCP 专用工具类</td><td>复制业务调用 → 长期与后台行为分叉</td></tr><tr><td>3</td><td>同时支持 <code>@RequestParam</code> 和 <code>@RequestBody</code></td><td>强制把请求体序列化成字符串</td><td>类型校验弱、调用体验差、复杂 DTO 无法表达</td></tr><tr><td>4</td><td>工具名 snake_case + 动词前缀（<code>create_/update_/delete_/enable_/disable_</code>）</td><td>复用 HTTP 路径</td><td>路径名可读性差、不符合 MCP 工具命名约定</td></tr><tr><td>5</td><td>复用 Service 事务/校验边界，Provider 只做协议适配</td><td>在 Provider 补业务校验</td><td>协议层变业务层 → 违反分层</td></tr></tbody></table>
-<hr>
-<h2 id="三-核心技术点-带源码定位">三、核心技术点（带源码定位）</h2>
-<h3 id="1-双注解扫描-RestController-McpTool">1. 双注解扫描（<code>@RestController</code> + <code>@McpTool</code>）</h3>
-<ul><li><code>applicationContext.getBeansWithAnnotation(RestController.class)</code> 拿到所有 Controller bean</li><li>遍历 <code>clazz.getDeclaredMethods()</code>，只注册同时具备 <code>@McpTool</code><strong>和</strong>任一 Spring 映射注解的方法</li><li>关键文件：<code>McpSpringToolProvider.java:51-69</code></li></ul>
-<h3 id="2-映射注解集合白名单">2. 映射注解集合白名单</h3>
-<pre><code>private static final Class&lt;?&gt;[] MAPPING_ANNOTATIONS = {
-    GetMapping.class, PostMapping.class, PutMapping.class, DeleteMapping.class, RequestMapping.class
-};</code></pre>
-<p>注意：<code>@RequestMapping</code> 也包含进来了 —— 因为类级 <code>@RequestMapping</code> 上仍可声明 method 级别的方法注解组合，老代码风格里有些写法走的是这个。</p>
-<h3 id="3-JSON-Schema-自动生成-核心-DTO-字段展平">3. JSON Schema 自动生成（核心：DTO 字段展平）</h3>
-<ul><li><code>@RequestParam</code> → 直接转 schema property</li><li><code>@RequestBody DTO</code> → <strong>反射 DTO <code>getDeclaredFields()</code> 把字段展平到顶层 properties</strong></li></ul>
-<blockquote><p>为什么展平？MCP 工具调用的入参是扁平 <code>Map&amp;lt;String, Object&amp;gt;</code>，没有嵌套对象的"标准做法"。展平之后 LLM 的 tool 调用形态最自然。</p></blockquote>
-<h3 id="4-参数解析-双向转换">4. 参数解析（双向转换）</h3>
-<ul><li>简单类型：<code>convertType()</code> 走字符串 → 目标类型转换</li><li>请求体：<code>MAPPER.convertValue(args, dtoClass)</code> 把扁平 map 拼装成 DTO</li></ul>
-<h3 id="5-Result-T-统一解包">5. <code>Result&amp;lt;T&amp;gt;</code> 统一解包</h3>
-<pre><code>// Result.code == 0 返回 data，否则结构化错误
-unwrapResult(result) → success: 业务数据 / fail: {code, message}</code></pre>
-<p>读写一致，LLM 调用方不用关心业务返回壳。</p>
-<h3 id="6-审计日志-独立-logger-结构化-JSON">6. 审计日志：独立 logger + 结构化 JSON</h3>
-<pre><code>private static final Logger AUDIT_LOG = LoggerFactory.getLogger(&quot;MCP_AUDIT&quot;);
-// 字段：tool, caller, elapsedMs, success, error</code></pre>
-<ul><li>单独 logger 名 <code>MCP_AUDIT</code>，logback 里可单独输出文件，便于审计链路</li><li><strong>失败路径也走 finally 风格的 <code>logAudit(success=false)</code></strong> —— 不能因为业务异常就丢审计</li></ul>
-<h3 id="7-鉴权传递-ThreadLocal-模式">7. 鉴权传递（ThreadLocal 模式）</h3>
-<ul><li><code>/mcp/*</code> 路径走独立 Bearer Token Filter（既有）</li><li>通过 <code>McpCallerHolder</code> ThreadLocal 把 caller 透传给 invoke 阶段</li><li>注意：反射调用 Controller 是同步的，ThreadLocal 安全；如果未来切到异步要单独处理</li></ul>
-<hr>
-<h2 id="四-生产级踩坑点-这一节是重点-看-commit-时间线就懂了">四、生产级踩坑点（这一节是重点，看 commit 时间线就懂了）</h2>
-<p>主提交 13:12 落地 → 14:50 修复 → 15:48 又修复。三个小时连续两次 hotfix —— <strong>每一次都是真实环境跑起来才发现的</strong>。</p>
-<h3 id="坑-1-DTO-字段名-JSON-字段名-commit-7446300">坑 1：DTO 字段名 ≠ JSON 字段名（commit <code>7446300</code>）</h3>
-<p><strong>症状</strong>：DTO 用了 <code>@JsonProperty(&quot;dict_table_id&quot;)</code> 把驼峰 <code>dictTableId</code> 映射成下划线，但 schema 生成时直接用了 <code>field.getName()</code> —— 结果 schema 里写的是 <code>dictTableId</code>，LLM 按 schema 传，反序列化时却找不到字段。</p>
-<p><strong>修复</strong>：</p>
-<pre><code>JsonProperty jp = field.getAnnotation(JsonProperty.class);
-String fieldName = (jp != null &amp;&amp; !jp.value().isEmpty()) ? jp.value() : field.getName();</code></pre>
-<p><strong>经验</strong>：</p>
-<ul><li>反射读字段名时<strong>永远要尊重 Jackson 注解</strong></li><li>风控后台老 DTO 大量用 snake_case，这个坑必踩</li><li>类似的还有 <code>@JsonAlias</code>、<code>@JsonNaming</code>，本次只覆盖了 <code>@JsonProperty</code>，但 Guardians 项目里够用</li></ul>
-<h3 id="坑-2-MCP-客户端把数组-对象当成-JSON-字符串传-commit-5201c29">坑 2：MCP 客户端把数组/对象当成 JSON 字符串传（commit <code>5201c29</code>）</h3>
-<p><strong>症状</strong>：DTO 字段是 <code>List&amp;lt;Long&amp;gt; factors</code>，但很多 MCP 客户端（包括 Claude/Cursor）会把它<strong>序列化成字符串</strong><code>&quot;[1,2,3]&quot;</code> 塞进 JSON 顶层，因为它们对 schema 中嵌套类型的支持不一致。Jackson <code>convertValue(map, dtoClass)</code> 直接抛 <code>Cannot deserialize value of type List from String</code>。</p>
-<p><strong>修复</strong>：在 convertValue 之前加 <code>preprocessListFields()</code> —— 遍历 DTO 字段，遇到 <code>List/Set/Map</code> 类型且传入值是 <code>&quot;[&quot;</code> 或 <code>&quot;{&quot;</code> 开头的 String，先 <code>MAPPER.readValue</code> 解析成对象再放回。</p>
-<pre><code>boolean isList = List.class.isAssignableFrom(fieldClass) || Set.class.isAssignableFrom(fieldClass);
-boolean isMap = Map.class.isAssignableFrom(fieldClass);
-if (isList &amp;&amp; !strValue.startsWith(&quot;[&quot;)) continue;
-if (isMap &amp;&amp; !strValue.startsWith(&quot;{&quot;)) continue;
-Object parsed = MAPPER.readValue(strValue, javaType);  // javaType 来自 field.getGenericType()</code></pre>
-<p><strong>经验</strong>：</p>
-<ul><li>LLM 工具调用的入参是"扁平化、字符串友好"形态，永远要假设嵌套结构会以字符串形式到达</li><li>必须用 <code>field.getGenericType()</code> + <code>MAPPER.getTypeFactory().constructType(...)</code> 才能正确解出 <code>List&amp;lt;Long&amp;gt;</code> 这种带泛型的类型，光 <code>field.getType()</code> 拿到的是裸 <code>List</code></li></ul>
-<h3 id="坑-3-mapJavaTypeToJsonType-类型覆盖不全-同-commit-5201c29">坑 3：<code>mapJavaTypeToJsonType</code> 类型覆盖不全（同 commit <code>5201c29</code>）</h3>
-<p>第一版只处理了 <code>Integer/Long/Double/Float/Boolean/String</code>，集合类全部 fallthrough 成 <code>&quot;string&quot;</code> —— 直接导致 LLM 看到 schema 把数组传成字符串（也就是坑 2 的诱因之一）。</p>
-<p><strong>修复</strong>：补 <code>Short/Byte</code>，补 <code>List/Set/Array → &quot;array&quot;</code>，补 <code>Map → &quot;object&quot;</code>。</p>
-<p><strong>经验</strong>：JSON Schema 生成器要把 Java 类型空间<strong>完整覆盖</strong>，schema 错一个字段，LLM 就会按错的形态传，踩坑成本是连锁的。</p>
-<h3 id="坑-4-写接口爆炸暴露的红线">坑 4：写接口爆炸暴露的红线</h3>
-<p>设计阶段最重要的<strong>否决案</strong>：不要"扫到 POST 就自动暴露"。否则风控后台一堆内部接口（如 <code>/import-from-excel</code>、<code>/sync-from-x</code>）会瞬间出现在 MCP 工具列表里。</p>
-<p>落地约束（tasks.md <code>2.1 / 2.7</code>）：</p>
-<ul><li>显式标注 <code>@McpTool</code> 才暴露</li><li><strong>手工 review 一遍规则上线/发布/审批接口，确认没标注</strong></li><li>code review 时把 <code>@McpTool</code> 当成"对外暴露权限"来审</li></ul>
-<p><code>RuleController.java:42-47</code> 里 <code>update_rule_status</code> 被注释掉了 —— 就是这个原则的实物：状态变更影响线上规则启停，先不开放。</p>
-<h3 id="坑-5-反射调用绕过-Spring-MVC-全套机制">坑 5：反射调用绕过 Spring MVC 全套机制</h3>
-<p>写接口反射调用时<strong>没有走</strong> Spring MVC 的：</p>
-<ul><li><code>HandlerMethodArgumentResolver</code>（参数解析器链）</li><li><code>@Valid</code> / JSR-303 校验</li><li><code>HandlerInterceptor</code>（拦截器链）</li><li><code>@ControllerAdvice</code> 全局异常处理</li></ul>
-<p>所以 design.md 明确：<strong>业务校验必须在 Service 保证</strong>，Controller 上的 <code>@Valid</code> 在 MCP 调用路径下不生效。</p>
-<p><strong>经验</strong>：反射桥接是协议层，要么 Provider 自己补一遍，要么把校验下沉到 Service。本次选了后者 —— 简单、和 HTTP 调用路径行为一致。</p>
-<h3 id="坑-6-审计日志的失败路径">坑 6：审计日志的失败路径</h3>
-<p>最容易写错的写法：</p>
-<pre><code>// ❌ 错误：抛异常时审计日志丢了
-Object r = method.invoke(...);
-logAudit(success=true);
-return r;</code></pre>
-<p>正确写法在 <code>McpSpringToolProvider.java:211-229</code>：</p>
-<pre><code>try {
-    Object result = method.invoke(bean, methodArgs);
-    logAudit(toolName, caller, elapsed, true, null);
-    return MAPPER.writeValueAsString(unwrapResult(result));
-} catch (Exception e) {
-    logAudit(toolName, caller, elapsed, false, e.getMessage());
-    throw e;  // 必须 rethrow，否则 MCP 客户端拿不到错误
-}</code></pre>
-<p><code>McpAuditLogTest.testAuditLog_WriteFail_ThrowsAndLogsError</code> 专门覆盖这条分支。</p>
-<h3 id="坑-7-snakecase-工具名只-warn-不阻断">坑 7：snake_case 工具名只 warn 不阻断</h3>
-<pre><code>if (!SNAKE_CASE.matcher(toolName).matches()) {
-    log.warn(&quot;[MCP] 工具名不符合 snake_case 规范: {}&quot;, toolName);
-}</code></pre>
-<p>不抛异常 —— 因为做强校验意味着违规会启动失败。但 warn 也意味着没人盯启动日志就会漏。建议：CI 里加 grep <code>[MCP] 工具名不符合</code> 的扫描，或者直接 fail-fast。</p>
-<h3 id="坑-8-工具描述-description-是-LLM-调用质量的关键">坑 8：工具描述（description）是 LLM 调用质量的关键</h3>
-<p>看 <code>RuleController.java:56-60</code> 的 <code>save_rule</code> 描述：</p>
-<pre><code>创建或更新主规则配置。通过RequestBody传入Rule对象，
-包含规则名称、逻辑表达式(logic)、因子列表(factors)、绑定规则组ID等字段。
-若Rule对象包含id则为更新，否则为新建。返回操作结果字符串</code></pre>
-<p>每条 description 都包含三段（tasks.md 3.2 校验项）：</p>
-<ol><li><strong>用途</strong>（创建/更新/删除什么）</li><li><strong>关键参数</strong>（必填字段、字段语义）</li><li><strong>返回要点</strong>（成功返回什么/失败如何）</li></ol>
-<p>这是真正影响 LLM 工具调用准确率的地方 —— 字段名 LLM 能猜，但<strong>业务语义不写它就猜错</strong>（比如"id 存在表示更新"这种行业 convention）。</p>
-<hr>
-<h2 id="五-改了哪些文件-按层次分组">五、改了哪些文件（按层次分组）</h2>
-<h3 id="协议适配层-核心扩展">协议适配层（核心扩展）</h3>
-<table><thead><tr><th>文件</th><th>改动</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr><tr><td><code>McpSpringToolProvider.java</code></td><td>+59 行扩展 <code>@RequestBody</code> 支持、schema DTO 展平、JSON 字符串预处理、类型映射补全</td></tr><tr><td><code>annotation/McpTool.java</code></td><td>注释更新："仅 GET" → "支持 GET/POST/PUT/DELETE"</td></tr></tbody></table>
-<h3 id="Controller-标注-业务暴露层">Controller 标注（业务暴露层）</h3>
-<p>新增/补充 <code>@McpTool</code> 的 Controller（<code>b81ae0d</code> 一次性提交 14 个）：</p>
-<pre><code>配置类:
-  RuleController          - save/validate（注：update_rule_status 注释掉了）
-  RuleGroupController
-  RuleActionController
-  AppController
-  EventMetaController
-  EventGroupController
-  EventFieldController
-  RiskCodeMetaController
-  BusinessCodeMetaController
-  FuncMetaController
-
-数据类:
-  TagListController       - 名单库 CRUD
-  TagMetaController
-  RiskDictTableController - 字典表
-  RiskDictItemController  - 字典项</code></pre>
-<p>明确<strong>未开放</strong><code>@McpTool</code>：</p>
-<ul><li>规则上线 / 规则发布 / 上线审批 类接口（design.md 明确排除，tasks.md 2.7 验证）</li></ul>
-<h3 id="测试层">测试层</h3>
-<table><thead><tr><th>文件</th><th>改动</th></tr></thead><tbody><tr><td>-</td><td>-</td></tr><tr><td><code>McpSpringToolProviderTest.java</code></td><td>+130 行：写接口注册、未标注不注册、<code>@RequestBody</code> 转换、schema 含 DTO 字段、读写兼容性</td></tr><tr><td><code>McpAuditLogTest.java</code></td><td>+60 行：写成功审计、写失败审计（异常路径）</td></tr></tbody></table>
-<h3 id="OpenSpec-流程产物">OpenSpec 流程产物</h3>
-<pre><code>openspec/changes/support-mcp-write-apis/
-  proposal.md                              # Why / What
-  design.md                                # 5 大决策 + Risks
-  tasks.md                                 # 30 条任务清单
-  specs/mcp-write-apis/spec.md            # 6 个 Requirement + 多 Scenario
-openspec/specs/mcp-auth/spec.md            # 同步生成
-openspec/specs/mcp-server-core/spec.md
-openspec/specs/mcp-tool-registry/spec.md</code></pre>
-<hr>
-<h2 id="六-给学习者的总结清单">六、给学习者的总结清单</h2>
-<p>如果你正在做生产级 MCP 开发，按下面这个清单 self-check：</p>
-<h3 id="A-协议适配层">A. 协议适配层</h3>
-<ul><li><input type="checkbox" disabled> schema 生成器是否覆盖了 Java 类型空间（含 List/Set/Map/Array/Short/Byte）</li></ul>
-<ul><li><input type="checkbox" disabled> DTO 字段名是否尊重 <code>@JsonProperty / @JsonAlias</code></li></ul>
-<ul><li><input type="checkbox" disabled> 是否处理了 List/Map 字段以 JSON 字符串到达的情况（核弹级常见）</li></ul>
-<ul><li><input type="checkbox" disabled> 泛型类型解析是否用了 <code>getGenericType</code> 而非 <code>getType</code></li></ul>
-<h3 id="B-安全边界">B. 安全边界</h3>
-<ul><li><input type="checkbox" disabled> 暴露策略是 <strong>白名单（标注）</strong> 还是黑名单（路径过滤）—— 必须白名单</li></ul>
-<ul><li><input type="checkbox" disabled> 写接口是否有人工 review 流程</li></ul>
-<ul><li><input type="checkbox" disabled> 是否有"绝对不暴露"清单（上线、发布、审批、删库等）</li></ul>
-<ul><li><input type="checkbox" disabled> 鉴权是否走独立 Filter（不是 controller 层）</li></ul>
-<h3 id="C-可观测性">C. 可观测性</h3>
-<ul><li><input type="checkbox" disabled> 审计日志是否独立 logger，便于切文件</li></ul>
-<ul><li><input type="checkbox" disabled> 失败路径（抛异常）是否仍记录审计</li></ul>
-<ul><li><input type="checkbox" disabled> 字段是否结构化 JSON，包含 tool/caller/elapsed/success/error</li></ul>
-<ul><li><input type="checkbox" disabled> caller 透传机制（ThreadLocal）是否在异常路径清理（<code>McpCallerHolder.remove()</code>）</li></ul>
-<h3 id="D-业务一致性">D. 业务一致性</h3>
-<ul><li><input type="checkbox" disabled> 反射调用是否绕过 Spring MVC（一定会绕过），校验是否下沉到 Service</li></ul>
-<ul><li><input type="checkbox" disabled> 是否复用既有 Controller→Service 路径，不直连 Mapper</li></ul>
-<ul><li><input type="checkbox" disabled> <code>Result&amp;lt;T&amp;gt;</code> 等统一返回壳是否在 Provider 解包</li></ul>
-<h3 id="E-工具描述质量">E. 工具描述质量</h3>
-<ul><li><input type="checkbox" disabled> description 是否包含 用途 + 关键参数 + 返回要点</li></ul>
-<ul><li><input type="checkbox" disabled> 工具名是否 snake_case + 动词前缀（<code>create_/update_/delete_/list_/get_/enable_/disable_</code>）</li></ul>
-<ul><li><input type="checkbox" disabled> 业务 convention（如"id 存在表示更新"）是否在 description 里说明</li></ul>
-<h3 id="F-测试覆盖">F. 测试覆盖</h3>
-<ul><li><input type="checkbox" disabled> 注册：标注 → 注册 / 未标注 → 不注册</li></ul>
-<ul><li><input type="checkbox" disabled> 参数：<code>@RequestParam</code> 简单类型 / <code>@RequestBody</code> DTO 转换</li></ul>
-<ul><li><input type="checkbox" disabled> schema：DTO 字段是否完整出现</li></ul>
-<ul><li><input type="checkbox" disabled> 兼容性：扩展写接口后读接口行为不变</li></ul>
-<ul><li><input type="checkbox" disabled> 审计：成功路径 / 异常路径 都覆盖</li></ul>
-<hr>
-<h2 id="七-一句话回答最初的问题">七、一句话回答最初的问题</h2>
-<blockquote><p>"做 MCP demo 和做生产级 MCP 的差别在哪？"</p></blockquote>
-<p><strong>Demo 阶段：</strong>接通协议、调通工具、看到一次成功的工具调用就完了。</p>
-<p><strong>生产阶段：</strong>至少得回答清楚 7 个问题 —— <strong>谁能调（鉴权）、调了什么（审计）、传错了怎么办（schema + 类型转换）、改错了能不能撤回（暴露边界）、客户端把字段当字符串传怎么办（预处理）、写接口出异常审计还能记上吗（异常路径）、LLM 看不懂业务约定怎么办（description 三段式）</strong>。</p>
-<p>本次 commit 时间线（13:12 主提交 → 14:50 hotfix → 15:48 hotfix）就是这些问题挨个被打脸的过程。</p>
-<hr>
-<h2 id="附录-A-部署级踩坑-Streamable-HTTP-多副本下的握手-404">附录 A：部署级踩坑 —— Streamable HTTP 多副本下的握手 404</h2>
-<blockquote><p>这是代码层之外的另一类生产级坑：代码全对，curl 也能 200，但 MCP 客户端就是连不上。原因藏在"应用层有状态 + 基础设施层无粘性"的错配里。</p></blockquote>
-<h3 id="1-现象-Symptom">1. 现象（Symptom）</h3>
-<pre><code>guardians-mcp: https://guardians.pt.xiaomi.com/mcp/guardians/mcp (HTTP) - ✗ Failed to connect</code></pre>
-<p>但是直接 <code>curl</code> 打 <code>initialize</code> 是 200，业务 token、网络、URL 都正常 —— 看起来"通了一半"。</p>
-<h3 id="2-诊断证据">2. 诊断证据</h3>
-<p>按 MCP Streamable HTTP spec 完整跑一遍三步握手：</p>
-<table><thead><tr><th>#</th><th>请求</th><th>结果</th><th>x-proxy-node（MonKing 网关返回的后端节点 ID）</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>1</td><td><code>initialize</code></td><td>200 ✓，下发 <code>Mcp-Session-Id: c53a446b...</code></td><td>F9E7E168E1157F1D</td></tr><tr><td>2</td><td><code>notifications/initialized</code>（带上面的 sessionId）</td><td><strong>404 ✗ Session not found: c53a446b...</strong></td><td>F96A40989A462E15</td></tr><tr><td>3</td><td><code>tools/list</code>（带 sessionId）</td><td>200 ✓（但跑到了又一个节点）</td><td>F96A40989A462E15</td></tr></tbody></table>
-<p><strong>关键观察：每次请求的 <code>x-proxy-node</code> 都不一样。</strong></p>
-<h3 id="3-根因-Root-Cause">3. 根因（Root Cause）</h3>
-<h4 id="3-1-MCP-Streamable-HTTP-的两种工作模式">3.1 MCP Streamable HTTP 的两种工作模式</h4>
-<p>MCP 在 2025-03-26 spec 之后用 Streamable HTTP 替代了老的 SSE transport，服务端实现可以选两种模式：</p>
-<ul><li><strong>STREAMABLE（有状态）</strong>：服务端给每个客户端分配 <code>Mcp-Session-Id</code>，session 状态（initialize 协商结果、订阅、长任务、SSE 流）保存在该实例的内存里。后续所有请求<strong>必须回到同一个进程</strong>才能找到 session。</li><li><strong>STREAMABLE_STATELESS（无状态）</strong>：服务端不保存 session，每个请求都是独立、自包含的；客户端发的 <code>Mcp-Session-Id</code> 头被忽略或仅作为 trace。</li></ul>
-<h4 id="3-2-出问题时的部署形态">3.2 出问题时的部署形态</h4>
-<p>guardians-mcp 服务端跑的是 <strong>有状态</strong> 模式，但前面挂的 MonKing 网关 + 多副本部署：</p>
-<pre><code>        Client (Claude Code)
-                |
-                v
-      MonKing/3.14 网关（无 sticky session）
-         /        |        \
-    Pod A      Pod B      Pod C
-   session=     (空)        (空)
-   c53a446b</code></pre>
-<p>握手流程：</p>
-<ol><li><code>initialize</code> → 网关随机路由到 <strong>Pod A</strong>，A 创建 session 存到自己内存里，把 <code>Mcp-Session-Id</code> 返给客户端。</li><li>客户端按 spec 立刻发 <code>notifications/initialized</code>，带上同一个 sessionId → 网关又随机路由到 <strong>Pod B</strong>，B 内存里没有这个 session → <strong>404 Session not found</strong>。</li><li>Claude Code 的 MCP 客户端把这一步的 404 当成致命握手失败 → 整个 MCP server 标记为 Failed to connect。</li></ol>
-<p>为什么 <code>tools/list</code> 反而能跑？因为该 endpoint 的实现没强校验 session 存在，走的是无状态分支 —— 所以 curl 看着部分能用，<strong>迷惑性很强</strong>。</p>
-<h4 id="3-3-一句话定性">3.3 一句话定性</h4>
-<blockquote><p><strong>"应用层有状态 + 基础设施层无粘性"</strong> 的经典错配。Session 是 in-process 的，但负载均衡按请求级别打散了流量，导致除第一个请求外的所有 follow-up 都路由到没有 session 的兄弟实例。</p></blockquote>
-<h3 id="4-修复-Fix">4. 修复（Fix）</h3>
-<p><strong>切换到 <code>STREAMABLE_STATELESS</code> 模式。</strong></p>
-<h4 id="4-1-为什么这样能修">4.1 为什么这样能修</h4>
-<p>无状态模式下，服务端根本不再依赖 sessionId 找上下文：</p>
-<ul><li>每个 JSON-RPC 请求都自带完整入参</li><li><code>initialize</code> 和后续 call 之间没有内存级关联</li><li>任何 pod 都能独立处理任何请求 → 网关怎么打散都不影响正确性</li></ul>
-<p><code>notifications/initialized</code> 在无状态模式下要么直接 200/204，要么被忽略，不会再因为"找不到 session"而 404，握手就能跑完。</p>
-<h4 id="4-2-修复链路对比">4.2 修复链路对比</h4>
-<table><thead><tr><th>层级</th><th>修复前</th><th>修复后</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>MCP 客户端</td><td>按 spec 发 sessionId</td><td>一样（无影响）</td></tr><tr><td>网关</td><td>无 sticky</td><td>无 sticky（<strong>没改</strong>）</td></tr><tr><td>服务端</td><td>有状态，session 在 pod 内存</td><td>无状态，不存 session</td></tr><tr><td>多副本一致性</td><td>❌ 失败</td><td>✅ 通过</td></tr></tbody></table>
-<p><strong>注意网关侧没动 —— 修的是应用层，把"对基础设施的隐式假设（粘性路由）"消除了。这是更稳的修法。</strong></p>
-<h3 id="5-取舍-Trade-offs">5. 取舍（Trade-offs）</h3>
-<p>切到 <code>STREAMABLE_STATELESS</code> 不是没代价：</p>
-<table><thead><tr><th>能力</th><th>有状态模式</th><th>无状态模式</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td><code>tools/list</code>、<code>tools/call</code> 等纯 RPC</td><td>✓</td><td>✓</td></tr><tr><td>服务器主动推送（<code>notifications/*</code> from server）</td><td>✓（通过持久 SSE 流）</td><td>✗ 或受限</td></tr><tr><td><code>resources/subscribe</code> 订阅资源变更</td><td>✓</td><td>✗</td></tr><tr><td>长任务的进度回调</td><td>✓</td><td>✗</td></tr><tr><td>LLM sampling 反向请求</td><td>✓</td><td>✗</td></tr><tr><td>需要跨调用记忆的工具状态</td><td>✓</td><td>必须落外部存储（Redis/DB）</td></tr></tbody></table>
-<p>幸运的是 guardians-mcp 暴露的是一批纯 CRUD 风格的工具（<code>list_*</code> / <code>get_*</code> / <code>save_*</code> / <code>query_*</code>），全部是请求-响应一次完事，没有用到订阅/推送，所以无状态化对功能 <strong>0 影响</strong>。</p>
-<h3 id="6-长期建议">6. 长期建议</h3>
-<p>如果以后要恢复有状态能力（比如做 resource subscription），有几个选项：</p>
-<ol><li><strong>网关做 sticky</strong>：MonKing 按 <code>Mcp-Session-Id</code> header 做 consistent-hash 路由 —— 改基础设施，对应用透明，但跨节点重启时 session 会失效。</li><li><strong>session 状态外置</strong>：把 session 元数据（initialize 协商结果、订阅列表）写 Redis，pod 变成无状态，请求随便路由都能恢复 session —— 这是公认更稳的工业级做法。</li><li><strong>混合模式</strong>：纯 RPC 工具走 stateless 端点，需要订阅/推送的工具走带 sticky 的 stateful 端点。</li></ol>
-<p><strong>短期 stateless 是最优解，长期如果有订阅需求，推荐方案 2。</strong></p>
-<h3 id="7-上线-checklist-沉淀">7. 上线 checklist 沉淀</h3>
-<blockquote><p><strong>服务端从单实例升级到多副本时，一定要复测 MCP handshake 第二步 <code>notifications/initialized</code> —— 这是最容易"过 curl 测试但过不了真实客户端"的检测点。</strong></p></blockquote>
-<p>具体怎么测：</p>
-<ul><li><input type="checkbox" disabled> <strong>不要只测 initialize + tools/list</strong>：很多人这两步都能 200 就以为通了，但客户端真正的握手包含 <code>notifications/initialized</code>，curl 默认不发</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>必须用真实 MCP 客户端测</strong>（Claude Code / Cursor / mcp-inspector），或脚本严格按 spec 三步顺序发</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>观察响应头里的后端节点 ID</strong>（公司网关一般有 <code>x-proxy-node</code> 之类）—— 如果三个请求落在不同节点 + 服务端是有状态模式 = 一定挂</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>发布时灰度一台 pod 单独跑，先验证客户端连得上，再扩副本</strong> —— 避免"单实例时跑得好好的，扩到 3 副本就连不上"</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>健康检查别只查 <code>/health</code></strong>：要把 <code>notifications/initialized</code> 这一步也纳入冒烟测试</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>如选 stateless 模式，CI 加一条 case</strong>：模拟客户端把 <code>Mcp-Session-Id</code> 换成乱写的字符串，期待服务端依旧 200（验证不依赖 session）</li></ul>
-<h3 id="8-把这个坑映射回前面的-self-check">8. 把这个坑映射回前面的 self-check</h3>
-<p>第六节"给学习者的总结清单"补一类 <strong>G. 部署/传输层</strong>：</p>
-<ul><li><input type="checkbox" disabled> 是选 STREAMABLE 还是 STREAMABLE_STATELESS？理由是什么？</li></ul>
-<ul><li><input type="checkbox" disabled> 如果选 STREAMABLE，多副本部署下网关有没有 sticky？session 状态有没有外置？</li></ul>
-<ul><li><input type="checkbox" disabled> 如果选 STREAMABLE_STATELESS，是不是确认了不需要 server-initiated 推送（订阅、进度、sampling）？</li></ul>
-<ul><li><input type="checkbox" disabled> 上线前是否用真实 MCP 客户端而不是 curl 验证过完整三步握手？</li></ul>
-<ul><li><input type="checkbox" disabled> 监控里有没有把"<code>notifications/initialized</code> 失败率"作为单独指标？（这是判断本类故障最敏感的信号）</li></ul>
-<h2 id="附录-B-MCP-Spec-2025-06-18-structuredContent-字段缺失导致新版客户端拿">附录 B：MCP Spec 2025-06-18 <code>structuredContent</code> 字段缺失导致新版客户端拿 <code>{}</code></h2>
-<blockquote><p>这是协议级 + 跨版本的另一类生产级坑：server <code>tools/list</code> 返回正常、<code>tools/call</code> HTTP 也 200、curl 看着完美，但部分新版 MCP 客户端拿到的工具结果<strong>永远是空对象 <code>{}</code></strong>。原因藏在"spec 升级了字段语义但 server 端只填半边"的语义错配里。</p></blockquote>
-<h3 id="1-现象-Symptom-1">1. 现象（Symptom）</h3>
-<p>Claude Code 当前版本里：</p>
-<pre><code>mcp__guardians-mcp__list_events()        → {}
-mcp__guardians-mcp__list_apps()          → {}
-mcp__guardians-mcp__get_event_by_type()  → {}</code></pre>
-<p>但 <code>claude mcp list</code> 显示 <strong>✓ Connected</strong>，Python MCP SDK 直连 server 也能拿到完整数据。<strong>只有 Claude Code 这一类 client 看到空。</strong></p>
-<h3 id="2-诊断证据-1">2. 诊断证据</h3>
-<p>直接抓 ToolResult 的字段层（5 个不同性质工具一致）：</p>
-<table><thead><tr><th>调用</th><th>structuredContent</th><th>content[0].text 字节数</th><th>数据真实存在？</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>list_event_inner_fields</td><td>{} ❌</td><td>114</td><td>✅</td></tr><tr><td>list_apps</td><td>{} ❌</td><td>2354</td><td>✅</td></tr><tr><td>get_event_by_type</td><td>{} ❌</td><td>239</td><td>✅</td></tr><tr><td>list_event_fields</td><td>{} ❌</td><td>12234</td><td>✅</td></tr><tr><td>list_dict_tables</td><td>{} ❌</td><td>3844</td><td>✅</td></tr></tbody></table>
-<p>server <code>initialize</code> 响应：<code>protocolVersion = 2025-06-18</code>、<code>serverInfo.name = guardians_tools / version = 1.0.0</code></p>
-<p>→ server 已经<strong>声称</strong>支持 2025-06-18 spec，但实际只填了一半字段。</p>
-<h3 id="3-根因-Root-Cause-1">3. 根因（Root Cause）</h3>
-<h4 id="3-1-MCP-spec-2025-06-18-关于-ToolResult-的关键变化">3.1 MCP spec 2025-06-18 关于 ToolResult 的关键变化</h4>
-<p>老 spec（2024-11-05）的 CallToolResult：</p>
-<pre><code>{ content: ContentBlock[], isError?: boolean }</code></pre>
-<p>LLM 友好但机器不友好——结果都塞在 <code>content[0].text</code> 里需要 client 二次 JSON.parse。</p>
-<p>新 spec（2025-06-18）补了 <code>structuredContent</code>：</p>
-<pre><code>{
-  content: ContentBlock[],          // 给人 / LLM 看的文本表示（保留）
-  structuredContent?: object,       // 新增，机器直接消费的结构化数据
-  isError?: boolean
-}</code></pre>
-<p>spec 推荐 server <strong>两边都填</strong>：<code>content[0].text = JSON.stringify(data)</code>，<code>structuredContent = data</code>。</p>
-<h4 id="3-2-部分新客户端的偏好读取">3.2 部分新客户端的偏好读取</h4>
-<p>Claude Code、某些 Cursor 版本、新版 mcp-inspector 等，<strong>优先读 structuredContent</strong>：</p>
-<ul><li>如果非空 → 直接当返回值用</li><li>如果是空 <code>{}</code> → 不再回退读 content，直接给上层返回 <code>{}</code></li></ul>
-<p>老客户端（mcp-inspector v1、早期 Cursor）只读 <code>content[0].text</code>，所以<strong>在新坑出现前完全感知不到</strong>。</p>
-<h4 id="3-3-guardians-mcp-server-这一侧">3.3 guardians-mcp server 这一侧</h4>
-<p>按本文第三节第 5 条提到的 unwrapResult 流程：</p>
-<pre><code>// McpSpringToolProvider.java:211-229（推测）
-Object data = unwrapResult(result);
-return MAPPER.writeValueAsString(data);  // 只写成字符串</code></pre>
-<p>framework 把这个字符串塞进 <code>content[0].text</code>，<strong>但没有同时填 structuredContent</strong>。spec 2025-06-18 兼容性失败。</p>
-<h4 id="3-4-一句话定性">3.4 一句话定性</h4>
-<blockquote><p><strong>"升级了 protocolVersion 但没升级 ToolResult builder"</strong> 的经典错配。声称我会说新版英语，但实际只填了老语法字段——curl 看不出，新客户端一开口就懵。跟附录 A "应用层有状态 + 基础设施层无粘性"是同一类错配，都是"我说我是 X，但行为还是 Y"。</p></blockquote>
-<h3 id="4-修复-Fix-1">4. 修复（Fix）</h3>
-<h4 id="4-1-server-端双写-最优方案">4.1 server 端双写（最优方案）</h4>
-<p><code>McpSpringToolProvider.invoke()</code> 改：</p>
-<pre><code>try {
-    Object result = method.invoke(bean, methodArgs);
-    Object data = unwrapResult(result);                     // 业务数据（List/Map/POJO）
-    String json = MAPPER.writeValueAsString(data);          // 字符串表示
-    logAudit(toolName, caller, elapsed, true, null);
-
-    return CallToolResult.builder()
-        .addContent(TextContent.of(json))                    // 老字段：兼容老客户端
-        .structuredContent(data)                             // 新字段：spec 2025-06-18+
-        .build();
-} catch (Exception e) {
-    logAudit(toolName, caller, elapsed, false, e.getMessage());
-    throw e;
-}</code></pre>
-<p>注意点（按本文坑 6 那条精神）：</p>
-<ul><li><strong>failure 路径同样要符合新 spec</strong>：抛错走 <code>isError = true</code> + 双写 error message</li><li><strong>structuredContent 必须是 object</strong> 不是 array — spec 2025-06-18 限定 root 必须是 object/dict。如果业务数据是 list（<code>[{...}, {...}]</code>），要包一层：<code>structuredContent: { items: [...] }</code></li><li>关于 root-must-be-object 这点 spec 有明文，<code>list_events / list_rules</code> 这种返回是数组的工具，包 wrapper 比直接塞 list 更稳</li></ul>
-<h4 id="4-2-同步-outputSchema-spec-2025-06-18-配套字段">4.2 同步 outputSchema（spec 2025-06-18 配套字段）</h4>
-<p>spec 同步引入了 <code>Tool.outputSchema</code>：声明 structuredContent 的 JSON schema。让客户端能 typed 解析。</p>
-<pre><code>// 注册工具时同时声明输入 + 输出 schema
-@McpTool(
-    description = &quot;...&quot;,
-    outputSchema = &quot;{type:&#x27;object&#x27;,properties:{items:{type:&#x27;array&#x27;,items:{...}}}}&quot;
-)</code></pre>
-<p>没有 outputSchema 客户端只能拿 raw object。短期不做也能跑，长期 LLM 调用质量更好。</p>
-<h4 id="4-3-测试层加一条-case-按本文第六节-F-的-self-check-风格">4.3 测试层加一条 case（按本文第六节 F 的 self-check 风格）</h4>
-<pre><code>@Test
-void invoke_listEvents_StructuredContentNonEmpty() {
-    CallToolResult r = provider.invoke(&quot;list_events&quot;, Map.of(), caller);
-
-    // 老字段必须有
-    assertNotNull(r.getContent());
-    assertFalse(r.getContent().isEmpty());
-
-    // 🔥 新字段必须有，spec 2025-06-18 兼容性回归
-    assertNotNull(r.getStructuredContent());
-    assertNotEquals(Map.of(), r.getStructuredContent());
-
-    // 两边内容一致性
-    String contentText = ((TextContent)r.getContent().get(0)).getText();
-    Object expected = MAPPER.readValue(contentText, Object.class);
-    assertEquals(expected, r.getStructuredContent());
-}</code></pre>
-<h3 id="5-取舍-Trade-offs-1">5. 取舍（Trade-offs）</h3>
-<p>升级到双写不是没代价：</p>
-<table><thead><tr><th>维度</th><th>单写 content（现状）</th><th>双写 content + structuredContent</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>老客户端兼容（mcp-inspector v1 / 早期 Cursor）</td><td>✓</td><td>✓</td></tr><tr><td>新客户端兼容（Claude Code 当前版本）</td><td>✗（拿 <code>{}</code>）</td><td>✓</td></tr><tr><td>网络包体积</td><td>小</td><td>翻倍（数据冗余）</td></tr><tr><td>schema 定义工作量</td><td>0</td><td>每个工具加 outputSchema</td></tr><tr><td>spec 合规度</td><td>半合规</td><td>全合规</td></tr></tbody></table>
-<p>体积翻倍这一点对 list_event_fields（12KB）这类大返回有 latency 影响，但对 LLM 调用频率（每秒最多几次）完全可接受。</p>
-<h3 id="6-上线-checklist-沉淀">6. 上线 checklist 沉淀</h3>
-<blockquote><p><strong>每次升级 protocolVersion 声明值，必须同步审计 ToolResult / Tool / Notification 等所有 spec 类型的字段变化 —— 这是最容易"声称支持但实际半合规"的检测点。</strong></p></blockquote>
-<p>具体怎么做：</p>
-<ul><li><input type="checkbox" disabled> <strong>不要只跟着 framework 升 spec 版本号</strong>：framework（Solon MCP / Spring AI MCP）默认 builder 行为可能滞后于最新 spec，盲升 version 号不等于真合规</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>必须用真实 MCP 客户端测各代版本</strong>：至少覆盖 Claude Code（最新）+ 早期 Cursor（最老）+ mcp-inspector（参考实现）三种，验证字段读取行为</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>CI 加"字段对照"回归 case</strong>：spec 升级时把新增/变更字段全部加 assertion，避免 ToolResult builder 只填一半</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>server 端 ToolResult 构造逐字段对照 spec</strong>，不依赖 framework 的"看起来对"</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>监控 structuredContent 为空的工具调用比例</strong>：如果 &gt; 0 且 server 声称 protocolVersion ≥ 2025-06-18，就是合规漏洞信号</li></ul>
-<ul><li><input type="checkbox" disabled> <strong>观察用户反馈</strong>："server 显示 connected 但工具调用拿不到数据"是这类坑的高敏信号词，应触发立即排查</li></ul>
-<h3 id="7-把这个坑映射回前面的-self-check">7. 把这个坑映射回前面的 self-check</h3>
-<p>第六节"给学习者的总结清单"补一类 <strong>H. 协议版本兼容</strong>：</p>
-<ul><li><input type="checkbox" disabled> server 在 initialize 响应里声称的 protocolVersion 是哪个？（2024-11-05 / 2025-03-26 / 2025-06-18 / 更新）</li></ul>
-<ul><li><input type="checkbox" disabled> 是否每次 spec 升级都同步审计了 ToolResult / Tool / Notification 等类型的字段变化？</li></ul>
-<ul><li><input type="checkbox" disabled> 真用过 Claude Code / 最新 Cursor / 最新 mcp-inspector 三个不同客户端测过同一批工具？（仅一种客户端测试 = 协议版本兼容性盲区）</li></ul>
-<ul><li><input type="checkbox" disabled> CI 里是否覆盖了 "structuredContent 必须非空 + 与 content 数据一致" 的回归 case？</li></ul>
-<ul><li><input type="checkbox" disabled> server 端 ToolResult builder 是不是逐字段对照 spec 而不是依赖 framework 默认行为？（Solon MCP / Spring AI MCP 等 framework 的默认 builder 行为可能滞后于最新 spec）</li></ul>
-<h3 id="8-一句话回答">8. 一句话回答</h3>
-<blockquote><p>"为啥 server 一切 OK + curl 一切 OK + Python SDK 一切 OK，唯独 Claude Code 调用拿到 <code>{}</code>？"</p></blockquote>
-<p><strong>因为 spec 2025-06-18 把"机器可读的结构化数据"从 <code>content[0].text</code> 抽到了独立的 <code>structuredContent</code> 字段，server 升级了 protocolVersion 声明但没升级 ToolResult 构造，新版 client 看到空 structuredContent 不再回退读 content —— spec 字段错配。</strong></p>
-<blockquote><p>发现链路：2026-05-19 用 guardians-mcp 跑黑产挖掘 demo 时主对话拿 <code>{}</code> → 用 Python SDK 直连验证 server 真返回 ✅ → 抓 ToolResult 字段层定位到 structuredContent 空 → 复盘成文。</p></blockquote>
 <h2 id="原文沉淀">原文沉淀</h2>
-<h3 id="Guardians-MCP-写接口落地复盘-生产级-MCP-开发踩坑清单">Guardians MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</h3>
-<blockquote><p>来源：<code>openspec/changes/archive/2026-05-18-support-mcp-write-apis/</code> 主提交：<code>b81ae0d feat(mcp): 支持 MCP 写接口</code> + <code>7446300</code> / <code>5201c29</code> 两次"修复入参解析" 受众：做过 MCP demo 但没做过生产级 MCP 的同学</p></blockquote>
-<hr>
+<h3 id="目录">目录</h3>
+<ul><li><a href="#观看更多">观看更多</a></li><li><a href="#全屏">全屏</a></li></ul>
+<p><img alt="图片" src="../assets/img/img-001-33cfaf50-a0616056b948.png"></p>
+<p>编辑｜Panda</p>
+<p>前两天，<a href="https://mp.weixin.qq.com/s?__biz=MzA3MzI4MjgzMw==&amp;mid=2651056088&amp;idx=1&amp;sn=040b43776b998fe8b345c91a17134c25&amp;scene=21#wechat_redirect">DeepSeek V4.1 Flash 正式上线</a>，又快又强，引发了广泛关注和测试热潮。</p>
+<p><img alt="图片" src="../assets/img/img-002-ad4bc64e-2a7671c2fd91.png"></p>
+<p>比如著名测试机构 Artificial Analysis 对 V4.1 Flash 进行了非常充分的测试后，给出了 40 分的指数评分，超过了 DeepSeek 家参数量大得多的 V4 Pro。</p>
+<p><img alt="图片" src="../assets/img/img-003-cadac6e9-a5725e74e519.png"></p>
+<p>当然，这并不意外，毕竟 DeepSeek 自己也得出了这一结论，并表示会让 V4 Pro 下线并将相关请求直接路由的 V4.1 Flash。顺带一提，DeepSeek 已经连续两次修改决定，先是延迟下线 V4 Pro：</p>
+<p><img alt="图片" src="../assets/img/img-004-894910fd-05e242d4a386.png"></p>
+<p>然后又放弃下线 V4 Pro 并继续提供 API 调用服务：</p>
+<p><img alt="图片" src="../assets/img/img-005-4f0f2d01-5234b15a57ab.png"></p>
+<p>此外，Artificial Analysis 的系统评测中还有另一些看点：</p>
+<ul><li>DeepSeek V4.1 Flash 在智能体能力和长上下文推理方面进步明显。</li></ul>
+<ul><li>DeepSeek V4.1 Flash 以 69% 在 AutomationBench-AA 上排名第一，与 GPT-6 Astra（69%）持平，略高于 Grok 4.6（67%）。</li></ul>
+<ul><li>DeepSeek V4.1 Flash 是其测得的冗长度最高的模型之一，每个 Intelligence Index 任务 89k Tokens。</li></ul>
+<ul><li>尽管如此冗长，DeepSeek V4.1 Flash 每个 Intelligence Index 任务仍仅花费 0.27 美元。这主要得益于其低定价。</li></ul>
+<p>Sebastian Raschka 甚至认为 DeepSeek V4.1 Flash 创新之大，应该叫它 DeepSeek V5。</p>
+<p><img alt="图片" src="../assets/img/img-006-535ca45a-d8044b694a67.png"></p>
+<p>那么，DeepSeek V4.1 Flash 究竟是如何做到的呢？如何以 552B 参数的小肥鱼超越了 Pro 的 1.6T 参数大肥鱼？下面我们就基于其官方技术报告来进行一番解读。</p>
+<p><img alt="图片" src="../assets/img/img-007-023c340c-4d5710f7e7e5.png"></p>
+<p>报告地址：https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash/blob/main/DeepSeek_V41_Tech_Report.pdf</p>
+<p>这是一篇围绕 KV 缓存写的报告</p>
+<p>先看技术报告的标题：「DeepSeek-V4.1-Flash: Pushing the Limits of KV Cache Compression」。推进 KV 缓存压缩之极限。翻完架构章节，我们发现，这不是一个修辞，几乎每一处设计都能回溯到同一个目标：把 KV 缓存压下去。</p>
+<p>先看几个数字。V4.1-Flash 的全局 KV 缓存（始终常驻 HBM 的那部分）被压到每 token 890 字节，约为 V4-Flash 的 1/4；如果拉到 DeepSeek-V1 的 389,120 字节来看，这是 437 倍的差距。持久化 KV 缓存（落在 SSD 或主机内存里、用于前缀复用的那部分）则被压到 V4-Flash 的约 1/8。</p>
+<p>模型本身是 552B 主干参数外加 196B Engram 参数的多模态 MoE，原生支持 100 万 token 上下文，在 45T token 的多模态语料上预训练，prefill 阶段每 token 只激活 8B 参数，decode 阶段激活 16B。</p>
+<p><img alt="图片" src="../assets/img/img-008-764967fc-4b580a561045.png"></p>
+<p>DeepSeek 历代模型每 token 全局 KV 缓存大小对比</p>
+<p>这套数字组合起来，才是「552B 干掉 1.6T」的真正含义：比较的核心是同样一次 agent 调用里，模型要占多少显存、要从 SSD 搬多少数据、要重算多少次 prefill。</p>
+<p>稀疏注意力之后，贵的地方是存和搬</p>
+<p>要理解 DeepSeek 为什么把全部火力对准 KV 缓存，得先看清楚瓶颈的变化。</p>
+<p>从 V3.2 的 DSA 到 V4 的 CSA，稀疏注意力已经把长序列的计算成本削得足够低。但长程 agent 的工作负载有个特点：输入重（input-heavy）。</p>
+<p>一个跑几小时的编码 agent，每次工具调用都会产生一次新的 prefill 请求，上下文只增不减，真正需要生成的 token 反而是少数。</p>
+<p>于是，当「算」不再是瓶颈之后，「存」和「搬」就顶了上来。</p>
+<p>报告把这个新瓶颈拆成三块：</p>
+<ul><li>HBM 容量限制了运行时能同时装下多少并发请求的全局 KV；</li></ul>
+<ul><li>SSD 和主机内存容量限制了前缀缓存能存多久、命中率有多高；</li></ul>
+<ul><li>IO 与互联带宽则限制了缓存迁移和加载的速度。</li></ul>
+<p>三个问题合起来，决定了一个 agent 服务的吞吐上限和单位成本。V4 时代 DeepSeek 已经把 CSA 与 HCA 混合起来做序列维度的压缩，V4.1-Flash 则选择在架构、精度、部署三个层次上同时下手。</p>
+<p>CED：把一半的 prefill 计算直接砍掉</p>
+<p>V4.1-Flash 的语言主干是 40 层，但被切成了两半：前 20 层是因果编码器（Causal Encoder），后 20 层是解码器。这个结构叫 Causal Encoder-Decoder，简称 CED。这也是 DeepSeek 官方发布页上「输入激活 8B、输出激活 16B」这条不对称设计的来源。</p>
+<p><img alt="图片" src="../assets/img/img-009-5e336d61-f6361a26bcfd.png"></p>
+<p>有趣的是，Arena 的 Peter Gostev 还让 Astra 阅读了 DeepSeek v4.1 Flash 的论文，用 3D 将其架构与原始 Transformer 架构进行了非常直观的对比。他还将其分享了出来，你可以放大并排查看每一个元素：</p>
+<p>https://transformer-architecture.petergostev.chatgpt.site/</p>
+<p>已关注</p>
+<p>**</p>
+<p>关注</p>
+<p><strong> 重播   </strong> 分享    ** 赞</p>
+<h3 id="观看更多">观看更多</h3>
+<p>**</p>
+<p>**</p>
+<p>**</p>
+<p>**</p>
+<p>机器之心</p>
+<p>**</p>
+<p>0/0</p>
+<p>00:00/00:39</p>
+<p>进度条，百分之0</p>
+<p>**</p>
+<p>播放</p>
+<p>00:00</p>
+<p>/</p>
+<p>00:39</p>
+<p>00:39</p>
+<p>倍速</p>
+<h3 id="全屏">全屏</h3>
+<p>** 倍速播放中</p>
+<p>0.5倍0.75倍1.0倍1.5倍2.0倍</p>
+<p>超清流畅</p>
+<p>您的浏览器不支持 video 标签</p>
+<p>**</p>
+<p>继续观看</p>
+<p>DeepSeek V4.1 Flash用了哪些黑科技？竟让Flash（差点）逼退Pro</p>
+<p>转载</p>
+<p>,</p>
+<p>DeepSeek V4.1 Flash用了哪些黑科技？竟让Flash（差点）逼退Pro</p>
+<p>**</p>
+<p>机器之心</p>
+<p>****已同步到看一看写下你的评论</p>
+<p>**</p>
+<p>视频详情</p>
+<p>关键在于解码器那 20 层的全局 KV 是怎么来的？</p>
+<p>常规 Transformer 里，每层的 K、V 都从该层自己的隐藏状态算出来，所以处理一段提示词必须把 40 层全部跑完。</p>
+<p>CED 不这么做：解码器各层的 KV 条目直接由第 20 层（也就是编码器最后一层）的隐藏状态用各自的投影矩阵映射得到。换句话说，prefill 阶段只需要跑前 20 层，上半部分的全局 KV 缓存就已经以极低的代价拿到手了。序列长度远大于窗口时，prefill 的复杂度从 O(NL) 降到约 O(NL/2)，接近对半砍。</p>
+<p>这个思路继承自微软的 YoCo（You Only Cache Once），但 CED 做了结构上的加厚：YoCo 是让上半部分直接共享下半部分产生的同一份 KV 缓存，CED 则是为每一层配置独立的投影权重，在保住「只算一半」的前提下，扩大了 KV 的有效容量和生成深度。</p>
+<p>代价也有，出现在滑动窗口注意力上。SWA 仍然是逐层计算的，每层的局部 K、V 都来自本层隐藏状态，这样才能维持局部信息的计算深度。可这意味着 prefill 时解码器仍需额外处理 n_win × L/2 个 token 来补齐 SWA 状态，对于多轮短提示的场景反而成了新的开销。</p>
+<p>DeepSeek 的处理方式是「近似」：既然已有研究表明 SWA 的实际有效感受野远小于理论上的 n_win × L/2，那就只回放提示词最后的 n_win 个 token。这就是后面要讲的 Decoder SWA Bounded Replay。</p>
+<p>CSA2：三个压缩维度，第一次被同时吃满</p>
+<p>CED 管计算，CSA2（Compressed Sparse Attention 2）管的是存储。</p>
+<p>报告把 KV 缓存的压缩空间归纳成三个互相相乘的维度：条目大小（GQA 减少 KV 头数、MLA 让各头共享一个小 latent）、序列维度（每 m 个 token 压成一条，V4 的 CSA 和 HCA 属于这一类）、以及层维度（让部分层复用其他层的缓存和选择结果）。</p>
+<p>报告中还介绍了三项之前的成果：</p>
+<ul><li>IndexCache 跨层复用 Top-K 索引，省的是索引器的算力而不是缓存；</li></ul>
+<ul><li>YOIO 把稀疏路由算一次全网共享，但全网共享会伤性能；</li></ul>
+<ul><li>HySparse 让稀疏层复用稠密层的 KV 缓存，可它仍然保留了完整注意力层。</li></ul>
+<p>三者都没有覆盖全部三个维度，而 CSA2 想要的是同时吃满。</p>
+<p>它的做法是给每个 CSA2 层静态分配三种模式之一。</p>
+<ul><li>Full 模式自己算 main KV 和索引器 Q，从 main KV 投影出索引器 K，跑完整的索引流程产出新鲜的 Top-K 索引。</li></ul>
+<ul><li>Reindex 模式复用前面某层的 main KV 和索引器 K，但用自己的索引器 Q 重新打分、选出属于自己的 Top-K——缓存共享了，选择还是自己的。</li></ul>
+<ul><li>Reuse 模式最省，main KV 和 Top-K 索引全部沿用，直接做稀疏注意力，连索引器 Q 都不算。</li></ul>
+<p><img alt="图片" src="../assets/img/img-010-167a86aa-b3fb11840e36.png"></p>
+<p>三种模式的共同点是，每层仍然保留自己的全局 Q 和 SWA KV，所以层与层之间的表达能力并没有被抹平。具体配置参见原报告。</p>
+<p>FP4 与 Bounded Replay</p>
+<p>架构之外，还有两刀。</p>
+<p>第一刀在精度上。V4 已经对索引器的 Q、K 做了 FP4 量化感知训练，V4.1-Flash 把 FP4 推进到了 main KV 缓存。格式上选的是 E2M1 配每 16 通道一个 E4M3 缩放因子，接近 NVFP4 但省掉了它的二级全局缩放。报告也硬核地论证了这个做法，感兴趣的读者可自行查阅。</p>
+<p>第二刀在部署上，就是前面提到的 SWA Bounded Replay。由于 SWA 的依赖会逐层累积，精确重建 L 层的 SWA KV 需要回放 L × n_win 个 token，V4 的技术报告里提出过「Zero SWA Caching」的思路，但这个代价在生产部署中被证明过高。V4.1-Flash 干脆接受近似：只回放最近的 n_win 个 token（配置里 n_win = 128），并把 SWA 截断到回放段内。</p>
+<p>这个「接受近似」换来的收益很明显。在 V4 的部署中，SWA KV 占了持久化缓存近一半的容量，而它的访问模式跟持久化缓存的长留存策略根本不匹配——全局 KV 有长尾复用价值，SWA KV 却只在一个活跃会话内的分钟级窗口里有用，会话一结束就是死数据。</p>
+<p>于是 V4.1-Flash 把 SWA KV 整个移出持久化缓存，改放进由每台机器 10% 主机 DRAM 组成的分布式内存池，TTL 只有几分钟，靠高周转服务绝大多数并发会话；全局 KV 继续留在 SSD 上，保证至少 72 小时的生命周期。</p>
+<p>偶尔出现全局 KV 命中而 SWA KV 未命中的请求，就用 bounded replay 重算 n_win 个 token 兜底。报告称这把一次灾难性的缓存未命中变成了一次廉价的优雅降级，持久化 KV 缓存也因此降到 V4-Flash 的约 1/8。</p>
+<p>所有这些加在一起的效果：上下文从 4K 拉到 1M、放大 256 倍，V4.1-Flash 的单 token decode FLOPs 只增加了 1/4。</p>
+<p><img alt="图片" src="../assets/img/img-011-297fe28b-c1613308c42b.png"></p>
+<p>各代 DeepSeek 模型单 token decode FLOPs 随上下文长度的变化</p>
+<p>Single-Pass mHC、Engram 与 DSpark</p>
+<p>熟悉 DeepSeek 这一年论文节奏的读者，会在架构章节里看到不少老面孔。</p>
+<p>mHC（流形约束超连接）来自今年元旦发布的那篇论文，解决的是超大规模训练的稳定性问题。</p>
+<p>V4.1-Flash 把它升级成了 Single-Pass mHC。</p>
+<p>原始实现里，输入混合系数 A 必须等隐藏维度上的规约完成才能拿到，导致残差更新、系数预测、输入混合三个 kernel 只能串行，激活访存量是理论下界的两倍。</p>
+<p>新版本的做法是把混合系数错开一个 block——每个 block 消费上一个 block 产出的混合系数，依赖关系就此消失，三步可以融进一个叫 Mega-mHC 的 kernel 里，激活访存从 (4n+4)d 降到 (2n+2)d，正好减半。报告说这个错位带来的性能损失可以忽略。</p>
+<p>Engram 则是今年 1 月 DeepSeek 与北京大学合作提出的条件记忆模块，思路是用 N-gram 哈希实现 O(1) 复杂度的静态知识检索，把「记忆」从昂贵的 GPU 显存卸载到廉价的 DRAM，让 MoE 专心做组合推理。</p>
+<p>V4.1-Flash 里它第一次进了正式版模型：196B 参数平均分给两个模块，放在第 1 层和第 14 层，采用 {2, 3, 4} 阶 N-gram、8 个哈希头、每阶总嵌入维度 2048，每个头索引约 1600 万条目，表大小取互不相同的质数。嵌入表和投影都用 FP8，推理时靠确定性寻址从主机内存后台 RDMA 预取，第一个模块的预取直接和第一个 Transformer block 的计算重叠。相比原始 Engram 设计，这里去掉了那个短因果卷积，理由是它的收益不足以抵消推理栈的复杂度。</p>
+<p>投机解码模块 DSpark 由三个 Transformer block 组成，滑动窗口 128 token，一次前向并行给出五个草稿位置的 base logits，再用一个轻量的 Markov 头建模草稿 token 之间的依赖，另有一个置信度头预测逐位置的接受概率，由调度器结合引擎吞吐曲线动态决定每个请求的验证长度。跟 V3 里全程与主干联合训练的 MTP 不同，DSpark 是在预训练之后单独训练的，后训练阶段跟着主干一起走但不回传梯度，好处是它能持续对齐不断演化的策略，同时加速线上服务和 RL 的 rollout 生成。</p>
+<p>优化器层面也有两处调整：Q、K 权重用按头切分的 head-wise Muon，以处理注意力头之间的异质性；Engram 嵌入表、token 嵌入和预测头则用动量更新配 Sinkhorn 平衡替代 Adam，只需一个动量缓冲，省下了大量优化器状态显存。</p>
+<p>这些优化效果明显：占绝大多数的 Reuse 模式层，prefill 时只需执行 15 个 kernel，decode 时只需 11 个。</p>
+<p>后训练：「没有算法创新」</p>
+<p>DeepSeek 在后训练章节坦率地表示：这一版没有引入新的后训练算法，流程就是标准的 SFT 加 RL 加 on-policy 蒸馏，没有超出成熟实践的改动。所有的改动都在数据管线上，这里就不多展开了，详见原论文。</p>
+<p>一个有意思的点是，后训练引入了一个对使用者直接可见的设计：reasoning effort。</p>
+<p>训练时把一个 1 到 100 的标量 effort 显式写进系统提示，同一 effort 下的多个采样构成一个子组，组内做奖励中心化，而长度惩罚系数随 effort 指数衰减：effort 每增加一个特征尺度，惩罚系数乘以 1/e。这样一来，同一份权重就能在成本-质量曲线上滑动。DeepSeek API 暴露的 max、high、low 三档，对应的正是 b=100、75、50。</p>
+<p>这也顺带解释了开头 Artificial Analysis 那条「最冗长模型之一」的观察：它测的是 max 档，而 max 档在设计上就是这条曲线最右端的点。</p>
+<p>报告给出的数据是，effort 从 25 提到 100，八个推理密集型基准的平均 Pass@1 从 67.1% 升到 76.3%，DeepSWE v1.1 从 66.0% 到 74.2%，Terminal-Bench 2.1 从 82.4% 到 90.6%，代价是约 2.5 倍的输出 token。</p>
+<p><img alt="图片" src="../assets/img/img-012-565e4efc-ad5c12385acd.png"></p>
+<p>性能与输出长度随 reasoning effort 的变化</p>
+<p>但收益是前置的——60 到 80 这一档已经能用不到一半的 token 预算拿到接近满档的准确率，而从 80 走到 100 会让 agent 轨迹再长 1.6 到 1.8 倍，换来的只是边际提升。报告的建议是把 max 留给最难的任务。</p>
+<p><img alt="图片" src="../assets/img/img-013-6c14eb05-5461d53719ee.png"></p>
+<p>结语</p>
+<p>把这份报告读完，会发现它最值得注意的是三个层次被拧在同一个方向上：架构层用 CED 砍掉一半 prefill、用 CSA2 把跨层复用做到三个维度全覆盖，精度层把 main KV 压到 FP4，部署层则用 bounded replay 把 SWA KV 整个赶出持久化缓存。</p>
+<p>任何单独一项都只能带来百分之几十的改善，叠在一起才效果显著。</p>
+<p>顺带一提，DeepSeek 还开源了一些新的代码仓库，方便更容易地部署 V4.1 Flash 以及后续的开源模型：</p>
+<p><img alt="图片" src="../assets/img/img-014-00cadb6e-06719818ff06.png"></p>
+<ul><li>deepseek-recipe：是一组 Rust 库和 Python bindings，可将不同格式的 API 请求统一转换为 Conversation 格式，将其编码为 DeepSeek 模型的提示，并将模型输出转换为相应格式的响应。使用这些组件将推理后端连接到支持多种格式的 API 服务。</li></ul>
+<p>https://github.com/deepseek-ai/deepseek-recipe</p>
+<ul><li>DeepJIT：一个轻量级、仅头文件的 C++20 JIT 运行时，面向 NVIDIA CUDA GPU 和华为昇腾 NPU。它为 C++/Python 扩展作者提供了一个共享接口，用于在运行时编译内核源代码、缓存生成的二进制文件、将其加载到设备上，并使用后端特定的选项启动它们。</li></ul>
+<p>https://github.com/deepseek-ai/DeepJIT</p>
+<ul><li>DeepSelect：是 DeepSeek 稀疏注意力（DSA）（用于 DeepSeek V3.2、DeepSeek V4 和 DeepSeek V4.1 模型）中所用 TopK 内核以及采样器的高性能实现。与原生 torch.topk 相比，它实现了 2 ~ 20 倍的加速。</li></ul>
+<p>https://github.com/deepseek-ai/DeepSelect</p>
+<p>再顺带一提，DeepSeek 已经开始灰度语音交互了：</p>
+<p>已关注</p>
+<p>**</p>
+<p>关注</p>
+<p><strong> 重播   </strong> 分享    ** 赞</p>
+<h3 id="观看更多-1">观看更多</h3>
+<p>**</p>
+<p>**</p>
+<p>**</p>
+<p>**</p>
+<p>机器之心</p>
+<p>**</p>
+<p>0/0</p>
+<p>00:00/00:17</p>
+<p>进度条，百分之0</p>
+<p>**</p>
+<p>播放</p>
+<p>00:00</p>
+<p>/</p>
+<p>00:17</p>
+<p>00:17</p>
+<p>倍速</p>
+<h3 id="全屏-1">全屏</h3>
+<p>** 倍速播放中</p>
+<p>0.5倍0.75倍1.0倍1.5倍2.0倍</p>
+<p>超清流畅</p>
+<p>您的浏览器不支持 video 标签</p>
+<p>**</p>
+<p>继续观看</p>
+<p>DeepSeek V4.1 Flash用了哪些黑科技？竟让Flash（差点）逼退Pro</p>
+<p>转载</p>
+<p>,</p>
+<p>DeepSeek V4.1 Flash用了哪些黑科技？竟让Flash（差点）逼退Pro</p>
+<p>**</p>
+<p>机器之心</p>
+<p>****已同步到看一看写下你的评论</p>
+<p>**</p>
+<p>视频详情</p>
+<p><img alt="图片" src="../assets/img/img-015-72b28683-9f18e1a6a74b.png"></p>
+<p>© THE END</p>
+<p>转载请联系本公众号获得授权</p>
+<p>投稿或寻求报道：liyazhou@jiqizhixin.com</p>
 <p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
 </div>
 <script src="../assets/app.js"></script>
