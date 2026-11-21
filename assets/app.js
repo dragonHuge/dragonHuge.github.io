@@ -85,3 +85,48 @@
     });
   });
 })();
+
+/* 版本自更新（2026-11-21）：站点重建后，App/浏览器自动感知并刷新 */
+(function () {
+  var KEY = "dh-build";
+  function fetchVer() {
+    return fetch("/version.json?t=" + Date.now(), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .catch(function () { return null; });
+  }
+  fetchVer().then(function (v) {
+    if (v && v.build && !localStorage.getItem(KEY)) localStorage.setItem(KEY, v.build);
+  });
+  function check() {
+    if (document.visibilityState !== "visible") return;
+    fetchVer().then(function (v) {
+      if (!v || !v.build) return;
+      var seen = localStorage.getItem(KEY);
+      if (seen && seen !== v.build) {
+        var u = new URL(location.href);
+        u.searchParams.set("v", v.build);
+        location.replace(u.toString());
+        return;
+      }
+      localStorage.setItem(KEY, v.build);
+    });
+  }
+  document.addEventListener("visibilitychange", check);
+  window.addEventListener("focus", check);
+  setInterval(check, 10 * 60 * 1000);
+
+  /* App 内显示手动刷新按钮（浏览器里不显示） */
+  if (window.Capacitor) {
+    var b = document.createElement("button");
+    b.className = "app-refresh";
+    b.type = "button";
+    b.title = "刷新内容";
+    b.textContent = "↻";
+    b.addEventListener("click", function () {
+      var u = new URL(location.href);
+      u.searchParams.set("v", Date.now());
+      location.replace(u.toString());
+    });
+    document.body.appendChild(b);
+  }
+})();
