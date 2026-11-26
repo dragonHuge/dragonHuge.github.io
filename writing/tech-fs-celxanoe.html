@@ -81,9 +81,9 @@ java -jar arthas-boot.jar</code></pre><p>下图可以看到，容器中仅有1�
         return new Thread(r, "风控平台-talos-passport-action-" + System.currentTimeMillis());
     }
 }, new ThreadPoolExecutor.CallerRunsPolicy()</code></pre><ol><li><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong><code>systemload.average</code></strong></mark>参数<strong>：显示的是 过去 1 分钟 的平均负载，用来衡量系统的繁忙程度。</strong></li></ol><blockquote><p>简单理解：</p><ul><li>CPU 核数 = 收费窗口的数量。（4 核 即有 4 个窗口）</li></ul><ul><li>System Load = 正在办理 + 正在排队的车辆总数。</li></ul></blockquote><p>判断负载高低，必须结合 <strong>CPU 核数</strong> 来看。你的机器是 <strong>4核</strong>：</p><ul><li><strong>Load &lt; 4</strong>：健康。4 个窗口都在干活，偶尔有车来，马上就能办完，几乎不用排队。</li></ul><ul><li><strong>Load = 4</strong>：满载。4 个窗口全部坐满，且没有空闲，但也没有车在排队。</li></ul><ul><li><strong>Load &gt; 4</strong>：过载（排队）。窗口全满，后面还有车排起了长龙。</li></ul><p>图中值为126.65，意味着有126个任务在等待处理，但系统却只有4核。但<u>奇怪的是，CPU负载仅有5%</u>。</p><p>这说明有可能：<strong>当前进程任务属于IO密集型，大量请求卡在等待网络IO上</strong>。</p><blockquote><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px">但还有一种情况：</mark><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>宿主机负载高，</strong></mark><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px">这是容器的一个坑</mark>。--- <span style="color:#d83931"><strong>从后文分析得出结论，这里的高负载正是宿主机的原因，而非线程僵住。</strong></span></p><p>Arthas 读到的 System Load 往往是<strong>物理宿主机</strong>的负载，而不是你当前容器的。如果这台物理机上别的容器在“挖矿”或跑大数据，你的 Load 也会显示 126，但你的 CPU 使用率很低。</p></blockquote><p>因此，<mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><strong>需要进一步分析线程池情况，继续向下探究</strong></mark>。</p><h3 id="sec-7"><strong>ognl 表达式：万能探针，Arthas最强大的工具。</strong></h3><blockquote><p>简介<strong>：</strong>OGNL 全称是 <strong>Object-Graph Navigation Language</strong>（对象图导航语言）。它就像是 Java 内存世界的 <strong>“GPS 导航”</strong> 或 <strong>“万能探针”</strong>。</p><p>在 Arthas 中，OGNL 是最强大的工具，因为它允许你通过一行简单的文本命令，直接<strong>钻进</strong>正在运行的 JVM 内存里，去<strong>读取</strong>或<strong>修改</strong>任意对象的属性、调用任意方法，而不需要你写一行 Java 代码或重启服务。</p></blockquote><h4 id="sec-8">语法：</h4><p>在 OGNL 表达式里，为了区分<strong>静态（Static）资源和普通资源</strong>，它有一套特殊的语法规则。</p><ol><li><pre><code>TalosFingerPrintConsumer.WORKER_POOL // 假设 WORKER_POOL 是静态的</code></pre></li><li><pre><code>// 第一个 @ 告诉它后面是类名，第二个 @ 告诉它后面是静态变量
-@com.公司...TalosFingerPrintConsumer@WORKER_POOL</code></pre></li></ol><ol><li><pre><code>workerPool.getQueue().size() // Java写法
+@com.example...TalosFingerPrintConsumer@WORKER_POOL</code></pre></li></ol><ol><li><pre><code>workerPool.getQueue().size() // Java写法
 workerPool.queue.size // OGNL写法，它会自动去调用 getQueue() 和 size()，或者直接访问字段</code></pre></li></ol><ol><li><pre><code>myMap.get("Register") // java
-myMap['Register'] // ognl</code></pre></li></ol><h4 id="sec-9">接着实践：查看线程池的资源情况</h4><pre><code>ognl '@com.公司.infosec.risk.风控平台.app.consumer.fingerprint.TalosFingerPrintConsumer@WORKER_POOL'</code></pre><p>拿到以下结果：</p><pre><code>@ThreadPoolExecutor[
+myMap['Register'] // ognl</code></pre></li></ol><h4 id="sec-9">接着实践：查看线程池的资源情况</h4><pre><code>ognl '@com.example.risk.risk.风控平台.app.consumer.fingerprint.TalosFingerPrintConsumer@WORKER_POOL'</code></pre><p>拿到以下结果：</p><pre><code>@ThreadPoolExecutor[
     ctl=@AtomicInteger[-536870878],
     COUNT_BITS=@Integer[29],
     CAPACITY=@Integer[536870911],
@@ -98,7 +98,7 @@ myMap['Register'] // ognl</code></pre></li></ol><h4 id="sec-9">接着实践：�
     termination=@ConditionObject[java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject@17927394],
     largestPoolSize=@Integer[34], // 历史峰值线程数
     completedTaskCount=@Long[0], // 历史已完成的任务总数
-    threadFactory=@[com.公司.infosec.risk.风控平台.app.consumer.fingerprint.TalosFingerPrintConsumer$3@1154de98],
+    threadFactory=@[com.example.risk.risk.风控平台.app.consumer.fingerprint.TalosFingerPrintConsumer$3@1154de98],
     handler=@CallerRunsPolicy[java.util.concurrent.ThreadPoolExecutor$CallerRunsPolicy@323550b8], // 拒绝策略
     keepAliveTime=@Long[60000000000], // 临时线程存活时间（单位：纳秒），此时是60s。
     allowCoreThreadTimeOut=@Boolean[false],
@@ -124,6 +124,6 @@ thread 372 // 查看线程ID：372的堆栈情况。</code></pre><p>抽样查看
 </div>
 <script src="../assets/app.js?v=1795449805"></script>
 <script src="../assets/search.js?v=1793900983"></script>
-<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795668443"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
 </body>
 </html>

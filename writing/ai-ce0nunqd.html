@@ -97,7 +97,7 @@
   - 例子3：
     PDF文件内容：公司新政策规定员工每年可享受15天带薪休假。
     输出：根据公司新政策，员工每年可享受多少天带薪休假？A. 10天 B. 15天 C. 20天 D. 25天,B
-- Initialization: 在第一次对话中，请直接输出以下：您好！作为RAG知识库赛事测试集生成专家，我将根据您提供的PDF文件内容，从比赛主办方的角度出发，为您生成并筛选出50条最可能被询问的单项选择题测试集。请上传PDF文件，我将开始为您生成测试题目。</code></pre><p>由于测试集的生成依赖于知识库源数据，有保密需求，因此使用公司内部模型MiMO：https://mimo.dt.mi.com/#/chat/1a568ae4e1107dca480289643ef7aec7</p><p>但这个过程比较浪费精力，毕竟模型出的题不一定准确。</p><p>还好官方给了11道测试题，可以用它来做进一步微调啦！</p><h2 id="sec-7">RAG在线检索参数怎么配置</h2><p>涉及以下几个配置：</p><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div><p><strong>大模型推荐：</strong></p><ul><li>向量索引类型：flat</li></ul><ul><li>向量匹配类型：COSINE</li></ul><ul><li>搜索类型：all</li></ul><ul><li>检索结果数量：3-5 条</li></ul><ul><li><pre><code>我正在做一个RAG知识库的建设，这个知识库主要用于回答单选题，如：什么是发票校验码？A. 发票防伪的加密字段 B. 发票号码 C. 税务登记号 D. 金额, A；公司马克杯是多少ml？ A.145ml  B.289ml  C.390ml  D.450ml  E.500ml,C
+- Initialization: 在第一次对话中，请直接输出以下：您好！作为RAG知识库赛事测试集生成专家，我将根据您提供的PDF文件内容，从比赛主办方的角度出发，为您生成并筛选出50条最可能被询问的单项选择题测试集。请上传PDF文件，我将开始为您生成测试题目。</code></pre><p>由于测试集的生成依赖于知识库源数据，有保密需求，因此使用公司内部模型model：https://[内部链接]/#/chat/1a568ae4e1107dca480289643ef7aec7</p><p>但这个过程比较浪费精力，毕竟模型出的题不一定准确。</p><p>还好官方给了11道测试题，可以用它来做进一步微调啦！</p><h2 id="sec-7">RAG在线检索参数怎么配置</h2><p>涉及以下几个配置：</p><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div><p><strong>大模型推荐：</strong></p><ul><li>向量索引类型：flat</li></ul><ul><li>向量匹配类型：COSINE</li></ul><ul><li>搜索类型：all</li></ul><ul><li>检索结果数量：3-5 条</li></ul><ul><li><pre><code>我正在做一个RAG知识库的建设，这个知识库主要用于回答单选题，如：什么是发票校验码？A. 发票防伪的加密字段 B. 发票号码 C. 税务登记号 D. 金额, A；公司马克杯是多少ml？ A.145ml  B.289ml  C.390ml  D.450ml  E.500ml,C
 
 针对这种RAG知识库，有几个问题帮我分析一下：
 1. 其中的向量索引类型怎么配置？哪种向量索引类型最适合？
@@ -196,7 +196,7 @@ repetition_penalty用于抑制重复输出。由于单选题输出内容极短�
 
 
 总结配置核心逻辑
-通过明确 prompt 约束输出格式、降低随机性（temperature）、缩小候选范围（top_k/top_p）、限制生成长度（max_new_tokens），让模型聚焦 “文档 - 选项” 的精确匹配，最大限度减少干扰因素，从而提高单选题的回答准确率。</code></pre><h2 id="sec-11">生成模型源码逻辑解析 &amp; 提示词优化</h2><p>大致解析下Mi-Brag的generate接口。</p><figure class="fs-board" data-doc="[内部链接]" data-board="VVbZwEtYFhbJZnbEEzicbkrInVN"><div class="board-ph">正在加载画板…</div></figure><p>因此提示词构建也是十分重要的一环。</p><p>提示词优化核心：在保留 “系统提示 + 文档 + 问题” 核心结构的基础上，通过<strong>模块化标题分隔、关键规则重申、日志增强</strong>，让模型更易识别各模块功能，同时提升代码可维护性和调试便利性。</p><p>示例：</p><pre><code>def generate_prompt_text(query, docList):
+通过明确 prompt 约束输出格式、降低随机性（temperature）、缩小候选范围（top_k/top_p）、限制生成长度（max_new_tokens），让模型聚焦 “文档 - 选项” 的精确匹配，最大限度减少干扰因素，从而提高单选题的回答准确率。</code></pre><h2 id="sec-11">生成模型源码逻辑解析 &amp; 提示词优化</h2><p>大致解析下AI工具的generate接口。</p><figure class="fs-board" data-doc="[内部链接]" data-board="VVbZwEtYFhbJZnbEEzicbkrInVN"><div class="board-ph">正在加载画板…</div></figure><p>因此提示词构建也是十分重要的一环。</p><p>提示词优化核心：在保留 “系统提示 + 文档 + 问题” 核心结构的基础上，通过<strong>模块化标题分隔、关键规则重申、日志增强</strong>，让模型更易识别各模块功能，同时提升代码可维护性和调试便利性。</p><p>示例：</p><pre><code>def generate_prompt_text(query, docList):
     """
     生成优化后的单项选择题答题Prompt
     :param query: 用户输入的单项选择题（含选项，格式示例："问题：xxx？A.xx B.xx C.xx D.xx"）
@@ -268,6 +268,6 @@ repetition_penalty用于抑制重复输出。由于单选题输出内容极短�
 </div>
 <script src="../assets/app.js?v=1795449805"></script>
 <script src="../assets/search.js?v=1793900983"></script>
-<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795668443"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
 </body>
 </html>

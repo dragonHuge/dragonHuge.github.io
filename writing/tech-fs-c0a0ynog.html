@@ -82,7 +82,7 @@
 public class TalosWebProducer {
     @Autowired
     private 风控平台AppConf 风控平台AppConf;
-    private static final String TOPIC_NAME = "infosec_risk_风控平台_web_measure";
+    private static final String TOPIC_NAME = "risk_risk_风控平台_web_measure";
     private static TalosProducer asyncProducer;
     @PostConstruct
     private void init() {
@@ -143,8 +143,8 @@ public class TalosWebProducer {
         }
     }
 }</code></pre><h4 id="sec-11">2.Talos生产数据</h4><p>在使用Talos发送数据时，首先去Talos平台创建对应的<strong>Topic和Schema</strong>，再<strong>将其绑定</strong>。</p><p>[内部链接]</p><p>绑定后再将schema对应的pom依赖引入，如下：</p><pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;com.公司.cloud.streaming&lt;/groupId&gt;
-    &lt;artifactId&gt;com.公司.cloud.streaming.infosec.risk.风控平台AccountFrozenData&lt;/artifactId&gt;
+    &lt;groupId&gt;com.example.cloud.streaming&lt;/groupId&gt;
+    &lt;artifactId&gt;com.example.cloud.streaming.risk.risk.风控平台AccountFrozenData&lt;/artifactId&gt;
     &lt;version&gt;THRIFT.6.1732587420&lt;/version&gt;
 &lt;/dependency&gt;</code></pre><pre><code>/**
  * @author your-account
@@ -181,7 +181,7 @@ public class SaveFrozenAccountServiceImpl implements SaveDataService&lt;FrozenAc
         data.setCreated(String.valueOf(Optional.ofNullable(accountCtx.getCreated()).orElse(System.currentTimeMillis())));
         return new TSerializer(new TCompactProtocol.Factory()).serialize(data);
     }
-}</code></pre><h3 id="sec-12">2.talos-&gt;iceberg数据同步</h3><p>将消息队列中的数据持久化到数据湖Iceberg中。</p><p><span class="fs-mention">@数据集成详解</span></p><p>https://dt.mi.com/workspace/?wid=10563#/workspace/10563/realtimeJob?dirId=0</p><p>去数据工厂同步即可。</p><h2 id="sec-13">Talos 消费者</h2><blockquote><p>参考文档：<span class="fs-mention">@如何使用 Consumer</span></p></blockquote><pre><code>public class TalosConsumerDemo {
+}</code></pre><h3 id="sec-12">2.talos-&gt;iceberg数据同步</h3><p>将消息队列中的数据持久化到数据湖Iceberg中。</p><p><span class="fs-mention">@数据集成详解</span></p><p>https://[内部链接]</p><p>去数据工厂同步即可。</p><h2 id="sec-13">Talos 消费者</h2><blockquote><p>参考文档：<span class="fs-mention">@如何使用 Consumer</span></p></blockquote><pre><code>public class TalosConsumerDemo {
     private static final String endPoint = "endpoint";
     private static final String accessKey = "${accessKey}";
     private static final String accessSecret = "${secretKey}";
@@ -258,6 +258,6 @@ properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_PRODUCER_THREAD_POOL_S
 </div>
 <script src="../assets/app.js?v=1795449805"></script>
 <script src="../assets/search.js?v=1793900983"></script>
-<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795668443"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
 </body>
 </html>

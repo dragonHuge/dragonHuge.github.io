@@ -72,7 +72,7 @@
       var s = endpoint(c.start), e = endpoint(c.end);
       if (s) pts.push(s);
       /* 飞书导出里的 turning_points 是“相对上一点的偏移量”，不是画布绝对坐标。
-         之前按绝对坐标画，处罚中心这类复杂连线会横穿整张画布。 */
+         之前按绝对坐标画，复杂流程图连线会横穿整张画布。 */
       var cur = s || [0, 0];
       (c.turning_points || []).forEach(function (p) {
         cur = [cur[0] + (p.x || 0), cur[1] + (p.y || 0)];

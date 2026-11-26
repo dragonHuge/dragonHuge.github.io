@@ -74,8 +74,8 @@
 .md mark{padding:0 2px;border-radius:3px}
 @media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
 </style>
-<blockquote><p>需要解决的痛点：<span class="fs-mention">@风控痛点总结 &amp; 能力规划建设</span></p><p>痛点有：</p><ul><li><strong>名单库类型动态配置</strong></li></ul><ul><li><strong>账号登录的 action 的枚举等弱配置(</strong>每次查找这种映射关系，就需要翻代码、翻文档。如：软件特征风险标签的映射关系。)</li></ul><ul><li><strong>软件特征风险标签code</strong>，不知其具体含义，需查阅文档：https://wiki.n.miui.com/pages/viewpage.action?pageId=284444029</li></ul></blockquote><p>prompt：</p><pre><code>- Role: 业务安全风控系统架构师
-- Background: 风控团队-后端研发工程师在实时风控平台的研发过程中，面临名单库类型动态配置、账号登录事件枚举类含义不明确等问题，需要通过字典表能力建设来解决这些痛点。
+<blockquote><p>需要解决的痛点：<span class="fs-mention">@风控痛点总结 &amp; 能力规划建设</span></p><p>痛点有：</p><ul><li><strong>标签库类型动态配置</strong></li></ul><ul><li><strong>账号登录的 action 的枚举等弱配置(</strong>每次查找这种映射关系，就需要翻代码、翻文档。如：软件特征风险标签的映射关系。)</li></ul><ul><li><strong>软件特征风险标签code</strong>，不知其具体含义，需查阅文档：https://wiki.n.miui.com/pages/viewpage.action?pageId=284444029</li></ul></blockquote><p>prompt：</p><pre><code>- Role: 业务安全风控系统架构师
+- Background: 风控团队-后端研发工程师在实时风控平台的研发过程中，面临标签库类型动态配置、账号登录事件枚举类含义不明确等问题，需要通过字典表能力建设来解决这些痛点。
 - Profile: 你是一位资深的业务安全风控系统架构师，对后端开发、实时风控平台架构设计、字典表能力建设等方面有着丰富的经验，能够从系统架构层面提供高效、可拓展的解决方案。
 - Skills: 你具备系统架构设计、数据库设计、后端开发、性能优化、可用性保障等关键能力，能够熟练运用各种技术栈来实现字典表能力，同时确保方案的可通用性和可拓展性。
 - Goals: 
@@ -91,19 +91,19 @@
   3. 根据需求，设计字典表能力的实现方案，选择合适的技术栈，考虑耗时、可用性等问题。
   4. 提出保证字典表能力可通用性和可拓展性的策略，并提供拓展思路。
 - Examples:
-  - 例子1：名单库类型动态配置
-    - 问题描述：当前名单库类型写死在前端，增加新类型需改动代码。
-    - 解决方案：通过字典表存储名单库类型，前端通过接口动态获取，无需改动代码。
+  - 例子1：标签库类型动态配置
+    - 问题描述：当前标签库类型写死在前端，增加新类型需改动代码。
+    - 解决方案：通过字典表存储标签库类型，前端通过接口动态获取，无需改动代码。
   - 例子2：账号登录事件枚举类含义映射
     - 问题描述：日志分析时，action等枚举类含义不明确。
     - 解决方案：使用字典表维护枚举类映射关系，管理后台日志查看时直接通过字典表映射。
   - 例子3：系统中其他字典表应用场景
     - 问题描述：系统中存在其他需要字典表的场景，需主动拓展。
     - 解决方案：设计通用字典表架构，支持多种业务场景，确保可通用性和可拓展性。
-- Initialization: 在第一次对话中，请直接输出以下：您好，作为一名业务安全风控系统架构师，我将为您详细阐述字典表的概念及其在业务安全风控系统中的作用，针对当前痛点提供解决方案，并设计实现字典表能力的方案。请告诉我您对字典表能力的具体需求和期望。</code></pre><h1 id="sec-1">背景</h1><p>字典表（Dictionary Table）是软件开发中用于<strong>集中管理固定或半固定数据集合</strong>的结构化存储方案，核心作用是将系统中重复出现的 “键 - 值映射关系”从代码中抽离，通过统一的存储和接口进行管理。</p><p>其<strong>本质是 “键值对的集合”。</strong></p><p>字典表的核心价值在于：<strong>避免硬编码、支持动态更新、统一维护、降低跨模块耦合</strong>。</p><h1 id="sec-2">目标</h1><p>搭建风控-通用字典表能力，做到通用枚举数据即查、即知、即用。</p><blockquote><p>如：账号风险标签、名单库类型动态配置。</p></blockquote><h1 id="sec-3">实现方案</h1><blockquote><p><strong>核心设计目标：</strong></p><ol><li>高性能：支持毫秒级查询(&lt;=200ms)；</li></ol><ol><li>高可用：避免单点故障，缓存与数据库一致性；</li></ol><ol><li>易维护：提供管理界面，支持增删改查、权限控制(沿用风控平台的权限控制吧)。</li></ol></blockquote><figure class="fs-board" data-doc="[内部链接]" data-board="AAiDw8WcEhObm0bzKeYclxSxnhe"><div class="board-ph">正在加载画板…</div></figure><table><tr><th><p>技术选型</p></th><th><p>用法</p></th><th><p>备注</p></th></tr><tr><td><p>MYSQL</p></td><td><p>字典表信息持久化</p><ul><li><code>字典表（risk_dict_table）</code></li></ul><ul><li><code>字典项表（risk_dict_item）</code></li></ul></td><td></td></tr><tr><td><p>Redis</p></td><td><p>字典表缓存</p></td><td><ul><li>写操作：更新MYSQL -&gt; 更新Redis(hash更新子项)。</li><li>读操作：只读Redis。</li></ul></td></tr></table><h1 id="sec-4">元数据结构</h1><h2 id="sec-5">MYSQL</h2><h3 id="sec-6">字典表（risk_dict_table）</h3><p>用于管理字典分组（如 “名单库类型”、“IP 信誉等级”），考虑业务隔离与通用性需求。</p><pre><code>CREATE TABLE `risk_dict_table` (
+- Initialization: 在第一次对话中，请直接输出以下：您好，作为一名业务安全风控系统架构师，我将为您详细阐述字典表的概念及其在业务安全风控系统中的作用，针对当前痛点提供解决方案，并设计实现字典表能力的方案。请告诉我您对字典表能力的具体需求和期望。</code></pre><h1 id="sec-1">背景</h1><p>字典表（Dictionary Table）是软件开发中用于<strong>集中管理固定或半固定数据集合</strong>的结构化存储方案，核心作用是将系统中重复出现的 “键 - 值映射关系”从代码中抽离，通过统一的存储和接口进行管理。</p><p>其<strong>本质是 “键值对的集合”。</strong></p><p>字典表的核心价值在于：<strong>避免硬编码、支持动态更新、统一维护、降低跨模块耦合</strong>。</p><h1 id="sec-2">目标</h1><p>搭建风控-通用字典表能力，做到通用枚举数据即查、即知、即用。</p><blockquote><p>如：账号风险标签、标签库类型动态配置。</p></blockquote><h1 id="sec-3">实现方案</h1><blockquote><p><strong>核心设计目标：</strong></p><ol><li>高性能：支持毫秒级查询(&lt;=200ms)；</li></ol><ol><li>高可用：避免单点故障，缓存与数据库一致性；</li></ol><ol><li>易维护：提供管理界面，支持增删改查、权限控制(沿用风控平台的权限控制吧)。</li></ol></blockquote><figure class="fs-board" data-doc="[内部链接]" data-board="AAiDw8WcEhObm0bzKeYclxSxnhe"><div class="board-ph">正在加载画板…</div></figure><table><tr><th><p>技术选型</p></th><th><p>用法</p></th><th><p>备注</p></th></tr><tr><td><p>MYSQL</p></td><td><p>字典表信息持久化</p><ul><li><code>字典表（risk_dict_table）</code></li></ul><ul><li><code>字典项表（risk_dict_item）</code></li></ul></td><td></td></tr><tr><td><p>Redis</p></td><td><p>字典表缓存</p></td><td><ul><li>写操作：更新MYSQL -&gt; 更新Redis(hash更新子项)。</li><li>读操作：只读Redis。</li></ul></td></tr></table><h1 id="sec-4">元数据结构</h1><h2 id="sec-5">MYSQL</h2><h3 id="sec-6">字典表（risk_dict_table）</h3><p>用于管理字典分组（如 “标签库类型”、“IP 信誉等级”），考虑业务隔离与通用性需求。</p><pre><code>CREATE TABLE `risk_dict_table` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `dict_code` varchar(50) NOT NULL DEFAULT '' COMMENT '字典类型编码（如risk_tag_list、ip_reputation_level）',
-  `dict_name` varchar(100) NOT NULL DEFAULT '' COMMENT '字典类型名称（如“风控名单库类型”“登录行为枚举”）',
+  `dict_name` varchar(100) NOT NULL DEFAULT '' COMMENT '字典类型名称（如“风控标签库类型”“登录行为枚举”）',
   `dict_type` varchar(50) NOT NULL DEFAULT '' COMMENT '使用场景区分（普通型、规则型）', -- 补充字段类型，添加默认值
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态（1=启用，0=禁用；禁用后该类型下所有字典项不可用）',
   `description` varchar(500) DEFAULT '' COMMENT '备注',
@@ -139,8 +139,8 @@
         "4":"{XXX}"
     }"
 
-value中只需要加Item。</code></pre></li></ul><p>综上设计，那么针对字典表、字典项的操作，应遵守以下逻辑：</p><ul><li><blockquote><ul><li>字典表下线 -&gt; 修改status，且直接删redis key。</li></ul><ul><li>字典项更新 -&gt; 更新hash即可(部分更新)。</li></ul></blockquote></li></ul><ul><li><strong>查操作</strong> -&gt; 查redis（无论是否查到，直接返回）</li></ul><h1 id="sec-9">重点问题思考</h1><ul><li><strong>高性能</strong>：服务只涉及到redis查询和个别MYSQL查询，耗时有保障。唯一需要考虑的是海外集群耗时，是否需要多机房部署？- 》 <mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">使用方自己做缓存。国内外隔离，两套字典表。</mark></li></ul><h1 id="sec-10">接口设计</h1><h2 id="sec-11">一期 </h2><p>一期直接将字典表能力做到风控平台-web后台即可，开发HTTP接口。做好Redis和MYSQL的数据组织形式即可。</p><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px">因此</mark><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>共需5个接口</strong></mark>：</p><table><tr><th><p>服务</p></th><th><p>表</p></th><th><p>接口</p></th><th><p>接口逻辑图</p></th><th><p>实现细节</p></th></tr><tr><td><p><strong>管理后台</strong></p></td><td><p>字典表(MYSQL)</p></td><td><p>增、改：/dictTable/add</p></td><td></td><td><ul><li>删：即禁用字典表，且禁用其下的所有字典表项。-&gt; MYSQL 改status、Redis删除相应大Key。</li></ul><ul><li>增、改：MYSQL增改 -&gt; Redis增改。</li></ul></td></tr><tr><td></td><td></td><td><p>查</p><p>/dictTable/list</p></td><td></td><td><ul><li>扫MYSQL表。</li></ul></td></tr><tr><td></td><td><p>字典项表(MYSQL)</p></td><td><p>增：/dictItem/add</p><p>改：/dictItem/update</p></td><td><figure class="fs-board" data-doc="[内部链接]" data-board="BEcBwKRAghHcofbrjZacUYdFnwh"><div class="board-ph">正在加载画板…</div></figure></td><td><ul><li>删：禁用字典项。 -&gt; MYSQL改status、在Redis对应的字典表大Key中，删除该hash子项。</li></ul><ul><li>增、改。-&gt; MYSQL改、更新Redis对应的字典表大Key中的子项数据。</li></ul></td></tr><tr><td></td><td></td><td><p>查</p><p>/dictItem/list</p></td><td></td><td><ul><li>扫MYSQL表。</li></ul></td></tr><tr><td><p><strong>核心服务</strong></p></td><td><p>Redis</p></td><td><p>查</p><p>/dictTable/queryDictTable</p><p>/dictTable/queryDictItem</p></td><td></td><td><p>根据<code>dict_code</code>查询字典表。从Redis查出此字典表下的所有字典项和其他元数据。</p></td></tr></table><h2 id="sec-12">二期</h2><p>二期有需要的话再拆解为RPC服务。</p><pre><code>namespace java com.公司.infosec.risk.riskdict
-namespace go infosec.risk.riskdict
+value中只需要加Item。</code></pre></li></ul><p>综上设计，那么针对字典表、字典项的操作，应遵守以下逻辑：</p><ul><li><blockquote><ul><li>字典表下线 -&gt; 修改status，且直接删redis key。</li></ul><ul><li>字典项更新 -&gt; 更新hash即可(部分更新)。</li></ul></blockquote></li></ul><ul><li><strong>查操作</strong> -&gt; 查redis（无论是否查到，直接返回）</li></ul><h1 id="sec-9">重点问题思考</h1><ul><li><strong>高性能</strong>：服务只涉及到redis查询和个别MYSQL查询，耗时有保障。唯一需要考虑的是海外集群耗时，是否需要多机房部署？- 》 <mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">使用方自己做缓存。国内外隔离，两套字典表。</mark></li></ul><h1 id="sec-10">接口设计</h1><h2 id="sec-11">一期 </h2><p>一期直接将字典表能力做到风控平台-web后台即可，开发HTTP接口。做好Redis和MYSQL的数据组织形式即可。</p><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px">因此</mark><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>共需5个接口</strong></mark>：</p><table><tr><th><p>服务</p></th><th><p>表</p></th><th><p>接口</p></th><th><p>接口逻辑图</p></th><th><p>实现细节</p></th></tr><tr><td><p><strong>管理后台</strong></p></td><td><p>字典表(MYSQL)</p></td><td><p>增、改：/dictTable/add</p></td><td></td><td><ul><li>删：即禁用字典表，且禁用其下的所有字典表项。-&gt; MYSQL 改status、Redis删除相应大Key。</li></ul><ul><li>增、改：MYSQL增改 -&gt; Redis增改。</li></ul></td></tr><tr><td></td><td></td><td><p>查</p><p>/dictTable/list</p></td><td></td><td><ul><li>扫MYSQL表。</li></ul></td></tr><tr><td></td><td><p>字典项表(MYSQL)</p></td><td><p>增：/dictItem/add</p><p>改：/dictItem/update</p></td><td><figure class="fs-board" data-doc="[内部链接]" data-board="BEcBwKRAghHcofbrjZacUYdFnwh"><div class="board-ph">正在加载画板…</div></figure></td><td><ul><li>删：禁用字典项。 -&gt; MYSQL改status、在Redis对应的字典表大Key中，删除该hash子项。</li></ul><ul><li>增、改。-&gt; MYSQL改、更新Redis对应的字典表大Key中的子项数据。</li></ul></td></tr><tr><td></td><td></td><td><p>查</p><p>/dictItem/list</p></td><td></td><td><ul><li>扫MYSQL表。</li></ul></td></tr><tr><td><p><strong>核心服务</strong></p></td><td><p>Redis</p></td><td><p>查</p><p>/dictTable/queryDictTable</p><p>/dictTable/queryDictItem</p></td><td></td><td><p>根据<code>dict_code</code>查询字典表。从Redis查出此字典表下的所有字典项和其他元数据。</p></td></tr></table><h2 id="sec-12">二期</h2><p>二期有需要的话再拆解为RPC服务。</p><pre><code>namespace java com.example.risk.risk.riskdict
+namespace go risk.risk.riskdict
 
 exception RiskDictException {
     1: required i32 code;
@@ -190,6 +190,6 @@ service RiskDictService {
 </div>
 <script src="../assets/app.js?v=1795449805"></script>
 <script src="../assets/search.js?v=1793900983"></script>
-<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795668443"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
 </body>
 </html>

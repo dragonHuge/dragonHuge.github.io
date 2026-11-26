@@ -90,9 +90,9 @@ GDCxzo33Z+K6QOc6JcvFMDr1+Ji8Ai9HIduilmRTObiwF2Oa5vQ4I0E8d7JQPtMvEJsYEqBSUuhAlkGM
     token@kc-sid: ${kc.sid}
     catalog: @dt.elasticsearch.catalog@
     index:
-      mobile-device-log: infosec_risk_mobile_device_monitor_data*
-      dlp-device-log: infosec_risk_dlp_monitor_data*
-      feishu-audit-log: infosec_risk_audit_feishu_hit_rule_c4*</code></pre></li></ol><ol><li><strong>然后</strong><strong><code>@Configuration</code></strong>进行配置注入，并<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>将配置好的ElasticSearchHelper注入为Bean</strong></mark><strong>。</strong></li></ol><ol><li>可以看到此时做了一个ES数据源的配置，此时若想使用，直接将<strong>ElasticSearchHelper装配后使用即可，如下：</strong></li></ol><pre><code>@Slf4j
+      mobile-device-log: risk_risk_mobile_device_monitor_data*
+      dlp-device-log: risk_risk_dlp_monitor_data*
+      feishu-audit-log: risk_risk_audit_feishu_hit_rule_c4*</code></pre></li></ol><ol><li><strong>然后</strong><strong><code>@Configuration</code></strong>进行配置注入，并<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>将配置好的ElasticSearchHelper注入为Bean</strong></mark><strong>。</strong></li></ol><ol><li>可以看到此时做了一个ES数据源的配置，此时若想使用，直接将<strong>ElasticSearchHelper装配后使用即可，如下：</strong></li></ol><pre><code>@Slf4j
 @Service
 public class ElasticSearchService {
     public static final String SORT_FIELD_TIMESTAMP = "logtime";
@@ -238,7 +238,7 @@ public void splitPush(List&lt;String&gt; workOrders) {
   partitionOrders.forEach(this::workOrderWrite); // 将所有子列表写入ES
 }
 
-private String workOrderIndex = "infosec_risk_xms_work_order"; // 写入的文档索引
+private String workOrderIndex = "risk_risk_xms_work_order"; // 写入的文档索引
 /**
 * 工单实质写入ES的逻辑
 */
@@ -286,7 +286,7 @@ public void workOrderWrite(List&lt;String&gt; workOrders) {
   } catch (IOException e) {
       log.info("bulk error", e);
   }
-}</code></pre></li></ul><h2 id="sec-16">4.Kibana中的DSL查询</h2><ol></ol><ol><li><strong>左边</strong>：输入DSL查询语句；</li><li><strong>右边</strong>：展示查询结果。</li></ol><ol><li><p>详细见官网：<a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/bool-query.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/current/bool-query.html</a></p></li><li><blockquote><p>个人觉得ES的官网是很不错的！值得一看！</p></blockquote></li></ol><p>看一个简单的Demo吧：</p><pre><code>GET /infosec_cas_login_log_c4/_doc/_search // GET/索引名/类型/_search
+}</code></pre></li></ul><h2 id="sec-16">4.Kibana中的DSL查询</h2><ol></ol><ol><li><strong>左边</strong>：输入DSL查询语句；</li><li><strong>右边</strong>：展示查询结果。</li></ol><ol><li><p>详细见官网：<a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/bool-query.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/current/bool-query.html</a></p></li><li><blockquote><p>个人觉得ES的官网是很不错的！值得一看！</p></blockquote></li></ol><p>看一个简单的Demo吧：</p><pre><code>GET /risk_cas_login_log_c4/_doc/_search // GET/索引名/类型/_search
 {
     "from": 0,  // 偏移量，指定查询结果的起始位置  ,  这里属于是‘ES分页查询’的一种写法
     "size": 10, // 返回的数据条数
@@ -369,6 +369,6 @@ public void workOrderWrite(List&lt;String&gt; workOrders) {
 </div>
 <script src="../assets/app.js?v=1795449805"></script>
 <script src="../assets/search.js?v=1793900983"></script>
-<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795668443"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
 </body>
 </html>

@@ -313,7 +313,7 @@
 <span class="art-row"><a class="art" href="../ext/e282.html">GLM-5.3-FlashX 上线：200 tokens/s，提速 5 倍、提价 2.5 倍</a><a class="art-x" href="https://mp.weixin.qq.com/s/f4_O_ZpWiXpGyUiVwvGggg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 <span class="art-row"><a class="art" href="../ext/e283.html">Jev：只会做选择题的 System One 模型，TypeSafe AI 的高频决策分类器</a><a class="art-x" href="https://mp.weixin.qq.com/s/Nj7Y3DXibE28up0SvhJ67Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 <span class="art-row"><a class="art" href="../ext/e284.html">什么是 RSI：2026 年最贵的三个字母（递归自我改进科普）</a><a class="art-x" href="https://mp.weixin.qq.com/s/MS5Dzg1AjWiFAUE9aAFnzw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
-<span class="art-row"><a class="art" href="../ext/e285.html">公司 MiMo-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a><a class="art-x" href="https://mp.weixin.qq.com/s/3QZ2TU7Y5xss_jjxIYjfNw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e285.html">公司 model-V2.6 强化学习训练开直播：花多少钱、奖励曲线、显卡故障全公开</a><a class="art-x" href="https://mp.weixin.qq.com/s/3QZ2TU7Y5xss_jjxIYjfNw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 <span class="art-row"><a class="art" href="../ext/e286.html">Agent 自我进化三大技术路线：存技能、训技能、零数据自训</a><a class="art-x" href="https://mp.weixin.qq.com/s/fsVJiorPBN4ylGjUYBcIPw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 <span class="art-row"><a class="art" href="../ext/e287.html">多 Agent 三种拓扑怎么选：Network、Supervisor、Hierarchical 讲透</a><a class="art-x" href="https://mp.weixin.qq.com/s/WkQXscLAkpdo_ygqaNnuYw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
 <span class="art-row"><a class="art" href="../ext/e288.html">如何写 AGENTS.md：与不说人话且 over-engineering 的模型搏斗规则集</a><a class="art-x" href="https://mp.weixin.qq.com/s/lyjKtDPyOLavVJZBHmOcVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
@@ -401,7 +401,7 @@
 <p>这时候你会发现，每次评测都要跑一次大模型，随着Benchmark、RL rollout规模越来越大，成本和时延可能不能接受</p>
 <p>reward model as a judge</p>
 <p>既然做了那么久LLM-as-Judge，已经能比较好地复现人工判断，为什么还要再训RM来做judge呢？因为LLM Judge解决了自动化评测，但没有解决规模化评测</p>
-<p>当 Benchmark、实验和 RL rollout 的规模继续扩大时，每次都调用一个大模型做 Judge，成本和时延会随着评测量线性增长（对这个成本没概念可以看看最近mimo的直播RL），而且这个很难通过缩减prompt长度来优化，所以可以把已经验证过的评价标准蒸馏成一个低延迟、高吞吐的rm</p>
+<p>当 Benchmark、实验和 RL rollout 的规模继续扩大时，每次都调用一个大模型做 Judge，成本和时延会随着评测量线性增长（对这个成本没概念可以看看最近model的直播RL），而且这个很难通过缩减prompt长度来优化，所以可以把已经验证过的评价标准蒸馏成一个低延迟、高吞吐的rm</p>
 <p>LLM Judge 的优势是泛化能力强，Reward Model只需要在业务对应的数据分布里更强，所以原理上可以用更小的基模，然后用前面已有的评测数据来训。当然也会有Reward Hacking问题，所以RM也不能被当成永远正确，还是需要定期人工、LLM Judge检测新的 bad case 后补充数据，再重新训练和校准RM。</p>
 <p>这也是一个 scaling 的过程：Rubric 定义什么叫好，Human 积累人工判断的经验，LLM Judge 把人工判断自动化，Reward Model 再把自动化判断规模化。</p>
 <p>02</p>

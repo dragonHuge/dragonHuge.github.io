@@ -141,7 +141,7 @@
 <p>读 MCP 已经跑通：</p>
 <p><code>McpSpringToolProvider</code> 扫 <code>@RestController</code> 里被 <code>@McpTool</code> 标注的方法，桥接成 Solon <code>FunctionTool</code>。</p>
 <p>但只支持 <code>@GetMapping + @RequestParam</code>，写接口（<code>@PostMapping/@PutMapping/@DeleteMapping</code> + <code>@RequestBody DTO</code>）会被直接跳过。</p>
-<p>业务方需要：通过 MCP 创建/更新/启停/删除 风控配置（规则、规则组、事件、字段、风险码、名单库、字典 …），但<strong>严格不暴露</strong> 规则上线 / 规则发布 / 上线审批 这类有副作用的接口。</p>
+<p>业务方需要：通过 MCP 创建/更新/启停/删除 风控配置（规则、规则组、事件、字段、风险码、标签库、字典 …），但<strong>严格不暴露</strong> 规则上线 / 规则发布 / 上线审批 这类有副作用的接口。</p>
 <blockquote><p>一句话总结：让 LLM 能改风控配置，但改不了"放量到生产"这一步。</p></blockquote>
 <hr>
 <h2 id="二-整体技术方案-在-Provider-层做协议适配">二、整体技术方案：在 Provider 层做协议适配</h2>
@@ -264,7 +264,7 @@ return r;</code></pre>
   FuncMetaController
 
 数据类:
-  TagListController       - 名单库 CRUD
+  TagListController       - 标签库 CRUD
   TagMetaController
   RiskDictTableController - 字典表
   RiskDictItemController  - 字典项</code></pre>
