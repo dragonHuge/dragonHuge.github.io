@@ -39,20 +39,33 @@
     .kp-a{font-size:12.5px;color:var(--mut);margin-top:6px;line-height:1.65}
     .rd{border:1px solid var(--ln);background:transparent;color:var(--mut);border-radius:8px;
       font-size:10.5px;padding:4px 8px;cursor:pointer;flex:none}
-    .grp{margin:22px 0 0;padding:10px;margin-left:-10px;margin-right:-10px;border-radius:12px}
-    .grp h2{font-family:var(--serif);font-size:18px;margin:0 0 4px}
+    .grp{margin:26px 0 0}
+    .grp h2{font-family:var(--serif);font-size:17.5px;margin:0 0 3px;
+      display:flex;align-items:baseline;gap:8px}
     .grp h2 a{color:inherit;text-decoration:none}
-    .grp .n{font-size:11px;color:var(--mut);margin-left:6px;font-weight:400;font-family:-apple-system,sans-serif}
-    .grp p{font-size:12px;color:var(--mut);margin:0 0 6px}
+    .grp .n{font-size:10.5px;color:var(--gr);font-weight:500;font-family:-apple-system,sans-serif;
+      background:color-mix(in srgb,var(--gr) 10%,transparent);border-radius:99px;padding:1px 8px;
+      line-height:1.7;white-space:nowrap}
+    .grp p{font-size:11.5px;color:var(--mut);margin:0 0 10px;line-height:1.55}
 
-    /* 知识体系：文章行整行可点（不再整块高亮） */
-    .klist{list-style:none;margin:2px 0 0;padding:0}
-    .krow{display:flex;gap:10px;align-items:flex-start;padding:10px 6px;border-radius:8px;
-      color:inherit;text-decoration:none;border-bottom:1px solid var(--ln)}
-    .krow:active{background:color-mix(in srgb,var(--gr) 8%,transparent)}
-    .krow .d{font-size:11px;color:var(--mut);min-width:38px;padding-top:3px}
-    .krow .t{flex:1;font-size:14.5px;line-height:1.55;word-break:break-word}
-    .kmore{display:inline-block;margin-top:8px;font-size:12px;color:var(--gr);text-decoration:none}
+    /* 知识体系文章列表（2026-11-26 改卡片式）
+       原来「左日期列 + 细线分隔」遇到一行/两行标题混排会显得参差，改成
+       独立卡片：标题在上（统一两行截断），日期与来源在下，卡片之间留白不画线。 */
+    .klist{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+    .krow{display:flex;flex-direction:column;gap:7px;padding:12px 14px;border-radius:12px;
+      background:var(--card);border:1px solid var(--ln);color:inherit;text-decoration:none;
+      transition:border-color .14s ease,transform .14s ease}
+    .krow:active{transform:scale(.992);border-color:color-mix(in srgb,var(--gr) 38%,var(--ln))}
+    .krow .kt{font-size:14.5px;font-weight:600;line-height:1.55;letter-spacing:.005em;
+      word-break:break-word;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+      overflow:hidden}
+    .krow .km{display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--mut)}
+    .krow .kd{font-variant-numeric:tabular-nums;letter-spacing:.02em}
+    .krow .ksrc{color:var(--gr);background:color-mix(in srgb,var(--gr) 10%,transparent);
+      border-radius:99px;padding:1px 7px;line-height:1.6}
+    .kmore{display:inline-flex;align-items:center;gap:4px;margin-top:10px;font-size:12px;
+      color:var(--gr);text-decoration:none;padding:7px 12px;border-radius:99px;
+      background:color-mix(in srgb,var(--gr) 8%,transparent)}
     .kart-load{color:var(--mut);font-size:13px;padding:18px 4px}
 
     /* App 内文章阅读页 */
@@ -88,12 +101,30 @@
       height:calc(58px + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom)}
     .tabbar button{flex:1;border:none;background:none;font-size:11.5px;color:var(--mut);cursor:pointer}
     .tabbar button.on{color:var(--gr);font-weight:600}
-    .me-row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;
-      border-bottom:1px solid var(--ln);font-size:13px}
-    .me-row button{border:1px solid var(--ln);background:transparent;color:var(--ink);
-      border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer}
-    .themes button{margin-left:6px}
-    .themes button.on{background:var(--gr);color:#fff;border-color:var(--gr)}
+    /* 我的 · 设置区（2026-11-26 重构）
+       原来 6 条满宽 me-row + 细线，像一张拉长的大表格；改成
+       ① 两块并排的数据卡 ② 主题分段控件 ③ 三个等宽动作按钮 */
+    .me-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0 10px}
+    .mst{background:var(--card);border:1px solid var(--ln);border-radius:14px;
+      padding:12px 14px;display:flex;flex-direction:column;gap:5px}
+    .mst-k{font-size:10.5px;color:var(--mut);letter-spacing:.06em}
+    .mst-v{font-family:var(--serif);font-size:16px;font-weight:650;line-height:1.3;
+      font-variant-numeric:tabular-nums}
+    .me-card{background:var(--card);border:1px solid var(--ln);border-radius:14px;
+      padding:12px 14px 13px;margin-bottom:10px}
+    .me-card-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+      margin-bottom:9px}
+    .me-card-h>:first-child{font-size:13px;font-weight:600}
+    .me-card-d{font-size:10.5px;color:var(--mut);white-space:nowrap}
+    .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:3px;border-radius:11px;
+      background:color-mix(in srgb,var(--ink) 6%,transparent)}
+    .seg button{border:none;background:transparent;color:var(--mut);font-size:12px;
+      padding:8px 0;border-radius:9px;cursor:pointer;font-weight:550;transition:background .14s ease}
+    .seg button.on{background:var(--p);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.10)}
+    .me-acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
+    .me-acts button{border:1px solid var(--ln);background:var(--card);color:var(--ink);
+      border-radius:14px;padding:14px 6px;font-size:12.5px;font-weight:550;cursor:pointer}
+    .me-acts button:active{background:color-mix(in srgb,var(--gr) 8%,var(--card))}
 
     /* 首页三模块差异化（2026-11-22） */
     .mod-qa{margin-top:28px}
@@ -172,6 +203,10 @@
     .theme-b .qa-card,.theme-b .kp,.theme-b .qline{background:#131917;border-color:#25312b}
     .theme-b .mini{border-color:#25312b;color:#57d39b}
     .theme-b .pabout{background:#131917;border-color:#25312b}
+    .theme-b .krow,.theme-b .mst,.theme-b .me-card,.theme-b .me-acts button{
+      background:#131917;border-color:#25312b}
+    .theme-b .seg{background:rgba(255,255,255,.05)}
+    .theme-b .seg button.on{background:#1e2a24;color:#dfe7e2}
     .theme-b .hint,.theme-b .meta{color:#6f7c74}
     .theme-c{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}
     .theme-c .date{font-size:56px;letter-spacing:-.03em;font-family:inherit;font-weight:650}
@@ -180,7 +215,10 @@
     .theme-c .kp{border:none;background:#f5f6f2}
     .theme-c .qline{border:none;background:#f5f6f2;border-radius:18px;font-size:15.5px}
     .theme-c .mini{border:none;background:#f5f6f2;border-radius:16px}
-    .theme-c .grp{border-bottom:1px solid #eceee9;border-radius:0;margin-left:0;margin-right:0;padding:14px 0}
+    .theme-c .krow,.theme-c .mst,.theme-c .me-card,.theme-c .me-acts button{
+      border:none;background:#f5f6f2}
+    .theme-c .seg{background:rgba(0,0,0,.05)}
+    .theme-c .seg button.on{background:#fff}
     .theme-c .sec-t{font-family:inherit;font-weight:650}
     .theme-c h1,.theme-c .grp h2{font-family:inherit;font-weight:650;letter-spacing:-.02em}
     .kb-maps{margin:18px 0 4px;padding:14px;border:1px solid var(--ln);border-radius:14px;background:var(--card)}
@@ -383,8 +421,8 @@
 
 <main class="v on" id="v-home">
   <div class="k">TODAY</div>
-  <div class="date">11 / 26</div>
-  <div class="sub">周四 · 羊毛 15 条</div>
+  <div class="date">11 / 27</div>
+  <div class="sub">周五 · 羊毛 15 条</div>
   <div class="rule"></div>
 
   <div class="sec mod-review"><div class="sec-t">知识回顾 <span class="hint">每天 3 个 · 间隔复习</span></div>
@@ -403,7 +441,7 @@
 
 <main class="v" id="v-kb"><h1>知识体系</h1><p class="meta">我自己写的文章与一线经验</p>
   <div class="kb-maps"><div class="kb-maps-h">知识导图 <span class="hint">两个来源</span></div><p class="kb-sub">幕布大纲原文 / FlowUs 技术文章，分开浏览</p><div class="kb-map-list"><a class="kb-map" href="/mindmap/mubu/"><b>幕布导图 →</b><span>加粗、颜色、备注、表格、图片 · 按章节排序</span><em>71 张 · 7400 节点</em></a><a class="kb-map" href="/mindmap/flowus/"><b>FlowUs 技术导图 →</b><span>技术文章结构化：面试题、源码笔记、框架原理</span><em>54 张 · 3092 节点</em></a></div></div>
-  <div class="kb-sec"><h2 class="kb-sec-h">知识沉淀<span class="kb-sec-n">109 篇</span></h2><p class="kb-sec-d">技术 / AI / 业务安全风控：学到了什么</p></div><div class="grp"><h2><a href="/writing/tech/" data-klist="tech">技术</a><span class="n">73 篇</span></h2><p>Hadoop、Flink、工程实践</p><ul class="klist"><li><a class="krow" href="/writing/tech-fs-cdughnid.html" data-kart="tech-fs-cdughnid"><span class="d">11-19</span><span class="t">7.UDF开发 SOP总结 &amp; UDF开发记录</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/tech-fs-c0a0ynog.html" data-kart="tech-fs-c0a0ynog"><span class="d">10-14</span><span class="t">Talos理论 &amp; 实践</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/tech-fs-c0jqonvb.html" data-kart="tech-fs-c0jqonvb"><span class="d">10-14</span><span class="t">2025-09-09 高并发场景下HTTP Client配置踩坑</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/tech-fs-ct7dunjh.html" data-kart="tech-fs-ct7dunjh"><span class="d">10-14</span><span class="t">OpenCode - 踩坑实践总结&amp;常见问题收录</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/tech-fs-ct5uenxf.html" data-kart="tech-fs-ct5uenxf"><span class="d">07-27</span><span class="t">1.开发-&gt;上线 SOP流程总结</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/tech-rb-apus-thrift.html" data-kart="tech-rb-apus-thrift"><span class="d">07-09</span><span class="t">apus thrift Server / Client 规则</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li></ul><a class="kmore" href="/writing/tech/" data-klist="tech">查看全部 73 篇 →</a></div><div class="grp"><h2><a href="/writing/ai/" data-klist="ai">AI</a><span class="n">34 篇</span></h2><p>Agent、模型、工程化</p><ul class="klist"><li><a class="krow" href="/writing/ai-ragnotes.html" data-kart="ai-ragnotes"><span class="d">11-26</span><span class="t">RAG 实战讲解 · 要点整理</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/ai-cmm4xnxb.html" data-kart="ai-cmm4xnxb"><span class="d">09-28</span><span class="t">OpenClaw 多 Agent 能力梳理与巡检落地方案</span></a></li><li><a class="krow" href="/writing/ai-cdrjunub.html" data-kart="ai-cdrjunub"><span class="d">09-20</span><span class="t">OpenCode、Claw🦞 联网指南：搜索、抓取、浏览器，什么场景用什么方法？</span></a></li><li><a class="krow" href="/writing/ai-cpcaqnsc.html" data-kart="ai-cpcaqnsc"><span class="d">09-20</span><span class="t">MCP开发指北(Java) - 组内</span></a></li><li><a class="krow" href="/writing/ai-corjfnwb.html" data-kart="ai-corjfnwb"><span class="d">08-13</span><span class="t">多 Agent 架构梳理：五家系统的架构、通信与派系归属</span></a></li><li><a class="krow" href="/writing/ai-caxcjnld.html" data-kart="ai-caxcjnld"><span class="d">08-10</span><span class="t">AI 发展-自顶向下</span></a></li></ul><a class="kmore" href="/writing/ai/" data-klist="ai">查看全部 34 篇 →</a></div><div class="grp"><h2><a href="/writing/security/" data-klist="security">业务安全风控</a><span class="n">2 篇</span></h2><p>策略、恶意团伙对抗、账号安全</p><ul class="klist"><li><a class="krow" href="/writing/sec-cxrdpnpe.html" data-kart="sec-cxrdpnpe"><span class="d">01-04</span><span class="t">实时风控平台介绍</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/sec-cbvusnic.html" data-kart="sec-cbvusnic"><span class="d">09-28</span><span class="t">标签库 · 源码阅读分析</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li></ul></div><div class="kb-sec"><h2 class="kb-sec-h">项目方案设计<span class="kb-sec-n">7 篇</span></h2><p class="kb-sec-d">业务痛点 → 平台方案：我怎么设计的</p></div><div class="grp"><h2><a href="/writing/solution/" data-klist="solution">项目方案设计</a><span class="n">7 篇</span></h2><p>业务痛点 → 平台方案：需求、架构、落地</p><ul class="klist"><li><a class="krow" href="/writing/sol-ccmvfngc.html" data-kart="sol-ccmvfngc"><span class="d">04-21</span><span class="t">复盘 · 标签库代码误删导致部分名单不生效</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/sol-ct3l1nge.html" data-kart="sol-ct3l1nge"><span class="d">02-12</span><span class="t">历史 IP 信誉库重拾 · 接入实时风控平台</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/sol-cxkzgnlg.html" data-kart="sol-cxkzgnlg"><span class="d">11-27</span><span class="t">实时风控 · 通用离线处罚能力建设（MYSQL+Redis）</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/sol-c79tnnbu.html" data-kart="sol-c79tnnbu"><span class="d">11-25</span><span class="t">实时风控 · 字典表方案设计</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/sol-cwmftn2d.html" data-kart="sol-cwmftn2d"><span class="d">09-28</span><span class="t">标签库 · 接口设计</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li><li><a class="krow" href="/writing/sol-cprm1nbd.html" data-kart="sol-cprm1nbd"><span class="d">09-23</span><span class="t">标签库标签 · 标准化管理</span><em style="font-size:9.5px;line-height:1;padding:2px 5px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;font-style:normal;vertical-align:1px">飞书</em></a></li></ul><a class="kmore" href="/writing/solution/" data-klist="solution">查看全部 7 篇 →</a></div>
+  <div class="kb-sec"><h2 class="kb-sec-h">知识沉淀<span class="kb-sec-n">109 篇</span></h2><p class="kb-sec-d">技术 / AI / 业务安全风控：学到了什么</p></div><div class="grp"><h2><a href="/writing/tech/" data-klist="tech">技术</a><span class="n">73 篇</span></h2><p>Hadoop、Flink、工程实践</p><ul class="klist"><li><a class="krow" href="/writing/tech-fs-cdughnid.html" data-kart="tech-fs-cdughnid"><span class="kt">7.UDF开发 SOP总结 &amp; UDF开发记录</span><span class="km"><span class="kd">11-19</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/tech-fs-c0a0ynog.html" data-kart="tech-fs-c0a0ynog"><span class="kt">Talos理论 &amp; 实践</span><span class="km"><span class="kd">10-14</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/tech-fs-c0jqonvb.html" data-kart="tech-fs-c0jqonvb"><span class="kt">2025-09-09 高并发场景下HTTP Client配置踩坑</span><span class="km"><span class="kd">10-14</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/tech-fs-ct7dunjh.html" data-kart="tech-fs-ct7dunjh"><span class="kt">OpenCode - 踩坑实践总结&amp;常见问题收录</span><span class="km"><span class="kd">10-14</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/tech-fs-ct5uenxf.html" data-kart="tech-fs-ct5uenxf"><span class="kt">1.开发-&gt;上线 SOP流程总结</span><span class="km"><span class="kd">07-27</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/tech-rb-apus-thrift.html" data-kart="tech-rb-apus-thrift"><span class="kt">apus thrift Server / Client 规则</span><span class="km"><span class="kd">07-09</span><span class="ksrc">飞书</span></span></a></li></ul><a class="kmore" href="/writing/tech/" data-klist="tech">查看全部 73 篇 →</a></div><div class="grp"><h2><a href="/writing/ai/" data-klist="ai">AI</a><span class="n">34 篇</span></h2><p>Agent、模型、工程化</p><ul class="klist"><li><a class="krow" href="/writing/ai-ragnotes.html" data-kart="ai-ragnotes"><span class="kt">RAG 实战讲解 · 要点整理</span><span class="km"><span class="kd">11-26</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/ai-cmm4xnxb.html" data-kart="ai-cmm4xnxb"><span class="kt">OpenClaw 多 Agent 能力梳理与巡检落地方案</span><span class="km"><span class="kd">09-28</span></span></a></li><li><a class="krow" href="/writing/ai-cdrjunub.html" data-kart="ai-cdrjunub"><span class="kt">OpenCode、Claw🦞 联网指南：搜索、抓取、浏览器，什么场景用什么方法？</span><span class="km"><span class="kd">09-20</span></span></a></li><li><a class="krow" href="/writing/ai-cpcaqnsc.html" data-kart="ai-cpcaqnsc"><span class="kt">MCP开发指北(Java) - 组内</span><span class="km"><span class="kd">09-20</span></span></a></li><li><a class="krow" href="/writing/ai-corjfnwb.html" data-kart="ai-corjfnwb"><span class="kt">多 Agent 架构梳理：五家系统的架构、通信与派系归属</span><span class="km"><span class="kd">08-13</span></span></a></li><li><a class="krow" href="/writing/ai-caxcjnld.html" data-kart="ai-caxcjnld"><span class="kt">AI 发展-自顶向下</span><span class="km"><span class="kd">08-10</span></span></a></li></ul><a class="kmore" href="/writing/ai/" data-klist="ai">查看全部 34 篇 →</a></div><div class="grp"><h2><a href="/writing/security/" data-klist="security">业务安全风控</a><span class="n">2 篇</span></h2><p>策略、黑产对抗、账号安全</p><ul class="klist"><li><a class="krow" href="/writing/sec-cxrdpnpe.html" data-kart="sec-cxrdpnpe"><span class="kt">实时风控平台介绍</span><span class="km"><span class="kd">01-04</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/sec-cbvusnic.html" data-kart="sec-cbvusnic"><span class="kt">标签库 · 源码阅读分析</span><span class="km"><span class="kd">09-28</span><span class="ksrc">飞书</span></span></a></li></ul></div><div class="kb-sec"><h2 class="kb-sec-h">项目方案设计<span class="kb-sec-n">7 篇</span></h2><p class="kb-sec-d">业务痛点 → 平台方案：我怎么设计的</p></div><div class="grp"><h2><a href="/writing/solution/" data-klist="solution">项目方案设计</a><span class="n">7 篇</span></h2><p>业务痛点 → 平台方案：需求、架构、落地</p><ul class="klist"><li><a class="krow" href="/writing/sol-ccmvfngc.html" data-kart="sol-ccmvfngc"><span class="kt">复盘 · 标签库代码误删导致部分名单不生效</span><span class="km"><span class="kd">04-21</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/sol-ct3l1nge.html" data-kart="sol-ct3l1nge"><span class="kt">历史 IP 信誉库重拾 · 接入实时风控平台</span><span class="km"><span class="kd">02-12</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/sol-cxkzgnlg.html" data-kart="sol-cxkzgnlg"><span class="kt">实时风控 · 通用离线处罚能力建设（MYSQL+Redis）</span><span class="km"><span class="kd">11-27</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/sol-c79tnnbu.html" data-kart="sol-c79tnnbu"><span class="kt">实时风控 · 字典表方案设计</span><span class="km"><span class="kd">11-25</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/sol-cwmftn2d.html" data-kart="sol-cwmftn2d"><span class="kt">标签库 · 接口设计</span><span class="km"><span class="kd">09-28</span><span class="ksrc">飞书</span></span></a></li><li><a class="krow" href="/writing/sol-cprm1nbd.html" data-kart="sol-cprm1nbd"><span class="kt">标签库标签 · 标准化管理</span><span class="km"><span class="kd">09-23</span><span class="ksrc">飞书</span></span></a></li></ul><a class="kmore" href="/writing/solution/" data-klist="solution">查看全部 7 篇 →</a></div>
   <a class="mini" href="/ext/">外部沉淀 · 468 篇 →</a></main>
 
 <main class="v" id="v-qa"><h1>问答沉淀</h1><p class="meta">飞书群里的日常问答 · 8 天 29 条</p>
@@ -450,12 +488,19 @@
   <p class="pdesc">AI × 风控的实践者，把每天学到、问到、看到的东西，沉淀成自己的知识体系。</p>
   <div class="ptags"><span>AI Agent</span><span>业务安全</span><span>知识管理</span></div>
   <div class="pabout">这个 App 是我的个人知识库与运营工作台：技术 / AI / 业务安全风控三大知识库、日常问答沉淀、羊毛线报，以及自媒体内容排期。</div>
-  <div class="me-row"><span>App 版本</span><span id="ver">—</span></div>
-  <div class="me-row"><span>内容更新</span><span id="contentVer">—</span></div>
-  <div class="me-row"><span>主题</span><span class="themes"><button data-t="a" class="on">A</button><button data-t="b">B</button><button data-t="c">C</button></span></div>
-  <div class="me-row"><span>检查更新</span><button id="checkUpd">检查</button></div>
-  <div class="me-row"><span>已读标记</span><button id="resetRead">清空</button></div>
-  <div class="me-row"><span>界面</span><button id="toSite2">切回网站版</button></div>
+  <div class="me-stats">
+    <div class="mst"><span class="mst-k">App 版本</span><span class="mst-v" id="ver">—</span></div>
+    <div class="mst"><span class="mst-k">内容更新</span><span class="mst-v" id="contentVer">—</span></div>
+  </div>
+  <div class="me-card">
+    <div class="me-card-h"><span>主题</span><span class="me-card-d">A 纸感 · B 夜间 · C 极简</span></div>
+    <div class="themes seg"><button data-t="a" class="on">A</button><button data-t="b">B</button><button data-t="c">C</button></div>
+  </div>
+  <div class="me-acts">
+    <button id="checkUpd">检查更新</button>
+    <button id="resetRead">清空已读</button>
+    <button id="toSite2">网站版</button>
+  </div>
   <div class="upd" id="updMsg"></div>
 </main>
 
@@ -683,7 +728,9 @@ try{localStorage.setItem('dh-style','app');localStorage.removeItem('dh-web-until
       document.getElementById('klistTitle').textContent=list.length+' 篇文章';
       document.getElementById('klistBody').innerHTML=list.map(function(x){
         return '<a class="krow" href="/writing/'+x.id+'.html" data-kart="'+x.id+'">'
-          +'<span class="d">'+(x.d||'').slice(5)+'</span><span class="t">'+escTxt(x.t)+'</span></a>';
+          +'<span class="kt">'+escTxt(x.t)+'</span>'
+          +'<span class="km"><span class="kd">'+(x.d||'').slice(5)+'</span>'
+          +(x.o?'<span class="ksrc">飞书</span>':'')+'</span></a>';
       }).join('');
       scrollMemo['v-klist']=0;
       show('v-klist');
@@ -812,7 +859,11 @@ try{localStorage.setItem('dh-style','app');localStorage.removeItem('dh-web-until
   }).join('');
 
   fetch('/version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();})
-    .then(function(v){document.getElementById('contentVer').textContent=(v.date||v.build||'—');})
+    /* 卡片只有半屏宽，年份省掉，避免在窄屏上换行（2026-11-27） */
+    .then(function(v){var t=String(v.date||v.build||'—')
+        .replace(/^(\d{4})-(\d{2})-(\d{2})/,'$2-$3')
+        .replace(/^(\d{4})(\d{2})(\d{2})\d*$/,'$2-$3');
+      document.getElementById('contentVer').textContent=t;})
     .catch(function(){});
 
   /* ============================================================
