@@ -99,7 +99,7 @@ public class TalosWebProducer {
             TalosProducerConfig producerConfig = new TalosProducerConfig(pros);
             Credential credential = new Credential().setSecretKeyId(accessKey)
                     .setSecretKey(accessSecret)
-                    .setType(UserType.DEV_XIAOMI);
+                    .setType(UserType.DEV_COMPANY);
             asyncProducer = new TalosProducer(
                     producerConfig,
                     credential,
@@ -143,8 +143,8 @@ public class TalosWebProducer {
         }
     }
 }</code></pre><h4 id="sec-11">2.Talos生产数据</h4><p>在使用Talos发送数据时，首先去Talos平台创建对应的<strong>Topic和Schema</strong>，再<strong>将其绑定</strong>。</p><p>[内部链接]</p><p>绑定后再将schema对应的pom依赖引入，如下：</p><pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;com.xiaomi.cloud.streaming&lt;/groupId&gt;
-    &lt;artifactId&gt;com.xiaomi.cloud.streaming.infosec.risk.风控平台AccountFrozenData&lt;/artifactId&gt;
+    &lt;groupId&gt;com.公司.cloud.streaming&lt;/groupId&gt;
+    &lt;artifactId&gt;com.公司.cloud.streaming.infosec.risk.风控平台AccountFrozenData&lt;/artifactId&gt;
     &lt;version&gt;THRIFT.6.1732587420&lt;/version&gt;
 &lt;/dependency&gt;</code></pre><pre><code>/**
  * @author your-account
@@ -195,7 +195,7 @@ public class SaveFrozenAccountServiceImpl implements SaveDataService&lt;FrozenAc
         TalosConsumerConfig consumerConfig = new TalosConsumerConfig(properties);
 
         Credential credential = new Credential()
-                .setType(UserType.DEV_XIAOMI)
+                .setType(UserType.DEV_COMPANY)
                 .setSecretKeyId(accessKey)
                 .setSecretKey(accessSecret);
 

@@ -77,8 +77,8 @@ body{overflow:hidden;overscroll-behavior:none}
   background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
 .lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
 .lb-stage:active{cursor:grabbing}
-.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
-  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-stage img{max-width:none;max-height:none;transform-origin:0 0;will-change:transform;
+  user-select:none;-webkit-user-drag:none}
 .lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
   padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
 /* 文档视图 */
@@ -511,7 +511,6 @@ body{overflow:hidden;overscroll-behavior:none}
   }
   function lbClose(){
     if (lbClosing) return;
-    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
     lbClosing = 1;
     lbStopAnim();
     lb.classList.remove('on');
@@ -527,27 +526,10 @@ body{overflow:hidden;overscroll-behavior:none}
   document.getElementById('lb1x').onclick = function(){
     lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
   };
-  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
-  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
-  function lbZoomToggle(x, y){
+  lbstage.addEventListener('dblclick', function(e){
+    var r = lbRect;
     var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
-    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
-  }
-  function lbTap(x, y){
-    var now = Date.now();
-    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
-      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
-      lbZoomToggle(x, y);
-      return;
-    }
-    lbLastTap = now; lbLastX = x; lbLastY = y;
-    clearTimeout(lbTapTimer);
-    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
-  }
-  lbstage.addEventListener('click', function(e){
-    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
-    if (e.target && e.target.closest && e.target.closest('button')) return;
-    lbTap(e.clientX, e.clientY);
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, e.clientX - r.left, e.clientY - r.top, true);
   });
   lbstage.addEventListener('wheel', function(e){
     e.preventDefault();
@@ -555,21 +537,17 @@ body{overflow:hidden;overscroll-behavior:none}
     lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
   }, {passive:false});
 
-  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  var lbDrag = null, lbPinch = null, lbMomentum = 0;
   function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
   lbstage.addEventListener('touchstart', function(e){
     lbStopAnim(); lbStopMomentum();
-    lbTouchAt = Date.now();
     if (e.touches.length === 1) {
       var t = e.touches[0];
       lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
       lbPinch = null;
-      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
     } else if (e.touches.length === 2) {
       lbDrag = null;
       lbPinch = { d: dist(e.touches), s: lbt.s };
-      clearTimeout(lbTapTimer); lbTapTimer = 0;
-      if (lbTapStart) lbTapStart.moved = true;
     }
   }, {passive:true});
   lbstage.addEventListener('touchmove', function(e){
@@ -582,10 +560,6 @@ body{overflow:hidden;overscroll-behavior:none}
     } else if (lbDrag && e.touches.length === 1) {
       var t = e.touches[0], now = performance.now();
       var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
-      if (lbTapStart && !lbTapStart.moved &&
-          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
-        lbTapStart.moved = true;
-      }
       lbt.x += dx; lbt.y += dy;
       lbDrag.x = t.clientX; lbDrag.y = t.clientY;
       var dt = Math.max(1, now - lbDrag.lt);
@@ -597,8 +571,6 @@ body{overflow:hidden;overscroll-behavior:none}
   }, {passive:false});
   lbstage.addEventListener('touchend', function(e){
     if (e.touches.length === 0) {
-      var tap = lbTapStart;
-      lbTapStart = null;
       if (lbDrag) {
         lbClamp();
         var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
@@ -620,10 +592,6 @@ body{overflow:hidden;overscroll-behavior:none}
         }
       }
       lbDrag = null; lbPinch = null;
-      if (tap && !tap.moved && Date.now() - tap.t < 500) {
-        var tt = e.changedTouches[0];
-        lbTap(tt.clientX, tt.clientY);
-      }
     } else if (e.touches.length < 2) lbPinch = null;
   }, {passive:true});
   lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });

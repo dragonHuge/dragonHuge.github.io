@@ -185,7 +185,7 @@
         Bootstrap&lt;EchoServiceImpl&gt; bootstrap = new Bootstrap&lt;&gt;(config);
         bootstrap.start(); // 启动此服务
     }
-}</code></pre></li></ol><ol><li><p>因为zookeeper是注册中心，<strong>server要把自己注册上去</strong>，<strong>这样其他的服务(Client)就可以从注册中心找到它，以达到远程过程调用的目的。</strong></p></li><li><p>参考：<a href="http://zkview.d.xiaomi.net/" target="_blank" rel="noopener">公司Zookeeper集群地址</a>，<a href="http://infra.d.xiaomi.net/zookeeper/user/client.html" target="_blank" rel="noopener">Zookeeper文档</a></p></li></ol><p>     具体做法就是：构建zookeeper配置文件，写好配置即可，如下</p><pre><code>zookeeper.host = onebox  // 表示将ZooKeeper服务的主机名设置为 onebox</code></pre><ol><li><p>配不配都可以。新建一个log4j.xml文件，并写入下方即可。</p></li><li><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+}</code></pre></li></ol><ol><li><p>因为zookeeper是注册中心，<strong>server要把自己注册上去</strong>，<strong>这样其他的服务(Client)就可以从注册中心找到它，以达到远程过程调用的目的。</strong></p></li><li><p>参考：<a href="http://zkview.d.公司.net/" target="_blank" rel="noopener">公司Zookeeper集群地址</a>，<a href="http://infra.d.公司.net/zookeeper/user/client.html" target="_blank" rel="noopener">Zookeeper文档</a></p></li></ol><p>     具体做法就是：构建zookeeper配置文件，写好配置即可，如下</p><pre><code>zookeeper.host = onebox  // 表示将ZooKeeper服务的主机名设置为 onebox</code></pre><ol><li><p>配不配都可以。新建一个log4j.xml文件，并写入下方即可。</p></li><li><pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;!DOCTYPE log4j:configuration SYSTEM "log4j.dtd"&gt;
 &lt;log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"&gt;
     &lt;appender name="stdout" class="org.apache.log4j.ConsoleAppender"&gt;
