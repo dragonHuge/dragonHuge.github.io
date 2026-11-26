@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>复盘 · 名单库代码误删导致部分名单不生效 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">10</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#sec-1">一、事件概述</a><a class="tl l2" href="#sec-2">二、时间线</a><a class="tl l3" href="#sec-3">阶段一：隐患埋入</a><a class="tl l3" href="#sec-4">阶段二：隐患触发（04-16 周四）</a><a class="tl l3" href="#sec-5">阶段三：问题发现（04-20 周一）</a><a class="tl l3" href="#sec-6">阶段四：修复上线（进行中）</a><a class="tl l2" href="#sec-7">三、影响分析</a><a class="tl l2" href="#sec-8">四、根因分析</a><a class="tl l2" href="#sec-9">五、改进措施</a><a class="tl l2" href="#sec-10">六、经验教训</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="solution/index.html">项目方案设计</a></div><article><h1>复盘 · 名单库代码误删导致部分名单不生效</h1><div class="meta">2026-04-21<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累 · 我主导的设计&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<h2 id="sec-1">一、事件概述</h2><table><tr><th><p>项目</p></th><th><p>内容</p></th></tr><tr><td><p><strong>事件</strong></p></td><td><p><span style="color:#d83931"><strong>名单库（risk-tag-list）MR 中误删关键代码行，后续上线触发线上部分名单不生效</strong></span></p></td></tr><tr><td><p><strong>发现时间</strong></p></td><td><p>2026-04-20（周一）</p></td></tr><tr><td><p><strong>影响时段</strong></p></td><td><p>2026-04-17（周五）~ 2026-04-20（周一回滚前）</p></td></tr><tr><td><p><strong>影响范围</strong></p></td><td><p><span style="color:#d83931"><strong>国内 + 测试环境，部分名单不生效，不导致误伤。</strong></span></p></td></tr><tr><td><p><strong>处理人</strong></p></td><td><p>孙小龙、刘佳峰</p></td></tr><tr><td><p><strong>当前状态</strong></p></td><td><p>已回滚止血，代码修复中，预计 04-22 上线</p></td></tr></table><h2 id="sec-2">二、时间线</h2><h3 id="sec-3">阶段一：隐患埋入</h3><p>某次 MR（MR#36）中，对 <code>OperatorTagServiceImpl.java</code> 进行修改时，<strong>误删了第 104 行的关键代码</strong>：</p><pre><code>// 被误删的代码
+items.addToTags(tagItem);
+</code></pre><p>该行负责将标签项写入名单集合，删除后导致名单无法正常加载对应标签。</p><p>由于本次 MR 属于非功能性变动，合并后<strong>未触发上线</strong>，隐患静默潜伏。</p><h3 id="sec-4">阶段二：隐患触发（04-16 周四）</h3><p>组内 JVM 内存调优任务，调优完成后上线。上线版本包含了阶段一中误删代码的变更，隐患正式生效。</p><h3 id="sec-5">阶段三：问题发现（04-20 周一）</h3><p>周一有大模型测试联调，发现名单库不生效。随即拉刘佳峰一起排查，最终定位到误删的 <code>items.addToTags(tagItem)</code> 这行代码。</p><p><strong>处置动作</strong>：当天回滚至上一个稳定版本，恢复名单功能。</p><h3 id="sec-6">阶段四：修复上线（进行中）</h3><p>正在修改代码，预计 04-22（周三）完成上线。</p><hr><h2 id="sec-7">三、影响分析</h2><table><tr><th><p>维度</p></th><th><p>评估</p></th></tr><tr><td><p><strong>影响面</strong></p></td><td><p>国内 + 测试环境的部分名单不生效</p></td></tr><tr><td><p><strong>业务影响</strong></p></td><td><p>黑名单中的恶意团伙请求被放行，<strong>不会导致误伤正常用户</strong></p></td></tr><tr><td><p><strong>实际损失</strong></p></td><td><p>周末期间无恶意团伙、撞库攻击事件，影响可控</p></td></tr><tr><td><p><strong>持续时间</strong></p></td><td><p>约 3 天（04-17 周五 ~ 04-20 周一回滚）</p></td></tr></table><hr><h2 id="sec-8">四、根因分析</h2><pre><code>MR 代码变更时误删关键行
+        │
+        ▼
+非功能性变动，未上线 ── 隐患静默潜伏
+        │
+        ▼
+同事JVM调优后上线 ── 携带了误删代码
+        │
+        ▼
+部分名单不生效 ── 黑名单放行恶意团伙请求
+</code></pre><p><strong>根因</strong>：代码撰写不严谨 + 需求实现到上线流程不严谨。</p><p>具体来说：</p><ol><li><strong>代码 Review 不充分</strong>：MR 中的误删未在 Code Review 环节被发现</li></ol><ol><li><strong>变更与上线脱节</strong>：代码合入主干后未及时上线，导致后续无关变更上线时携带了未验证的改动</li></ol><ol><li><strong>缺乏增量变更验证</strong>：JVM 调优上线时，未对本次上线包含的所有代码变更做完整回归</li></ol><hr><h2 id="sec-9">五、改进措施</h2><table><tr><th><p>#</p></th><th><p>改进项</p></th><th><p>负责人</p></th><th><p>预计完成</p></th></tr><tr><td><p>1</p></td><td><p><strong>严格 Code Review</strong>：MR 合入前逐行审查 diff，尤其关注非预期的删除行</p></td><td><p>孙小龙</p></td><td><p>长期执行</p></td></tr><tr><td><p>2</p></td><td><p><strong>合入即上线原则</strong>：代码合入主干后应尽快上线验证，避免"写了不上"的悬挂状态</p></td><td><p>孙小龙</p></td><td><p>长期执行</p></td></tr><tr><td><p>3</p></td><td><p><strong>上线前增量 diff 检查</strong>：每次上线前，对比上一次线上版本的完整 diff，确认无非预期变更</p></td><td><p>孙小龙</p></td><td><p>长期执行</p></td></tr><tr><td><p>4</p></td><td><p><strong>关键逻辑加单测覆盖</strong>：为 <code>addToTags</code> 等名单核心写入逻辑补充单元测试，防止误删后无感知</p></td><td><p>孙小龙</p></td><td><p>04-30</p></td></tr></table><hr><h2 id="sec-10">六、经验教训</h2><blockquote><strong>一行代码的误删，可以静默潜伏数周，直到一次无关的上线将它带到生产环境。</strong></blockquote><ul><li>非功能性 MR 也要认真逐行 Review，"改得少"不等于"改得对"</li></ul><ul><li>合入不上线 = 给未来埋雷，任何已合入的变更都应尽快闭环</li></ul><ul><li>上线不只是看自己的改动，还要看"从上次上线到现在，主干上到底多了什么"</li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

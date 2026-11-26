@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>HashMap、ConcurrentHashMap · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">23</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-HashMap">1.HashMap</a><a class="tl l3" href="#1-HashMap的底层原理">1.HashMap的底层原理</a><a class="tl l3" href="#2-HashMap的扩容机制">2.HashMap的扩容机制：</a><a class="tl l3" href="#3-HashMap为何线程不安全">3.HashMap为何线程不安全？</a><a class="tl l3" href="#4-HashMap头插法-尾插法出现的问题">4.HashMap头插法/尾插法出现的问题</a><a class="tl l4" href="#1-头插法">1.头插法</a><a class="tl l4" href="#2-尾插法">2.尾插法</a><a class="tl l4" href="#3-头插法出现死循环的问题详解">3.头插法出现死循环的问题详解：</a><a class="tl l3" href="#5-HashMap的7种遍历方式">5.HashMap的7种遍历方式</a><a class="tl l3" href="#6-HashMap与HashTable的区别">6.HashMap与HashTable的区别</a><a class="tl l3" href="#7-简单写一个HashMap">7.简单写一个HashMap？</a><a class="tl l2" href="#2-ArrayList-LinkedList">2.ArrayList、LinkedList</a><a class="tl l3" href="#1-ArrayList与LinkedList">1.ArrayList与LinkedList</a><a class="tl l3" href="#2-ArrayList的扩容机制">2.ArrayList的扩容机制：</a><a class="tl l2" href="#3-ConcurrentHashMap">3、ConcurrentHashMap</a><a class="tl l3" href="#1-ConcurrentHashMap与HashTable的区别">1.ConcurrentHashMap与HashTable的区别</a><a class="tl l3" href="#2-ConcurrentHashMap线程安全的底层实现">2.ConcurrentHashMap线程安全的底层实现</a><a class="tl l4" href="#JDK1-8之前">JDK1.8之前</a><a class="tl l4" href="#JDK1-8之后">JDK1.8之后</a><a class="tl l4" href="#1-JDK1-8为何弃用分段锁-segment">1.JDK1.8为何弃用分段锁(segment)</a><a class="tl l4" href="#2-为什么是synchronized-而不是ReentranLock">2.为什么是synchronized，而不是ReentranLock</a><a class="tl l4" href="#3-JDK1-8之后为什么改成了-CAS-synchronized">3.JDK1.8之后为什么改成了 CAS + synchronized</a><a class="tl l4" href="#4-CAS-sychronized是怎么保证其线程安全的">4.CAS+sychronized是怎么保证其线程安全的？</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>HashMap、ConcurrentHashMap</h1><div class="meta">2024-05-11 · <a class="src-link" href="https://flowus.cn/e261299b-eb79-4f0f-9501-a4f3758617d3" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><p>ConcurrentHashMap</p>
+<h2 id="1-HashMap">1.HashMap</h2>
+<p>HashMap 主要用来存放键值对，它基于哈希表的 <strong>Map 接口</strong>实现，是常用的 Java 集合之一，是非线程安全的。</p>
+<ul><li><code>HashMap</code> <strong>可以存储 null 的 key 和 value</strong>，但 <strong>null 作为键只能有一个，null 作为值可以有多个。</strong></li></ul>
+<ul><li><code>HashMap</code> 默认的<strong>初始化大小为 16</strong>。之后每次扩充，容量变为原来的 2 倍。并且， <strong><code>HashMap</code> 总是使用 2 的幂</strong>作为哈希表的大小</li></ul>
+<h3 id="1-HashMap的底层原理">1.HashMap的底层原理</h3>
+<p>依旧分为JDK1.8之前和JDK1.8之后两个版本。</p>
+<ol><li>JDK1.8之前：<strong>数组链表(拉链法)</strong></li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-76462002ebfc7023.png"></p>
+<p>JDK1.8 之前 <code>HashMap</code> 底层是 <strong>数组和链表</strong> 结合在一起使用也就是 <strong>链表散列</strong>。</p>
+<p>HashMap 通过 key 的 <code>hashcode</code> 经过扰动函数处理过后得到 hash 值，然后通过 <strong><code>(n - 1) &amp;amp; hash</code></strong> <strong>判断当前元素存放的位置</strong>（这里的 <strong>n 指的是数组的长度</strong>），如果当前位置存在元素的话，就判断该元素与要存入的元素的 hash 值以及 key 是否相同，如果相同的话，直接覆盖，不相同就通过拉链法解决冲突。</p>
+<p>所谓扰动函数指的就是 HashMap 的 <code>hash</code> 方法。使用 <code>hash</code> 方法也就是扰动函数是为了防止一些实现比较差的 <code>hashCode()</code> 方法 换句话说<strong>使用扰动函数之后可以减少碰撞</strong>。</p>
+<ol><li>JDK1.8之后：<strong>数组+链表+红黑树</strong></li></ol>
+<p>JDK1.8 之后在解决哈希冲突时有了较大的变化：</p>
+<p><strong>当链表长度大于阈值</strong>（默认为 8）（<strong>将链表转换成红黑树</strong>前会判断，<strong>如果当前数组的长度小于 64</strong>，那么会选择<strong>先进行数组扩容</strong>，而不是转换为红黑树）时，将链表转化为红黑树，以减少搜索时间。</p>
+<p><img alt="image.png" src="/assets/img/flowus-cbbfe309218bdd27.png"></p>
+<p><strong>红黑树</strong>就是为了<strong>解决二叉查找树的缺陷</strong>，因为二叉查找树在某些情况下会退化成一个线性结构。</p>
+<h3 id="2-HashMap的扩容机制">2.HashMap的扩容机制：</h3>
+<p>HashMap 的扩容机制是指当 HashMap 中的元素个数达到容量的一定比例（<strong>负载因子</strong>），就会触发扩容操作，以保持其性能。</p>
+<p>HashMap 在进行扩容时，会<strong>重新计算每个元素在新数组中的位置，并将其重新分布到新的更大的数组中。</strong></p>
+<p><strong>具体扩容的过程</strong>如下：</p>
+<ol><li>当 HashMap 中的元素个数达到容量的一定比例（<strong>默认为负载因子 0.75</strong>），HashMap 就会触发扩容操作。</li></ol>
+<ol><li>扩容时，会<strong>创建一个新的数组，其大小是原数组的2倍</strong>。</li></ol>
+<ol><li>然后，HashMap 会将原数组中的<strong>每个元素重新计算其在新数组中的位置</strong>，并将其存放到新的数组中。</li></ol>
+<ol><li>如果原数组中存在多个元素映射到新数组的同一位置上（即发生了哈希冲突），则在新数组中会使用链表或红黑树（Java 8 后引入）等数据结构来解决冲突。</li></ol>
+<ol><li>扩容完成后，HashMap 的容量和负载因子会更新为新的值。</li></ol>
+<p>通过扩容机制，HashMap 在保持较低的冲突率的同时，能够保证较好的性能表现，使得在插入、查找、删除等操作的时间复杂度近似于 O(1)。</p>
+<h3 id="3-HashMap为何线程不安全">3.HashMap为何线程不安全？</h3>
+<p>出现两个问题：</p>
+<ol><li><strong>死循环</strong>  </li></ol>
+<ul><li>JDK1.7 及之前版本，由于使用<strong>头插法</strong>，导致在多线程环境下，<code>HashMap</code> <strong>扩容时会造成死循环</strong>和数据丢失的问题。</li></ul>
+<ul><li>JDK1.8之后，由于改用<strong>尾插法</strong>，<strong>避免了死循环</strong>问题。</li></ul>
+<ol><li><strong>数据丢失</strong></li></ol>
+<p>数据丢失这个在 JDK1.7 和 JDK 1.8 中都存在，这里以 JDK 1.8 为例进行介绍。</p>
+<p>JDK 1.8 后，在 <code>HashMap</code> 中，<strong>多个键值对可能会被分配到同一个桶</strong>，并以链表或红黑树的形式存储。</p>
+<p><strong>多个线程对 <code>HashMap</code> 的 <code>put</code> 操作会导致线程不安全</strong>，具体来说会有<strong>数据覆盖</strong>的风险。</p>
+<p>数据丢失举例：</p>
+<ul><li><strong>两个线程 1,2 同时进行 put 操作，并且发生了哈希冲突</strong>（hash 函数计算出的插入下标是相同的）。</li></ul>
+<ul><li>不同的线程可能在不同的时间片获得 CPU 执行的机会，当前线程 1 执行完哈希冲突判断后，由于时间片耗尽挂起。线程 2 先完成了插入操作。</li></ul>
+<ul><li>随后，线程 1 获得时间片，由于之前已经进行过 hash 碰撞的判断，所有此时会直接进行插入，这就导致线程 2 插入的数据被线程 1 覆盖了。</li></ul>
+<hr>
+<h3 id="4-HashMap头插法-尾插法出现的问题">4.HashMap头插法/尾插法出现的问题</h3>
+<p>书接上文，JDK1.8之前，使用<strong>头插法</strong>，会出现<strong>“链表成环</strong>”的问题，导致<strong>死循环</strong>。而在JDK1.8之后，使用了尾插法。</p>
+<p>因此这里分析一下头插法和尾插法。</p>
+<h4 id="1-头插法">1.头插法</h4>
+<ol><li><strong>优点：</strong></li></ol>
+<ul><li><strong>效率高</strong></li></ul>
+<ul><li>扩容的时候，插入在头部，效率高一些，时间复杂度为O(1)</li></ul>
+<ul><li>但如果插入尾部，都要遍历到最后一个节点，时间复杂度为O(N)</li></ul>
+<ul><li><strong>满足时间局部性原理=》</strong>最近插入的最有可能被使用</li></ul>
+<ol><li><strong>缺点</strong>：</li></ol>
+<ul><li><strong>死循环</strong>：就是因为 <strong>倒序+ 正序 这种乱序的插入</strong>，<strong>导致了 尾部的丢失</strong>，从而<strong>形成了环形链表</strong>。</li></ul>
+<p>这就像 负负得正 一样的。 第一次头插是倒序， 第二次 头插是 正序， 第三次头插是倒序， 第四次 头插是 正序。 而只要 倒序+ 正序 一组合，就会丢掉尾部的 空指针。</p>
+<h4 id="2-尾插法">2.尾插法</h4>
+<ol><li><strong>优点：</strong></li></ol>
+<ul><li><strong>不会死循环</strong></li></ul>
+<ol><li><strong>缺点：</strong></li></ol>
+<ul><li><strong>扩容的效率低些  O(N)</strong></li></ul>
+<p>扩容的时候，插入在尾部，效率高一些，时间复杂度为<strong>O(N)</strong></p>
+<ul><li><strong>不满足时间局部性原理</strong></li></ul>
+<p>根据时间局部性原理，最近插入的最有可能被使用，这时候已经插入到尾部去了，要找到尾部才能找得到。</p>
+<h4 id="3-头插法出现死循环的问题详解">3.头插法出现死循环的问题详解：</h4>
+<blockquote><p>💡 <strong>Q1</strong>：产生<strong>循环链表后带来的问题</strong>是什么?</p></blockquote>
+<p>环形链表已经产生了, 当我们调用get(3)或者get(1)不会产生问题, 但是如果get(5), 并且5在数组中的下标和1,3的一致的话, 由于<strong>链表中没有5, 所以就会一直在链表中寻找</strong>, 但是链表没有尽头, 就导致程序卡在get(5)处了</p>
+<p><strong>后果</strong>：调用get()方法时可能陷入死循环. 为什么会出现循环链表呢?</p>
+<p><strong>产生循环链表的过程:主要发生在扩容操作中。</strong></p>
+<ol><li>如下所示的hashmap, 有两个元素, 它们的<strong>key分别是1和3</strong>, <strong>假设再增加一个元素时会触发扩容操作</strong></li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-11971f7e47b65acf.png"></p>
+<ol><li>此时<strong>线程1和线程2都执行put()操作,</strong> 便都会<strong>触发hashmap的扩容操作</strong>,</li></ol>
+<p>假设线程1扩容时, 执行完<strong>transfer()中的<code>Entry&amp;lt;K,V&amp;gt; next = e.next;</code>被挂起</strong>, 此时<strong>e指向1</strong>, <strong>next指向3</strong>, 如下图所示</p>
+<p><img alt="image.png" src="/assets/img/flowus-27d8b4cbecc562d3.png"></p>
+<ol><li>假设<strong>1和3在新的数组中仍然发生哈希碰撞</strong>, 假设<strong>线程2完成了扩容</strong>, 那么此时哈希表的样子如下图所示</li></ol>
+<p>可以发现, 由于使用了头插法, 所以<strong>3变成了头结点</strong>。</p>
+<p><img alt="image.png" src="/assets/img/flowus-617e98f7ab359b4c.png"></p>
+<ol><li><strong>回到线程1</strong>, <strong>e指向的是1, next指向的是3</strong>, 继续向下执行</li></ol>
+<p>当执行完<strong><code>e.next = newTable[i];</code></strong>便出现了循环链表, 其中,<code>newTable[i]</code>是3。</p>
+<p><img alt="image.png" src="/assets/img/flowus-69c5afff1476ddd2.png"></p>
+<blockquote><p>💡 <strong>Q3：tranfer()方法源码</strong></p></blockquote>
+<p>```Java //newTable表示新创建的扩容后的数组 //rehash表示元素是否需要重新计算哈希值 void transfer(Entry[] newTable, boolean rehash) { //记录新数组的容量 int newCapacity = newTable.length; //遍历原数组的桶位置 for (Entry&lt;K,V&gt; e : table) { //如果桶位置不为空，则遍历链表的元素 while(null != e) { //next表示原数组链表的下一个节点 Entry&lt;K,V&gt; next = e.next; //确定元素在新数组的索引位置 if (rehash) { e.hash = null == e.key ? 0 : hash(e.key); } int i = indexFor(e.hash, newCapacity); // 头插法，新元素始终指向新数组对应桶位置的第一个元素 e.next = newTable[i]; // 新插入的元素成为桶位置的第一个元素 newTable[i] = e; //遍历原数组链表的下一个元素 e = next; } } } ```</p>
+<h3 id="5-HashMap的7种遍历方式">5.HashMap的7种遍历方式</h3>
+<p><img alt="image.png" src="/assets/img/flowus-757fdcc294821988.png"></p>
+<p>HashMap <strong>遍历从大的方向来说，可分为以下 4 类</strong>：</p>
+<ol><li><strong>迭代器（Iterator）</strong>方式遍历；</li></ol>
+<ol><li><strong>For Each</strong> 方式遍历；</li></ol>
+<ol><li><strong>Lambda</strong> 表达式遍历（JDK 1.8+）;</li></ol>
+<ol><li><strong>Streams API</strong> 遍历（JDK 1.8+）。</li></ol>
+<p>但每种类型下又有不同的实现方式，因此具体的遍历方式又可以分为以下 7 种：</p>
+<ol><li>使用迭代器（Iterator）<strong>EntrySet</strong> 的方式进行遍历；</li></ol>
+<ol><li>使用迭代器（Iterator）<strong>KeySe</strong>t 的方式进行遍历；</li></ol>
+<ol><li>使用 For Each EntrySet 的方式进行遍历；</li></ol>
+<ol><li>使用 For Each KeySet 的方式进行遍历；</li></ol>
+<ol><li>使用 Lambda 表达式的方式进行遍历；</li></ol>
+<ol><li>使用 Streams API 单线程的方式进行遍历；</li></ol>
+<ol><li>使用 Streams API 多线程的方式进行遍历。</li></ol>
+<h3 id="6-HashMap与HashTable的区别">6.HashMap与HashTable的区别</h3>
+<ol><li><strong>线程是否安全：</strong> <code>HashMap</code> 不安全，<strong><code>Hashtable</code> 是线程安全</strong></li></ol>
+<p>因为 <code>Hashtable</code> 内部的方法基本都经过<strong><code>synchronized</code> 修饰</strong>；</p>
+<ol><li><strong>效率：</strong> HashMap较高</li></ol>
+<p>因为线程安全的问题，<code>HashMap</code> 要比 <code>Hashtable</code> 效率高一点。另外，<code>Hashtable</code> 基本被淘汰，不要在代码中使用它；</p>
+<ol><li><strong>对 Null key 和 Null value 的支持：</strong> </li></ol>
+<p><code>HashMap</code> 可以存储 null 的 key 和 value，但 null 作为键只能有一个，null 作为值可以有多个；<strong>Hashtable 不允许有 null 键和 null 值</strong>，否则会抛出 <code>NullPointerException</code>。</p>
+<ol><li><strong>底层数据结构：</strong> </li></ol>
+<p>JDK1.8 以后的 <code>HashMap</code> 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）时，将链表转化为红黑树（将链表转换成红黑树前会判断，如果当前数组的长度小于 64，那么会选择先进行数组扩容，而不是转换为红黑树），以减少搜索时间（后文中我会结合源码对这一过程进行分析）。</p>
+<p><strong><code>Hashtable</code> 没有这样的机制。</strong></p>
+<ol><li><strong>初始容量大小和每次扩充容量大小的不同：</strong> </li></ol>
+<hr>
+<h3 id="7-简单写一个HashMap">7.简单写一个HashMap？</h3>
+<p>思路：<strong>定义数据结构散列表(数组)、实现put()、get()操作，并且实现冲突处理、扩容</strong>等。</p>
+<p>这个简单的HashMap实现主要包含了以下几个部分：</p>
+<ol><li><strong>初始化：</strong> 构造函数用于初始化HashMap，包括指定初始容量和加载因子。加载因子是一个影响HashMap扩容的因素，当元素个数达到容量乘以加载因子时，HashMap会进行扩容。</li></ol>
+<ol><li><strong>哈希函数：</strong> <code>hash()</code> 方法用于计算键的哈希值，它通过对键的哈希码进行位运算来得到最终的哈希值。</li></ol>
+<ol><li><strong>索引计算：</strong> <code>indexFor()</code> 方法根据哈希值和数组长度计算出存储位置的索引。HashMap内部使用一个数组来存储元素，索引计算的目的是将哈希值映射到数组的一个位置上。</li></ol>
+<ol><li><strong>添加元素：</strong> <code>put()</code> 方法用于向HashMap中添加键值对。首先计算键的哈希值，然后根据哈希值计算出存储位置的索引。如果该位置已经存在元素，就使用链表的形式解决哈希冲突，将新元素添加到链表的末尾。当链表长度超过一定阈值时，会将链表转化为红黑树以提高性能。</li></ol>
+<ol><li><strong>获取元素：</strong> <code>get()</code> 方法根据给定的键查找对应的值。首先计算键的哈希值，然后根据哈希值计算出存储位置的索引。如果该位置有元素，则遍历链表或者红黑树查找对应的键值对。</li></ol>
+<ol><li><strong>扩容：</strong> 当HashMap中的元素个数超过了容量乘以加载因子时，会触发扩容操作。扩容会创建一个新的数组，并重新计算每个元素在新数组中的位置。这个过程涉及到元素的重新哈希和重新分配，以确保新数组中的元素分布更加均匀。</li></ol>
+<ol><li><strong>链表转化为红黑树：</strong> 当链表长度超过一定阈值时，为了提高查找效率，会将链表转化为红黑树。红黑树是一种平衡二叉搜索树，它的查找、插入和删除操作的时间复杂度都是O(logN)，比链表的O(N)要快。</li></ol>
+<ol><li><strong>Entry类：</strong> Entry类表示HashMap中的每个键值对，包括键、值、哈希值以及指向下一个Entry的引用。在发生哈希冲突时，使用链表或者红黑树来解决冲突，需要将键值对封装成Entry对象。</li></ol>
+<h2 id="2-ArrayList-LinkedList">2.ArrayList、LinkedList</h2>
+<h3 id="1-ArrayList与LinkedList">1.ArrayList与LinkedList</h3>
+<p>注意：一个底层是<strong>Objext[]数组</strong>，一个底层是<strong>双向链表</strong>。从数组 VS 链表入手即可。</p>
+<ul><li><strong>是否保证线程安全：</strong> <code>ArrayList</code> 和 <code>LinkedList</code> 都是不同步的，也就是不保证线程安全；</li></ul>
+<ul><li><strong>底层数据结构：</strong> <code>ArrayList</code> 底层使用的是 <strong><code>Object</code> 数组</strong>；<code>LinkedList</code> 底层使用的是 <strong>双向链表</strong> 数据结构</li></ul>
+<ul><li><strong>是否支持快速随机访问：</strong> <code>LinkedList</code> 不支持高效的随机元素访问，而 <code>ArrayList</code>（实现了 <code>RandomAccess</code> 接口） 支持。快速随机访问就是通过元素的序号快速获取元素对象(对应于<code>get(int index)</code>方法)。</li></ul>
+<ul><li><strong>内存空间占用：</strong> <code>ArrayList</code> 的空间浪费主要体现在在 list 列表的结尾会预留一定的容量空间，而 LinkedList 的空间花费则体现在它的每一个元素都需要消耗比 ArrayList 更多的空间（因为要存放直接后继和直接前驱以及数据）。</li></ul>
+<h3 id="2-ArrayList的扩容机制">2.ArrayList的扩容机制：</h3>
+<ul><li><strong>以无参数构造方法创建 <code>ArrayList</code> 时，实际上初始化赋值的是一个空数组。</strong></li></ul>
+<ul><li><strong>当真正对数组进行添加元素操作时，才真正分配容量。即向数组中添加第一个元素时，数组容量扩为 10。</strong></li></ul>
+<ul><li><strong><code>int newCapacity = oldCapacity + (oldCapacity &amp;gt;&amp;gt; 1)</code>,所以 ArrayList 每次扩容之后容量都会变为原来的 1.5 倍左右（oldCapacity 为偶数就是 1.5 倍，否则是 1.5 倍左右）！</strong> 奇偶不同，比如：10+10/2 = 15, 33+33/2=49。如果是奇数的话会丢掉小数.</li></ul>
+<h2 id="3-ConcurrentHashMap">3、ConcurrentHashMap</h2>
+<p>线程安全的HashMap。</p>
+<h3 id="1-ConcurrentHashMap与HashTable的区别">1.ConcurrentHashMap与HashTable的区别</h3>
+<ol><li><strong>底层数据结构：</strong> </li></ol>
+<p>JDK1.7 的 <code>ConcurrentHashMap</code> 底层采用 <strong>分段的数组+链表</strong> 实现，JDK1.8 采用的数据结构跟 <code>HashMap1.8</code> 的结构一样，<strong>数组+链表/红黑二叉树</strong>。<code>Hashtable</code> 和 JDK1.8 之前的 <code>HashMap</code> 的底层数据结构类似都是采用 <strong>数组+链表</strong> 的形式，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的；</p>
+<blockquote><p>💡 即：<strong>HashTable底层并不使用红黑树，只用链表。</strong></p></blockquote>
+<ol><li><strong>实现线程安全的方式（重要）：</strong></li></ol>
+<ul><li><strong><code>Hashtable</code>(同一把锁)</strong> :使用 <strong><code>synchronized</code> 来保证线程安全</strong>，效率非常低下</li></ul>
+<ul><li>ConcurrentHashMap：用了线程安全的数据结构，见下节解析。</li></ul>
+<hr>
+<h3 id="2-ConcurrentHashMap线程安全的底层实现">2.ConcurrentHashMap线程安全的底层实现</h3>
+<h4 id="JDK1-8之前">JDK1.8之前</h4>
+<p>存储结构：<strong>Segment 数组(分段锁) + HashEntry 数组 + 链表。</strong></p>
+<p>对<strong>同一 <code>Segment</code> 的并发写入会被阻塞</strong>，<strong>不同 <code>Segment</code> 的写入是可以并发执行的。</strong></p>
+<p>在 JDK1.7 的时候，<code>ConcurrentHashMap</code> 对整个桶数组进行了分割分段(<strong><code>Segment</code>，分段锁</strong>)，<strong>每一把锁只锁容器其中一部分数据</strong>，多线程访问容器里不同数据段的数据，就不会存在锁竞争，提高并发访问率。</p>
+<p><img alt="image.png" src="/assets/img/flowus-137e3f0e8f8e1c9d.png"></p>
+<ol><li>首先将数据分为一段一段（这个“段”就是 <code>Segment</code>）的存储，然后给<strong>每一段数据配一把锁</strong>，<strong>当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问</strong>。</li></ol>
+<p><code>Segment</code> 继承了 <code>ReentrantLock</code>,所以 <strong><code>Segment</code> 是一种可重入锁，扮演锁的角色</strong>。<code>HashEntry</code> 用于存储键值对数据。</p>
+<ol><li><strong>一个 <code>ConcurrentHashMap</code> 里包含一个 <code>Segment</code> 数组</strong>，<code>Segment</code> 的个数一旦<strong>初始化就不能改变</strong>。 </li></ol>
+<p><code>Segment</code> 数组的大小<strong>默认是 16</strong>，也就是说默认可以同时支持 16 个线程并发写。</p>
+<p><strong><code>Segment</code> 的结构和 <code>HashMap</code> 类似</strong>，是一种<strong>数组和链表结构</strong>，一个 <code>Segment</code> 包含一个 <code>HashEntry</code> 数组，每个 <code>HashEntry</code> 是一个链表结构的元素，每个 <code>Segment</code> 守护着一个 <code>HashEntry</code> 数组里的元素，当对 <code>HashEntry</code> 数组的数据进行修改时，必须首先获得对应的 <code>Segment</code> 的锁。</p>
+<hr>
+<h4 id="JDK1-8之后">JDK1.8之后</h4>
+<ol><li>存储结构：<strong>Node 数组 + 链表 / 红黑树</strong></li></ol>
+<p>当冲突链表达到一定长度时，链表会转换成红黑树</p>
+<ol><li>并发控制：使用 <strong><code>synchronized</code> 和 CAS</strong> 来操作</li></ol>
+<p>(JDK1.6 以后 <code>synchronized</code> 锁做了很多优化） <strong>整个看起来就像是优化过且线程安全的 <code>HashMap</code></strong>，虽然在 JDK1.8 中还能看到 <code>Segment</code> 的数据结构，但是已经简化了属性，只是为了兼容旧版本；</p>
+<p><strong><code>ConcurrentHashMap</code> 的初始化</strong>是通过<strong>自旋和 CAS</strong> 操作完成的</p>
+<p>ConcurrentHashMap 中 synchronized <strong>只锁定当前链表或红黑二叉树的首节点</strong>，<strong>只要节点 <a href="https://so.csdn.net/so/search?q=hash&amp;spm=1001.2101.3001.7020">hash</a> 不冲突，就不会产生并发</strong>。</p>
+<p><img alt="image.png" src="/assets/img/flowus-2296d7f81326e32d.png"></p>
+<p><img alt="image.png" src="/assets/img/flowus-c9b3d20a17989231.png"></p>
+<blockquote><p>💡 CAS是<strong>Compare And Swap</strong>的缩写，直译就是比较并交换。CAS是现代CPU广泛支持的一种对内存中的共享数据进行操作的一种特殊指令，这个指令会对内存中的共享数据做原子的读写操作。其作用是<strong>让CPU比较内存中某个值是否和预期的值相同</strong>，如果<strong>相同则将这个值更新为新值</strong>，<strong>不相同则不做更新</strong>。</p></blockquote>
+<blockquote><p>💡 本质上来讲CAS是一种无锁的解决方案，也是一种<strong>基于乐观锁的操作</strong>，可以保证在多线程并发中保障共享资源的原子性操作，相对于synchronized或Lock来说，是一种轻量级的实现方案。</p></blockquote>
+<h4 id="1-JDK1-8为何弃用分段锁-segment">1.JDK1.8为何弃用分段锁(segment)</h4>
+<p>jdk8 放弃了分段锁而是<strong>用了Node锁</strong>，<strong>减低锁的粒度</strong>，提高性能，并使用<strong>CAS操作来确保Node的一些操作的原子性</strong>，<strong>取代了锁</strong>。</p>
+<p>原因由以下几点：</p>
+<ul><li>加入<strong>多个分段锁浪费内存空间</strong>。</li></ul>
+<ul><li>生产环境中， <strong>map 在放入时竞争同一个锁的概率非常小</strong>，分段锁反而会造成更新等操作的长时间等待。</li></ul>
+<p><strong>只锁定当前链表或红黑二叉树的首节点</strong>，<strong>只要节点 <a href="https://so.csdn.net/so/search?q=hash&amp;spm=1001.2101.3001.7020">hash</a> 不冲突，就不会产生并发</strong>。</p>
+<ul><li>为了<strong>提高 GC 的效率</strong>。</li></ul>
+<h4 id="2-为什么是synchronized-而不是ReentranLock">2.为什么是synchronized，而不是ReentranLock</h4>
+<ol><li><strong>减少内存开销</strong></li></ol>
+<p>假设使用可重入锁来获得同步支持，那么<strong>每个节点都需要通过继承AQS来获得同步支持</strong>。但并不是每个节点都需要获得同步支持的，<strong>只有链表的头节点</strong>（红黑树的根节点）需要同步，这无疑带来了巨大内存浪费。</p>
+<ol><li><strong>获得JVM的支持</strong></li></ol>
+<p><strong>Reentrant是是API这个级别的</strong>，后续的性能优化空间很小。</p>
+<p><strong>synchronized则是JVM直接支持的</strong>，JVM能够在运行时做出相应的优化措施：锁粗化、锁消除、锁自旋等等。这就使得synchronized能够随着JDK版本的升级而不改动代码的前提下获得性能上的提升。</p>
+<h4 id="3-JDK1-8之后为什么改成了-CAS-synchronized">3.JDK1.8之后<strong>为什么改成了 CAS + synchronized</strong></h4>
+<ol><li><strong>综合利用CAS和锁的优势</strong>：</li></ol>
+<p>CAS 操作具有轻量级的特点，适用于对单个变量进行并发控制，可以减少锁竞争带来的性能开销。</p>
+<p>但是，CAS 也有一些局限性，比如 <strong>ABA 问题</strong>。</p>
+<p>为了克服 CAS 的局限性，并且在需要时提供更强的同步语义，ConcurrentHashMap 在 JDK 1.8 中采用了 CAS 和 synchronized 结合的方式。这样就能综合利用 CAS 的轻量级和锁的强一致性。</p>
+<ol><li><strong>提高并发度</strong>：CAS 和 synchronized 结合的方式可以提高并发度。</li></ol>
+<p>CAS 操作不会阻塞线程，而是基于乐观锁的方式进行更新。这样可以允许更多的线程同时访问 ConcurrentHashMap，减少线程的等待时间，提高并发度。</p>
+<ol><li><strong>简化实现</strong>：CAS 和 synchronized 结合的方式相对于传统的锁机制来说，实现起来更简单。</li></ol>
+<p>使用 CAS 可以避免对整个哈希表进行锁定，减少锁粒度，降低实现的复杂度。</p>
+<h4 id="4-CAS-sychronized是怎么保证其线程安全的">4.CAS+sychronized是怎么保证其线程安全的？</h4>
+<p>JDK8中的实现也是<strong>锁分离</strong>的思想，它把锁分的比segment（JDK1.5）更细一些，只要hash不冲突，就不会出现并发获得锁的情况。</p>
+<ol><li>首先使用<strong>无锁操作CAS插入头结点</strong>，如果<strong>插入失败，说明已经有别的线程插入头结点了</strong>，再次循环进行操作。</li></ol>
+<ol><li>如果<strong>头结点已经存在</strong>，则<strong>通过synchronized获得头结点锁，进行后续的操作</strong>。</li></ol>
+<h5 id="5-JDK1-8之后ConcurrentHashMap的源码分析">5.JDK1,8之后ConcurrentHashMap的源码分析</h5>
+<ol><li>判断Node[]数组是否初始化，没有则进行初始化操作</li></ol>
+<ol><li>通过hash定位Node[]数组的索引坐标，是否有Node节点，如果没有则使用CAS进行添加（链表的头结点），添加失败则进入下次循环。</li></ol>
+<ol><li><strong>检查到内部正在扩容，如果正在扩容，就帮助它一块扩容</strong>。</li></ol>
+<ol><li>如果f!=null，则使用synchronized锁住f元素（链表/红黑二叉树的头元素）</li></ol>
+<p>4.1 如果是Node(链表结构)则执行链表的添加操作。 4.2 如果是TreeNode(树型结果)则执行树添加操作。</p>
+<ol><li>判断链表长度已经达到临界值8 就需要把链表转换为树结构。</li></ol>
+<pre><code>public V put(K key, V value) {
+    return putVal(key, value, false);
+}
+    /** Implementation for put and putIfAbsent */
+final V putVal(K key, V value, boolean onlyIfAbsent) {
+    //ConcurrentHashMap 不允许插入null键，HashMap允许插入一个null键
+    if (key == null || value == null) throw new NullPointerException();
+    //计算key的hash值
+    int hash = spread(key.hashCode());
+    int binCount = 0;
+    //for循环的作用：因为更新元素是使用CAS机制更新，需要不断的失败重试，直到成功为止。
+    for (Node&lt;K,V&gt;[] tab = table;;) {
+        // f：链表或红黑二叉树头结点，向链表中添加元素时，需要synchronized获取f的锁。
+        Node&lt;K,V&gt; f; int n, i, fh;
+        //判断Node[]数组是否初始化，没有则进行初始化操作
+        if (tab == null || (n = tab.length) == 0)
+            tab = initTable();
+        //通过hash定位Node[]数组的索引坐标，是否有Node节点，如果没有则使用CAS进行添加（链表的头结点），添加失败则进入下次循环。
+        else if ((f = tabAt(tab, i = (n - 1) &amp; hash)) == null) {
+            if (casTabAt(tab, i, null,
+                         new Node&lt;K,V&gt;(hash, key, value, null)))
+                break;                   // no lock when adding to empty bin
+        }
+        //检查到内部正在移动元素（Node[] 数组扩容）
+        else if ((fh = f.hash) == MOVED)
+            //帮助它扩容
+            tab = helpTransfer(tab, f);
+        else {
+            V oldVal = null;
+            //锁住链表或红黑二叉树的头结点
+            synchronized (f) {
+                //判断f是否是链表的头结点
+                if (tabAt(tab, i) == f) {
+                    //如果fh&gt;=0 是链表节点
+                    if (fh &gt;= 0) {
+                        binCount = 1;
+                        //遍历链表所有节点
+                        for (Node&lt;K,V&gt; e = f;; ++binCount) {
+                            K ek;
+                            //如果节点存在，则更新value
+                            if (e.hash == hash &amp;&amp;
+                                ((ek = e.key) == key ||
+                                 (ek != null &amp;&amp; key.equals(ek)))) {
+                                oldVal = e.val;
+                                if (!onlyIfAbsent)
+                                    e.val = value;
+                                break;
+                            }
+                            //不存在则在链表尾部添加新节点。
+                            Node&lt;K,V&gt; pred = e;
+                            if ((e = e.next) == null) {
+                                pred.next = new Node&lt;K,V&gt;(hash, key,
+                                                          value, null);
+                                break;
+                            }
+                        }
+                    }
+                    //TreeBin是红黑二叉树节点
+                    else if (f instanceof TreeBin) {
+                        Node&lt;K,V&gt; p;
+                        binCount = 2;
+                        //添加树节点
+                        if ((p = ((TreeBin&lt;K,V&gt;)f).putTreeVal(hash, key,
+                                                      value)) != null) {
+                            oldVal = p.val;
+                            if (!onlyIfAbsent)
+                                p.val = value;
+                        }
+                    }
+                }
+            }
+            if (binCount != 0) {
+                //如果链表长度已经达到临界值8 就需要把链表转换为树结构
+                if (binCount &gt;= TREEIFY_THRESHOLD)
+                    treeifyBin(tab, i);
+                if (oldVal != null)
+                    return oldVal;
+                break;
+            }
+        }
+    }
+    //将当前ConcurrentHashMap的size数量+1
+    addCount(1L, binCount);
+    return null;
+}</code></pre></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>Spring Boot 启动规则 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">16</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-适用范围">1. 适用范围</a><a class="tl l2" href="#2-版本-依赖">2. 版本 / 依赖</a><a class="tl l2" href="#3-标准骨架">3. 标准骨架</a><a class="tl l3" href="#3-1-启动类-main-只-SpringApplication-run">3.1 启动类（main 只 SpringApplication.run）</a><a class="tl l3" href="#3-2-application-yml-最小骨架">3.2 application.yml 最小骨架</a><a class="tl l3" href="#3-3-BeanConfiguration-装配模式">3.3 BeanConfiguration 装配模式</a><a class="tl l3" href="#3-4-appassembler-打包-service-模块">3.4 appassembler 打包（service 模块）</a><a class="tl l2" href="#4-配置项">4. 配置项</a><a class="tl l2" href="#5-监控与日志">5. 监控与日志</a><a class="tl l2" href="#6-常见踩坑">6. 常见踩坑</a><a class="tl l3" href="#6-1-main-里直接启动外设">6.1 🔴 main 里直接启动外设</a><a class="tl l3" href="#6-2-resource-filtering-delimiter-配置丢失">6.2 🔴 resource filtering delimiter 配置丢失</a><a class="tl l3" href="#6-3-logging-config-不在-static-block-设">6.3 🟠 logging.config 不在 static block 设</a><a class="tl l3" href="#6-4-web-application-type-未设-none">6.4 🟠 web-application-type 未设 none</a><a class="tl l3" href="#6-5-多-region-maven-profile-漏配某-region">6.5 🟢 多 region maven profile 漏配某 region</a><a class="tl l2" href="#7-边界">7. 边界</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>Spring Boot 启动规则</h1><div class="meta">2026-07-09<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;本地沉淀 · 风控工程知识库&quot;</em></div><div class="md"><blockquote><p>本文是工程<strong>规则</strong>（团队约定 + 踩坑结论），不是入门教程： 适合「已经知道要做什么，只想知道怎么做才不出事」的场景。</p></blockquote>
+<h2 id="1-适用范围">1. 适用范围</h2>
+<p>风控在线服务（apus thrift RPC 服务）启动层。<strong>不</strong>覆盖 web/MVC、不覆盖 Spring Security、不覆盖响应式 webflux。</p>
+<p>新风控服务的 Spring Boot 启动 + KeyCenter 初始化 + 多 region profile + appassembler 打包 全部走本文。</p>
+<hr>
+<h2 id="2-版本-依赖">2. 版本 / 依赖</h2>
+<table><thead><tr><th>坐标</th><th>版本</th><th>备注</th></tr></thead><tbody><tr><td><code>org.springframework.boot:spring-boot-starter-parent</code></td><td>由公司 <code>parent-pom</code> 锁定</td><td>不要在子项目里覆盖</td></tr><tr><td><code>com.xiaomi.mit:mit-starter</code></td><td>跟随 <code>parent-pom</code></td><td>公司链路追踪 / 治理 starter</td></tr><tr><td><code>org.springframework.boot:spring-boot-starter-test</code></td><td>由 BOM 锁定</td><td>测试 scope</td></tr><tr><td><code>org.springframework.boot:spring-boot-starter-web</code></td><td><strong>不引</strong></td><td>风控服务为 non-web；走 apus thrift</td></tr><tr><td><code>com.alibaba.boot:nacos-config-spring-boot-starter</code></td><td>由根 pom 锁定</td><td>配置中心，见 <a href="nacos.md">nacos.md</a></td></tr></tbody></table>
+<p><strong>关键属性</strong>（继承自公司 parent）：</p>
+<ul><li>Java 21 主线（spark module 退回 Java 8）</li><li><code>spring.main.web-application-type=none</code>（不起 web 容器）</li><li>maven resource filtering delimiters：<code>${*}</code> + <code>@</code>（详见 §6.2）</li></ul>
+<hr>
+<h2 id="3-标准骨架">3. 标准骨架</h2>
+<h3 id="3-1-启动类-main-只-SpringApplication-run">3.1 启动类（main 只 <code>SpringApplication.run</code>）</h3>
+<pre><code>package ${basePackage};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ${serviceApplicationClass} {
+
+    static {
+        System.setProperty(&quot;logging.config&quot;, &quot;classpath:logback-spring.xml&quot;);
+    }
+
+    public static void main(String[] args) {
+        SpringApplication.run(${serviceApplicationClass}.class, args);
+    }
+}</code></pre>
+<p><strong>铁律</strong>：</p>
+<ul><li><code>main</code> 中<strong>不</strong>自行启动 RPC server / Talos producer / 其他外设 — 全部走 <code>@Bean</code> + <code>ApplicationRunner</code></li><li><code>logging.config</code> 在 static block 里设，<strong>早于</strong> Spring 启动</li><li>想用调度 / Plan 等公司 starter，在类上加注解（如 <code>@EnableMiPlan</code>），不要在 main 里调</li></ul>
+<h3 id="3-2-application-yml-最小骨架">3.2 application.yml 最小骨架</h3>
+<pre><code>spring:
+  main:
+    web-application-type: none
+env: ${env}
+apus:
+  port: ${apusPort}
+nacos:
+  config:
+    bootstrap:
+      enable: true
+    remote-first: true
+    server-addr: ${config.nacos.host}
+    namespace: ${config.nacos.namespace}
+    username: ${config.nacos.username}
+    password: ${config.nacos.password}
+    data-ids: ${config.nacos.data-ids}
+    auto-refresh: true
+    group: ${config.nacos.group}
+    type: yaml
+    max-retry: 3
+    config-retry-time: 2000
+    config-long-poll-timeout: 30000
+    enable-remote-sync-config: true
+zookeeper:
+  default: ${zookeeper.host}
+  host:
+    staging: staging
+    # region key → ZK env value，由 ${apusServerClass} 在 resolveZkEnv 读取</code></pre>
+<p>完整 nacos 段说明见 <a href="nacos.md">nacos.md</a> §3.2。</p>
+<h3 id="3-3-BeanConfiguration-装配模式">3.3 BeanConfiguration 装配模式</h3>
+<pre><code>@Configuration
+public class BeanConfiguration {
+
+    @Value(&quot;${redis.${configPrefix}.host}&quot;)
+    private String redisHost;
+
+    private JedisPooled jedisPooled;
+    private ${producerClass} producer;
+
+    @PostConstruct
+    public void init() {
+        this.jedisPooled = JedisFactory.createJedisPooled(redisHost, ...);
+        this.producer = new ${producerClass}(...);
+        this.producer.init();
+    }
+
+    @PreDestroy
+    public void destroy() {
+        if (producer != null) producer.shutdown();
+    }
+
+    @Bean public JedisPooled jedisPooled() { return jedisPooled; }
+    @Bean public ${producerClass} producer() { return producer; }
+    // 其他 RPC impl / server Bean ...
+}</code></pre>
+<p><strong>铁律</strong>：</p>
+<ul><li>外部资源（Redis / Talos producer）用 <code>@PostConstruct</code> init + <code>@PreDestroy</code> destroy</li><li>不要在 <code>@Bean</code> 方法里 new 大对象后又当字段持有 — 二选一</li><li>同步阻塞，不引 spring-data-redis / Lettuce / WebFlux</li></ul>
+<h3 id="3-4-appassembler-打包-service-模块">3.4 appassembler 打包（service 模块）</h3>
+<p><code>service/pom.xml</code>：</p>
+<pre><code>&lt;plugin&gt;
+    &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+    &lt;artifactId&gt;appassembler-maven-plugin&lt;/artifactId&gt;
+    &lt;version&gt;2.1.0&lt;/version&gt;
+    &lt;configuration&gt;
+        &lt;programs&gt;
+            &lt;program&gt;
+                &lt;mainClass&gt;${basePackage}.${serviceApplicationClass}&lt;/mainClass&gt;
+                &lt;id&gt;run.sh&lt;/id&gt;
+                &lt;platforms&gt;&lt;platform&gt;unix&lt;/platform&gt;&lt;/platforms&gt;
+            &lt;/program&gt;
+        &lt;/programs&gt;
+        &lt;repositoryLayout&gt;flat&lt;/repositoryLayout&gt;
+        &lt;assembleDirectory&gt;release&lt;/assembleDirectory&gt;
+        &lt;configurationSourceDirectory&gt;src/main/resources&lt;/configurationSourceDirectory&gt;
+        &lt;configurationDirectory&gt;configuration&lt;/configurationDirectory&gt;
+        &lt;copyConfigurationDirectory&gt;true&lt;/copyConfigurationDirectory&gt;
+        &lt;includeConfigurationDirectoryInClasspath&gt;true&lt;/includeConfigurationDirectoryInClasspath&gt;
+        &lt;filterConfigurationDirectory&gt;true&lt;/filterConfigurationDirectory&gt;
+        &lt;repositoryName&gt;lib&lt;/repositoryName&gt;
+        &lt;extraJvmArguments&gt;
+            -XX:InitialRAMPercentage=60.0
+            -XX:MaxRAMPercentage=60.0
+            -Xss512k
+            -XX:+UseG1GC
+            -XX:MaxGCPauseMillis=200
+            -XX:+ParallelRefProcEnabled
+            -XX:+UseStringDeduplication
+            -XX:+HeapDumpOnOutOfMemoryError
+            -XX:HeapDumpPath=/home/work/logs
+            -XX:+ExitOnOutOfMemoryError
+            -XX:+UseGCLogFileRotation
+            -XX:NumberOfGCLogFiles=10
+            -XX:GCLogFileSize=100M
+            -Xloggc:/home/work/logs/gc.log
+        &lt;/extraJvmArguments&gt;
+    &lt;/configuration&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+            &lt;goals&gt;&lt;goal&gt;assemble&lt;/goal&gt;&lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;</code></pre>
+<p>产出 <code>release/{bin,configuration,lib}/</code>，bin 内含可执行 <code>run.sh</code>。</p>
+<hr>
+<h2 id="4-配置项">4. 配置项</h2>
+<table><thead><tr><th>配置 key</th><th>默认</th><th>说明</th></tr></thead><tbody><tr><td><code>spring.main.web-application-type</code></td><td><code>none</code></td><td>风控服务不起 web</td></tr><tr><td><code>env</code></td><td>由 maven profile 注入</td><td>staging/prod/sgp/ind/rus/eur 之一</td></tr><tr><td><code>${apusPort}</code> 字面</td><td>由使用方提供</td><td>apus 监听端口</td></tr><tr><td><code>zookeeper.default</code></td><td>由 profile 注入</td><td>默认 ZK env 名</td></tr><tr><td><code>zookeeper.host.*</code></td><td>静态映射</td><td>region → ZK env 名映射</td></tr><tr><td><code>logging.config</code></td><td><code>classpath:logback-spring.xml</code></td><td>必须用 <code>logback-spring.xml</code>（支持 spring profile）</td></tr></tbody></table>
+<hr>
+<h2 id="5-监控与日志">5. 监控与日志</h2>
+<ul><li><strong>PerfCounter 启动指标</strong>：</li><ul><li><code>${metricPrefix}.startup.apus_started</code> — apus 启动成功</li><li><code>${metricPrefix}.startup.apus_failed</code> — apus 启动失败</li><li><code>${metricPrefix}.startup.zk_env_missing</code> — ZK env 未解析到</li></ul><li><strong>logback-spring.xml</strong> 必须在 <code>src/main/resources</code>，文件名固定（spring 才能注入 profile）</li><li>容器化 GC 日志固定写 <code>/home/work/logs/gc.log</code>（appassembler 配置见 §3.4）</li></ul>
+<hr>
+<h2 id="6-常见踩坑">6. 常见踩坑</h2>
+<h3 id="6-1-main-里直接启动外设">6.1 🔴 main 里直接启动外设</h3>
+<p>错误：<code>main()</code> 里手写 <code>new TalosProducer(...).init()</code>。 后果：Spring 还没装配完就跑业务初始化，依赖注入失效。 正确：用 <code>@PostConstruct</code> 或 <code>ApplicationRunner</code>。</p>
+<h3 id="6-2-resource-filtering-delimiter-配置丢失">6.2 🔴 resource filtering delimiter 配置丢失</h3>
+<p>maven 默认占位符是 <code>${*}</code>，但 Spring 也用 <code>${*}</code> 做 placeholder。<strong>必须</strong>在根 pom 配 <code>&amp;lt;delimiters&amp;gt;</code> 加 <code>@</code> 作为 maven-only 占位（如 <code>@profiles.active@</code>），让 maven 编译期替换的归 maven、运行期替换的归 Spring。</p>
+<pre><code>&lt;plugin&gt;
+    &lt;artifactId&gt;maven-resources-plugin&lt;/artifactId&gt;
+    &lt;configuration&gt;
+        &lt;delimiters&gt;
+            &lt;delimiter&gt;${*}&lt;/delimiter&gt;
+            &lt;delimiter&gt;@&lt;/delimiter&gt;
+        &lt;/delimiters&gt;
+        &lt;useDefaultDelimiters&gt;false&lt;/useDefaultDelimiters&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;</code></pre>
+<h3 id="6-3-logging-config-不在-static-block-设">6.3 🟠 <code>logging.config</code> 不在 static block 设</h3>
+<p>后果：Spring 启动早期日志走默认配置，看不到自定义 layout。 正确：static block 是最早执行点。</p>
+<h3 id="6-4-web-application-type-未设-none">6.4 🟠 <code>web-application-type</code> 未设 none</h3>
+<p>后果：服务起了 tomcat 占端口，但本服务走 apus thrift，端口冲突 / 健康检查混乱。 正确：yml 显式 <code>none</code>。</p>
+<h3 id="6-5-多-region-maven-profile-漏配某-region">6.5 🟢 多 region maven profile 漏配某 region</h3>
+<p>后果：发布该 region 时缺 <code>${env}</code> / <code>${zookeeper.host}</code>，启动 NPE。 正确：所有 region profile 字段对齐，CI 校验。</p>
+<hr>
+<h2 id="7-边界">7. 边界</h2>
+<ul><li><strong>Nacos 配置中心</strong>：<a href="nacos.md">nacos.md</a></li><li><strong>apus 启动顺序</strong>：<a href="apus-thrift.md">apus-thrift.md</a> §3</li><li><strong>Redis 装配</strong>：<a href="redis.md">redis.md</a> §3</li><li><strong>Talos 内发</strong>：<a href="talos.md">talos.md</a> §4</li></ul>
+<hr>
+<blockquote><p>引用约束见 <a href="../CONSTRAINTS.md">../CONSTRAINTS.md</a>。</p></blockquote></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

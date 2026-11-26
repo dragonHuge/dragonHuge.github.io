@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>Redis三大集群模式(主从复制、哨兵机制、Cluster模式) · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>Redis三大集群模式(主从复制、哨兵机制、Cluster模式)</b><small>幕布导图 · 132 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "Redis三大集群模式(主从复制、哨兵机制、Cluster模式)", "data": {"id": "root", "topic": "<b>Redis三大集群模式(主从复制、哨兵机制、Cluster模式)<\/b>", "children": [{"id": "n1", "topic": "<b>总结<\/b><span class=\"mm-note\">本文详细介绍了Redis的三大集群模式：主从复制、哨兵模式和Cluster模式。每种模式都有其特点和应用场景，具体如下：<\/span>", "children": [{"id": "n2", "topic": "<b>主从复制模式<\/b>：适用于<b>数据备份和读写分离场景<\/b>，配置简单，但在主节点故障时需要手动切换。", "children": []}, {"id": "n3", "topic": "<b>哨兵模式<\/b>：在主从复制的基础上<b>实现自动故障转移<\/b>，提高高可用性，适用于高可用性要求较高的场景。", "children": []}, {"id": "n4", "topic": "<b>Cluster模式<\/b>：通过<b>数据分片和负载均衡<\/b>实现大规模数据存储和高性能，适用于大规模数据存储和高性能要求场景。", "children": []}]}, {"id": "n5", "topic": "<b>1.Redis集群简介<\/b>", "children": [{"id": "n6", "topic": "<b>1.什么是Redis集群<\/b><span class=\"mm-note\">Redis集群是一种<b>通过将多个Redis节点连接在一起<\/b>以实现<b>高可用性、数据分片和负载均衡<\/b>的技术。 它<b>允许Redis在不同节点上同时提供服务，提高整体性能和可靠性<\/b>。根据搭建的方式和集群的特性，Redis集群主要有三种模式：主从复制模式（Master-Slave）、哨兵模式（Sentinel）和Cluster模式。<\/span>", "children": []}, {"id": "n7", "topic": "<b>2.Redis集群的作用和优势<\/b>", "children": [{"id": "n8", "topic": "<b>高可用性<\/b>：Redis集群可以在某个节点发生故障时，自动进行故障转移，保证服务的持续可用。", "children": []}, {"id": "n9", "topic": "<b>负载均衡<\/b>：Redis集群可以将客户端请求分发到不同的节点上，有效地分摊节点的压力，提高系统的整体性能。", "children": []}, {"id": "n10", "topic": "<b>容灾恢复<\/b>：通过主从复制或哨兵模式，Redis集群可以在主节点出现故障时，快速切换到从节点，实现业务的无缝切换。", "children": []}, {"id": "n11", "topic": "<b>数据分片<\/b>：在Cluster模式下，Redis集群可以将数据分散在不同的节点上，从而突破单节点内存限制，实现更大规模的数据存储。", "children": []}, {"id": "n12", "topic": "<b>易于扩展<\/b>：Redis集群可以根据业务需求和系统负载，动态地添加或移除节点，实现水平扩展。", "children": []}]}]}, {"id": "n13", "topic": "<b>2.主从复制如何实现？<\/b>", "children": [{"id": "n14", "topic": "<b>总结<\/b><span class=\"mm-note\">主从复制共有三种模式：<\/span>", "children": [{"id": "n15", "topic": "<b>全量复制<\/b><span class=\"mm-note\">主从服务器<b>第一次同步的时候，就是采用全量复制<\/b>，此时主服务器会两个耗时的地方，分别是<b>生成 RDB 文件和传输 RDB 文件<\/b>。 为了避免过多的从服务器和主服务器进行全量复制，可以<b>把一部分从服务器升级为「经理角色」<\/b>，让它也有自己的从服务器，通过这样可以分摊主服务器的压力。<\/span>", "children": []}, {"id": "n16", "topic": "<b>基于长连接的命令传播<\/b><span class=\"mm-note\"><b>第一次同步完成后，主从服务器都会维护着一个长连接<\/b>，主服务器在接收到写操作命令后，就会通过这个连接将写命令传播给从服务器，来保证主从服务器的数据一致性。<\/span>", "children": []}, {"id": "n17", "topic": "<b>增量复制<\/b><span class=\"mm-note\">如果<b>遇到网络断开<\/b>，<b>增量复制就可以上场了<\/b>，不过这个还<b>跟 repl_backlog_size 这个大小有关系<\/b>。 如果它配置的过小，主从服务器网络恢复时，可能发生「从服务器」想读的数据已经被覆盖了，那么这时就会导致主服务器采用全量复制的方式。所以为了避免这种情况的频繁发生，要调大这个参数的值，以降低主从服务器断开后全量同步的概率。 我在前两篇已经给大家图解了 <b>AOF 和 RDB<\/b>，这两个持久化技术保证了即使在服务器重启的情况下也不会丢失数据（或少量损失）。 不过，由于数据都是存储在一台服务器上，如果出事就完犊子了，比如：<\/span>", "children": []}, {"id": "n18", "topic": "如果服务器发生了宕机，由于数据恢复是需要点时间，那么这个期间是无法服务新的请求的；", "children": []}, {"id": "n19", "topic": "如果这台服务器的硬盘出现了故障，可能数据就都丢失了。<span class=\"mm-note\">要避免这种单点故障，最好的办法是将数据备份到其他服务器上，让这些服务器也可以对外提供服务，这样即使有一台服务器出现了故障，其他服务器依然可以继续提供服务。 <b>多台服务器要保存同一份数据<\/b>，这里问题就来了。 😘 <b>Q1：这些服务器之间的数据如何保持一致性呢？数据的读写操作是否每台服务器都可以处理？<\/b> Redis 提供了<b>主从复制模式<\/b>，来避免上述的问题。 这个模式可以保证多台服务器的数据一致性，且<b>主从服务器之间<\/b>采用的是<b>「读写分离」的方式<\/b>。<\/span>", "children": []}, {"id": "n20", "topic": "<b>主服务器可以进行读写操作<\/b>，当发生写操作时自动将写操作同步给从服务器。", "children": []}, {"id": "n21", "topic": "<b>从服务器一般是只读，并接受主服务器同步过来写操作命令<\/b>，然后执行这条命令。<span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-b601acdcfaebf6.jpg\" style=\"width:320px;height:154px\" loading=\"lazy\" decoding=\"async\"> 也就是说，<b>所有的数据修改只在主服务器上进行<\/b>，然后<b>将最新的数据同步给从服务器<\/b>，这样就使得主从服务器的数据是一致的。 同步这两个字说的简单，但是这个同步过程并没有想象中那么简单，要考虑的事情不是一两个。 我们先来看看，主从服务器间的第一次同步是如何工作的？<\/span>", "children": []}]}, {"id": "n22", "topic": "<b>1.第一次同步？<\/b><span class=\"mm-note\">😘 Q1：<b>多台服务器之间要通过什么方式来确定谁是主服务器，或者谁是从服务器呢？<\/b> 我们可以使用 <b><code>replicaof<\/code><\/b>（Redis 5.0 之前使用 slaveof）<b>命令<\/b>形成主服务器和从服务器的关系。 比如，现在有服务器 A 和 服务器 B，我们在服务器 B 上执行下面这条命令： 接着，<b>服务器 B 就会变成服务器 A 的「从服务器」<\/b>，然后<b>与主服务器进行第一次同步。<\/b> <img class=\"mm-img\" src=\"fl-3f50b444a2f171.jpg\" style=\"width:320px;height:184px\" loading=\"lazy\" decoding=\"async\"> 主从服务器间的第一次同步的过程可分为<b>三个阶段<\/b>：<\/span>", "children": [{"id": "n23", "topic": "第一阶段是<b>建立链接、协商同步<\/b>；<span class=\"mm-note\">执行了 replicaof 命令后，<b>从服务器就会给主服务器<\/b>发送 <b><code>psync<\/code> 命令<\/b>，表示<b>要进行数据同步<\/b>。<\/span>", "children": []}, {"id": "n24", "topic": "第二阶段是<b>主服务器同步数据给从服务器<\/b>；<span class=\"mm-note\">接着，主服务器会执行 <b>bgsave 命令来生成 RDB 文件<\/b>，然后<b>把文件发送给从服务器<\/b>。 从服务器收到 RDB 文件后，会<b>先清空当前的数据，然后载入 RDB 文件<\/b>。 &gt; 😘 <b>Q1：<\/b>这里有一点要注意，<b>主服务器生成 RDB 这个过程是不会阻塞主线程的<\/b>，因为 <b>bgsave 命令是产生了一个子进程来做生成 RDB 文件的工作<\/b>，是异步工作的，这样 Redis 依然可以正常处理命令。 &gt; 😘 <b>Q2：<\/b>但是，<b>这期间的写操作命令并没有记录到刚刚生成的 RDB 文件中，这时主从服务器间的数据就不一致了<\/b>。 那么为了保证主从服务器的数据一致性，**主服务器在下面这三个时间间隙中将收到的写操作命<\/span>", "children": [{"id": "n25", "topic": "<b>主服务器生成 RDB 文件期间<\/b>；", "children": []}, {"id": "n26", "topic": "<b>主服务器发送 RDB 文件给从服务器期间<\/b>；", "children": []}, {"id": "n27", "topic": "<b>「从服务器」加载 RDB 文件期间<\/b>；", "children": []}]}, {"id": "n28", "topic": "第三阶段是<b>主服务器发送新写操作命令给从服务器<\/b>。<span class=\"mm-note\">在主服务器生成的 RDB 文件发送完，从服务器收到 RDB 文件后，丢弃所有旧数据，将 RDB 数据载入到内存。 完成 RDB 的载入后，会<b>回复一个确认消息给主服务器<\/b>。 接着，<b>主服务器将 replication buffer 缓冲区里所记录的写操作命令发送给从服务器<\/b>，<b>从服务器执行来自主服务器 replication buffer 缓冲区里发来的命令<\/b>，这时主从服务器的数据就一致了。 至此，主从服务器的第一次同步的工作就完成了。<\/span>", "children": []}]}, {"id": "n29", "topic": "<b>2.基于长连接的命令传播<\/b><span class=\"mm-note\">主从服务器在<b>完成第一次同步后<\/b>，<b>双方之间就会维护一个 TCP 连接<\/b>。 <img class=\"mm-img\" src=\"fl-79e3259a19118d.jpg\" style=\"width:320px;height:176px\" loading=\"lazy\" decoding=\"async\"> 😘 <b>Q1：长连接有啥作用？<\/b> 后续主服务器可以<b>通过这个连接继续将写操作命令传播给从服务器<\/b>，然后<b>从服务器执行该命令，使得与主服务器的数据库状态相同<\/b>。 而且这个连接是<b>长连接的<\/b>，目的是<b>避免频繁的 TCP 连接和断开带来的性能开销<\/b>。 上面的这个过程被称为<b>基于长连接的命令传播<\/b>，通过这种方式<b>来保证第一次同步后的主从服务器的数据一致性<\/b>。<\/span>", "children": []}, {"id": "n30", "topic": "<b>3.分摊主服务器的压力<\/b><span class=\"mm-note\">在前面的分析中，我们可以知道主从服务器在第一次数据同步的过程中，主服务器会做<b>两件耗时的操作<\/b>：<b>生成 RDB 文件和传输 RDB 文件<\/b>。 <b>主服务器是可以有多个从服务器的，如果从服务器数量非常多，而且都与主服务器进行全量同步的话，就会带来两个问题<\/b>：<\/span>", "children": [{"id": "n31", "topic": "由于是通过 <b>bgsave 命令来生成 RDB 文件<\/b>的，那么<b>主服务器就会忙于使用 fork() 创建子进程<\/b>，如果主服务器的内存数据不大，在执行 fork() 函数时是会阻塞主线程的，从而使得 Redis 无法正常处理请求；", "children": []}, {"id": "n32", "topic": "<b>传输 RDB 文件会占用主服务器的网络带宽<\/b>，会对主服务器响应命令请求产生影响。<span class=\"mm-note\">😘 这种情况就好像，刚创业的公司，由于人不多，所以员工都归老板一个人管，但是随着公司的发展，人员的扩充，老板慢慢就无法承担全部员工的管理工作了。 要解决这个问题，老板就需要设立经理职位，由经理管理多名普通员工，然后老板只需要管理经理就好。 Redis 也是一样的，<b>从服务器可以有自己的从服务器<\/b>，我们可以<b>把拥有从服务器的从服务器当作经理角色<\/b>，它<b>不仅可以接收主服务器的同步数据，自己也可以同时作为主服务器的形式将数据同步给从服务器<\/b>，组织形式如下图： <img class=\"mm-img\" src=\"fl-471c32de5812ba.jpg\" style=\"width:320px;height:196px\" loading=\"lazy\" decoding=\"async\"> 通过这种方式，<b>主服务器生成 RDB 和传输 RDB 的压力可以分摊到充当经理角色的从服务器<\/b>。 😘 **<\/span>", "children": []}]}, {"id": "n33", "topic": "<b>4.增量复制<\/b><span class=\"mm-note\"><b>主从服务器在完成第一次同步后<\/b>，就会<b>基于长连接进行命令传播<\/b>。 可是，网络总是不按套路出牌的嘛，说延迟就延迟，说断开就断开。 <b>如果主从服务器间的网络连接断开<\/b>了，那么就<b>无法进行命令传播了<\/b>，这时从服务器的<b>数据就没办法和主服务器保持一致<\/b>了，客户端就可能从「从服务器」读到旧的数据。 <img class=\"mm-img\" src=\"fl-9d46a07c14ceae.jpg\" style=\"width:320px;height:304px\" loading=\"lazy\" decoding=\"async\"> 😘 <b>Q1：那么问题来了，如果此时断开的网络，又恢复正常了，要怎么继续保证主从服务器的数据一致性呢？<\/b><\/span>", "children": [{"id": "n34", "topic": "在 <b>Redis 2.8 之前<\/b>，如果主从服务器在命令同步时出现了网络断开又恢复的情况，从服务器就会和主服务器<b>重新进行一次全量复制<\/b>，很明显这样的开销太大了，必须要改进一波。", "children": []}, {"id": "n35", "topic": "所以，从 Redis 2.8 开始，网络断开又恢复后，从主从服务器会采用<b>增量复制<\/b>的方式继续同步，也就是<b>只会把网络断开期间主服务器接收到的写操作命令，同步给从服务器。<\/b><span class=\"mm-note\"><b>网络恢复后的增量复制过程<\/b>如下图： <img class=\"mm-img\" src=\"fl-bad42613ffa648.jpg\" style=\"width:320px;height:276px\" loading=\"lazy\" decoding=\"async\"> 主要有<b>三个步骤<\/b>：<\/span>", "children": []}, {"id": "n36", "topic": "<b>从服务器<\/b>在恢复网络后，会<b>发送 psync 命令给主服务器<\/b>，此时的 psync 命令里的 offset <b>参数不是 -1<\/b>；", "children": []}, {"id": "n37", "topic": "<b>主服务器<\/b>收到该命令后，然后<b>用 CONTINUE 响应命令告诉从服务器接下来采用增量复制的方式同步数据<\/b>；", "children": []}, {"id": "n38", "topic": "然后<b>主服务将主从服务器断线期间<\/b>，所<b>执行的写命令发送给从服务器<\/b>，然后<b>从服务器执行这些命令<\/b>。<span class=\"mm-note\">😘 <b>Q1：<\/b>那么关键的问题来了，<b>主服务器怎么知道要将哪些增量数据发送给从服务器呢？<\/b> 答案藏在这两个东西里：<\/span>", "children": [{"id": "n39", "topic": "<b>repl_backlog_buffer<\/b>，是一个<b>「环形」缓冲区<\/b>，用于<b>主从服务器断连后，从中找到差异的数据<\/b>；", "children": []}, {"id": "n40", "topic": "<b>replication offset<\/b>，<b>标记上面那个缓冲区的同步进度<\/b>，主从服务器都有各自的偏移量，主服务器使用 <b>master_repl_offset 来记录自己「*写*」到的位置<\/b>，从服务器使用 <b>slave_repl_offset 来记录自己「*读*」到的位置<\/b>。", "children": []}]}]}, {"id": "n41", "topic": "<b>5.常见面试题<\/b>", "children": [{"id": "n42", "topic": "<b>1.Redis主从节点是长连接还是短连接？<\/b><span class=\"mm-note\">长连接<\/span>", "children": []}, {"id": "n43", "topic": "<b>2.怎么判断 Redis 某个节点是否正常工作？<\/b><span class=\"mm-note\">Redis 判断节点是否正常工作，基本都是<b>通过互相的 ping-pong 心态检测机制.<\/b>如果<b>有一半以上的节点去 ping 一个节点的时候没有 pong 回应<\/b>，集群<b>就会认为这个节点挂掉了<\/b>，会<b>断开与这个节点的连接<\/b>。 Redis 主从节点发送的心态间隔是不一样的，而且作用也有一点区别：<\/span>", "children": [{"id": "n44", "topic": "Redis 主节点默认每隔 10 秒对从节点发送 ping 命令，判断从节点的存活性和连接状态，可通过参数repl-ping-slave-period控制发送频率。", "children": []}, {"id": "n45", "topic": "Redis 从节点每隔 1 秒发送 replconf ack{offset} 命令，给主节点上报自身当前的复制偏移量，目的是为了：", "children": [{"id": "n46", "topic": "实时监测主从节点网络状态；", "children": []}, {"id": "n47", "topic": "上报自身复制偏移量， 检查复制数据是否丢失， 如果从节点数据丢失， 再从主节点的复制缓冲区中拉取丢失数据。", "children": []}]}]}, {"id": "n48", "topic": "<b>3.主从复制架构中，过期key如何处理？<\/b><span class=\"mm-note\">主节点处理了一个key或者通过淘汰算法淘汰了一个key，<b>这个时间主节点模拟一条del命令发送给从节点<\/b>，<b>从节点收到该命令后，就进行删除key<\/b>的操作。<\/span>", "children": []}, {"id": "n49", "topic": "<b>4.Redis是同步复制还是异步复制？<\/b><span class=\"mm-note\">Redis 主节点每次收到写命令之后，<b>先写到内部的缓冲区<\/b>，然后<b>异步发送给从节点<\/b>。<\/span>", "children": []}, {"id": "n50", "topic": "<b>5.为什么会出现数据不一致？<\/b><span class=\"mm-note\">主从数据不一致，就是指<b>客户端从从节点中读取到的值和主节点中的最新值并不一致<\/b>。 之所以会出现主从数据不一致的现象，是<b>因为主从节点间的命令复制是异步进行的<\/b>，所以<b>无法实现强一致性保证<\/b>。 😘 具体来说，在主从节点命令传播阶段，主节点收到新的写命令后，会发送给从节点。 但是，<b>主节点并不会等到从节点实际执行完命令后，再把结果返回给客户端<\/b>，而是<b>主节点自己在本地执行完命令后，就会向客户端返回结果了<\/b>。如果从节点还没有执行主节点同步过来的命令，主从节点间的数据就不一致了。<\/span>", "children": []}, {"id": "n51", "topic": "<b>6.如何应对主从数据不一致？<\/b>", "children": [{"id": "n52", "topic": "<b>方法1<\/b>：<b>尽量保证主从节点间的网络连接状况良好<\/b>，避免主从节点在不同的机房。", "children": []}, {"id": "n53", "topic": "方法2：可以<b>开发一个外部程序来监控主从节点间的复制进度<\/b>。<span class=\"mm-note\">具体做法：<\/span>", "children": [{"id": "n54", "topic": "Redis 的 <b>INFO replication 命令<\/b>可以查看主节点接收写命令的进度信息（master_repl_offset）和从节点复制写命令的进度信息（slave_repl_offset），所以，我们就可以开发一个监控程序，先用 INFO replication 命令查到主、从节点的进度，然后，我们用 master_repl_offset 减去 slave_repl_offset，这样就能得到从节点和主节点间的复制进度差值了。", "children": []}, {"id": "n55", "topic": "如果<b>某个从节点的进度差值大于我们预设的阈值<\/b>，我们可以让客户端不再和这个从节点连接进行数据读取，这样就可以减少读到不一致数据的情况。不过，为了避免出现客户端和所有从节点都不能连接的情况，我们需要把复制进度差值的阈值设置得大一些。", "children": []}]}]}, {"id": "n56", "topic": "<b>7.主从切换如何减少数据丢失？<\/b><span class=\"mm-note\">主从切换过程中，产生数据丢失的情况有两种：<\/span>", "children": [{"id": "n57", "topic": "<b>异步复制同步丢失<\/b>", "children": []}, {"id": "n58", "topic": "<b>集群产生脑裂数据丢失<\/b><span class=\"mm-note\">我们不可能保证数据完全不丢失，只能做到使得尽量少的数据丢失。<\/span>", "children": []}, {"id": "n59", "topic": "<b>1.异步复制同步丢失<\/b><span class=\"mm-note\">对于 Redis 主节点与从节点之间的数据复制，是异步复制的，当客户端发送写请求给主节点的时候，客户端会返回 ok，接着主节点将写请求异步同步给各个从节点，但是<b>如果此时主节点还没来得及同步给从节点时发生了断电，那么主节点内存中的数据会丢失<\/b>。 😘 <b>Q1：如何减少异步复制的数据丢失？<\/b> Redis 配置里有一个<b>参数 min-slaves-max-lag<\/b>，表示<b>一旦所有的从节点数据复制和同步的延迟都超过了 min-slaves-max-lag 定义的值<\/b>，那么<b>主节点就会拒绝接收任何请求。<\/b> 假设将 min-slaves-max-lag 配置为 10s 后，根据目前 master-&gt;slave 的复制速度，如<\/span>", "children": []}, {"id": "n60", "topic": "<b>2.集群产生脑裂数据丢失<\/b><span class=\"mm-note\">先来理解集群的脑裂现象，这就好比一个人有两个大脑，那么到底受谁控制呢？ 那么在 Redis 中，集群脑裂产生数据丢失的现象是怎样的呢？ 在 Redis 主从架构中，<b>部署方式一般是「一主多从」<\/b>，<b>主节点提供写操作，从节点提供读操作<\/b>。 如果主节点的网络突然发生了问题，它与所有的从节点都失联了，但是此时的主节点和客户端的网络是正常的，这个客户端并不知道 Redis 内部已经出现了问题，还在照样的向这个失联的主节点写数据（过程A），此时这些数据被主节点缓存到了缓冲区里，因为主从节点之间的网络问题，这些数据都是无法同步给从节点的。 这时，<b>哨兵也发现主节点失联了<\/b>，<b>它就认为主节点挂了<\/b>（但实际上主节点正常运行，只是网络<\/span>", "children": []}]}, {"id": "n61", "topic": "<b>8.主从如何做到故障自动切换？<\/b><span class=\"mm-note\"><b>主节点挂了 ，从节点是无法自动升级为主节点的，这个过程需要人工处理<\/b>，在此期间 Redis 无法对外提供写操作。 此时，<b>Redis 哨兵机制<\/b>就登场了，<b>哨兵在发现主节点出现故障时，由哨兵自动完成故障发现和故障转移<\/b>，并<b>通知给应用方<\/b>，从而<b>实现高可用性<\/b>。<\/span>", "children": []}]}, {"id": "n62", "topic": "<b>6.主从复制的优缺点<\/b><span class=\"mm-note\"><b>优点<\/b>：<\/span>", "children": [{"id": "n63", "topic": "配置简单，易于实现。", "children": []}, {"id": "n64", "topic": "实现<b>数据冗余，提高数据可靠性<\/b>。", "children": []}, {"id": "n65", "topic": "<b>读写分离，提高系统性能<\/b>。<span class=\"mm-note\"><b>缺点<\/b>：<\/span>", "children": []}, {"id": "n66", "topic": "主节点故障时，需要手动切换到从节点，故障恢复时间较长。<b>不能实现自动故障转移<\/b>", "children": []}, {"id": "n67", "topic": "主节点承担所有写操作，可能成为<b>性能瓶颈<\/b>。", "children": []}, {"id": "n68", "topic": "<b>无法实现数据分片<\/b>，受单节点内存限制", "children": []}]}, {"id": "n69", "topic": "<b>7.主从复制的应用场景<\/b><span class=\"mm-note\">主从复制模式适用于以下场景：<\/span>", "children": [{"id": "n70", "topic": "<b>数据备份和容灾恢复<\/b>：通过从节点备份主节点的数据，实现数据冗余。", "children": []}, {"id": "n71", "topic": "<b>读写分离<\/b>：将读操作分发到从节点，减轻主节点压力，提高系统性能。", "children": []}, {"id": "n72", "topic": "<b>在线升级和扩展<\/b>：在<b>不影响主节点的情况下<\/b>，通过增加从节点来扩展系统的读取能力。<span class=\"mm-note\">总结：主从复制模式适合数据备份、读写分离和在线升级等场景，但在主节点故障时需要手动切换，不能自动实现故障转移。如果对高可用性要求较高，可以考虑使用哨兵模式或Cluster模式。<\/span>", "children": []}]}]}, {"id": "n73", "topic": "<b>3.Redis哨兵机制<\/b>", "children": [{"id": "n74", "topic": "<b>1.为何要有哨兵机制？<\/b><span class=\"mm-note\">在 Redis 的主从架构中，由于<b>主从模式是读写分离的<\/b>，如果<b>主节点（master）挂了，那么将没有主节点来服务客户端的写操作请求<\/b>，也<b>没有主节点给从节点（slave）进行数据同步了。<\/b> 这时如果要恢复服务的话，需要人工介入，选择一个「从节点」切换为「主节点」，然后让其他从节点指向新的主节点，同时还需要通知上游那些连接 Redis 主节点的客户端，将其配置中的主节点 IP 地址更新为「新主节点」的 IP 地址。 这样也不太“智能”了，要是<b>有一个节点能监控「主节点」的状态<\/b>，当发现主节点挂了，它自动将一个「从节点」切换为「主节点」的话，那么可以节省我们很多事情啊！ Redis 在 2.8 版本以后提供的**哨兵<\/span>", "children": []}, {"id": "n75", "topic": "<b>2.哨兵机制如何工作？<\/b><span class=\"mm-note\">哨兵其实是一个<b>运行在特殊模式下的 Redis 进程<\/b>，所以<b>它是一个特殊的节点<\/b>。从“哨兵”这个名字也可以看得出来，它相当于是“<b>观察者节点<\/b>”，观察的对象是<b>主从节点。<\/b> 当然，它不仅仅是观察那么简单，在它观察到有异常的状况下，会做出一些“动作”，来修复异常状态。 哨兵节点<b>主要负责三件事情<\/b>：<b>监控、选主、通知<\/b>。 <img class=\"mm-img\" src=\"fl-658f555e47c9cf.jpg\" style=\"width:320px;height:114px\" loading=\"lazy\" decoding=\"async\"> 😘 <b>所以，我们重点要学习这三件事情<\/b>：<\/span>", "children": [{"id": "n76", "topic": "哨兵节点是如何监控节点的？又是如何判断主节点是否真的故障了？", "children": []}, {"id": "n77", "topic": "根据什么规则选择一个从节点切换为主节点？", "children": []}, {"id": "n78", "topic": "怎么把新主节点的相关信息通知给从节点和客户端呢？", "children": []}]}, {"id": "n79", "topic": "<b>3.如何判断主节点是真的故障了？<\/b><span class=\"mm-note\"><b>哨兵会每隔 1 秒给所有主从节点<\/b>发送 <b>PING 命令<\/b>，当<b>主从节点收到 PING 命令后<\/b>，会发送一个<b>响应命令给哨兵<\/b>，这样就可以<b>判断它们是否在正常运行<\/b>。 <img class=\"mm-img\" src=\"fl-411d00e1c9e1d4.jpg\" style=\"width:320px;height:182px\" loading=\"lazy\" decoding=\"async\"> 如果<b>主节点或者从节点没有在规定的时间内响应哨兵的 PING 命令<\/b>，哨兵就会将它们标记为「<b>主观下线<\/b>」。这个「规定的时间」是配置项 <code>down-after-milliseconds<\/code> 参数设定的，单位是毫秒。 😘 <b>Q1：主观下线？难道还有客观下线？<\/b> 是的没错，<b>客观下线只适用于主节点<\/b>。<b>主观下线适用于主从节点<\/b>。 **从节点只有主观下线，因为从节点故障无需故<\/span>", "children": [{"id": "n80", "topic": "主观下线：不一定真的故障了。", "children": []}, {"id": "n81", "topic": "客观下线：一定故障了，抓紧准备选举新leader吧。<span class=\"mm-note\">😘 <b>Q2：为何既有主观下线？又有客观下线？<\/b> <b>主要是针对主节点设计<\/b>。 之所以针对「主节点」设计「主观下线」和「客观下线」两个状态，是因为<b>有可能「主节点」其实并没有故障<\/b>，<b>可能只是因为主节点的系统压力比较大或者网络发送了拥塞，导致主节点没有在规定时间内响应哨兵的 PING 命令。<\/b> 所以，为了减少误判的情况，<b>哨兵在部署的时候不会只部署一个节点<\/b>，而是<b>用多个节点部署成哨兵集群<\/b>（*最少需要三台机器来部署哨兵集群*），<b>通过多个哨兵节点一起判断，就可以就可以避免单个哨兵因为自身网络状况不好，而误判主节点下线的情况<\/b>。 同时，多个哨兵的网络同时不稳定的概率较小，由它们一起做决策，误判率也能降低。 😘<\/span>", "children": []}]}, {"id": "n82", "topic": "<b>4.由哪个哨兵进行主从故障转移？<\/b><span class=\"mm-note\">前面说过，为了更加“客观”的判断主节点故障了，一般不会只由单个哨兵的检测结果来判断，而是多个哨兵一起判断，这样可以减少误判概率，所以<b>哨兵是以哨兵集群的方式存在的<\/b>。 😘 Q1：<b>问题来了<\/b>，<b>由哨兵集群中的哪个节点进行主从故障转移呢<\/b>？ 所以这时候，还<b>需要在哨兵集群中选出一个 leader，让 leader 来执行主从切换<\/b>。 选举 leader 的过程其实是一个投票的过程，在投票开始前，肯定得有个<b>「候选者」<\/b>。 <b>Q2：为何要选一个leader执行故障转移呢？<\/b> 他们会选举一个哨兵作为领导者来进行故障转移。这是<b>为了避免多个哨兵同时执行故障转移导致的冲突<\/b>。<\/span>", "children": [{"id": "n83", "topic": "<b>1.谁作为候选者？<\/b><span class=\"mm-note\"><b>哪个哨兵节点判断主节点为「客观下线」<\/b>，<b>这个哨兵节点就是候选者<\/b>，所谓的<b>候选者就是想当 Leader 的哨兵<\/b>。 😘 <b>举个例子：<\/b> 假设有3个哨兵。当哨兵 B 先判断到主节点「主观下线后」，就会给其他实例发送 is-master-down-by-addr 命令。接着，其他哨兵会根据自己和主节点的网络连接情况，做出赞成投票或者拒绝投票的响应。 当哨兵 B 收到赞成票数达到哨兵配置文件中的 quorum 配置项设定的值后，就会将主节点标记为「客观下线」，此时的<b>哨兵 B 就是一个 Leader 候选者<\/b>。 <img class=\"mm-img\" src=\"fl-024b620b38b086.jpg\" style=\"width:320px;height:262px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n84", "topic": "<b>2.候选者如何成为Leader？<\/b><span class=\"mm-note\">候选者会向其他哨兵发送命令，<b>表明希望成为 Leader 来执行主从切换<\/b>，并<b>让所有其他哨兵对它进行投票<\/b>。 <b>每个哨兵只有一次投票机会<\/b>，如果用完后就不能参与投票了，<b>可以投给自己或投给别人<\/b>，但是<b>只有候选者才能把票投给自己<\/b>。 那么在投票过程中，<b>任何一个「候选者」，要满足两个条件<\/b>：<\/span>", "children": [{"id": "n85", "topic": "第一，<b>拿到半数以上的赞成票<\/b>；", "children": []}, {"id": "n86", "topic": "第二，<b>拿到的票数同时还需要大于等于哨兵配置文件中的 quorum 值。<\/b><span class=\"mm-note\">&gt; 😘 <b>quorum字段<\/b>：<code>quorum<\/code> 字段用于<b>设置形成共识所需的哨兵实例数量<\/b>。具体来说，这个字段决定了多少个哨兵实例必须同意一个主节点（Master）失效才能触发故障转移（failover）操作。 😘 <b>Q1：举个例子：<\/b> 假设哨兵节点有 3 个，quorum 设置为 2，那么任何一个想成为 Leader 的哨兵只要拿到 2 张赞成票，就可以选举成功了。如果没有满足条件，就需要重新进行选举。 😘 Q2：<b>如果某个时间点，刚好有两个哨兵节点判断到主节点为客观下线，那这时不就有两个候选者了？这时该如何决定谁是 Leader 呢？<\/b> <b>每位候选者都会先给自己投一票，然后向其他哨兵发起投票请求<\/b>。 如果投票<\/span>", "children": []}]}, {"id": "n87", "topic": "<b>3.为何哨兵结点至少3个？<\/b><span class=\"mm-note\"><b>如果哨兵集群中只有 2 个哨兵节点<\/b>，此时<b>如果一个哨兵想要成功成为 Leader，必须获得 2 票，而不是 1 票。<\/b> 所以，如果哨兵集群中有个哨兵挂掉了，那么就只剩一个哨兵了，如果这个哨兵想要成为 Leader，这时票数就没办法达到 2 票，就无法成功成为 Leader，这时是无法进行主从节点切换的。 因此，通常我们至少会配置 3 个哨兵节点。这时，如果哨兵集群中有个哨兵挂掉了，那么还剩下两个哨兵，如果这个哨兵想要成为 Leader，这时还是有机会达到 2 票的，所以还是可以选举成功的，不会导致无法进行主从节点切换。 当然，你要问，如果 3 个哨兵节点，挂了 2 个怎么办？**这个时候得人为介入了，或者增加多一点哨兵节<\/span>", "children": []}]}, {"id": "n88", "topic": "<b>5.主从故障转移的过程是怎样的？<\/b><span class=\"mm-note\">在哨兵集群中通过投票的方式，<b>选举出了哨兵 leader 后<\/b>，就<b>可以进行主从故障转移的过程<\/b>了，如下图： <img class=\"mm-img\" src=\"fl-114bab1c81a74a.jpg\" style=\"width:320px;height:90px\" loading=\"lazy\" decoding=\"async\"> 主从故障转移操作包含以下<b>四个步骤：<\/b><\/span>", "children": [{"id": "n89", "topic": "步骤1：此时的leader会在<b>已下线主节点（旧主节点）属下的所有「从节点」里面<\/b>，<b>挑选出一个从节点，并将其转换为主节点<\/b>。", "children": [{"id": "n90", "topic": "选择标准包括：<b>复制偏移量、响应时间<\/b>等。", "children": []}]}, {"id": "n91", "topic": "步骤2：让<b>已下线主节点属下的所有「从节点」修改复制目标<\/b>，<b>修改为复制「新主节点」<\/b>；", "children": []}, {"id": "n92", "topic": "步骤3：<b>将新主节点的 IP 地址和信息<\/b>，通过<b>「发布者/订阅者机制」通知给客户端<\/b>；", "children": []}, {"id": "n93", "topic": "步骤4：<b>继续监视旧主节点<\/b>，<b>当这个旧主节点重新上线时<\/b>，<b>将它设置为新主节点的从节点。<\/b>", "children": []}]}, {"id": "n94", "topic": "<b>6.哨兵集群是如何组成的？<\/b><span class=\"mm-note\"><b>总结：<\/b><\/span>", "children": [{"id": "n95", "topic": "<b>Redis 的发布者/订阅者机制→实现哨兵的相互感知，组成集群。<\/b><span class=\"mm-note\">通过这个机制，<b>哨兵之间可以相互感知，然后组成集群。<\/b><\/span>", "children": []}, {"id": "n96", "topic": "<b>哨兵向主节点发送INFO命令→获取从节点信息，并实现监控。<\/b><span class=\"mm-note\">哨兵又通过 INFO 命令，在主节点里获得了所有从节点连接信息，于是就能和从节点建立连接，并进行监控了。 前面提到了 <b>Redis 的发布者/订阅者机制<\/b>，那就不得不提一下哨兵集群的组成方式，因为它也用到了这个技术。 在我第一次搭建哨兵集群的时候，当时觉得很诧异。因为<b>在配置哨兵的信息时，竟然只需要填下面这几个参数<\/b>，设置主节点名字、主节点的 IP 地址和端口号以及 quorum 值。 不需要填其他哨兵节点的信息。 😘 <b>Q1：<\/b>所以问题就来了：<b>它们是如何感知对方的，又是如何组成哨兵集群的？<\/b> 后面才了解到，<b>哨兵节点之间是通过 Redis 的发布者/订阅者机制来相互发现的<\/b>。 在主从集群中，主节点上有一个名为<\/span>", "children": []}]}, {"id": "n97", "topic": "<b>7.哨兵模式的优缺点<\/b><span class=\"mm-note\"><b>优点<\/b>：<\/span>", "children": [{"id": "n98", "topic": "<b>自动故障转移，提高系统的高可用性<\/b>。", "children": []}, {"id": "n99", "topic": "具有主从复制模式的所有优点，如<b>数据冗余和读写分离<\/b>。<span class=\"mm-note\"><b>缺点<\/b>：<\/span>", "children": []}, {"id": "n100", "topic": "<b>配置和管理相对复杂<\/b>。", "children": []}, {"id": "n101", "topic": "依然<b>无法实现数据分片，受单节点内存限制<\/b>。→如果要实现数据分片，可以使用<b>Cluster模式<\/b>。", "children": []}]}, {"id": "n102", "topic": "<b>8.应用场景<\/b><span class=\"mm-note\">哨兵模式适用于以下场景：<\/span>", "children": [{"id": "n103", "topic": "<b>高可用性要求较高的场景<\/b>：通过自动故障转移，确保服务的持续可用。", "children": []}, {"id": "n104", "topic": "<b>数据备份和容灾恢复<\/b>：在主从复制的基础上，<b>提供自动故障转移功能<\/b>。<span class=\"mm-note\">总结：哨兵模式在主从复制模式的基础上实现了自动故障转移，提高了系统的高可用性。然而，它仍然无法实现数据分片。如果需要实现数据分片和负载均衡，可以考虑使用Cluster模式。<\/span>", "children": []}]}]}, {"id": "n105", "topic": "<b>4.Cluster模式<\/b>", "children": [{"id": "n106", "topic": "<b>1.原理<\/b><span class=\"mm-note\">Cluster模式是Redis的一种<b>高级集群模式<\/b>，它通过<b>数据分片和分布式存储实现了负载均衡和高可用性<\/b>。 在Cluster模式下，<b>Redis将所有的键值对数据分散在多个节点上<\/b>。<b>每个节点负责一部分数据，称为槽位<\/b>。 通过对数据的分片，Cluster模式<b>可以突破单节点的内存限制<\/b>，<b>实现更大规模的数据存储<\/b>。 Cluster模式<b>实现了Redis的分布式存储<\/b>，即<b>每台节点存储不同的内容<\/b>，来<b>解决在线扩容的问题<\/b>。 <img class=\"mm-img\" src=\"fl-6a2df8dcd20d3f.jpg\" style=\"width:320px;height:306px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n107", "topic": "<b>2.数据分片与槽位<\/b><span class=\"mm-note\">Redis Cluster将数据分为<b>16384个槽位<\/b>，<b>每个节点负责管理一部分槽位<\/b>。每个集群节点管理一定数量的哈希槽，这些哈希槽在节点之间均匀分布，以实现负载均衡。 当客户端向Redis Cluster发送请求时，Cluster会根据键的哈希值将请求路由到相应的节点。具体来说，Redis Cluster使用CRC16算法计算键的哈希值，然后对16384取模，得到槽位编号。<\/span>", "children": []}, {"id": "n108", "topic": "<b>3.Cluster模式配置和实现<\/b>", "children": [{"id": "n109", "topic": "<b>配置Redis节点<\/b>：为每个节点创建一个redis.conf配置文件，并添加如下配置：<span class=\"mm-note\">像这样的配置，一共需要创建6个，我们做一个三主三从的集群。<\/span>", "children": []}, {"id": "n110", "topic": "<b>启动Redis节点<\/b>：使用如下命令启动6个节点：", "children": []}, {"id": "n111", "topic": "<b>创建Redis Cluster<\/b>：使用Redis命令行工具执行如下命令创建Cluster：<span class=\"mm-note\"><b>cluster-replicas<\/b> 表示从节点的数量，1代表每个主节点都有一个从节点。<\/span>", "children": []}, {"id": "n112", "topic": "<b>验证Cluster模式<\/b>：向Cluster发送请求，观察请求是否正确路由到相应的节点。", "children": []}]}, {"id": "n113", "topic": "<b>4.Cluster的结构-无中心结构<\/b><span class=\"mm-note\">😘 无中心结构（decentralized architecture）意味着<b>没有单一的中央控制节点或单点控制节点<\/b>。 <b>每个节点在集群中都具有平等的角色和职责<\/b>，并且<b>能够独立地执行任务<\/b>。 Cluster采用<b>无中心结构<\/b>,它的特点如下：<\/span>", "children": [{"id": "n114", "topic": "<b>所有的redis节点彼此互联(PING-PONG机制),<\/b>内部使用二进制协议优化传输速度和带宽", "children": []}, {"id": "n115", "topic": "<b>节点的fail是通过集群中超过半数的节点检测失效时才生效<\/b>", "children": []}, {"id": "n116", "topic": "<b>客户端与redis节点直连<\/b>,<b>不需要中间代理层<\/b>.客户端不需要连接集群所有节点,连接集群中任何一个可用节点即可", "children": []}]}, {"id": "n117", "topic": "<b>5.Cluster模式的具体工作机制<\/b>", "children": [{"id": "n118", "topic": "在Redis的每个节点上，都有若干个<b>插槽（slot）<\/b>，取值范围为0-16383。", "children": []}, {"id": "n119", "topic": "当我们<b>存取key的时候<\/b>，Redis会根据<b>CRC16的算法得出一个结果<\/b>，然后把结果<b>对16384求余数<\/b>，这样<b>每个key都会对应一个编号在0-16383之间的哈希槽<\/b>，通过这个值，<b>去找到对应的插槽所对应的节点<\/b>，然后直接自动跳转到这个对应的节点上进行存取操作。", "children": []}, {"id": "n120", "topic": "为了保证高可用，Cluster模式也引入<b>主从复制模式<\/b>，一个主节点对应一个或者多个从节点，当主节点宕机的时候，就会启用从节点。", "children": []}, {"id": "n121", "topic": "当<b>其它主节点ping一个主节点A<\/b>时，<b>如果半数以上的主节点与A通信超时<\/b>，那么<b>认为主节点A宕机<\/b>了。如果主节点A和它的从节点都宕机了，那么该集群就无法再提供服务了。<span class=\"mm-note\">Cluster模式集群节点<b>最小配置6个节点(3主3从，因为需要半数以上)<\/b>，其中主节点提供读写操作，<b>从节点作为备用节点，不提供请求，只作为故障转移使用<\/b>。<\/span>", "children": []}]}, {"id": "n122", "topic": "<b>6.Cluster模式场景应用<\/b><span class=\"mm-note\"><b>优点<\/b>：<\/span>", "children": [{"id": "n123", "topic": "<b>数据分片<\/b>，实现大规模数据存储。", "children": []}, {"id": "n124", "topic": "负载均衡，提高系统性能。", "children": []}, {"id": "n125", "topic": "自动故障转移，提高高可用性。<span class=\"mm-note\"><b>缺点<\/b>：<\/span>", "children": []}, {"id": "n126", "topic": "配置和管理较复杂。", "children": []}, {"id": "n127", "topic": "一些复杂的多键操作可能受到限制。", "children": []}]}, {"id": "n128", "topic": "<b><b>7.Cluster模式场景应用<\/b><\/b><span class=\"mm-note\">Cluster模式适用于以下场景：<\/span>", "children": [{"id": "n129", "topic": "<b>大规模数据存储<\/b>：通过数据分片，突破单节点内存限制。", "children": []}, {"id": "n130", "topic": "<b>高性能要求场景<\/b>：通过负载均衡，提高系统性能。", "children": []}, {"id": "n131", "topic": "<b>高可用性要求<\/b>场景：通过自动故障转移，确保服务的持续可用。<span class=\"mm-note\">总结：Cluster模式在提供高可用性的同时，实现了数据分片和负载均衡，适用于大规模数据存储和高性能要求的场景。然而，它的配置和管理相对复杂，且某些复杂的多键操作可能受到限制。<\/span>", "children": []}]}]}], "expanded": true}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

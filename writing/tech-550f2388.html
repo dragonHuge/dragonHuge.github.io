@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>Hive入门 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">7</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-简介">1.简介</a><a class="tl l2" href="#2-Hive体系架构">2.Hive体系架构</a><a class="tl l2" href="#3-Hive的存储格式与压缩格式">3.Hive的存储格式与压缩格式</a><a class="tl l3" href="#1-行存储-列存储">1.行存储 &amp; 列存储</a><a class="tl l4" href="#行存储">行存储</a><a class="tl l4" href="#列存储">列存储</a><a class="tl l3" href="#2-存储格式">2.存储格式</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>Hive入门</h1><div class="meta">2024-10-30 · <a class="src-link" href="https://flowus.cn/550f2388-8605-4ec8-86ae-cdc38eacea65" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><p>教程见：</p>
+<p><a href="https://blog.csdn.net/qq_44186838/article/details/119959839">一文带你了解Hive【详细介绍】Hive与传统数据库有什么区别？_hvle-CSDN博客</a></p>
+<h2 id="1-简介">1.简介</h2>
+<p>Hive是Facebook为了解决海量数据的统计分析，开发的一个<strong>基于 Hadoop 的数据分析工具。</strong></p>
+<p><strong>Hive没有存储数据的能力，它只有使用数据的能力。</strong></p>
+<p><strong>作用</strong>：将结构化的数据文件映射成表，并提供类 SQL 查询功能（HQL），用于查询的 SQL 语句会被转化为 MapReduce 作业，然后提交到 Hadoop 集群上运行，最早是由 Facebook 开源，用以解决海量结构化日志统计的工具。</p>
+<blockquote><p>Hive是一个数据仓库工具，没有数据存储功能，它的数据是从HDFS来获得的，但是它又不能直接从HDFS进行数据访问，它是通过MapReduce来实现的，本质上也就是<strong>将HQL语句转换为MapReduce的任务，然后来进行数据访问</strong>。</p></blockquote>
+<blockquote><p>🥰 <strong>为什么说 Hive 是建立在 Hadoop 之上的呢？</strong></p></blockquote>
+<ol><li>Hive 的数据是存储在 HDFS 上的。</li></ol>
+<ol><li>计算是由 MapReduce 完成的。</li></ol>
+<ol><li>任务调度是由 Yarn 完成的。</li></ol>
+<blockquote><p>🤯 <strong>问题：什么是Hadoop？</strong></p></blockquote>
+<p>答：Apache Hadoop 是一种<strong>用于分布式存储和处理大规模数据集的框架</strong>，用于高效存储和处理从 <strong>GB 级到 PB 级</strong>的大型数据集。</p>
+<p><strong>特点：</strong></p>
+<ol><li>提供了类似 sql 的查询语言 <strong>HQL</strong></li></ol>
+<ol><li>为超大的数据集设计的计算和存储能力，集群扩展容易;</li></ol>
+<ol><li>执行<strong>延迟高</strong>，<strong>不适合做数据的实时处理</strong>，但<strong>适合做海量数据的离线处理</strong>。</li></ol>
+<h2 id="2-Hive体系架构">2.Hive体系架构</h2>
+<p><img alt="image.png" src="/assets/img/flowus-3b50e15989a32a56.png"></p>
+<ol><li><strong>command-line shell</strong> &amp;  <strong>thrift/JDBC</strong></li></ol>
+<p>在SpringBoot项目中，是通过JDBC的方式与Hive建立连接并进行HQL操作的。</p>
+<ul><li><strong>command-line shell</strong>：通过 hive 命令行的的方式来操作数据；</li></ul>
+<ul><li><strong>thrift／jdbc</strong>：通过 thrift 协议按照标准的 JDBC 的方式操作数据。</li></ul>
+<ol><li><strong>Metastore</strong> 元数据</li></ol>
+<p>在 Hive 中，<strong>表名、表结构、字段名、字段类型、表的分隔符等</strong>统一被称为<strong>元数据</strong>。</p>
+<p>所有的元数据默认存储在 Hive 内置的 <strong>derby 数据库</strong>中，但由于 derby 只能有一个实例，也就是说不能有多个命令行客户端同时访问，所以在实际生产环境中，通常使用 MySQL 代替 derby。</p>
+<p>Hive 进行的是统一的元数据管理，就是说你在 Hive 上创建了一张表，然后在 presto／impala／sparksql 中都是可以直接使用的，它们会从 Metastore 中获取统一的元数据信息，同样的你在 presto／impala／sparksql 中创建一张表，在 Hive 中也可以直接使用。</p>
+<h2 id="3-Hive的存储格式与压缩格式">3.Hive的存储格式与压缩格式</h2>
+<h3 id="1-行存储-列存储">1.行存储 &amp; 列存储</h3>
+<p>当今的数据处理大致可分为两大类：</p>
+<ul><li><strong>联机事务处理 OLTP</strong>(on-line transaction processing)</li></ul>
+<p>OLTP 是<strong>传统关系型数据库的主要应用</strong>，来执行一些基本的、日常的事务处理比如数据库记录的增、删、改、查等等</p>
+<ul><li><strong>联机分析处理 OLAP</strong>(On-Line Analytical Processing)</li></ul>
+<p>OLAP则是<strong>分布式数据库的主要应用</strong>，它对实时性要求不高，但处理的数据量大通常应用于复杂的动态报表系统上</p>
+<p><img alt="202302091141202.png" src="/assets/img/flowus-721a6c9059753138.png"></p>
+<p>所以一般<strong>OLTP 都是使用行式存储</strong>的，因为实时性要求高，而且有大量的更新操作；</p>
+<p><strong>OLAP 都是使用列式存储</strong>的，因为实时性要求不高，主要是要求性能好</p>
+<p><img alt="image.png" src="/assets/img/flowus-99101daec840b041.png"></p>
+<h4 id="行存储">行存储</h4>
+<p>经典代表就是MYSQL。</p>
+<ul><li>数据是以<strong>行为基础逻辑存储单元进行存储</strong>的<strong>， 一行中的数据在存储介质中以连续存储形式存在</strong>。</li></ul>
+<ul><li>这种存储格式比较方便进行INSERT/UPDATE操作，不足之处就是如果查询只涉及某几个列，它会把整行数据都读取出来，<strong>不能跳过不必要的列读取。</strong></li></ul>
+<ul><li>查询满足条件的一整行数据时，只需要找到其中一个值，其余的值都在相邻地方，所以此时行存储查询的速度更快。</li></ul>
+<h4 id="列存储">列存储</h4>
+<ul><li>在基于列式存储的数据库中， <strong>数据是按照列为基础逻辑存储单元进行存储的，一列中的数据在存储介质中以连续存储形式存在</strong>。</li></ul>
+<ul><li>查询时，只有涉及到的列才会被查询，不会把所有列都查询出来，即<strong>可以跳过不必要的列查询</strong>，在查询只需要少数几个字段的时候，能大大减少读取的数据量；因为每一列的数据都是存储在一起的，每个字段的数据类型一定是相同的，列式存储可以针对性的设计更好的设计压缩算法，高效的压缩率，不仅节省储存空间也节省计算内存和CPU。</li></ul>
+<ul><li>不足之处是INSERT/UPDATE很麻烦或者不方便，不适合扫描小量的数据</li></ul>
+<p>因为每个字段的数据聚集存储，在查询只需要少数几个字段的时候，能<strong>大大减少读取的数据量</strong>；</p>
+<p>每个字段的数据类型一定是相同的，列式存储可以针对性的设计更好的设计压缩算法。</p>
+<blockquote><p>🤯 <strong>举个例子吧不然还是太抽象</strong>：</p></blockquote>
+<p>假设一个表有10亿行数据，按照列式存储的定义，应该先将某个字段的10亿条数据存储完之后，再存储其他字段。</p>
+<p>ORC和PARQUET是基于列式存储的。</p>
+<h3 id="2-存储格式">2.存储格式</h3>
+<p>Hive 数据存储常用的格式如下：（默认格式为TextFile）</p>
+<ul><li><strong>行式存储</strong>： 文本格式（TextFile） 二进制序列化文件 （SequenceFile）。</li></ul>
+<ul><li><strong>列式存储</strong>： 行列式文件（RCFile） 优化的行列式文件（ORCFile） Apache Parquet。</li></ul>
+<blockquote><p>注：RCFile 和 ORCFile <strong>并不是纯粹的列式存储</strong>，它是先<strong>基于行对数据表进行分组(</strong>行组)，然后对行组进行列式存储。</p></blockquote></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

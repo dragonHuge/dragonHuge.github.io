@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>补充3-持久性 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>补充3-持久性</b><small>幕布导图 · 140 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "补充3-持久性", "data": {"id": "mvirtual-root", "topic": "<b>补充3-持久性<\/b>", "expanded": true, "children": [{"id": "mdYdMLdCt0k", "topic": "<b>一、I/O控制方式<\/b><br><img class=\"mm-img\" src=\"mm-f6eda9fc8c7f79.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mrHogaRiW6r", "topic": "<b>1、程序直接控制方式— <\/b><b><mark>轮询<\/mark><\/b>", "expanded": true, "children": [{"id": "mesCWm2SvMq", "topic": "<b>缺点：CPU和I/O设备只能串行工作，在等待I/O完成的过程中，<\/b><span style=\"color:#b45309\"><b><span>CPU需要一直轮询检查<\/span><\/b><b>，长期处于<\/b><span style=\"color:#b45309\"><b><span>“忙等<\/span><\/b><b>”状态，<\/b><span style=\"color:#b45309\"><b><span>CPU利用率低<\/span><\/b><span class=\"mm-note\">基于以上缺点，就有了中断驱动方式<\/span>", "expanded": true}, {"id": "mV9pYZOSUoZ", "topic": "优点：实现简单。", "expanded": true}]}, {"id": "m9DZlBgOxTk", "topic": "<b>2、中断驱动方式—<\/b> <b><mark>中断机制<\/mark><\/b><b>（CPU在发出I/O指令后，将对应进程休眠，<\/b><span style=\"color:#d92d20\"><b><span>CPU则切换到其他进程执行<\/span><\/b><b>）<\/b>", "expanded": true, "children": [{"id": "mUpCYY7dkf9", "topic": "优点：<span style=\"color:#d92d20\"><b><span>CPU和I/O设备可以并行工作<\/span><\/b><span class=\"mm-note\">解决了程序直接控制方式的缺点，使CPU<b>不再需要不停地轮询<\/b>，而是在I/O过程中执行其他进程的工作。<\/span>", "expanded": true}, {"id": "mso2yR6uhom", "topic": "缺点：<b>频繁的中断处理会消耗较多的CPU时间；<\/b><span style=\"color:#b45309\"><b><span>读写操作均需要经过CPU<\/span><\/b><b>；<\/b><span style=\"color:#b45309\"><b><span>每次只读写一个字<\/span><\/b><span class=\"mm-note\">为了改善上述缺点，就又推出下边的DMA方式<\/span>", "expanded": true}]}, {"id": "mGc2WS2MrSM", "topic": "<b>3、<\/b><b><mark>直接存储器<\/mark><\/b><b>存取(<\/b><b><mark>DMA<\/mark><\/b><b>)方式<\/b>", "expanded": true, "children": [{"id": "mkhoAJTVMh5", "topic": "1.改进：数据<b>传输效率提高<\/b>  &amp;  CPU和I/O设备的<b>并行性得到提升<\/b>", "expanded": true, "children": [{"id": "mk8bwDmYdep", "topic": "<b>① <\/b><span style=\"color:#d92d20\"><b><span>数据的传送单位是“块”<\/span><\/b><b>，不再是一个字、一个字地传送<\/b><span class=\"mm-note\">之前的中断机制传送，单位就是“字”<\/span>", "expanded": true}, {"id": "mOnjBmSz5or", "topic": "② <b>数据的流向<\/b>是<b>从设备直接放入内存<\/b>，或从内存直接到设备，<span style=\"color:#b45309\"><b><span>不再需要CPU处在中间<\/span><\/b>", "expanded": true}, {"id": "mjRX8oEPMzZ", "topic": "③ <span style=\"color:#b45309\"><b><span>仅在传送一个或多个数据块的开始和结束时<\/span><\/b>，<b>才需要CPU干预<\/b>", "expanded": true}]}, {"id": "mSZZSERvb4K", "topic": "<b>2.DMA控制器图解：<\/b><br><img class=\"mm-img\" src=\"mm-55c9d7720f490c.jpg\" style=\"width:260px;height:153px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mU0NPYFG2Do", "topic": "<b>3.DMA方式的流程图解：<\/b><br><img class=\"mm-img\" src=\"mm-33a8772653bc4b.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mAdmFSKcklu", "topic": "缺点：<b>CPU每发出一条I/O指令<\/b>，<b>只能读/写一个或多个<\/b><span style=\"color:#b45309\"><b><span>连续的数据块<\/span><\/b><span class=\"mm-note\">而如果要读/写多个离散存储的数据块，那么依旧需要CPU进行多次中断处理才能完成。<\/span>", "expanded": true}]}, {"id": "mCwWgB7gGHq", "topic": "<b><mark>DMA<\/mark><\/b>：是一个特殊设备，可以<span style=\"color:#d92d20\"><b><span>协调完成内存和设备之间的数据传递<\/span><\/b>，<b><mark>不需要CPU介入<\/mark><\/b>。<br><img class=\"mm-img\" src=\"mm-198c0e97d3cb38.jpg\" style=\"width:260px;height:62px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mJLt8UDDQkQ", "topic": "<b>4、<\/b><b><mark>通道<\/mark><\/b><b>控制方式<\/b>", "expanded": false, "children": [{"id": "mwLj6jwFTQg", "topic": "1.<b>通道<\/b>：一种<b>硬件<\/b>，“<span style=\"color:#b45309\"><b><span>弱鸡版的CPU<\/span><\/b>”，可以<b>识别并执行一系列通道指令<\/b><br><img class=\"mm-img\" src=\"mm-b30e72e87dddfc.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">为何叫“弱鸡版CPU”呢？  答：与CPU相比，<b>通道可以执行的指令很单一<\/b>；并且<b>通道程序也是放在主存中的，可以与CPU共享内容<\/b>。<\/span>", "expanded": true, "children": [{"id": "mIjof4FdZAh", "topic": "通道程序 =  任务清单", "expanded": true}]}, {"id": "mcCGw4DM7md", "topic": "<b>2.完成一次I/O读写的过程：<\/b>", "expanded": true, "children": [{"id": "mH4bSfbRATr", "topic": "缺点：实现较复杂，<b>需要硬件支持<\/b>", "expanded": true}, {"id": "mMas7SkePXR", "topic": "优点：<b><mark>CPU、通道、I/O设备可并行工作<\/mark><\/b>，<b>资源利用率很高；每次读/写一组<\/b><span style=\"color:#d92d20\"><b><span>数据块<\/span><\/b>", "expanded": true}]}]}]}, {"id": "mtZEg8fXKua", "topic": "<b>二、<\/b><span style=\"color:#d92d20\"><b><span>❤ <\/span><\/b><b>磁盘<\/b>", "expanded": false, "children": [{"id": "mhy2L2qgiUO", "topic": "<b>1、磁盘的结构<\/b>", "expanded": false, "children": [{"id": "mTCKJo987hL", "topic": "<b>1.磁盘、磁道、扇区<\/b><br><img class=\"mm-img\" src=\"mm-b1cbc487646a6e.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "m9s7YhlCRFV", "topic": "① <b>一个<\/b><span style=\"color:#b45309\"><b><span>同心圆<\/span><\/b>就是一个<span style=\"color:#b45309\"><b><span>磁道<\/span><\/b>", "expanded": true}, {"id": "m6psdrKqqLb", "topic": "<b>② 一个磁道又被划分成一个个扇区，<\/b>每个扇区就是一个“<b>磁盘块<\/b>”", "expanded": true}]}, {"id": "mha48iypgg8", "topic": "<b>2、盘面、柱面<\/b><br><img class=\"mm-img\" src=\"mm-716fb7f3132445.jpg\" style=\"width:260px;height:217px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "my2K2Pc2BG2", "topic": "① <b>一个盘片可能有两个盘面(一正一反)<\/b>，每个盘面对应一个磁头", "expanded": true}, {"id": "mrAtOqFf20b", "topic": "② 磁头：<b>所有的磁头都连在同一个磁臂上<\/b>，因此<b><mark>所有磁头只能“共进退”<\/mark><\/b>", "expanded": true}, {"id": "mbnbDWccsTo", "topic": "③ 柱面：<b>所有盘面中相对位置相同的磁道组成柱面<\/b>", "expanded": true}]}, {"id": "m65S5IidbTM", "topic": "3、磁盘的<b>物理地址<\/b>：<span style=\"color:#b45309\"><b><span>（柱面号，盘面号，扇区号）<\/span><\/b><br><img class=\"mm-img\" src=\"mm-381538a6dff5df.jpg\" style=\"width:260px;height:225px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mtZgv6gNQZY", "topic": "<b>4、磁盘的分类<\/b><br><img class=\"mm-img\" src=\"mm-7d2e2e5a4db231.jpg\" style=\"width:260px;height:64px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mDU6FoItxEI", "topic": "1.根据<b>磁头是否可移动<\/b>：<span style=\"color:#b45309\"><b><span>固定头磁盘(<\/span><\/b><b><mark>每个磁道一个磁头<\/mark><\/b><span style=\"color:#b45309\"><b><span>)<\/span><\/b> <b>&amp;<\/b> <span style=\"color:#b45309\"><b><span>移动头磁盘(<\/span><\/b><b><mark>每个盘面一个磁头<\/mark><\/b><span style=\"color:#b45309\"><b><span>)<\/span><\/b><br><img class=\"mm-img\" src=\"mm-47f0caa2434772.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mOmzWbbxZMq", "topic": "2.根据<b>盘片是否可更换<\/b>：<span style=\"color:#b45309\"><b><span>可换磁盘<\/span><\/b> &amp; <span style=\"color:#b45309\"><b><span>固定盘磁盘<\/span><\/b><br><img class=\"mm-img\" src=\"mm-4305953db35889.jpg\" style=\"width:260px;height:194px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mbFzX2iYh96", "topic": "<b>2、磁盘调度算法 <\/b>与<b>  I/O时间计算<\/b><br><img class=\"mm-img\" src=\"mm-89a9c6f82e3638.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "msPOYZwCpei", "topic": "<b>1.一次磁盘读/写操作需要的时间：<\/b><span style=\"color:#d92d20\"><b><span> T总 = Ts + T平均旋转 + T传输<\/span><\/b>", "expanded": true, "children": [{"id": "mk78RL8vRyN", "topic": "① <b>多磁道延迟<\/b>——<span style=\"color:#b45309\"><b><span>寻道时间<\/span><\/b>：在读/写数据前，<b>将磁头移动到指定磁道所花时间<\/b> <b><mark>Ts = 启动磁头臂的时间 + 跨越n条磁道的时间<\/mark><\/b>", "expanded": true}, {"id": "mQ9GwMoob2j", "topic": "② <b>单磁道延迟<\/b>—<span style=\"color:#b45309\"><b><span>延迟(旋转)时间<\/span><\/b>：通过<b>旋转磁盘<\/b>，使<b>磁头定位到目标扇区所需要的时间<\/b> <b><mark>T平均旋转 = T最大旋转 / 2<\/mark><\/b>", "expanded": false, "children": [{"id": "mlmjtn65iIc", "topic": "<b><mark>RPM<\/mark><\/b><b>(Rotations Per Minute)：每分钟转数<\/b>", "expanded": true}]}, {"id": "mdZfmQlrOcG", "topic": "<b>③<\/b> <span style=\"color:#b45309\"><b><span>传输时间<\/span><\/b><b>：从磁盘中 读取/写入数据所经历的时间   <\/b><b><mark>T传输 = 传输大小 / 峰值传输速率<\/mark><\/b>", "expanded": true}]}, {"id": "mUiqq81j6XZ", "topic": "2.旋转时间和传输时间都与磁盘转速线性相关，而<b>转速是磁盘硬件的固有属性<\/b>，因此<b>操作系统<\/b><span style=\"color:#b45309\"><b><span>无法优化旋转时间和传输时间<\/span><\/b><b>，但<\/b><span style=\"color:#b45309\"><b><span>可以优化寻道时间<\/span><\/b>", "expanded": true}, {"id": "m7UqwTz2UmV", "topic": "<b>3.先来先服务算法(<\/b><b><mark>FCFS)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-311f5e41eac4d9.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "m5EHca2231w", "topic": "优点：<b>公平<\/b>；若请求访问磁道比较集中，性能就还行", "expanded": true}, {"id": "moPVNYVG83i", "topic": "缺点：若大量进程竞争使用磁盘，<b>请求访问的磁道分散<\/b>，则<b>性能很差<\/b>，<b>寻道时间长<\/b>", "expanded": true}]}, {"id": "mJDvNeu0CNO", "topic": "<b>4.最短寻道时间优先(<\/b><b><mark>SSTF<\/mark><\/b><b>)：<\/b><span style=\"color:#d92d20\"><b><span>优先处理与当前磁头最近的磁道<\/span><\/b><br><img class=\"mm-img\" src=\"mm-2d8791b8cd7d0b.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mBh6pS8eaMS", "topic": "优点：<b>性能较好<\/b>，平均寻道时间短。", "expanded": true}, {"id": "mUOyC14A2ty", "topic": "缺点：可能产生“<b>饥饿<\/b>”现象", "expanded": true}, {"id": "mHxL7Xcp3UM", "topic": "<b><mark>饥饿现象<\/mark><\/b>：<b>磁头在一个小区域里边来回地移动<\/b>", "expanded": true}, {"id": "mKgcTfw7b26", "topic": "<b>核心思想：<\/b><span style=\"color:#d92d20\"><b><span>贪心<\/span><\/b><b>，只选择眼前最优，不保证全局最优<\/b>", "expanded": true}]}, {"id": "miakxTJ7EvQ", "topic": "<b>5.扫描(电梯)算法(<\/b><b><mark>SCAN<\/mark><\/b><b>)：只有<\/b><span style=\"color:#d92d20\"><b><span>磁头移动到最外侧磁道的时候才能向内移动<\/span><\/b><b>，移动到<\/b><span style=\"color:#d92d20\"><b><span>最内侧磁道的时候才能向外移动（<\/span><\/b><b><mark>往返移动<\/mark><\/b><span style=\"color:#d92d20\"><b><span>）<\/span><\/b><br><img class=\"mm-img\" src=\"mm-1da1b044022480.jpg\" style=\"width:260px;height:159px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">解决饥饿问题<\/span>", "expanded": true, "children": [{"id": "muaJSDvZ4vn", "topic": "优点：<b>不会产生饥饿现象<\/b>", "expanded": true}, {"id": "mhtnzoY1M5j", "topic": "缺点：<b>只有到达最边上的磁道才可以改变扫描方向<\/b>；对于<b>各个磁道的响应频率不平均<\/b><span class=\"mm-note\">针对这两个缺点，下边又提出了改进算法<\/span>", "expanded": true}]}, {"id": "moe7cz60b7L", "topic": "<b>6.<\/b><b><mark>LOOK<\/mark><\/b><b>调度算法：如果<\/b><span style=\"color:#b45309\"><b><span>在磁头移动方向上没有别的请求<\/span><\/b><b>了，就可以<\/b><span style=\"color:#d92d20\"><b><span>立即改变磁头移动方向<\/span><\/b><br><img class=\"mm-img\" src=\"mm-5236392713dd51.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">解决SCAN算法中，“只有到达最边上的磁道才可以改变扫描方向”这个缺点<\/span>", "expanded": true}, {"id": "mA1WVKnBvFA", "topic": "<b>7.循环扫描算法(<\/b><b><mark>C-SCAN<\/mark><\/b><b>)：只有到最边上的磁道才能改变磁头移动方向，磁头返回时<\/b><span style=\"color:#b45309\"><b><span>直接快速移动到起始端<\/span><\/b><b>，返回途中不处理任何请求，再继续单向扫描(<\/b><b><mark>单向移动<\/mark><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-1e90983dc914b5.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">解决SCAN算法中，“对各个位置磁道的响应频率不平均”这个缺点<\/span>", "expanded": true, "children": [{"id": "mSpDMfRXtlR", "topic": "优点：对比SCAN，<b>对各个位置<\/b><span style=\"color:#0e7a52\"><b><span>磁道的响应频率很平均<\/span><\/b>", "expanded": true}, {"id": "mnTaae8O57t", "topic": "缺点：<b>只有到达最边上的磁道才改变磁头移动的方向<\/b>。<span class=\"mm-note\">为了解决这个问题，提出下边的C-LOOK算法<\/span>", "expanded": true}]}, {"id": "maAZBrB9hUU", "topic": "<b>8.<\/b><b><mark>C-LOOK<\/mark><\/b><b>算法：如果磁头移动方向上已经没有磁头访问请求，就<\/b><span style=\"color:#b45309\"><b><span>可以立即让磁头返回<\/span><\/b><b>，并且<\/b><span style=\"color:#b45309\"><b><span>只需要返回到有磁道访问请求的位置<\/span><\/b><b>即可(<\/b><b><mark>单向移动<\/mark><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-8a871c5ba7a907.jpg\" style=\"width:260px;height:131px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mBSyFmBNL0D", "topic": "<b>9.最短定位时间优先(<\/b><b><mark>SPTF<\/mark><\/b><b>)：<\/b><span style=\"color:#d92d20\"><b><span>视情况而定<\/span><\/b><br><img class=\"mm-img\" src=\"mm-d013fd9d348978.jpg\" style=\"width:260px;height:276px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">在讨论最短定位时间优先之前（有时也称为最短接入时间优先），我们先来看一个例子，在这个例子中，磁头当前定位在内圈磁道上的扇区30上方. 因此，调度程序必须决定：<b>下一个请求应该安排扇区16还是扇区8<\/b>，接下来应该服务哪个请求.<\/span>", "expanded": true, "children": [{"id": "mDZGLWKVlm4", "topic": "答案是：“<span style=\"color:#b45309\"><b><span>视情况而定<\/span><\/b>”.", "expanded": true}, {"id": "mNaMqP68nYM", "topic": "这里的情况是旋转与寻道相比的相对时间，如果在我们的例子中，寻道时间远远高于旋转延迟，那么SSTF就行，但是，如果寻道比旋转块的多，那么，在我们的例子中，寻道远一点的、在外圈磁道的服务请求8，比寻道近一点的、在中间磁道的服务请求16更好，因为16必须旋转很长的距离才能移到磁头下.", "expanded": true}, {"id": "ma93mZCoxxR", "topic": "在现代驱动器中，正如上面所看到的，查找和旋转大致相当（当然，视具体的请求而定），因此 SPTF 是有用的，它提高了性能。然而，它在操作系统中实现起来更加困难，操作系统通常不太清楚磁道边界在哪，也不知道磁头当前的位置（旋转到了哪里）。因此，S<b>PTF通常在驱动器内部执行<\/b>.", "expanded": true}]}]}, {"id": "mgIpZyaUdB2", "topic": "<b>3、减少磁盘(延迟)旋转时间的方法<\/b>", "expanded": true, "children": [{"id": "mBUDMTt18y3", "topic": "1.前情回顾：由于<span style=\"color:#b45309\"><b><span>磁头在读入一个扇区数据后需要一小段时间处理<\/span><\/b>，如果<b>逻辑上相邻的扇区在物理上也相邻<\/b>，则<b>读入几个连续的逻辑扇区时<\/b>，可能<b>需要很长的“延迟时间”<\/b>。", "expanded": true}, {"id": "mUb534cuX1d", "topic": "<b>2.减少延迟时间的方法：<\/b>", "expanded": true, "children": [{"id": "m00vPSatn9T", "topic": "<b><mark>1.交替编号<\/mark><\/b><b>— <\/b><span style=\"color:#b45309\"><b><span>逻辑上相邻的磁盘在物理上有一定的间隔<\/span><\/b><b>，可以使读取连续的逻辑扇区所需要的的延迟时间更小<\/b><br><img class=\"mm-img\" src=\"mm-8f65136ec5121f.jpg\" style=\"width:260px;height:117px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mcFVrAzF3aM", "topic": "<b>2.<\/b><b><mark>错位命名<\/mark><\/b><b>— <\/b><span style=\"color:#b45309\"><b><span>让相邻盘面的扇区编号“错位”<\/span><\/b><b>— <\/b>例如：0号盘面的0号扇区正下方对应1号盘面的7号扇区<br><img class=\"mm-img\" src=\"mm-d7853f2aea3b6b.jpg\" style=\"width:260px;height:152px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mDpxhXMoTTT", "topic": "<b>3.磁盘地址结构的设计：为何要用<\/b><span style=\"color:#b45309\"><b><span>(柱面号，盘面号，扇区号) —<\/span><\/b> <b>原因：在读取地址连续的磁盘块时，<\/b><span style=\"color:#d92d20\"><b><span>前者更不需要移动磁头<\/span><\/b><br><img class=\"mm-img\" src=\"mm-e35993dababe86.jpg\" style=\"width:260px;height:126px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mgnpQHwcG8M", "topic": "<b>4、磁盘的管理<\/b>", "expanded": true, "children": [{"id": "mahT5Rk5TtY", "topic": "1、磁盘<b>初始化<\/b>— 一个扇区分为：<span style=\"color:#b45309\"><b><span>头、数据区域、尾<\/span><\/b>", "expanded": true, "children": [{"id": "mfemfSegWyL", "topic": "步骤1：<b>物理格式化<\/b>，将磁盘的各个磁道划分为扇区", "expanded": true}, {"id": "mNfx2f4wgir", "topic": "步骤2：将<b>磁盘分区<\/b>，每个分区由若干个柱面组成(如：C盘、D盘)", "expanded": true}, {"id": "mD7BeGKMvn6", "topic": "步骤3：<b>逻辑格式化<\/b>，创建文件系统", "expanded": true}]}, {"id": "mlDwryl7XIi", "topic": "<b>2、引导块：<\/b><span style=\"color:#b45309\"><b><span>完整的自举程序放在磁盘的引导块<\/span><\/b><b>上。<\/b><br><img class=\"mm-img\" src=\"mm-257f26e82166c8.jpg\" style=\"width:260px;height:152px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mYQYdzrYUJw", "topic": "<b><mark>ROM(只读寄存器)<\/mark><\/b>：<b>初始化程序放在ROM中。<\/b>ROM中的数据在出厂时就集成在主板上，以后不能再修改。<span class=\"mm-note\">那么万一需要更改ROM程序呢？<\/span>", "expanded": true}, {"id": "mH01rKyWjLB", "topic": "因此：<b>现在<\/b><span style=\"color:#b45309\"><b><span>ROM只存放很小的“自举装入程序”<\/span><\/b>，而<b>将完整的自举程序放在磁盘的引导块。引导块位于磁盘的固定位置(<\/b>系统盘C盘<b>)。<\/b>", "expanded": true}]}, {"id": "mOF3faGZiCT", "topic": "<b>3、坏块的管理<\/b>", "expanded": true, "children": [{"id": "mgPyQZEF5Tx", "topic": "方法1：逻辑格式化时<b>标记坏块，维护一个坏块链<\/b>", "expanded": true}, {"id": "mJMHe8MmV9E", "topic": "方法2：保留一些<b>“备用扇区”<\/b>，用于<b>替换坏块<\/b>", "expanded": true}]}]}, {"id": "mwaMfDREl1B", "topic": "<b>5、固态硬盘<\/b><b><mark>(SSD)<\/mark><\/b> <b>— 基于<\/b><span style=\"color:#b45309\"><b><span>闪存技术<\/span><\/b><b>(Flash Memory),属于<\/b><span style=\"color:#b45309\"><b><span>电可擦除ROM<\/span><\/b>", "expanded": true, "children": [{"id": "mK2saGvvKVf", "topic": "<b>1.SSD的结构：<\/b><br><img class=\"mm-img\" src=\"mm-141e6ea0103d5a.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mokmEP4RRoo", "topic": "<b>闪存翻译层<\/b>：<b>翻译逻辑块号<\/b>，找到对应页", "expanded": true}, {"id": "mmuUwPS9PGE", "topic": "<b>存储介质<\/b>：<span style=\"color:#b45309\"><span>多个闪存芯片 =》 每个芯片包含多个块=》每个块包含多个页<\/span>", "expanded": true}]}, {"id": "m0qvdRemP7I", "topic": "<b>2.SSD的读写特性：<\/b>", "expanded": true, "children": [{"id": "mUiEud7T46g", "topic": "1.以<b>页为单位读/写<\/b>", "expanded": true}, {"id": "mxjBQwLBu5M", "topic": "2.以<b>块为单位“擦除”<\/b><span class=\"mm-note\">即：如果块1中的页0-3中有数据而其余空闲，那么想给页0写入数据，<b>只能将整个块1中的所有页都擦干净<\/b>，而<b>不是只擦页0<\/b>.<\/span>", "expanded": true}]}, {"id": "mgGY8ZOSYgs", "topic": "<b>3.固态硬盘 VS 机械硬盘<\/b><br><img class=\"mm-img\" src=\"mm-94d2e70e3a042d.jpg\" style=\"width:260px;height:54px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mCzeF0L0S8T", "topic": "① <b>SSD速度快，<\/b>用<b>电路控制访问位置<\/b>；<b>机械硬盘慢一点<\/b>，用<b>磁臂旋转磁盘访问位置<\/b>", "expanded": true}, {"id": "m43GYkhNreY", "topic": "② SSD更贵、更安静<span class=\"mm-note\">因为SSD没有磁盘转动产生的噪音<\/span>", "expanded": true}, {"id": "mQr2dRsOQhu", "topic": "③ <b>SSD的一个块擦除次数太多可能会坏掉<\/b>，机械硬盘不会", "expanded": true}]}, {"id": "mG7IplRcK1b", "topic": "<b>4.磨损均衡技术：将<\/b><span style=\"color:#b45309\"><b><span>“擦除”平均分布到各个块<\/span><\/b><b>，提升使用寿命<\/b><br><img class=\"mm-img\" src=\"mm-24ad9558dfe049.jpg\" style=\"width:260px;height:45px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mGQmiOZgbHF", "topic": "<b>动态磨损均衡<\/b>：写入数据时，<b>优先选择<\/b>累积<b>擦除次数少的新闪存块<\/b>", "expanded": true}, {"id": "mm2He7XrvgR", "topic": "<b>静态磨损均衡<\/b>：<b>SSD监测并自动进行数据分配、迁移<\/b>，让<b>老旧的闪存块承担以读为主的存储任<\/b>务，<b>较新的闪存块承担更多的写任务<\/b>。", "expanded": true}]}]}, {"id": "m54sfWJoTm0", "topic": "<b><mark>RPM<\/mark><\/b><b>(Rotations Per Minute)：每分钟转数。<\/b><span class=\"mm-note\"><b>10000RPM<\/b>旋转的驱动器：<b>一次旋转需要大约6ms  (60/10000 = 6ms)<\/b><\/span>", "expanded": true}]}, {"id": "mX2SHBImbL1", "topic": "<b>三、廉价冗余磁盘阵列（<\/b><b><mark>RAID<\/mark><\/b><b>）<\/b><span class=\"mm-note\">RAID是一种<b>把多块独立的磁盘（物理磁盘）按不同的方式组合起来形成一个磁盘组<\/b>，在<b>逻辑上看起来就是一块大的磁盘<\/b>，从而提供比单个物理磁盘更大的存储容量或更高的存储性能，同时又提供不同级别数据冗余备份的一种技术。<\/span>", "expanded": true, "children": [{"id": "m3c3VSMIphp", "topic": "1、RAID的优点：<span style=\"color:#b45309\"><b><span>性能<\/span><\/b> <b>&amp;<\/b> <span style=\"color:#b45309\"><b><span>容量 <\/span><\/b><b>&amp; <\/b><span style=\"color:#b45309\"><b><span>可靠性<\/span><\/b>", "expanded": false, "children": [{"id": "mcPvnjDm7ZZ", "topic": "性能：<b>并行使用多个磁盘<\/b>，大大加快I/O时间", "expanded": true}, {"id": "mDW3By4sjN2", "topic": "可靠性：<b>容许损失一个磁盘并保持运行<\/b>，就像没有错误一般", "expanded": true}]}, {"id": "mSjke5fFzqY", "topic": "2、RAID的<b>性能评估<\/b>：", "expanded": true, "children": [{"id": "mw9Q2yUbYmG", "topic": "假设：磁盘在<span style=\"color:#b45309\"><b><span>顺序<\/span><\/b>工作负载下以<b><mark>S<\/mark><\/b><mark> <\/mark><b><mark>MB/s<\/mark><\/b><b>传输<\/b>；<span style=\"color:#b45309\"><b><span>随机<\/span><\/b>工作负载下以<b><mark>R MB/s<\/mark><\/b>传输<span class=\"mm-note\">一般来说，S比R大得多。<\/span>", "expanded": true}]}, {"id": "mqD94Zrme28", "topic": "<b>3、RAID不同级别综合分析：<\/b><span style=\"color:#d92d20\"><b><span>磁盘个数为N<\/span><\/b><br><img class=\"mm-img\" src=\"mm-5c706f9e525ad7.jpg\" style=\"width:260px;height:96px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-95221348bd2d65.jpg\" style=\"width:260px;height:43px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "ma0VAKJqKbK", "topic": "<b>1.<\/b><b><mark>RAID 0级<\/mark><\/b><b>— <\/b><b><mark>条带化<\/mark><\/b><b>：以<\/b><span style=\"color:#b45309\"><b><span>轮转的方式将磁盘阵列的块分布在磁盘上<\/span><\/b><br><img class=\"mm-img\" src=\"mm-bed6b3e3b38cb8.jpg\" style=\"width:260px;height:63px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mfBswlF8mJN", "topic": "① 条带：将<b>同一行中的块<\/b>称为条带", "expanded": true}, {"id": "moFJSmVQD6w", "topic": "② 目的：在<b>对数组的连续块请求时<\/b>，从<b>阵列中获取最大的并行性<\/b>。", "expanded": true}, {"id": "mVo8lSfiMSg", "topic": "③ 缺点：<b>任何磁盘故障都会导致数据丢失<\/b>", "expanded": true}, {"id": "mjW5m83cJjb", "topic": "<b>性能分析：无<\/b>", "expanded": true}]}, {"id": "mnMsv7Su1Sh", "topic": "<b>2.<\/b><b><mark>RAID 1级<\/mark><\/b><b>—<\/b> <b><mark>镜像<\/mark><\/b><b>：就是保存每个块的副本<\/b><br><img class=\"mm-img\" src=\"mm-c9837014254058.jpg\" style=\"width:260px;height:68px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">磁盘0和磁盘1有相同的内容，磁盘2和磁盘3有相同的内容。<\/span>", "expanded": true, "children": [{"id": "m3blItWIMxm", "topic": "① 优点：<b>容许任一磁盘故障，最多可容许N/2个磁盘故障；<\/b>", "expanded": true}, {"id": "mQn65uZjKT8", "topic": "② 缺点：<b>N个磁盘<\/b>，有用容量为N/2；读取时导向一个副本，<span style=\"color:#b45309\"><b><span>写入时需要完成两次物理写入<\/span><\/b><span style=\"color:#b45309\"><span>(<\/span><span style=\"color:#d92d20\"><b><span>两个写入并行发生<\/span><\/b><span style=\"color:#b45309\"><span>)<\/span><span class=\"mm-note\">比如：在写入块0时，RAID会在内部写入块0和块1，<b>确保副本的同步。<\/b><\/span>", "expanded": true}, {"id": "m6sAGkPpPKn", "topic": "<b>性能分析：<\/b>", "expanded": true, "children": [{"id": "m4V7xsIumjp", "topic": "1.顺序", "expanded": true, "children": [{"id": "m8DF28u7GqN", "topic": "顺序<b>写入<\/b>带宽：<span style=\"color:#d92d20\"><b><span>(N/2) * S <\/span><\/b><b>—<\/b> 峰值带宽的一半<span class=\"mm-note\">原因：在写入块0时，RAID会在内部写入块0和块1，<b>确保副本的同步。<\/b><\/span>", "expanded": true}, {"id": "mUbRySj3V8F", "topic": "顺序<b>读取<\/b>带宽：<span style=\"color:#d92d20\"><b><span>(N/2) * S <\/span><\/b><b>—<\/b> 峰值带宽的一半<span class=\"mm-note\">原因：在读取磁盘时，当<b>在跳过副本时，不会为用户提供有效的带宽<\/b>，而副本个数为N/2，因此读取带宽依旧为 (N/2) * S<\/span>", "expanded": true}]}, {"id": "mSYX7TMqP23", "topic": "2.随机", "expanded": true, "children": [{"id": "mBpBEd9ExaR", "topic": "随机<b>读取<\/b>带宽：<span style=\"color:#d92d20\"><b><span>N * R<\/span><\/b> MB/s— <b>全部带宽<\/b><span class=\"mm-note\">原因：<b>随机读取时，可以在所有磁盘上分配读取数据，从而获得完整的可用带宽<\/b>。<\/span>", "expanded": true}, {"id": "mD3CRBIA5Tl", "topic": "随机<b>写入<\/b>带宽：<span style=\"color:#d92d20\"><b><span>(N/2) * R <\/span><\/b><b>—<\/b> <b>峰值带宽的一半<\/b><span class=\"mm-note\">原因：<b>每个逻辑写入必须变成两个物理写入(原磁盘一个，副本磁盘一个)<\/b><\/span>", "expanded": true}]}]}]}, {"id": "mXQBMf5F2R3", "topic": "<b>3.<\/b><b><mark>RAID 4级<\/mark><\/b><b>— 通过<\/b><b><mark>奇偶校验<\/mark><\/b><b>节省空间，<\/b>对于每一条数据，添加了一个<span style=\"color:#b45309\"><b><span>奇偶校验块<\/span><\/b>，用于<b>存储该条块的冗余信息<\/b><br><img class=\"mm-img\" src=\"mm-0fce25d08b1aeb.jpg\" style=\"width:260px;height:65px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">克服由镜像系统付出的巨大空间损失。如上图，<b>磁盘4中的P0-P3就是奇偶校验块。<\/b>\nP1<b>具有从块4/5/6/7计算出的冗余信息<\/b>。<\/span>", "expanded": true, "children": [{"id": "mB4WN9yYLxQ", "topic": "① 计算奇偶校验的方法：<span style=\"color:#d92d20\"><b><span>异或— <\/span><\/b>在<b>数据块的每一位上执行按位异或<\/b>，将<b>每个按位异或的结果放入奇偶校验块的相应位置<\/b><br><img class=\"mm-img\" src=\"mm-cca8aac023bf54.jpg\" style=\"width:260px;height:38px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mXHP5xFlxEk", "topic": "② <b>如何利用奇偶校验信息从故障中恢复<\/b>：读取<span style=\"color:#b45309\"><b><span>该行中所有其他值<\/span><\/b>并<span style=\"color:#b45309\"><b><span>根据异或重构正确答案<\/span><\/b>。<span class=\"mm-note\">就跟计算奇偶校验码一样。<\/span>", "expanded": true}, {"id": "mflUOwxaU4x", "topic": "容量：<b>有用容量<\/b>为 <b><mark>N-1<\/mark><\/b><span class=\"mm-note\">由于<b>有1个块需要装奇偶校验码<\/b>。<\/span>", "expanded": true}, {"id": "m4PhgWfRWBk", "topic": "可靠性：<b>容许<\/b><span style=\"color:#b45309\"><b><span>1个<\/span><\/b><b>磁盘故障<\/b><span class=\"mm-note\">有1个磁盘故障的话，可以通过异或运算重建丢失数据；再多就重建不了了。<\/span>", "expanded": true}, {"id": "mDhcScufFjq", "topic": "<b>性能分析：<\/b>", "expanded": true, "children": [{"id": "mcijJGt59tl", "topic": "1.顺序", "expanded": true, "children": [{"id": "mGDaA5QZzF5", "topic": "顺序<b>读取<\/b>带宽：<span style=\"color:#d92d20\"><b><span>(N-1) * S <\/span><\/b><b>MB/s<\/b><span class=\"mm-note\">由于<b>有1个块需要装奇偶校验码<\/b>。<\/span>", "expanded": true}, {"id": "m9xo2rdI0kG", "topic": "顺序<b>写入<\/b>带宽：<span style=\"color:#d92d20\"><b><span>(N-1) * S<\/span><\/b> <b>MB/s —<\/b> <b>全条带写入<\/b><span class=\"mm-note\">因为奇偶校验块中的数据是根据前N-1块中的数据计算得出的。<\/span>", "expanded": true}]}, {"id": "mEdwPcipbHN", "topic": "2.随机", "expanded": true, "children": [{"id": "mjozb891Seb", "topic": "随机<b>读取<\/b>带宽：<span style=\"color:#d92d20\"><b><span>(N-1) * R <\/span><\/b><b>MB/s<\/b><span class=\"mm-note\">依旧是<b>除去奇偶校验<\/b>的那一块。<\/span>", "expanded": true}, {"id": "m572KXfRSGk", "topic": "随机<b>写入<\/b>带宽：<span style=\"color:#d92d20\"><b><span>1/2 * R<\/span><\/b><b> MB/s<\/b><span class=\"mm-note\">因为在<b>给RAID 4随机写入<\/b>时，会影响着奇偶校验块的变化(奇偶校验块中的数据是根据前四块的数据计算而来的)<\/span>", "expanded": true}]}]}]}, {"id": "mmNcik8s5Gb", "topic": "<b>4.<\/b><b><mark>RAID 5级<\/mark><\/b><b>—<\/b> <b><mark>旋转奇偶校验<\/mark><\/b><b>，<\/b>工作原理与RAID 4级几乎完全相同，只是<span style=\"color:#b45309\"><b><span>将奇偶校验块跨驱动器旋转<\/span><\/b><br><img class=\"mm-img\" src=\"mm-ee7531c8fdab16.jpg\" style=\"width:260px;height:62px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mQW57hCm1d7", "topic": "① RAID 4级 与 RAID 5级 的<span style=\"color:#1d4ed8\"><b><span>有效容量(N-1)<\/span><\/b>和<span style=\"color:#1d4ed8\"><b><span>容错能力(容错1个块)<\/span><\/b>都<span style=\"color:#b45309\"><b><span>相同<\/span><\/b>", "expanded": true}, {"id": "m0hViZW1Cae", "topic": "② 性能分析：", "expanded": true, "children": [{"id": "m4tbzBdp4HS", "topic": "1.顺序：", "expanded": true, "children": [{"id": "mFhdzNzZDDy", "topic": "顺序<b>读取<\/b>带宽：<span style=\"color:#d92d20\"><b><span>(N-1)*S<\/span><\/b>", "expanded": true}, {"id": "mQuUNhvauHe", "topic": "顺序<b>写入<\/b>带宽<b>：<\/b><span style=\"color:#d92d20\"><b><span>(N-1)*S<\/span><\/b>", "expanded": true}]}, {"id": "msuDmUMRwul", "topic": "2.随机：", "expanded": true, "children": [{"id": "mxgJ25bTIO4", "topic": "随机<b>读取<\/b>带宽：<span style=\"color:#d92d20\"><b><span>N*R<\/span><\/b>", "expanded": true}, {"id": "mweJa7HY21c", "topic": "随机<b>写入<\/b>带宽：<span style=\"color:#d92d20\"><b><span>N/4 * R<\/span><\/b><span class=\"mm-note\">因为：<b>每个RAID-5写入依然产生总计4个I/O操作<\/b>。<\/span>", "expanded": true}]}]}]}]}]}, {"id": "memE1m7splU", "topic": "<b><mark>设备驱动程序<\/mark><\/b><b>：<\/b>负责<b>对硬件的具体控制<\/b>，<span style=\"color:#d92d20\"><b><span>所有与设备交互的细节都封装在其中<\/span><\/b>，将上层发出的一系列命令转化为该设备“能听得懂”的一系列操作。", "expanded": true}, {"id": "mVtie63Yvgj", "topic": "<b><mark>吞吐量<\/mark><\/b><b>(<\/b>单位：MB/s<b>)：单位时间内传输的数据量。<\/b><span class=\"mm-note\">也是：<b>许多并发请求的总带宽<\/b><\/span>", "expanded": true}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>补充1-进程与分页 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>补充1-进程与分页</b><small>幕布导图 · 145 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "补充1-进程与分页", "data": {"id": "mvirtual-root", "topic": "<b>补充1-进程与分页<\/b>", "expanded": true, "children": [{"id": "mCwTHrxnEpD", "topic": "<b>一、进程API<\/b>", "expanded": false, "children": [{"id": "m0LPMECMwfY", "topic": "<b>1.<\/b><b><mark>fork()<\/mark><\/b><b>：<\/b><span style=\"color:#b45309\"><b><span>创建新进程<\/span><\/b>", "expanded": true, "children": [{"id": "mtNXncdlbk9", "topic": "① 子进程不会从main()开始执行，而是<b>直接从fork()调用返回<\/b>，再向下执行", "expanded": true}, {"id": "mtG1KmwVrt2", "topic": "② <b>父、子进程运行的优先顺序不确定<\/b>，由CPU调度程序决定", "expanded": true}, {"id": "mtIWRe4XpBR", "topic": "③ 子进程拥有自己的私有内存，但<b>并不是完全拷贝了父进程<\/b><span class=\"mm-note\">比如说，<b>int i = father.fork()<\/b>，<b>父进程获得的i是子进程的pid<\/b>，但<b>子进程获得的i = 0.<\/b><\/span>", "expanded": true}]}, {"id": "mPNi7HktOtr", "topic": "<b>2.<\/b><b><mark>wait()<\/mark><\/b><b>：<\/b><span style=\"color:#b45309\"><b><span>父进程等待子进程执行完毕，wait()返回后，父进程才接着执行<\/span><\/b>", "expanded": true}, {"id": "mSWX0W81nBI", "topic": "<b>3.<\/b><b><mark>exec()<\/mark><\/b><b>：让<\/b><span style=\"color:#b45309\"><b><span>父、子进程执行不同的程序<\/span><\/b>", "expanded": true}]}, {"id": "mmeMOztE0C7", "topic": "<b>二、进程调度<\/b>", "expanded": true, "children": [{"id": "mCTnXiimeng", "topic": "1.<b>FCFS<\/b>中的 <b><mark>护航效应<\/mark><\/b><b>— 指一些<\/b><span style=\"color:#b45309\"><b><span>耗时较小的消费者被排在耗时较大的消费者之后，<\/span><\/b><b>导致<\/b><span style=\"color:#b45309\"><b><span>平均周转时间很长<\/span><\/b><b>。<\/b><span class=\"mm-note\">例如：此时有3个任务，A需要100s，B需要10s，C需要10s。\n而此时<b>到达顺序为 A-&gt;B-&gt;C，那么平均周转时间 = (100+110+120)/3 = 110s<\/b><\/span>", "expanded": true}, {"id": "mb7prfJR9Y8", "topic": "<b>2.最短完成时间优先(<\/b><b><mark>STCF<\/mark><\/b><b>) — <\/b><span style=\"color:#d92d20\"><b><span>抢占式SJF<\/span><\/b><span class=\"mm-note\">课本 p51<\/span>", "expanded": false, "children": [{"id": "mEAagfLvLat", "topic": "思路：<span style=\"color:#b45309\"><b><span>每当<\/span><\/b><b>新工作加入系统<\/b>，它就会<b>确定剩余工作和新工作中<\/b>，<span style=\"color:#b45309\"><b><span>谁的<\/span><\/b><b><mark>剩余运行时间最少<\/mark><\/b>，然后<b>调度该工作<\/b>。", "expanded": true}, {"id": "m1uWQAEozlf", "topic": "示例：<br><img class=\"mm-img\" src=\"mm-f4ac45082a2318.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m29Kxysucpe", "topic": "3.如果<b>任务不同时到达<\/b>，<b>STCF是最优<\/b>的；如果<b>任务同时到达<\/b>，<b>SJF是最优<\/b>的。", "expanded": true}, {"id": "mqC3BSrpPJ2", "topic": "4.<b>SJF、STCF<\/b>：优化周转时间，但对响应时间不利；<b>RR<\/b>：优化响应时间，但对周转时间不利。", "expanded": true}, {"id": "mR3tFuqYHOn", "topic": "5.<b>MLFQ的优点<\/b>：不需要对工作的运行方式有先验知识，而是<b>通过观察工作的运行，动态地调整优先级<\/b>。<span class=\"mm-note\">而SJF、STCF需要工作的先验知识，如：需要知道每个任务的运行时间。<\/span>", "expanded": true}, {"id": "menDr52QOZa", "topic": "<b>6.<\/b><b><mark>比例份额<\/mark><\/b><b>调度程序<\/b>— 基于一个简单想法：调度程序的最终目标，是确保每个工作获得一定比例的CPU时间，而不是优化周转时间和响应时间。<span class=\"mm-note\">课本P66<\/span>", "expanded": false, "children": [{"id": "moi3FR02zQU", "topic": "实现1：<span style=\"color:#d92d20\"><b><span>彩票调度<\/span><\/b><b>— 随机性、实现简单<\/b><span class=\"mm-note\">用随机数。<\/span>", "expanded": true}, {"id": "my8UnB94VZG", "topic": "实现2：<span style=\"color:#d92d20\"><b><span>步长调度<\/span><\/b><b>— 最小行程值优先<\/b>", "expanded": false, "children": [{"id": "mEN5UuGxLwf", "topic": "<b>步长<\/b>：<b>与票数值成反比<\/b>，<span style=\"color:#b45309\"><b><span>步长 =  一个大数/票数<\/span><\/b>", "expanded": true}, {"id": "mStrgreQ4hr", "topic": "<span style=\"color:#b45309\"><b><span>行程值<\/span><\/b>：初始为0，记录<b>每个进程的运行进展<\/b>，每次进程运行后，让其 <b>计数器+=步长<\/b>", "expanded": true}, {"id": "mOYBfJwUTfW", "topic": "基本思路：需要进行调度时，<b>选择<\/b><span style=\"color:#d92d20\"><b><span>目前拥有最小行程值<\/span><\/b><b>的进程<\/b>，并且在<b>运行后将行程值增加1个步长<\/b>。", "expanded": true}]}, {"id": "mDLID5Ror2C", "topic": "相比于步长调度，彩票调度的一个优势：<span style=\"color:#b45309\"><b><span>不需要全局状态<\/span><\/b><br><img class=\"mm-img\" src=\"mm-160804c2f903f1.jpg\" style=\"width:260px;height:58px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m7WMrnpSccg", "topic": "<b>MLFQ的特点<\/b>：<b><mark>不同优先级队列的时间片长度不同<\/mark><\/b>，<span style=\"color:#d92d20\"><b><span>高优先级队列通常只有较短的时间片<\/span><\/b>（比如 10ms 或者更少），因而<b>这一层的交互工作可以更快地切换<\/b>。", "expanded": true}]}, {"id": "mfVoYum9A8U", "topic": "<b>三、受限直接执行(<\/b><b><mark>LDE协议<\/mark><\/b><b>)— 实现<\/b><span style=\"color:#b45309\"><b><span>高效、可控地虚拟化 CPU<\/span><\/b><span class=\"mm-note\"><a href=\"https://blog.csdn.net/hrbust_cxl/article/details/119902425\" target=\"_blank\" rel=\"noopener\">操作系统-受限直接执行（Limited Direct Execution, LDE）-CSDN博客<\/a><\/span>", "expanded": false, "children": [{"id": "mcx1S3orEzB", "topic": "1.<a href=\"https://so.csdn.net/so/search?q=%E8%99%9A%E6%8B%9F%E5%8C%96&amp;spm=1001.2101.3001.7020\" target=\"_blank\" rel=\"noopener\">虚拟化<\/a><b> CPU<\/b>的概念：操作系统需要以某种方式让许多任务共享物理CPU,让它们看起来像是同时运行。", "expanded": true}, {"id": "m5rwmmQdF5P", "topic": "2.<span style=\"color:#b45309\"><b><span>直接执行<\/span><\/b>：直接在CPU上运行程序即可。使用正常的调用(call)跳转到用户程序的main()，用户程序结束后返回内核。", "expanded": true, "children": [{"id": "mg3UygTN4VR", "topic": "直接执行的<b>两个问题<\/b>：", "expanded": true, "children": [{"id": "mDGOMjojAhq", "topic": "1. <b>对用户程序没有限制<\/b>(用户程序可能做出危害行为) — 解决：<span style=\"color:#b45309\"><b><span>硬件<\/span><\/b><span style=\"color:#b45309\"><span>通过<\/span><span style=\"color:#b45309\"><b><span>提供不同的执行模式(用户态/内核态)<\/span><\/b>来协助操作系统。", "expanded": true}, {"id": "mianCAnTlRZ", "topic": "2. <b>不能切换进程<\/b>(即没有完成时分共享的目标)— 解决：<b>协作方式<\/b>(操作系统相信系统的进程会合理运行，等待系统调用)；<b>非协作方式<\/b>(操作系统进行控制)— <b><mark>时钟中断<\/mark><\/b>", "expanded": true}]}]}]}, {"id": "mZsia2QfdA0", "topic": "<b>四、虚拟内存<\/b>", "expanded": false, "children": [{"id": "mns9Qa6JwqZ", "topic": "1、虚拟内存概念：", "expanded": true, "children": [{"id": "mgqQgok3Y0Q", "topic": "<b>1、虚拟内存的三个目标：<\/b><span style=\"color:#b45309\"><b><span>透明<\/span><\/b> <b>&amp;<\/b> <span style=\"color:#b45309\"><b><span>效率<\/span><\/b> <b>&amp; <\/b><span style=\"color:#b45309\"><b><span>保护<\/span><\/b>", "expanded": true}, {"id": "mTuwUmZMgJr", "topic": "2、用户级的程序员，<b>可以看到的任何地址都是虚拟地址<\/b>。", "expanded": true}, {"id": "m6fIX0ZXjdc", "topic": "3、虚拟地址<b>只是提供地址在内存中如何分布的假象<\/b>，只有<b>操作系统才知道物理地址<\/b>。", "expanded": true}]}, {"id": "mRlFMYNX7P6", "topic": "2、内存操作API：<b>malloc()<\/b> &amp; <b>free() <\/b>", "expanded": true, "children": [{"id": "mofoM49KZmO", "topic": "<b>1.malloc()调用示例：<\/b><br><img class=\"mm-img\" src=\"mm-5a7eaa1aa544d5.jpg\" style=\"width:260px;height:29px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mXqHH2Uarqc", "topic": "<b>2.free()调用示例：<\/b><br><img class=\"mm-img\" src=\"mm-efe01eb84fc0e8.jpg\" style=\"width:260px;height:65px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mBOATz9tBBB", "topic": "3.调用常见错误：", "expanded": true, "children": [{"id": "mSkmC5HVzy4", "topic": "<b>① 忘记分配内存<\/b><br><img class=\"mm-img\" src=\"mm-e7d0ae377baa62.jpg\" style=\"width:260px;height:61px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d02a14071fb10b.jpg\" style=\"width:260px;height:72px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mSGJGXR63jw", "topic": "② <b>没有分配足够的内存— 最常见：<\/b><span style=\"color:#b45309\"><b><span>没有给字符串结束符分配空间<\/span><\/b><br><img class=\"mm-img\" src=\"mm-ad4f55681fbec8.jpg\" style=\"width:260px;height:42px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mFW16eM8ZNC", "topic": "<b>③ 忘记初始化分配的内存<\/b><br><img class=\"mm-img\" src=\"mm-1cb85f59846fdb.jpg\" style=\"width:260px;height:43px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mWwyWRyIyQc", "topic": "<b>④ 忘记释放内存— 不调用free()，导致<\/b><span style=\"color:#b45309\"><b><span>内存泄漏<\/span><\/b>", "expanded": true}, {"id": "m3mBvU2Cd9Y", "topic": "⑤ 在<b>用完之前释放内存— <\/b><span style=\"color:#b45309\"><b><span>悬挂指针<\/span><\/b><br><img class=\"mm-img\" src=\"mm-bece8137536e03.jpg\" style=\"width:260px;height:39px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m0zDwGNp5wq", "topic": "⑥ <b>重复释放内存<\/b>", "expanded": true}, {"id": "mhgupog4LmN", "topic": "<b>⑦ 错误调用free()<\/b><br><img class=\"mm-img\" src=\"mm-515eda603f8f3f.jpg\" style=\"width:260px;height:31px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mK0ALjoQW0v", "topic": "<b>注意：如果<\/b><span style=\"color:#b45309\"><b><span>为字符串声明空间<\/span><\/b><b>，用法：<\/b><b><mark>malloc(strlen(s)+1)<\/mark><\/b><span class=\"mm-note\">为<b>字符串结束符留出1个空间<\/b><\/span>", "expanded": true}]}, {"id": "mNSU2shrue0", "topic": "<b>3、动态重定位(<\/b><b><mark>基址+界限机制<\/mark><\/b><b>)：程序要真正<\/b><span style=\"color:#b45309\"><b><span>运行时<\/span><\/b>，才会将逻辑地址<b>重定位为物理地址<\/b><br><img class=\"mm-img\" src=\"mm-2a5970c593f6d9.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mG2132gpa96", "topic": "<b><mark>1.物理地址<\/mark><\/b> <b>=<\/b> <b><mark>虚拟地址<\/mark><\/b> <b>+<\/b> <b><mark>基址寄存器中的地址<\/mark><\/b>", "expanded": true}, {"id": "mfLMCS7AZPJ", "topic": "<b>2.基址寄存器<\/b>：将<b>虚拟地址转换为物理地址，<\/b>存储的是<b> <\/b><span style=\"color:#d92d20\"><b><span>在物理内存中的实际起始地址<\/span><\/b>", "expanded": true}, {"id": "mMIsrFHqekO", "topic": "<b>3.界限寄存器<\/b>：<b>提供<\/b><span style=\"color:#b45309\"><b><span>访问保护<\/span><\/b>，<b>确保进程产生的所有地址都在进程的地址“界限”中，<\/b>存放<span style=\"color:#d92d20\"><span>进程的<\/span><span style=\"color:#d92d20\"><b><span>最大逻辑地址<\/span><\/b><span style=\"color:#d92d20\"><span>。<\/span>", "expanded": true, "children": [{"id": "muGdPiM6Csm", "topic": "两种实现：", "expanded": true, "children": [{"id": "mCwTek5WtPP", "topic": "① 记录<span style=\"color:#1d4ed8\"><b><span>地址空间大小<\/span><\/b>— 硬件在<b>将虚拟地址与基址寄存器内容求和前<\/b>，就检查这个界限(比较虚拟地址大小与界限寄存器中值的大小)。", "expanded": true}, {"id": "mXiAzMwNc5O", "topic": "② 记录<span style=\"color:#1d4ed8\"><b><span>地址空间结束的物理地址<\/span><\/b>— 在硬件<b>将虚拟地址转换为物理地址之后<\/b>，才去检查这个界限。", "expanded": true}]}]}, {"id": "mQNy8eNjzDx", "topic": "4.优点：程序在内存中<b>可以移动<\/b><span class=\"mm-note\">改变重定位寄存器中的起始位置即可。<\/span>", "expanded": true}]}, {"id": "mMVKBdqru7e", "topic": "<b>4、静态重定位 ：<\/b><span style=\"color:#b45309\"><b><span>装入时<\/span><\/b>将逻辑地址<b>重定位为物理地址，<\/b><span style=\"color:#b45309\"><b><span>纯软件的定位方式<\/span><\/b>", "expanded": false, "children": [{"id": "mxgiXf1ueqc", "topic": "① 一个作业装入内存时，<b>必须分配全部的内存空间<\/b>", "expanded": true}, {"id": "mHzoD5UQIRQ", "topic": "② 作业一旦进入内存，在<b>运行期间就不能再移动<\/b>", "expanded": true}]}]}, {"id": "m3EScTK4ISh", "topic": "<b>五、空闲空间管理(解决外部碎片的方法)<\/b>", "expanded": false, "children": [{"id": "mC5bqWhkgKR", "topic": "1.<span style=\"color:#b45309\"><b><span>空闲列表：<\/span><\/b>在<b>堆上管理空闲空间的数据结构<\/b>。<br><img class=\"mm-img\" src=\"mm-b3b7f21c3bbf3a.jpg\" style=\"width:260px;height:50px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-4d79ce03db6255.jpg\" style=\"width:260px;height:69px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mYoaNa2Lm2o", "topic": "<b>2、分割 与 合并<\/b>", "expanded": true, "children": [{"id": "msHO1188BF9", "topic": "分割：<b>请求空间 &lt; 某空闲块<\/b>", "expanded": true}, {"id": "mBeydWmF3Z8", "topic": "合并：<span style=\"color:#b45309\"><b><span>相邻<\/span><\/b><b>的空闲块合并<\/b>成一个<b>较大的空闲块<\/b>", "expanded": true}]}, {"id": "mDK9S9Rlhdm", "topic": "<b>3、追踪已分配空间的大小：<\/b><b><mark>头块<\/mark><\/b><b>中保留一些额外信息<\/b><br><img class=\"mm-img\" src=\"mm-f9404e44305158.jpg\" style=\"width:260px;height:119px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mo4wxL5vhYj", "topic": "<b><mark>总分配空闲块 = 头块大小 +  请求的空间大小<\/mark><\/b><span class=\"mm-note\"><b>如果用户请求N字节内存<\/b>，OS寻找的是：<b>N+头块<\/b> <b>大小的空闲块<\/b>。<\/span>", "expanded": true}]}, {"id": "mR6WnflVX05", "topic": "<b>4、管理空闲空间的基本策略(<\/b><b><mark>动态分区分配算法<\/mark><\/b><b>)：<\/b><br><img class=\"mm-img\" src=\"mm-7d9114c1a711e9.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "miLMsdmxQzN", "topic": "<b>1、首次匹配算法— 空闲分区按<\/b><b><mark>地址递增<\/mark><\/b><b>次序排列，每次从低地址开始找，找到<\/b><span style=\"color:#b45309\"><b><span>第一个满足大小的分区<\/span><\/b><span class=\"mm-note\">综合看，这个性能最好。<\/span>", "expanded": true}, {"id": "muFoU7TX13p", "topic": "<b>2、最佳匹配算法— 空闲分区按<\/b><b><mark>容量递增<\/mark><\/b><b>次序排列，顺序查找，找到<\/b><span style=\"color:#b45309\"><b><span>大小满足要求的第一个空闲分区<\/span><\/b><span class=\"mm-note\">缺点：会<b>产生很多外部碎片<\/b><\/span>", "expanded": true}, {"id": "mopLkSG8MkA", "topic": "<b>3、最差匹配算法— 空闲分区按<\/b><b><mark>容量递减<\/mark><\/b><b>次序排列，顺序查找，找到大小满足要求的第一个空闲分区<\/b>", "expanded": true}, {"id": "mUXKZrL5gpL", "topic": "<b>4、邻近匹配算法—  空闲分区按<\/b><b><mark>地址递增<\/mark><\/b><b>次序排列，每次分配内存时<\/b><span style=\"color:#b45309\"><b><span>从上次查找结束的位置开始查找<\/span><\/b><b>空闲区，找到大小能满足要求的第一个空闲分区<\/b><span class=\"mm-note\">优点：算法开销小，不用每一次都从头查找；\n缺点：使高地址的大分区更容易被使用。\n想法：将对空闲空间的查找操作扩散到整个列表，<b>避免对列表开头的频繁切割。<\/b><\/span>", "expanded": false, "children": [{"id": "mhpFNmGDQPg", "topic": "<b>多维护一个<\/b><span style=\"color:#d92d20\"><b><span>指针<\/span><\/b>，<span style=\"color:#0e7a52\"><b><span>指向上一次查找结束的位置<\/span><\/b>。", "expanded": true}]}, {"id": "m4uvjTTOsPk", "topic": "<b>5、分离空闲列表<\/b><br><img class=\"mm-img\" src=\"mm-d28b8828f27567.jpg\" style=\"width:260px;height:47px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mOpWmoqczo7", "topic": "<b>6、二分伙伴系统<\/b><br><img class=\"mm-img\" src=\"mm-e857ae03bd3ef5.jpg\" style=\"width:260px;height:193px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mCPoGpqZBkG", "topic": "<b>六、分页<\/b>", "expanded": false, "children": [{"id": "mmQ69JCWbCs", "topic": "1.<b>确定逻辑地址的页号、页偏移量<\/b>：", "expanded": true, "children": [{"id": "myldovxaEjF", "topic": "<b><mark>① 页号<\/mark><\/b> <b>= 逻辑地址 / 页面长度(向下取整)<\/b>", "expanded": true}, {"id": "mMPodLel1o7", "topic": "<b><mark>② 页内偏移量<\/mark><\/b><b> = 逻辑地址 % 页面长度<\/b>", "expanded": true}, {"id": "m34qDSH7iWB", "topic": "<b>③ 逻辑地址<\/b>可以拆分为：<span style=\"color:#b45309\"><span>（<\/span><span style=\"color:#b45309\"><b><span>页号，页内偏移量<\/span><\/b><span style=\"color:#b45309\"><span>）<\/span><span class=\"mm-note\">通过页号查询页表，就可知页面在内存中的起始地址。<\/span>", "expanded": true}, {"id": "mzpGNVc2rLs", "topic": "④ <b>实际物理地址 = 该页面在物理内存中的起始地址 + 页内偏移量<\/b>", "expanded": true}]}, {"id": "mwLYSbSneGs", "topic": "<span style=\"color:#d92d20\"><b><span>2. ❤<\/span><\/b> <b>如果每个页面大小刚好为2的整数幂(<\/b><span style=\"color:#d92d20\"><b><span>2^k<\/span><\/b><b>) ,好处为：<\/b><br><img class=\"mm-img\" src=\"mm-f44adb5fa0caa2.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f0ff7aadaadc86.jpg\" style=\"width:260px;height:70px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mJweMist2Pg", "topic": "① <b>逻辑地址的拆分更方便<\/b>：<span style=\"color:#b45309\"><b><span>末尾k位即为页内偏移量<\/span><\/b><b>，<\/b><span style=\"color:#b45309\"><b><span>其余部分就是页号<\/span><\/b><span class=\"mm-note\">由于<b>除2^k的本质<\/b>其实就是：将被除数右移k位。<\/span>", "expanded": true}, {"id": "mixGMi4N53Y", "topic": "<b>② <\/b>物理地址的计算更迅速<b>：物理地址 =<\/b>  <b><mark>物理块号  | (拼接)  页内偏移量<\/mark><\/b>", "expanded": true}]}, {"id": "mwNF6cNguxT", "topic": "<b>3、逻辑地址的结构— <\/b> <b><mark>页号 |  页面偏移量<\/mark><\/b><span class=\"mm-note\">当然，如果有些题目中，页面大小不是2的整数次幂，还是需要用最原始的方法去计算页号<\/span>", "expanded": false, "children": [{"id": "mcP00Jt1zbC", "topic": "<b><mark>页面大小 &lt;—&gt; 页内偏移量位数  =》逻辑地址结构<\/mark><\/b><span class=\"mm-note\">假设<b>32位系统<\/b>下，<b>页内偏移量为k位<\/b>，则<b>页面大小 = 2^k bit<\/b>。则<b>页号范围为：0 ~ 2^(32-k)-1<\/b><\/span>", "expanded": true}]}, {"id": "m5ojUhJkcV5", "topic": "4、<b><mark>页表<\/mark><\/b><b>— 记录 进程页面和实际存放的页框之间的<\/b><span style=\"color:#b45309\"><b><span>映射关系—<\/span><\/b> <b><mark>（页号，块号）—<\/mark><\/b> <span style=\"color:#d92d20\"><b><span>每个进程1个页表<\/span><\/b>", "expanded": true}, {"id": "mPJa759V3a7", "topic": "<b>5、物理帧号(<\/b><b><mark>PFN<\/mark><\/b><b>)<\/b>", "expanded": true}, {"id": "mq47AYxRQAJ", "topic": "<b>6、<\/b><span style=\"color:#d92d20\"><b><span>分页不会导致外部碎片<\/span><\/b>", "expanded": true}, {"id": "mK7XzDIMWHb", "topic": "<b>7、快速地址转换缓存  <\/b><b><mark>TLB<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-de84f625c3e83e.jpg\" style=\"width:260px;height:74px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d71d029b4e32f7.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mUDUXfYhA3f", "topic": "<b>1、什么是<\/b><b><mark>快表(TLB)<\/mark><\/b><b>— 访问速度比内存快很多的<\/b><b><mark>高速缓存(集成在CPU内部)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-60651443965bb5.jpg\" style=\"width:260px;height:153px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>内存中的页表常称为慢表<\/b><\/span>", "expanded": false, "children": [{"id": "mDmBRt2qIoO", "topic": "①<b> <\/b><span style=\"color:#d92d20\"><b><span>TLB不是内存！！<\/span><\/b>", "expanded": true}, {"id": "mUeijQdulSI", "topic": "② 作用：用来<span style=\"color:#b45309\"><b><span>存放最近访问的页表项副本<\/span><\/b>", "expanded": true}]}, {"id": "m4TcvyVghIs", "topic": "<b>2、引入快表后的地址转换<\/b><br><img class=\"mm-img\" src=\"mm-a7545c35a35664.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-2fc5f7b4cb2078.jpg\" style=\"width:260px;height:98px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mi5o6af4Gxh", "topic": "<b>1.在找匹配页号时(<\/b><span style=\"color:#b45309\"><b><span>先查快表，后查慢表<\/span><\/b><b>)：<\/b>", "expanded": true, "children": [{"id": "mEAZNsWAenv", "topic": "如果<b>TLB未命中<\/b> =》查询<b>内存中的页表 =》<\/b>再<b>将内存中的页表项Copy一份给TLB <\/b> =》再<b>根据拿到的页表项，访问该物理地址对应的内存单元(<\/b><b><mark>两次访存<\/mark><\/b><b>)<\/b>", "expanded": true}, {"id": "mFLzDc9ou1E", "topic": "如果<b>TLB命中<\/b> =》<b>拿到页表项，访问该物理地址对应的内存单元(<\/b><b><mark>一次访存<\/mark><\/b><b>)<\/b>", "expanded": true}, {"id": "mXvdLcADymh", "topic": "练习：<br><img class=\"mm-img\" src=\"mm-8f59e4291864e9.jpg\" style=\"width:260px;height:50px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m43RsmaKJ7p", "topic": "2.<b>如果<\/b><span style=\"color:#b45309\"><b><span>快表、慢表同时查询<\/span><\/b><br><img class=\"mm-img\" src=\"mm-f10c6f2177e6b6.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mqMf4bgFIAm", "topic": "<b>3、<\/b>TLB背后的核心思想<b>：<\/b><b><mark>局部性原理<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-e7e239ffaf6b7b.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8e20c488b8d937.jpg\" style=\"width:260px;height:33px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "moaRbZZe32E", "topic": "<b>时间局部性<\/b>：如果执行了程序中的某条指令，那么<b>不久后这条指令很可能再次被执行<\/b>", "expanded": true}, {"id": "mhXljQ7thVY", "topic": "<b>空间局部性<\/b>：一旦程序<b>访问了某个存储单元<\/b>，不久后，<b>附近的存储单元也很有可能被访问<\/b><span class=\"mm-note\">原因：很多数据在内存中是连续存放的，并且<b>程序的指令也是顺序地在内存中存放<\/b>的。<\/span>", "expanded": true}]}, {"id": "mMJ9POq1p7A", "topic": "<b>4、谁来处理TLB未命中：<\/b><span style=\"color:#d92d20\"><b><span>硬件全权处理！<\/span><\/b>", "expanded": false, "children": [{"id": "m9372CyXz17", "topic": "流程：TLB未命中 =&gt;<b> 抛异常<\/b> =&gt;暂停当前指令流(<b>特权提升至内核级<\/b>)=&gt;<b> 陷进处理程序(查找页表)<\/b>=&gt; 更新TLB =&gt; 从陷阱返回 =&gt; 重新执行该指令=&gt; TLB命中<br><img class=\"mm-img\" src=\"mm-3103ebb407a6b8.jpg\" style=\"width:260px;height:47px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m69fYFHfm29", "topic": "<b>5、一条TLB的内容：<\/b><b><mark>VPN | PFN | 其他位<\/mark><\/b><span class=\"mm-note\"><b>有效位<\/b>：标识该项是不是有效地址转换映射；\n<b>保护位<\/b>：标识该页是否有访问权限。<\/span>", "expanded": true}, {"id": "mGFqAD92m6Q", "topic": "<b>TLB和普通cache<\/b>的区别：<span style=\"color:#d92d20\"><b><span>TLB中只有页表项的副本<\/span><\/b>，普通cache中可能会有其它各种数据的副本。", "expanded": true}]}, {"id": "mIVGQhF1SKQ", "topic": "<b>8、两级页表<\/b>", "expanded": true, "children": [{"id": "mL4cxh6EyIs", "topic": "<b>1、单级页表的问题与解决<\/b><br><img class=\"mm-img\" src=\"mm-6befd6df219b65.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "muzn3797n5i", "topic": "1.问题1：页表<b>必须连续存放<\/b>，页表很大时，需要<b>占用很多个连续的页框，消耗的内存太大<\/b>", "expanded": true, "children": [{"id": "m0xSH0bGzdA", "topic": "解决：<b>两级页表<\/b>", "expanded": true}]}, {"id": "mpLEqhEqWdb", "topic": "2.问题2：<span style=\"color:#b45309\"><b><span>不必要让整个页表常驻内存<\/span><\/b>，进程在一段时间内可能只需要访问某几个特定的页面", "expanded": true, "children": [{"id": "mLcELs976ej", "topic": "解决：在<b>页表项中加一个标志位<\/b>，用于<b>表示该页面是否已经调入内存<\/b><br><img class=\"mm-img\" src=\"mm-417c36d532f749.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mMaNPjSm1nG", "topic": "<b>2、二级页表介绍：（<\/b><span style=\"color:#b45309\"><b><span>页目录表 = 顶层页表<\/span><\/b><b>）<\/b><br><img class=\"mm-img\" src=\"mm-c42679a2eaaae4.jpg\" style=\"width:260px;height:159px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-e6859e90f310d7.jpg\" style=\"width:260px;height:156px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mNUTfJK9aKe", "topic": "<b>两级页表实现地址转换：<\/b><b><mark>(一级页号，二级页号，页内偏移量)—<\/mark><\/b> <b>多查一级页表而已<\/b><br><img class=\"mm-img\" src=\"mm-528b98e66b3952.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mWHrN82OVkn", "topic": "<b>3、<\/b><span style=\"color:#d92d20\"><b><span>❤<\/span><\/b><b>  需要注意的细节：<\/b>", "expanded": true, "children": [{"id": "mFbkZKnTKBB", "topic": "1.<b>多级页表<\/b>机制中，<span style=\"color:#d92d20\"><b><span>各级页表的大小不能超过一个页面！！！<\/span><\/b><br><img class=\"mm-img\" src=\"mm-b9a77b6a2a840f.jpg\" style=\"width:260px;height:131px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">原因：<b>避免内存碎片化<\/b>，且页是内存管理的基本单位，实现<b>页面对齐，便于管理。<\/b><\/span>", "expanded": true}, {"id": "mBwlSHD3lbg", "topic": "2.<b>两级页表<\/b>的<b>访存次数分析<\/b>：<b>如果<\/b><span style=\"color:#d92d20\"><b><span>没有快表机制<\/span><\/b><span style=\"color:#d92d20\"><span>，那么<\/span><span style=\"color:#d92d20\"><b><span>N级页表<\/span><\/b><span style=\"color:#d92d20\"><span>的访存次数为<\/span><span style=\"color:#d92d20\"><b><span>N+1<\/span><\/b><span style=\"color:#d92d20\"><span>次<\/span><br><img class=\"mm-img\" src=\"mm-2b15053f3ad557.jpg\" style=\"width:260px;height:61px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mrtdWX5A0qh", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-804293dd4a12c9.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mb3HBCVuQZY", "topic": "七、<b><mark>交换空间<\/mark><\/b>：在<b>硬盘上开辟一部分空间<\/b>用于物理页的移入/移出<br><img class=\"mm-img\" src=\"mm-085e1b186a34c1.jpg\" style=\"width:260px;height:97px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为<b>可以将内存中的页交换到其中，并在需要的时候换回去<\/b>。—— 一种访问超出内存大小时的方法<\/span>", "expanded": false, "children": [{"id": "mYLUyQkLEul", "topic": "1.页表项中的<span style=\"color:#d92d20\"><b><span>存在位<\/span><\/b>：<b>1<\/b>—&gt; 该页在物理内存中；<b>0<\/b>-&gt;该页不在物理内存中，而是被交换到了硬盘上。", "expanded": true}, {"id": "mkWut1yDb2T", "topic": "<b>2.<\/b><span style=\"color:#d92d20\"><b><span>页错误<\/span><\/b><b>：访问不在物理内存中的页<\/b><span class=\"mm-note\">就是要<b>去硬盘找这个页<\/b>啦。<\/span>", "expanded": true}, {"id": "mRMoLfXnjL0", "topic": "<b>3.示例流程：<\/b><br><img class=\"mm-img\" src=\"mm-75451c40e4a407.jpg\" style=\"width:260px;height:263px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mwWH5WcUMRS", "topic": "<b>八、页面置换算法（<\/b><b><mark>外存 &lt;=&gt; 内存<\/mark><\/b><b>）<\/b><br><img class=\"mm-img\" src=\"mm-eca9d68f730cff.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8c0716159c7523.jpg\" style=\"width:260px;height:155px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mbgZDDO6VZ1", "topic": "<b>1、<\/b><span style=\"color:#d92d20\"><b><span>最佳<\/span><\/b><b>置换算法(<\/b><b><mark>OPT<\/mark><\/b><b>)—<\/b> <span style=\"color:#b45309\"><b><span>替换<\/span><\/b><b>内存中<\/b><span style=\"color:#b45309\"><b><span>在最远将来才会被访问到的页<\/span><\/b><br><img class=\"mm-img\" src=\"mm-f77b85b10fcf0f.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-4b39291ba01100.jpg\" style=\"width:260px;height:20px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mOq7yD5mTPJ", "topic": "<b>缺点：<\/b><span style=\"color:#d92d20\"><b><span>无法实现<\/span><\/b><span class=\"mm-note\">原因：<b>OS无法预判页面的访问序列<\/b><\/span>", "expanded": true}]}, {"id": "maMVQLfjphs", "topic": "<b>2、先进先出置换算法(<\/b><b><mark>FIFO<\/mark><\/b><b>)— 每次<\/b><span style=\"color:#b45309\"><b><span>淘汰最早进入内存的页面<\/span><\/b><br><img class=\"mm-img\" src=\"mm-2d768910f172f4.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mh3D8MeDK9r", "topic": "<b>缺点：<\/b><span style=\"color:#b45309\"><b><span>性能较差<\/span><\/b><b>，无法确定页的重要性<\/b><span class=\"mm-note\">因为：<b>先进入的页面也有可能被经常访问<\/b><\/span>", "expanded": true}, {"id": "mJA7NwNa75G", "topic": "<span style=\"color:#d92d20\"><b><span>Belady异常<\/span><\/b><b>— <\/b>当给进程分配的物理块数增大，缺页次数不减反增<br><img class=\"mm-img\" src=\"mm-12f54b2ac85806.jpg\" style=\"width:260px;height:32px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mXLqBA8b2X3", "topic": "<b>3、最近最久未使用算法(<\/b><b><mark>LRU<\/mark><\/b><b>)— 每次淘汰<\/b><span style=\"color:#b45309\"><b><span>最近最久未使用的页面<\/span><\/b><br><img class=\"mm-img\" src=\"mm-565819ea336ef7.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mZMccWLgWWd", "topic": "<span style=\"color:#d92d20\"><b><span>❤<\/span><\/b> <b>方法：需要淘汰页面时，<\/b><span style=\"color:#b45309\"><b><span>逆向检查<\/span><\/b><b>在内存中的几个页面号，逆向扫描过程中<\/b><span style=\"color:#b45309\"><b><span>最后一个出现的页号<\/span><\/b><b>就是要淘汰的页面<\/b>", "expanded": true}, {"id": "mFaRGuhJYfM", "topic": "<b>算法基于 局部性原理。<\/b>", "expanded": true}, {"id": "m2KrcuuZV0W", "topic": "缺点<b>：实现困难，开销大，需要专门的硬件支持<\/b>", "expanded": true}, {"id": "mH9lwjxukf4", "topic": "优点：<b>性能好<\/b>", "expanded": true}]}, {"id": "mRsa7qbx31M", "topic": "<b>4、简单时钟置换算法(<\/b><b><mark>CLOCK<\/mark><\/b><b>)/ 二次机会算法<\/b><br><img class=\"mm-img\" src=\"mm-025d831a29c8e0.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">为啥叫时钟置换算法？ 因为算法示意图很像一个时钟在走动。<\/span>", "expanded": true, "children": [{"id": "m7iT2XILsyo", "topic": "<b>① 为每个页面设置一个<\/b><b><mark>访问位<\/mark><\/b><b>：0=&gt; 最近没访问过；1=&gt; 最近访问过<\/b><span class=\"mm-note\">当某页被访问，就将访问位 置为1。<\/span>", "expanded": true}, {"id": "mfLgffk3t63", "topic": "② 再将<b>内存中的页面都链接成一个<\/b><span style=\"color:#b45309\"><b><span>循环链表<\/span><\/b>", "expanded": true}, {"id": "mwQNlNNHPtW", "topic": "③ 当需要淘汰页面时，<b>只需检查其访问位<\/b><span class=\"mm-note\">访问位=1—&gt; <b>将其置为0，暂不换出，继续向后访问<\/b>；访问位=0—&gt; 将改页换出。<\/span>", "expanded": true}, {"id": "maIvdZlU6Eh", "topic": "④ 因此：<b>简单CLOCK算法选择一个淘汰页面<\/b><span style=\"color:#d92d20\"><b><span>最多会经过两轮扫描<\/span><\/b>", "expanded": true}, {"id": "mMyrqfQnG5H", "topic": "⑤ 实现流程：<br><img class=\"mm-img\" src=\"mm-3ca39d409d4cc2.jpg\" style=\"width:260px;height:207px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m9GlL64ZjaO", "topic": "<b>5、增强型时钟置换算法—<\/b> 增加了一个<span style=\"color:#b45309\"><b><span>修改位，<\/span><\/b><b>将<\/b><b><mark>最近未访问又未修改的页淘汰<\/mark><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-ce940ece278325.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "ma8b0CkVA3Y", "topic": "<b>寻找替换页时，<\/b><span style=\"color:#1d4ed8\"><b><span>先看使用位，再看修改位<\/span><\/b><b>。<\/b>", "expanded": true}, {"id": "mZCQKIel2bK", "topic": "<b>修改位=0 -》未修改；修改位=1-》 修改过<\/b>", "expanded": true}, {"id": "msV29tutYYC", "topic": "<span style=\"color:#d92d20\"><b><span>重点：<\/span><\/b><b>改进型CLOCK选择一个淘汰页<\/b><span style=\"color:#d92d20\"><b><span>最多会进行四轮扫描<\/span><\/b><br><img class=\"mm-img\" src=\"mm-6dad3462fb812c.jpg\" style=\"width:260px;height:85px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mJIQL2qnAro", "topic": "注意选择顺序优先级：<b>最近没访问没修改(0,0) &gt; 最近没访问但修改(0,1) &gt; 最近访问过但没修改(1,0) &gt; 最近访问过且修改过(1,1) — <\/b>其他条件相等时<b>，<\/b><b><mark>优先淘汰没有修改过的页面<\/mark><\/b>", "expanded": true}]}, {"id": "mgoII6tJvfT", "topic": "<b>平均内存访问时间(<\/b><b><mark>AMAT<\/mark><\/b><b>) <\/b><br><img class=\"mm-img\" src=\"mm-7bc1ef48c2e7a9.jpg\" style=\"width:260px;height:31px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "miWzQjippFQ", "topic": "<span style=\"color:#0e7a52\"><span>由于实现完美LRU过于困难，因此出现了<\/span><span style=\"color:#0e7a52\"><b><span>“近似LRU”<\/span><\/b><span style=\"color:#0e7a52\"><span>，即以下的时钟置换算法<\/span>", "expanded": true}]}, {"id": "mnZtNBKd3qr", "topic": "九、<b><mark>抖动<\/mark><\/b><b>：指频繁的页面调度行为=》<\/b>主要原因<b>：进程频繁访问的页面数目高于可用的物理块数(<\/b><span style=\"color:#b45309\"><b><span>分配给进程的物理块数不够<\/span><\/b><b>)<\/b>", "expanded": true}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

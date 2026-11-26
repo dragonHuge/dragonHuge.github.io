@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>CAS、AQS原理 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">10</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-CAS">1.CAS</a><a class="tl l3" href="#1-什么是CAS">1.什么是CAS</a><a class="tl l3" href="#2-什么是ABA问题-怎么解决">2.什么是ABA问题，怎么解决？</a><a class="tl l2" href="#2-AQS">2.AQS</a><a class="tl l3" href="#1-什么是AQS">1.什么是AQS？</a><a class="tl l3" href="#2-AQS核心思想">2.AQS核心思想</a><a class="tl l3" href="#3-AQS是怎么实现的">3.AQS是怎么实现的？</a><a class="tl l3" href="#4-哪些地方用到了AQS">4.哪些地方用到了AQS？</a><a class="tl l4" href="#1-ReentrantLock-可重入锁独占锁">1.ReentrantLock（可重入锁独占锁）</a><a class="tl l4" href="#2-CountDownLatch-倒计时器">2.CountDownLatch(倒计时器)</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>CAS、AQS原理</h1><div class="meta">2024-05-11 · <a class="src-link" href="https://flowus.cn/be37779a-d0d4-4beb-bfc5-356891afe188" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h2 id="1-CAS">1.CAS</h2>
+<h3 id="1-什么是CAS">1.什么是CAS</h3>
+<ol><li>CAS（Compare and Swap）是一种<strong>并发编程中常用的原子操作</strong>，用于<strong>实现乐观锁机制</strong>。底<strong>层依赖于一条 CPU 的原子指令</strong>。</li></ol>
+<ol><li>CAS 的思想很简单：<strong>用一个预期值和要更新的当前变量值进行比较</strong>，<strong>两值相等才会进行更新。</strong></li></ol>
+<ol><li>CAS 涉及到<strong>三个操作数</strong>：</li></ol>
+<ul><li><strong>V</strong>：要更新的变量值(Var)</li></ul>
+<ul><li><strong>E</strong>：预期值(Expected)</li></ul>
+<ul><li><strong>N</strong>：拟写入的新值(New)</li></ul>
+<ol><li><strong>举例：</strong></li></ol>
+<p><strong>举一个简单的例子</strong>：线程 A 要修改变量 i 的值为 6，i 原值为 1（<strong>V = 1，E=1，N=6</strong>，假设不存在 ABA 问题）。</p>
+<ol><li>i 与 1 进行比较，如果相等， 则说明没被其他线程修改，可以被设置为 6 。</li></ol>
+<ol><li>i 与 1 进行比较，如果不相等，则说明被其他线程修改，当前线程放弃更新，CAS 操作失败。</li></ol>
+<p>当多个线程同时使用 CAS 操作一个变量时，<strong>只有一个会胜出</strong>，并成功更新，其余均会失败，但<strong>失败的线程并不会被挂起，仅是被告知失败</strong>，并且允许再次尝试，当然也允许失败的线程放弃操作。</p>
+<h3 id="2-什么是ABA问题-怎么解决">2.什么是ABA问题，怎么解决？</h3>
+<ol><li><strong>ABA问题</strong>：</li></ol>
+<p>如果一个变量 V 初次读取的时候是 A 值，并且在准备赋值的时候检查到它仍然是 A 值，那我们就能说明它的值没有被其他线程修改过了吗？</p>
+<p>很<strong>明显是不能</strong>的，因为<strong>在这段时间它的值可能被改为其他值</strong>，<strong>然后又改回 A</strong>，那 <strong>CAS 操作就会误认为它从来没有被修改过</strong>。这个问题被称为 CAS 操作的 <strong>"ABA"问题。</strong></p>
+<ol><li><strong>解决思路</strong>：是在变量前面追加上<strong>版本号或者时间戳</strong>。</li></ol>
+<p>JDK 1.5 以后的 <code>AtomicStampedReference</code> 类就是用来解决 ABA 问题的，其中的 <code>compareAndSet()</code> 方法就是首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志，如果全部相等，则以原子方式将该引用和该标志的值设置为给定的更新值。</p>
+<h2 id="2-AQS">2.AQS</h2>
+<h3 id="1-什么是AQS">1.什么是AQS？</h3>
+<p>AQS全称是<code>AbstractQueuedSynchronizer</code>，形如其名，<strong>抽象队列同步器</strong>。</p>
+<ol><li><strong>作用</strong>：Java 中用于<strong>构建同步器（Synchronizer）的抽象基类</strong>。</li></ol>
+<p>可以用于实现各种类型的同步器，例如锁、信号量、倒计时门栓等。</p>
+<ol><li>AQS定义了<strong>两种资源共享模式</strong>：</li></ol>
+<ol><li><strong>独占式，每次只能有一个线程持有锁。</strong></li></ol>
+<p>例如<code>ReentrantLock</code>实现的就是独占式的锁资源。</p>
+<ol><li><strong>共享式，允许多个线程同时获取锁，并发访问共享资源。</strong></li></ol>
+<p><code>ReentrantWriteLock</code>和<code>CountDownLatch</code>等就是实现的这种模式<strong>。</strong></p>
+<h3 id="2-AQS核心思想">2.AQS核心思想</h3>
+<ol><li>AQS 的<strong>核心思想</strong>是：<strong>使用一个 FIFO 队列来管理等待线程</strong>，通过 <strong>acquire 和 release 方法来控制线程的获取和释放资源的行为</strong>。</li></ol>
+<p>在 AQS 中，有两种资源状态：共享资源和独占资源。对于独占资源，只允许一个线程访问；而对于共享资源，允许多个线程同时访问。</p>
+<ol><li>AQS 提供了<strong>两个重要的方法</strong>：<code>acquire</code> 和 <code>release</code>。这两个方法分别用于<strong>线程获取和释放资源</strong>。</li></ol>
+<p>在具体的同步器实现中，需要通过重写这两个方法来实现不同的同步策略。</p>
+<ol><li>核心数据结构是一个<strong>双向链表（CLH 队列）</strong>，用于<strong>管理等待线程</strong>。</li></ol>
+<p>当一个线程尝试获取资源时，如果资源已被其他线程占用，则将当前线程加入到等待队列中，然后阻塞等待。当资源释放时，AQS 会唤醒等待队列中的线程，并根据特定的规则选择一个或多个线程继续执行。</p>
+<h3 id="3-AQS是怎么实现的">3.AQS是怎么实现的？</h3>
+<p>它维护了一个<strong><code>volatile</code>的<code>state</code>变量</strong>和一个<strong>FIFO的队列</strong>。</p>
+<ol><li><strong>state变量</strong>：<strong>表示同步状态</strong>，由<strong>volatile修饰</strong>。</li></ol>
+<p>展示<strong>当前临界资源的获锁情况</strong>。</p>
+<p>状态信息 <code>state</code> 可以通过 <code>protected</code> 类型的<code>getState()</code>、<code>setState()</code>和<code>compareAndSetState()</code> 进行操作。并且，<strong>这几个方法都是 <code>final</code> 修饰的</strong>，<strong>在子类中无法被重写</strong>。</p>
+<p>```Java // 共享变量，使用volatile修饰保证线程可见性 private volatile int state; //返回同步状态的当前值 protected final int getState() { return state; } // 设置同步状态的值 protected final void setState(int newState) { state = newState; } //原子地（CAS操作）将同步状态值设置为给定值update如果当前同步状态的值等于expect（期望值） protected final boolean compareAndSetState(int expect, int update) { return unsafe.compareAndSwapInt(this, stateOffset, expect, update); }</p>
+<p>```</p>
+<ol><li><strong>FIFO线程等待队列：完成获取资源线程的排队工作</strong>。</li></ol>
+<p>存放竞争资源失败的线程。</p>
+<h3 id="4-哪些地方用到了AQS">4.哪些地方用到了AQS？</h3>
+<h4 id="1-ReentrantLock-可重入锁独占锁">1.ReentrantLock（可重入锁独占锁）</h4>
+<p>实现流程与步骤：</p>
+<ol><li><strong><code>state</code> 变量</strong>：用来<strong>表示锁的占用状态</strong>。</li></ol>
+<p><code>state</code> 的初始值为 0，表示锁处于未锁定状态。</p>
+<ol><li>当线程 A 调用 <code>lock()</code> 方法时，会尝试通过 <code>tryAcquire()</code> 方法独占该锁，并让 <strong><code>state</code> 的值加 1</strong>。</li></ol>
+<ol><li>如果<strong>成功</strong>了，那么线程 A 就获取到了锁。</li></ol>
+<ol><li>如果<strong>失败</strong>了，那么<strong>线程 A 就会被加入到一个等待队列（CLH 队列）中</strong>，直到其他线程释放该锁。</li></ol>
+<p>假设线程 A 获取锁成功了，释放锁之前，<strong>A 线程自己是可以重复获取此锁的（<code>state</code> 会累加</strong>）。</p>
+<p>这就是<strong>可重入性的体</strong>现：一个线程可以多次获取同一个锁而不会被阻塞。但是，这也意味着，一个线程必须释放与获取的次数相同的锁，才能让 <code>state</code> 的值回到 0，也就是让锁恢复到未锁定状态。只有这样，其他等待的线程才能有机会获取该锁。</p>
+<h4 id="2-CountDownLatch-倒计时器">2.CountDownLatch(倒计时器)</h4></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

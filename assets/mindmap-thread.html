@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>Thread · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;inset:0;padding-top:var(--hd)}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>Thread</b><small>幕布导图 · 70 个节点</small></div>
+  <div class="acts">
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"></div>
+<div class="tip">单指拖动 · 双指缩放 · 点节点圆点收起/展开</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "Thread", "data": {"id": "mvirtual-root", "topic": "<b>Thread<\/b>", "expanded": true, "children": [{"id": "meNgPC0ONIP", "topic": "<b>1、线程关键字总结<\/b>", "expanded": true, "children": [{"id": "m7zQgLKJAem", "topic": "<b>1、volatile — <\/b><b><mark>直接存取原始内存地址<\/mark><\/b><span class=\"mm-note\"><a href=\"https://blog.csdn.net/didi1663478999/article/details/98523122\" target=\"_blank\" rel=\"noopener\">Volatile详解，点击进入查看<\/a><\/span>", "expanded": true, "children": [{"id": "muLS2ryGOZW", "topic": "<b>1、简介<\/b><span class=\"mm-note\">volatile是一个<b>类型修饰符<\/b>，作用是<b>作为指令关键字。\n<\/b>最原始的意义<b>：禁用CPU缓存。\n<\/b>一般都是<b>和const对应<\/b>。\nconst：常量，程序不应该去修改它所定义的数据。<\/span>", "expanded": true}, {"id": "mtpFB8CNGAD", "topic": "<b>2、特点：<\/b><span style=\"color:#d92d20\"><b><span>修改与读取直接对原始内存地址操作(不用寄存器)<\/span><\/b><span class=\"mm-note\">当它修饰一个变量时，就可以<b>确保关于这个变量的指令<\/b>是<b>直接对该变量的原始内存地址存取的，不会因为编译器的优化出现错误。<\/b><\/span>", "expanded": true}, {"id": "mi27BHksRNr", "topic": "<b>3<\/b>、<b>分析<\/b>：<span style=\"color:#1d4ed8\"><b><span>为何编译器的优化有时会出现错误<\/span><\/b><b>？<\/b><span class=\"mm-note\"><b>优化背景<\/b>：程序<b>从内存读取数据的速度是很慢<\/b>的。\n<b>解释<\/b>：\n因为在程序编译时，为了保证程序效率，当编译器发现在一个程序连续对同一个变量进行读取操作时，那么它在<b>第一次读取后就会将该变量存入寄存器中<\/b>，那么<b>下一次的变量读取就是直接从寄存器中读取<\/b>。\n基于这种特性，定义一个变量a。\n<b>假想一下<\/b>：\n如果在一个线程T1第一次读取变量a后，那编译器就将a存入线程<b>T1的寄存器<\/b>中，并且此时正好有一个线程T2，<b>将变量a修改(将原始内存地址的值修改)<\/b>，虽然此时a被修改了，但是T1感知不到，它在接下来对a的读取其实是对其对应寄存器中数值的读取，而寄存器中此时保存的却是a的旧值。\n​综上，就出现了数据不一致的错误。<\/span>", "expanded": true}, {"id": "mwZJLlRpQr0", "topic": "<b>4、<\/b><span style=\"color:#1d4ed8\"><b><span>volatile作用<\/span><\/b><b>的实例解释：<\/b><span class=\"mm-note\">书接上边的假想情况，那<b>如果将变量a用volatile关键字修饰<\/b>。\n那么就会变成如下情况：\n      T1在<b>第一次读取a后<\/b>，编译器<b>不会将a保存到寄存器；<\/b>并且在T1的对<b>变量a的第二次读取中<\/b>，是<b>直\n      接从其内存地址读取<\/b>。因此即使T2修改了变量a，但是此时T1读取的依旧是正确的修改后的a\n      值。从而不会出现数据不一致的问题。<\/span>", "expanded": true}, {"id": "m4grNzyoi0b", "topic": "<b>5、需要使用volatile的举例<\/b>", "expanded": true, "children": [{"id": "mIrW5e2xFfR", "topic": "①：<b>并行设备的硬件寄存器<\/b>（如：状态寄存器）", "expanded": true}, {"id": "mIyOqjOKBhq", "topic": "②：一个中断服务子程序中会访问到的非自动变量（Non-automatic variables)", "expanded": true}, {"id": "mKK8XNEmuks", "topic": "<b>③：多线程应用中被几个任务共享的变量<\/b>", "expanded": true}]}, {"id": "mXLlTsE5hT6", "topic": "<b>6、<\/b><span style=\"color:#d92d20\"><b><span>精华！！<\/span><\/b>", "expanded": true, "children": [{"id": "mzClDRBEgtu", "topic": "①：<b>volatile对应的变量可能在你的程序本身不知道的情况下发生改变<\/b><span class=\"mm-note\">比如多线程的程序，共同访问的内存当中，多个程序都可以操纵这个变量<\/span>", "expanded": true}, {"id": "mEk9hwcFZNd", "topic": "②：你<b>自己的程序<\/b>，是<b>无法感知何时这个变量会发生变化<\/b><span class=\"mm-note\">还比如，他和一个外部设备的某个状态对应，当外部设备发生操作的时候，通过驱动程序和中断事件，系统改变了这个变量的数值，而你的程序并不知道<\/span>", "expanded": true}, {"id": "mPB76Nwc2Ak", "topic": "③：volatile类型的变量，系统每次用到他的时候都是<b>直接从对应的内存当中提取<\/b>，而<b>不会利用cache当中的原有数值<\/b>，<b>以适应它的未知何时会发生的变化。<\/b><span class=\"mm-note\"><b>系统对这种变量的处理不会做优化<\/b>——显然也是因为它的数值随时都可能变化的情况。<\/span>", "expanded": true}]}, {"id": "mxwSbOAnTbZ", "topic": "<b>7、面试小题：<\/b>", "expanded": true, "children": [{"id": "m2m18Uka4og", "topic": "1、<b>一个参数既可以是const还可以是volatile吗？解释为什么。<\/b><span class=\"mm-note\"><b>是的，可以<\/b>。\nconst：定义常量，定义后之后不可修改。\n1个例子是：只读的状态寄存器。它是volatile因为它可能被意想不到地改变。\n它是const因为<b>程序不应该试图去修改它<\/b>。<\/span>", "expanded": true}, {"id": "mTuXYKs3byH", "topic": "2、<b>一个指针可以是volatile 吗？解释为什么<\/b><span class=\"mm-note\"><b>是的，可以。\n<\/b>尽管这并不很常见。1个例子是：<b>当一个中断服务子程序修改一个指向一个buffer的指针时。<\/b><\/span>", "expanded": true}, {"id": "m2mcGRKjvJI", "topic": "3、<b>下面的函数被用来计算某个整数的平方，它能实现预期设计目标吗？如果不能，试回答存在什么问题：<\/b>", "expanded": true, "children": [{"id": "m0XpGdui1tA", "topic": "<b>int square(volatile int* &amp;ptr){ int a,b; a = *ptr;  b = *ptr; return a*b;}<\/b>", "expanded": true}, {"id": "mk1UBdvijSd", "topic": "<b>解答<\/b>：由于<span style=\"color:#1d4ed8\"><b><span>*ptr的值可能在两次取值语句之间发生改变<\/span><\/b>，因此<span style=\"color:#1d4ed8\"><b><span>a和b可能是不同的<\/span><\/b>。结果，这段代码可能返回的不是你所期望的平方值！", "expanded": true}, {"id": "mkspCDT1m2l", "topic": "<b>正确的代码<\/b>如下：", "expanded": true}, {"id": "mrlys7ghT4i", "topic": "<b>long square(volatile int*ptr){ int a; a = *ptr; return a*a;}<\/b><span class=\"mm-note\">正确原因：在整个计算过程中，只取了一次值，因此不可能出现错误。<\/span>", "expanded": true}]}]}, {"id": "mEgXXmY4m6W", "topic": "8、<span style=\"color:#d92d20\"><b><span>volatile不能保证原子性<\/span><\/b><span class=\"mm-note\"><a href=\"https://blog.csdn.net/xdzhouxin/article/details/81236356\" target=\"_blank\" rel=\"noopener\">volatile为什么不能保证原子性_volatile不保证原子性的原理_十一月上的博客-CSDN博客<\/a>\nvolatile可以保证数据可见性，不能保证对变量的操作的原子性。<b>\n​synchronized 关键字两者都能保证。<\/b><\/span>", "expanded": true, "children": [{"id": "mI1AIr8ccOz", "topic": "如果一个变量被volatile修饰了，那么肯定<b>可以保证每次读取这个变量值的时候得到的值是最新的<\/b>，<b>但是一旦需要对变量进行自增这样的非原子操作，就不会保证这个变量的原子性<\/b>了。<span class=\"mm-note\">举个栗子\n一个变量i被volatile修饰，两个线程想对这个变量修改，都对其进行自增操作也就是i++，i++的过程可以分为三步，首先获取i的值，其次对i的值进行加1，最后将得到的新值写会到缓存中。\n线程A首先得到了i的初始值100，但是还没来得及修改，就阻塞了，这时线程B开始了，它也得到了i的值，由于i的值未被修改，即使是被volatile修饰，主存的变量还没变化，那么线程B得到的值也是100，之后对其进行加1操作，得到101后，将新值写入到缓存中，再刷入主存中。根据可见性的原则，这个主存的值可以被其他线程可见。\n问题来了，线程A已经读取到了i的值为100，也就是说读取的这个原子操作已经结束了，所以这个可见性来的有点晚，线程A阻塞结束后，继续将100这个值加1，得到101，再将值写到缓存，最后刷入主存，所以即便是volatile具有可见性，也不能保证对它修饰的变量具有原子性。<\/span>", "expanded": true}]}]}, {"id": "m4PdOskgAXW", "topic": "<b>2、ReentrantLock — <\/b><b><mark>可重入可公平可不公平锁(独占锁)<\/mark><\/b><span class=\"mm-note\"><a href=\"https://zhuanlan.zhihu.com/p/146445537\" target=\"_blank\" rel=\"noopener\">ReentrantLock 详解 - 知乎 (zhihu.com)<\/a>\nReentrantLock是一个<b>可重入的互斥锁<\/b>，又被称为“独占锁”。<\/span>", "expanded": true, "children": [{"id": "mwjt64eRBGS", "topic": "<b>1、特点：<\/b>", "expanded": true, "children": [{"id": "m8IE2zZoJLO", "topic": "①<span style=\"color:#1d4ed8\"><b><span>可重入<\/span><\/b>：ReentrantLock锁<b>可以被同一个线程多次获取。<\/b><span class=\"mm-note\">可重入性就是说：<b>任意线程在获取到锁之后能够再次获取该锁而不会被锁阻塞<\/b><\/span>", "expanded": true}, {"id": "mtVsRU2z4UQ", "topic": "②<span style=\"color:#1d4ed8\"><b><span>互斥<\/span><\/b>：<b>同一个时间点只能被一个线程锁持有<\/b>", "expanded": true}, {"id": "mfzKfZaThGJ", "topic": "<b>③支持<\/b><span style=\"color:#1d4ed8\"><b><span>公平锁和非公平锁<\/span><\/b><b>两种方式(<\/b>默认是非公平锁<b>)<\/b><span class=\"mm-note\">ReentraantLock是通过一个<b>FIFO的等待队列<\/b>来管理获取该锁所有线程的。\n<b>公平锁(fairSync)：线程依次排队获取锁<\/b>；\n<b>非公平锁(NonfairSync)：<\/b>在<b>锁是可获取状态时，不管自己是不是在队列的开头都会获取锁<\/b>。<\/span>", "expanded": true}, {"id": "mpwVqLatefS", "topic": "<b>④<\/b><span style=\"color:#1d4ed8\"><b><span>可中断<\/span><\/b><b>：ReentrantLock对中断是有响应的.<\/b><span class=\"mm-note\">与synchronized不同，synchronized一旦尝试获取锁就会一直等待直到获取到锁。\n<b>具体解释：<\/b>\nReentrantLock中的lockInterruptibly()方法使得线程可以在被阻塞时响应中断。\n比如一个线程t1通过<b>lockInterruptibly()<\/b>方法获取到一个可重入锁，并执行一个长时间的任务，另一个线程通过interrupt()方法就可以立刻打断t1线程的执行，来获取t1持有的那个可重入锁。而通过ReentrantLock的lock()方法或者Synchronized持有锁的线程是不会响应其他线程的interrupt()方法的，直到该方法主动释放锁之后才会响应interrupt()方法。<\/span>", "expanded": true}, {"id": "micIUjgPkkh", "topic": "<b>⑤<\/b><span style=\"color:#1d4ed8\"><b><span>可限时<\/span><\/b><b>：超时不能获得锁，就返回false，不会永久等待构成死锁。<\/b><span class=\"mm-note\">使用ReentrantLock.tryLock(long timeout, TimeUnit unit)来实现可限时锁，参数为时间和单位。<\/span>", "expanded": true, "children": [{"id": "mWIDs1QwFWu", "topic": "<b>2、使用：<\/b>", "expanded": true, "children": [{"id": "mK53NzGh3Zk", "topic": "<b>1、使用格式：<\/b>true:公平锁；false：非公平锁<span class=\"mm-note\"><b>Lock lock = new ReentrantLock(true/false);  \ntry{      \n      lock.lock();//加锁操作  }\nfinally{      \n      lock.unlock();  }<\/b><\/span>", "expanded": true}, {"id": "m2FFbyXwYBv", "topic": "<b>2、使用注意：<\/b>", "expanded": true, "children": [{"id": "m4c8pvBugOT", "topic": "①：<span style=\"color:#d92d20\"><b><span>必须在finally块中释放锁<\/span><\/b><span class=\"mm-note\">防止出现死锁。<\/span>", "expanded": true}]}]}]}]}]}, {"id": "mcUXz1PXgdp", "topic": "<b>3、Synchronized — <\/b><b><mark>可重入不公平锁<\/mark><\/b>", "expanded": true, "children": [{"id": "mNU05q6YsCD", "topic": "<b>1、特点：<\/b>", "expanded": true, "children": [{"id": "mj2jO3FbFXK", "topic": "<b>①：使用简单，一切交给JVM处理<\/b><span class=\"mm-note\">java语言的关键字，是<b>原生语法层面的互斥<\/b>，需要<b>jvm实现。\n保证在同一时刻， 被修饰的代码块或方法只会有一个线程执行，以达到保证并发安全的效果。<\/b><\/span>", "expanded": true}]}, {"id": "mLFQPowqybY", "topic": "<b>2、使用(<\/b>四种使用方式<b>)<\/b><br><img class=\"mm-img\" src=\"mm-14dc2fddd0b132.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mAk9MPk9XSv", "topic": "<b>①：修饰<\/b><span style=\"color:#1d4ed8\"><b><span>方法<\/span><\/b>：在方法的前面加synchronized<span class=\"mm-note\">被修饰的方法称为<b>同步方法<\/b>，作用的范围是整个方法，<b>作用的对象是调用这个方法的对象<\/b><\/span>", "expanded": true}, {"id": "mekkYP2hXNb", "topic": "<b>②：修饰<\/b><span style=\"color:#1d4ed8\"><b><span>静态方法：<\/span><\/b><b><mark>该类的所有实例对象用的是同一把锁<\/mark><\/b><span class=\"mm-note\">作用的范围是整个静态方法，作用的对象是<b>这个类的所有对象。(即：该类的所有实例对象用的是同一把锁)\n<\/b>因为<b>：静态方法是属于类而不属于对象的<\/b>。因此作用的对象是这个类的所有对象。<\/span>", "expanded": true}, {"id": "mrFybTcfXh5", "topic": "<b>③：修饰<\/b><span style=\"color:#1d4ed8\"><b><span>代码块<\/span><\/b><span class=\"mm-note\">被修饰的代码块称为<b>同步语句块<\/b>，其作用的范围是大括号{}括起来的代码，作用的对象是<b>调用这个代码块的对象<\/b>；<\/span>", "expanded": true}, {"id": "mFPLjEFh9E4", "topic": "<b>④：修饰<\/b><span style=\"color:#1d4ed8\"><b><span>类：<\/span><\/b><b><mark>该类的所有实例对象用的是同一把锁<\/mark><\/b><span class=\"mm-note\">作用的范围是synchronized后面括号括起来的部分，作用的对象是<b>这个类的所有对象。(即：该类的所有实例对象用的是同一把锁)<\/b><\/span>", "expanded": true}]}, {"id": "maOKLcn8qca", "topic": "<b>3、总结：<\/b>", "expanded": true, "children": [{"id": "mxwez18avEX", "topic": "<b>①：分清不同位置的作用对象<\/b><span class=\"mm-note\">无论synchronized关键字加在方法上还是对象上，如果它作用的对象是非静态的，则它取得的锁是对象；\n如果synchronized作用的对象是一个<b>静态方法或一个类<\/b>，则它取得的锁是对类，该类所有的对象同一把锁。<\/span>", "expanded": true}, {"id": "mDIsxOjfasK", "topic": "②：<b>每个对象只有一个锁（lock）<\/b>与之相关联，谁拿到这个锁谁就可以运行它所控制的那段代码。", "expanded": true}, {"id": "mFJ9U0jQl97", "topic": "③：定义<b>接口方法时不能使用synchronized<\/b>关键字。", "expanded": true}, {"id": "mTteHi21vw3", "topic": "④：<b>构造方法不能使用synchronized<\/b>关键字，但可以使用synchronized代码块来进行同步。", "expanded": true}, {"id": "mNsuoB0N5YD", "topic": "⑤：<b> synchronized关键字不能继承<\/b><span class=\"mm-note\">如果在父类中的某个方法使用了synchronized关键字，而在子类中覆盖了这个方法，在子类中的这个方法默认情况下并不是同步的，而必须显式地在子类的这个方法中加上synchronized关键字才可以。\n当然，还可以在子类方法中调用父类中相应的方法，这样虽然子类中的方法不是同步的，但子类调用了父类的同步方法，因此，子类的方法也就相当于同步了。<\/span>", "expanded": true}]}]}, {"id": "mZ2UmOQsAAT", "topic": "<b>4、ReentrantLock 与 Synchronized的区别总结<\/b><span class=\"mm-note\"><a href=\"https://blog.csdn.net/zxd8080666/article/details/83214089\" target=\"_blank\" rel=\"noopener\">Synchronized与ReentrantLock区别总结（简单粗暴，一目了然）_rentrantlock synchinonzed_奋力奔跑的蜗牛的博客-CSDN博客<\/a><\/span>", "expanded": true, "children": [{"id": "mZHY6MVlBBb", "topic": "<b>相似点：均为<\/b><b><mark>加锁阻塞式同步，都是可重入锁<\/mark><\/b><span class=\"mm-note\">也就是说当如果一个线程获得了对象锁，进入了同步块，<b>其他访问该同步块的线程都必须阻塞在同步块外面等待<\/b>。\n​而进行线程阻塞和唤醒的代价是比较高的（操作系统需要在用户态与内核态之间来回切换，代价很高)。<\/span>", "expanded": true}, {"id": "mxytcntI6Lk", "topic": "<b>区别：<\/b><span class=\"mm-note\"><a href=\"https://blog.csdn.net/sufu1065/article/details/124464245?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522169347649916800184187303%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=169347649916800184187303&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-124464245-null-null.142^v93^koosearch_v1&amp;utm_term=synchronized%20%E4%B8%8E%20reentrantlock&amp;spm=1018.2226.3001.4187\" target=\"_blank\" rel=\"noopener\">synchronized和ReentrantLock的5个区别！_sufu1065的博客-CSDN博客<\/a><\/span>", "expanded": true, "children": [{"id": "mC379XUlvtL", "topic": "①：<span style=\"color:#1d4ed8\"><b><span>响应中断不同<\/span><\/b><span class=\"mm-note\"><b>ReentrantLock 可以使用 lockInterruptibly 获取锁并响应中断指令；\n​而 synchronized 不能响应中断，也就是如果发生了死锁，使用 synchronized 会一直等待下去，而使用 ReentrantLock 可以响应中断并释放锁，从而解决死锁的问题<\/b><\/span>", "expanded": true}, {"id": "mQBpooOp4VC", "topic": "<b>②：<\/b><span style=\"color:#1d4ed8\"><b><span>锁的粒度和灵活度<\/span><\/b><b>：ReenTrantLock优于Synchronized<\/b>", "expanded": true}, {"id": "mBxCAAoTZi3", "topic": "<b>③：<\/b><span style=\"color:#1d4ed8\"><b><span>底层实现不同<\/span><\/b><span class=\"mm-note\">对于Synchronized来说，它是java语言的关键字，是<b>原生语法层面<\/b>的互斥，是 <b>JVM<\/b> 层面<b>通过监视器（Monitor）实现<\/b>的。\n而ReentrantLock它是JDK 1.5之后提供的<b>API层面的互斥锁<\/b>，需要<b>lock()和unlock()方法配合try/finally语句块<\/b>来完成<\/span>", "expanded": true}, {"id": "mfUKPx2Siwy", "topic": "④：<span style=\"color:#1d4ed8\"><b><span>用法不同<\/span><\/b><span class=\"mm-note\"><b>synchronized 可用来修饰普通方法、静态方法和代码块，而 ReentrantLock 只能用在代码块上。\nReentrantLock 在使用之前需要先创建 ReentrantLock 对象，然后使用 lock 方法进行加锁，使用完之后再调用 unlock 方法释放锁。<\/b><\/span>", "expanded": true}, {"id": "mYzec8ednGn", "topic": "⑤：<span style=\"color:#1d4ed8\"><b><span>获取锁和释放锁方式不同<\/span><\/b><span class=\"mm-note\"><b>synchronized 会由编译器自动加锁和释放锁<\/b>，当进入 synchronized 修饰的代码块之后会自动加锁，当离开 synchronized 的代码段之后会自动释放锁。\n<b>ReentrantLock 需要手动加锁和释放锁。\n<\/b>所以最好在<b>finally中声明/释放锁<\/b>。<\/span>", "expanded": true}, {"id": "mjxkGyWZAZ6", "topic": "⑥：<span style=\"color:#1d4ed8\"><b><span>锁类型不同：<\/span><\/b><span class=\"mm-note\"><b>synchronized 属于非公平锁，而 ReentrantLock 既可以是公平锁也可以是非公平锁。<\/b><\/span>", "expanded": true}]}]}]}, {"id": "mhjldDIiQrd", "topic": "<b>2、线程的生命周期与状态(<\/b><span style=\"color:#b45309\"><b><span>六种状态<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-134f64ebe5365c.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><a href=\"https://mp.weixin.qq.com/s/R5MrTsWvk9McFSQ7bS0W2w\" target=\"_blank\" rel=\"noopener\">线程的几种状态你真的了解么 (qq.com)<\/a>\n<b>\nNEW: 初始状态<\/b>，线程被创建出来但没有被调用 start() 。\n<b>RUNNABLE<\/b>: 运行状态，线程被调用了 start()等待运行的状态。\n<b>BLOCKED<\/b>：阻塞状态，需要等待锁释放。\n<b>WAITING<\/b>：等待状态，表示该线程需要等待其他线程做出一些特定动作（通知或中断）。\n<b>TIME_WAITING<\/b>：超时等待状态，可以在指定的时间后自行返回而不是像 WAITING 那样一直等待。\n<b>TERMINATED<\/b>：终止状态，表示该线程已经运行完毕<\/span>", "expanded": true, "children": [{"id": "mkF5uzms7yw", "topic": "<b>1、简单分析：<\/b><span class=\"mm-note\">当线程执行 wait()方法之后，线程进入 <b>WAITING（等待）<\/b> 状态。进入等待状态的线程需要依靠其他线程的通知才能够返回到运行状态。\n<b>TIMED_WAITING(超时等待)<\/b> 状态相当于在等待状态的基础上增加了超时限制，比如通过 sleep（long millis）方法或 wait（long millis）方法可以将线程置于 TIMED_WAITING 状态。当超时时间结束后，线程将会返回到 RUNNABLE 状态。\n当线程进入 synchronized 方法/块或者调用 wait 后（被 notify）重新进入 synchronized 方法/块，但是锁被其它线程占有，这个时候线程就会进入 <b>BLOCKED（阻塞）<\/b> 状态。\n线程在执行完了 run()方法之后将会进入到 <b>TERMINATED（终止）<\/b> 状态\n著作权归Guide所有原文链接：<a href=\"https://javaguide.cn/java/concurrent/java-concurrent-questions-01.html#%E8%AF%B4%E8%AF%B4%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%92%8C%E7%8A%B6%E6%80%81\" target=\"_blank\" rel=\"noopener\">https://javaguide.cn/java/concurrent/java-concurrent-questions-01.html#%E8%AF%B4%E8%AF%B4%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E5%92%8C%E7%8A%B6%E6%80%81<\/a><\/span>", "expanded": true}, {"id": "mtmhGYvWgdi", "topic": "<b>2、<\/b><span style=\"color:#1d4ed8\"><b><span>JVM不区分Ready 与 RUNNING状态<\/span><\/b><b>：<\/b><span class=\"mm-note\">现在的时分（time-sharing）多任务（multi-task）操作系统架构通常都是用所谓的“时间分片（time quantum or time slice）”方式进行抢占式（preemptive）轮转调度（round-robin 式）。这个时间分片通常是很小的，一个线程一次最多只能在 CPU 上运行比如 10-20ms 的时间（此时处于 running 状态），也即大概只有 0.01 秒这一量级，时间片用后就要被切换下来放入调度队列的末尾等待再次调度。（也即回到 ready 状态）。线程切换的如此之快，区分这两种状态就没什么意义了。<\/span>", "expanded": true}]}, {"id": "mFo2aMMZ75F", "topic": "<b>3、可重入锁与不可重入锁原理<\/b><span class=\"mm-note\"><b>每一个锁关联一个线程持有者和计数器<\/b>，当计数器为 0 时表示该锁没有被任何线程持有，那么任何线程都可能获得该锁而调用相应的方法；\n​当某一线程请求成功后，JVM会记下锁的持有线程，并且将计数器置为 1；此时其它线程请求该锁，则必须等待；而该持有锁的线程如果再次请求这个锁，就可以再次拿到这个锁，同时计数器会递增；当线程退出同步代码块时，计数器会递减，如果计数器为 0，则释放该锁。<\/span>", "expanded": true, "children": [{"id": "mqNt8IKwAM6", "topic": "因此ReentrantLock、synchronized均为可重入锁", "expanded": true}]}, {"id": "mHnb6wxtJIG", "topic": "<b>4、Condition—  与Lock配合可以实现<\/b><span style=\"color:#b45309\"><b><span>等待/通知模式<\/span><\/b><span class=\"mm-note\">是一个Java多线程接口，Condition接口<b>提供了类似Object的监视器方法<\/b>，<b>与Lock配合可以实现等待/通知模式。<\/b><\/span>", "expanded": true, "children": [{"id": "m25ZbiOpgTm", "topic": "1、与java.lang.Object的区别：<br><img class=\"mm-img\" src=\"mm-d0ac52b0d7555f.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mSuQeXV38FA", "topic": "<b>2、Condition接口详解<\/b>", "expanded": true, "children": [{"id": "mqnIUK2P9V8", "topic": "1.Condition对象是由Lock对象（调用Lock对象的newCondition()方法）创建出来的，换句话说，<b><mark>Condition是依赖Lock对象的<\/mark><\/b>。<b>获取一个Condition必须通过Lock的newCondition()方法<\/b><br><img class=\"mm-img\" src=\"mm-65de9e0e5db3a9.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">如图，<b>先new出了个Lock，再用Lock创建出了Condition对象<\/b>。<\/span>", "expanded": true}, {"id": "m8LC5BYWVuf", "topic": "2.Condition定义了<b>等待(await)/通知(signal)<\/b>两种类型的方法，当前线程调用这些方法时，<span style=\"color:#b45309\"><b><span>需要提前获取到Condition对象关联的锁<\/span><\/b>。<br><img class=\"mm-img\" src=\"mm-853a3db1f58866.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f8294188007121.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "moU4QQ6mqzf", "topic": "<b>5、CountDownLatch<\/b>", "expanded": true}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#map',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  var fitTimer = setTimeout(function(){ try{ mind.scaleFit(); }catch(e){} }, 80);
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ mind.scaleFit(); }, 60);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 双指缩放（mind-elixir 桌面端仅处理滚轮）
+  var pinch = null, mapEl = document.getElementById('map');
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    if (e.touches.length === 2) {
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var v = pinch.s * (dist(e.touches) / pinch.d);
+      v = Math.max(0.2, Math.min(2.4, v));
+      mind.scale(v, { x: pinch.x, y: pinch.y });
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+
+  window.__mind = mind;
+})();
+</script>
+</body></html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>JVM · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">21</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-Java内存区域详解">1.Java内存区域详解</a><a class="tl l3" href="#1-程序计数器-PC">1.程序计数器(PC)</a><a class="tl l3" href="#2-虚拟机栈">2.虚拟机栈</a><a class="tl l3" href="#3-本地方法栈">3.本地方法栈</a><a class="tl l3" href="#4-堆">4.堆</a><a class="tl l3" href="#5-方法区">5.方法区</a><a class="tl l4" href="#1-方法区与元空间-永久代的关系">1.方法区与元空间、永久代的关系</a><a class="tl l4" href="#2-为什么要将永久代替换为元空间">2.为什么要将永久代替换为元空间？</a><a class="tl l3" href="#6-运行时常量池">6.运行时常量池</a><a class="tl l3" href="#7-字符串常量池">7.字符串常量池</a><a class="tl l3" href="#8-直接内存">8.直接内存</a><a class="tl l2" href="#2-什么区域会OOM-什么区域不会OOM">2.什么区域会OOM、什么区域不会OOM？</a><a class="tl l2" href="#2-Java-堆中对象创建-内存布局和访问的全过程">2. Java 堆中对象创建、内存布局和访问的全过程</a><a class="tl l3" href="#1-对象的创建步骤">1.对象的创建步骤</a><a class="tl l3" href="#2-对象的内存布局">2.对象的内存布局</a><a class="tl l3" href="#3-对象的访问定位">3.对象的访问定位</a><a class="tl l2" href="#3-类加载过程详解">3.类加载过程详解</a><a class="tl l4" href="#1-类的生命周期-7个阶段">1.类的生命周期(7个阶段)</a><a class="tl l4" href="#2-类加载过程">2.类加载过程</a><a class="tl l2" href="#4-JVM怎么对指令重排序-排序依据是什么">4.JVM怎么对指令重排序，排序依据是什么</a><a class="tl l2" href="#5-指令执行的完整流程-如何得知一条指令的运行时间">5.指令执行的完整流程，如何得知一条指令的运行时间？</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>JVM</h1><div class="meta">2024-05-09 · <a class="src-link" href="https://flowus.cn/1f4b6dd9-4761-4bd6-b733-24f7cc42d5ca" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h2 id="1-Java内存区域详解">1.Java内存区域详解</h2>
+<p>Java 虚拟机在执行 Java 程序的过程中会把它管理的内存划分成若干个不同的数据区域。</p>
+<p>JDK 1.8 和之前的版本略有不同，我们这里以 JDK 1.7 和 JDK 1.8 这两个版本为例介绍。</p>
+<ul><li><strong>JDK1.7：</strong></li></ul>
+<p><img alt="image.png" src="/assets/img/flowus-ef79962fa781f00c.png"></p>
+<ul><li><strong>JDK1.8：</strong></li></ul>
+<p><img alt="image.png" src="/assets/img/flowus-000fe5c6cc1fd324.png"></p>
+<ul><li><strong>线程私有</strong>：</li></ul>
+<ul><li><strong>程序计数器（PC）</strong></li></ul>
+<ul><li><strong>虚拟机栈</strong></li></ul>
+<ul><li><strong>本地方法栈</strong></li></ul>
+<ul><li><strong>线程共享</strong>：</li></ul>
+<ul><li>堆</li></ul>
+<ul><li>方法区</li></ul>
+<ul><li>直接内存 (非运行时数据区的一部分)</li></ul>
+<h3 id="1-程序计数器-PC">1.程序计数器(PC)</h3>
+<p>程序计数器是一块较小的内存空间，可以看作是<strong>当前线程所执行的字节码的行号指示器</strong>。</p>
+<p>一个<a href="https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%A4%AE%E5%A4%84%E7%90%86%E5%99%A8">中央处理器</a>CPU中的<a href="https://zh.wikipedia.org/wiki/%E5%AF%84%E5%AD%98%E5%99%A8">寄存器</a>，其功能是<strong>存储下一条要执行的指令（在机器语言中）的内存地址</strong>。</p>
+<p><strong>字节码解释器</strong>工作时通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等功能都需要依赖这个计数器来完成。</p>
+<p>另外，为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各线程之间计数器互不影响，独立存储，我们称这类内存区域为“线程私有”的内存。</p>
+<p>从上面的介绍中我们知道了程序计数器主要有两个作用：</p>
+<ul><li>字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。</li></ul>
+<ul><li>在多线程的情况下，程序计数器用于<strong>记录当前线程执行的位置</strong>，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。</li></ul>
+<blockquote><p>💡 ⚠️ 注意：程序计数器是<strong>唯一一个不会出现 <code>OutOfMemoryError</code> 的内存区域</strong>，它的<strong>生命周期随着线程的创建而创建，随着线程的结束而死亡</strong>。</p></blockquote>
+<h3 id="2-虚拟机栈">2.虚拟机栈</h3>
+<p><strong>生命周期和线程相同</strong>，随着线程的创建而创建，随着线程的死亡而死亡。</p>
+<p>方法调用的数据需要通过栈进行传递，<strong>每一次方法调用都会有一个对应的栈帧被压入栈中</strong>，每一个方法调用结束后，都会有一个栈帧被弹出。</p>
+<p><strong>栈由一个个栈帧组成</strong>，而<strong>每个栈帧中都拥有</strong>：<strong>局部变量表、操作数栈、动态链接、方法返回地址</strong>。和数据结构上的栈类似，两者都是先进后出的数据结构，只支持出栈和入栈两种操作。</p>
+<ol><li><strong>局部变量表：</strong>主要存放了编译期可知的各种数据类型（boolean、byte、char、short、int、float、long、double）、对象引用等</li></ol>
+<ol><li><strong>操作数栈</strong> 主要作为方法调用的中转站使用，用于存放方法执行过程中产生的中间计算结果。另外，计算过程中产生的<strong>临时变量也会放在操作数栈中</strong>。</li></ol>
+<ol><li><strong>动态链接</strong> 主要<strong>服务一个方法需要调用其他方法的场景</strong>。</li></ol>
+<p>Class 文件的常量池里保存有大量的符号引用比如方法引用的符号引用。</p>
+<p>当一个方法要调用其他方法，需要将常量池中指向方法的符号引用转化为其在内存地址中的直接引用。动态链接的作用就是为了将符号引用转换为调用方法的直接引用，这个过程也被称为 <strong>动态连接</strong> 。</p>
+<p>那么<strong>当线程请求栈的深度超过当前 Java 虚拟机栈的最大深度</strong>的时候，就抛出 <strong><code>StackOverFlowError</code></strong> 错误。</p>
+<p>Java 方法有两种返回方式，一种是 <strong>return 语句正常返回</strong>，一种是<strong>抛出异常</strong>。不管哪种返回方式，都会导致栈帧被弹出。</p>
+<p>简单总结一下程序运行中栈<strong>可能会出现两种错误</strong>：</p>
+<ul><li><strong><code>StackOverFlowError</code>：</strong> 若<strong>栈的内存大小不允许动态扩展</strong>，那么当线程请求栈的深度超过当前 Java 虚拟机栈的最大深度的时候，就抛出 <code>StackOverFlowError</code> 错误。</li></ul>
+<ul><li><strong><code>OutOfMemoryError</code>：</strong> 如果<strong>栈的内存大小可以动态扩展</strong>， 如果虚拟机在动态扩展栈时<strong>无法申请到足够的内存空间</strong>，则抛出<code>OutOfMemoryError</code>异常。</li></ul>
+<hr>
+<h3 id="3-本地方法栈">3.本地方法栈</h3>
+<p>和虚拟机栈所发挥的作用非常相似，区别是：<strong>虚拟机栈为虚拟机执行 Java 方法 （也就是字节码）服务，而本地方法栈则为虚拟机使用到的 Native 方法服务。</strong> 在 HotSpot 虚拟机中和 Java 虚拟机栈合二为一。</p>
+<p>本地方法被执行的时候，在本地方法栈也会创建一个栈帧，用于存放该本地方法的局部变量表、操作数栈、动态链接、出口信息。</p>
+<p>方法执行完毕后相应的栈帧也会出栈并释放内存空间，也会出现 <code>StackOverFlowError</code> 和 <strong><code>OutOfMemoryError</code></strong> 两种错误</p>
+<h3 id="4-堆">4.堆</h3>
+<p>Java 虚拟机所管理的内存中最大的一块，Java 堆是<strong>所有线程共享的一块内存区域</strong>，在虚拟机启动时创建。</p>
+<p><strong>此内存区域的唯一目的就是存放对象实例，几乎所有的对象实例以及数组都在这里分配内存。</strong></p>
+<p>Java 世界中“<strong>几乎</strong>”所有的对象都在堆中分配，但是，随着 JIT 编译器的发展与<strong>逃逸分析技术</strong>逐渐成熟，栈上分配、标量替换优化技术将会导致一些微妙的变化，所有的对象都分配到堆上也渐渐变得不那么“绝对”了。从 JDK 1.7 开始已经默认开启逃逸分析，如果<strong>某些方法中的对象引用没有被返回或者未被外面使用</strong>（也就是未逃逸出去），那么对象<strong>可以直接在栈上分配内存</strong>。</p>
+<p><strong>Java 堆是垃圾收集器管理的主要区域</strong>，因此也被称作 <strong>GC 堆（Garbage Collected Heap）</strong>。从垃圾回收的角度，由于现在收集器基本都采用分代垃圾收集算法，所以 Java 堆还可以细分为：新生代和老年代；再细致一点有：Eden、Survivor、Old 等空间。进一步划分的目的是更好地回收内存，或者更快地分配内存。</p>
+<p>堆这里最容易出现的就是 <strong><code>OutOfMemoryError</code> 错误</strong></p>
+<h3 id="5-方法区">5.方法区</h3>
+<p>方法区属于是 <strong>JVM 运行时数据区域的一块逻辑区域</strong>，是<strong>各个线程共享的内存区域</strong>。</p>
+<p>《Java 虚拟机规范》只是规定了有方法区这么个概念和它的作用，方法区到底要如何实现那就是虚拟机自己要考虑的事情了。也就是说，<strong>在不同的虚拟机实现上，方法区的实现是不同</strong>的。</p>
+<p>当虚拟机要使用一个类时，它需要读取并解析 Class 文件获取相关信息，再将信息存入到方法区。</p>
+<p>方法区会存储已被虚拟机加载的 <strong>类信息、字段信息、方法信息、常量、静态变量、即时编译器编译后的代码等数据</strong>。</p>
+<ul><li>static final修饰的成员变量都存储于 方法区中</li></ul>
+<ul><li>字符串常量也是存储在方法区中</li></ul>
+<h4 id="1-方法区与元空间-永久代的关系">1.方法区与元空间、永久代的关系</h4>
+<p>在 <strong>jdk7 及以前</strong>，习惯上把方法区称为<strong>永久代</strong>。<strong>jdk8开始</strong>，使用<strong>元空间</strong>取代了永久代。</p>
+<p><strong>方法区是一种规范</strong>，不同的虚拟机厂商可以基于规范做出不同的实现，永久代和元空间就是出于不同jdk版本的实现。</p>
+<p>方法区和永久代以及元空间的关系很像 <strong>Java 中接口和类的关系</strong>，类实现了接口，这里的类就可以看作是永久代和元空间，接口可以看作是方法区，也就是说<strong>永久代以及元空间是 HotSpot 虚拟机对虚拟机规范中方法区的两种实现方式。</strong></p>
+<p>并且，永久代是 JDK 1.8 之前的方法区实现，JDK 1.8 及以后方法区的实现变成了元空间。</p>
+<p>永久代、元空间并不只是名字变了，内部结构也进行了调整。</p>
+<p><strong>永久代使用的是 JVM 的内存</strong>，而<strong>元空间使用的是本地的直接内存</strong>。</p>
+<p>直接内存并不是 JVM 运行时数据区的一部分，因此不会受到 Java 堆的限制。但是它<strong>会受到本机总内存大小以及处理器寻址空间的限制</strong>，所以如果这部分内存也被频繁的使用，<strong>依然会导致 OOM</strong> 错误的出现。</p>
+<p><img alt="image.png" src="/assets/img/flowus-2a976fadc6f56652.png"></p>
+<h4 id="2-为什么要将永久代替换为元空间">2.为什么要将永久代替换为元空间？</h4>
+<ol><li><strong>突破内存限制，减少OOM。</strong> </li></ol>
+<p>整个<strong>永久代有一个 JVM 本身设置的固定大小上限</strong>，无法进行调整（也就是<strong>受到 JVM 内存的限制</strong>）。</p>
+<p>由于<strong>元空间使用的是本地内存，而不是 JVM 内存</strong>，因此理论上，其大小只受限于操作系统的实际可用内存。这大大减少了内存溢出的可能性。相较于永久代在 JVM 堆中预分配的有限空间，元空间的引入提供了更大的空间来存储类元数据。</p>
+<ol><li><strong>能加载的类多了</strong></li></ol>
+<p><strong>元空间里面存放的是类的元数据</strong>，这样加载多少类的元数据就不由 <code>MaxPermSize</code> 控制了, 而<strong>由系统的实际可用空间来控制</strong>，这样能加载的类就更多了。</p>
+<ol><li><strong>永久代调优复杂</strong></li></ol>
+<p><strong>永久代会为GC带来不必要的复杂性</strong>，并且<strong>回收效率偏低</strong>。</p>
+<p>主要是为了<strong>降低 Full GC。</strong></p>
+<p>在永久代中元数据可能会随着每一次赋GC发生而进行移动，而 hotspot虚拟机每种类型的垃圾回收器都要特殊处理永久代中的元数据，分离出来以后可以简化赋GC，以及以后并发隔离元数据等方面进行优化。</p>
+<h3 id="6-运行时常量池">6.运行时常量池</h3>
+<p>Class 文件中除了有类的版本、字段、方法、接口等描述信息外，还有用于<strong>存放编译期生成的各种字面量</strong>（Literal）<strong>和符号引用</strong>（Symbolic Reference）的 <strong>常量池表(Constant Pool Table)</strong> 。</p>
+<ol><li><strong>字面量</strong>：包括字符串、整数、浮点数等常量。</li></ol>
+<ol><li><strong>符号引用</strong>：包括类和接口的全限定名、字段的名称和描述符、方法的名称和描述符等。</li></ol>
+<p><strong>常量池表会在类加载后存放到方法区的运行时常量池</strong>中。</p>
+<p>运行时常量池的功能<strong>类似于传统编程语言的符号表</strong>，尽管它包含了比典型符号表更广泛的数据。</p>
+<p>既然运行时常量池是方法区的一部分，自然受到方法区内存的限制，当常量池无法再申请到内存时会抛出 <code>OutOfMemoryError</code> 错误</p>
+<h3 id="7-字符串常量池">7.字符串常量池</h3>
+<p><strong>字符串常量池</strong> 是 JVM 为了<strong>提升性能和减少内存消耗针对字符串</strong>（String 类）专门开辟的一块区域，主要目的是为了避免字符串的重复创建。</p>
+<h3 id="8-直接内存">8.直接内存</h3>
+<p>直接内存是一种<strong>特殊的内存缓冲区</strong>，并不在 Java 堆或方法区中分配的，而是通过 JNI 的方式在<strong>本地内存上分配</strong>的。</p>
+<p><strong>直接内存并不是虚拟机运行时数据区的一部分</strong>，也<strong>不是虚拟机规范中定义的内存区域</strong>，但是这部分内存也被频繁地使用。而且也可能导致 <strong><code>OutOfMemoryError</code></strong> 错误出现。</p>
+<hr>
+<h2 id="2-什么区域会OOM-什么区域不会OOM">2.什么区域会OOM、什么区域不会OOM？</h2>
+<p><strong>除了PC(程序计数器)</strong>，其他都可能会发生。</p>
+<p>需要注意的是：</p>
+<ol><li><strong>元空间</strong></li></ol>
+<p>其使用的是本地内存，因此OOM时，是本地内存不足。</p>
+<ol><li><strong>永久代</strong></li></ol>
+<p>使用的是JVM内存，OOM时，是JVM的内存不同</p>
+<ol><li><strong>虚拟机栈</strong></li></ol>
+<p>当虚拟机栈<strong>可动态申请内存时，才可能出现OOM</strong>；否则只会出现stackOverFlowError</p>
+<h2 id="2-Java-堆中对象创建-内存布局和访问的全过程">2. Java 堆中对象创建、内存布局和访问的全过程</h2>
+<h3 id="1-对象的创建步骤">1.对象的创建步骤</h3>
+<ol><li><strong>类加载检查</strong></li></ol>
+<p>虚拟机遇到一条 new 指令时，首先将去检查这个指令的参数<strong>是否能在常量池中定位到这个类的符号引用</strong>，并且<strong>检查这个符号引用</strong>代表的类<strong>是否已被加载过、解析和初始化过</strong>。如果没有，那必须先执行相应的类加载过程。</p>
+<ol><li><strong>分配内存</strong></li></ol>
+<p>在<strong>类加载检查</strong>通过后，接下来虚拟机将为新生对象<strong>分配内存</strong>。对象所需的内存大小在类加载完成后便可确定，为对象分配空间的任务等同于把一块确定大小的内存从 Java 堆中划分出来。</p>
+<p><strong>分配方式</strong>有 <strong>“指针碰撞”</strong> 和 <strong>“空闲列表”</strong> 两种，<strong>选择哪种分配方式由 Java 堆是否规整决定，而 Java 堆是否规整又由所采用的垃圾收集器是否带有压缩整理功能决定</strong>。</p>
+<ol><li><strong>初始化零值</strong></li></ol>
+<p>内存分配完成后，虚拟机需要<strong>将分配到的内存空间都初始化为零值</strong>（不包括对象头），这一步操作保证了对象的实例字段在 Java 代码中<strong>可以不赋初始值就直接使用</strong>，程序能访问到这些字段的数据类型所对应的零值。</p>
+<ol><li><strong>设置对象头</strong></li></ol>
+<p>初始化零值完成之后，<strong>虚拟机要对对象进行必要的设置</strong>，例如这个对象是哪个类的实例、如何才能找到类的元数据信息、对象的哈希码、对象的 GC 分代年龄等信息。 <strong>这些信息存放在对象头中。</strong> 另外，根据虚拟机当前运行状态的不同，如是否启用偏向锁等，对象头会有不同的设置方式。</p>
+<ol><li><strong>执行init方法</strong></li></ol>
+<p>在上面工作都完成之后，从虚拟机的视角来看，一个新的对象已经产生了，但从 Java 程序的视角来看，对象创建才刚开始，<code>&amp;lt;init&amp;gt;</code> 方法还没有执行，所有的字段都还为零。所以一般来说，执行 new 指令之后会接着执行 <code>&amp;lt;init&amp;gt;</code> 方法，<strong>把对象按照程序员的意愿进行初始化</strong>，这样一个真正可用的对象才算完全产生出来。</p>
+<p><img alt="image.png" src="/assets/img/flowus-adcbb91b3306ee6a.png"></p>
+<p>补充第二步的内容：</p>
+<ol><li><strong>内存分配的两种方式</strong> </li></ol>
+<ul><li><strong>指针碰撞</strong>：</li></ul>
+<ul><li>适用场合：<strong>堆内存规整</strong>（即没有内存碎片）的情况下。</li></ul>
+<ul><li>原理：<strong>用过的内存全部整合到一边，没有用过的内存放在另一边</strong>，中间有一个<strong>分界指针</strong>，只需要向着没用过的内存方向将该指针移动对象内存大小位置即可。</li></ul>
+<ul><li>使用该分配方式的 GC 收集器：<strong>Serial, ParNew</strong></li></ul>
+<ul><li><strong>空闲列表</strong>：</li></ul>
+<ul><li>适用场合：<strong>堆内存不规整</strong>的情况下。</li></ul>
+<ul><li>原理：虚拟机会维护一个列表，该<strong>列表中会记录哪些内存块是可用的</strong>，在分配的时候，找一块儿足够大的内存块儿来划分给对象实例，最后更新列表记录。</li></ul>
+<ul><li>使用该分配方式的 GC 收集器：<strong>CMS</strong></li></ul>
+<p>选择以上两种方式中的哪一种，<strong>取决于 Java 堆内存是否规整</strong>。而 Java 堆内存是否规整，取决于 GC 收集器的算法是"标记-清除"，还是"标记-整理"（也称作"标记-压缩"），值得注意的是，复制算法内存也是规整的。</p>
+<ol><li><strong>内存分配并发问题</strong></li></ol>
+<p>在创建对象的时候有一个很重要的问题，就是<strong>线程安全</strong>，因为在实际开发过程中，创建对象是很频繁的事情，作为虚拟机来说，必须要保证线程是安全的，通常来讲，虚拟机采用<strong>两种方式来保证线程安全</strong>：</p>
+<ol><li><strong>CAS+失败重试：</strong> CAS 是乐观锁的一种实现方式。所谓乐观锁就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止。<strong>虚拟机采用 CAS 配上失败重试的方式保证更新操作的原子性。</strong></li></ol>
+<ol><li><strong>TLAB：</strong> 为每一个线程预先在 Eden 区分配一块儿内存，JVM 在给线程中的对象分配内存时，首先在 TLAB 分配，当对象大于 TLAB 中的剩余内存或 TLAB 的内存已用尽时，再采用上述的 CAS 进行内存分配</li></ol>
+<h3 id="2-对象的内存布局">2.对象的内存布局</h3>
+<p>在 Hotspot 虚拟机中，对象在内存中的布局可以分为 <strong>3 块区域</strong>：</p>
+<ol><li><strong>对象头</strong></li></ol>
+<p>Hotspot 虚拟机的对象头包括<strong>两部分</strong>信息<strong>：</strong></p>
+<ol><li><strong>第一部分用于存储对象自身的运行时数据</strong>（哈希码、GC 分代年龄、锁状态标志等等），</li></ol>
+<ol><li><strong>另一部分是类型指针</strong>，即对象指向它的类元数据的指针，<strong>虚拟机通过这个指针来确定这个对象是哪个类的实例</strong>。</li></ol>
+<ol><li><strong>实例数据</strong></li></ol>
+<p><strong>实例数据部分是对象真正存储的有效信息</strong>，也是在程序中所定义的各种类型的字段内容。</p>
+<ol><li><strong>对齐填充</strong></li></ol>
+<p><strong>对齐填充部分不是必然存在的，也没有什么特别的含义，仅仅起占位作用。</strong> 因为 Hotspot 虚拟机的自动内存管理系统<strong>要求对象起始地址必须是 8 字节的整数倍</strong>，换句话说就是对象的大小必须是 8 字节的整数倍。而对象头部分正好是 <strong>8 字节的倍数</strong>（1 倍或 2 倍），因此，当对象实例数据部分没有对齐时，就需要通过对齐填充来补全。</p>
+<h3 id="3-对象的访问定位">3.对象的访问定位</h3>
+<p>建立对象就是为了使用对象，我们的 Java 程序<strong>通过栈上的 reference 数据来操作堆上的具体对象</strong>。</p>
+<p>对象的访问方式由虚拟机实现而定，目前主流的访问方式有：<strong>使用句柄</strong>、<strong>直接指针</strong>。</p>
+<ol><li><strong>使用句柄</strong></li></ol>
+<p>使用句柄的话，那么 Java 堆中将会划分出一块内存来作为<strong>句柄池</strong>，reference 中存储的就是<strong>对象的句柄地址</strong>，</p>
+<p>而<strong>句柄中包含了对象实例数据与对象类型数据各自的具体地址信息</strong>。</p>
+<p><img alt="image.png" src="/assets/img/flowus-838887a9d43271e8.png"></p>
+<ol><li><strong>直接指针</strong></li></ol>
+<p>reference 中存储的<strong>直接就是对象的地址。</strong></p>
+<p><img alt="image.png" src="/assets/img/flowus-f3ad8e3c3bdfc586.png"></p>
+<p>这两种对象访问方式各有优势。</p>
+<ol><li>使用<strong>句柄</strong>来访问的最大好处是 <strong>reference 中存储的是稳定的句柄地址</strong>，在<strong>对象被移动时只会改变句柄中的实例数据指针</strong>，而 reference 本身不需要修改。</li></ol>
+<ol><li>使用<strong>直接指针</strong>访问方式最大的好处就是<strong>速度快</strong>，它<strong>节省了一次指针定位的时间开销。</strong></li></ol>
+<hr>
+<h2 id="3-类加载过程详解">3.类加载过程详解</h2>
+<h4 id="1-类的生命周期-7个阶段">1.类的生命周期(7个阶段)</h4>
+<p>类从<strong>被加载到虚拟机内存中开始到卸载出内存为止</strong>，它的整个生命周期可以简单概括为 <strong>7 个阶段</strong>：加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Using）和卸载（Unloading）。其中，验证、准备和解析这三个阶段可以统称为连接（Linking）。</p>
+<p><img alt="image.png" src="/assets/img/flowus-1f75a9470809781e.png"></p>
+<h4 id="2-类加载过程">2.类加载过程</h4>
+<p><strong>Class 文件需要加载到虚拟机中之后才能运行和使用，那么虚拟机是如何加载这些 Class 文件呢？</strong></p>
+<p>系统加载 Class 类型的文件主要三步：<strong>加载-&gt;连接-&gt;初始化</strong>。</p>
+<ul><li>"<strong>加载</strong>"通常指的是<strong>将类加载到内存中的过程，获取二进制字节流</strong></li></ul>
+<ul><li>"<strong>连接</strong>"阶段则是<strong>将类的二进制数据合并到虚拟机的运行时状态中</strong>，包括三个步骤。</li></ul>
+<ul><li>最后才是"<strong>初始化</strong>"，即<strong>执行类构造器方法的过程</strong>。</li></ul>
+<p>连接过程又可分为三步：<strong>验证-&gt;准备-&gt;解析</strong>。</p>
+<h5 id="1-加载">1.加载</h5>
+<p>类加载过程的第一步，主要完成下面 3 件事情：</p>
+<ol><li>通过<strong>全类名获取定义此类的二进制字节流</strong>。</li></ol>
+<ol><li>将字节流所代表的静态存储结构转换为方法区的运行时数据结构。</li></ol>
+<ol><li>在<strong>内存中生成一个代表该类的 <code>Class</code> 对象</strong>，<strong>作为方法区这些数据的访问入口</strong>。</li></ol>
+<p>加载这一步主要是通过我们后面要讲到的 <strong>类加载器</strong> 完成的。<strong>类加载器</strong>有很多种，当我们想要加载一个类的时候，具体是哪个类加载器加载由 <strong>双亲委派模型</strong> 决定（不过，我们也能打破由双亲委派模型）。</p>
+<p>加载阶段与连接阶段的部分动作(如一部分字节码文件格式验证动作)是交叉进行的，加载阶段尚未结束，连接阶段可能就已经开始了。</p>
+<h5 id="2-验证">2.验证</h5>
+<p><strong>验证是连接阶段的第一步，</strong>这一阶段的<strong>目的是确保 Class 文件的字节流中包含的信息符合《Java 虚拟机规范》的全部约束要求，保证这些信息被当作代码运行后不会危害虚拟机自身的安全。</strong></p>
+<p>验证阶段这一步在整个类加载过程中耗费的资源还是相对较多的，但很有必要，可以<strong>有效防止恶意代码的执行</strong>。任何时候，程序安全都是第一位。</p>
+<p>不过，<strong>验证阶段也不是必须要执行的阶段</strong>。如果程序运行的全部代码(包括自己编写的、第三方包中的、从外部加载的、动态生成的等所有代码)都已经被反复使用和验证过，在生产环境的实施阶段就可以考虑使用 <code>-Xverify:none</code> 参数来关闭大部分的类验证措施，以缩短虚拟机类加载的时间。</p>
+<p>验证阶段主要由四个检验阶段组成：</p>
+<ol><li>文件格式验证（Class 文件格式检查）</li></ol>
+<ol><li>元数据验证（字节码语义检查）</li></ol>
+<ol><li>字节码验证（程序语义检查）</li></ol>
+<ol><li>符号引用验证（类的正确性检查）</li></ol>
+<hr>
+<h5 id="3-准备">3.准备</h5>
+<p><strong>准备阶段是正式为类变量分配内存并设置类变量初始值的阶段</strong></p>
+<p>这里所设置的初始值"通常情况"下是<strong>数据类型默认的零值</strong>（如 0、0L、null、false 等），比如我们定义了<code>public static int value=111</code> ，那么 value 变量在准备阶段的初始值就是 0 而不是 111（<strong>初始化阶段才会赋值</strong>）。</p>
+<p><strong>特殊情况</strong>：比如给 value 变量加上了 <strong>final 关键字</strong><code>public static final int value=111</code> ，那么准备阶段 value 的值就被赋值为 111。</p>
+<h5 id="4-解析">4.解析</h5>
+<p><strong>解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程</strong></p>
+<blockquote><p>💡 <strong>符号引用：不直接指向内存中的具体位置</strong>，而是<strong>通过虚拟机的符号引用解析机制，在运行时期动态地转换为直接引用</strong>，从而定位到内存中的具体对象。</p></blockquote>
+<ul><li><strong>那为什么要用符号引用呢？</strong></li></ul>
+<p>这是因为<a href="https://so.csdn.net/so/search?q=%E7%B1%BB%E5%8A%A0%E8%BD%BD&amp;spm=1001.2101.3001.7020">类加载</a>之前，javac会将源代码编译成.class文件，这个时候javac是不知道被编译的类中所引用的类、方法或者变量他们的引用地址在哪里，所以只能用符号引用来表示</p>
+<p>举个例子：在<strong>程序执行方法时，系统需要明确知道这个方法所在的位置</strong>。</p>
+<p>在<strong>编译阶段</strong>，<strong>Java 虚拟机并不知道类、接口、字段和方法在内存中的具体地址</strong>，而是<strong>使用符号引用来表示</strong>。解析阶段需要将这些符号引用转换为直接引用，即直接指向内存中的实际对象。</p>
+<p>Java 虚拟机为每个类都准备了一张方法表来存放类中所有的方法。当需要调用一个类的方法的时候，只要知道这个方法在方法表中的偏移量就可以直接调用该方法了。</p>
+<p><strong>通过解析操作符号引用就可以直接转变为目标方法在类中方法表的位置</strong>，从而使得方法可以被调用。</p>
+<h5 id="5-初始化">5.初始化</h5>
+<p><strong>执行初始化方法 <code>&amp;lt;clinit&amp;gt; ()</code>方法的过程，是类加载的最后一步，这一步 JVM 才开始真正执行类中定义的 Java 程序代码(字节码)。</strong></p>
+<blockquote><p>说明：<code>&amp;lt;clinit&amp;gt; ()</code>方法是编译之后自动生成的。</p></blockquote>
+<p>对于<code>&amp;lt;clinit&amp;gt; ()</code> 方法的调用，虚拟机会自己确保其在多线程环境中的安全性。因为 <strong><code>&amp;lt;clinit&amp;gt; ()</code> 方法是带锁线程安全</strong>，所以在多线程环境下进行类初始化的话可能会引起多个线程阻塞，并且这种阻塞很难被发现。</p>
+<h5 id="6-卸载">6.卸载</h5>
+<p><strong>卸载类即该类的 Class 对象被 GC。</strong></p>
+<p>卸载类需要满足 3 个要求:</p>
+<ol><li>该类的<strong>所有的实例对象都已被 GC</strong>，也就是说堆不存在该类的实例对象。</li></ol>
+<ol><li>该<strong>类没有在其他任何地方被引用</strong></li></ol>
+<ol><li>该类的<strong>类加载器的实例已被 GC</strong></li></ol>
+<blockquote><p>💡 <strong>类加载器（ClassLoader）:</strong>是 Java 虚拟机（JVM）的一个重要组成部分，<strong>负责加载 Java 类文件到内存中</strong>，并<strong>生成对应的 Class 对象</strong>。</p></blockquote>
+<p>类加载器在 Java 程序中起到了承上启下的作用，它负责加载应用程序需要的类文件，同时也是 Java 虚拟机与外部世界（文件系统、网络等）交互的桥梁。</p>
+<p>所以，<strong>在 JVM 生命周期内，由 jvm 自带的类加载器加载的类是不会被卸载的</strong>。但是由我们自定义的类加载器加载的类是可能被卸载的。</p>
+<p>只要想通一点就好了，JDK 自带的 <code>BootstrapClassLoader</code>, <code>ExtClassLoader</code>, <code>AppClassLoader</code> 负责加载 JDK 提供的类，所以它们(类加载器的实例)肯定不会被回收。而我们自定义的类加载器的实例是可以被回收的，所以使用我们自定义加载器加载的类是可以被卸载掉的。</p>
+<h2 id="4-JVM怎么对指令重排序-排序依据是什么">4.JVM怎么对指令重排序，排序依据是什么</h2>
+<p>指令重排序是指在<strong>不改变程序执行结果</strong>的前提下，重新排列指令的执行顺序。</p>
+<ul><li>目的是<strong>提高程序的执行效率和吞吐量</strong>，但必须保证程序的执行结果与原始顺序一致，否则会导致程序出现错误。</li></ul>
+<p>因此，在进行指令重排序时，JVM 会根据数据依赖性和内存屏障来进行限制，确保重排序不会改变程序的语义。</p>
+<p>JVM 可以对指令进行<strong>重排序的依据</strong>主要<strong>有两个</strong>：</p>
+<ol><li><strong>数据依赖性</strong>：如果两条指令之间没有数据依赖关系，即它们之间的数据没有直接或间接的依赖关系，那么这两条指令就可以被重排序。</li></ol>
+<ol><li><strong>内存屏障</strong>：在<strong>多线程环境下</strong>，JVM 会使用<strong>内存屏障来确保内存操作的顺序性</strong>。内存屏障会<strong>限制指令的重排序</strong>，确保特定类型的指令不会被重排序到内存屏障之前或之后。</li></ol>
+<p>什么是内存屏障：<strong>内存屏障是一条指令</strong>，该指令可以对编译器（软件）和处理器（硬件）的指令重排做出一定的限制，比如，<strong>一条内存屏障指令可以禁止编译器和处理器将其后面的指令移到内存屏障指令之前</strong>。</p>
+<p>为什么需要内存屏障：编译器和处理器指令重排只能保证在单线程执行下逻辑正确，在多个线程同时读写多个变量的情况下，如果不对指令重排作出一定限制，代码的执行结果会根据指令重排后的顺序产生不同的结果。指令重排后的顺序每次执行时都可能不一样，显然我们希望我们的代码执行结果与代码顺序是逻辑一致的（可能不太准确），所以我们需要内存屏障。</p>
+<p>基于这两个依据，JVM 在执行指令时可以进行<strong>多种类型的重排序</strong>，包括：</p>
+<ul><li><strong>指令重排</strong>：改变指令的<strong>执行顺序</strong>，但不改变程序的执行结果。</li></ul>
+<ul><li><strong>内存重排</strong>：改变<strong>内存操作的顺序</strong>，但不改变程序的执行结果。</li></ul>
+<ul><li><strong>编译优化</strong>：对代码进行优化，包括<strong>删除无用指令、合并相邻指令</strong>等。</li></ul>
+<ol><li><strong>突破内存限制，减少OOM。</strong> 由于元空间使用的是本地内存，而不是 JVM 内存，因此理论上，其大小只受限于操作系统的实际可用内存。这大大减少了内存溢出的可能性。相较于永久代在 JVM 堆中预分配的有限空间，元空间的引入提供了更大的空间来存储类元数据。</li></ol>
+<ol><li><strong>突破内存限制，减少OOM。</strong> 由于元空间使用的是本地内存，而不是 JVM 内存，因此理论上，其大小只受限于操作系统的实际可用内存。这大大减少了内存溢出的可能性。相较于永久代在 JVM 堆中预分配的有限空间，元空间的引入提供了更大的空间来存储类元数据。</li></ol>
+<h2 id="5-指令执行的完整流程-如何得知一条指令的运行时间">5.指令执行的完整流程<strong>，如何得知一条指令的运行时间</strong>？</h2>
+<p>指令执行的完整流程通常涉及以下几个步骤：</p>
+<ol><li><strong>指令获取</strong>：CPU 从指令缓存或内存中获取下一条要执行的指令。</li></ol>
+<ol><li><strong>指令解码</strong>：CPU 对获取到的指令进行解码，<strong>确定指令的类型和操作数</strong>。</li></ol>
+<ol><li><strong>操作数获取</strong>：CPU 根据指令中的操作数地址，<strong>从寄存器或内存中获取操作数</strong>。</li></ol>
+<ol><li><strong>指令执行</strong>：CPU 执行指令对应的操作，例如算术运算、逻辑运算、存储数据等。</li></ol>
+<ol><li><strong>结果写回</strong>：如果指令执行产生了结果，CPU 将结果写回寄存器或内存中。</li></ol>
+<ol><li><strong>更新程序计数器</strong>：CPU 更新程序计数器，指向下一条要执行的指令。</li></ol>
+<p>要得知一条指令的运行时间，通常可以通过以下几种方法：</p>
+<ol><li><strong>CPU周期数</strong>：许多 CPU 架构都会提供关于每个指令的CPU周期数的信息。通过这些信息，可以估算指令的运行时间。</li></ol>
+<ol><li><strong>性能计数器</strong>：现代的处理器通常会提供一组性能计数器，用于测量不同类型的事件，例如指令执行次数、缓存命中率等。通过分析这些性能计数器的值，可以推断出指令的运行时间。</li></ol>
+<ol><li><strong>模拟器</strong>：使用指令级别的模拟器来模拟指令的执行过程，并记录每条指令的运行时间。</li></ol>
+<ol><li><strong>基准测试</strong>：编写基准测试程序，测量某个程序或代码片段的整体执行时间，并将其与执行指令的次数进行比较，从而得出平均每条指令的运行时间。</li></ol>
+<ol><li><strong>CPU性能分析工具</strong>：使用专门的CPU性能分析工具，如Linux中的perf或Windows中的Windows Performance Toolkit（WPT），来分析程序的执行情况，包括每条指令的运行时间。</li></ol>
+<blockquote><p>💡 linux下<strong>time命令：</strong></p></blockquote>
+<p><strong>可以获取到一个程序的执行时间</strong>，包括程序的<strong>实际运行时间(real time)</strong>，以及程序运行在用户态的时间(user time)和内核态的时间(sys time)。用法是<strong>在待执行的命令前加上time</strong>即可。</p>
+<p>```Shell [root@localhost ~]# time ls anaconda-ks.cfg  install.log  install.log.syslog  satools  text real    0m0.009s user    0m0.002s sys     0m0.007s ```</p></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

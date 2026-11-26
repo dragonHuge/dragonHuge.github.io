@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>昇腾AI图像和自然语言处理实践 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;inset:0;padding-top:var(--hd)}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>昇腾AI图像和自然语言处理实践</b><small>幕布导图 · 47 个节点</small></div>
+  <div class="acts">
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"></div>
+<div class="tip">单指拖动 · 双指缩放 · 点节点圆点收起/展开</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "昇腾AI图像和自然语言处理实践", "data": {"id": "mvirtual-root", "topic": "<b>昇腾AI图像和自然语言处理实践<\/b>", "expanded": true, "children": [{"id": "mUwdalKXk9M", "topic": "<b>一、AI教学基础<\/b>", "expanded": true, "children": [{"id": "mqOlORxOStq", "topic": "<b>1、最优化问题<\/b>", "expanded": true, "children": [{"id": "mnTWV4N70zT", "topic": "<b>1、分类<\/b><br><img class=\"mm-img\" src=\"mm-1f8f9c01101c20.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mSez2WMSqOi", "topic": "<b>2、求解<\/b><br><img class=\"mm-img\" src=\"mm-fd18cc04fb8799.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mgHLsqYN958", "topic": "<b>2、梯度下降(<\/b><span style=\"color:#1d4ed8\"><b><span>梯度：最大方向导数)<\/span><\/b><span class=\"mm-note\">是最优化问题的<b>无约束优化求解方法<\/b>。\n就是<b>求解凸函数最优化问题<\/b>的一个方法。\n<b>梯度<\/b>：最大方向导数。\n\n理解：其实梯度下降就是通过<b>不断求导(一元求导、多元偏导)<\/b>，进而<b>不断求凸函数的极值<\/b>，且在每一步<b>根据经验加上下降步长<\/b>，一步一步递进，最后得出最终极值的过程。<\/span>", "expanded": true, "children": [{"id": "mxzAFgaePDp", "topic": "<b>1、凸函数<\/b><br><img class=\"mm-img\" src=\"mm-75a7c3094f9d0d.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">何为凸函数：就是将实际问题抽象出来后，发现其函数只有一个全局最优解，因此在图像上表示为凸。\n梯度下降法：就是<b>求解凸函数最优化问题<\/b>的一个方法。\n特点：<b>只有一个全局最优解<\/b>。<\/span>", "expanded": true}, {"id": "m6CaMYUOSv2", "topic": "<b>2、梯度 与 步长<\/b><br><img class=\"mm-img\" src=\"mm-d184b9b22616ca.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f13d5ec2176ffe.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mGQvMyR7hpl", "topic": "3、<br><img class=\"mm-img\" src=\"mm-85c68a5b237ca1.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mPMA0Aoobws", "topic": "<b>二、Python编程基础<\/b>", "expanded": false, "children": [{"id": "mJ1ksFuM9fM", "topic": "<b>1、Python入门<\/b>", "expanded": true, "children": [{"id": "mob5Fu0KHja", "topic": "1、简介：<br><img class=\"mm-img\" src=\"mm-91a68d65eef722.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mn6DqrFEKp5", "topic": "2、优缺点：<br><img class=\"mm-img\" src=\"mm-fd95b09c38f787.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mZCHWxnXdD9", "topic": "<b>3、运行环境<\/b><br><img class=\"mm-img\" src=\"mm-29c89ca294eedb.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "m5ueU8gfdSg", "topic": "<b>三、MindSpore框架简介<\/b>", "expanded": true, "children": [{"id": "mPWMrZ5GUKA", "topic": "<b>1、深度学习开发框架介绍<\/b><br><img class=\"mm-img\" src=\"mm-a7902b91faeeff.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">其实就是：<b>已经造好的轮子<\/b>。\n​<\/span>", "expanded": true}, {"id": "mPXeFe53sRD", "topic": "<b>2、Pytorch<\/b><br><img class=\"mm-img\" src=\"mm-0206d44ad28883.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "muMT6MhO3Ye", "topic": "<b>特点：<\/b><b><mark>动态神经网络<\/mark><\/b> <span style=\"color:#1d4ed8\"><b><span>+ CPU与GPU可以并行运算<\/span><\/b><br><img class=\"mm-img\" src=\"mm-190216cf1e4733.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">与<b>TensorFlow的静态计算图<\/b>相比，动态神经网络更加灵活。<\/span>", "expanded": true}]}, {"id": "mWiglK63Ff7", "topic": "<b>3、TensorFlow简介<\/b><br><img class=\"mm-img\" src=\"mm-6dffcead7b0eb7.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mTzLSTa7elI", "topic": "<b>1、特点：<\/b><br><img class=\"mm-img\" src=\"mm-4aa375d1ca325d.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">灵活可扩展：将keras变成了一个TensorFlow内部的一个高级接口。<\/span>", "expanded": true, "children": [{"id": "mNBeqrGUjrv", "topic": "<b><mark>分布式：<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-09e510cc4fa7df.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m7HmfUth2Tb", "topic": "<b>2、为何使用TensorFlow？<\/b><br><img class=\"mm-img\" src=\"mm-44f6e3233e3106.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mKslx7aDfen", "topic": "<b>3、不同版本的特点比较<\/b>", "expanded": true, "children": [{"id": "mWJwhHqZc32", "topic": "<b>1.0：入门难、上手难、<\/b><b><mark>采用静态计算图<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-d07c7ab1b0c255.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">静态计算图：在<b>计算之前<\/b>，<b>先要声明计算的整体过程和处理流程<\/b>，再去一次性执行。\n\n<b>优势<\/b>：性能优化和部署方面优势很大。\n<b>缺点<\/b>：不好debug。<\/span>", "expanded": true}, {"id": "muKiQU1vczh", "topic": "<b>2.0：<\/b><b><mark>采用动态计算图(Eager Execution)<\/mark><\/b><b>机制、API优化了<\/b><br><img class=\"mm-img\" src=\"mm-acbaf58b0d2cf5.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mpYd6Tld067", "topic": "<b>4、TensorFlow基础理论<\/b>", "expanded": true, "children": [{"id": "m4riGunYNEf", "topic": "<b>1、张量(tensor)：其实就是<\/b><b><mark>多维数组<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-d2283e3cebdc1b.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mps3sxcXXgG", "topic": "<b>2、动态计算图(<\/b><b><mark>Eager Execution<\/mark><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-b30bceada33fe1.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">即：版本2中的特点。<\/span>", "expanded": true}, {"id": "mE2nAXqT8ga", "topic": "<b>3、<\/b><b><mark>AutoGraph<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-ccc074b49be76a.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为动态计算图机制会使得性能较低，因此使用AutoGraph机制，就可以将一个函数中的TensorFlow操作构建为一个Graph，就可以在静态图模式下执行，效率较高。\n\n​<\/span>", "expanded": true}]}]}, {"id": "mBWCCNeI89a", "topic": "<b>关卡1：AI开发全景体验<\/b>", "expanded": true, "children": [{"id": "m2MIACXJTgd", "topic": "<b>1、卷积神经网络(Convolutional Neural Network, <\/b><span style=\"color:#1d4ed8\"><b><span>CNN<\/span><\/b><b>)<\/b><span class=\"mm-note\">对卷积的意义的理解：\n1. 从“积”的过程可以看到，我们得到的叠加值，是个全局的概念。以信号分析为例，卷积的结果是不仅跟当前时刻输入信号的响应值有关，也跟过去所有时刻输入信号的响应都有关系，考虑了对过去的所有输入的效果的累积。\n在图像处理的中，卷积处理的结果，其实就是把每个像素周边的，甚至是整个图像的像素都考虑进来，对当前像素进行某种<a href=\"https://www.zhihu.com/search?q=%E5%8A%A0%E6%9D%83%E5%A4%84%E7%90%86&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A637156871%7D\" target=\"_blank\" rel=\"noopener\">加权处理<\/a>。所以说，“积”是全局概念，或者说是一种“混合”，把两个函数在时间或者空间上进行混合。\n\n2. 那为什么要进行“卷”？直接相乘不好吗？我的理解，进行“卷”（翻转）的目的其实是施加一种约束，它指定了在“积”的时候以什么为参照。在信号分析的场景，它指定了在哪个特定时间点的前后进行“积”，在<a href=\"https://www.zhihu.com/search?q=%E7%A9%BA%E9%97%B4%E5%88%86%E6%9E%90&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A637156871%7D\" target=\"_blank\" rel=\"noopener\">空间分析<\/a>的场景，它指定了在哪个位置的周边进行累积处理。\n\n链接：<a href=\"https://www.zhihu.com/question/22298352/answer/637156871\" target=\"_blank\" rel=\"noopener\">https://www.zhihu.com/question/22298352/answer/637156871<\/a><\/span>", "expanded": true, "children": [{"id": "mlJCn6lJHFI", "topic": "1、缩略语：<br><img class=\"mm-img\" src=\"mm-1c8541d711dc5c.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mVkj8uoRKkT", "topic": "<b>2、简介：<\/b><span style=\"color:#1d4ed8\"><b><span>前馈神经网络<\/span><\/b><b>，对图像处理有出色表现<\/b><br><img class=\"mm-img\" src=\"mm-7d725c6960bd63.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">它的人工神经元可以响应一部分覆盖范围内的周围单元，对于图像处理有出色表现<\/span>", "expanded": true}, {"id": "mrml6bCuG8p", "topic": "<b>3、网络结构(<\/b><span style=\"color:#1d4ed8\"><b><span>六层<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-0a6e5cad5c4d0a.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-506c230195f5b5.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>输入层<\/b>，用于数据的输入。\n\n<b>卷积层<\/b>（Convolutional layer），卷积神经网络中每层卷积层由若干卷积单元组成，每个卷积单元的参数都是通过反向传播算法优化得到的。卷积运算的目的是提取输入的不同特征，第一层卷积层可能只能提取一些低级的特征如边缘、线条和角等层级，更多层的网络能从低级特征中迭代提取更复杂的特征\n。\n<b>激活函数<\/b>（Activation function），又被称作激活层（ Activation layer）。使用激活函数将卷积层的输出非线性化。最常用的激活函数是ReLU函数。激活函数不被计算层数。\n\n<b>池化层<\/b>（Pooling layer），通常在卷积层之后会得到维度很大的特征，将特征切成几个区域，取其最大值或平均值，得到新的、维度较小的特征。\n\n<b>全连接层<\/b>（ Fully-Connected layer）, 把所有局部特征结合变成全局特征，用来计算最后每一类的得分。\n\n<b>输出层<\/b>，用于输出最终结果。<\/span>", "expanded": true, "children": [{"id": "mrXq5iiFWy5", "topic": "<b>1、卷积层<\/b>", "expanded": true, "children": [{"id": "mU0qzv6MAar", "topic": "<b>1、卷积-单通道单卷积核计算<\/b><br><img class=\"mm-img\" src=\"mm-9f33dec64e3ba5.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">对于卷积神经网络，首先我们来介绍卷积是什么？\n​如上图所示，输入一张5*5的图像，经过一个3*3的卷积核（filter），那么得到的结果是3*3的特征图（featuremap），其中卷积核每次移动的距离叫做步长（stride）。右图展示了具体卷积的过程。\n卷积层对输入和卷积核权重进行互相关运算，并在添加标量偏置之后产生输出。所以，卷积层中的两个被训练的参数是卷积核权重和标量偏置。<\/span>", "expanded": true, "children": [{"id": "meV4sgKrU8a", "topic": "<b><mark>卷积核个数 = 特征图个数<\/mark><\/b>", "expanded": true}, {"id": "mn65RndWEyR", "topic": "<b>步长<\/b>：即卷积核每一次滑动的行数与列数。", "expanded": true}, {"id": "m1BrdNcf21O", "topic": "<b>填充<\/b>：为了加强对边缘特征的利用。<span class=\"mm-note\">因为在卷积核的滑动中，可以看到矩阵边缘的图像特征利用次数较少，而处于中间地带的特征利用次数较多。\n​那么为了加强对边缘特征的利用，就在特征外部填充一些工具元素(通常为0)。<\/span>", "expanded": true}]}, {"id": "mN1InSdojB4", "topic": "<b>2、卷积 – 多通道多卷积核计算<\/b><br><img class=\"mm-img\" src=\"mm-597fc91dafab38.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">刚才介绍了单通道图像的卷积，我们知道彩色图像是3通道的，因此此时我们输入的图像是5*5*3；由于<b>输入图像是3层的，卷积核自然也是3层的<\/b>，因此为3*3*3，并且这里选用了<b>2个卷积核<\/b>；步长为2；由于是2个卷积核，我们就得到了<b>两个特征图<\/b>。<\/span>", "expanded": true}, {"id": "motiXUrgg1T", "topic": "<b>3、卷积的作用：提取<\/b><span style=\"color:#1d4ed8\"><b><span>局部特征信息<\/span><\/b><br><img class=\"mm-img\" src=\"mm-6489a500fb0200.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-bbf85ecf3990b5.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">卷积还起到<b>降维的作用<\/b>，如上图将3*32*32降到6*28*28。\n<b>中间层<\/b>：要想深入了解卷积网络，就需要了解中间层特征的作用。\n本文将中间层特征反向映射到像素空间，观察出什么输入会导致特点的输出，可视化过程基于（Zeiler et al 2011）提出的反卷积网络实现。\n一层反卷积网可以看成是一层卷积网络的逆操作，他们拥有相同的卷积核和 pooling函数（准确来讲，应该是逆函数），因此反卷积网是将输出特征逆映射成输入信号。在（Zeiler et al 2011）中，反卷积网络被用作无监督学习，本文则用来可视化演示。<\/span>", "expanded": true}]}, {"id": "mViRHDlC7mg", "topic": "<b>2、激活函数<\/b><br><img class=\"mm-img\" src=\"mm-0b6c3e6ba1819a.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mTaSiNLNsvW", "topic": "<b>3、池化层<\/b><br><img class=\"mm-img\" src=\"mm-464a7036cbe4a3.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">池化的目的是<b>减少图像特征图（Feature Map）的空间尺寸。<\/b>\n在这里，我们把步幅定为 2，池化尺寸也为 2。最大化执行也应用在每个卷机输出的深度尺寸中。正如你所看到的，最大池化操作后，4*4 卷积的输出变成了 2*2。<\/span>", "expanded": true}, {"id": "mKu6LuSnU0H", "topic": "<b>4、全连接层<\/b><br><img class=\"mm-img\" src=\"mm-211b6fd5b9bfb2.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">经过多次卷积池化后，我们最终得到的是多层的特征图，通常卷积神经网络会将末端得到的特征图平摊成一个长的列向量，经过<b>全连接层连接所有特征<\/b>，<b>将所有特征传递给具体的分类器进行分类或者回归处理<\/b>，一般都使用的softmax激活函数将最终的输出量化。\n与多层感知机类似，<b>全连接层中的每个神经元与其前一层的所有神经元进行全连接<\/b>。全连接层可以<b>整合卷积层或者池化层中具有类别区分性的局部信息<\/b>。最后一个全连接层的输出值可以用softmax 进行分类，最后输出分类结果。<\/span>", "expanded": true}]}, {"id": "mMx3Bgc2wEr", "topic": "<b>4、核心思想：<\/b><br><img class=\"mm-img\" src=\"mm-7bb68b4ac39ffc.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mlY5FkoyWCw", "topic": "<b>关卡3：NLP-机器翻译<\/b><span class=\"mm-note\">NLP(Natural Language Processing)：<b>自然语言处理<\/b>。<\/span>", "expanded": true, "children": [{"id": "mQF6MrvnkKV", "topic": "<b>1、词向量<\/b><br><img class=\"mm-img\" src=\"mm-9595cc1737c6e0.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#map',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  var fitTimer = setTimeout(function(){ try{ mind.scaleFit(); }catch(e){} }, 80);
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ mind.scaleFit(); }, 60);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 双指缩放（mind-elixir 桌面端仅处理滚轮）
+  var pinch = null, mapEl = document.getElementById('map');
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    if (e.touches.length === 2) {
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var v = pinch.s * (dist(e.touches) / pinch.d);
+      v = Math.max(0.2, Math.min(2.4, v));
+      mind.scale(v, { x: pinch.x, y: pinch.y });
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+
+  window.__mind = mind;
+})();
+</script>
+</body></html>

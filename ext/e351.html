@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>手推Transformer（3）架构图解 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">20</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">468</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav>
+<nav class="context-nav" aria-label="当前栏目目录">
+<div class="context-title">外部沉淀分类</div>
+<a class="context-cat" href="../ext/index.html#c0"><span>AI与大模型</span><span class="nav-count">32</span></a>
+<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">305</span></a>
+<a class="context-cat active" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">65</span></a>
+<a class="context-cat" href="../ext/index.html#c3"><span>认知与思维</span><span class="nav-count">12</span></a>
+<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">44</span></a>
+<div class="context-group current">工具与技术文章</div>
+<a class="art" href="../ext/e338.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e339.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e340.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e341.html">EasySync、OpenPlug、Resojot三件套</a>
+<span class="art-row"><a class="art" href="../ext/e342.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a><a class="art-x" href="https://mp.weixin.qq.com/s/_92qxY50yrITYDkhnKVv5w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e343.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a><a class="art-x" href="https://mp.weixin.qq.com/s/VuJsVTvyNIK8GRTL95n-Qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e344.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a><a class="art-x" href="https://mp.weixin.qq.com/s/opomqvcruvmcQr4fzTT5Sg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e345.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a><a class="art-x" href="https://mp.weixin.qq.com/s/xyLlUlHJG7zbs32B3ibarw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e346.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/sddXH_qxY0LlPvftJy4rTA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e347.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a><a class="art-x" href="https://mp.weixin.qq.com/s/EGCfOEP4-j0dZ1gV-QBF9Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e348.html">FID：公司设备不变的硬件标识</a>
+<a class="art" href="../ext/e349.html">防重放攻击Nonce机制</a>
+<span class="art-row"><a class="art" href="../ext/e350.html">Claude Code Thariq：如何设置不同模型的 effort？</a><a class="art-x" href="https://mp.weixin.qq.com/s/OtdHHVKZOY28qCNfy99o0A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art active" href="../ext/e351.html">手推Transformer（3）架构图解</a><a class="art-x" href="https://v.douyin.com/QfsCWkmq6Jk/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e352.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/RfCE5yqOrR_b2AWeI530GQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e353.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a><a class="art-x" href="https://mp.weixin.qq.com/s/8KB9H19wTmV9Ttsls2ZQOQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e354.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a><a class="art-x" href="https://mp.weixin.qq.com/s/C06VC_u8ThxoX65GZXD98A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e355.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<span class="art-row"><a class="art" href="../ext/e356.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a><a class="art-x" href="https://mp.weixin.qq.com/s/9k__ghMXA4xAP94aHFh-Gg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e357.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jgwZE6nflPIRkJkrwfz40w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e358.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/gOCMe2lrO8PFGfZoKhUmfA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e359.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a><a class="art-x" href="https://mp.weixin.qq.com/s/JpDAPxDxt8HWdxwuVpOCGg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e360.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a><a class="art-x" href="https://mp.weixin.qq.com/s/6MmevXDynsrlcOoDr3NMEA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e361.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a><a class="art-x" href="https://mp.weixin.qq.com/s/IG1lcRRtIhRePZfLrLZl_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e362.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a><a class="art-x" href="https://mp.weixin.qq.com/s/a35eQqCyxdybODuJlFwBTg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e363.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/z2t4cSkZo3JvXdmnq58MxA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e364.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jf5OKEhBDWkP0228tC5o1w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e365.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a><a class="art-x" href="https://mp.weixin.qq.com/s/_r6om75XRHj2NsgqN6l45A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e366.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a><a class="art-x" href="https://mp.weixin.qq.com/s/pS3UX6_XWcqjNCYxtNzNjA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e367.html">2026年量化投资类Skills排行榜</a><a class="art-x" href="https://xhslink.cn/o/36OmI68hnmy" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e368.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a><a class="art-x" href="https://mp.weixin.qq.com/s/INr-j63NxC1JKiBeasTreA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e369.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a><a class="art-x" href="https://mp.weixin.qq.com/s/Zb7TCRf0ULhR6m4gv0T8cg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e370.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a><a class="art-x" href="https://mp.weixin.qq.com/s/ZxhhQlgzm7j7bfesSect4w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e371.html">6个Vibe Coding必备宝藏网站</a>
+<span class="art-row"><a class="art" href="../ext/e372.html">Archify：AI代码仓库架构可视化开源Skill</a><a class="art-x" href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e373.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a><a class="art-x" href="https://mp.weixin.qq.com/s/6l9eoyAyADd4l4CgdbKFwQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e374.html">anything2explainer：一键制作科普视频的开源Skill</a><a class="art-x" href="https://www.douyin.com/video/7683581072979226340" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e375.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a><a class="art-x" href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e376.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a><a class="art-x" href="https://mp.weixin.qq.com/s/4Wm668hdNhRCSorNEY--Wg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e377.html">内容审核控制台嵌入式 MCP Server 落地方案</a><a class="art-x" href="#" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e378.html">MCP 开发指北(Java) — 组内</a><a class="art-x" href="#" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e379.html">风控平台 MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a><a class="art-x" href="#" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e380.html">html-anything — Agent 时代的 HTML 编辑器</a><a class="art-x" href="https://mp.weixin.qq.com/s/PdnzdlANDDDrMrTMYhahvw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e381.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ux91m8vFib3GFWY6GqHssA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e382.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a><a class="art-x" href="https://mp.weixin.qq.com/s/8rXk9rn3qoT-_-s8bIEicw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e383.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a><a class="art-x" href="https://mp.weixin.qq.com/s/z1ZreI_TYEsHj2pGIKrmcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e384.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/8kLJvAEgN_qtcGWQAfORvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e385.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a><a class="art-x" href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e386.html">Claude Code Prompt Cache 配置实战</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/（视频" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e387.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e388.html">待考证 Claude Code Skill / MCP 清单</a>
+<span class="art-row"><a class="art" href="../ext/e389.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a><a class="art-x" href="https://mp.weixin.qq.com/s/NAqk-Hwpb0kf0ZggDs4TLQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e390.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a><a class="art-x" href="https://mp.weixin.qq.com/s/Sz2hzXiNCyf1YNzPbeUo5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e391.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a><a class="art-x" href="https://mp.weixin.qq.com/s/v6iBuqep2ZCZ9wAwhnHLDA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e392.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a><a class="art-x" href="https://mp.weixin.qq.com/s/3pYESr-ZDD-qM3uktiSIYQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e393.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a><a class="art-x" href="https://mp.weixin.qq.com/s/BCstLeMYEPTk5A4sJp66jA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e394.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a><a class="art-x" href="https://mp.weixin.qq.com/s/-Vb_8UdgglaYj0HnSYPZcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e395.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a><a class="art-x" href="https://bytedance.sg.larkoffice.com/docx/QNsIdi8VFoKm00xY8SRlkXxygve" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e396.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a><a class="art-x" href="https://www.anytocopy.com/xiaohongshu" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e397.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/udSpp7eMqwiRo5yVShRzLw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e398.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a><a class="art-x" href="https://mp.weixin.qq.com/s/PcZVz9Xf2-SFE_9_e41uVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e399.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<span class="art-row"><a class="art" href="../ext/e400.html">Obsidian 必装的 9 个 AI Agent Skill</a><a class="art-x" href="http://xhslink.com/o/4tA9NrR4eXd" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e401.html">大博主常用的 5 个录屏 + 3 个白板工具</a><a class="art-x" href="http://xhslink.com/o/68mgswUWCNA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e402.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a><a class="art-x" href="https://mp.weixin.qq.com/s/OqpljVUwvONVohnk7Sf5hw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+</nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">54</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a><a class="tl l3" href="#目录">目录</a><a class="tl l3" href="#手推Transformer-3-架构图解-Transformer-编码器-解码器-大模型原理-ai新星计划">手推Transformer（3）架构图解 #Transformer #编码器 #解码器 #大模型原理 #ai新星计划</a><a class="tl l3" href="#推荐视频">推荐视频</a><a class="tl l3" href="#通俗易懂地讲解什么是Agent-从0到1搭建一个简易Agent-从小白的角度出发解释Agent是如何运行的-agent-AIagent-LLM-AI教程-AI新星计划">通俗易懂地讲解什么是Agent？ 从0到1搭建一个简易Agent，从小白的角度出发解释Agent是如何运行的？ #agent #AIagent #LLM #AI教程 #AI新星计划</a><a class="tl l3" href="#1万洪涛同学LovTech">1万洪涛同学LovTech</a><a class="tl l3" href="#认识WorkBuddy-保姆级入门到精通教程-AI智能体-Agent-Workbuddy-AI办公">认识WorkBuddy-保姆级入门到精通教程 #AI智能体 #Agent #Workbuddy #AI办公</a><a class="tl l3" href="#Kimi转接Claude-这账到底怎么算-高价买回答-再按低价交付-真能省成本吗-人工智能-Kimi-Claude-AI工具">Kimi转接Claude，这账到底怎么算？ 高价买回答，再按低价交付，真能省成本吗？#人工智能 #Kimi #Claude #AI工具</a><a class="tl l3" href="#WorkBuddy保姆级教学办公三件套-WorkBuddy-AI办公-AI工具-人工智能-AI教程">WorkBuddy保姆级教学办公三件套。 #WorkBuddy #AI办公 #AI工具 #人工智能 #AI教程</a><a class="tl l3" href="#openclaw智能AI龙虾工具-U-Claw2-0pro-人工智能-龙虾ai-openclaw-黑科技-ai">openclaw智能AI龙虾工具 U Claw2.0pro #人工智能 #龙虾ai #openclaw #黑科技 #ai</a><a class="tl l3" href="#YOLO天塌了-这个开源视觉模型可以做更精细的目标定位-端侧ai-大模型-VLX-多模态-具身智能">YOLO天塌了，这个开源视觉模型可以做更精细的目标定位 #端侧ai #大模型 #VLX #多模态 #具身智能</a><a class="tl l3" href="#研究生必备科研工具-科研工具-研究生-科研干货">研究生必备科研工具#科研工具 #研究生 #科研干货</a><a class="tl l3" href="#6万江枫">6万江枫</a><a class="tl l3" href="#GraphPad进阶版层叠图-书霸AI-GraphPad-科研绘图-研究生-知识分享">GraphPad进阶版层叠图 #书霸AI #GraphPad #科研绘图 #研究生 #知识分享</a><a class="tl l3" href="#当工科生用gpt画pcb板子-pcb打样-pcb线路板-工科女-电子-电赛">当工科生用gpt画pcb板子 #pcb打样 #pcb线路板 #工科女 #电子 #电赛</a><a class="tl l3" href="#手推Transformer-1-自注意力机制-大语言模型-大语言模型原理-Transformer-自注意力机制">手推Transformer（1）自注意力机制 #大语言模型 #大语言模型原理 #Transformer #自注意力机制</a><a class="tl l3" href="#1万刘海儿在风中飘荡">1万刘海儿在风中飘荡</a><a class="tl l3" href="#生产级PDF文件识别RAG要过4道关-90-的人倒在第一关-Ai大模型-大模型-Agent-大模型面试-人工智能">生产级PDF文件识别RAG要过4道关，90%的人倒在第一关 #Ai大模型 #大模型 #Agent #大模型面试 #人工智能</a><a class="tl l3" href="#数模agent-Beacon开源了-耗时一个月终于vibe-coding出来了----Beacon-功能还算可以-可以直接输出latex排版的pdf-ai新星计划-vibecoding-大学生-数模-vibecoding大赏">数模agent-Beacon开源了 耗时一个月终于vibe coding出来了----Beacon,功能还算可以,可以直接输出latex排版的pdf#ai新星计划 #vibecoding #大学生 #数模 #vibecoding大赏</a><a class="tl l3" href="#Workbuddy-nature-skill-绘图-科研绘图全流程指南-科研-科研工具-科研绘图-研究生-ai工具">Workbuddy + nature skill 绘图 科研绘图全流程指南#科研 #科研工具 #科研绘图 #研究生 #ai工具</a><a class="tl l3" href="#脑洞说给AI听-它连电路图和组装说明书都做好了-AI工具-机械臂-外骨骼-电路设计-DIY">脑洞说给AI听，它连电路图和组装说明书都做好了 #AI工具 #机械臂 #外骨骼 #电路设计 #DIY</a><a class="tl l3" href="#新开源image-2-1效果比肩Nano-banana-2-本地部署效果能力增强很多-主要是很多用低端机器-api生成的用户很友好-可以本地去编辑很多在线api不能编辑的图片-Qwen-comfyui-文生图-Ai-工作流">新开源image-2.1效果比肩Nano-banana-2 本地部署效果能力增强很多，主要是很多用低端机器+api生成的用户很友好，可以本地去编辑很多在线api不能编辑的图片。#Qwen #comfyui #文生图 #Ai #工作流</a><a class="tl l3" href="#2万晓辉博士">2万晓辉博士</a><a class="tl l3" href="#Deepseek-Solidworks-自动绘制复杂机械结构-Deepseek-solidworks-建模-codex-skills">Deepseek+Solidworks,自动绘制复杂机械结构 #Deepseek #solidworks #建模 #codex #skills</a><a class="tl l3" href="#6万极简AI-3">6万极简AI（3%）</a><a class="tl l3" href="#多模态大模型是如何实现的-多模态-交叉注意力-AI-AI计划-clip">多模态大模型是如何实现的 #多模态 #交叉注意力 #AI #AI计划 #clip</a><a class="tl l3" href="#推荐视频-1">推荐视频</a><a class="tl l3" href="#通俗易懂地讲解什么是Agent-从0到1搭建一个简易Agent-从小白的角度出发解释Agent是如何运行的-agent-AIagent-LLM-AI教程-AI新星计划-1">通俗易懂地讲解什么是Agent？ 从0到1搭建一个简易Agent，从小白的角度出发解释Agent是如何运行的？ #agent #AIagent #LLM #AI教程 #AI新星计划</a><a class="tl l3" href="#1万洪涛同学LovTech-1">1万洪涛同学LovTech</a><a class="tl l3" href="#认识WorkBuddy-保姆级入门到精通教程-AI智能体-Agent-Workbuddy-AI办公-1">认识WorkBuddy-保姆级入门到精通教程 #AI智能体 #Agent #Workbuddy #AI办公</a><a class="tl l3" href="#5-6-升级-GPT6-Astra-PCB-到底提升了什么-模型能力是基础-工程可控性才是量产落地的关键-下期我们会继续剖析GPT-6-Astra版本工程在技术上还存在哪些问题-欢迎追更">5.6 升级 GPT6 Astra，PCB 到底提升了什么？ 模型能力是基础，工程可控性才是量产落地的关键。下期我们会继续剖析GPT-6 Astra版本工程在技术上还存在哪些问题，欢迎追更。</a><a class="tl l3" href="#Kimi转接Claude-这账到底怎么算-高价买回答-再按低价交付-真能省成本吗-人工智能-Kimi-Claude-AI工具-1">Kimi转接Claude，这账到底怎么算？ 高价买回答，再按低价交付，真能省成本吗？#人工智能 #Kimi #Claude #AI工具</a><a class="tl l3" href="#WorkBuddy保姆级教学办公三件套-WorkBuddy-AI办公-AI工具-人工智能-AI教程-1">WorkBuddy保姆级教学办公三件套。 #WorkBuddy #AI办公 #AI工具 #人工智能 #AI教程</a><a class="tl l3" href="#openclaw智能AI龙虾工具-U-Claw2-0pro-人工智能-龙虾ai-openclaw-黑科技-ai-1">openclaw智能AI龙虾工具 U Claw2.0pro #人工智能 #龙虾ai #openclaw #黑科技 #ai</a><a class="tl l3" href="#YOLO天塌了-这个开源视觉模型可以做更精细的目标定位-端侧ai-大模型-VLX-多模态-具身智能-1">YOLO天塌了，这个开源视觉模型可以做更精细的目标定位 #端侧ai #大模型 #VLX #多模态 #具身智能</a><a class="tl l3" href="#研究生必备科研工具-科研工具-研究生-科研干货-1">研究生必备科研工具#科研工具 #研究生 #科研干货</a><a class="tl l3" href="#6万江枫-1">6万江枫</a><a class="tl l3" href="#GraphPad进阶版层叠图-书霸AI-GraphPad-科研绘图-研究生-知识分享-1">GraphPad进阶版层叠图 #书霸AI #GraphPad #科研绘图 #研究生 #知识分享</a><a class="tl l3" href="#当工科生用gpt画pcb板子-pcb打样-pcb线路板-工科女-电子-电赛-1">当工科生用gpt画pcb板子 #pcb打样 #pcb线路板 #工科女 #电子 #电赛</a><a class="tl l3" href="#手推Transformer-1-自注意力机制-大语言模型-大语言模型原理-Transformer-自注意力机制-1">手推Transformer（1）自注意力机制 #大语言模型 #大语言模型原理 #Transformer #自注意力机制</a><a class="tl l3" href="#1万刘海儿在风中飘荡-1">1万刘海儿在风中飘荡</a><a class="tl l3" href="#生产级PDF文件识别RAG要过4道关-90-的人倒在第一关-Ai大模型-大模型-Agent-大模型面试-人工智能-1">生产级PDF文件识别RAG要过4道关，90%的人倒在第一关 #Ai大模型 #大模型 #Agent #大模型面试 #人工智能</a><a class="tl l3" href="#数模agent-Beacon开源了-耗时一个月终于vibe-coding出来了----Beacon-功能还算可以-可以直接输出latex排版的pdf">数模agent-Beacon开源了 耗时一个月终于vibe coding出来了----Beacon,功能还算可以,可以直接输出latex排版的pdf</a><a class="tl l3" href="#Workbuddy-nature-skill-绘图-科研绘图全流程指南">Workbuddy + nature skill 绘图 科研绘图全流程指南</a><a class="tl l3" href="#脑洞说给AI听-它连电路图和组装说明书都做好了-AI工具-机械臂-外骨骼-电路设计-DIY-1">脑洞说给AI听，它连电路图和组装说明书都做好了 #AI工具 #机械臂 #外骨骼 #电路设计 #DIY</a><a class="tl l3" href="#新开源image-2-1效果比肩Nano-banana-2-本地部署效果能力增强很多-主要是很多用低端机器-api生成的用户很友好-可以本地去编辑很多在线api不能编辑的图片-Qwen-comfyui-文生图-Ai-工作流-1">新开源image-2.1效果比肩Nano-banana-2 本地部署效果能力增强很多，主要是很多用低端机器+api生成的用户很友好，可以本地去编辑很多在线api不能编辑的图片。#Qwen #comfyui #文生图 #Ai #工作流</a><a class="tl l3" href="#2万晓辉博士-1">2万晓辉博士</a><a class="tl l3" href="#Deepseek-Solidworks-自动绘制复杂机械结构-Deepseek-solidworks-建模-codex-skills-1">Deepseek+Solidworks,自动绘制复杂机械结构 #Deepseek #solidworks #建模 #codex #skills</a><a class="tl l3" href="#6万极简AI-3-1">6万极简AI（3%）</a><a class="tl l3" href="#多模态大模型是如何实现的-多模态-交叉注意力-AI-AI计划-clip-1">多模态大模型是如何实现的 #多模态 #交叉注意力 #AI #AI计划 #clip</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>手推Transformer（3）架构图解</h1><div class="meta">2026-09-24 · <span class="badge">抖音</span> · <a class="src-link" href="https://v.douyin.com/QfsCWkmq6Jk/" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">工具与技术/20260924-手推Transformer3架构图解.md</span></div><div class="md"><blockquote><p>来源：<a href="https://v.douyin.com/QfsCWkmq6Jk/">抖音·视频</a> 归档日期：2026-09-24 抓取状态：成功 原文字符：28889｜配图：30 张</p></blockquote>
+<h2 id="摘要速览">摘要速览</h2>
+<ul><li>抖音视频《手推Transformer（3）架构图解》，Transformer 系列教程第 3 讲，主题为架构图解。</li><li>视频无文字稿；按原文铁律不以标题描述冒充正文，留待文稿/字幕可得时补。</li></ul>
+<h2 id="核心内容">核心内容</h2>
+<p>（待补充——视频无文稿，不伪造正文）</p>
+<h2 id="可执行启发">可执行启发</h2>
+<ul><li>（待补充）</li></ul>
+<h2 id="我的想法">我的想法</h2>
+<p>（待补充）</p>
+<hr>
+<h2 id="原文沉淀">原文沉淀</h2>
+<h3 id="目录">目录</h3>
+<ul><li><a href="#推荐视频">推荐视频</a></li><li><a href="#1万洪涛同学lovtech">1万洪涛同学LovTech</a></li><li><a href="#研究生必备科研工具科研工具-研究生-科研干货">研究生必备科研工具#科研工具 #研究生 #科研干货</a></li><li><a href="#6万江枫">6万江枫</a></li><li><a href="#1万刘海儿在风中飘荡">1万刘海儿在风中飘荡</a></li><li><a href="#2万晓辉博士">2万晓辉博士</a></li><li><a href="#6万极简ai3">6万极简AI（3%）</a></li><li><a href="#多模态大模型是如何实现的-多模态-交叉注意力-ai-ai计划-clip">多模态大模型是如何实现的 #多模态 #交叉注意力 #AI #AI计划 #clip</a></li><li><a href="#workbuddy--nature-skill-绘图-科研绘图全流程指南">Workbuddy + nature skill 绘图 科研绘图全流程指南</a></li></ul>
+<p>读屏标签已关闭</p>
+<p><a href="https://www.douyin.com/jingxuan?from_nav=1">精选</a></p>
+<p><a href="https://www.douyin.com/?recommend=1&amp;from_nav=1">推荐</a></p>
+<p><a href="https://www.douyin.com/aisearch?from_nav=1">AI抖音</a></p>
+<p><a href="https://www.douyin.com/follow?from_nav=1">关注</a></p>
+<p><a href="https://www.douyin.com/friend?from_nav=1">朋友</a></p>
+<p><a href="https://www.douyin.com/user/self?from_nav=1">我的</a></p>
+<p><a href="https://live.douyin.com/?from_nav=1">直播</a></p>
+<p><a href="https://www.douyin.com/vs?from_nav=1">放映厅</a></p>
+<p><a href="https://www.douyin.com/series?from_nav=1">短剧</a></p>
+<p><img alt="" src="../assets/img/img-001-cb55d122-1b8c682edd9f.png"></p>
+<p><img alt="" src="../assets/img/img-002-66367dbc-9d4b29a3e526.png"></p>
+<p><img alt="" src="../assets/img/img-003-dd0616fa-bc8072290336.png"></p>
+<p><img alt="" src="../assets/img/img-004-4452cad3-9a5ffb671cef.png"></p>
+<p>下载抖音精选</p>
+<p>2026 © 抖音</p>
+<p><a href="https://beian.miit.gov.cn/">京ICP备16016397号-3</a></p>
+<p>[<img alt="icon" src="../assets/img/img-005-b4f19472-4083ac1656e5.png"></p>
+<p>京公网安备11010802050006号](https://beian.mps.gov.cn/)</p>
+<p>[<img alt="icon" src="../assets/img/img-006-1d780013-cdfa6ad0b2de.png"></p>
+<p>电子营业执照](https://zzlz.gsxt.gov.cn/businessCheck/verifKey.do)</p>
+<p>信息网络传播视听节目许可证 0126733</p>
+<p>广播电视节目制作经营许可证 （京）字第11313号</p>
+<p>增值电信业务经营许可证 京B2-20170846</p>
+<p>网络文化经营许可证 京网文〔2025〕0181-061号</p>
+<p>互联网宗教信息服务许可证 京（2025）0000017</p>
+<p>药品医疗器械网络信息服务备案 （京）网药械信息备字（2023）第00570号</p>
+<p>互联网新闻信息服务许可证 11220230001</p>
+<p><a href="https://p-pc-weboff.byteimg.com/tos-cn-i-9r5gewecjs/d1cb34abe8ebb5600b51bac36ce3247f.jpg">（京）人服证字〔2026〕第0600005023号</a></p>
+<p><a href="https://www.piyao.org.cn/yybgt/index.htm">网络谣言曝光台</a></p>
+<p><a href="https://www.12377.cn/">网上有害信息举报</a></p>
+<p>违法和不良信息举报 400-140-2108 [邮箱]</p>
+<p>算法推荐专项举报 [邮箱]</p>
+<p>体育饭圈专项举报 [邮箱]</p>
+<p><a href="https://www.oceanengine.com/resource/douyin">广告投放</a></p>
+<p><a href="https://www.douyin.com/agreements/?id=6773906068725565448">用户服务协议</a></p>
+<p><a href="https://www.douyin.com/agreements/?id=6773901168964798477">隐私政策</a></p>
+<p><a href="https://www.douyin.com/recovery_account/">账号找回</a></p>
+<p><a href="https://www.douyin.com/aboutus/">联系我们</a></p>
+<p><a href="https://www.douyin.com/aboutus/">加入我们</a></p>
+<p><a href="https://www.douyin.com/friend_links">友情链接</a></p>
+<p><a href="https://www.douyin.com/htmlmap/hotauthor_0_1">站点地图</a></p>
+<p><a href="https://www.douyin.com/downloadpage/pc">下载抖音</a></p>
+<p><a href="https://mix.jinritemai.com/falcon/mix_page/index.html">抖音电商</a></p>
+<p>transformer模型训练全流程</p>
+<p>充钻石</p>
+<p><a href="https://www.douyin.com/download/pc/obj/douyin-pc-web/douyin-pc-client/7044145585217083655/releases/469669512/8.5.1/darwin-universal/douyin-v8.5.1-darwin-universal.dmg">客户端</a></p>
+<p>壁纸</p>
+<p>通知</p>
+<p>**</p>
+<p>消息</p>
+<p>投稿</p>
+<p>未登录</p>
+<p>登录后即可观看喜欢、收藏作品</p>
+<p>我的喜欢</p>
+<p>我的收藏</p>
+<p>观看历史</p>
+<p>稍后再看</p>
+<p>我的作品</p>
+<p>我的预约</p>
+<p>我的订单</p>
+<p><img alt="" src="../assets/img/img-007-f9871514-4194d423e99a.jpeg"></p>
+<p>暂停</p>
+<p>00:07 / 06:46 直播</p>
+<p>章节要点1：引言</p>
+<p>登录后可发布弹幕</p>
+<p>发送</p>
+<p>00:00</p>
+<p>引言</p>
+<p>进入全屏H</p>
+<p>网页全屏Y</p>
+<p>0</p>
+<p>截图</p>
+<p>小窗模式U</p>
+<p>字幕</p>
+<ul><li>不开启</li></ul>
+<p>稍后再看L</p>
+<p>倍速</p>
+<p>登录后即可切换倍速立即登录</p>
+<p>高清 1080P登录即享</p>
+<p>高清 720P</p>
+<p>标清 540P</p>
+<p>智能</p>
+<p>智能</p>
+<p>清屏</p>
+<p>清屏J</p>
+<p>连播</p>
+<p>自动连播K</p>
+<p>5741</p>
+<p>63</p>
+<p>4115</p>
+<p>832</p>
+<p>听抖音</p>
+<p>个人观点，仅供参考</p>
+<p>**</p>
+<p>重播</p>
+<p><img alt="" src="../assets/img/img-008-0a48c919-93eeb82fbf04.jpeg"></p>
+<p>3s 后播放</p>
+<p>通俗易懂地讲解什么是Agent？ 从0到1搭建一个简易Agent，从小白的角度出发解释Agent是如何运行的？ #agent #AIagent #LLM #AI教程 #AI新星计划</p>
+<p>3s 后播放下一个视频</p>
+<p>3s 后循环播放当前视频</p>
+<p>点击按住可拖动视频</p>
+<p>章节要点</p>
+<p>Transformer架构的图解，包括Encoder和Decoder两部分。Encoder负责理解输入，Decoder负责生成输出。Transformer最初用于机器翻译，后来被广泛应用于语言模型。通过词嵌入、位置编码、多头注意力机制、残差连接归一化和前馈神经网络等操作，Transformer能够有效地处理序列数据。</p>
+<p>00:00</p>
+<p>引言</p>
+<p>00:31</p>
+<p>常见误区</p>
+<p>Transformer最初用于机器翻译，后来被发现适合语言模型，从而诞生了大语言模型。</p>
+<p>01:09</p>
+<p>架构概述</p>
+<p>Transformer架构分为Encoder和Decoder两部分，用于机器翻译，训练和推理时Decoder输入来源不同。</p>
+<p>01:49</p>
+<p>Encoder</p>
+<p>Encoder负责理解输入，经过多次计算得到包含上下文信息的语义矩阵。</p>
+<p>02:55</p>
+<p>Decoder</p>
+<p>Decoder负责生成输出，通过带掩码的自注意力和交叉注意力，逐步生成翻译结果。</p>
+<p>06:11</p>
+<p>结语</p>
+<p>内容由AI生成</p>
+<h3 id="手推Transformer-3-架构图解-Transformer-编码器-解码器-大模型原理-ai新星计划">手推Transformer（3）架构图解 #Transformer #编码器 #解码器 #大模型原理 #ai新星计划</h3>
+<p>5741</p>
+<p>63</p>
+<p>4115</p>
+<p>832</p>
+<p>举报</p>
+<p>发布时间：2026-08-28 07:10</p>
+<p><img alt="刘海儿在风中飘荡" src="../assets/img/img-009-c4536419-ed763472df29.jpeg"></p>
+<p>刘海儿在风中飘荡</p>
+<p>粉丝1.3万获赞4.6万</p>
+<h3 id="推荐视频">推荐视频</h3>
+<ul><li><span class="img-missing">［图：通俗易懂地讲解什么是Agent？ 从0到1搭建一个简易Agent，从小白的角度出发解释Agent是如何运行的？  #agent #AIagent #LLM #AI教程 #AI新星计划］</span></li></ul>
+<p>15:06</p>
+<p>播放中</p>
+<h3 id="通俗易懂地讲解什么是Agent-从0到1搭建一个简易Agent-从小白的角度出发解释Agent是如何运行的-agent-AIagent-LLM-AI教程-AI新星计划">通俗易懂地讲解什么是Agent？ 从0到1搭建一个简易Agent，从小白的角度出发解释Agent是如何运行的？  #agent #AIagent #LLM #AI教程 #AI新星计划</h3>
+<h3 id="1万洪涛同学LovTech">1万洪涛同学LovTech</h3>
+<ul><li><span class="img-missing">［图：认识WorkBuddy-保姆级入门到精通教程 #AI智能体  #Agent  #Workbuddy  #AI办公］</span></li></ul>
+<p>06:01</p>
+<p>播放中</p>
+<h3 id="认识WorkBuddy-保姆级入门到精通教程-AI智能体-Agent-Workbuddy-AI办公">认识WorkBuddy-保姆级入门到精通教程 #AI智能体  #Agent  #Workbuddy  #AI办公</h3>
+<p>554晓墨AIGC</p>
+<ul><li>![5.6 升级 GPT6 Astra，PCB 到底提升了什么？ 模型能力是基础，工程可控性才是量产落地的关键。下期我们会继续剖析GPT-6 Astra版本工程在技术上还存在哪些问题，欢迎追更。</li></ul>
+<p>#AI #工科 #高多层PCB #硬件 #嘉立创有料季](../../_assets/20260924-手推Transformer3架构图解/img-011-ea7ce504.jpeg)</p>
+<p>03:58</p>
+<p>播放中</p>
+<p>5.6 升级 GPT6 Astra，PCB 到底提升了什么？ 模型能力是基础，工程可控性才是量产落地的关键。下期我们会继续剖析GPT-6 Astra版本工程在技术上还存在哪些问题，欢迎追更。#AI #工科 #高多层PCB #硬件 #嘉立创有料季</p>
+<p>5038謓泽</p>
+<ul><li><span class="img-missing">［图：Kimi转接Claude，这账到底怎么算？ 高价买回答，再按低价交付，真能省成本吗？#人工智能 #Kimi #Claude #AI工具］</span></li></ul>
+<p>00:56</p>
+<p>播放中</p>
+<h3 id="Kimi转接Claude-这账到底怎么算-高价买回答-再按低价交付-真能省成本吗-人工智能-Kimi-Claude-AI工具">Kimi转接Claude，这账到底怎么算？ 高价买回答，再按低价交付，真能省成本吗？#人工智能 #Kimi #Claude #AI工具</h3>
+<p>603永哥讲 AI</p>
+<ul><li><span class="img-missing">［图：WorkBuddy保姆级教学办公三件套。 #WorkBuddy  #AI办公  #AI工具  #人工智能 #AI教程］</span></li></ul>
+<p>11:37</p>
+<p>播放中</p>
+<h3 id="WorkBuddy保姆级教学办公三件套-WorkBuddy-AI办公-AI工具-人工智能-AI教程">WorkBuddy保姆级教学办公三件套。 #WorkBuddy  #AI办公  #AI工具  #人工智能 #AI教程</h3>
+<p>825张瑞麟AI</p>
+<ul><li><span class="img-missing">［图：openclaw智能AI龙虾工具 U Claw2.0pro #人工智能 #龙虾ai #openclaw #黑科技 #ai］</span></li></ul>
+<p>00:23</p>
+<p>播放中</p>
+<h3 id="openclaw智能AI龙虾工具-U-Claw2-0pro-人工智能-龙虾ai-openclaw-黑科技-ai">openclaw智能AI龙虾工具 U Claw2.0pro #人工智能 #龙虾ai #openclaw #黑科技 #ai</h3>
+<p>812智能AI便携助手</p>
+<ul><li><span class="img-missing">［图：YOLO天塌了，这个开源视觉模型可以做更精细的目标定位 #端侧ai #大模型 #VLX #多模态 #具身智能］</span></li></ul>
+<p>00:30</p>
+<p>播放中</p>
+<h3 id="YOLO天塌了-这个开源视觉模型可以做更精细的目标定位-端侧ai-大模型-VLX-多模态-具身智能">YOLO天塌了，这个开源视觉模型可以做更精细的目标定位 #端侧ai #大模型 #VLX #多模态 #具身智能</h3>
+<p>6936VLX开源社区</p>
+<ul><li>![GPT-6 Astra全自动设计F405六层FPV飞控板 GPT-6 Astra设计FPV无人机飞控 PCB全过程记录，从电路原理图到 PCB 布局、走线、元器件摆放，都是Codex里的GPT-6在 KiCad 里直接操作，我可以看到它一步步画出来。</li></ul>
+<p>画完后它自己运行 ERC、DRC，检查问题，再修改电路和布局。 最后完成了 F405 六层飞控板的设计，还导出了 Gerber、钻孔、BOM、贴装坐标和 STEP 文件，能直接打开 3D 看整块板子的效果。 整个设计过程，总耗时3 小时 13 分 56 秒，总token消耗量约为51,900,896个（约5200万个），模型思考强度为高。 目前还没打样，实际能不能稳定工作，还要上板测试。但从描述需求到画出整块 PCB，这个过程已经挺让我惊叹了。 #PCB  #KiCad  #Codex  #GPT6  #Astra](../../_assets/20260924-手推Transformer3架构图解/img-016-ab3fc0c5.jpeg)</p>
+<p>01:23</p>
+<p>播放中</p>
+<p>GPT-6 Astra全自动设计F405六层FPV飞控板 GPT-6 Astra设计FPV无人机飞控 PCB全过程记录，从电路原理图到 PCB 布局、走线、元器件摆放，都是Codex里的GPT-6在 KiCad 里直接操作，我可以看到它一步步画出来。 画完后它自己运行 ERC、DRC，检查问题，再修改电路和布局。 最后完成了 F405 六层飞控板的设计，还导出了 Gerber、钻孔、BOM、贴装坐标和 STEP 文件，能直接打开 3D 看整块板子的效果。 整个设计过程，总耗时3 小时 13 分 56 秒，总token消耗量约为51,900,896个（约5200万个），模型思考强度为高。 目前还没打样，实际能不能稳定工作，还要上板测试。但从描述需求到画出整块 PCB，这个过程已经挺让我惊叹了。  #PCB  #KiCad  #Codex  #GPT6  #Astra</p>
+<p>3567去飞GoFly</p>
+<ul><li><span class="img-missing">［图：研究生必备科研工具#科研工具 #研究生 #科研干货］</span></li></ul>
+<p>02:11</p>
+<p>播放中</p>
+<h3 id="研究生必备科研工具-科研工具-研究生-科研干货">研究生必备科研工具#科研工具 #研究生 #科研干货</h3>
+<h3 id="6万江枫">6万江枫</h3>
+<p><img alt="🍃" src="../assets/img/img-018-fbc683b6-ba44c58b8bdb.png"></p>
+<p>读博中</p>
+<ul><li><span class="img-missing">［图：GraphPad进阶版层叠图 #书霸AI #GraphPad #科研绘图 #研究生 #知识分享］</span></li></ul>
+<p>01:36</p>
+<p>播放中</p>
+<h3 id="GraphPad进阶版层叠图-书霸AI-GraphPad-科研绘图-研究生-知识分享">GraphPad进阶版层叠图 #书霸AI #GraphPad #科研绘图 #研究生 #知识分享</h3>
+<p>311GraphPad大胃袋（良子版）</p>
+<ul><li><span class="img-missing">［图：当工科生用gpt画pcb板子 #pcb打样 #pcb线路板 #工科女 #电子 #电赛］</span></li></ul>
+<p>00:16</p>
+<p>播放中</p>
+<h3 id="当工科生用gpt画pcb板子-pcb打样-pcb线路板-工科女-电子-电赛">当工科生用gpt画pcb板子 #pcb打样 #pcb线路板 #工科女 #电子 #电赛</h3>
+<p>5967矢口</p>
+<ul><li><span class="img-missing">［图：手推Transformer（1）自注意力机制 #大语言模型 #大语言模型原理 #Transformer #自注意力机制］</span></li></ul>
+<p>06:23</p>
+<p>播放中</p>
+<h3 id="手推Transformer-1-自注意力机制-大语言模型-大语言模型原理-Transformer-自注意力机制">手推Transformer（1）自注意力机制 #大语言模型 #大语言模型原理 #Transformer #自注意力机制</h3>
+<h3 id="1万刘海儿在风中飘荡">1万刘海儿在风中飘荡</h3>
+<ul><li><span class="img-missing">［图：生产级PDF文件识别RAG要过4道关，90%的人倒在第一关 #Ai大模型 #大模型 #Agent #大模型面试 #人工智能］</span></li></ul>
+<p>06:20</p>
+<p>播放中</p>
+<h3 id="生产级PDF文件识别RAG要过4道关-90-的人倒在第一关-Ai大模型-大模型-Agent-大模型面试-人工智能">生产级PDF文件识别RAG要过4道关，90%的人倒在第一关 #Ai大模型 #大模型 #Agent #大模型面试 #人工智能</h3>
+<p>5247AI大模型日记</p>
+<ul><li>![数模agent-Beacon开源了 耗时一个月终于vibe coding出来了----Beacon,功能还算可以,可以直接输出latex排版的pdf</li></ul>
+<p>#ai新星计划  #vibecoding  #大学生 #数模 #vibecoding大赏](../../_assets/20260924-手推Transformer3架构图解/img-023-e5811439.jpeg)</p>
+<p>00:28</p>
+<p>播放中</p>
+<h3 id="数模agent-Beacon开源了-耗时一个月终于vibe-coding出来了----Beacon-功能还算可以-可以直接输出latex排版的pdf-ai新星计划-vibecoding-大学生-数模-vibecoding大赏">数模agent-Beacon开源了 耗时一个月终于vibe coding出来了----Beacon,功能还算可以,可以直接输出latex排版的pdf#ai新星计划  #vibecoding  #大学生 #数模 #vibecoding大赏</h3>
+<p>7940雾离欢</p>
+<ul><li>![Workbuddy + nature skill 绘图 科研绘图全流程指南</li></ul>
+<p>#科研 #科研工具 #科研绘图 #研究生  #ai工具](../../_assets/20260924-手推Transformer3架构图解/img-024-0fe0bca1.jpeg)</p>
+<p>02:05</p>
+<p>播放中</p>
+<h3 id="Workbuddy-nature-skill-绘图-科研绘图全流程指南-科研-科研工具-科研绘图-研究生-ai工具">Workbuddy + nature skill 绘图 科研绘图全流程指南#科研 #科研工具 #科研绘图 #研究生  #ai工具</h3>
+<p>567布尔博士</p>
+<ul><li><span class="img-missing">［图：脑洞说给AI听，它连电路图和组装说明书都做好了 #AI工具 #机械臂 #外骨骼 #电路设计 #DIY］</span></li></ul>
+<p>00:31</p>
+<p>播放中</p>
+<h3 id="脑洞说给AI听-它连电路图和组装说明书都做好了-AI工具-机械臂-外骨骼-电路设计-DIY">脑洞说给AI听，它连电路图和组装说明书都做好了 #AI工具 #机械臂 #外骨骼 #电路设计 #DIY</h3>
+<p>722微微辣不加班</p>
+<ul><li><span class="img-missing">［图：新开源image-2.1效果比肩Nano-banana-2 本地部署效果能力增强很多，主要是很多用低端机器+api生成的用户很友好，可以本地去编辑很多在线api不能编辑的图片。#Qwen #comfyui #文生图 #Ai #工作流］</span></li></ul>
+<p>00:42</p>
+<p>播放中</p>
+<h3 id="新开源image-2-1效果比肩Nano-banana-2-本地部署效果能力增强很多-主要是很多用低端机器-api生成的用户很友好-可以本地去编辑很多在线api不能编辑的图片-Qwen-comfyui-文生图-Ai-工作流">新开源image-2.1效果比肩Nano-banana-2 本地部署效果能力增强很多，主要是很多用低端机器+api生成的用户很友好，可以本地去编辑很多在线api不能编辑的图片。#Qwen #comfyui #文生图 #Ai #工作流</h3>
+<p>588AIGC绘式</p>
+<ul><li><span class="img-missing">［图：最近硅谷热议的Jev模型及其影响 最近AI圈广泛热议的Jev模型，是OpenAI的一位研究员用了两年时间研发出来的，一种用于决策和判断场景的快思考模型，比其他模型快一百倍，同时成本只要几百分之一，幻觉率还低。区别于以往LLM基于RLHF的后训练方法，他们采用了RLCD，可校准决策的强化学习，强化模型输出问题的回答和对这个回答的置信度。真是个有创意的方向，而且我觉得接下来价值巨大。#Jev #Jev模型 #RLCD #AI #OpenAI］</span></li></ul>
+<p>07:18</p>
+<p>播放中</p>
+<p>最近硅谷热议的Jev模型及其影响 最近AI圈广泛热议的Jev模型，是OpenAI的一位研究员用了两年时间研发出来的，一种用于决策和判断场景的快思考模型，比其他模型快一百倍，同时成本只要几百分之一，幻觉率还低。区别于以往LLM基于RLHF的后训练方法，他们采用了RLCD，可校准决策的强化学习，强化模型输出问题的回答和对这个回答的置信度。真是个有创意的方向，而且我觉得接下来价值巨大。#Jev #Jev模型 #RLCD #AI #OpenAI</p>
+<h3 id="2万晓辉博士">2万晓辉博士</h3>
+<ul><li><span class="img-missing">［图：Deepseek+Solidworks,自动绘制复杂机械结构 #Deepseek #solidworks #建模 #codex #skills］</span></li></ul>
+<p>02:02</p>
+<p>播放中</p>
+<h3 id="Deepseek-Solidworks-自动绘制复杂机械结构-Deepseek-solidworks-建模-codex-skills">Deepseek+Solidworks,自动绘制复杂机械结构 #Deepseek #solidworks #建模 #codex #skills</h3>
+<h3 id="6万极简AI-3">6万极简AI（3%）</h3>
+<ul><li><span class="img-missing">［图：多模态大模型是如何实现的 #多模态 #交叉注意力 #AI #AI计划 #clip］</span></li></ul>
+<p>12:18</p>
+<p>播放中</p>
+<h3 id="多模态大模型是如何实现的-多模态-交叉注意力-AI-AI计划-clip">多模态大模型是如何实现的 #多模态 #交叉注意力 #AI #AI计划 #clip</h3>
+<p>2851乙</p>
+<p>全部评论</p>
+<p>请先登录后发表评论</p>
+<p>大家都在搜：ai芯片架构</p>
+<p>寻找我的</p>
+<p>...</p>
+<p>8你讲的太好了。3期视频把我的疑问全部解决了。</p>
+<p>作者赞过</p>
+<p>2周前·北京</p>
+<p>1</p>
+<p>分享</p>
+<p>回复</p>
+<p>i吃菠萝咕噜肉</p>
+<p>...</p>
+<p>太厉害了，听你的白话版本才理解</p>
+<p><em class='embed'>[图片: 举手]</em>(https://p3-pc-sign.douyinpic.com/obj/tos-cn-i-tsj2vxp0zn/3c34da0d65db47c6933e6b66cc17e5aa?lk3s=343af0a2&amp;x-expires=2105658000&amp;x-signature=EEx6lPFIo1dwlJKfy4LNIMK1keE%3D&amp;from=876277922)</p>
+<p>2周前·广东</p>
+<p>0</p>
+<p>分享</p>
+<p>回复</p>
+<p>小哈基米</p>
+<p><img alt="👾" src="../assets/img/img-030-d4b99050-9918cc29e9ad.png"></p>
+<p>...</p>
+<p>FFN的输出怎么变成k和v传递给交叉注意力模块？</p>
+<p>2周前·广东</p>
+<p>0</p>
+<p>分享</p>
+<p>回复</p>
+<p>小鸭哥</p>
+<p>...</p>
+<p>博主可以讲讲带因果掩码的自注意力机制吗？</p>
+<p>3周前·宁夏</p>
+<p>3</p>
+<p>分享</p>
+<p>回复</p>
+<p>不能说</p>
+<p>...</p>
+<p>刷到讲这个的我是真的又想看又不想看，想看是因为大模型是我的工作，不想看是因为当年写算子的时候这玩意我已经看吐了</p>
+<p>3周前·上海</p>
+<p>0</p>
+<p>分享</p>
+<p>回复</p>
+<p>登录后即可参与互动讨论</p>
+<p><img alt="刘海儿在风中飘荡" src="../assets/img/img-009-c4536419-ed763472df29.jpeg"></p>
+<p>刘海儿在风中飘荡</p>
+<p>粉丝1.3万获赞4.6万</p>
+<h3 id="推荐视频-1">推荐视频</h3>
+<ul><li><span class="img-missing">［图：通俗易懂地讲解什么是Agent？ 从0到1搭建一个简易Agent，从小白的角度出发解释Agent是如何运行的？  #agent #AIagent #LLM #AI教程 #AI新星计划］</span></li></ul>
+<p>15:06</p>
+<p>播放中</p>
+<h3 id="通俗易懂地讲解什么是Agent-从0到1搭建一个简易Agent-从小白的角度出发解释Agent是如何运行的-agent-AIagent-LLM-AI教程-AI新星计划-1">通俗易懂地讲解什么是Agent？ 从0到1搭建一个简易Agent，从小白的角度出发解释Agent是如何运行的？ #agent #AIagent #LLM #AI教程 #AI新星计划</h3>
+<h3 id="1万洪涛同学LovTech-1">1万洪涛同学LovTech</h3>
+<ul><li><span class="img-missing">［图：认识WorkBuddy-保姆级入门到精通教程 #AI智能体  #Agent  #Workbuddy  #AI办公］</span></li></ul>
+<p>06:01</p>
+<p>播放中</p>
+<h3 id="认识WorkBuddy-保姆级入门到精通教程-AI智能体-Agent-Workbuddy-AI办公-1">认识WorkBuddy-保姆级入门到精通教程 #AI智能体 #Agent #Workbuddy #AI办公</h3>
+<p>554晓墨AIGC</p>
+<ul><li>![5.6 升级 GPT6 Astra，PCB 到底提升了什么？ 模型能力是基础，工程可控性才是量产落地的关键。下期我们会继续剖析GPT-6 Astra版本工程在技术上还存在哪些问题，欢迎追更。</li></ul>
+<p>#AI #工科 #高多层PCB #硬件 #嘉立创有料季](../../_assets/20260924-手推Transformer3架构图解/img-011-ea7ce504.jpeg)</p>
+<p>03:58</p>
+<p>播放中</p>
+<h3 id="5-6-升级-GPT6-Astra-PCB-到底提升了什么-模型能力是基础-工程可控性才是量产落地的关键-下期我们会继续剖析GPT-6-Astra版本工程在技术上还存在哪些问题-欢迎追更">5.6 升级 GPT6 Astra，PCB 到底提升了什么？ 模型能力是基础，工程可控性才是量产落地的关键。下期我们会继续剖析GPT-6 Astra版本工程在技术上还存在哪些问题，欢迎追更。</h3>
+<p>#AI #工科 #高多层PCB #硬件 #嘉立创有料季</p>
+<p>5038謓泽</p>
+<ul><li><span class="img-missing">［图：Kimi转接Claude，这账到底怎么算？ 高价买回答，再按低价交付，真能省成本吗？#人工智能 #Kimi #Claude #AI工具］</span></li></ul>
+<p>00:56</p>
+<p>播放中</p>
+<h3 id="Kimi转接Claude-这账到底怎么算-高价买回答-再按低价交付-真能省成本吗-人工智能-Kimi-Claude-AI工具-1">Kimi转接Claude，这账到底怎么算？ 高价买回答，再按低价交付，真能省成本吗？#人工智能 #Kimi #Claude #AI工具</h3>
+<p>603永哥讲 AI</p>
+<ul><li><span class="img-missing">［图：WorkBuddy保姆级教学办公三件套。 #WorkBuddy  #AI办公  #AI工具  #人工智能 #AI教程］</span></li></ul>
+<p>11:37</p>
+<p>播放中</p>
+<h3 id="WorkBuddy保姆级教学办公三件套-WorkBuddy-AI办公-AI工具-人工智能-AI教程-1">WorkBuddy保姆级教学办公三件套。 #WorkBuddy #AI办公 #AI工具 #人工智能 #AI教程</h3>
+<p>825张瑞麟AI</p>
+<ul><li><span class="img-missing">［图：openclaw智能AI龙虾工具 U Claw2.0pro #人工智能 #龙虾ai #openclaw #黑科技 #ai］</span></li></ul>
+<p>00:23</p>
+<p>播放中</p>
+<h3 id="openclaw智能AI龙虾工具-U-Claw2-0pro-人工智能-龙虾ai-openclaw-黑科技-ai-1">openclaw智能AI龙虾工具 U Claw2.0pro #人工智能 #龙虾ai #openclaw #黑科技 #ai</h3>
+<p>812智能AI便携助手</p>
+<ul><li><span class="img-missing">［图：YOLO天塌了，这个开源视觉模型可以做更精细的目标定位 #端侧ai #大模型 #VLX #多模态 #具身智能］</span></li></ul>
+<p>00:30</p>
+<p>播放中</p>
+<h3 id="YOLO天塌了-这个开源视觉模型可以做更精细的目标定位-端侧ai-大模型-VLX-多模态-具身智能-1">YOLO天塌了，这个开源视觉模型可以做更精细的目标定位 #端侧ai #大模型 #VLX #多模态 #具身智能</h3>
+<p>6936VLX开源社区</p>
+<ul><li>![GPT-6 Astra全自动设计F405六层FPV飞控板 GPT-6 Astra设计FPV无人机飞控 PCB全过程记录，从电路原理图到 PCB 布局、走线、元器件摆放，都是Codex里的GPT-6在 KiCad 里直接操作，我可以看到它一步步画出来。</li></ul>
+<p>画完后它自己运行 ERC、DRC，检查问题，再修改电路和布局。 最后完成了 F405 六层飞控板的设计，还导出了 Gerber、钻孔、BOM、贴装坐标和 STEP 文件，能直接打开 3D 看整块板子的效果。 整个设计过程，总耗时3 小时 13 分 56 秒，总token消耗量约为51,900,896个（约5200万个），模型思考强度为高。 目前还没打样，实际能不能稳定工作，还要上板测试。但从描述需求到画出整块 PCB，这个过程已经挺让我惊叹了。 #PCB  #KiCad  #Codex  #GPT6  #Astra](../../_assets/20260924-手推Transformer3架构图解/img-016-ab3fc0c5.jpeg)</p>
+<p>01:23</p>
+<p>播放中</p>
+<p>GPT-6 Astra全自动设计F405六层FPV飞控板 GPT-6 Astra设计FPV无人机飞控 PCB全过程记录，从电路原理图到 PCB 布局、走线、元器件摆放，都是Codex里的GPT-6在 KiCad 里直接操作，我可以看到它一步步画出来。 画完后它自己运行 ERC、DRC，检查问题，再修改电路和布局。 最后完成了 F405 六层飞控板的设计，还导出了 Gerber、钻孔、BOM、贴装坐标和 STEP 文件，能直接打开 3D 看整块板子的效果。 整个设计过程，总耗时3 小时 13 分 56 秒，总token消耗量约为51,900,896个（约5200万个），模型思考强度为高。 目前还没打样，实际能不能稳定工作，还要上板测试。但从描述需求到画出整块 PCB，这个过程已经挺让我惊叹了。 #PCB #KiCad #Codex #GPT6 #Astra</p>
+<p>3567去飞GoFly</p>
+<ul><li><span class="img-missing">［图：研究生必备科研工具#科研工具 #研究生 #科研干货］</span></li></ul>
+<p>02:11</p>
+<p>播放中</p>
+<h3 id="研究生必备科研工具-科研工具-研究生-科研干货-1">研究生必备科研工具#科研工具 #研究生 #科研干货</h3>
+<h3 id="6万江枫-1">6万江枫</h3>
+<p><img alt="🍃" src="../assets/img/img-018-fbc683b6-ba44c58b8bdb.png"></p>
+<p>读博中</p>
+<ul><li><span class="img-missing">［图：GraphPad进阶版层叠图 #书霸AI #GraphPad #科研绘图 #研究生 #知识分享］</span></li></ul>
+<p>01:36</p>
+<p>播放中</p>
+<h3 id="GraphPad进阶版层叠图-书霸AI-GraphPad-科研绘图-研究生-知识分享-1">GraphPad进阶版层叠图 #书霸AI #GraphPad #科研绘图 #研究生 #知识分享</h3>
+<p>311GraphPad大胃袋（良子版）</p>
+<ul><li><span class="img-missing">［图：当工科生用gpt画pcb板子 #pcb打样 #pcb线路板 #工科女 #电子 #电赛］</span></li></ul>
+<p>00:16</p>
+<p>播放中</p>
+<h3 id="当工科生用gpt画pcb板子-pcb打样-pcb线路板-工科女-电子-电赛-1">当工科生用gpt画pcb板子 #pcb打样 #pcb线路板 #工科女 #电子 #电赛</h3>
+<p>5967矢口</p>
+<ul><li><span class="img-missing">［图：手推Transformer（1）自注意力机制 #大语言模型 #大语言模型原理 #Transformer #自注意力机制］</span></li></ul>
+<p>06:23</p>
+<p>播放中</p>
+<h3 id="手推Transformer-1-自注意力机制-大语言模型-大语言模型原理-Transformer-自注意力机制-1">手推Transformer（1）自注意力机制 #大语言模型 #大语言模型原理 #Transformer #自注意力机制</h3>
+<h3 id="1万刘海儿在风中飘荡-1">1万刘海儿在风中飘荡</h3>
+<ul><li><span class="img-missing">［图：生产级PDF文件识别RAG要过4道关，90%的人倒在第一关 #Ai大模型 #大模型 #Agent #大模型面试 #人工智能］</span></li></ul>
+<p>06:20</p>
+<p>播放中</p>
+<h3 id="生产级PDF文件识别RAG要过4道关-90-的人倒在第一关-Ai大模型-大模型-Agent-大模型面试-人工智能-1">生产级PDF文件识别RAG要过4道关，90%的人倒在第一关 #Ai大模型 #大模型 #Agent #大模型面试 #人工智能</h3>
+<p>5247AI大模型日记</p>
+<ul><li>![数模agent-Beacon开源了 耗时一个月终于vibe coding出来了----Beacon,功能还算可以,可以直接输出latex排版的pdf</li></ul>
+<p>#ai新星计划  #vibecoding  #大学生 #数模 #vibecoding大赏](../../_assets/20260924-手推Transformer3架构图解/img-023-e5811439.jpeg)</p>
+<p>00:28</p>
+<p>播放中</p>
+<h3 id="数模agent-Beacon开源了-耗时一个月终于vibe-coding出来了----Beacon-功能还算可以-可以直接输出latex排版的pdf">数模agent-Beacon开源了 耗时一个月终于vibe coding出来了----Beacon,功能还算可以,可以直接输出latex排版的pdf</h3>
+<p>#ai新星计划 #vibecoding #大学生 #数模 #vibecoding大赏</p>
+<p>7940雾离欢</p>
+<ul><li>![Workbuddy + nature skill 绘图 科研绘图全流程指南</li></ul>
+<p>#科研 #科研工具 #科研绘图 #研究生  #ai工具](../../_assets/20260924-手推Transformer3架构图解/img-024-0fe0bca1.jpeg)</p>
+<p>02:05</p>
+<p>播放中</p>
+<h3 id="Workbuddy-nature-skill-绘图-科研绘图全流程指南">Workbuddy + nature skill 绘图 科研绘图全流程指南</h3>
+<p>#科研 #科研工具 #科研绘图 #研究生 #ai工具</p>
+<p>567布尔博士</p>
+<ul><li><span class="img-missing">［图：脑洞说给AI听，它连电路图和组装说明书都做好了 #AI工具 #机械臂 #外骨骼 #电路设计 #DIY］</span></li></ul>
+<p>00:31</p>
+<p>播放中</p>
+<h3 id="脑洞说给AI听-它连电路图和组装说明书都做好了-AI工具-机械臂-外骨骼-电路设计-DIY-1">脑洞说给AI听，它连电路图和组装说明书都做好了 #AI工具 #机械臂 #外骨骼 #电路设计 #DIY</h3>
+<p>722微微辣不加班</p>
+<ul><li><span class="img-missing">［图：新开源image-2.1效果比肩Nano-banana-2 本地部署效果能力增强很多，主要是很多用低端机器+api生成的用户很友好，可以本地去编辑很多在线api不能编辑的图片。#Qwen #comfyui #文生图 #Ai #工作流］</span></li></ul>
+<p>00:42</p>
+<p>播放中</p>
+<h3 id="新开源image-2-1效果比肩Nano-banana-2-本地部署效果能力增强很多-主要是很多用低端机器-api生成的用户很友好-可以本地去编辑很多在线api不能编辑的图片-Qwen-comfyui-文生图-Ai-工作流-1">新开源image-2.1效果比肩Nano-banana-2 本地部署效果能力增强很多，主要是很多用低端机器+api生成的用户很友好，可以本地去编辑很多在线api不能编辑的图片。#Qwen #comfyui #文生图 #Ai #工作流</h3>
+<p>588AIGC绘式</p>
+<ul><li><span class="img-missing">［图：最近硅谷热议的Jev模型及其影响 最近AI圈广泛热议的Jev模型，是OpenAI的一位研究员用了两年时间研发出来的，一种用于决策和判断场景的快思考模型，比其他模型快一百倍，同时成本只要几百分之一，幻觉率还低。区别于以往LLM基于RLHF的后训练方法，他们采用了RLCD，可校准决策的强化学习，强化模型输出问题的回答和对这个回答的置信度。真是个有创意的方向，而且我觉得接下来价值巨大。#Jev #Jev模型 #RLCD #AI #OpenAI］</span></li></ul>
+<p>07:18</p>
+<p>播放中</p>
+<p>最近硅谷热议的Jev模型及其影响 最近AI圈广泛热议的Jev模型，是OpenAI的一位研究员用了两年时间研发出来的，一种用于决策和判断场景的快思考模型，比其他模型快一百倍，同时成本只要几百分之一，幻觉率还低。区别于以往LLM基于RLHF的后训练方法，他们采用了RLCD，可校准决策的强化学习，强化模型输出问题的回答和对这个回答的置信度。真是个有创意的方向，而且我觉得接下来价值巨大。#Jev #Jev模型 #RLCD #AI #OpenAI</p>
+<h3 id="2万晓辉博士-1">2万晓辉博士</h3>
+<ul><li><span class="img-missing">［图：Deepseek+Solidworks,自动绘制复杂机械结构 #Deepseek #solidworks #建模 #codex #skills］</span></li></ul>
+<p>02:02</p>
+<p>播放中</p>
+<h3 id="Deepseek-Solidworks-自动绘制复杂机械结构-Deepseek-solidworks-建模-codex-skills-1">Deepseek+Solidworks,自动绘制复杂机械结构 #Deepseek #solidworks #建模 #codex #skills</h3>
+<h3 id="6万极简AI-3-1">6万极简AI（3%）</h3>
+<ul><li><span class="img-missing">［图：多模态大模型是如何实现的 #多模态 #交叉注意力 #AI #AI计划 #clip］</span></li></ul>
+<p>12:18</p>
+<p>播放中</p>
+<h3 id="多模态大模型是如何实现的-多模态-交叉注意力-AI-AI计划-clip-1">多模态大模型是如何实现的 #多模态 #交叉注意力 #AI #AI计划 #clip</h3>
+<p>2851乙</p>
+<p><a href="https://www.oceanengine.com/resource/douyin">广告投放</a></p>
+<p><a href="https://www.douyin.com/agreements/?id=6773906068725565448">用户服务协议</a></p>
+<p><a href="https://www.douyin.com/agreements/?id=6773901168964798477">隐私政策</a></p>
+<p><a href="https://www.douyin.com/recovery_account/">账号找回</a></p>
+<p><a href="https://www.douyin.com/aboutus/">联系我们</a></p>
+<p><a href="https://www.douyin.com/aboutus/">加入我们</a></p>
+<p><a href="https://www.douyin.com/friend_links">友情链接</a></p>
+<p><a href="https://www.douyin.com/htmlmap/hotauthor_0_1">站点地图</a></p>
+<p><a href="https://www.douyin.com/downloadpage/pc">下载抖音</a></p>
+<p><a href="https://mix.jinritemai.com/falcon/mix_page/index.html">抖音电商</a></p>
+<p><a href="https://www.piyao.org.cn/yybgt/index.htm">网络谣言曝光台 ｜</a></p>
+<p><a href="https://www.12377.cn/">网上有害信息举报</a></p>
+<p>｜ 违法和不良信息举报：400-140-2108 [邮箱] ｜ 算法推荐专项举报：[邮箱] | 体育饭圈专项举报：[邮箱]</p>
+<p><a href="https://beian.miit.gov.cn/">京ICP备16016397号-3</a></p>
+<p>｜ 信息网络传播视听节目许可证 0126733</p>
+<p>｜ 广播电视节目制作经营许可证 （京）字第11313号</p>
+<p>｜ 增值电信业务经营许可证 京B2-20170846</p>
+<p>｜ 网络文化经营许可证 京网文〔2025〕0181-061号 ｜</p>
+<p><img alt="icon" src="../assets/img/img-005-b4f19472-4083ac1656e5.png"></p>
+<p><a href="https://beian.mps.gov.cn/">京公网安备11010802050006号</a></p>
+<p>｜ 互联网宗教信息服务许可证 京（2025）0000017 ｜</p>
+<p><img alt="icon" src="../assets/img/img-006-1d780013-cdfa6ad0b2de.png"></p>
+<p><a href="https://zzlz.gsxt.gov.cn/businessCheck/verifKey.do">电子营业执照</a></p>
+<p><a href="https://p-pc-weboff.byteimg.com/tos-cn-i-9r5gewecjs/d1cb34abe8ebb5600b51bac36ce3247f.jpg">｜（京）人服证字〔2026〕第0600005023号</a></p>
+<p>热门：<a href="https://www.douyin.com/jingxuan/food">抖音美食推荐</a><a href="https://www.douyin.com/jingxuan">抖音官网</a><a href="https://www.douyin.com/user/MS4wLjABAAAATHhwRAZhQFaAxLoV74aVGXlkzYD3wncv-Eus1iSke8vRs_dHIKLFaIT7lZn6Dpp2">剧好侃</a><a href="https://www.douyin.com/video/7689035904153059162">家里有大学生的，互相转告一下#央国企就业 #央国企招聘 #家长必读 #就业方向</a><a href="https://www.douyin.com/topic/7509883237716461618">甲卷数学解析</a><a href="https://www.douyin.com/shipin/7509904415944411175">高考语文必背古诗文朗诵</a><a href="https://www.douyin.com/search/%E5%B9%BF%E8%A5%BF595%E5%88%86%E8%83%BD%E4%B8%8A%E4%BB%80%E4%B9%88%E5%A4%A7%E5%AD%A6">广西595分能上什么大学</a><a href="https://www.douyin.com/video/7608874813393866010?source=Baiduspider">徐梦桃的卫冕时刻</a><a href="https://www.douyin.com/video/7326482171827408166?source=Baiduspider">享声MDA3便携解码耳放听感分享</a><a href="https://www.douyin.com/video/7328216607002479911?source=Baiduspider">天命卦师20#读书</a><a href="https://www.douyin.com/video/7589555308080677242?source=Baiduspider-sdc">第113集：数形结合法是解决零点问题的重要方法。#高考数学 #高中数学 #高中数学妙招 #数学思维 #高考</a><a href="https://www.douyin.com/video/7444536234233449747?source=Baiduspider">扭扭棒大丽花 教程第一期#扭扭棒花束 #我的手工日常 #教程 #手工 #扭扭棒</a><a href="https://www.douyin.com/video/6941310064162589987?source=Baiduspider">#lol 这期是教学，大家学习能早日进修峡谷之渊！</a><a href="https://www.douyin.com/video/7480397955594292540?source=Baiduspider-sdc">作为经常跑北滨路，算半个江北人的我，这份女马赛道攻略请收下。#重庆女子半程马拉松#义渡跑团#北滨路</a></p>
+<p>进入全屏</p>
+<p>直播加载中</p>
+<ul><li><a href="https://creator.douyin.com/">发布视频/图文</a></li></ul>
+<ul><li><a href="https://creator.douyin.com/creator-micro/content/manage">视频管理</a></li></ul>
+<ul><li><a href="https://creator.douyin.com/creator-micro/data/stats/overview">作品数据</a></li></ul>
+<ul><li><a href="https://streamingtool.douyin.com/">开直播</a></li></ul>
+<ul><li><a href="https://livedata.douyin.com/">直播数据</a></li></ul>
+<ul><li><a href="https://creator.douyin.com/creator-school">创作者学习中心</a></li></ul>
+<ul><li>创作者中心</li></ul>
+<ul><li><a href="https://api.amemv.com/magic/eco/runtime/release/6461f944e84c15036369f2a8">剪映专业版</a></li></ul>
+<ul><li><a href="https://music.douyin.com/studio">AI音乐创作</a></li></ul>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+
+</body>
+</html>

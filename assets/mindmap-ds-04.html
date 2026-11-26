@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>第五章-树 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>第五章-树</b><small>幕布导图 · 240 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "第五章-树", "data": {"id": "mvirtual-root", "topic": "<b>第五章-树<\/b>", "expanded": true, "children": [{"id": "mGuvWjB2dt0", "topic": "<b>一、基本概念<\/b>", "expanded": false, "children": [{"id": "mNCyaw3aIix", "topic": "1、定义：n个结点的有限集。<span class=\"mm-note\">n&gt;=0 。当n=0时，称为空树。<\/span>", "expanded": true}, {"id": "m7vuP2euaBm", "topic": "2、特点：", "expanded": true, "children": [{"id": "mvs8y9msB0C", "topic": "1、根节点没有前驱，除根节点外的所有结点有且仅有一个前驱", "expanded": true}, {"id": "mmDxajguclh", "topic": "2、所有结点都可以有0个或多个后继。", "expanded": true}]}, {"id": "mxMSipf83bh", "topic": "3、<b>子树<\/b>：子树之间互不相交。<br><img class=\"mm-img\" src=\"mm-74fb17e8d4fdf3.jpg\" style=\"width:260px;height:162px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m6R4a7bYazd", "topic": "4、树是一种<b>递归<\/b>的数据结构<span class=\"mm-note\">也是一种分层结构，适用于具有<b>层次结构<\/b>的数据。<\/span>", "expanded": true}]}, {"id": "mEYDfpVa6Rq", "topic": "<b>二、基本术语<\/b>", "expanded": false, "children": [{"id": "mOWOBSzD1lC", "topic": "1、结点之间的关系", "expanded": true, "children": [{"id": "mq7dbOHSzR4", "topic": "1、祖先结点", "expanded": true}, {"id": "myvt0xsj3Cu", "topic": "2、<b>子孙结点<\/b><span class=\"mm-note\">除了包括子节点之外，还包括所有子孙<\/span>", "expanded": true}, {"id": "mFZt1GzDXph", "topic": "3、<b>子结点<\/b>", "expanded": true}, {"id": "mMg0gmV5MVt", "topic": "4、父结点", "expanded": true}, {"id": "mvaJhssDc5b", "topic": "5、兄弟结点<span class=\"mm-note\">同一个父节点。<\/span>", "expanded": true}, {"id": "mwI8AH7bGhd", "topic": "6、堂兄弟结点<span class=\"mm-note\">就是<b>父节点在同一层的结点<\/b>属于堂兄弟。<\/span>", "expanded": true}]}, {"id": "m6yqc2kz45B", "topic": "2、<b>结点属性<\/b>", "expanded": true, "children": [{"id": "mFY3ygpWEs2", "topic": "1、<b>结点的层次<\/b>：树根开始定义，<span style=\"color:#d92d20\"><b><span>根节点为第一层。<\/span><\/b><span class=\"mm-note\">但是<b>有的教材是从0开始。即根节点为第0层<\/b>。\n按题目条件而定。<\/span>", "expanded": true}, {"id": "mER3Z7z0LpU", "topic": "2、<b>深度<\/b>：从<b>上向下累加<\/b>", "expanded": true}, {"id": "mIoJZgfnUp4", "topic": "3、<b>高度<\/b>：从<b>下向上累加<\/b><span class=\"mm-note\">对<b>节点<\/b>来说：\n深度是指从根节点到该节点的<b>最长简单路径边的条数<\/b>；\n高度是指从<b>最下面<\/b>的<a href=\"https://so.csdn.net/so/search?q=%E5%8F%B6%E5%AD%90%E8%8A%82%E7%82%B9&amp;spm=1001.2101.3001.7020\" target=\"_blank\" rel=\"noopener\">叶子节点<\/a>到该节点的最长简单路径边的条数；\n\n对<b>二叉树<\/b>来说：\n深度是从根节点数到它的叶节点；\n高度是从叶节点数到它的根节点；\n注意： 树的深度和高度一样，但是具体到树的某个节点，其深度和高度不一样。<\/span>", "expanded": true}, {"id": "mrdrsJakTik", "topic": "4、<span style=\"color:#1d4ed8\"><b><span>结点的度<\/span><\/b>：<b>结点的孩子个数(分支个数)<\/b><span class=\"mm-note\">因此: \n​分支节点：度&gt;0 ；\n叶子结点：度=0.<\/span>", "expanded": true}]}, {"id": "mTSMFrhOgD8", "topic": "3、<b>树的属性<\/b>", "expanded": true, "children": [{"id": "mo99U0xgqLq", "topic": "1、高度/深度：树中<b>结点的最大层数<\/b><span class=\"mm-note\">因此不同教材中，可能会有所不同。<\/span>", "expanded": true}, {"id": "mLdXyA9bleL", "topic": "2、<span style=\"color:#1d4ed8\"><b><span>树的度<\/span><\/b>：树中<b>结点度的最大值<\/b>", "expanded": true}]}, {"id": "mDKFaMbqMD3", "topic": "4、<b>有序树 <\/b>&amp; 无序树", "expanded": true, "children": [{"id": "mEcA2mHe7Hw", "topic": "有序树：树中结点的各子树<b>从左向右是有次序<\/b>的，不能互换。", "expanded": true}]}, {"id": "maNA4QSd6M8", "topic": "5、<b>路径<\/b>：结点之间的路径，是<b>从上向下的(<\/b><span style=\"color:#0e7a52\"><b><span>有向<\/span><\/b><b>)。<\/b>", "expanded": true}, {"id": "mJzxHW1nQRA", "topic": "5、<b>结点的路径长度<\/b>：两个节点之间路径所<b>经过<\/b><span style=\"color:#0e7a52\"><b><span>边的条数<\/span><\/b><b>。<\/b>", "expanded": true}, {"id": "m0uGhE2WoJo", "topic": "6、<b>树的路径长度<\/b>：<b>树根到每个结点的路径长的<\/b><span style=\"color:#0e7a52\"><b><span>总和<\/span><\/b>。<span class=\"mm-note\">根到每个结点的路径长度的最大值：树的高度-1<\/span>", "expanded": true}, {"id": "mudixHC3k86", "topic": "7、<b>森林：m棵<\/b><span style=\"color:#1d4ed8\"><b><span>互不相交的树<\/span><\/b><b>的集合。<\/b><br><img class=\"mm-img\" src=\"mm-089618d9900a78.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">m&gt;=0 。m=0时，就是空森林。\n并且考试中，会有将森林转化为树的题目。<\/span>", "expanded": true}, {"id": "mYM7zFdsSZS", "topic": "8、常用于<span style=\"color:#0e7a52\"><b><span>求解树结点与度之间关系<\/span><\/b>的有：<br><img class=\"mm-img\" src=\"mm-7f195c3f3c0afb.jpg\" style=\"width:260px;height:42px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">在解题中，就是根据上述关系，列出关系式，然后求解。\n一般用于求解 度为0,1,2...的结点个数<\/span>", "expanded": true}, {"id": "m71VJiaEIlP", "topic": "<br><img class=\"mm-img\" src=\"mm-66746ff429a823.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m6VrBiMORSJ", "topic": "<b>三、树的性质<\/b>", "expanded": false, "children": [{"id": "mwuEkjUdMBs", "topic": "<b>1、<\/b><b><mark>结点数 = 总度数+1<\/mark><\/b><span class=\"mm-note\">加的<b>1就是根节点<\/b>。<\/span>", "expanded": true}, {"id": "mpvc6Bd5I4B", "topic": "2、<b>度为m的树<\/b> &amp; <b>m叉树的区别<\/b><br><img class=\"mm-img\" src=\"mm-2e746b9362103b.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mxNcbCuldRW", "topic": "<b>度为m的树：<\/b><span style=\"color:#b45309\"><b><span>至少有一个节点的度 = m<\/span><\/b><span class=\"mm-note\"><b>不能为空树。<\/b><\/span>", "expanded": true}, {"id": "m0zEb1lOeUQ", "topic": "<b>m叉树：<\/b><span style=\"color:#b45309\"><b><span>允许所有结点的度都 &lt; m<\/span><\/b><span class=\"mm-note\"><b>可以是空树。<\/b><\/span>", "expanded": true}]}, {"id": "mRtVm41rxnP", "topic": "3、<b>度为m的树第i层<\/b><span style=\"color:#0e7a52\"><b><span>最多<\/span><\/b>有多少个结点：<br><img class=\"mm-img\" src=\"mm-963fbdbe2078d6.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m0biqZmkHxq", "topic": "4、<b>高度为h的m叉树<\/b><span style=\"color:#0e7a52\"><b><span>最多<\/span><\/b>有多少个结点：<br><img class=\"mm-img\" src=\"mm-859c3073aa94da.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "my3qItMgvsg", "topic": "5、<b>高度为h的m叉树 &amp; 高度为h的度为m的树 <\/b><span style=\"color:#0e7a52\"><b><span>至少<\/span><\/b>有多少个结点：<br><img class=\"mm-img\" src=\"mm-d71a55ded0c3a0.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">注意：<b>区分高度为h的m叉树和度为m的树<\/b>。<\/span>", "expanded": true, "children": [{"id": "mVMj9DoKPws", "topic": "<b>①m叉树：<\/b><span style=\"color:#b45309\"><b><span>h<\/span><\/b><b>个(<\/b>每层1个结点<b>)<\/b>", "expanded": true}, {"id": "mz6kZEK8nwh", "topic": "<b>②度为m的树：<\/b><span style=\"color:#b45309\"><b><span>h+m-1<\/span><\/b><b>个(<\/b>h-1层每层一个，第h层m个<b>)<\/b>", "expanded": true}, {"id": "mXgxLMYdVkj", "topic": "③同理：<b>结点个数为n，度为m的树，高度至多为<\/b><span style=\"color:#b45309\"><b><span>n-m+1<\/span><\/b>", "expanded": true}]}, {"id": "mTmg4VVR7kl", "topic": "6、<b>n个结点的m叉树<\/b>的<span style=\"color:#0e7a52\"><b><span>最小高度<\/span><\/b>是:   <span style=\"color:#d92d20\"><b><span>小于h层满的情况<\/span><\/b><br><img class=\"mm-img\" src=\"mm-18c274edc11529.jpg\" style=\"width:260px;height:152px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">注意这里是<b>取上限<\/b>。<\/span>", "expanded": true}, {"id": "m0YISCZchYa", "topic": "<b>7、满m叉树中，<\/b><span style=\"color:#1d4ed8\"><b><span>编号为i的结点<\/span><\/b><b>的<\/b><span style=\"color:#1d4ed8\"><b><span>第k个孩子的编号<\/span><\/b><b>为：<\/b><b><mark>m*(i-1)+1+k<\/mark><\/b><span class=\"mm-note\">反推即可得到：m叉树中，结点i的双亲结点编号<\/span>", "expanded": true}]}, {"id": "mRr2q70K9EB", "topic": "<b>四、二叉树<\/b>", "expanded": true, "children": [{"id": "m53FfKoefSH", "topic": "<b>一、二叉树的概念<\/b>", "expanded": false, "children": [{"id": "m5qXFOX17kF", "topic": "1、定义：n个结点的有限集合<span class=\"mm-note\">n =0时，为：<b>空二叉树<\/b>。\n注意：将度为2的树和二叉树进行区分：\n​              度为2的树：至少有三个结点，而二叉树可以为空。<\/span>", "expanded": true, "children": [{"id": "m2xIU6MMLBU", "topic": "1、每个结点最多只有两棵子树", "expanded": true}, {"id": "mHo4EDrHVWA", "topic": "2、左右子树不可颠倒(<span style=\"color:#1d4ed8\"><b><span>二叉树是有序树<\/span><\/b>)<span class=\"mm-note\">如果交换左右子树，就变成了不同的二叉树。<\/span>", "expanded": true}, {"id": "mFKycEozhMN", "topic": "3、二叉树的五种形态：<br><img class=\"mm-img\" src=\"mm-17fe7297d5c1ab.jpg\" style=\"width:260px;height:159px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mgExz40tMD9", "topic": "<b>2、特殊的二叉树<\/b>", "expanded": true, "children": [{"id": "mgC2GxBG9G3", "topic": "<span style=\"color:#0e7a52\"><b><span>1、满二叉树<\/span><\/b>", "expanded": true, "children": [{"id": "m28mHbKtMHz", "topic": "<span style=\"color:#d92d20\"><b><span>注意<\/span><\/b>：<b>HNU满二叉树的定义有所不同：<\/b><br><img class=\"mm-img\" src=\"mm-689fafa8310858.jpg\" style=\"width:260px;height:171px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mzmKGHtzogj", "topic": "叶子结点均在最后一层 (<b>树中的每层都含有最多的结点<\/b>)。<br><img class=\"mm-img\" src=\"mm-1b907ccf2a0aad.jpg\" style=\"width:260px;height:237px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">注意最后是<b>向下取整<\/b>。\n这一特性，有助于顺序存储。<\/span>", "expanded": true}]}, {"id": "mM2Md00QIVM", "topic": "2、<span style=\"color:#0e7a52\"><b><span>完全二叉树<\/span><\/b>", "expanded": true, "children": [{"id": "mxQzmysSpMr", "topic": "从根节点起，<b>从左向右填充<\/b>。", "expanded": true}, {"id": "mUuEjrkuZ5N", "topic": "底层的<b>叶结点集中在左边的若干位置<\/b>上。", "expanded": true}, {"id": "mxpnddqCkqk", "topic": "<span style=\"color:#d92d20\"><b><span>最多只有1个度为1的结点。<\/span><\/b><b>即：<\/b><b><mark>n1 = 0 或 1<\/mark><\/b><span class=\"mm-note\">完全二叉树有：\n         ①偶数个结点：n1 = 0\n         ②奇数个结点：n1 = 1<\/span>", "expanded": true}, {"id": "mtPjMGoVCu7", "topic": "<b>只有最后两层可能有叶子结点。<\/b><span class=\"mm-note\">最后一层全是叶子；\n倒数第二层可能出现叶子，且<b>出现叶子的情况也只能是从右向左<\/b>。<\/span>", "expanded": true}, {"id": "mcVotgcGSRy", "topic": "<b>从根结点到倒数第二层是一颗满二叉树<\/b><br><img class=\"mm-img\" src=\"mm-b468d6b088ed83.jpg\" style=\"width:260px;height:259px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m98Ie8FzpNw", "topic": "3、<b>二叉排序树(BSt)<\/b>", "expanded": true, "children": [{"id": "mrraYPOxGhH", "topic": "元素特性：<b>左小右大<\/b><br><img class=\"mm-img\" src=\"mm-510ae504d89b1c.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">用于元素的排序与搜索。<\/span>", "expanded": true}]}, {"id": "mwpaj4SJisK", "topic": "4、<b>平衡二叉树<\/b>", "expanded": true, "children": [{"id": "mkL7FVdVZ9R", "topic": "<b>左右子树的 深度/高度之差 不超过1<\/b><br><img class=\"mm-img\" src=\"mm-5ccb5dbc0af719.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "muS5zIL3Y17", "topic": "<span style=\"color:#0e7a52\"><b><span>满二叉树是特殊的完全二叉树。<\/span><\/b>", "expanded": true}, {"id": "mhTkOhbLHHm", "topic": "<br><img class=\"mm-img\" src=\"mm-1e5a649c26944c.jpg\" style=\"width:260px;height:102px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "m5T6U42uBAM", "topic": "<b>二、二叉树的性质<\/b>", "expanded": false, "children": [{"id": "mGTWsD4D1lb", "topic": "1、非空二叉树上的叶节点数 = 度为2的结点数 + 1 （<b><mark>n0 = n2+ 1<\/mark><\/b> ）<br><img class=\"mm-img\" src=\"mm-137e9b457c78f7.jpg\" style=\"width:260px;height:136px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">核心推导就在于<b>树结点与结点度的关系(总结点数 = 总分支数 + 1)<\/b>。<\/span>", "expanded": true}, {"id": "mXbby8t5gG7", "topic": "2、二叉树的第i层最多的结点个数：<br><img class=\"mm-img\" src=\"mm-a00d0464d6d6b0.jpg\" style=\"width:260px;height:65px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m293U25Pt7U", "topic": "3、<b>高度为h的二叉树最多有的结点个数<\/b>(<b>满二叉树<\/b>)：<b><mark>2^h -1<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-5174bf544c1246.jpg\" style=\"width:260px;height:89px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">根节点高度为1.<\/span>", "expanded": true}]}, {"id": "mwMyC9kuRwU", "topic": "<b>三、完全二叉树的常见考点<\/b><span style=\"color:#d92d20\"><b><span>!!!!!!<\/span><\/b>", "expanded": false, "children": [{"id": "mfeaXjBpsJ1", "topic": "1、<b>具有<\/b><span style=\"color:#b45309\"><b><span>n个结点的完全二叉树的高度<\/span><\/b>为(两种思路)：<br><img class=\"mm-img\" src=\"mm-a531f732b1fb8c.jpg\" style=\"width:260px;height:39px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mJBiIMpjtgL", "topic": "<b>①：第<\/b><span style=\"color:#1d4ed8\"><b><span>h层满  ：<\/span><\/b><b><mark>n ≤ 2^h - 1<\/mark><\/b><span class=\"mm-note\">方法1：向上取整 。思路：比h-1层的最大结点数还多(&gt;) + <b>小于等于第h层满结点的情况<\/b><\/span>", "expanded": true}, {"id": "muEvOPiVNLT", "topic": "<b>②：第<\/b><span style=\"color:#1d4ed8\"><b><span>h层只有1个结点 ：<\/span><\/b><b><mark>n ≥ 2^(h-1) -1 + 1<\/mark><\/b><span class=\"mm-note\">方法2：向下取整。思路：比h+1层的最小结点数还少(&lt;) + <b>大于等于第h层只有一个节点的情况。\n即：计算出前h-1层满时的结点个数：2^(h-1)-1<\/b>\n          <b>再加上第h层的1个结点<\/b>。<\/span>", "expanded": true}]}, {"id": "mqLoHjN9T1O", "topic": "2、<span style=\"color:#b45309\"><b><span>完全二叉树<\/span><\/b><b>根据结点个数推出度为0/1/2的结点个数<\/b>。<br><img class=\"mm-img\" src=\"mm-8d37f91b70f220.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">核心就在于：\n1、<b>n1 = 0 或 1<\/b> ，即完全二叉树度为1的结点只有一个 或  没有。\n2、<b>n0 = n2 + 1。<\/b><\/span>", "expanded": true, "children": [{"id": "mnjsq8d3gJ8", "topic": "①可以推出：<span style=\"color:#1d4ed8\"><b><span>n0 + n2 = 2*n2 +1<\/span><\/b> <b>一定为奇数<\/b><span class=\"mm-note\">因为二叉树中：<b>n0 = n2 + 1<\/b><\/span>", "expanded": true}, {"id": "mjTkGG1hdQb", "topic": "②又因为：<b>n = n0 + n1 + n2 =<\/b><span style=\"color:#1d4ed8\"><span> <\/span><span style=\"color:#1d4ed8\"><b><span>2*n2 + 1 + n1<\/span><\/b>", "expanded": true}, {"id": "mknhctYmyjT", "topic": "因此可以得出：<span style=\"color:#1d4ed8\"><b><span>n(总结点数)的奇偶性 与 n1(度为1的结点数)的奇偶性 刚好相反<\/span><\/b>", "expanded": true}]}, {"id": "mrelDllrpC9", "topic": "考点回顾：<br><img class=\"mm-img\" src=\"mm-af8433fd828d31.jpg\" style=\"width:260px;height:93px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mhm8PD8Kg0w", "topic": "<b>四、二叉树的存储结构<\/b>", "expanded": false, "children": [{"id": "mHRr2Rc0bTg", "topic": "1、顺序存储 —— <b><mark>均以满二叉树的形式存储<\/mark><\/b><span class=\"mm-note\">使用数组来存二叉树。即层序遍历二叉树，\n按照编号顺序存储，并且要保证能按照一定的规则，\n​找到结点的左右孩子。<\/span>", "expanded": true, "children": [{"id": "moFPlzXl8kd", "topic": "1、<b>完全二叉树<\/b>(<span style=\"color:#0e7a52\"><b><span>适合顺序存储<\/span><\/b>) <span style=\"color:#d92d20\"><span>  ❤<\/span><br><img class=\"mm-img\" src=\"mm-98fb6833e93b8e.jpg\" style=\"width:260px;height:115px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">即数组下标就可以确定结点在二叉树中的位置，和结点之间的关系。\n并且推荐从<b>数组下标为1的地方开始存储结点<\/b>。<\/span>", "expanded": true, "children": [{"id": "mNSfJLtOXs1", "topic": "注意：<b>存储高度为h的完全二叉树时，将其<\/b><span style=\"color:#1d4ed8\"><b><span>按照高度为h的满二叉树存储<\/span><\/b>", "expanded": true}, {"id": "mDO0LQhaZUi", "topic": "<span style=\"color:#1d4ed8\"><b><span>判断i是否为叶子节点<\/span><\/b><b>：<\/b><b><mark>i ≥ ⌈n/2⌉  <\/mark><\/b><b>是否成立<\/b><span class=\"mm-note\">成立：是<b>叶子结点<\/b>；\n不成立：是<b>分支节点<\/b><\/span>", "expanded": true}, {"id": "m2Mbz0aH9mf", "topic": "对于一个有 <b>n 个节点<\/b>的完全二叉树<b>，最后一层的节点数为 n/2<\/b>，而这些节点的编号正是从一半节点开始到最后一个节点。", "expanded": true}, {"id": "msx8x1ofBGh", "topic": "<span style=\"color:#1d4ed8\"><b><span>完全二叉树中，叶子结点的编号范围规律<\/span><\/b>：<span style=\"color:#b45309\"><b><span>如果总节点数是 n，叶子节点的编号范围就是从<\/span><\/b><mark> <\/mark><b><mark>⌈n/2⌉到 n<\/mark><\/b><span class=\"mm-note\">由于完全二叉树的特性，最后一层的节点都尽可能地靠左排列，因此从一半节点开始到最后一个节点都是叶子节点。\n当我们把一个完全二叉树的节点从上到下，从左到右依次编号时，如果节点总数是偶数，那么从一半节点开始到最后一个节点就是叶子节点。\n这是因为在<b>完全二叉树中<\/b>，<b>每个非叶子节点都会有左子节点<\/b>，而<b>有些节点还可能有右子节点<\/b>。\n​当节点总数是偶数时，一半节点之后就没有节点有子节点了，因此这些节点就是叶子节点。\n当节点总数是奇数时，最后一个节点也是叶子节点。\n​因此，如果总节点数是 n，叶子节点的编号范围就是从 ⌈2/n⌉ 到 n。<\/span>", "expanded": true}, {"id": "mT6oMFbLvJo", "topic": "<b>编号为i的结点<\/b><span style=\"color:#1d4ed8\"><b><span>所在的层次<\/span><\/b><b>为：<\/b><b><mark>⌊logi⌋ + 1<\/mark><\/b>", "expanded": true}, {"id": "mHBbjWcZnjq", "topic": "<b>编号为i的结点<\/b><b>的<\/b><span style=\"color:#1d4ed8\"><b><span>父结点<\/span><\/b><b>为：<\/b><b><mark>⌊ i/2⌋<\/mark><\/b><span class=\"mm-note\">注意：<b>此时是从1开始编号<\/b>(根结点为1)。<b>如果根节点从0开始编号<\/b>，那父节点为：<b>(i-1)/2<\/b><\/span>", "expanded": true}]}, {"id": "meQb9oozE9Z", "topic": "2、<b>非完全二叉树<\/b>(<span style=\"color:#0e7a52\"><b><span>不适合顺序存储 <\/span><\/b><b>- <\/b>浪费空间)<br><img class=\"mm-img\" src=\"mm-ce7440fe328de3.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">但是如果使用顺序存储来存储非完全二叉树时，\n为了<b>满足任意性<\/b>，<b>也要以完全二叉树的方式来存<\/b>。\n​即：若此时有一个非完全二叉树高度为5，节点数量为10，要用顺序存储，那么数组的最小容量为31.<\/span>", "expanded": true, "children": [{"id": "m1nthrWLu9i", "topic": "注意：为了<span style=\"color:#1d4ed8\"><b><span>满足任意性<\/span><\/b><b>，存储非完全二叉树时，<\/b><span style=\"color:#1d4ed8\"><b><span>也要以满二叉树的方式储存<\/span><\/b><b>。<\/b>", "expanded": true}]}]}, {"id": "mMZ396gK4Qr", "topic": "<b>2、链式存储（二叉链表）<\/b>", "expanded": true, "children": [{"id": "ma3g1ZKMbkW", "topic": "1、结构：<br><img class=\"mm-img\" src=\"mm-38932bddcf09f3.jpg\" style=\"width:260px;height:121px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">结点包含三个域：数据域、左指针域、右指针域<\/span>", "expanded": true}, {"id": "mh8EnFftlmf", "topic": "2、<b>空链域 (另一种说法：有多少空子树)：<\/b><b><mark>n+1 个<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-e678400a3b2b75.jpg\" style=\"width:260px;height:70px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为<b>n个结点<\/b>，总共有<b>2n个指针域<\/b>，且<b>总共会有n-1个结点会被指到<\/b>。\n因此还剩 2n - (n - 1) = n+1个空链域。\n该空链域在之后的<b>线索二叉树的构建上，会用到<\/b>。<\/span>", "expanded": true}, {"id": "mr6WiIFWFvp", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-28d7a9bcc1893f.jpg\" style=\"width:260px;height:117px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mw20E2mk0nZ", "topic": "<b>五、二叉树的遍历<\/b>", "expanded": false, "children": [{"id": "mVQWzZBxaBj", "topic": "1、<b>先序遍历(中左右)<\/b>", "expanded": true, "children": [{"id": "m7VgXLMYwT5", "topic": "1、递归实现：<br><img class=\"mm-img\" src=\"mm-7666b51513d79a.jpg\" style=\"width:260px;height:98px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mbOTT6q4ljK", "topic": "2、迭代实现：用一个<b>栈辅助<\/b><span class=\"mm-note\">因为遍历的顺序为 中 左 右，因此入栈的顺序为 : 中 右 左。\n保证右结点在左结点之前入栈，从而保证出栈时遍历顺序为中左右。<\/span>", "expanded": true}]}, {"id": "msHgBtlm6C7", "topic": "2、<b>中序遍历(左中右)<\/b>", "expanded": true, "children": [{"id": "mswzRFxZp4D", "topic": "1、递归实现：<br><img class=\"mm-img\" src=\"mm-7cf9c9ef4b1857.jpg\" style=\"width:260px;height:92px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m53YvOBlwo6", "topic": "2、迭代实现：与先序/后序区别较大<span class=\"mm-note\">思路：一路向左下，没有左孩子就收集中结点，然后收集右孩子，以此类推...<\/span>", "expanded": true}]}, {"id": "mWWqNkfhon4", "topic": "3、<b>后序遍历(左右中)<\/b>", "expanded": true, "children": [{"id": "mdmRn984PHl", "topic": "1、递归实现：<br><img class=\"mm-img\" src=\"mm-5db62dbb0e1435.jpg\" style=\"width:260px;height:108px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mHS6YkiE6gX", "topic": "2、迭代遍历：<b>搭乘先序遍历的顺风车 -&gt;<\/b><span style=\"color:#b45309\"><b><span> 将前序改为中右左，再将结果反转<\/span><\/b><span class=\"mm-note\">因为先序：中左右；后序：左右中。因此在遍历顺序上，把前序改为中右左，然后将遍历结果翻转一下即可。\n\n因此，后序遍历就是在前序遍历的基础上，将入栈顺序改为中左右，最后结果反转，就得到了后序遍历序列。<\/span>", "expanded": true}]}, {"id": "mgyJrtlKz6q", "topic": "4、<b>层次遍历<\/b><span class=\"mm-note\">前三个遍历既可以使用递归，又可以使用非递归。\n而<b>层序遍历就只能使用非递归，且借助于一个辅助Queue<\/b>。<\/span>", "expanded": true, "children": [{"id": "mYxW0UIrKno", "topic": "1、算法思想：<br><img class=\"mm-img\" src=\"mm-bf88a355db2012.jpg\" style=\"width:260px;height:121px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m8z2tU3lmcr", "topic": "2、代码实现：<br><img class=\"mm-img\" src=\"mm-89c542efac8c53.jpg\" style=\"width:260px;height:152px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "miZr074FnJ0", "topic": "5、<b>由<\/b><span style=\"color:#1d4ed8\"><b><span>遍历序列构造二叉树<\/span><\/b><b>(<\/b><span style=\"color:#b45309\"><b><span>没了中序无法构造<\/span><\/b><b>)<\/b><span class=\"mm-note\"><b>构造的核心<\/b>就是：\n1、根据<b>前序/后序/层序<\/b>序列<b>找到每一次的根节点<\/b>。\n2、再根据<b>中序序列<\/b>，将序列<b>划分为左右子树两部分<\/b><\/span>", "expanded": true, "children": [{"id": "mCGDQhD1Hem", "topic": "1、根据 <b>先序序列 + 中序序列<\/b> 构造<br><img class=\"mm-img\" src=\"mm-b47a6ce0ebef47.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">例子。<\/span>", "expanded": true}, {"id": "myYTtlddgbF", "topic": "2、根据 <b>后序序列 + 中序序列<\/b> 构造<br><img class=\"mm-img\" src=\"mm-a2a3505847dff5.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mN0Oo9loppq", "topic": "3、根据 <b>层序序列 + 中序序列<\/b> 构造<br><img class=\"mm-img\" src=\"mm-a9720ce7461db9.jpg\" style=\"width:260px;height:110px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mUCUzZtNz2b", "topic": "4、知识点回顾：<br><img class=\"mm-img\" src=\"mm-27d069bd5b634b.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mLI6e0NjMQH", "topic": "举例：<br><img class=\"mm-img\" src=\"mm-8d09dde1526e18.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mUfoTN5f2Px", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-4115aa577d297b.jpg\" style=\"width:260px;height:125px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mit4GLExVxo", "topic": "<b>六、线索二叉树<\/b><span class=\"mm-note\">就是<b>给结点找了前驱和后继<\/b>。<\/span>", "expanded": false, "children": [{"id": "mZEn916Ksni", "topic": "1、<b>中序线索二叉树<\/b>图示：<br><img class=\"mm-img\" src=\"mm-ffee13e7cb4320.jpg\" style=\"width:260px;height:112px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-5ad7a1027c487e.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d1613e144924e0.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是根据遍历序列，来确定每一个结点的前驱和后继。\n因此还有先序、后序、层序的线索二叉树。\n​原理都一样。并且注意区分中序前驱、中序后继....等说法的意思.<\/span>", "expanded": true}, {"id": "m0Qzz3f16IT", "topic": "2、线索二叉树的<b>结点结构：注意<\/b> <span style=\"color:#d92d20\"><b><span>ltag 与 rtag <\/span><\/b><b>的含义<\/b><br><img class=\"mm-img\" src=\"mm-a29606bbdf0aab.jpg\" style=\"width:260px;height:157px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">用<b>两个标志位<\/b>，来<b>标明<\/b>左右指针<b>指向的到底是左孩子还是前驱<\/b>、<b>右孩子还是后继<\/b>。<\/span>", "expanded": true}, {"id": "mdH1kb3DGOq", "topic": "3、引入线索二叉树的目的：<b>加快查找结点前驱和后继的速度<\/b>。", "expanded": true}, {"id": "m45G31Lkmve", "topic": "4、知识点回顾：<br><img class=\"mm-img\" src=\"mm-585ce0264167d4.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mjxCPMZt6lD", "topic": "<b>定义<\/b>：<b><mark>根据遍历序列<\/mark><\/b><b>，来<\/b><span style=\"color:#1d4ed8\"><b><span>确定每一个结点的前驱和后继<\/span><\/b><b>；并利用<\/b><span style=\"color:#1d4ed8\"><b><span>空链域<\/span><\/b><b>,对应指向。<\/b><span class=\"mm-note\"><b>指向前驱、指向后继的指针<\/b>叫作<b>线索<\/b>。<\/span>", "expanded": true}, {"id": "moLlo28Un2z", "topic": "<b>线索二叉树是一种<\/b><b><mark>物理结构<\/mark><\/b><span class=\"mm-note\">二叉树是一种逻辑结构，但线索二叉树是加上线索后的链表结构，即：它<b>是二叉树在计算机内部的一种存储结构<\/b>。<\/span>", "expanded": true}, {"id": "m0VJJgH44y3", "topic": "<b>n个结点的线索二叉树上含有的<\/b><span style=\"color:#1d4ed8\"><b><span>线索数<\/span><\/b><b>为：<\/b><b><mark>n+1<\/mark><\/b><span class=\"mm-note\">其实<b>也就是空链域数。<\/b><\/span>", "expanded": true}, {"id": "mVEjwESlUXp", "topic": "<span style=\"color:#1d4ed8\"><b><span>后序线索树的遍历<\/span><\/b><b>仍<\/b><span style=\"color:#1d4ed8\"><b><span>需要栈的支持<\/span><\/b><span class=\"mm-note\"><b>前序和中序线索树，就不需要了<\/b>。\n原因：\n 在后序遍历中，我们需要首先遍历左子树，然后遍历右子树，最后才访问根节点。\n 而后序线索化只提供了从某个节点到其后继节点的链接，而没有提供从某个节点到其前驱节点的链接。(也就是说，<b>如果不将中结点提前压入栈保存，那就找不到中了<\/b>呀)\n因此，如果我们<b>仅依赖线索化的后继节点，我们无法直接回溯到根节点之前访问右子树<\/b>。为了正确完成后序遍历，我们仍然需要使用栈或者递归等方式，来辅助记录遍历过程中的前驱节点。这样我们才能在遍历完右子树后回溯到根节点，从而访问根节点。\n因此，尽管线索化提供了一种快速定位节点的方式，但仍需要其他辅助手段才能进行特定顺序的遍历。<\/span>", "expanded": true}]}, {"id": "mjMOO7WpSrh", "topic": "<b>七、二叉树的线索化<\/b><span class=\"mm-note\">代码中的实现。\n其实就是在遍历过程中找到每一个结点的前驱和后继，同时伴随着节点域ltag、rtag标志位的修改。<\/span>", "expanded": false, "children": [{"id": "mRounLLP81g", "topic": "1、<b>中序线索化<\/b><br><img class=\"mm-img\" src=\"mm-c27bb0ba110faf.jpg\" style=\"width:260px;height:131px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">需要注意两点：\n1、最后线索化结束后，<b>需要处理遍历的最后一个节点<\/b>。\n2、pre参数是<b>引用类型(&amp;)<\/b>，目的是将pre的作用范围由局部扩展到全局，这样一来，在中序线索化过程中，pre的一切变化都可以被CreateInThread函数中的pre结点感知到。<\/span>", "expanded": true}, {"id": "myEQvlIinAA", "topic": "<b>2、先序线索化(<\/b><span style=\"color:#d92d20\"><b><span>爱的魔力转圈圈问题<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-4f65b99c3cbca5.jpg\" style=\"width:260px;height:125px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">大体代码与中序线索化类似，但是有点区别：\n1、<b>在线索化处理当前结点的左孩子时，需要先根据ltag判断一下<\/b>：\n      此时的left指向的究竟是左孩子还是前继。\n      因为会出现下述的错误(爱的魔力转圈圈问题)：<\/span>", "expanded": true, "children": [{"id": "mPiuX4Zwhbz", "topic": "错误示例：<br><img class=\"mm-img\" src=\"mm-e5380238d9ebe4.jpg\" style=\"width:260px;height:131px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时处理D结点，因为D没有左孩子，因此在线索化时，会将其进行前继线索化，也就是说会令它的left指向B。而在处理完D后，就会接着去处理它的左孩子，但是此时发现：它的左孩子居然已经指向D了，很明显，这里出现了死循环。\n因此，我们在处理它的左孩子时，要加上一个判断条件，如下：<\/span>", "expanded": true}, {"id": "mcDRC85yBE1", "topic": "<br><img class=\"mm-img\" src=\"mm-cbbd57e327ae85.jpg\" style=\"width:260px;height:96px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mHcJjw0WZxF", "topic": "<b>3、后序线索化<\/b><br><img class=\"mm-img\" src=\"mm-ef6e96eb19ae52.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">不会出现先序线索化中的情况，因为后序遍历的顺序为左右中，因此当处理结点D时，它的左子树和右子树均已经处理完毕。<\/span>", "expanded": true}]}, {"id": "mvkDK4IXVEC", "topic": "<b>八、在线索二叉树中找前驱与后继<\/b>", "expanded": false, "children": [{"id": "mNt95hgLp5H", "topic": "<b>1、中序线索树<\/b><span class=\"mm-note\">左中右<\/span>", "expanded": true, "children": [{"id": "mf0orFSTdlP", "topic": "1、找<b>中序后继<\/b><span class=\"mm-note\">两种情况:\n1、node-&gt;rtag = 1,说明此时right指向的就是其后继，直接找到。\n2、node-&gt;rtag = 0,说明此节点一定有右孩子且此时right指向的是右孩子而非后继。\n又因为中序遍历顺序为：左中右。\n因此此时该节点(中)的后继就是<b>右子树中第一个遍历到的结点(也就是右子树中最左下的结点)<\/b>。<\/span>", "expanded": true, "children": [{"id": "mKEVcoD6wbR", "topic": "示意图：<br><img class=\"mm-img\" src=\"mm-bf224107903f0e.jpg\" style=\"width:260px;height:256px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "ms576VZW4rf", "topic": "实现代码：<br><img class=\"mm-img\" src=\"mm-ddb665de5ae9eb.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mqDbmN9Leac", "topic": "据上述代码，实现<b>二叉搜索树的中序遍历代码<\/b>如下：<br><img class=\"mm-img\" src=\"mm-b49f7d3bca2a85.jpg\" style=\"width:260px;height:54px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">空间复杂度：O(1)<\/span>", "expanded": true}]}, {"id": "mjzF2ZCo5Zh", "topic": "2、找<b>中序前驱<\/b><span class=\"mm-note\">与找后继同理。\n两种情况:\n1、node-&gt;ltag = 1,说明此时left指向的就是其前驱，直接找到。\n2、node-&gt;ltag = 0,说明该结点一定有左孩子且此时left指向的是左孩子而非后继。\n又因为中序遍历顺序为：左中右。\n因此此时该节点(中)的前驱就是<b>左子树中最后一个遍历到的结点(也就是左子树中最右下的结点)<\/b>。<\/span>", "expanded": true, "children": [{"id": "mkjXDSGzoej", "topic": "示意图：<br><img class=\"mm-img\" src=\"mm-c0ca3e62ba646c.jpg\" style=\"width:260px;height:285px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mhYITztScZr", "topic": "代码实现：<br><img class=\"mm-img\" src=\"mm-c4f2ce1de14065.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mjvSJS7Ihct", "topic": "实现<b>中序线索树的<\/b><span style=\"color:#1d4ed8\"><b><span>逆向中序遍历<\/span><\/b>：<br><img class=\"mm-img\" src=\"mm-32204fea0f5fd6.jpg\" style=\"width:260px;height:56px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mrZtjClhRNp", "topic": "<b>2、先序线索树<\/b><span class=\"mm-note\">中左右<\/span>", "expanded": true, "children": [{"id": "m3fEU5Lyxja", "topic": "1、找<b>先序后继<\/b><span class=\"mm-note\">两种情况：\n1、node-&gt;rtag = 1,说明此时right指向的就是其后继，直接找到。\n2、node-&gt;rtag = 0,那么<b>此时又有两种情况<\/b>：\n         (1)<b>有左孩子<\/b>：那么此时该结点的先序后继就是它的左孩子。\n          (2)<b>没有左孩子<\/b>：那么它必有右孩子，且此时该结点的先序后继就   \n          是它的右孩子。<\/span>", "expanded": true, "children": [{"id": "mWV4Ps5ygpw", "topic": "示意图：<br><img class=\"mm-img\" src=\"mm-cbcf29edec3e5d.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mc0wVpcmtGT", "topic": "代码实现：（二刷补充）", "expanded": true}]}, {"id": "mcF5YXV4NJh", "topic": "2、找<b>先序前驱<\/b><span class=\"mm-note\">两种情况：\n1、node-&gt;ltag = 1,说明此时left指向的就是其前驱，直接找到。\n2、node-&gt;ltag = 0, 在当前的定义下(就是每个结点只有指向其左右孩子的指针而没有指向其父结点的指针)，如果ltag==0的话，是<b>无法找到其先序前驱结点<\/b>的（因为先序遍历序列为:中左右，可以看到左右子树都只能是它的后继）。<\/span>", "expanded": true, "children": [{"id": "miWVdvsKWwh", "topic": "示意图:<br><img class=\"mm-img\" src=\"mm-9b2bc2ec11a5f9.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mdaVhz3zUsF", "topic": "代码实现：(二刷补充)", "expanded": true}]}, {"id": "m5WF1J3HB7P", "topic": "3、<b>三叉链表找先序前驱(<\/b><span style=\"color:#0e7a52\"><b><span>前提：<\/span><\/b><b><mark>允许找到结点的父结点<\/mark><\/b><b>)<\/b><span class=\"mm-note\">因为在一般的先序线索二叉树中，ltag=0时，无法找到其前驱。\n那么我们就加个条件:<b>使用三叉链表，给结点增加指向其父结点的指针。<\/b>然后再来讨论找先序前驱。<\/span>", "expanded": true, "children": [{"id": "m5Mj917IEdu", "topic": "对于结点分以下四种情况讨论：<br><img class=\"mm-img\" src=\"mm-c58c9412bd7f0e.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">在四种结点情况中，注意第三种中：<b>找左兄弟子树中最后一个被先序遍历的结点<\/b>的思路。\n正确思路：<b>先<\/b>在左兄弟子树中一直<b>向右下遍历<\/b>，直到右孩子为空而左孩子不为空，再一直向左下遍历，直到左孩子为空而右孩子不为空。\n以此类推，直到左右孩子均为空。<\/span>", "expanded": true}]}]}, {"id": "m3ZBURyNWLZ", "topic": "<b>3、后序线索树<\/b><span class=\"mm-note\">左右中<\/span>", "expanded": true, "children": [{"id": "mzmhdSF5sFj", "topic": "1、找<b>后序前驱<\/b><span class=\"mm-note\">两种情况:\n1、node-&gt;ltag = 1,说明此时left指向的就是其前驱，直接找到。\n2、node-&gt;ltag = 0,说明该结点一定有左孩子且此时left指向的是右孩子而非后继。\n又因为后序遍历顺序为：左右中。\n那么<b>此时又有两种情况：\n        <\/b>(1)<b>有右孩子：<\/b>前驱就是其右孩子\n        (2)<b>没有右孩子<\/b>：那前驱就是其左孩子。<\/span>", "expanded": true, "children": [{"id": "m88fVew4rIo", "topic": "示意图：<br><img class=\"mm-img\" src=\"mm-de9aa61a961682.jpg\" style=\"width:260px;height:123px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mbbgtrdgwke", "topic": "代码实现：（二刷再说）", "expanded": true}]}, {"id": "mkFatyAfrdE", "topic": "2、找<b>后序后继<\/b><span class=\"mm-note\">两种情况：\n1、node-&gt;rtag = 1,说明此时right指向的就是其后继，直接找到。\n2、node-&gt;rtag = 0, 在当前的定义下(就是每个结点只有指向其左右孩子的指针而没有指向其父结点的指针)，如果rtag==0的话，是<b>无法找到其后序后继结点<\/b>的（因为后序遍历为:左右中，可以看到左右子树都只能是它的前驱）。\n因此就是土办法喽：从头遍历 or 三叉链表<\/span>", "expanded": true, "children": [{"id": "maVEZWRWVUv", "topic": "示意图：<br><img class=\"mm-img\" src=\"mm-1a103d4c5134d9.jpg\" style=\"width:260px;height:222px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m6F0FM8CrCv", "topic": "代码实现：（二刷再补）", "expanded": true}]}, {"id": "mGdKpCIbUzR", "topic": "3、<b>三叉链表找后序后驱(<\/b><span style=\"color:#0e7a52\"><b><span>前提：允许找到结点的父结点<\/span><\/b><b>)<\/b><span class=\"mm-note\">因为在一般的先序线索二叉树中，rtag=0时，无法找到其后继。\n那么我们就加个条件:<b>使用三叉链表，给结点增加指向其父结点的指针。<\/b>然后再来讨论找后续后驱。<\/span>", "expanded": true, "children": [{"id": "mtdMFHU3DvF", "topic": "结点的情况分为以下四种讨论：<br><img class=\"mm-img\" src=\"mm-eab084fdc54d58.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">在四种结点情况中，注意第三种中：<b>找右兄弟子树中第一个被后序遍历的结点<\/b>的思路。\n正确思路：先在右兄弟子树中一直向左下遍历，直到左孩子为空而右孩子不为空，再一直向右下遍历，直到右孩子为空而左孩子不为空。\n以此类推，直到左右孩子均为空。<\/span>", "expanded": true}]}]}, {"id": "mYIuzWecWVg", "topic": "<b>4、知识回顾与重要考点<\/b><br><img class=\"mm-img\" src=\"mm-ce16fd8e09bede.jpg\" style=\"width:260px;height:125px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mY2Z9GcG9C6", "topic": "<b>五、树的存储结构<\/b><span class=\"mm-note\">注意这里是讨论树的存储结构，而非二叉树。<\/span>", "expanded": false, "children": [{"id": "mLdV9Ht1E5M", "topic": "1、<b>双亲表示法<\/b>(<span style=\"color:#1d4ed8\"><b><span>顺序存储<\/span><\/b>)<br><img class=\"mm-img\" src=\"mm-2bea59cdd4ada4.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">1、连续的地址\n2、每个结点中增设一个<b>伪指针<\/b>，用来指示<b>其双亲节点在数组中的下标<\/b>。\n3、利用了<b>每个结点只有唯一双亲的性质<\/b><\/span>", "expanded": true, "children": [{"id": "mFgtRzaidIV", "topic": "1、<b>增加结点<\/b>：无需按逻辑上的次序存储，只要<b>指示清楚其双亲的位置<\/b>即可。", "expanded": true}, {"id": "m7GEuvOQDzt", "topic": "2、<b>删除结点<\/b>：<span class=\"mm-note\">两种情况：\n1、删除的结点是<b>叶子结点，那就直接删除即可。<\/b>\n2、删除的结点是<b>分支节点，那就要把以该结点为根的整颗子树也删除。<\/b><\/span>", "expanded": true, "children": [{"id": "mkxGLwzV3W1", "topic": "1、<b>删除叶子<\/b>结点：<b>直接删除<\/b><span class=\"mm-note\">两种方案：\n1、把该节点处的<b>伪指针域置为-1<\/b>。\n2、把<b>尾部的结点数据移上来填充删除后的空白<\/b>。\n第二种方案会更好，因为第一种方案在求结点的孩子时，空数据会导致遍历更慢。<\/span>", "expanded": true}, {"id": "m7rpf4gVFla", "topic": "2、<b>删除分支<\/b>节点：将<b>以该结点为根节点的子树全部删除<\/b><span class=\"mm-note\">方法：<b>遍历寻找该结点的所有孩子<\/b>，<b>并且删除<\/b>。<\/span>", "expanded": true}]}, {"id": "mZOrfP5wItK", "topic": "3、<b>查询孩子：<\/b><br><img class=\"mm-img\" src=\"mm-f00d2f73647ce2.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">查询孩子需要遍历整个结构。<\/span>", "expanded": true}, {"id": "myfkmfDe1ql", "topic": "4、<b>优点<\/b>：很快找到每个结点的双亲结点。", "expanded": true}, {"id": "mHwfqJevgp9", "topic": "5、<b>缺点<\/b>：求结点的孩子时需要遍历整个结构。<span class=\"mm-note\">并且有时有<b>空数据会导致遍历更慢<\/b><\/span>", "expanded": true}, {"id": "mlP7coqaY6D", "topic": "<b>数据域：data；双亲域：parent<\/b><span class=\"mm-note\">双亲域：存储<b>双亲的下标<\/b><\/span>", "expanded": true}, {"id": "mbUy68lzTAC", "topic": "<b><mark>parent = -1<\/mark><\/b><span style=\"color:#0e7a52\"><span> <\/span>：表示<span style=\"color:#1d4ed8\"><b><span>没有双亲(是根节点)<\/span><\/b>", "expanded": true}]}, {"id": "m4osaS9XB4E", "topic": "2、<b>孩子表示法<\/b>(<span style=\"color:#1d4ed8\"><b><span>顺序存储+链式存储<\/span><\/b>)<br><img class=\"mm-img\" src=\"mm-67eccf1777bb04.jpg\" style=\"width:260px;height:137px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">将<b>每个结点孩子结点用单链表链接起来<\/b>，形成一个线性结构。\n​叶结点的孩子链表为空表。<\/span>", "expanded": true, "children": [{"id": "mkM7qQRq49q", "topic": "1、<b>优点<\/b>：找孩子很简单", "expanded": true}, {"id": "mlnwT4Yxh3U", "topic": "2、<b>缺点<\/b>：找双亲就需要遍历n个结点的n个孩子链表。", "expanded": true}]}, {"id": "mNJGO18qpxn", "topic": "<b>3、孩子兄弟表示法(<\/b><span style=\"color:#1d4ed8\"><b><span>链式存储<\/span><\/b><b>) —<\/b> <span style=\"color:#0e7a52\"><b><span>左孩子，右兄弟<\/span><\/b><br><img class=\"mm-img\" src=\"mm-de7608ce898df6.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">也叫二叉树表示法。\n每个结点包含三部分内容：\n1、结点值\n2、指向<b>结点第一个孩子结点的指针(firstchild) — 看作左指针<\/b>\n3、指向<b>结点下一个兄弟结点的指针(nextsibling) — 看作右指针<\/b><\/span>", "expanded": true, "children": [{"id": "mM49gKh3bEe", "topic": "1、<b>优点<\/b>：<b>方便实现<\/b><span style=\"color:#1d4ed8\"><b><span>树到二叉树的转化<\/span><\/b>", "expanded": true}, {"id": "mFwXw3DZ5rf", "topic": "2、缺点：查找结点的双亲节点较为麻烦", "expanded": true}]}, {"id": "moV5LpRjvKY", "topic": "<b>4、树转化为二叉树<\/b><b><mark>(左孩子右兄弟<\/mark><\/b><b>)<\/b>：<b>每个结点<\/b><span style=\"color:#b45309\"><b><span> 左指针指向它的第一个孩子，右指针指向它在树中的相邻右兄弟。<\/span><\/b><br><img class=\"mm-img\" src=\"mm-64f848ffaab67b.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">由于<b>根节点没有右兄弟<\/b>，所以<b>对应的二叉树没有右子树<\/b>。<\/span>", "expanded": true, "children": [{"id": "m1lg39jxta1", "topic": "<b>因此：<\/b><span style=\"color:#0e7a52\"><b><span>树转为二叉树时<\/span><\/b><span style=\"color:#1d4ed8\"><b><span>，<\/span><\/b><b><mark>根节点必然没有右孩子<\/mark><\/b><span class=\"mm-note\">因为树的<b>根节点必然没有右兄弟呀<\/b>。<\/span>", "expanded": true}]}, {"id": "mHLaph8Zb0e", "topic": "<b>5、森林转化为二叉树：<\/b><span style=\"color:#1d4ed8\"><b><span>各个树的根节点视作兄弟关系，<\/span><\/b><b>再用<\/b><span style=\"color:#1d4ed8\"><b><span>\"左孩子右兄弟\"<\/span><\/b><br><img class=\"mm-img\" src=\"mm-d4a33fcd1c0b35.jpg\" style=\"width:260px;height:113px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>两个步骤：\n1、先将森林中的每棵树转化为二叉树\n2、每棵树的根也可以视为兄弟关系，在每棵树的根之间加一根连线(右连线)，<\/b>依旧按照<b>左孩子右兄弟<\/b>的做法<b>。<\/b><\/span>", "expanded": true}, {"id": "mrPH6J0e1JA", "topic": "<b>5、二叉树转化为森林：<\/b><span style=\"color:#1d4ed8\"><b><span>左孩子右兄弟的倒推<\/span><\/b><br><img class=\"mm-img\" src=\"mm-bf1fe6167a52d4.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">注意以下几点：\n1、从<b>根节点出发<\/b>，<b>右路的结点是平级关系<\/b>(都是<b>森林中的根结点<\/b>)\n2、将森林中的所有根节点列出后，再根据孩子兄弟表示法(<b>左孩子右兄弟倒推<\/b>)完善森林中的每一棵树。<\/span>", "expanded": true}, {"id": "mMdoTedTia1", "topic": "6、知识点回顾：<br><img class=\"mm-img\" src=\"mm-fea89d842231e7.jpg\" style=\"width:260px;height:112px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "maY879f2eE3", "topic": "<b>六、树、森林的遍历<\/b>", "expanded": false, "children": [{"id": "mmIli7BVwgJ", "topic": "<b>1、树的遍历<\/b>", "expanded": true, "children": [{"id": "mfhcddeoVVB", "topic": "<b>1、先根遍历<\/b><br><img class=\"mm-img\" src=\"mm-78ad0c3048a4e3.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是：先访问根结点，再依次遍历根节点的每颗子树\n相当于：二叉树中的<b>先序遍历。<\/b><\/span>", "expanded": true}, {"id": "mVzJZiSHQn2", "topic": "<b>2、后根遍历<\/b><br><img class=\"mm-img\" src=\"mm-8088b98d702924.jpg\" style=\"width:260px;height:131px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是：先依次遍历根节点的每颗子树，再访问根节点。\n相当于：二叉树中的<b>中序遍历<\/b><\/span>", "expanded": true}, {"id": "mypSETaLLTG", "topic": "<b>3、层次遍历：<\/b><br><img class=\"mm-img\" src=\"mm-7e4e04f648b4ab.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">广度优先遍历。<\/span>", "expanded": true}]}, {"id": "mBhwEysqz70", "topic": "<b>2、森林的遍历<\/b><span class=\"mm-note\">森林和树相互递归定义<\/span>", "expanded": true, "children": [{"id": "m8HVl9gIIGn", "topic": "<b>1、先序遍历森林：<\/b>", "expanded": true, "children": [{"id": "mzs0RY6QrOM", "topic": "<b>方法1：对森林中的树，依次进行先根遍历<\/b><br><img class=\"mm-img\" src=\"mm-32d07a89577d8c.jpg\" style=\"width:260px;height:117px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">相当于对森林中的树，<b>依次进行先根遍历<\/b>。<\/span>", "expanded": true}, {"id": "m7XQPV8IA2P", "topic": "<b>方法2<\/b>：<span style=\"color:#1d4ed8\"><b><span>将森林转为二叉树<\/span><\/b>，<span style=\"color:#1d4ed8\"><span>再<\/span><span style=\"color:#1d4ed8\"><b><span>先根遍历<\/span><\/b>：<br><img class=\"mm-img\" src=\"mm-372604514112ed.jpg\" style=\"width:260px;height:126px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">最后遍历顺序都一样。<\/span>", "expanded": true}]}, {"id": "mHSxvUl8NiK", "topic": "<b>2、中序遍历森林<\/b><span class=\"mm-note\">称其<b>中序遍历：是相对于森林转换后的二叉树而言的<\/b>，\n称其<b>后序遍历：是针对其在森林状态时，根确实是最后访问到的<\/b>。\n有的教材中，也将森林的中序遍历称为后序遍历。<\/span>", "expanded": true, "children": [{"id": "mPLzg5N1LNp", "topic": "<b>方法1：将森林转为二叉树<\/b>，再<b>中序遍历<\/b>：<br><img class=\"mm-img\" src=\"mm-052c93e11cda81.jpg\" style=\"width:260px;height:126px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mU1wcBRf0y1", "topic": "<b>方法1：相当于对森林中各树，依次进行<\/b><b><mark>后根遍历<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-ed30bbf1a45bb0.jpg\" style=\"width:260px;height:115px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">为何是依次进行后根遍历？\n答：根本原因是，我们在<b>将森林转换为二叉树时<\/b>，是<b>从左向右<\/b>，<b>将平级的右路根节点作为右子树，一步一步构建二叉树。<\/b>而这样一来，就<b>将森林中的根节点全部变成了二叉树中的右子树结点<\/b>。\n因此：在这个森林的二叉树中<b>，所谓的“右结点<\/b>”，<b>都是原森林中的根节点。<\/b>那么中序遍历(左中右)里，<b>“右”也即是“根”是最后被访问到的<\/b>，当然是后根遍历啦！！！<\/span>", "expanded": true}]}]}, {"id": "m09rRu8o6eG", "topic": "<b>3、知识点回顾（<\/b><span style=\"color:#d92d20\"><b><span>重点<\/span><\/b><b>）：<\/b><br><img class=\"mm-img\" src=\"mm-1ee658303f39ac.jpg\" style=\"width:260px;height:38px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是说这三者的遍历顺序有所关联：\n1、树先根遍历 ===(相当于)该树对应转为二叉树的<b>先序遍历<\/b>；\n2、树后根遍历===(相当于)该树对应转为二叉树的<b>中序遍历<\/b>；\n\n3、森林先序遍历 ===(相当于)该森林对应转为二叉树的<b>先序遍历<\/b>；\n4、森林中序遍历(后序遍历)===(相当于)该森林 对应转为二叉树的<b>中序遍历<\/b>；\n​<\/span>", "expanded": true, "children": [{"id": "m4gZO9bNe87", "topic": "<b>造成这种现象的<\/b><span style=\"color:#0e7a52\"><b><span>根本原因<\/span><\/b><b>：我们<\/b><span style=\"color:#1d4ed8\"><b><span>在将树转换为二叉树、森林转换为二叉树时，均采用了<\/span><\/b><span style=\"color:#b45309\"><b><span>左兄弟右子树<\/span><\/b><span style=\"color:#1d4ed8\"><b><span>的方法<\/span><\/b><b>。<\/b><span class=\"mm-note\">因此，<b>树中的各级根节点，就变成了二叉树、森林中的右部结<\/b>点。<\/span>", "expanded": true}]}]}, {"id": "m8FKR7nb8vc", "topic": "<b>七、哈夫曼树与哈夫曼编码<\/b><span class=\"mm-note\">树与二叉树的应用。<b>本质上是二叉树<\/b>，且是：<b>最优二叉树<\/b>\n哈夫曼树简介：\n给定N个权值作为N个叶子结点，构造一棵二叉树，若<b>该树的带权路径长度达到最小<\/b>，称这样的二叉树为最优二叉树，也称为哈夫曼树(Huffman Tree)。\n<b>哈夫曼树是带权路径长度最短的树，权值较大的结点离根较近。<\/b><\/span>", "expanded": false, "children": [{"id": "mZ4gBAeTSRO", "topic": "1、<b>带权路径长度：<\/b><br><img class=\"mm-img\" src=\"mm-032228c727aa0a.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mm60TARt7tV", "topic": "1、<b>结点的权<\/b>：具有某种现实含义的数值。", "expanded": true}, {"id": "mnqiVTpUMGM", "topic": "2、<b>结点的带权路径长度：<\/b><span style=\"color:#1d4ed8\"><b><span>结点权值 * 路径长度<\/span><\/b><span class=\"mm-note\">结点的路径长度就是从根节点到该节点，经过边的条数。<\/span>", "expanded": true}, {"id": "mgCG5CznQAP", "topic": "3、<b>树的带权路径长度<\/b>：树中<span style=\"color:#0e7a52\"><b><span>所有叶结点的带权路径长度之和<\/span><\/b><span style=\"color:#1d4ed8\"><b><span>(<\/span><\/b><span style=\"color:#d92d20\"><b><span>WPL<\/span><\/b><span style=\"color:#1d4ed8\"><b><span>)<\/span><\/b><span class=\"mm-note\">这里注意，是<b>所有叶结点<\/b>，而不将分支节点计算在内。<\/span>", "expanded": true}, {"id": "mUHFcarj42Y", "topic": "WPL的计算举例：<br><img class=\"mm-img\" src=\"mm-fbbddc40af9ff5.jpg\" style=\"width:260px;height:78px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mnaWptzdmCe", "topic": "<b>2、哈夫曼树(<\/b><b><mark>最优二叉树<\/mark><\/b><b>)：<\/b><span style=\"color:#0e7a52\"><b><span>WPL最小的二叉树<\/span><\/b><br><img class=\"mm-img\" src=\"mm-a90824a4ef2f8a.jpg\" style=\"width:260px;height:121px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-cd96da4140fa97.jpg\" style=\"width:260px;height:94px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>哈夫曼树并不唯一<\/b>，但是<b>WPL相同且为最优<\/b>。\n如上图1 图2，最后构造出来的哈夫曼树不同，但是WPL相同。<\/span>", "expanded": true}, {"id": "mmW387u3kAM", "topic": "<b>3、哈夫曼树的构造：<\/b><br><img class=\"mm-img\" src=\"mm-88a5a820f0dd07.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">假设有n个结点，将之构造为哈夫曼树，有以下步骤：\n1、将<b>权值最小的两个结点作为兄弟<\/b>，并且new一个<b>新节点(权值为这两个结点的权值之和<\/b>)作为它两的父结点。\n2、再<b>将该新节点与其余结点比较<\/b>，重复上述操作。直到最后构造完成。\n并且注意：构造时，<b>默认左小右大<\/b>，将两个节点中权值较小的放在左边，考研题目中一般都是这样的。<\/span>", "expanded": true, "children": [{"id": "meazPcxrz5o", "topic": "<span style=\"color:#d92d20\"><b><span>构造哈夫曼树时，一定注意!!!<\/span><\/b><b>：在选择结点时，一定<\/b><b><mark>是选择剩下新结点集合中，最小的那两个结点<\/mark><\/b><span class=\"mm-note\">比如说：此时有5、6、8、9、15\n第一步：5与6结合，形成新结点11\n第二步：此时新的集合为：8/9/11/15，因此选择8与9结合 (<b>注意：绝不是11和8哦！！！<\/b>)<\/span>", "expanded": true}]}, {"id": "mEYBBKiUCv5", "topic": "<b>4、哈夫曼树的性质：<\/b><br><img class=\"mm-img\" src=\"mm-f2cfe6877ebb80.jpg\" style=\"width:260px;height:40px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">从构造过程就能得出以上性质。\n1、权值越小，路径越远。\n2、每个初始结点都为叶结点。\n3、构造时因为两两结合，因此新建了n-1个父结点，最后节点总数为：n+n-1 = 2n-1\n4、哈夫曼中不存在度为1的结点。不是度为0(叶结点)，就是度为2(new的父结点)<\/span>", "expanded": true, "children": [{"id": "mxBlhoBGwwu", "topic": "<b>1、哈夫曼树中<\/b><b><mark>没有度为1<\/mark><\/b><span style=\"color:#1d4ed8\"><b><span>的结点<\/span><\/b>", "expanded": true}, {"id": "moa3NJV1kHZ", "topic": "<b>2、<\/b><span style=\"color:#1d4ed8\"><b><span>n个叶子结点<\/span><\/b><b>的哈夫曼树<\/b><span style=\"color:#1d4ed8\"><b><span>共有<\/span><\/b><b><mark>2n-1<\/mark><\/b><span style=\"color:#1d4ed8\"><b><span>个结点<\/span><\/b><span class=\"mm-note\">因为哈夫曼树中没有度为1的结点。再联想哈夫曼树的构造过程。\n可以用以下思路记忆：\n      <b> 两个叶子结点再合并一下多出一个父结点，变成了三个结点。那么就是共有2n-1个结点。<\/b><\/span>", "expanded": true}, {"id": "mVen9Pnv7QR", "topic": "<b>3、哈夫曼树中，不存在权值相等的结点<\/b><span class=\"mm-note\">由哈夫曼树的定义决定的。（但是在实际应用场景下，可以特殊情况）\n​因为哈夫曼树是一种带权路径长度最短的树，如果有两个相同权值的节点，它们在树中的位置可以互换，不会影响树的带权路径长度。因此，为了保证哈夫曼树的唯一性，一般要求权值各不相同。<\/span>", "expanded": true}]}, {"id": "mN0f4D2Nqlf", "topic": "<b>5、哈夫曼编码(<\/b><span style=\"color:#0e7a52\"><b><span>数据压缩编码<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-ed42a410003b22.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">哈夫曼编码就是将哈夫曼树<b>左孩子的边看作0，右孩子的边看作1<\/b>(当然也可以反过来，随心而定)。\n​哈夫曼树不唯一，因此哈夫曼编码也不唯一。\n​并且考研中考夫曼编码时，其实就是构造哈夫曼树。<\/span>", "expanded": true, "children": [{"id": "mCCJwsv0lQH", "topic": "1、<b>固定长度编码<\/b>：每个字符用<b>相等长度的二进制位<\/b>表示", "expanded": true}, {"id": "m9D8YTu6fVI", "topic": "2、<b>可变长度编码：<\/b>允许<b>对不同字符用不等长的二进制位<\/b>表示。", "expanded": true}, {"id": "mqq4tIKzTvA", "topic": "3、<span style=\"color:#1d4ed8\"><b><span>前缀编码<\/span><\/b>：没有一个编码是另一个编码的前缀", "expanded": true}, {"id": "mrJRuxH9zwj", "topic": "<b>4、由哈夫曼树得到哈夫曼编码：<\/b><span style=\"color:#1d4ed8\"><b><span>每个字符作为一个叶子结点<\/span><\/b>，各个<span style=\"color:#1d4ed8\"><b><span>字符出现的频度作为结点的权值<\/span><\/b>，然后构造哈夫曼树即可。", "expanded": true}]}, {"id": "mlra1In4OfG", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-a1b5246c97ebb3.jpg\" style=\"width:260px;height:113px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">重点：哈夫曼树的构建、哈夫曼编码<\/span>", "expanded": true}]}, {"id": "mGOgq9REHjp", "topic": "<b>八、并查集(Disjoint Set)——<\/b>逻辑结构<span class=\"mm-note\">就是只进行 <b>并<\/b> 和 <b>查<\/b> 操作的集合 ，而集合是一个逻辑结构。<\/span>", "expanded": false, "children": [{"id": "mYqjbgHm2qk", "topic": "1、用<b>互不相交的树(森林)，表示集合特性<\/b>：<br><img class=\"mm-img\" src=\"mm-32b15a328ea222.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-6adb13333d7ac0.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">若干个互不相交的子集，由此可以联想到之前学到的：森林。\n因此可以<b>将同一子集的各个元素组织为一棵树<\/b>。\n那么不同子集就组成了一个森林。\n因此可以在这个森林中进行 <b>查<\/b> 和 <b>并<\/b> 的操作。<\/span>", "expanded": true}, {"id": "mtOpDEoFdNI", "topic": "2、<b><mark>查<\/mark><\/b>：<span style=\"color:#1d4ed8\"><b><span>判断两个元素在不在同一个集合<\/span><\/b>。<br><img class=\"mm-img\" src=\"mm-2cb32c8f259d6e.jpg\" style=\"width:260px;height:68px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">从<b>指定元素出发，一路向上，找到根节点<\/b>。<\/span>", "expanded": true}, {"id": "mUFqQOv0JOm", "topic": "3、<b><mark>并<\/mark><\/b>：<span style=\"color:#1d4ed8\"><b><span>将两个元素添加到一个集合中<\/span><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-ce4af32cc80689.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-1e1356e8464d82.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>让一棵树成为另一棵树的子树<\/b>即可。\n​如上所示，将第二个树作为第一个树的子树，就将两个子集合并为一个集合了。<\/span>", "expanded": true}, {"id": "mzX4c2re8Fk", "topic": "<b>4、<\/b>并查集的<b>代码实现思路：<\/b><span style=\"color:#1d4ed8\"><b><span>双亲表示法<\/span><\/b><br><img class=\"mm-img\" src=\"mm-dd85ab520f6e83.jpg\" style=\"width:260px;height:125px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">结合并和查的基本逻辑，可以联想到在树的存储结构中，双亲表示法是最符合并查集的需求的。\n因为<b>双亲表示法可以直接找到结点的双亲。<\/b>\n并且只需要一个一维数组(S[])就能表示集合关系。\n数组元素的下标代表元素名，根节点的下标代表子集和名，<b>根节点的双亲结点为负数<\/b>。<\/span>", "expanded": true}, {"id": "mHBPM4BNDzF", "topic": "<b>5、并查集的代码实现：<\/b>", "expanded": true, "children": [{"id": "mGuaFcwZ0xl", "topic": "1、初始化：<br><img class=\"mm-img\" src=\"mm-5bdd4b28d1167b.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">全初始化为-1<\/span>", "expanded": true}, {"id": "mIaZZxRI3PD", "topic": "<b>2、查(Find) 与 并(Union)<\/b><br><img class=\"mm-img\" src=\"mm-656dd8868e7d4f.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这里注意：\n         并(Union)的时候，应该是<b>两个子树的根节点进行合并<\/b>。\n         如果给的结点是某个子结点而非根节点，那就先Find到该节点的根节点，然后再进行合并。<\/span>", "expanded": true}, {"id": "m3omxsYxiLQ", "topic": "<b>3、时间复杂度分析：<\/b><br><img class=\"mm-img\" src=\"mm-267054436b0ba2.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">查(Find)的时间复杂度，最坏为n，<b>与树的高度直接相关<\/b>。\n因此我们就想，如果想要减小时间复杂度，或许可以从减小树的高度入手，\n​由此有了以下对Union的优化思路。<\/span>", "expanded": true}]}, {"id": "mCwNNpqubvc", "topic": "<b>6、Union的优化：<\/b>", "expanded": true, "children": [{"id": "mafxdSHrUGN", "topic": "1、<b>优化思路：<\/b>每次Union建树时，尽可能让树不长高。", "expanded": true}, {"id": "mw1cN6Xgs9I", "topic": "<b>2、优化方法：<\/b><span style=\"color:#0e7a52\"><b><span>小树合并到大树<\/span><\/b><br><img class=\"mm-img\" src=\"mm-cfc29a9b6466a7.jpg\" style=\"width:260px;height:41px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d33f2757716612.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">1.用<b>根节点的绝对值<\/b>来记录树中的结点数，据此来判断树的大小。<\/span>", "expanded": true}, {"id": "mU7SvekXKTw", "topic": "<b>3、优化后代码：<\/b><br><img class=\"mm-img\" src=\"mm-dc004ad439e780.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到：\n1.优化后Union的复杂度不变，仍为O(1)，而<b>Find的复杂度变为O(logn)<\/b>\n2.构造的<b>树高不超过 logn+1<\/b>(取下限)<\/span>", "expanded": true}]}, {"id": "mJrrx0lTrO6", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-e8c68786767824.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mw6T2PkeeFA", "topic": "<b>九、并查集的进一步优化(<\/b><span style=\"color:#0e7a52\"><b><span>Find的优化-<\/span><\/b><b><mark>压缩路径<\/mark><\/b><b>)<\/b><span class=\"mm-note\">在上一节中，我们对Union优化，从而将Find的复杂度降低到了O(logn),那么在这节中，我们对Find进行优化。<\/span>", "expanded": true, "children": [{"id": "mG1YYsyoXzG", "topic": "<b>1、原来的Find操作：<\/b><br><img class=\"mm-img\" src=\"mm-5aa3ce7bd65f54.jpg\" style=\"width:260px;height:104px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">依次向上寻找，直到找到根节点。<\/span>", "expanded": true}, {"id": "mhE4PMF3tBV", "topic": "<b>2、Find优化：<\/b><span style=\"color:#d92d20\"><b><span>压缩路径<\/span><\/b><br><img class=\"mm-img\" src=\"mm-eb83e97d77c804.jpg\" style=\"width:260px;height:35px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-439c99d4df6cd8.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">其实就是在一边Find，一边压缩路径。\n​并且压缩路径后的时间复杂度a(n)比logn增长还要慢，甚至对于一般n(1000、10000等)，时间复杂度可以近似为O(1)。<\/span>", "expanded": true}, {"id": "mGRKUeEhx90", "topic": "<b>3、并查集的优化后代码：<\/b><br><img class=\"mm-img\" src=\"mm-d9df103c04b152.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到，优化的核心思想<b>：尽可能让树变矮<\/b>。<\/span>", "expanded": true}, {"id": "mzALW2YTuBP", "topic": "<b>4、并查集的优化总结：<\/b><br><img class=\"mm-img\" src=\"mm-cb1db80ecbff3c.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为将n个独立元素Union为一个集合，要经过(n-1)次Union。<\/span>", "expanded": true}]}, {"id": "mBNfBy4EZUv", "topic": "<span style=\"color:#d92d20\"><b><span>❤<\/span><\/b><span style=\"color:#d92d20\"><span> <\/span><b>树、森林、二叉树常考知识点<\/b>", "expanded": false, "children": [{"id": "mYiLP6i5f5L", "topic": "1、<b>树转为二叉树时(<\/b><span style=\"color:#d92d20\"><b><span>重点<\/span><\/b><b>)<\/b>：若<span style=\"color:#1d4ed8\"><b><span>树中有n个分支结点<\/span><\/b>，那么对应转化的<span style=\"color:#1d4ed8\"><b><span>二叉树右指针为空的结点有：<\/span><\/b><span style=\"color:#d92d20\"><b><span>n+1个<\/span><\/b><b>（+1的是最后一棵树的根节点右指针为空)<\/b><span class=\"mm-note\">二叉树中右指针为空<b>代表该节点没有右兄弟<\/b>。\n且：<b>森林中每棵树的根节点从第二个开始，依次连接到前一棵树根的右孩子<\/b>上。\n因此：\n        1、树的每个分支结点(非终端结点)，其所有的孩子结点在转换后，<b>最后一个孩子的右指针为空<\/b>。\n        2、并且<b>最后一棵树的根节点的右孩子为空<\/b>。<b>（+1的是根节点）\n<\/b>综上：就有n+1个右指针为空的点。<\/span>", "expanded": true}, {"id": "m7md8TaIi37", "topic": "2、记住树、森林、二叉树<b>三者遍历顺序之间的关系<\/b>", "expanded": true}, {"id": "mshFQeKKpbD", "topic": "3、<b>在n个结点的树中有n-1条边(<\/b><b><mark>树中结点数比边数多1<\/mark><\/b><b>)<\/b><span class=\"mm-note\">例如：若森林F有15条边，25个结点，因此该森林中共有25-15 = 10棵树。<\/span>", "expanded": true}, {"id": "mdpObNqGeVW", "topic": "4、<b>高度为h的满二叉树<\/b>对应的森林所含树的个数为：<b>h<\/b>。<span class=\"mm-note\">一个高度为 h 的满二叉树可以看作是一个根节点和两棵子树构成的森林，每个子树的高度为 h−1。而这两棵子树又可以继续被划分为更小的子树。\n​以此类推，直到高度为 1 的树<\/span>", "expanded": true}, {"id": "mGUNRbRV1au", "topic": "5、<b>将<\/b><span style=\"color:#1d4ed8\"><b><span>森林F转为二叉树T<\/span><\/b>，那么 <b><mark>F中叶结点个数 = T中左孩子指针为空的结点个数<\/mark><\/b>。<span class=\"mm-note\">因为：<b>F中的叶结点，必然没有左孩子和右孩子<\/b>。\n但是在转成二叉树(T)时，由于采用<b>左孩子右兄弟<\/b>的做法，<b>F中的叶结点的右指针会指向下一个右部平级根节点，直到构建完成。而叶结点的左指针是不会动的。<\/b>\n因此，T中左孩子指针为空的结点数就是F中叶结点的个数。<\/span>", "expanded": true}, {"id": "mvpmCmgHOJ6", "topic": "<b>6、度为m的哈夫曼树<\/b><br><img class=\"mm-img\" src=\"mm-dba10a4415f354.jpg\" style=\"width:260px;height:93px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

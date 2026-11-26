@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>第八章-排序 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{max-width:none;max-height:none;transform-origin:0 0;will-change:transform;
+  user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>第八章-排序</b><small>幕布导图 · 296 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "第八章-排序", "data": {"id": "mvirtual-root", "topic": "<b>第八章-排序<\/b>", "expanded": true, "children": [{"id": "mhMQGyByku4", "topic": "<b>一、基本概念<\/b>", "expanded": false, "children": [{"id": "mANJa8LFaev", "topic": "<b>1、定义：<\/b><br><img class=\"mm-img\" src=\"mm-36a102ae93f296.jpg\" style=\"width:260px;height:165px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">使用链表也可以排序，只是有些排序方式不再适用。<\/span>", "expanded": true}, {"id": "mQKSM6hfJq1", "topic": "2、排序算法的<b>评价指标<\/b>：", "expanded": false, "children": [{"id": "mTWCOHMf9oJ", "topic": "<b>1、<\/b><b><mark>稳定性<\/mark><\/b><b>：<\/b><br><img class=\"mm-img\" src=\"mm-7d4b7135e89453.jpg\" style=\"width:260px;height:165px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">即：\n    有<b>两个关键字相等<\/b>的元素，若在<b>排序后<\/b>这两个关键字的<b>相对位置不发生改变<\/b>，那么就说这个算法是<b>稳定<\/b>的；反之就说这个算法不稳定。\n\n并且<b>稳定的算法并不是一定比不稳定的算法好<\/b>，需要在实际的应用场景中选择应用。<\/span>", "expanded": true}, {"id": "mGroj7cgStR", "topic": "<b>2、时间复杂度 &amp;&amp; 空间复杂度<\/b><span class=\"mm-note\">这两个就不用了多说了。<\/span>", "expanded": true}]}, {"id": "mRVAhRv6jJC", "topic": "<b>3、排序算法的分类：<\/b><br><img class=\"mm-img\" src=\"mm-19f013f6f594cc.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mfIK6rIUJWH", "topic": "<b>1、内部排序：<\/b><b><mark>数据量小<\/mark><\/b><b>，排序期间<\/b><b><mark>元素全部存放在内存<\/mark><\/b><span class=\"mm-note\">内存中处理很快，因此只需关注如何使算法的时间、空间复杂度更低。\n即：\n     内部排序的算法取决于算法的时间复杂度和空间复杂度。<\/span>", "expanded": true}, {"id": "mKxHiH3w2ac", "topic": "<b>2、外部排序：<\/b><b><mark>数据量大<\/mark><\/b><b>，排序期间<\/b><b><mark>元素不断在内、外存之间移动<\/mark><\/b><span class=\"mm-note\">因为磁盘读写所需时间远大于内存处理的时间，因此<b>时间复杂度被磁盘读写影响的比重较高。\n<\/b>因此主要关注<b>：如何使磁盘读/写次数更少。<\/b><\/span>", "expanded": true}]}, {"id": "mnI2nMTn39w", "topic": "4、<b>对任意n个关键字的排序<\/b><span style=\"color:#7c3aed\"><b><span>比较次数<\/span><\/b><b>至少为<\/b>： <b><mark>㏒(n!)<\/mark><\/b> <b>(向上取整)<\/b><span class=\"mm-note\">数论....<\/span>", "expanded": true}, {"id": "mup0gl8xbCa", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-34c9ddd46b5b75.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m5O0U4JKzTE", "topic": "<b>二、内部排序<\/b>", "expanded": true, "children": [{"id": "mrADE8mJGIm", "topic": "<b>一、插入排序<\/b>", "expanded": false, "children": [{"id": "mW02RmWgJVu", "topic": "<b>1、直接插入排序<\/b>", "expanded": false, "children": [{"id": "mBal2hbGNq6", "topic": "<b>1、算法思想：<\/b><span style=\"color:#1d4ed8\"><b><span>从前向后<\/span><\/b><br><img class=\"mm-img\" src=\"mm-50f82b42d73240.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是<b>从头开始遍历<\/b>每一个元素，将每一个待排序记录<b>按照关键字大小插入到前边已经排好的序列中<\/b>。<\/span>", "expanded": true}, {"id": "m80kh5vqhMB", "topic": "<b>2、代码实现：<\/b>", "expanded": false, "children": [{"id": "mvLHF4nkPls", "topic": "<b>①：普通版<\/b><br><img class=\"mm-img\" src=\"mm-229af4427d0d2c.jpg\" style=\"width:260px;height:164px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">两层for循环。\n1、外层for：从头遍历每一个元素，处理每一个元素(找每一个元素的插入位置)。\n2、内层for：核心逻辑，用一个<b>temp<\/b>暂存当前<b>待插入元素<\/b>，<b>从后向前<\/b>检查前边已经排好的序列，<b>将大于temp的元素依次后移<\/b>，直到找到插入位置，插入即可。<\/span>", "expanded": true}, {"id": "m3HXV8dX8RS", "topic": "<b>②：<\/b><span style=\"color:#0e7a52\"><b><span>哨兵版<\/span><\/b><br><img class=\"mm-img\" src=\"mm-ab4669974130ee.jpg\" style=\"width:260px;height:191px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">逻辑与普通版相同，但是在具体实现中有些不同。\n<b>优化的逻辑：<\/b>\n       数组0位置不放元素，用来存放每次循环的待插入元素。\n\n<b>优化<\/b>：内层循环中<b>少了一次逻辑判断<\/b>，<b>少了<\/b>临时变量<b>temp<\/b>的使用。其实效率提升不高。<\/span>", "expanded": true}]}, {"id": "mskdxwSoBJf", "topic": "<b>3、复杂度分析：<\/b>", "expanded": false, "children": [{"id": "mbNwKeWDgoX", "topic": "<b>1、时间复杂度：<\/b><b><mark>O(n²)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-828e2f862b15d6.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-4a11843719d390.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">时间复杂度主要受两个方面影响：\n1、关键字比较次数\n2、关键字移动次数<\/span>", "expanded": false, "children": [{"id": "m1RxeBxWK58", "topic": "<b>最好情况(O(n))：<\/b><span style=\"color:#0e7a52\"><b><span>本就有序<\/span><\/b><br><img class=\"mm-img\" src=\"mm-b21ef6768da292.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mSn9fY3Trz9", "topic": "<b>最坏的情况(O(n²))：<\/b><span style=\"color:#0e7a52\"><b><span>原本为逆序<\/span><\/b><br><img class=\"mm-img\" src=\"mm-91ebfade2def16.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">累加就是，等差数列求和，因此是n方。<\/span>", "expanded": true}]}, {"id": "mqyh7wbSxNK", "topic": "<b>2、空间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(1)<\/span><\/b><span class=\"mm-note\">只需要i、j、temp等的定义<\/span>", "expanded": true}]}, {"id": "mNqrHg9B9a8", "topic": "<b>4、关键字比较次数分析<\/b>", "expanded": false, "children": [{"id": "m8qelvJei1D", "topic": "<b>最多<\/b>比较<b>-<\/b><span style=\"color:#1d4ed8\"><b><span>逆序<\/span><\/b><b>：<\/b><span style=\"color:#b45309\"><b><span>n(n-1)/2<\/span><\/b> <b>次<\/b><span class=\"mm-note\">也就是<b>逆序<\/b>的情况。\n(<b>越接近逆序，比较次数越多<\/b>)\n<b>分析：<\/b>\n        从后向前比较，那么第n个元素需要比较n-1次、第n-1个元素需要比较n-2次..........第1个元素需要比较0次。\n        综上，也就是<b>从1加到n-1的等差数列<\/b>，因此就是比较n(n-1)/2次。<\/span>", "expanded": true}, {"id": "mYgyFUFsAci", "topic": "<b>最少<\/b>比较-<span style=\"color:#1d4ed8\"><b><span>正序<\/span><\/b><b>：<\/b><span style=\"color:#b45309\"><b><span>n-1趟<\/span><\/b> <b>次<\/b><span class=\"mm-note\">也就是<b>正序<\/b>的情况。\n(<b>越接近正序，比较次数越少<\/b>)\n分析：\n     因为正序，所以n-1个元素比较1次，第一个元素比较0次。总计比较n-1次。<\/span>", "expanded": true}]}, {"id": "m2imGtqRmQt", "topic": "<b>4、稳定性：<\/b><b><mark>稳定<\/mark><\/b><span class=\"mm-note\">因为每次插入元素时，总是<b>从后向前先比较再移动<\/b>，且<b>元素相等时不会交换<\/b>，因此所以<b>不会出现相同元素相对位置发生变化<\/b>的情况。<\/span>", "expanded": true}, {"id": "mCjOP4HsEcW", "topic": "<b>5、适用于：<\/b><span style=\"color:#7c3aed\"><b><span>顺序存储+链式存储<\/span><\/b>", "expanded": true}]}, {"id": "mpRKy6U5rhf", "topic": "<b>2、折半插入排序<\/b><span class=\"mm-note\">是直接插入排序的优化，<b>优化了在前i-1的有序区域，查找插入位置<\/b>这一步。<\/span>", "expanded": false, "children": [{"id": "miQ3tfQ7fS8", "topic": "<b>1、算法思想：<\/b><br><img class=\"mm-img\" src=\"mm-ad88cf8eb7de19.jpg\" style=\"width:260px;height:164px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">即：\n1、先折半查找找到插入位置\n2、再移动元素<\/span>", "expanded": true}, {"id": "mxkoG1ouFCs", "topic": "<b>2、代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-e30086b1cac9d8.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">A[0]留空用来放置当前处理元素。\n\n在<b>前i-1个元素中折半<\/b>找位置。因此如果找到位置(low所在)，那么就要将区间<b>[low,i-1]<\/b>上的元素右移。<\/span>", "expanded": false, "children": [{"id": "m631xBcUahW", "topic": "<b>注意点1：<\/b><span style=\"color:#0e7a52\"><b><span>稳定性<\/span><\/b><span class=\"mm-note\"><b>标注1<\/b>：其实就是<b>保证算法的稳定性<\/b>，保证即便<b>找到<\/b>和该待插入元素<b>相等的元素<\/b>，依旧<b>继续在其右区间折半查找插入位置<\/b>。这样就会把本就相对位置靠后的相同元素，依旧放在相对位置靠后，不打乱顺序。<\/span>", "expanded": true}, {"id": "mSPd0JQgb6B", "topic": "<b>注意点2：<\/b><span style=\"color:#0e7a52\"><b><span>右移元素的区间<\/span><\/b><span class=\"mm-note\"><b>标注2<\/b>：保证移动元素的正确性，因为折半是在low &gt; high 时停止，因此最后<b>low一定在high右边一位(即：high+1 = low)<\/b>，而要移动的元素区间为：<b>[low，i-1]<\/b>。\n因此上边代码中的high和low其实是一个意思。<\/span>", "expanded": true}]}, {"id": "m4SFjSK9Wp1", "topic": "<b>3、时间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(n²)<\/span><\/b><span class=\"mm-note\">原因：折半查找是减少了元素的比较次数，约为<b>O(nlogn)<\/b>。\n               但是<b>元素的移动次数并未改变<\/b>，<b>因此时间复杂度未变<\/b>。<\/span>", "expanded": true}, {"id": "mMVG3SanwXx", "topic": "<b>4、稳定性：<\/b><b><mark>稳定<\/mark><\/b><span class=\"mm-note\">这都归功于上边代码实现里边，为了保证稳定性做的工作。<\/span>", "expanded": true}, {"id": "muzFGnUzGVq", "topic": "<b>5、直接插入 VS 折半插入：<\/b><span style=\"color:#7c3aed\"><b><span>元素的比较次数可能不同<\/span><\/b><span class=\"mm-note\">两者元素的<b>移动次数都取决于初始序列，<\/b>而比较次数明显折半少而直接多(折半的比较次数与表的初始状态无关)<b>。<\/b><\/span>", "expanded": true}, {"id": "mzA1Ka3e6rV", "topic": "<b>5、链表的插入排序：时间复杂度也是<\/b><span style=\"color:#7c3aed\"><b><span>O(n²)<\/span><\/b><br><img class=\"mm-img\" src=\"mm-6f37e22e35b748.jpg\" style=\"width:260px;height:165px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>折半插入排序<\/b>用不了(因为链表没办法折半)，直接插入排序可以。\n\n对于链表来说，<b>移动元素只需要改变指针指向<\/b>，移动元素的次数减少，但是<b>关键字的比较次数没变<\/b>，因此时间复杂度还是没变。<\/span>", "expanded": true}, {"id": "mcAYG5nVjGR", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-1cec1666041983.jpg\" style=\"width:260px;height:121px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>着重注意两点<\/b>：\n1、折半插入中，为了<b>保证稳定性<\/b>\n2、折半插入中，所需<b>右移元素的区间([low，i-1])<\/b>。<\/span>", "expanded": true}]}, {"id": "m9HdFlbwqUG", "topic": "<b>3、希尔排序<\/b><span class=\"mm-note\">Shell Sort，是由一个叫shell的人发明。\n又称：<b>缩小增量排序<\/b>。(为啥叫这个，后边会解释)\n\n<b>算法由来：<\/b>\n            从前边的分析可知，当直接插入排序要排序的数据完全有序时，时间效率可以提高到O(n)。\n            那么shell排序就在此基础上，想着：既然不能完全有序，那么我可以让它<b>基本有序<\/b>。\n          \n  即：<b>先追求表中元素部分有序，再逐渐逼近全局有序。<\/b><\/span>", "expanded": false, "children": [{"id": "mNwOyoVVlJF", "topic": "<b>1、算法思想：<\/b><br><img class=\"mm-img\" src=\"mm-6be29a63860071.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">基本思想：\n    将<b>相隔某个\"增量\"的记录组成一个子表<\/b>，对<b>各个子表进行直接插入排序，缩小增量d，直到d=1(基本有序)<\/b>。<\/span>", "expanded": false, "children": [{"id": "mxTOQLdBNi1", "topic": "<b>注意：对<\/b><span style=\"color:#b45309\"><b><span>每个子表是进行<\/span><\/b><b><mark>直接插入排序<\/mark><\/b>", "expanded": true}, {"id": "m0WIH8aD4nA", "topic": "<b>实例：<\/b>", "expanded": false, "children": [{"id": "m68o6neoPqF", "topic": "<b>第1趟：d1=n/2<\/b><br><img class=\"mm-img\" src=\"mm-e3820499680e5c.jpg\" style=\"width:260px;height:157px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8e5a727724e15c.jpg\" style=\"width:260px;height:100px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">n：元素个数。\n\n<b>分析：<\/b>\n     可以看到，第一趟选择增量d=4，划分好<b>子表(蓝色)<\/b>，然后对每个子表进行直接插入排序，就得到第一趟排序后的子表(绿色)。<\/span>", "expanded": true}, {"id": "mWIu2ggp1cd", "topic": "<b>第2趟：d2=d1/2<\/b><br><img class=\"mm-img\" src=\"mm-0c82820f4a0b30.jpg\" style=\"width:260px;height:97px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-6990baacb4b0a5.jpg\" style=\"width:260px;height:84px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mj50ZNyO5n9", "topic": "<b>第3趟：d3 = d2/2 =<\/b> <span style=\"color:#d92d20\"><b><span>1<\/span><\/b><b>（<\/b><span style=\"color:#d92d20\"><b><span>基本有序<\/span><\/b><b>）<\/b><br><img class=\"mm-img\" src=\"mm-7a49f0e04f5c86.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-0115f195138b5e.jpg\" style=\"width:260px;height:64px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时d=1，且基本有序，因此对所有元素做一次直接插入即可。<\/span>", "expanded": true}]}]}, {"id": "mCagjefffvI", "topic": "<b>2、<\/b><b><mark>增量序列(d)<\/mark><\/b><span class=\"mm-note\">增量序列无固定要求，看题目的要求。\nshell本人较为推荐的就是<b>每次增量缩小一半<\/b>。<\/span>", "expanded": false, "children": [{"id": "mxLFN1l7zHW", "topic": "<b>例：(上边实例中，用不同的增量序列)<\/b><br><img class=\"mm-img\" src=\"mm-0088127e42bd6c.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">考试中，就会给一个排序序列，然后给固定增量，然后进行shell排序。\n随机应变喽~~<\/span>", "expanded": true}]}, {"id": "mLPBcFCZaBS", "topic": "<b>3、代码实现：<\/b>", "expanded": false, "children": [{"id": "maUTDdqEAVl", "topic": "<b>实现1(王道版)：<\/b><span style=\"color:#1d4ed8\"><b><span>最外层for控制增量<\/span><\/b><b>，<\/b><span style=\"color:#1d4ed8\"><b><span>内层两个for进行插入<\/span><\/b><b>排序。<\/b><br><img class=\"mm-img\" src=\"mm-7cb7c7028a7be3.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此代码实现，是将A[0]的位置来存放临时变量。\n并且是<b>将各子表元素轮流处理、糅杂到了一起处理，<\/b>而没有分裂开处理，还有一种实现方法可以将各子表元素的处理分隔开，看下边实现2。<\/span>", "expanded": true}, {"id": "mHTJXHw4yqn", "topic": "<b>实现2(自己版)：<\/b><span class=\"mm-note\">实现思想：\n      就是将每一次的各子表独立开来，每一步的各子表分别执行直接插入排序，然后再合并即可。<\/span>", "expanded": true}]}, {"id": "m91WKi1pWkv", "topic": "<b>4、性能分析：<\/b><br><img class=\"mm-img\" src=\"mm-a9bfb4cdd1a6e1.jpg\" style=\"width:260px;height:160px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mBu87YpVtqU", "topic": "<b>1、时间复杂度：<\/b><span style=\"color:#b45309\"><b><span>受增量序列影响<\/span><\/b><b>，未知，但<\/b><span style=\"color:#b45309\"><b><span>优于插入排序<\/span><\/b><b>。<\/b><span class=\"mm-note\"><b>最差：<\/b>也就是开始排序时d1=1时，就<b>直接退化为直接插入排序<\/b>，时间复杂度也就\n               是：<b>O(n²)。\n<\/b><\/span>", "expanded": true}, {"id": "mhN1dFYZTD2", "topic": "<b>2、空间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(1)<\/span><\/b><span class=\"mm-note\">只用到了常数级辅助单位。<\/span>", "expanded": true}]}, {"id": "mHez4GE0YqH", "topic": "<b>5、稳定性：<\/b><b><mark>不稳定<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-1be3272c0f3a02.jpg\" style=\"width:260px;height:194px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">当<b>相同关键字的记录被分到了不同的子表<\/b>时，<b>可能会改变<\/b>它们之间的<b>相对次序<\/b>。\n因此不稳定。<\/span>", "expanded": true}, {"id": "mmTN27vlO2W", "topic": "<b>6、适用性：<\/b><span style=\"color:#b45309\"><b><span>只适用于顺序表，不适用于链表。<\/span><\/b><span class=\"mm-note\">因为要用增量序列找子表元素，而<b>链表没有随机存取的特性<\/b>。<\/span>", "expanded": true}, {"id": "mwiBFvJoGey", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-aa36555fa32d0d.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mogDuWw23ah", "topic": "<b>二、交换排序<\/b>", "expanded": false, "children": [{"id": "mNicWmbQnbH", "topic": "<b>1、冒泡排序：<\/b>", "expanded": true, "children": [{"id": "mOsxETXxdrm", "topic": "<b>1、算法思想：<\/b><br><img class=\"mm-img\" src=\"mm-d0457de288d1db.jpg\" style=\"width:260px;height:106px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-e47f61f6c06bf2.jpg\" style=\"width:260px;height:89px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-489f1797cf4773.jpg\" style=\"width:260px;height:81px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-02371d58144c91.jpg\" style=\"width:260px;height:96px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">思想：\n      每一次将<b>剩下未排元素中的最小元素<\/b>，<b>冒泡到最前边<\/b>。\n具体操作：\n     <b>从后向前<\/b>(从前向后)<b>两两比较相邻元素<\/b>，若为<b>逆序<\/b>，<b>则交换<\/b>它们，直到序列比较完毕。\n\n<b>注意细节：<\/b>\n1、下一趟冒泡时，<b>前一趟确定的最小元素不再参与比较。\n<\/b>        即：图3所示。\n2、<b>每趟冒泡<\/b>的结果就是<b>把序列中的最小元素(或最大)放到了序列的最终位置<\/b>。\n        即：图2所示。\n3、若<b>某一趟排序没有发生交换<\/b>，那么说明此时<b>已经整体有序，冒泡结束<\/b>。\n        即：图4所示。\n4、最多需要：n-1趟冒泡；最少需要：1趟冒泡。\n​<\/span>", "expanded": true}, {"id": "m4KhnX7A4z6", "topic": "<b>2、代码实现：外层for从<\/b><span style=\"color:#1d4ed8\"><b><span>前向后遍历<\/span><\/b><b>，内层for<\/b><span style=\"color:#1d4ed8\"><b><span>从后向前冒泡。<\/span><\/b><br><img class=\"mm-img\" src=\"mm-70ac4daef7c7ed.jpg\" style=\"width:260px;height:160px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">实现也比较简单，注意细节即可。\n此处实现：<b>从后向前<\/b>冒泡。\n\n<b>注意<\/b>：\n      在考题中，从前向后、从后向前冒泡都有可能，别忘了这个。<\/span>", "expanded": false, "children": [{"id": "mXsB1cRlgQf", "topic": "<b>①<\/b><b><mark>保证稳定性<\/mark><\/b><b>：<\/b><span class=\"mm-note\">只有在A[j-1] &gt; A[j]的时候才会交换，当元素相等时不会交换。<\/span>", "expanded": true}, {"id": "mq446osCgkN", "topic": "<b>②<\/b><b><mark>可提前结束(Flag不发生变化时)<\/mark><\/b><b>：当某一趟冒泡没有发生交换时，说明已经有序，提前结束<\/b>", "expanded": true}, {"id": "mppYA6z2AuW", "topic": "<b>③<\/b><b><mark>每一趟排序都能将一个元素放到其最终位置上<\/mark><\/b>", "expanded": true}, {"id": "mj2auUdE9Cg", "topic": "<b>④ 可以<\/b><b><mark>形成全局有序子序列<\/mark><\/b><b>。<\/b>", "expanded": true}]}, {"id": "mZasABAjcgZ", "topic": "<b>3、性能分析：<\/b>", "expanded": false, "children": [{"id": "mgoc2PkVpFu", "topic": "<b>1、时间复杂度：<\/b><br><img class=\"mm-img\" src=\"mm-5045f308ac2e41.jpg\" style=\"width:260px;height:153px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "m9dfbtfqFNq", "topic": "<b>最好情况(有序)：<\/b><span style=\"color:#b45309\"><b><span>O(n)<\/span><\/b><span class=\"mm-note\">那么此时只需要比较n-1次即可确认已经全部有序。\n即：第1个，比较0次；第2个，比较1次；第3个，比较1次..........第n个，比较1次...\n综上：总共比较n-1次。<\/span>", "expanded": false, "children": [{"id": "mNDdK9xrfiE", "topic": "<b>比较次数：n-1<\/b>", "expanded": true}, {"id": "m0cXfzZdHmT", "topic": "<b>交换次数：0<\/b>", "expanded": true}]}, {"id": "maFQ4W9jEpk", "topic": "<b>最坏情况(逆序)：<\/b><span style=\"color:#b45309\"><b><span>O(n²)<\/span><\/b><span class=\"mm-note\">需要的<b> 比较次数 = 交换次数 = 0+1+2+.....+n-1 = n*(n-1)/2\n<\/b>即：\n      此时需要进行<b>n-1趟冒泡<\/b>，第i趟排序要进行<b>n-i<\/b>次关键字的<b>比较，交换次数也为n-i<\/b>，但是<b>一次关键字的交换需要移动元素3次<\/b>。<\/span>", "expanded": false, "children": [{"id": "mWcVTmuANtm", "topic": "<b>1、比较次数：<\/b><span style=\"color:#1d4ed8\"><b><span>n(n-1)/2<\/span><\/b>", "expanded": true}, {"id": "mLSEx8jj3Zi", "topic": "<b>2、交换次数：<\/b><span style=\"color:#1d4ed8\"><b><span>n(n-1)/2<\/span><\/b>", "expanded": true}, {"id": "mwi20Db7e3j", "topic": "<b>3、移动次数：<\/b><span style=\"color:#1d4ed8\"><b><span>3 * n(n-1)/2<\/span><\/b>", "expanded": true}]}, {"id": "mcydH5KkkOo", "topic": "<b>最好的情况(顺序)：<\/b><span style=\"color:#b45309\"><b><span>O(n)<\/span><\/b>", "expanded": false, "children": [{"id": "mboZ0YGR77X", "topic": "<b>比较次数：<\/b><span style=\"color:#1d4ed8\"><b><span>n-1<\/span><\/b><span class=\"mm-note\">最好的情况下，如果输入序列已经是有序的，那么在<b>第一轮排序时就不会出现任何交换<\/b>，因此<b>只需要进行 n−1 次比较即可完成排序<\/b>。<\/span>", "expanded": true}, {"id": "m9rfe1EzD4a", "topic": "<b>交换次数：<\/b><span style=\"color:#1d4ed8\"><b><span>0<\/span><\/b>", "expanded": true}, {"id": "m9NlsgjCKl0", "topic": "<b>移动次数：<\/b><span style=\"color:#1d4ed8\"><b><span>0<\/span><\/b>", "expanded": true}]}, {"id": "mCaCNqNeESI", "topic": "<b><mark>移动次数：<\/mark><\/b><span style=\"color:#7c3aed\"><b><span>一次关键字的交换(<\/span><\/b><b>swap()<\/b><span style=\"color:#7c3aed\"><b><span>)需要移动元素3次<\/span><\/b><span class=\"mm-note\">即：swap函数中的操作。\n注意关键字的移动次数与交换次数之间的关系：<b>移动次数 =  3 * 交换次数<\/b><\/span>", "expanded": true}]}, {"id": "m9SHaT5Ff21", "topic": "<b>2、空间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(1)<\/span><\/b><span class=\"mm-note\">用了常数个辅助单元。<\/span>", "expanded": true}]}, {"id": "mxH8BnA92k3", "topic": "<b>4、稳定性：<\/b><b><mark>稳定<\/mark><\/b><span class=\"mm-note\">在代码的实现中，<b>元素相等时不交换<\/b>。<\/span>", "expanded": true}, {"id": "mb6UfGLGVmk", "topic": "<b>5、是否适用于链表：<\/b><span style=\"color:#7c3aed\"><b><span>适用<\/span><\/b><br><img class=\"mm-img\" src=\"mm-b7b90f0df58c95.jpg\" style=\"width:260px;height:116px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为<b>无需随机存取<\/b>。<\/span>", "expanded": true}, {"id": "mNQvOWHxspn", "topic": "<b>6、能形成：<\/b><b><mark>全局有序的子序列<\/mark><\/b><span class=\"mm-note\">冒泡中，每一趟产生的有序子序列一定全局有序(<b>不同于直接插入排序<\/b>)。\n也就是上文代码分析中所说的：<b>每趟排序都会将一个元素放置到其最终位置<\/b>。<\/span>", "expanded": true}, {"id": "mrC5VPDTePS", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-fa5daada383391.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m0xTOrCKGIr", "topic": "<b>2、快速排序：<\/b>", "expanded": false, "children": [{"id": "mQTr2oZKKFe", "topic": "<b>1、算法思想：<\/b><br><img class=\"mm-img\" src=\"mm-093ea094f73ec7.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">基于：<b>分治法<\/b>。\n\n<b>基本思想：<\/b>\n     1、 在待排序表<b>L<\/b>中<b>任取一个元素pivot<\/b>作为<b>枢轴(基准元素)。\n<\/b>     2、然后经过一趟排序将<b>L划分为独立的两部分<\/b>(即<b>小于pivot：L[0,k-1]、大于等于pivot：L[k+1,n-1]<\/b>)。\n    3、而<b>将pivot放在了其最终位置L[k]上<\/b>。\n    4、分别<b>递归<\/b>地<b>对两个子表执行上述过程<\/b>。直至<b>每部分内只有一个元素或空<\/b>为止。\n\n注意：\n    1、pivot一般取<b>首元素<\/b>。<\/span>", "expanded": true}, {"id": "mT9Iu5f8pF1", "topic": "<b>2、算法实例：(<\/b><b><mark>重点<\/mark><\/b><b>)<\/b><span class=\"mm-note\"><b>双指针法<\/b>。\n方法核心：<b>哪个不空比较哪个，然后往空的填入<\/b>。<\/span>", "expanded": false, "children": [{"id": "mTIkmWvBmJX", "topic": "<span style=\"color:#1d4ed8\"><b><span>双指针法<\/span><\/b><b>：<\/b><span class=\"mm-note\"><b>双指针法<\/b>：一个指针low，一个指针high，<b>同时向中间移动<\/b>。用于<b>划分子区间<\/b>。\n①low与high：<b>谁指向空<\/b>，那就<b>看另一个与pivot的大小关系<\/b>。\n②<b>high与low相遇<\/b>，就找到了<b>pivot的存放位置<\/b>。<\/span>", "expanded": false, "children": [{"id": "mErXbuAUhpi", "topic": "<b>low<\/b>：从<b>首部开始<\/b>，指向<b>小于pivot<\/b>的元素", "expanded": true}, {"id": "mwjYYocsixq", "topic": "<b>high<\/b>：从<b>尾部开始<\/b>，指向<b>大于pivot<\/b>的元素", "expanded": true}]}, {"id": "m4rxYu1AtQy", "topic": "<b>示例1：<\/b>", "expanded": false, "children": [{"id": "mNmsEfeo3zm", "topic": "<b>①：<\/b>找第一个pivot<br><img class=\"mm-img\" src=\"mm-dff340255df945.jpg\" style=\"width:260px;height:116px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时选择首元素49作为pivot。<\/span>", "expanded": true}, {"id": "m2BIYwZ4yhL", "topic": "②：看high所指元素<br><img class=\"mm-img\" src=\"mm-9bf85a93fa70d2.jpg\" style=\"width:260px;height:95px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8c8410836f3d18.jpg\" style=\"width:260px;height:101px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为49作为pivot，<b>low处为空<\/b>，因此<b>先看high指向的元素<\/b>。\n​\n​第一次：high指针指向49，因为&gt;= 49 ,因此不用挪动位置。\n​因此high指针向前走一步。\n​\n第二次：high指针指向27，&lt; 49,因此将27填入low指针指向的位置。<\/span>", "expanded": true}, {"id": "msyeURjyLfT", "topic": "③：看low所指元素<br><img class=\"mm-img\" src=\"mm-feee7055974b7a.jpg\" style=\"width:260px;height:92px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-06fe4d634eb047.jpg\" style=\"width:260px;height:114px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-c471263ebcdeab.jpg\" style=\"width:260px;height:102px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">那么此时<b>high处<\/b>为空，因此<b>查看low指向位置的元素<\/b>。\n​\n​第三次：此时low指针指向38，&lt; 49，不用挪动。\n第四次：此时low指针指向65，&gt;= 49 ，因此需要挪动，将65填入high指针指向的位置。<\/span>", "expanded": true}, {"id": "mPXVHKffQv0", "topic": "④：看high所指元素<br><img class=\"mm-img\" src=\"mm-36212fec0d8a75.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-9292a0e2030bf2.jpg\" style=\"width:260px;height:92px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-bc12c287332272.jpg\" style=\"width:260px;height:91px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时<b>low处为空<\/b>，因此<b>查看high处元素<\/b>。\n\n​第五次：high指向65，&gt;= 49,无需挪动。\nhigh左移一位。\n第六次：high指向13，&lt; 49,因此需要挪动，将13填入low指针指向的位置。<\/span>", "expanded": true}, {"id": "m8R6G2N6Uud", "topic": "⑤：看low所指元素<br><img class=\"mm-img\" src=\"mm-19304ca8be5d4f.jpg\" style=\"width:260px;height:91px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-6491dccb505918.jpg\" style=\"width:260px;height:94px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">接着查看low所指元素。\n​第七次：low指向13，无需挪动。\n第八次：low指向97,97 &gt;= 49，因此需要挪动，将97填入high指向的位置。<\/span>", "expanded": true}, {"id": "m7NltK51187", "topic": "⑥：<b><mark>high与low相遇<\/mark><\/b>：<b>一趟结束，存入基准元素<\/b><br><img class=\"mm-img\" src=\"mm-161672776530fb.jpg\" style=\"width:260px;height:96px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-025a5f7626c1c4.jpg\" style=\"width:260px;height:104px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">接着查看high所指的元素。\n第九次：high指向97，无需挪动。\n第十次：high指向76，无需挪动。\n因此：\n     <b>low和high相遇<\/b>，就找到了<b>pivot的存放位置<\/b>。<\/span>", "expanded": true}, {"id": "mt7LDe8kZEu", "topic": "<b>接着<\/b><span style=\"color:#7c3aed\"><b><span>对第一趟的左右子表，递归上述步骤<\/span><\/b><br><img class=\"mm-img\" src=\"mm-c41d0b5237d95d.jpg\" style=\"width:260px;height:61px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这就是最后结果。<\/span>", "expanded": true}]}]}, {"id": "mcwiXfSfZSd", "topic": "<b>3、代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-a126b1b1c74f90.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">核心思想：<b>递归+分治<\/b>。\n\n<b>两个函数：<\/b>\n    1、<b>QuickSort()<\/b>：递归，统筹全局。\n    2、<b>Partition()<\/b>：找到<b>当前所选择的pivot的存储位置<\/b>，辅助QuickSort函数。\n\n<b>注意细节：<\/b>\n   1、分治时，遵守：<b>左闭右闭<\/b>规则。因此 在QuickSort中递归划分左右子表时有：pivotpos-1、pivotpos+1。<\/span>", "expanded": true}, {"id": "mYkejhBo1dQ", "topic": "<b>4、算法效率分析：<\/b><br><img class=\"mm-img\" src=\"mm-6985c9c0bb33da.jpg\" style=\"width:260px;height:165px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">快排算法的关键在于划分操作，同时快排的<b>性能<\/b>也主要<b>取决于划分操作的好坏<\/b>。\n因为划分操作影响着<b>递归调用的层数<\/b>。<\/span>", "expanded": false, "children": [{"id": "mjhFKVDpPD0", "topic": "<b>1、时间复杂度：<\/b><span style=\"color:#b45309\"><b><span> O(n * 递归层数)<\/span><\/b><br><img class=\"mm-img\" src=\"mm-5ad3ea316de9d1.jpg\" style=\"width:260px;height:152px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">Partition()：其实就是<b>将n个元素扫描一遍<\/b>，时间复杂度<b>不会超过O(n)<\/b>。\n\n并且随着向下递归，区间是变小的，partition扫描的元素个数是逐个减少的。\n因此每一层递归的时间复杂度不会超过O(n)，因此有：\n    <b>  时间复杂度 = O(n * 递归层数)<\/b><\/span>", "expanded": false, "children": [{"id": "mYoKhbFWv9T", "topic": "<b>最好情况：<\/b><span style=\"color:#7c3aed\"><b><span>O(nlogn)——<\/span><\/b> <b><mark>均匀划分<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-cfad6671adb2b5.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">二叉树的最小高度(递归的最小层数)。\n即：每一次选择的pivot都能将待排序序列<b>划分为均匀的两部分<\/b>。<\/span>", "expanded": true}, {"id": "mjuYbuHWOVS", "topic": "<b>最坏情况：<\/b><span style=\"color:#7c3aed\"><b><span>O(n²) ——<\/span><\/b> <b><mark>本就有序<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-c96cf8138fd47b.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>每次Partion的时间复杂度为n，且这样处理n次(递归层数为n)<\/b>，时间复杂度：O(n^2)\n二叉树的最大高度(递归的最大层数)。\n即：<b>本就有序(顺序或逆序)<\/b>的情况。<\/span>", "expanded": true}]}, {"id": "mRVGO78PnRp", "topic": "<b>2、空间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(递归层数)<\/span><\/b><br><img class=\"mm-img\" src=\"mm-4f2f9aa82c2c3c.jpg\" style=\"width:260px;height:156px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">主要是<b>递归工作栈<\/b>的使用。\n而其<b>容量与递归调用的最大深度<\/b>一致。\n​<\/span>", "expanded": false, "children": [{"id": "m99BBz5kobY", "topic": "<b>最好情况<\/b>：<span style=\"color:#7c3aed\"><b><span>O(logn)<\/span><\/b><span class=\"mm-note\">枢轴值每次<b>将子表等分<\/b>。\n二叉<b>树的最小高度<\/b>(递归的最小层数)。<\/span>", "expanded": true}, {"id": "mUw5p4k3zmx", "topic": "<b>最坏情况<\/b>：<span style=\"color:#7c3aed\"><b><span>O(n)<\/span><\/b><span class=\"mm-note\"><b>枢轴值每次都是子表的最大、最小值时<\/b>。递归树退化为单链表。\n二叉<b>树的最大高度<\/b>(递归的最大层数)。<\/span>", "expanded": true}]}, {"id": "mo5Uuypmuog", "topic": "<b><mark>递归层数<\/mark><\/b><b>：<\/b><span style=\"color:#7c3aed\"><b><span>n个结点二叉树的高度<\/span><\/b><br><img class=\"mm-img\" src=\"mm-cb4f86ca6130b3.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">最大高度：<b>n   ---&gt; 单支树<\/b>\n最小高度：<b>logn   ----&gt; 每一次都平分。<\/b><\/span>", "expanded": true}, {"id": "mEr4vfMtlwx", "topic": "<span style=\"color:#0e7a52\"><b><span>平均时间复杂度<\/span><\/b><b>：<\/b><b><mark>O(nlogn)<\/mark><\/b><span class=\"mm-note\">快排比较特殊，实际应用中平均时间复杂度不是最坏的情况，而是接近最好的情况。<\/span>", "expanded": true}]}, {"id": "mJapLdlOSZJ", "topic": "<b>5、算法优化：<\/b><span style=\"color:#b45309\"><b><span>尽量选取一个可以将数据中分的pivot<\/span><\/b><br><img class=\"mm-img\" src=\"mm-da70125de7fb25.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">结合上边算法效率分析，为了提高效率。那么我们就<b>尽可能让子区间划分地更加均匀<\/b>。<\/span>", "expanded": false, "children": [{"id": "m0o2MdyKDpp", "topic": "<b>①：取头、中、尾的元素，<\/b><span style=\"color:#7c3aed\"><b><span>取三者的中间值<\/span><\/b><b>作为pivot<\/b>", "expanded": true}, {"id": "mrKDs1KAZW9", "topic": "②：<span style=\"color:#7c3aed\"><b><span>随机取<\/span><\/b><b>一个元素作为pivot。<\/b>", "expanded": true}]}, {"id": "m4ZFILYFL61", "topic": "<b>6、稳定性：<\/b><b><mark>不稳定<\/mark><\/b><span class=\"mm-note\">因为<b>若在右区间有两个关键字相同<\/b>，并且<b>均小于此时的基准值<\/b>，则在<b>交换到左区间之后<\/b>，两者的<b>相对位置会发生变化<\/b>。<\/span>", "expanded": true}, {"id": "m806Jzzk7fw", "topic": "<b>7、<\/b><b><mark>不产生有序子序列<\/mark><\/b><b>，但<\/b><b><mark>每趟划分会确定一个元素(pivot)的最终位置<\/mark><\/b><b>。<\/b>", "expanded": true}, {"id": "m9zuRyqsB5R", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-559a0e99316a1a.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">注意：<b>区别\"一趟划分\"<\/b> 和 <b>\"一次排序\"：\n\n<\/b>1、一次划分：也就是一次partition。对<b>一个子区间进行划分操作<\/b>。因此一次划分可以\n                                 <b>确定一个元素的最终位置<\/b>。\n2、一趟排序：也就是一次QuickSort。对<b>多个子区间同时做划分操作<\/b>。因此一趟排序\n                                可以<b>确定多个元素的最终位置<\/b>。<\/span>", "expanded": true}]}]}, {"id": "mBvSMoluXa2", "topic": "<b>三、选择排序<\/b>", "expanded": false, "children": [{"id": "mzvGbHz1QMB", "topic": "<b>1、简单选择排序：<\/b>", "expanded": false, "children": [{"id": "mMCyx8rLzRS", "topic": "<b>1、算法思想：<\/b><br><img class=\"mm-img\" src=\"mm-9fb2cff138e658.jpg\" style=\"width:260px;height:155px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-e022e227c05038.jpg\" style=\"width:260px;height:80px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就很简单：每一次在待排序序列中寻找最小的元素，向前加入有序子序列即可。<\/span>", "expanded": true}, {"id": "mdKqL3ky3TR", "topic": "<b>2、代码实现：<\/b><span style=\"color:#1d4ed8\"><b><span>外层for从前向后遍历，内层for从后边选择最小的元素<\/span><\/b><br><img class=\"mm-img\" src=\"mm-535e2018cca7c4.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mfuDtX0maF8", "topic": "<b>注意：在找最小值时，<\/b><span style=\"color:#0e7a52\"><b><span>找到的是最小值元素的下标<\/span><\/b><b>即可。<\/b><span class=\"mm-note\">原因：便于交换嘛。<\/span>", "expanded": true}]}, {"id": "mwiH0gPs0xT", "topic": "<b>3、算法性能分析：<\/b><br><img class=\"mm-img\" src=\"mm-db0963d27dbbbf.jpg\" style=\"width:260px;height:218px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">无论顺序如何，<b>都需要按部就班两两比较(<\/b>最后一个元素不用比较)，\n因此<b>总共比较n*(n-1)/2<\/b>次。<\/span>", "expanded": false, "children": [{"id": "mxSExR2BXnP", "topic": "<b>时间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(n²)<\/span><\/b>", "expanded": true}, {"id": "m3mAs0UI83R", "topic": "<b>空间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(1)<\/span><\/b>", "expanded": true}, {"id": "m9ahWcdlQ04", "topic": "<b>移动次数：最多<\/b><span style=\"color:#b45309\"><b><span>3*(n-1)<\/span><\/b><b>次；最少<\/b><span style=\"color:#b45309\"><b><span>0<\/span><\/b><b>次<\/b><span class=\"mm-note\">swap1次，移动3次。\n最多：也就是逆序的情况。\n最少0次：那就是本就有序的情况。<\/span>", "expanded": true}, {"id": "mnFwQKwX7mU", "topic": "<b><mark>注意<\/mark><\/b><b>：简单选择排序，<\/b><b><mark>无论有序、逆序、顺序<\/mark><\/b><span style=\"color:#7c3aed\"><b><span>，<\/span><\/b><b><mark>必然需要n-1趟处理<\/mark><\/b><span class=\"mm-note\">即：<b>元素间的比较次数与序列的初始状态无关<\/b>。<\/span>", "expanded": true}]}, {"id": "mCqP3RkEz2x", "topic": "<b>4、稳定性：<\/b><b><mark>不稳定<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-8b49506b9bbbc7.jpg\" style=\"width:260px;height:219px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">解释：在第i趟找到最小元素时后，和第i个元素直接交换，就是<b>这个交换操作<\/b>，太随意了，就可能会<b>导致第i个元素与其含有相同关键字元素的相对位置发生改变<\/b>。<\/span>", "expanded": true}, {"id": "mdS35rVLn8N", "topic": "<b>5、也<\/b><span style=\"color:#7c3aed\"><b><span>适用于链表<\/span><\/b><span class=\"mm-note\">因为：<b>不用随机存取<\/b>，它是按顺序遍历。<\/span>", "expanded": true}, {"id": "mo8L7DfCvMf", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-6cac970e92527d.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mwxXyR4aTqt", "topic": "<b>2、堆排序<\/b><span class=\"mm-note\">重点！！！！！<\/span>", "expanded": true, "children": [{"id": "mFR5bZHRnPL", "topic": "<b>1、堆的定义：<\/b><br><img class=\"mm-img\" src=\"mm-a7f09fd2cbdb3b.jpg\" style=\"width:260px;height:159px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>逻辑视角<\/b>：是一棵<b>根结点值大于左右节点值的树<\/b>。\n<b>存储视角<\/b>：在内存中是<b>顺序存储<\/b>的。\n\n且：\n   <b>根节点(L[i])<\/b>的<b>左、右孩子坐标<\/b>分别为：<b>L[2i]、L[2i+1]。<\/b><\/span>", "expanded": false, "children": [{"id": "mdyaIEjKjeP", "topic": "<b>大根堆：<\/b><span style=\"color:#b45309\"><b><span>根 ≥ 左、右<\/span><\/b>", "expanded": true}, {"id": "mupzdEWkjED", "topic": "<b>小根堆：<\/b><span style=\"color:#b45309\"><b><span>根 ≤ 左、右<\/span><\/b>", "expanded": true}, {"id": "mxs3FDfCHG8", "topic": "<span style=\"color:#b45309\"><b><span>左孩子：<\/span><\/b><span style=\"color:#1d4ed8\"><b><span>L[2i]<\/span><\/b><b>；<\/b><span style=\"color:#b45309\"><b><span>右孩子：<\/span><\/b><span style=\"color:#1d4ed8\"><b><span>L[2i+1]<\/span><\/b>", "expanded": true}, {"id": "mIJwVWKlDWi", "topic": "<b>注意细节：是<\/b><b><mark>大于等于<\/mark><\/b><b>哦！！<\/b><span class=\"mm-note\">因此：堆中，可以存在相同的元素。<\/span>", "expanded": true}]}, {"id": "m8dHpAP0rE2", "topic": "<b>2、如何基于堆来排序：<\/b><br><img class=\"mm-img\" src=\"mm-70240b332945bb.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">原理很简单：\n      堆顶元素不是最大(大根堆)就是最小(小根堆)。那么我们在选择排序时，<b>每次拿堆\n 顶元素即可<\/b>。<\/span>", "expanded": true}, {"id": "mhmU2TUYarw", "topic": "<b>3、建立大根堆：<\/b><br><img class=\"mm-img\" src=\"mm-195e55ec5a6d7f.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">思路：\n     1、 将所有<b>非终端结点都从后向前检查一遍(即：调整前n/2个元素)<\/b>，看是否满足大根堆的要求。\n                                  注：这个操作对应代码实现中的BulidMaxHeap()函数。\n     2、如果<b>不满足<\/b>，则<b>进行调整：将当前结点与更大的一个孩子互换。\n                                  <\/b>注：这个操作对应代码实现中的HeapAdjust函数。<b>\n<\/b>     3、若元素交换<b>破坏了下一级的堆<\/b>，则<b>采用相同的方法继续向下调整(下坠)<\/b>。\n​\n基于上述思路，就有了如下的代码实现。<\/span>", "expanded": false, "children": [{"id": "mEj0G3Rsize", "topic": "<b>注意<\/b>：<b>在顺序存储的完全二叉树中，<\/b><span style=\"color:#b45309\"><b><span>非终端结点编号<\/span><\/b><b><mark>i ≤ n/2(向下取整)<\/mark><\/b><span class=\"mm-note\">为什么是调整前n/2个结点？\n答：因为<b>[n/2,n]这个区间的结点是叶结点<\/b>呀！！！而我们<b>只需要调整非终端结点<\/b>就可以啦！！<\/span>", "expanded": true}, {"id": "m2XPELoKEAo", "topic": "<b>核心：<\/b><b><mark>下坠操作<\/mark><\/b><span class=\"mm-note\">下坠操作中：\n        1、当有<b>两个孩子<\/b>时，最多<b>比较2次<\/b>关键字\n               (<b>两个孩子比较一次<\/b>，选出较大/较小的孩子，再将<b>选出的孩子与要下坠的\n               元素比较一次<\/b>)。\n        2、当有<b>一个孩子<\/b>时，最多<b>比较1次<\/b>关键字。<\/span>", "expanded": true}, {"id": "mSe7EHyilyT", "topic": "<span style=\"color:#d92d20\"><b><span>❤ <\/span><\/b><b>注意：<\/b><b><mark>依次插入建堆<\/mark><\/b> <b>与<\/b> <b><mark>将数组调整为堆<\/mark><\/b> <b>的<\/b><span style=\"color:#d92d20\"><b><span>区别<\/span><\/b><span class=\"mm-note\"><b>依次插入为堆<\/b>：那就在插入的过程中一步步调整，而不是将要插入的元素看作数组，再全局调整。(题目见王道P335 17题)\n<b>调整数组为堆<\/b>：那就是此处的方法，将前n/2个元素依次进行下坠操作。<\/span>", "expanded": true}, {"id": "maRR1rWDAte", "topic": "<b>注意：在实现代码时，往往<\/b><span style=\"color:#1d4ed8\"><b><span>将A[0]空出来<\/span><\/b><b>，<\/b><span style=\"color:#1d4ed8\"><b><span>从下标为1的地方开始存储堆。<\/span><\/b><span class=\"mm-note\">原因：<b>如果从下标为0开始<\/b>，那么<b>i=0时的左孩子：i*2 = 0<\/b>，这样就会导致for处理时，i一直为0。<\/span>", "expanded": true}, {"id": "mbk0lLfzp36", "topic": "<b>建堆注意事项：如果在过程中，<\/b><b><mark>破坏了下一级堆<\/mark><\/b><b>，那就<\/b><b><mark>继续向下调整<\/mark><\/b><b>；如果是<\/b><span style=\"color:#1d4ed8\"><b><span>破坏了上一级堆，就不用调整<\/span><\/b><b>(<\/b>因为我们从后向前处理，总会处理到上一级的<b>)<\/b>", "expanded": true}, {"id": "mKUWEo8zUr6", "topic": "<b>建立实例：<\/b>", "expanded": false, "children": [{"id": "mktB1ZaGwSc", "topic": "①：处理09<br><img class=\"mm-img\" src=\"mm-f26185dccc3be1.jpg\" style=\"width:260px;height:221px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-33380f325521f3.jpg\" style=\"width:260px;height:225px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到：\n 因为此时n=8，因此处理其非终端结点，也就是<b>处理前4个结点<\/b>即可。\n 09 &lt; 32 ，不符合大根堆。于是与它更大的孩子互换，也就是09与32互换，得到上述结果。<\/span>", "expanded": true}, {"id": "mdU8Tz8YPxx", "topic": "②：处理78<br><img class=\"mm-img\" src=\"mm-7e426af68b6dcb.jpg\" style=\"width:260px;height:219px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-9299478ff202ab.jpg\" style=\"width:260px;height:221px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">78 &lt; 87 ，不符合大根堆。于是与它更大的孩子互换，也就是78与87互换，得到上述结果。<\/span>", "expanded": true}, {"id": "mBqUnw4qvP0", "topic": "③：处理17<br><img class=\"mm-img\" src=\"mm-4ac68c3848f710.jpg\" style=\"width:260px;height:210px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8c12b22846b5de.jpg\" style=\"width:260px;height:232px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mHErGQLJAsG", "topic": "④：处理53<br><img class=\"mm-img\" src=\"mm-fff29cba9f6736.jpg\" style=\"width:260px;height:229px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-3adbfd26c15461.jpg\" style=\"width:260px;height:192px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">明显：右孩子比53大，因此交换。\n但是此时发现：\n      <b>此次互换破坏了下一级的堆<\/b>，因此<b>采用相同的方法继续往下调整<\/b>。<\/span>", "expanded": false, "children": [{"id": "mgh8XCDnERO", "topic": "①：继续处理53<br><img class=\"mm-img\" src=\"mm-a9b1a292debee1.jpg\" style=\"width:260px;height:217px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到：\n    53再次与78交换，全树符合大根堆，结束。<\/span>", "expanded": true}]}]}]}, {"id": "mkFPIPrJXf9", "topic": "<b>4、建立大根堆代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-5f3d90dd12b162.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>注意：\n     <\/b>1<b>、从最底层的分支结点开始调整<\/b>，也就是从：<b>第n/2个结点开始<\/b>。\n     2、同样，此时将<b>A[0]空出来存放临时元素<\/b>。\n\n<b>HeadAdjust()参数说明：<\/b>\n                1、A[]：堆数组\n                2、k：<b>根节点的下标<\/b>\n                3、<b>len<\/b>：此时<b>堆中的元素个数<\/b>。<\/span>", "expanded": true}, {"id": "mlTLntGi017", "topic": "<b>5、基于大根堆的排序：<\/b><br><img class=\"mm-img\" src=\"mm-447352ac4413d9.jpg\" style=\"width:260px;height:261px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d9a7e670df0f0f.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>思路：<\/b>\n      1、每一趟<b>将堆顶元素加入有序子序列<\/b>（即：<b>与待排序序列中的最后一个元素交换<\/b>）。\n(这个有序子序列在尾部)\n      2、将<b>剩下的待排序元素序列再次调整为大根堆<\/b>。重复上述过程。\n\n\n<b>上图说明：<\/b>\n   上图中，就是将堆顶元素87与最后一个元素09交换。\n   交换后<b>87就已经独立出来<\/b>了，<b>剩下的元素就构成了一个新的大根堆(红色圈)<\/b>，接着在新的大根堆上排序、调整即可。\n   因此下次调整时，参数len就从8变成了7，说明此时堆中只有7个元素了。<\/span>", "expanded": false, "children": [{"id": "mFL51zwmxIm", "topic": "<b>1.注意：此时<\/b><span style=\"color:#b45309\"><b><span>基于大根堆处理<\/span><\/b><b>，得到<\/b><span style=\"color:#b45309\"><b><span>升序序列<\/span><\/b><b>；如果<\/b><span style=\"color:#1d4ed8\"><b><span>基于小根堆处理<\/span><\/b><b>，那就得到<\/b><span style=\"color:#1d4ed8\"><b><span>降序序列<\/span><\/b><b>。<\/b><span class=\"mm-note\">根本原因：\n             实现堆排序时，我们是<b>统一将堆顶元素逐个放在堆底，<\/b>以此来形成有序子序列，<\/span>", "expanded": true}, {"id": "mWyEqzVl1K5", "topic": "<b>2.<\/b><b><mark>向上调整<\/mark><\/b><b>时，<\/b><b><mark>比较次数的计算<\/mark><\/b><b>一定小心！！<\/b><span class=\"mm-note\">踩坑例题见：王道P334 12/14题。\n简单说明：\n          就是在计算比较次数时，当<b>比较完后发现不用调整，那么这一次比较的交换次数也要计算在内<\/b>！！！别忘了！！！<\/span>", "expanded": true}, {"id": "mohJfH7gI8A", "topic": "接着调整：", "expanded": false, "children": [{"id": "mKBN6pdJp6T", "topic": "①：调整以09为根的堆，并接着处理一次<br><img class=\"mm-img\" src=\"mm-c6d56aded6d80e.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-00bea852254443.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">调整好后，以78为根。并且接着将78与最后一个元素53交换。<\/span>", "expanded": true}, {"id": "mlyXibsN6du", "topic": "②：调整以53为根的堆，并接着处理一次<br><img class=\"mm-img\" src=\"mm-1dfc2dc0ad1ce4.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8648b4918e7e07.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时调整大根堆时，传入的参数len = 6，说明此时堆中的元素为6个。\n调整完毕后，以65为根。然后再次将65与最后一个元素09交换。\n再接着调整以09为根的大根堆，如此反复.....<\/span>", "expanded": true}, {"id": "m6eyOzocFqn", "topic": "反复处理后，得到最后的结果：<br><img class=\"mm-img\" src=\"mm-3863450e21ff97.jpg\" style=\"width:260px;height:153px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mVS4EuYq8Cr", "topic": "<b>6、基于大根堆排序的代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-f9e200832e153d.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">代码思路：\n     1、<b>建堆<\/b>(BuildMaxHeap())。\n     2、<b>外层for循环n-1趟交换和建堆过程<\/b>。\n     3、<b>for中实现<\/b>：\n                         <b> ①<\/b>：交换堆顶元素和最后一个元素(<b>swap(A[1],A[i])<\/b>)\n                          <b>②<\/b>：调整剩余待排序序列整理成堆<b>(HeadAdjust()<\/b>)。<\/span>", "expanded": true}, {"id": "m5d2OWyyhjN", "topic": "<b>7、堆排序的算法效率分析： <\/b>", "expanded": false, "children": [{"id": "mSs4oHPhG3Y", "topic": "<b>1、时间复杂度：<\/b><b><mark>O(nlogn)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-ee1d5e933fd6ca.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为在建堆和具体的排序时，<b>核心逻辑<\/b>都是调整为大根堆(<b>HeadAdjust()<\/b>)。\n因此<b>主要讨论<\/b>的就是<b>HeadAdjust()的时间复杂度<\/b>。\n\n上图给出：<b>\n         1、建堆(BuildMaxHeap())<\/b>的时间(<b>绿色<\/b>)为：<b>O(n)<\/b>\n        <b> 2<\/b>、<b>排序过程(for循环)<\/b>的时间(<b>红色<\/b>)为：<b>O(nlogn)<\/b>\n\n下边进行分析。<\/span>", "expanded": false, "children": [{"id": "mCDsY1pIQUm", "topic": "<b>1、<\/b><span style=\"color:#0e7a52\"><b><span>建堆的时间复杂度(绿色部分)<\/span><\/b><b>分析：<\/b>", "expanded": false, "children": [{"id": "mrZ4GZXkHdQ", "topic": "<b>①HeadAdjust()中<\/b><span style=\"color:#b45309\"><b><span>第i层元素<\/span><\/b><b>的<\/b><span style=\"color:#b45309\"><b><span>关键字比较次数<\/span><\/b><br><img class=\"mm-img\" src=\"mm-333272e2252081.jpg\" style=\"width:260px;height:101px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-a6a3ca6a39a593.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">图1看出：当有<b>两个孩子<\/b>时，最多<b>比较2次<\/b>关键字，<b>下坠1层<\/b>。\n图2看出：当有<b>一个孩子<\/b>时，最多<b>比较1次<\/b>关键字，<b>下坠1层<\/b>。\n\n综上可知：\n     若<b>树高为h<\/b>，某<b>结点在第i层<\/b>，那么该结点<b>最多下坠h-i层<\/b>，关键字<b>比较次数最多为2*(h-i)。<\/b><\/span>", "expanded": true}, {"id": "mM5mZSGS1lG", "topic": "<b>②建堆时，<\/b><b><mark>关键字的对比次数不超过4n<\/mark><\/b><b>，<\/b><span style=\"color:#b45309\"><b><span>建堆时间复杂度<\/span><\/b><b>为<\/b><b><mark>O(n)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-831f14f40095bc.jpg\" style=\"width:260px;height:154px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mptK5xWVxRr", "topic": "<b>2、<\/b><span style=\"color:#d92d20\"><b><span>排序时间复杂度(红色部分)<\/span><\/b><b>分析：<\/b><br><img class=\"mm-img\" src=\"mm-8287e01b072e6e.jpg\" style=\"width:260px;height:83px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">分析：\n     1、<b>for循环<\/b>需要进行<b>n-1趟向下调整<\/b>。\n     2、<b>每一趟交换后<\/b>，就需要<b>将根节点下坠<\/b>(HeadAdjust())，而这个<b>下坠最多会进行h-1层<\/b>，且<b>每下坠一层<\/b>，<b>最多只需对比关键字2次<\/b>，说明<b>每次下坠操作都是常数级<\/b>的。\n           因此每次下坠时间复杂度只需要看下坠的层数即可。\n           因此<b>每一趟的排序复杂度不会超过O(h) = O(logn)\n<\/b>                              注：完全二叉树的高度最高为h=logn+1。\n    3、综上，总的时间复杂度就是两个相乘：O(nlogn)<\/span>", "expanded": true}]}, {"id": "mP3RGj8y1MZ", "topic": "<b>2、空间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(1)<\/span><\/b><span class=\"mm-note\">仅用了常数个辅助单元。<\/span>", "expanded": true}]}, {"id": "mVoAlAIyUEG", "topic": "<b>8、堆的时间复杂度总结<\/b>", "expanded": false, "children": [{"id": "mCGfOPU0VcV", "topic": "<b>1、<\/b><span style=\"color:#1d4ed8\"><b><span>堆排序<\/span><\/b><b> ：<\/b><b><mark>O(nlogn)<\/mark><\/b><span class=\"mm-note\">HeapSort()的时间复杂度 = <b>Max<\/b>(建堆时间，n-1次调整时间) = <b>nlogn<\/b><\/span>", "expanded": true}, {"id": "mt4oKt9mXH8", "topic": "<b>2、<\/b><span style=\"color:#1d4ed8\"><b><span>建堆<\/span><\/b><b>：<\/b><b><mark>O(n)<\/mark><\/b><span class=\"mm-note\">BulidMaxHeap()的时间复杂度，上边有分析，<b>比较次数不超过4n<\/b>，因此为O(n)。<\/span>", "expanded": true}, {"id": "moPBJpOHohM", "topic": "<b>3、<\/b><span style=\"color:#1d4ed8\"><b><span>调整堆<\/span><\/b><b>：<\/b><b><mark>O(logn)<\/mark><\/b><span class=\"mm-note\">即：一次向上调整或一次下坠，也是堆的插入和删除时间复杂度。\n          一次下坠或者向上调整，<b>比较次数最多为树高h-1<\/b>，因此为<b>O(h)<\/b>，又因为完全\n          二叉树树高为 logn，因此时间复杂度为O(<b>logn<\/b>)。<\/span>", "expanded": true}]}, {"id": "mgRJd1karcN", "topic": "<b>9、稳定性：<\/b><b><mark>不稳定<\/mark><\/b><span class=\"mm-note\">进行筛选时，有<b>可能把后面相同关键字的元素调整到前边<\/b>。<\/span>", "expanded": true}, {"id": "m4M9zuKdGAL", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-09823fa8079c26.jpg\" style=\"width:260px;height:155px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mSxE0SC8njF", "topic": "<b>拓展练习：<\/b><br><img class=\"mm-img\" src=\"mm-7afe478fc9be73.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">很简单：只需修改一下HeadAdjust中的逻辑即可。<\/span>", "expanded": true}]}, {"id": "m0lw392iJIe", "topic": "<b>3、堆的插入、删除<\/b>", "expanded": true, "children": [{"id": "mD1P23wS89i", "topic": "<b>1、插入<\/b><span class=\"mm-note\">这里以小根堆为例。\n其实就是分两步走即可。<\/span>", "expanded": false, "children": [{"id": "m8OIewN13Jc", "topic": "<b>①：先将<\/b><span style=\"color:#b45309\"><b><span>新结点放在堆的末尾<\/span><\/b>", "expanded": true}, {"id": "m7UZhdWnYt9", "topic": "<b>②：再将<\/b><span style=\"color:#b45309\"><b><span>新结点向上调整<\/span><\/b><b>，<\/b><span style=\"color:#b45309\"><b><span>直到无法上升<\/span><\/b><span class=\"mm-note\">向上调整时，根据<b>i的父结点下标 = i/2(向下取整)<\/b> 来找父元素即可。<\/span>", "expanded": true}, {"id": "mJi40TPkWy6", "topic": "<b>举例：<\/b>插入13<span class=\"mm-note\">总共进行3次关键字对比。<\/span>", "expanded": false, "children": [{"id": "mpExMbmm1MY", "topic": "①：13与32调整<br><img class=\"mm-img\" src=\"mm-5bf2733d5adac8.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m2bO8Hhmsdm", "topic": "②：13与17调整<br><img class=\"mm-img\" src=\"mm-cc2c74b59a6778.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mPtofDJfK7i", "topic": "③：13与9对比<br><img class=\"mm-img\" src=\"mm-0fb89477b1272b.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "m4kiSGVTR58", "topic": "<b>2、删除<\/b><span class=\"mm-note\">小根堆为例。\n总共也是两步。<\/span>", "expanded": true, "children": [{"id": "mljrPF1PS6u", "topic": "<b>①：<\/b><span style=\"color:#b45309\"><b><span>被删除元素用堆底元素替代<\/span><\/b>", "expanded": true}, {"id": "m2g5lQCsGCq", "topic": "<b>②：<\/b><span style=\"color:#b45309\"><b><span>该元素不断\"下坠\"<\/span><\/b><b>，直到无法下坠<\/b>", "expanded": true}, {"id": "mLi3tApP4eM", "topic": "<b>示例：<\/b>删除13<span class=\"mm-note\">总共4次关键字的对比。<\/span>", "expanded": false, "children": [{"id": "mFhSoL2sYTx", "topic": "①：用堆底元素代替13<br><img class=\"mm-img\" src=\"mm-4292a266c6bd06.jpg\" style=\"width:260px;height:136px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-855ae4902e700f.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mny2k5C3eh2", "topic": "②：46下坠第一次：<br><img class=\"mm-img\" src=\"mm-4d40be7b50094d.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mlGQecWAR2p", "topic": "③：46下坠第二次：<br><img class=\"mm-img\" src=\"mm-b7b5d7be835c2d.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mI1zqXqmitC", "topic": "<b>时间复杂度：<\/b><b><mark>O(logn)<\/mark><\/b><span class=\"mm-note\">分析：\n      一次下坠或者向上调整，<b>比较次数最多为树高h-1<\/b>，而<b>完全二叉树树高为logn<\/b>，因此时间复杂度为logn。<\/span>", "expanded": true}, {"id": "mjVLdm0TntS", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-fea2dbdccedae9.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">常考：\n    <b>插入、删除<\/b>的调整和调整过程中<b>关键字的比较次数<\/b>。<\/span>", "expanded": true}]}, {"id": "mquVnxSi6sh", "topic": "<b>定义：<\/b><span style=\"color:#1d4ed8\"><b><span>从前向后<\/span><\/b><br><img class=\"mm-img\" src=\"mm-ec588cf36e18fe.jpg\" style=\"width:260px;height:72px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">顾名思义：\n     就是在<b>每一趟在待排序元素<\/b>中<b>选取关键字最小<\/b>(或最大)的元素<b>加入有序子序列<\/b>。\n\n<b>与插入排序区别开<\/b>：\n         插入排序：将元素一个个向前插入到有序子序列中。\n         选择排序：从待排序序列中一步步选择出最小/最大的元素，加入有序子序列。<\/span>", "expanded": true}]}, {"id": "mwltniqODAQ", "topic": "<b>四、归并排序 &amp; 基数排序 &amp; 计数排序 &amp; 桶排序<\/b>", "expanded": true, "children": [{"id": "mIj2Ox0gWWw", "topic": "<b>1、归并排序：<\/b>", "expanded": true, "children": [{"id": "mXwC9I5vbky", "topic": "<b>1、何为归并？<\/b><span class=\"mm-note\">含义：将<b>两个或者多个的有序表合并成一个新的有序表<\/b>。<\/span>", "expanded": false, "children": [{"id": "md1f5x8JWgP", "topic": "<span style=\"color:#b45309\"><b><span>m路归并<\/span><\/b><b>，<\/b><span style=\"color:#b45309\"><b><span>每选出一个元素需要对比关键字m-1次<\/span><\/b><span class=\"mm-note\">每一个比较得出最小/最大的元素。<\/span>", "expanded": true}, {"id": "mvRKpYXhMJ1", "topic": "<b>\"2路\" 归并：<\/b><br><img class=\"mm-img\" src=\"mm-a10fadb6f129a9.jpg\" style=\"width:260px;height:156px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">双指针法依次比较，写入较小的元素即可。<\/span>", "expanded": true}, {"id": "mLl1ATzKHKf", "topic": "<b>\"4路\" 归并<\/b><br><img class=\"mm-img\" src=\"mm-209b5c2f5f4efd.jpg\" style=\"width:260px;height:168px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m0wEIimMp98", "topic": "<b>2、算法思想：<\/b>", "expanded": false, "children": [{"id": "mtd9ne60ZvU", "topic": "<b>处理过程：<\/b><br><img class=\"mm-img\" src=\"mm-ee6d9632320da2.jpg\" style=\"width:260px;height:159px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">待排序序列有<b>n个元素<\/b>，则将其视为<b>n个有序的子表<\/b>。\n​每个子表长度为1，然后两两归并，得到n/2个长度为1或2的有序表，然后再将这些有序表向下递归、两两归并..........直到结束。<\/span>", "expanded": true}, {"id": "mHGn81qXFQV", "topic": "<b>核心操作：<\/b><span style=\"color:#b45309\"><b><span>将数组内1个<\/span><\/b>", "expanded": true}]}, {"id": "m3N11xqjj3p", "topic": "<b>3、代码实现：<\/b>", "expanded": false, "children": [{"id": "mUEC5mnqato", "topic": "<b>全部代码：<\/b><span style=\"color:#b45309\"><b><span>递归+归并<\/span><\/b><br><img class=\"mm-img\" src=\"mm-6f1cea13c4b6f7.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>总体思路：<\/b>\n         1、将数组<b>左半部分[low,mid]<\/b>、<b>右半部分[mid+1,high]<\/b>分别<b>递归地<\/b>进行归并排序。\n         2、<b>最后再将左右两部分进行一次归并排序<\/b>。<\/span>", "expanded": true}, {"id": "mRzpKzIacbU", "topic": "<b><mark>Merge()<\/mark><\/b><b>：<\/b><span style=\"color:#b45309\"><b><span>核心函数<\/span><\/b><br><img class=\"mm-img\" src=\"mm-838a350ec5dbca.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这个<b>函数的作用<\/b>：\n         根据传入的low，mid，high，将传入数组划分为左右两部分，<b>进行一次归并<\/b>。\n\n<b>详细思路：<\/b>\n     1、用一个<b>辅助数组B<\/b>，先将原数组A的元素复制给B。\n     2、再根据low，mid，high遍历B，依次更新A数组。\n     3、最后<b>将没有归并完的部分复制到尾部<\/b>。(即：最<b>后两个While只有一个会执行<\/b>)\n\n​<\/span>", "expanded": false, "children": [{"id": "m7yRP5cb7Is", "topic": "<b>时间复杂度：<\/b><b><mark>O(n)<\/mark><\/b><span class=\"mm-note\"><b>分析：<\/b>\n     因为<b>第一趟归并的比较次数 = n/2<\/b>......  而<b>最后一层的比较次数最多为 = n-1次<\/b>.\n     因此可知：<b>每一趟的Merge()，时间复杂度均为O(n)<\/b><\/span>", "expanded": true}]}]}, {"id": "mMszunIVU6L", "topic": "<b>4、算法效率分析：<\/b><br><img class=\"mm-img\" src=\"mm-e8c8c1834b981d.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mneVx5pslTK", "topic": "<b>1、时间复杂度：<\/b>", "expanded": false, "children": [{"id": "mTad5gbPAfk", "topic": "<b>①：算法每趟归并时间：<\/b><b><mark>O(n)<\/mark><\/b><span class=\"mm-note\">也就是Merge的时间复杂度。<\/span>", "expanded": true}, {"id": "mt4DDv0Ow1G", "topic": "<b>②：算法总时间复杂度：<\/b><b><mark>O(nlog₂n)<\/mark><\/b><span class=\"mm-note\"><b>归并的趟数 = O(logn)。\n每一次归并时间：O(n)。<\/b>\n因此，总时间复杂度就是：O(nlogn)。<\/span>", "expanded": true}, {"id": "mGs7khsCLMi", "topic": "<b>归并排序的时间复杂度<\/b><span style=\"color:#b45309\"><b><span>与初始序列状态无关<\/span><\/b><b>，均为<\/b><span style=\"color:#b45309\"><b><span>O(nlog₂n)<\/span><\/b>", "expanded": true}]}, {"id": "mJR0VhOH5Fc", "topic": "<b>2、空间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(n)<\/span><\/b><span class=\"mm-note\">主要来自于：<b>辅助数组<\/b>B。\n解释：\n        递归工作栈当然也会影响空间复杂度。但是此时归并的趟数= logn，因此<b>递归工作栈的复杂度为O(logn)<\/b>，而<b>辅助数组的空间复杂度为O(n)，两者取大值，那就是O(n)。<\/b><\/span>", "expanded": true}, {"id": "mm8YVNk6H2K", "topic": "<b>核心原因：<\/b><b><mark>\"2路\"归并树<\/mark><\/b> <b>形态上其实就是一颗倒立的<\/b><b><mark>二叉树<\/mark><\/b><span class=\"mm-note\">又因为：二叉树的第h层有2^(h-1) 个结点。\n因此若树高为h，则满足：<b>n ≤ 2^(h-1)。\n可得：h - 1 = logn<\/b>(向上取整)  <b>==》归并趟数 = logn(向上取整)。\n<\/b><\/span>", "expanded": true}, {"id": "mui13l9UmKG", "topic": "<b><mark>归并趟数 = log₂n(向上取整)<\/mark><\/b><span class=\"mm-note\">n个元素进行2路归并，归并趟数 = logn(向上取整)。\n如果是<b>m路归并，那么底数就是m了<\/b>。\n因为上边分析得出：h = logn + 1。 因此<b>除去初始序列的高度1<\/b>，那么剩下的就是归并趟数了。<\/span>", "expanded": true}]}, {"id": "mgZZRHHeCPR", "topic": "<b>5、稳定性：<\/b><b><mark>稳定<\/mark><\/b><span class=\"mm-note\">因为在Merge()实现时，<b>如果两个指针指向相同元素<\/b>，那就<b>优先让靠左边的元素先填入<\/b>。\n​这样就保证了稳定性。<\/span>", "expanded": true}, {"id": "mcapM55PZ4d", "topic": "<b>6、归并排序的<\/b><span style=\"color:#1d4ed8\"><b><span>比较次数的数量级<\/span><\/b><b>与<\/b><span style=\"color:#1d4ed8\"><b><span>序列的初始状态无关<\/span><\/b><span class=\"mm-note\">这是因为归并排序的核心操作是在合并阶段进行的。\n            无论输入序列是什么样的，归并排序都会均匀地将其分成较小的子数组，然后进行递归排序。在归并的过程中，它会将两个已经排序好的子数组合并成一个更大的有序数组。在合并的过程中，算法会比较每个子数组中的元素，并按照顺序将它们合并到输出数组中。\n            由于归并排序是基于比较的排序算法，它<b>所需的比较次数取决于输入序列的长度<\/b>，而不受序列初始状态的影响。<b>即使输入序列已经部分有序或完全逆序，归并排序的分治策略仍然会将其分成较小的部分并最终合并为有序序列<\/b>，而不会导致额外的比较操作。这使得归并排序具有稳定的比较次数。<\/span>", "expanded": true}, {"id": "mxrfhmTMoSg", "topic": "<b>7、对<\/b><span style=\"color:#1d4ed8\"><b><span>n个元素进行m路归并排序<\/span><\/b><b>时，排序的<\/b><span style=\"color:#1d4ed8\"><b><span>趟数k<\/span><\/b> <b>满足：<\/b><b><mark>m<\/mark><\/b><mark> <\/mark><b><mark>^ k = n<\/mark><\/b><span class=\"mm-note\">分析：<b>每一趟的子序列长度就是在上一次的基础上除m，到最后长度为1时，除m的次数就是趟数 = 归并的趟数<\/b>。因此可得上述结论。<\/span>", "expanded": true}, {"id": "mP6qXE3kmoY", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-b6253f9c4ce71e.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mOgzrfuDGit", "topic": "<b>2、基数排序：<\/b>", "expanded": false, "children": [{"id": "m21FRGY3D4D", "topic": "<b>1、简介：基于关键字的各<\/b><b><mark>位的大小<\/mark><\/b><b>排序<\/b><span class=\"mm-note\"><b>\"位的大小\" ：依次根据 <\/b>个位、十位、百位......的大小排序。\n一种很特别的排序方法。不基于比较和移动进行排序。<b>\n\n<\/b>基数排序是<b>一种借助多关键字排序的思想对单逻辑关键字进行排序<\/b>的方法。<\/span>", "expanded": true}, {"id": "mtA7wE9Fvn8", "topic": "<b>2、算法思想：<\/b>", "expanded": false, "children": [{"id": "mwYGo9h3IpZ", "topic": "<b>1、核心思想(<\/b><b><mark>递减序列<\/mark><\/b><b>)：<\/b><br><img class=\"mm-img\" src=\"mm-3e612606f35eea.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>最高位优先(MSD)：先排高位，最后排最低位()<\/b>。\n           * 特点：\"<b>关键字权重递减<\/b>\"：是指在排序过程中，从最高位到最低位，关键字的权重是递减的。换句话说，<b>最左边的位数的权重最高，而最右边的位数的权重最低<\/b>\n           *  实现思路：先根据最高位排序，高位分配与收集完毕后；接着根据次高级排序........一直到最低位。\n\n<b>最低位优先(LSD)：先排低位，最后排高位()<\/b>。\n           * 特点：\"<b>关键字权重递增<\/b>\"：是指在排序过程中，从最高位到最低位，关键字的权重是递增的。换句话说，<b>最左边的位数的权重最低，而最右边的位数的权重最高<\/b>\n           *  实现思路：先根据最低位排序，低位分配与收集完毕后；接着根据次低位排序........一直到最高位。\n<b>\n算法过程：<\/b>\n     1、设置<b>r个辅助队列(r是基数，<\/b>就是进制数)，用来存放每一次的分配结果。\n     2、然后按照各个 关键字位  权重递减/增 ，对d个关键字位分别进行分配和收集\n     3、分配：顺序扫描各元素，若当前处理的关键字位为x，那么就将元素插入队列 Qx 队尾。\n     4、收集：将<b>Q(r-1)、Q(r-2) .....Q0<\/b>的各个队列的结点一次出队并且统一链接起来。\n      \n一些参数说明：\n     ① <b>r：基数<\/b>，也是进制数。\n     ② <b>d：元素的关键字位数<\/b>。例：156(d=3)、23666(d=5)。\n     ③ <b>n：元素个数<\/b>。<\/span>", "expanded": false, "children": [{"id": "mMupIyZbsgl", "topic": "<span style=\"color:#1d4ed8\"><b><span>LSD<\/span><\/b><b>：先排低位，再排高位。<\/b>", "expanded": true}, {"id": "mC0P3lYHQsX", "topic": "<span style=\"color:#1d4ed8\"><b><span>MSD<\/span><\/b><b>：先排高位，再排低位。<\/b>", "expanded": true}, {"id": "m6J9Q2gWsz9", "topic": "<b>得到递增序列：队列从 0~9 排列；得到递减序列：队列从 9 ~ 0 排列<\/b><br><img class=\"mm-img\" src=\"mm-6640c310c71b6e.jpg\" style=\"width:260px;height:58px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">只需要<b>将分配时出队的顺序反转<\/b>一下。<\/span>", "expanded": true}, {"id": "maFj4tkCJN0", "topic": "<span style=\"color:#b45309\"><b><span>关键字位权重<\/span><\/b><b>：就是个位、十位、百位......<\/b><span class=\"mm-note\"><b>最低(次)位<\/b>关键字：<b>个位<\/b>。\n<b>最高(主)位<\/b>关键字：<b>数量级最高的那个位<\/b>。<\/span>", "expanded": true}]}, {"id": "mQB2u1GAdbJ", "topic": "<b>2、基数排序<\/b><b><mark>不是基于比较的算法<\/mark><\/b>", "expanded": true}, {"id": "mQ0jbwyMBlD", "topic": "<b>3、实例演示(<\/b><span style=\"color:#1d4ed8\"><b><span>LSD<\/span><\/b><b>)：<\/b>", "expanded": false, "children": [{"id": "mbnuFQuPDPh", "topic": "①第一趟分配(<b>按个位<\/b>)", "expanded": false, "children": [{"id": "mB8FQFNf3ug", "topic": "过程：<br><img class=\"mm-img\" src=\"mm-2503b412dccb7e.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-54edb9efa5b8ac.jpg\" style=\"width:260px;height:112px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-12c7229eefaff2.jpg\" style=\"width:260px;height:115px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-47a7fd559bdd71.jpg\" style=\"width:260px;height:104px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mdbhUpHUHzF", "topic": "②第一趟收集", "expanded": false, "children": [{"id": "myUXM6Ac6Bq", "topic": "过程：<br><img class=\"mm-img\" src=\"mm-b3b3405b8f9f06.jpg\" style=\"width:260px;height:110px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-9cd0bb482cdd90.jpg\" style=\"width:260px;height:107px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-389fcd573c2a71.jpg\" style=\"width:260px;height:117px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-02d307cbf04204.jpg\" style=\"width:260px;height:108px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mn95OWthSo8", "topic": "③第二趟分配(<b>按十位<\/b>)", "expanded": false, "children": [{"id": "mPfNCVS2dfz", "topic": "<br><img class=\"mm-img\" src=\"mm-dff7fa3c21a34e.jpg\" style=\"width:260px;height:109px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-7eb257835792f3.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-94c988920e470c.jpg\" style=\"width:260px;height:109px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m89wsYHXfpp", "topic": "④第二趟收集", "expanded": false, "children": [{"id": "mPmhKlfQnio", "topic": "<br><img class=\"mm-img\" src=\"mm-4b107c5af71662.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-e3bceabb815a9e.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-fb805ef29e4cf5.jpg\" style=\"width:260px;height:97px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mTDat3YO8yO", "topic": "⑤第三趟分配(<b>按百位<\/b>)", "expanded": false, "children": [{"id": "mYr1HyIIAt0", "topic": "<br><img class=\"mm-img\" src=\"mm-8aa57d0e3adb3e.jpg\" style=\"width:260px;height:109px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-c3a776095458ce.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-a94e2967b15ce6.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mvcOIoi7buE", "topic": "⑥第三趟收集", "expanded": false, "children": [{"id": "mV92vMNR7oz", "topic": "<br><img class=\"mm-img\" src=\"mm-8d7cbf3f1bd130.jpg\" style=\"width:260px;height:123px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-175984c86cd776.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-ce83678829159a.jpg\" style=\"width:260px;height:121px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mMcqQeraogr", "topic": "<b>结果：<\/b><span style=\"color:#1d4ed8\"><b><span>递减序列<\/span><\/b><br><img class=\"mm-img\" src=\"mm-83980472e1c2e0.jpg\" style=\"width:260px;height:161px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mGoV8NXxYGH", "topic": "<b>3、算法效率分析：<\/b><br><img class=\"mm-img\" src=\"mm-7d05523885d95b.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mxLe2Pj4c42", "topic": "<b>1、时间复杂度：<\/b><b><mark>O(d*(n+r))<\/mark><\/b><span class=\"mm-note\"><b>分析：\n      1、总共<\/b>需要执行<b>d次的分配和收集。\n      2、每一次的分配和收集时，<\/b>需要<b>遍历 n个元素+r个队列\n\n<\/b>综上可知，时间复杂度为<b>：O(d*(n+r))<\/b><\/span>", "expanded": true}, {"id": "mv03Vyatiju", "topic": "<b>2、空间复杂度：<\/b><span style=\"color:#b45309\"><b><span>O(r)<\/span><\/b><span class=\"mm-note\">因为：需要r个辅助队列，而一个队列就是一个指针链表，因此为O(r)<\/span>", "expanded": true}]}, {"id": "mf1KqG5qk72", "topic": "<b>4、基数排序通常<\/b><b><mark>基于链式存储实现<\/mark><\/b>", "expanded": true}, {"id": "mFrWZbtvbFW", "topic": "<b>5、稳定性：<\/b><b><mark>稳定<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-56abc8fe6d3603.jpg\" style=\"width:260px;height:166px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">总结为：<b>基你太稳。\n分析：\n       <\/b>因为在分配和收集时都是<b>顺序遍历<\/b>，因此<b>每一次按位排序都是稳定的<\/b>。<\/span>", "expanded": true}, {"id": "mpkWXKLgoTr", "topic": "<b>6、应用<\/b>", "expanded": false, "children": [{"id": "mUbohkwHVSi", "topic": "<b>1、适用的场景：<\/b><b><mark>n大 + r小 + d小<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-cfc67a76a51ab6.jpg\" style=\"width:260px;height:62px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为：\n         <b>r<\/b>要是<b>太大<\/b>，就需要<b>太多个辅助队列<\/b>。\n         <b>d<\/b>要是<b>太大<\/b>，那就<b>遍历太多次数<\/b>了。<\/span>", "expanded": true}, {"id": "m3p9DNGA9NW", "topic": "<b>2、实例：<\/b>", "expanded": false, "children": [{"id": "mnIxdBdGqQL", "topic": "<b>正例：<\/b>学生年龄递减排序<br><img class=\"mm-img\" src=\"mm-a41d48f0d76ce6.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mNEzOTN0OYq", "topic": "<b>反例：<\/b>给5人的身份证号排序、中文人排序等<br><img class=\"mm-img\" src=\"mm-3a7f01af17dfe1.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mW3VVxw4W4k", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-1328dc5c60d0c3.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mjnTQdvyLDg", "topic": "<b>3、计数排序：<\/b>", "expanded": false, "children": [{"id": "m9uelwp4gse", "topic": "<b>1、<\/b>简介：<b>将<\/b><b>输入的数据值转化为键存储在额外开辟的数组空间<\/b><span style=\"color:#1d4ed8\"><b><span>(Count[])中<\/span><\/b>。作为一种线性时间复杂度的排序，<b>计数排序要求输入的数据必须是有确定范围的整数<\/b>。", "expanded": true}, {"id": "mg9rCm3lc7a", "topic": "<b>2<\/b>、时间复杂度：当<b>输入的元素是 n 个 0 到 k 之间的整数<\/b>时，它的<b>运行时间是 <\/b><b><mark>Θ(n + k)<\/mark><\/b>。", "expanded": true}, {"id": "mK6Wdotxum4", "topic": "<b>3<\/b>、特点：", "expanded": false, "children": [{"id": "msgH1oIXHsB", "topic": "① 计数排序<b>不是比较排序<\/b>，<b><mark>排序的速度快于任何比较排序算法<\/mark><\/b>。", "expanded": true}, {"id": "mu13ODXqBSf", "topic": "② 由于<span style=\"color:#1d4ed8\"><b><span>用来计数的数组C的长度取决于待排序数组中数据的范围<\/span><\/b>（等于待排序数组的最大值与最小值的差加上1），这使得<b>计数排序对于数据范围很大的数组，需要大量时间和内存<\/b>。<span class=\"mm-note\">例如：<b>计数排序是用来排序0到100之间的数字的最好的算法<\/b>，但是它<b>不适合按字母顺序排序人名<\/b>。但是，计数排序可以用在基数排序中的算法来排序数据范围很大的数组。<\/span>", "expanded": true}]}, {"id": "mXeESOzG3aG", "topic": "<b>4<\/b>、算法步骤：<span class=\"mm-note\">通俗地理解，例如有 10 个年龄不同的人，统计出有 8 个人的年龄比 A 小，那 A 的年龄就排在第 9 位,用这个方法可以得到其他每个人的位置,也就排好了序。\n​当然，年龄有重复时需要特殊处理（保证稳定性），这就是为什么最后要反向填充目标数组，以及将每个数字的统计减去 1 的原因。<\/span>", "expanded": false, "children": [{"id": "msySPikNodf", "topic": "（1）找出待排序的数组中<b>最大和最小的元素<\/b>", "expanded": true}, {"id": "mKkpcdNaZca", "topic": "（2）统计数组中<b>每个值为i的元素出现的次数<\/b>，<b>存入数组C的第i项<\/b>", "expanded": true}, {"id": "mwSqi8nLMZM", "topic": "（3）对<b>所有的计数累加<\/b>（从C中的第一个元素开始，每一项和前一项相加）", "expanded": true}, {"id": "m0PghAIF3lE", "topic": "（4）<span style=\"color:#1d4ed8\"><b><span>填充目标数组<\/span><\/b>：将每个元素i放在新数组的第C(i)项，每放一个元素就将C(i)减去1", "expanded": true}]}, {"id": "m61RfPCttub", "topic": "<b>5<\/b>、<b>动图演示<\/b>：<a href=\"https://www.runoob.com/wp-content/uploads/2019/03/countingSort.gif\" target=\"_blank\" rel=\"noopener\">https://www.runoob.com/wp-content/uploads/2019/03/countingSort.gif<\/a>", "expanded": true}, {"id": "mEp1AkHfPfW", "topic": "<b><mark>辅助数组Count[]<\/mark><\/b><b>的作用<\/b>：<span style=\"color:#1d4ed8\"><b><span>统计每个元素的出现次数。<\/span><\/b>", "expanded": true}]}, {"id": "mn6pQSM8ruK", "topic": "<b>4、桶排序：<\/b>", "expanded": false, "children": [{"id": "m2beCOsjjDy", "topic": "1、简介：桶排序是<b>计数排序的升级版<\/b>。它<b>利用了<\/b><b><mark>函数的映射关系<\/mark><\/b>，高效与否的关键就在于这个映射函数的确定。", "expanded": true}, {"id": "mPZbZcAr2R6", "topic": "<b>2、算法思路：<\/b>", "expanded": false, "children": [{"id": "mtAcXzFvT4X", "topic": "<b>① 将数组分到有限数量的桶子里。<\/b>", "expanded": true}, {"id": "mcjvQk9mrGk", "topic": "<b>② 每个桶子再个别排序<\/b><span class=\"mm-note\">有可能再<b>使用别的排序算法<\/b>或是以<b>递归方式继续使用桶排序<\/b>进行排序<\/span>", "expanded": true}]}, {"id": "mFaDQMRMOkz", "topic": "3、为了<b>使桶排序更加高效<\/b>，我们需要做到这两点：", "expanded": false, "children": [{"id": "mTs9T9XY6OL", "topic": "在额外空间充足的情况下，<span style=\"color:#1d4ed8\"><b><span>尽量增大桶的数量<\/span><\/b>", "expanded": true}, {"id": "mmr71ekhlHD", "topic": "使用的<span style=\"color:#1d4ed8\"><b><span>映射函数能够将输入的 N 个数据均匀的分配到 K 个桶中<\/span><\/b>", "expanded": true}]}, {"id": "mc1cNnwXrAQ", "topic": "<b>4、什么时候<\/b><span style=\"color:#b45309\"><b><span>最快<\/span><\/b><b>：当输入的数据可以<\/b><span style=\"color:#1d4ed8\"><b><span>均匀的分配到每一个桶中<\/span><\/b><b>。<\/b>", "expanded": true}, {"id": "mcXuX9Q5LC5", "topic": "<b>5、什么时候<\/b><span style=\"color:#b45309\"><b><span>最慢<\/span><\/b><b>：当输入的数据被<\/b><span style=\"color:#1d4ed8\"><b><span>分配到了同一个桶中<\/span><\/b><b>。<\/b>", "expanded": true}, {"id": "mphHUP10N1b", "topic": "6、示意图：<br><img class=\"mm-img\" src=\"mm-378e2c0f58329f.jpg\" style=\"width:260px;height:258px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "m0LbCO9kCrP", "topic": "<b>五、内部排序算法的比较及应用<\/b>", "expanded": false, "children": [{"id": "mIcD6thny1w", "topic": "<b>1、时间复杂度比较<\/b><br><img class=\"mm-img\" src=\"mm-9055d38c48691b.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mhLFYSWxdWv", "topic": "<b>一些结论：<\/b>", "expanded": false, "children": [{"id": "mvViAmn2U20", "topic": "<b>1、归并排序的<\/b><span style=\"color:#b45309\"><b><span>时间复杂度与初始序列无关<\/span><\/b><b>，最好、最坏、平均<\/b><b>均为<\/b><span style=\"color:#b45309\"><b><span>O(nlogn)<\/span><\/b><span class=\"mm-note\">基于：分治思想。且这个分治是严格分治。<\/span>", "expanded": true}, {"id": "mjnIFeFsfk1", "topic": "<b>2、快排时间复杂度<\/b><span style=\"color:#b45309\"><b><span>最好：O(nlogn)<\/span><\/b> <b>；<\/b><span style=\"color:#b45309\"><b><span>最坏：O(n²)<\/span><\/b><span class=\"mm-note\">基于：分治思想。但这个分治不严格，是按照pivot来分治的。\n<b>最好：分得均匀(每次都等分)    ；最坏：分得不均匀(本就有序)<\/b>。<\/span>", "expanded": true}, {"id": "m93NkQIcoOm", "topic": "<b>3、平均时间复杂度为 <\/b><span style=\"color:#b45309\"><b><span>O(nlogn) 且 稳定<\/span><\/b><b>的算法只有：<\/b><span style=\"color:#1d4ed8\"><b><span>归并排序<\/span><\/b>", "expanded": true}, {"id": "mtxRwLMl6fH", "topic": "<b>4、直接插入排序、冒泡排序 在最好的情况下时间复杂度为：O(n)<\/b><span class=\"mm-note\">情况：<b>本就有序<\/b>的情况下，那就<b>只需要比较n-1次<\/b>。<\/span>", "expanded": true}, {"id": "m4CG7uzLr1n", "topic": "<b>5、简单选择排序时间复杂度<\/b><span style=\"color:#b45309\"><b><span>与序列初始状态无关，<\/span><\/b><b>均为<\/b><span style=\"color:#b45309\"><b><span>O(n²)<\/span><\/b><span class=\"mm-note\">即：比较次数也无关。<\/span>", "expanded": true}]}]}, {"id": "mGXRlwZ65BS", "topic": "<b>2、常用的一些结论：<\/b>", "expanded": false, "children": [{"id": "mFpGVatvZra", "topic": "<b>1、shell排序当前未得出精确的渐进时间复杂度<\/b>", "expanded": true}, {"id": "mFgCBXlSZtK", "topic": "<b>2、快排需要借助一个<\/b><span style=\"color:#b45309\"><b><span>递归工作栈<\/span><\/b><span class=\"mm-note\"><b>最大(单支树)：n      ；最小(完全二叉树)：logn\n<\/b>因为<b>：递归深度就是树的高度<\/b><\/span>", "expanded": true}, {"id": "mQ7mPjWxuKX", "topic": "<b>3、归并排序需要一个<\/b><span style=\"color:#b45309\"><b><span>辅助数组B<\/span><\/b><span class=\"mm-note\">大小：<b>n<\/b>\n作用：用于<b>两个有序子列表的合并<\/b>。<\/span>", "expanded": true}, {"id": "mboMinWPoAm", "topic": "<b>4、冒泡、堆排序<\/b><span style=\"color:#b45309\"><b><span>每一趟处理后都能产生当前的最大/小值<\/span><\/b>", "expanded": true}, {"id": "mEqZeiyLTqt", "topic": "<b>5、快排<\/b><span style=\"color:#b45309\"><b><span>每一趟至少能确定一个元素的最终位置<\/span><\/b><span class=\"mm-note\">也就是<b>pivot<\/b>的最终位置。<\/span>", "expanded": true}, {"id": "mEOwyoF4Cxj", "topic": "<b>6、<\/b><span style=\"color:#b45309\"><b><span>堆的定义是递归<\/span><\/b><b>的：大根堆的次大值一定是其左孩子或者右孩子。<\/b>", "expanded": true}, {"id": "moBkTcIqDgL", "topic": "<b>7、<\/b><span style=\"color:#b45309\"><b><span>冒泡、堆、简单选择<\/span><\/b><b>排序 <\/b><b><mark>能形成全局有序的子序列<\/mark><\/b><b>。<\/b>", "expanded": true}, {"id": "moOP4OEaN4L", "topic": "<b>8、对任意n个关键字的排序比较次数至少为：<\/b><span style=\"color:#b45309\"><b><span>log(n!)<\/span><\/b>", "expanded": true}, {"id": "mxfU5fdccXt", "topic": "<b>9、将<\/b><span style=\"color:#1d4ed8\"><b><span>顺序存储改为链式存储<\/span><\/b><b>，算法的<\/b><span style=\"color:#1d4ed8\"><b><span>时间效率会降低<\/span><\/b><b>的是：<\/b><span style=\"color:#1d4ed8\"><b><span>堆排序、shell排序<\/span><\/b><span class=\"mm-note\">原因：\n        这两种都<b>利用了顺序存储的随机存取特性<\/b>。<\/span>", "expanded": true}, {"id": "mkoSQHRveOT", "topic": "<b>10、<\/b><b><mark>改进版归并排序<\/mark><\/b><b>：将<\/b><span style=\"color:#1d4ed8\"><b><span>直接插入排序与归并排序结合<\/span><\/b><span class=\"mm-note\"><b>先用直接插入排序求得较长有序子序列<\/b>，<b>再归并<\/b>。而直接插入稳定，因此这种归并也稳定。<\/span>", "expanded": true}]}, {"id": "mqWlTEBoj8J", "topic": "3、选取算法时的考虑因素：<br><img class=\"mm-img\" src=\"mm-851840769512e4.jpg\" style=\"width:260px;height:98px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f402a0d4de0dc3.jpg\" style=\"width:260px;height:35px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mo39xBZL7Ex", "topic": "<b>4、总结：<\/b>", "expanded": false, "children": [{"id": "mIPxafHptku", "topic": "<b>1、<\/b><span style=\"color:#1d4ed8\"><b><span>n较小<\/span><\/b><b>：直接插入  or   简单选择<\/b><span class=\"mm-note\"><b>直接插入的元素移动次数又比简单选择多<\/b>，因此当记录本身数据量大的时候，用简单选择。<\/span>", "expanded": true}, {"id": "mfRNqPB2KaQ", "topic": "<b>2、<\/b><span style=\"color:#1d4ed8\"><b><span>n较大<\/span><\/b><b>：快排 or  堆排  or  归并<\/b><span class=\"mm-note\">1、待排序<b>关键字随机分布<\/b>：快排最好。\n2、堆排序所需<b>辅助空间少于快排<\/b>，且<b>不会出现快排可能出现最坏情况<\/b>。\n3、堆排与快排均不稳定。\n4、归并又稳定，时间复杂度又为O(logn)。但是在实际运用中，通常<b>与直接插入排序相结合<\/b>。\n                                                 即：<b>先用直接插入排序求得较长有序子文件<\/b>，<b>再归并<\/b>。而直接插入稳定，因此这种归并也稳定。\n​<\/span>", "expanded": true}, {"id": "mLTmh4x21kl", "topic": "<b>3、当n个<\/b><span style=\"color:#1d4ed8\"><b><span>关键字随机分布<\/span><\/b><b>，<\/b><span style=\"color:#1d4ed8\"><b><span>任何借助于比较的排序算法<\/span><\/b><b>，<\/b><b><mark>至少需要O(nlogn)<\/mark><\/b><b>的时间<\/b><span class=\"mm-note\">解释：\n        <b>在每次比较两个关键字之后，仅可能出现两种转移<\/b>，因此可以用一棵二叉树表示比较过程。<\/span>", "expanded": true}, {"id": "mVb4JnkGZjQ", "topic": "<b>4、<\/b><span style=\"color:#1d4ed8\"><b><span>n很大<\/span><\/b><b>，但<\/b><span style=\"color:#1d4ed8\"><b><span>关键字位数较少且可以分解<\/span><\/b><b>时：基数排序<\/b>", "expanded": true}, {"id": "m5nOgxlXJz8", "topic": "<b>5、当<\/b><span style=\"color:#1d4ed8\"><b><span>记录本身数据量很大<\/span><\/b><b>时，用<\/b><span style=\"color:#1d4ed8\"><b><span>链表作为存储结构<\/span><\/b><span class=\"mm-note\">解释：<b>避免耗费大量的时间移动记录<\/b>。<\/span>", "expanded": true}]}]}]}, {"id": "m0Vd3cTHktB", "topic": "<b>三、外部排序<\/b>", "expanded": true}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  lbstage.addEventListener('dblclick', function(e){
+    var r = lbRect;
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, e.clientX - r.left, e.clientY - r.top, true);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

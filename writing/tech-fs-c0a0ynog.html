@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>Talos理论 &amp; 实践 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">21</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">理论</a><a class="tl l2" href="#sec-2">基本概念</a><a class="tl l2" href="#sec-3">架构介绍</a><a class="tl l3" href="#sec-4">服务端</a><a class="tl l3" href="#sec-5">客户端</a><a class="tl l2" href="#sec-6">高阶特性</a><a class="tl l1" href="#sec-7">实践</a><a class="tl l2" href="#sec-8">Talos消息队列使用+数据工厂talos-&gt;iceberg数据同步</a><a class="tl l3" href="#sec-9">1.Talos数据生产</a><a class="tl l4" href="#sec-10">1.producer定义</a><a class="tl l4" href="#sec-11">2.Talos生产数据</a><a class="tl l3" href="#sec-12">2.talos-&gt;iceberg数据同步</a><a class="tl l2" href="#sec-13">Talos 消费者</a><a class="tl l3" href="#sec-14">三个核心函数：</a><a class="tl l4" href="#sec-15">init(TopicAndPartition topicAndPartition, long startMessageOffset)</a><a class="tl l4" href="#sec-16">process(List&lt;MessageAndOffset&gt; messages, MessageCheckpointer ...)</a><a class="tl l4" href="#sec-17">shutdown(MessageCheckpointer messageCheckpointer)</a><a class="tl l3" href="#sec-18">Consumer核心配置</a><a class="tl l4" href="#sec-19">GALAXY_TALOS_PRODUCER_THREAD_POOL_SIZE：负责不同分区消息的并发。</a><a class="tl l1" href="#sec-20">Talos vs RocketMQ</a><a class="tl l1" href="#sec-21">Consumer配置调优</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>Talos理论 &amp; 实践</h1><div class="meta">2026-10-14<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<blockquote><p>公司官方文档：<span class="fs-mention">@Talos</span></p><p>Talos操作平台：Talos操作平台</p><p><span class="fs-mention">@Talos Consumer 并发消费最佳实践</span></p></blockquote><h1 id="sec-1">理论</h1><h2 id="sec-2">基本概念</h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>Talos 提供多种发送方式，<strong>同步发送、异步发送、顺序发送</strong>，还支持 Schema 功能特性。</p></div></div><ol><li><p>Topic 是生产者发布到消息队列每条信息所属的类别，<strong>表示一类消息的集合</strong>，每个Topic包含若干条消息，每条消息只能属于一个Topic。</p></li><li><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>每个 Topic可以被切分成一个或多个分区</strong></mark>，即<strong>Partition，用来实现水平扩展</strong>。</p></li></ol><ol><li><p>Partition 即分区，是管理消息的最小单元，是集群横向扩展和一切并行化的基础。</p></li><li><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>单个分区中的消息强有序</strong></mark>。</p></li><li></li></ol><blockquote><p><strong>【注】：Partition个数的指定，请用户参照如下的标准来设置：每个partition允许最大1MB/s的写，最大2MB/s的读</strong></p></blockquote><ol><li><p>消息，业务服务将要发送的内容构造成 Message 对象，然后发送到 Talos 中。</p></li></ol><ol><li><p>为消息设置的标志，用于<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>同一主题下区分不同类型的消息</strong></mark>。来自同一业务单元的消息，可以根据不同业务目的在同一主题下设置不同标签。标签能够有效地保持代码的清晰度和连贯性，消费者可以根据Tag实现对不同子主题的不同消费逻辑，实现更好的扩展性。</p></li></ol><ol><li><p>同一类 Consumer的 集合，这类 Consumer 通常消费同一类消息且消费逻辑一致。一个消费者组下的所有消费实例组成一个消费集群，<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>平摊消费某个 Topic 中的消息</strong></mark>。</p></li><li></li></ol><ol><li><p>对于写入每个Partition的每一条数据，Talos都会为其分配一个<strong>Partition内部的唯一ID</strong>，称其为offset。</p></li><li><p>offset是一个int64的整数，用于<strong>标识其为当前Partition的消息序列号</strong>，从0开始，例如0、1、2…等。</p></li></ol><ol><li><p>用于<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>标识当前Parititon内部第一条可读的消息</strong></mark>，称其为StartOffset。StartOffset是当前Partition内部ID最小的消息。</p></li><li><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>由于<strong>Talos的消息存在过期机制</strong>，因此<strong>StartOffset不一定是0，也可能是其他的有效数值</strong>。</p></div></div></li></ol><ol><li><p>用于标识当前Partition内部的<strong>最后一条可读的消息</strong>，称其为EndOffset。EndOffset是当前Partition内部ID最大的消息。</p></li></ol><ol><li><p>存储在 Talos 中的消息过期之后会被删除，同时更新StartOffset。用户随时可以修改 Topic 的消息保留时间。Talos保证每一条消息的存活周期都大于等于Retention Time。</p></li></ol><h2 id="sec-3">架构介绍</h2><h3 id="sec-4">服务端</h3><ul><li>nginx：负责转发请求，Nginx 会将客户端的请求优先打到本机的 Server 节点上，若本机Server 不可用，则会将请求转发到其他节点上，从而使客户端对服务端节点异常无感知。</li></ul><ul><li>Server：负责处理 Talos 读写请求的后端节点。</li></ul><ul><li><strong>Hdfs</strong>：数据节点，Server 节点会将数据写入到 Hdfs 中进行持久化</li></ul><ul><li><strong>HBase</strong>：元数据中心，负责存储集群中各类配信息，比如patition与server的调度信息，Topic元数据、消费位点等</li></ul><ul><li><strong>zk</strong>：用于发现 Server 节点，当有节点上下线时，会通知其它 Server 重新计算分区与server的调度信息。</li></ul><ul><li>Balance server：用来平衡各 Server 节点的流量负载情况</li></ul><ul><li>Metric Server：用来统计监控指标</li></ul><h3 id="sec-5">客户端</h3><p>①<strong> 获取路由信息</strong>：客户端会先根据 endpoint 随机打到一台Server节点上，获取到该Topic 各个Partiton 的路由信息，如下所示：</p><div class="fs-embed">📊 表格：请在飞书原文中查看</div><p>② 直连 Server 进行读写：客户端后续逻辑会直接请求 Partition 对应的 Server 节点</p><p>③ <strong>兜底逻辑</strong>：若请求<strong>对应 </strong><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>Server 出现异常</strong></mark>，可根据 endpoint <mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>随机请求一台 Server 节点</strong></mark>执行相应请求。</p><h2 id="sec-6">高阶特性</h2><blockquote><p>见公司文档：<span class="fs-mention">@高阶特性</span></p></blockquote><p>简单陈述一下一些重要概念：</p><ol><li><p>消息队列中的事务是指 “<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>业务执行本地任务” 与 “消息发送到消息队列” 的原子性</strong></mark>。</p></li><li><p>事务消息跟普通消息的区别是，<strong>在事务提交前，这个消息对消费者来说是不可见的</strong>；基于事务消息，消息队列最终<strong>解决的是生产者与消费者在分布式事务场景中的一致性问题</strong>。</p></li><li><blockquote><p>见：<span class="fs-mention">@事务消息</span></p></blockquote></li></ol><ol><li><p>Talos 为支持订阅多个 Topic 同时消费，引入 Topic Group（Topic 组） 的概念，用来预先定义消费者可以消费的 Topic 范围。用户可以通过 SDK 传入 Topic Group 名称来<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>消费该组下所有 Topic</strong></mark>。</p></li><li><blockquote><p>文档见：<span class="fs-mention">@Topic 组</span></p></blockquote></li></ol><ol><li><p>标签过滤功能是指生产者向 Topic 中发送消息时，设置消息标签对消息进行分类，消费者订阅 Topic 时设置标签对消息进行过滤，<strong>只有标签与之匹配的消息才会被投递到消费端进行消费</strong>。</p></li><li><p>消费者订阅 Topic 时若未设置任何标签，无论消息发送时是否有设置标签，Topic 中的所有消息都将被投递到消费端进行消费。</p></li></ol><h1 id="sec-7">实践</h1><h2 id="sec-8">Talos消息队列使用+数据工厂talos-&gt;iceberg数据同步</h2><h3 id="sec-9">1.Talos数据生产</h3><h4 id="sec-10">1.producer定义</h4><pre><code>/**
+ * @author your-account
+ */
+@Slf4j
+@Component
+public class TalosWebProducer {
+    @Autowired
+    private 风控平台AppConf 风控平台AppConf;
+    private static final String TOPIC_NAME = "infosec_risk_风控平台_web_measure";
+    private static TalosProducer asyncProducer;
+    @PostConstruct
+    private void init() {
+        try {
+            String accessKey = 风控平台AppConf.getTalosWebAccessKey(); // 从配置中心拿取
+            String accessSecret = 风控平台AppConf.getTalosWebAccessSecret();
+            String endpoint = 风控平台AppConf.getTalosWebEndpoint();
+            Properties pros = new Properties();
+            pros.setProperty("galaxy.talos.service.endpoint", endpoint);
+            pros.setProperty("galaxy.talos.producer.max.put.message.bytes", "5242880"); //5M
+            pros.setProperty("galaxy.talos.producer.max.retry.times", "3"); //最大重试次数
+            pros.setProperty("galaxy.talos.producer.put.message.max.failed.times", "3");
+            // 200ms or 2000条 or 5M 发送一次
+            TalosProducerConfig producerConfig = new TalosProducerConfig(pros);
+            Credential credential = new Credential().setSecretKeyId(accessKey)
+                    .setSecretKey(accessSecret)
+                    .setType(UserType.DEV_XIAOMI);
+            asyncProducer = new TalosProducer(
+                    producerConfig,
+                    credential,
+                    TOPIC_NAME,
+                    new SimpleTopicAbnormalCallback(),
+                    new WebMessageCallback()
+            );
+        } catch (Exception e) {
+            log.error("failed to init 风控平台 web producer, msg={}", e.toString(), e);
+            new Thread(() -&gt; System.exit(1)).start(); // 强制退出
+        }
+    }
+    // 异步发送
+    public void asyncSend(List&lt;byte[]&gt; datas) throws Exception {
+        List&lt;Message&gt; messagesList = new ArrayList&lt;&gt;();
+        datas.forEach(data -&gt; {
+            messagesList.add(new Message(ByteBuffer.wrap(data)));
+        });
+        asyncProducer.addUserMessage(messagesList); // 发送
+    }
+    /**
+     * 内部类，处理回调
+     */
+    private static class WebMessageCallback implements UserMessageCallback {
+        @Override
+        public void onSuccess(UserMessageResult userMessageResult) {
+            log.info("success to put message, size={}", userMessageResult.getMessageList().size());
+        }
+
+        // retry when failed
+        @Override
+        public void onError(UserMessageResult userMessageResult) {
+            try {
+                for (Message message : userMessageResult.getMessageList()) {
+                    log.warn("failed to put message will retry to put it, msg={}", message.getMessage());
+                }
+                asyncProducer.addUserMessage(userMessageResult.getMessageList());
+            } catch (Exception e) {
+                log.error("failed to retry put message, msg={}", e.toString(), e);
+            }
+        }
+    }
+}</code></pre><h4 id="sec-11">2.Talos生产数据</h4><p>在使用Talos发送数据时，首先去Talos平台创建对应的<strong>Topic和Schema</strong>，再<strong>将其绑定</strong>。</p><p>[内部链接]</p><p>绑定后再将schema对应的pom依赖引入，如下：</p><pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;com.xiaomi.cloud.streaming&lt;/groupId&gt;
+    &lt;artifactId&gt;com.xiaomi.cloud.streaming.infosec.risk.风控平台AccountFrozenData&lt;/artifactId&gt;
+    &lt;version&gt;THRIFT.6.1732587420&lt;/version&gt;
+&lt;/dependency&gt;</code></pre><pre><code>/**
+ * @author your-account
+ */
+@Slf4j
+@Service
+public class SaveFrozenAccountServiceImpl implements SaveDataService&lt;FrozenAccountCtx&gt; {
+    @Autowired
+    private TalosWebProducer talosWebProducer;
+
+    @Override
+    public boolean saveData(FrozenAccountCtx accountCtx) {
+        if (accountCtx == null) {
+            return false;
+        }
+        try {
+            byte[] eventBytes = buildFrozenAccountLogData(accountCtx);
+            talosWebProducer.asyncSend(Collections.singletonList(eventBytes)); // 异步发送日志
+            return true;
+        } catch (Exception e) {
+            log.error("save frozenAccount to talos error, event={}, err={}", accountCtx, e.toString(), e);
+            return false;
+        }
+    }
+// Topic所绑定schema的对应类 
+    private byte[] buildFrozenAccountLogData(FrozenAccountCtx accountCtx) throws Exception {
+        风控平台AccountFrozenData data = new 风控平台AccountFrozenData();
+        data.setAccount(Optional.ofNullable(accountCtx.getAccount()).orElse(0L));
+        data.setReason(Optional.ofNullable(accountCtx.getReason()).orElse(""));
+        data.setOperator(Optional.ofNullable(accountCtx.getOperator()).orElse(""));
+        data.setResult(Optional.ofNullable(accountCtx.getResult()).orElse(""));
+        data.setResultInfo(Optional.ofNullable(accountCtx.getResultInfo()).orElse(""));
+        data.setPenaltyType(Optional.of(accountCtx.getPenaltyType()).orElse(null).ordinal());
+        data.setCreated(String.valueOf(Optional.ofNullable(accountCtx.getCreated()).orElse(System.currentTimeMillis())));
+        return new TSerializer(new TCompactProtocol.Factory()).serialize(data);
+    }
+}</code></pre><h3 id="sec-12">2.talos-&gt;iceberg数据同步</h3><p>将消息队列中的数据持久化到数据湖Iceberg中。</p><p><span class="fs-mention">@数据集成详解</span></p><p>https://dt.mi.com/workspace/?wid=10563#/workspace/10563/realtimeJob?dirId=0</p><p>去数据工厂同步即可。</p><h2 id="sec-13">Talos 消费者</h2><blockquote><p>参考文档：<span class="fs-mention">@如何使用 Consumer</span></p></blockquote><pre><code>public class TalosConsumerDemo {
+    private static final String endPoint = "endpoint";
+    private static final String accessKey = "${accessKey}";
+    private static final String accessSecret = "${secretKey}";
+    private static final String topicName = "testTopic";
+    // groupName: 消费者组名称，使用相同groupName的消费者会均摊消费Topic下的消息
+    private static final String groupName = "testConsumer";
+
+    public static void main(String[] args) throws TException {
+        Properties properties = new Properties();
+        properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_SERVICE_ENDPOINT, endPoint);
+        TalosConsumerConfig consumerConfig = new TalosConsumerConfig(properties);
+
+        Credential credential = new Credential()
+                .setType(UserType.DEV_XIAOMI)
+                .setSecretKeyId(accessKey)
+                .setSecretKey(accessSecret);
+
+        MessageProcessorFactory factory = () -&gt; new MessageProcessor() {
+            @Override
+            public void init(TopicAndPartition topicAndPartition, long startMessageOffset) {
+
+            }
+
+            @Override
+            public void process(List&lt;MessageAndOffset&gt; messages, MessageCheckpointer messageCheckpointer) {
+                System.out.println("Message arrived " + messages);
+            }
+
+            @Override
+            public void shutdown(MessageCheckpointer messageCheckpointer) {
+
+            }
+        };
+
+        // groupName: 消费者组名称，使用相同groupName的消费者会均摊消费Topic下的消息
+        // prefix: 客户端id的前缀，用户可不指定或指定具备业务属性含义的名称，避免客户端id重复。
+        TalosConsumer consumer = new TalosConsumer(groupName, consumerConfig, credential,
+                topicName, factory, "${prefix}", new SimpleTopicAbnormalCallback());
+        Runtime.getRuntime().addShutdownHook(new Thread(consumer::shutDown));
+    }
+}</code></pre><p>Talos 是分布式消息队列，一个 Topic 会被分成多个 Partition。当你的消费者程序启动时，Talos 服务端会将这些 Partition 分配给不同的消费者实例。</p><h3 id="sec-14"><strong>三个核心函数：</strong></h3><h4 id="sec-15"> <code>init(TopicAndPartition topicAndPartition, long startMessageOffset)</code></h4><ul><li><strong>执行时机</strong>：<strong>当一个 Partition 被分配给当前消费者实例时</strong>（只执行一次）。</li></ul><ul><li><strong>程序刚启动</strong>：消费者上线，服务端进行负载均衡（Rebalance），分配了一些 Partition 给这个消费者。</li><li><strong>Rebalance（重平衡）之后</strong>：如果有其他消费者上线或下线，Partition 会重新分配。如果你“抢”到了一个新的 Partition，就会为那个 Partition 触发 <code>init</code>。</li></ul><ul><li>告诉你：“从现在开始，你负责处理 <code>Partition X</code>”。</li><li>告诉你：“请从 Offset <code>startMessageOffset</code> 处开始读取”。</li><li>可以在这里初始化一些针对该 Partition 的资源（比如独立的计数器）。</li></ul><h4 id="sec-16"><code>process(List&lt;MessageAndOffset&gt; messages, MessageCheckpointer ...)</code></h4><ul><li><strong>执行时机</strong>：<strong>当从服务端成功拉取到一批消息时</strong>（循环执行）。</li></ul><ul><li>这是一个死循环逻辑。只要该 Partition 还有未消费的消息，SDK 就会不断从服务端拉取数据，一旦拉到数据（<code>List</code> 不为空），就会调用一次 <code>process</code>。</li></ul><ul><li><strong>核心消费逻辑</strong>。你需要在这里写消费核心逻辑。</li><li><strong>注意</strong>：如果不处理完（函数不返回），SDK 不会去拉取下一批数据。</li></ul><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>Q1：process函数的耗时控制在多久内合理？这个配置是在哪里控制的？</strong></p><p>答：</p><p>Talos 的 <code>process</code> 函数耗时<strong>没有绝对的“硬性配置限制”</strong>（不会因为超时直接抛异常），但强烈建议控制在 <code>30秒</code> 以内，<strong>最佳实践是 </strong><strong><code>1秒</code></strong><strong> 以内</strong>。</p><p>它的隐形限制主要来自以下两个配置（在 <code>TalosClientConfigKeys</code> 中）：</p><ol><li><strong>网络请求超时 (</strong><em><strong>GALAXY_TALOS_CLIENT_TIMEOUT_MILLI_SECS</strong></em><strong>)</strong></li></ol><ul><li><strong>默认值</strong>：10000ms (10秒)</li></ul><ul><li><strong>影响</strong>：
+在你的代码末尾，调用了 <code>messageCheckpointer.checkpoint()</code>。这是一个网络请求。
+如果 <code>process</code> 耗时极长（例如 5 分钟），虽然 SDK 内部的心跳线程还在跑，但等到你终于执行到 <code>checkpoint</code> 时，之前的某些 TCP 连接状态可能已经变了，或者服务端的 Session 可能会遇到一些边缘情况（虽然概率较低）。
+<strong>更重要的是</strong>：如果你的 <code>checkpoint</code> 请求发出去，因为网络慢超过了 10秒，抛出了异常，你的这一批 500 条数据就全部<strong>白做了</strong>（因为没提交成功，下次还会重发）。</li></ul><ol><li><strong>服务端 Rebalance 超时 (Server Side Config)</strong></li></ol><ul><li><strong>默认值</strong>：通常 30秒 - 60秒（客户端不可改，由运维配置）</li></ul><ul><li><strong>影响</strong>：
+Talos SDK 内部有一个<strong>独立的心跳线程</strong>（Worker 线程卡死在 process 里通常不会阻塞心跳线程）。
+<strong>但是</strong>，如果你的 Worker 线程一直卡在 process 里不出来，虽然你还在发心跳，但你的<strong>消费位点（Offset）一直没动</strong>。
+完善的监控系统会报警“消费堆积（Lag）”。在某些极端的 Rebalance 策略下，长时间不提交 Offset 可能会被服务端标记为“假死”。</li></ul></div></div><h4 id="sec-17"><code>shutdown(MessageCheckpointer messageCheckpointer)</code></h4><ul><li><strong>执行时机</strong>：<strong>当该 Partition 不再由当前消费者负责时</strong>（只执行一次）。</li></ul><ul><li><strong>程序关闭</strong>：你调用了 <code>consumer.shutDown()</code> 或者杀死了进程（触发 ShutdownHook）。</li><li><strong>Rebalance（重平衡）丢失分区</strong>：此时有新的消费者加入（例如你的服务扩容了），Talos 决定把当前这个 Partition 挪给那台新机器处理。为了避免数据冲突，它会先调用你的 <code>shutdown</code>，让你停止处理。</li></ul><ul><li><strong>最重要的操作</strong>：必须在这里最后调用一次 <code>messageCheckpointer.checkpoint()</code>。因为在 Rebalance 发生时，如果你不提交当前的进度，新接手的机器就会从旧的进度开始消费，导致<strong>数据重复</strong>。</li></ul><h3 id="sec-18">Consumer核心配置</h3><pre><code>properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_SERVICE_ENDPOINT, endpoint);
+// 数据一致性控制，offset自动提交关闭，由用户自己控制offset提交时间点（一定关闭！！）。
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CONSUMER_CHECKPOINT_AUTO_COMMIT, "false");
+// 单次拉取的最多消息条数
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CONSUMER_MAX_FETCH_RECORDS, "500");
+// 消息拉取间隔
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CONSUMER_FETCH_INTERVAL, "0");
+// 控制 不同分区（Partitions）之间 的并发，而非 同一个分区内部 的并发
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_PRODUCER_THREAD_POOL_SIZE, "32");</code></pre><h4 id="sec-19"><em><strong>GALAXY_TALOS_PRODUCER_THREAD_POOL_SIZE</strong></em><em>：负责不同分区消息的并发。</em></h4><p>Talos核心规则：<strong>Partition 独占原则，即：</strong><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>同一个 Partition 的数据，永远只会被同一个线程串行处理</strong></mark><strong>。</strong></p><p>这个参数主要用于 <strong>“单进程多分区”</strong> 的场景，即 <strong>少量的消费者实例处理大量的分区</strong>。</p><blockquote><p>虽然参数名里带有 <code>PRODUCER</code>（生产者），但在 Consumer（消费者）端，它是<strong>Talos SDK 底层的 IO 与回调线程池</strong>。它<strong>决定了你的程序能同时并发拉取多少个分区的网络数据</strong>。</p></blockquote><p><strong>例1</strong>：<code>32个分区，4个消费者实例</code>。那么此时Talos会平均给1个消费者分配8个分区。</p><ul><li>假设有消费者A，该配置为1，那么A对8个分区的消息串行消费。</li></ul><ul><li>假设有消费者B，该配置为8，那么B对8个分区的消息并行消费。</li></ul><h1 id="sec-20">Talos vs RocketMQ</h1><p><strong>Talos（以及 Kafka）确实没有像 RocketMQ 那样原生内置的“自动重试队列”和“死信队列”概念。</strong></p><p>这是由两者的<strong>架构设计理念</strong>差异决定的：</p><ul><li><strong>RocketMQ / RabbitMQ</strong>：是基于 <strong>队列（Queue）</strong> 的模型。消息是可以被单独 ACK（确认）的。如果你处理失败，Broker 可以把这条消息单独拎出来，扔到重试队列里，过会儿再给你。</li></ul><ul><li>Offset 是线性的（1, 2, 3...）。</li><li><strong>规则</strong>：你必须先提交 Offset 1，才能提交 Offset 2。</li><li>如果你想“跳过”失败的 Offset 1 去消费 Offset 2，同时又想保留 Offset 1 稍后重试，这在 Talos 的模型里是<strong>逻辑悖论</strong>。</li></ul><div class="fs-embed">📊 表格：请在飞书原文中查看</div><h1 id="sec-21">Consumer配置调优</h1><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>上线后，去容器查看线程池的使用情况，关注活跃线程数，若线程池常满，说明资源不够用，则需要升容器配置或加容器。</p></div></div><p><strong>背景</strong>：Talos producer 峰值QPS约900、4核8G的机器，业务逻辑平均耗时50ms，且EUR Talos有8个分区。</p><p><mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><strong>Q1：</strong></mark>在保证CPU负载 &lt;=70%的情况下，Talos consumer、消费线程池配置如何调整？需多少个机器？</p><pre><code>// 线程池配置：
+WORKER_POOL = new ThreadPoolExecutor(10, 50, 60L, TimeUnit.SECONDS,
+        new LinkedBlockingQueue&lt;&gt;(1000), new ThreadFactory() {
+    public Thread newThread(@NotNull Runnable r) {
+        return new Thread(r, "风控平台-talos-passport-action-" + System.currentTimeMillis());
+    }
+}, new ThreadPoolExecutor.CallerRunsPolicy() // 队列满时由主线程执行，防止丢数据 - // TODO 上线后排查：是否线程池常满，导致主线程执行，阻塞流程
+);
+// consumer配置：
+// 数据一致性控制，offset自动提交关闭，由用户自己控制offset提交时间点。
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CONSUMER_CHECKPOINT_AUTO_COMMIT, "false");
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CONSUMER_MAX_FETCH_RECORDS, "1000");
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CONSUMER_FETCH_INTERVAL, "50");
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CLIENT_TIMEOUT_MILLI_SECS, "10000"); // 默认10s
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_PRODUCER_THREAD_POOL_SIZE, "8"); // passport_action最多有32个分区</code></pre><ol><li><p>总QPS=900，那么<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>「需要并发的线程数 = QPS ✖️ 平均耗时」</strong></mark>，因此需要的总线程数=45个(900*0.05s=45)。</p></li><li><p>即意味着：整个Talos consumer必须同时有45个线程在并行，才能消费完900 QPS的流量而不积压。</p></li></ol><ol><li><strong>机器数量：</strong> 为了高可用（容灾），生产环境最少需要 <strong>2 台</strong> 机器。</li><li><strong>单机负载：</strong> 若2 台机器分摊 900 QPS，每台承担 450 QPS。</li><li><strong>CPU 估算：</strong><ul><li>业务耗时 50ms。假设其中 CPU 密集运算占 5ms（序列化/逻辑），IO 等待占 45ms（写库/RPC）。</li></ul><ul><li>单机 CPU 需求 = 450QPS * 0.005s = 2.25核。</li></ul><ul><li>当前配置为 4 核，CPU 使用率约为 2.25 / 4 = 56%。<strong>2 台机器</strong> 完全满足 CPU &lt;= 70% 的要求。</li></ul></li></ol><ol><li>单机承担 QPS：450；单机所需线程 = 22.5。 </li><li><strong>因此建议配置：</strong><ul><li><code>CorePoolSize</code>: <strong>25</strong> (覆盖日常流量)。</li></ul><ul><li><code>MaxPoolSize</code>: <strong>50</strong> (应对抖动)。</li></ul></li></ol><ol><li><p>业务逻辑的平均耗时为50ms，且此时拉取消息的时间间隔为50ms，理想情况下，消费速度=拉取速度，此时无空转也无堆积。</p></li><li><p>但若某次耗时增长，消费速度跟不上拉取速度，会将拉取后的消息放入等待队列。那么此时<strong>需兜底，保证等待队列的大小能兜住至少两次「拉取消息但无法消费的情况」，</strong>因此<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>配置线程池的等待队列大小为 单次拉取消息数*2.5=2500</strong></mark><strong>。</strong></p></li><li><pre><code>// 拉取间隔50ms，单次拉取最大消息数1000，超时时间20s，单消费者可消费的分区数为8.
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CONSUMER_MAX_FETCH_RECORDS, "1000");
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CONSUMER_FETCH_INTERVAL, "50");
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_CLIENT_TIMEOUT_MILLI_SECS, "20000"); // 容错调高，防止：网络抖动导致的超时
+properties.setProperty(TalosClientConfigKeys.GALAXY_TALOS_PRODUCER_THREAD_POOL_SIZE, "8"); // passport_action最多有32个分区</code></pre></li></ol><p><mark style="background:#b2f2bb;color:inherit;padding:0 2px;border-radius:3px"><strong>结论</strong></mark>：</p><ul><li>2台4核8G机器。</li></ul><ul><li>单机线程池配置：<code>CorePoolSize</code>: <strong>25、</strong><code>MaxPoolSize</code>: <strong>50、</strong><code>LinkedBlockingQueue</code><strong>：2500。</strong></li></ul><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>上线实测</strong></mark>：</p><p><mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><strong>Q2</strong></mark>：<strong>若Talos producer 峰值QPS涨到3w，Talos有32个分区，又该如何调整？又该需多少个机器？</strong></p><p><strong>若按Q1中的配置</strong>：</p><ul><li>容器配置：<s>4核8G </s> 8核16G（<strong>数据量大，首先升级容器配置</strong>）。</li></ul><ul><li>线程池：核心线程25、最大线程50、等待队列2500。</li></ul><ul><li>Talos consumer： 拉取间隔50ms，单次拉取最大消息数1000，超时时间20s，单消费者可消费的分区数为8.</li></ul><ul><li>消费平均耗时：50ms。</li></ul><ul><li><strong>首先</strong>：32个分区，且单consumer可消费分区数为8，因此容器数至少为4。</li></ul><ul><li><strong>其次</strong>：8核，在保证CPU&lt;=70%的条件下，可用核数≈6核。保守估计单次请求CPU耗时5ms。那么<strong>单机最大安全QPS=6/0.005=1200QPS</strong>。因此所需的机器数为：30000/1200 ≈ 25台。</li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

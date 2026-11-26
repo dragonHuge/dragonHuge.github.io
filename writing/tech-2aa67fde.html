@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>Git rebase · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">6</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-简介">1.简介</a><a class="tl l2" href="#2-rebase-与-merge的区别">2.rebase 与 merge的区别</a><a class="tl l3" href="#1-应用场景">1.应用场景</a><a class="tl l3" href="#2-git-merge-合并">2.git merge 合并</a><a class="tl l3" href="#3-git-rebase-合并">3.git rebase 合并</a><a class="tl l2" href="#3-git-rebase命令使用">3.git rebase命令使用</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>Git rebase</h1><div class="meta">2024-08-13 · <a class="src-link" href="https://flowus.cn/2aa67fde-cd39-45dc-85a8-4ca01dea7b9c" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h2 id="1-简介">1.简介</h2>
+<p>顾名思义，就是<strong>重新定义（re）起点（base）的作</strong>用，即重新定义分支的版本库状态。</p>
+<p>要搞清楚这个东西，要先看看版本库状态切换的两种情况：</p>
+<ol><li>我们知道，在某个分支上，我们可以通过<strong>git reset</strong>，实现将当前分支切换到本分支以前的任何一个版本状态，即所谓的“回溯”。即实现了本分支的“后悔药”。也即版本控制系统的初衷。</li></ol>
+<ol><li>还有另一种情况，当我们的项目有多个分支的时候。</li></ol>
+<p>我们除了在本开发的时候可能会“回溯”外，也常常会将和自己并行开发的别人的分支修改添加到自己本地来。</p>
+<p>这种情况下很常见。作为项目管理员，肯定会不断的合并各个子项目的补丁，并将最新版本推送到公共版本库，而作为开发人员之一，提交自己的补丁之 后，往往需要将自己的工作更新到最新的版本库，也就是说把别的分支的工作包含进来。</p>
+<blockquote><p>🤩 <code>rebase</code> 官方解释为变基,可以理解为<strong>移动你的分支根节点,维护一个更好的提交记录</strong>。</p></blockquote>
+<p><code>rebase</code>把<strong>你当前最新分支与其他分支合并时候</strong>，会<strong>把其他分支的提交记录放在我们当前分支时间线最开始的位置</strong>。</p>
+<p>也就是说,会<strong>把我们的提交记录整合在公共分支的后面</strong>。</p>
+<h2 id="2-rebase-与-merge的区别">2.rebase 与 merge的区别</h2>
+<ul><li><code>rebase</code> 会把你当前分支的 <code>commit</code> 放到公共分支的最后面,所以叫变基。就像你从公共分支又重新拉出来这个分支一样。</li></ul>
+<ul><li><code>merge</code> 会把公共分支和你当前的 <code>commit</code> 合并在一起，形成一个新的 <code>commit</code> 提交。</li></ul>
+<p>来看看实际应用下的区别：</p>
+<h3 id="1-应用场景">1.应用场景</h3>
+<ul><li>你刚入公司，技术leader让你以 <code>master</code> 分支为基础,拉出一个分支进行开发需求。此时 <code>master</code> 分支提交记录为 <code>a、b</code>。你在 <code>dev</code> 分支分别 <code>commit</code> 了2次记录为 <code>e、f</code> ,有其他同事在 <code>master</code> 分支提交了两次记录为 <code>c、d</code> 这个时候你要合并master分支代码。</li></ul>
+<ul><li>当前分支状态节点如下图所示:</li></ul>
+<p><img alt="74179ab641704086b580ce53947552ef~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" src="/assets/img/flowus-d0809b629ad2aed2.png"></p>
+<h3 id="2-git-merge-合并">2.git merge 合并</h3>
+<pre><code>$ git merge master  // 合并master分支代码
+$ git log --graph --oneline // 查看log点线图
+// 符号解释:
+* 表示一个commit， 注意不要管*在哪一条主线上 
+| 表示分支前进 
+/ 表示分叉 
+\ 表示合入</code></pre>
+<p><img alt="54d58030198045749d9e66aaecefa757~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" src="/assets/img/flowus-c5d7528fb14be71d.png"></p>
+<p><img alt="7d54863e85e84224bc79a053e59dd808~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" src="/assets/img/flowus-2183041ef5ccf1ea.png"></p>
+<p><strong>结论</strong></p>
+<ol><li>如上图所示 <code>merge</code> 会把两个分支合并在一起，形成一个新的 <code>commit</code> 提交记录。</li></ol>
+<ol><li>我们发现 <code>coomit</code> 提交记录是<strong>把合并的分支记录放到我们当前<code>dev</code>分支记录的后面</strong>。</li></ol>
+<ol><li>并且<code>coomit</code> 提交记录<strong>会<code>产生分叉</code></strong>。</li></ol>
+<h3 id="3-git-rebase-合并">3.git rebase 合并</h3>
+<pre><code>$ git rebase master  // 合并master分支代码
+$ git log --graph --oneline // 查看log点线图
+// 符号解释:
+* 表示一个commit， 注意不要管*在哪一条主线上 
+| 表示分支前进 
+/ 表示分叉 
+\ 表示合入</code></pre>
+<p><img alt="aca1ec1695eb40749a8704981bb9a376~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" src="/assets/img/flowus-015ee919cddaf952.png"></p>
+<p><img alt="bac5536c4235491296da22689a260c33~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp" src="/assets/img/flowus-0ded499f0c0bc83b.png"></p>
+<p><strong>结论</strong></p>
+<ol><li>首先，我们发现目前 <code>dev</code> 分支上面的提交记录为 <code>abcdef</code> <strong>并没有像 <code>merge</code> 一样产生新的提交记录</strong></li></ol>
+<ol><li>其次 <code>rebase</code> <code>master</code> 分支到 <code>dev</code> 分支, <strong><code>dev</code> 分支的历史记录会添加在 <code>master</code> 分支的后面</strong>。</li></ol>
+<ol><li>如图所示，历史记录成一条线,非常整洁,最后并没有像使 <code>merge</code> 一样提交记录产生<code>分叉</code>。</li></ol>
+<h2 id="3-git-rebase命令使用">3.git rebase命令使用</h2>
+<ul><li><code>git rebase [branch-name]</code> ：<strong>合并一个分支到当前分支,</strong>把<strong>你当前分支的commit放到被合并分支的最后面</strong>。</li></ul>
+<ul><li><code>git rebase -i HEAD~[num]</code> ：将<strong>最近num个commit合并成一个</strong>(这样推送到远程仓库后只有一个commit，避免污染远端的commit)</li></ul>
+<blockquote><p>🤩 git merge与git rebase 使用建议：</p></blockquote>
+<ul><li>公共分支使用merge,个人分支使用rebase</li></ul>
+<ul><li>本地和远端对应同一条分支,优先使用rebase,而不是merge</li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

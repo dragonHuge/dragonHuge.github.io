@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>第六章：数据处理与分析 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">20</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">468</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav>
+<nav class="context-nav" aria-label="当前栏目目录">
+<div class="context-title">外部沉淀分类</div>
+<a class="context-cat active" href="../ext/index.html#c0"><span>AI与大模型</span><span class="nav-count">32</span></a>
+<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">305</span></a>
+<a class="context-cat" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">65</span></a>
+<a class="context-cat" href="../ext/index.html#c3"><span>认知与思维</span><span class="nav-count">12</span></a>
+<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">44</span></a>
+<div class="context-group current">AI与大模型文章</div>
+<a class="art" href="../ext/e001.html">大模型学习资料包（小红书购买 · 18份）</a>
+<a class="art" href="../ext/e002.html">大模型AI Agent知识从0-1笔记-万字详解版本！</a>
+<a class="art" href="../ext/e003.html">大模型Agent实战从0-1笔记：万字详解【迭代版V2】</a>
+<a class="art" href="../ext/e004.html">大模型Transformer架构从0-1架构深度解析</a>
+<a class="art" href="../ext/e005.html">AI开发基础：Langchain框架从入门到实战开发-附代码</a>
+<a class="art" href="../ext/e006.html">AI开发基础：Langgraph框架从入门到实战开发智能体-附带完整可运行代码</a>
+<a class="art" href="../ext/e007.html">万字详解！AI Harness 入门与实践！一篇博文给你讲透！</a>
+<a class="art" href="../ext/e008.html">RAG知识库助手实战-附带前后端和完整可运行服务</a>
+<a class="art" href="../ext/e009.html">实战智能出行Agent助手-附代码和前后端可视化界面</a>
+<a class="art" href="../ext/e010.html">Vibe Coding指南-AI编辑器全栈开发-附实战和视频</a>
+<a class="art" href="../ext/e011.html">AI大模型面试题-基础篇</a>
+<a class="art" href="../ext/e012.html">AI应用开发+后端面试题</a>
+<a class="art" href="../ext/e013.html">Codex 从小白到实战高手：大厂工程化实战手册</a>
+<a class="art" href="../ext/e014.html">Claude Code 入门到实战全流程详细版</a>
+<a class="art" href="../ext/e015.html">第一章：快速上手</a>
+<a class="art" href="../ext/e016.html">第二章 Claude Code 入门基础操作</a>
+<a class="art" href="../ext/e017.html">第三章： Claude Code 20个常用斜杠指令速查表</a>
+<a class="art" href="../ext/e018.html">第四章：文本处理与创作</a>
+<a class="art" href="../ext/e019.html">第五章：文档管理与处理</a>
+<a class="art active" href="../ext/e020.html">第六章：数据处理与分析</a>
+<a class="art" href="../ext/e021.html">第七章 创建常用模板</a>
+<a class="art" href="../ext/e022.html">第八章：提示词优化技巧</a>
+<a class="art" href="../ext/e023.html">第九章：复用文档解决同类问题</a>
+<a class="art" href="../ext/e024.html">第十章：用编程的思维解决问题</a>
+<a class="art" href="../ext/e025.html">第十一章：Claude 高级功能使用</a>
+<a class="art" href="../ext/e026.html">第十二章：让Claude自动解决问题</a>
+<a class="art" href="../ext/e027.html">Claude Code 实战指南</a>
+<a class="art" href="../ext/e028.html">滴云智能办公丨多Agent协同系统</a>
+<a class="art" href="../ext/e029.html">多Agent项目实战：多Agent协同系统</a>
+<a class="art" href="../ext/e030.html">AI应用开发项目实战知识库-详解版</a>
+<a class="art" href="../ext/e031.html">11-Java全套八股文</a>
+<a class="art" href="../ext/e032.html">AI应用开发：RAG技术从小白到深入理解-详细版</a>
+</nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">150</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#6-1-Excel-数据处理">6.1 Excel 数据处理</a><a class="tl l3" href="#一-数据清洗类操作">一、数据清洗类操作</a><a class="tl l4" href="#删除重复行">删除重复行</a><a class="tl l4" href="#填充空白数据">填充空白数据</a><a class="tl l4" href="#删除空行空列">删除空行空列</a><a class="tl l3" href="#二-数据格式统一类操作">二、数据格式统一类操作</a><a class="tl l4" href="#统一日期格式">统一日期格式</a><a class="tl l4" href="#统一数字-金额-格式">统一数字（金额）格式</a><a class="tl l4" href="#统一文本格式">统一文本格式</a><a class="tl l3" href="#三-数据筛选类操作">三、数据筛选类操作</a><a class="tl l4" href="#按数值条件筛选">按数值条件筛选</a><a class="tl l4" href="#按日期范围筛选">按日期范围筛选</a><a class="tl l4" href="#按文本精准筛选">按文本精准筛选</a><a class="tl l1" href="#案例示例-财务人员整理销售数据">案例示例：财务人员整理销售数据</a><a class="tl l3" href="#场景">场景</a><a class="tl l3" href="#Claude-指令示例">Claude 指令示例</a><a class="tl l3" href="#Claude-回答示例">Claude 回答示例</a><a class="tl l4" href="#数据清洗处理">数据清洗处理</a><a class="tl l4" href="#数据格式统一">数据格式统一</a><a class="tl l4" href="#条件数据筛选">条件数据筛选</a><a class="tl l4" href="#整体数据分析">整体数据分析</a><a class="tl l4" href="#销售员销售额降序排名">销售员销售额降序排名</a><a class="tl l1" href="#Excel-数据处理小技巧">Excel 数据处理小技巧</a><a class="tl l2" href="#通用可复用提示词模板">通用可复用提示词模板</a><a class="tl l3" href="#模板-1-Excel-批量去重清洗">模板 1：Excel 批量去重清洗</a><a class="tl l3" href="#模板-2-空白数据批量填充">模板 2：空白数据批量填充</a><a class="tl l3" href="#模板-3-表格空行空列清理">模板 3：表格空行空列清理</a><a class="tl l3" href="#模板-4-日期-数字-文本格式统一">模板 4：日期 / 数字 / 文本格式统一</a><a class="tl l3" href="#模板-5-多条件数据筛选通用模板">模板 5：多条件数据筛选通用模板</a><a class="tl l1" href="#6-2-数据统计与分析">6.2 数据统计与分析</a><a class="tl l2" href="#一-基本统计">一、基本统计</a><a class="tl l3" href="#描述性统计">描述性统计</a><a class="tl l4" href="#1-总体统计">（1）总体统计</a><a class="tl l4" href="#2-按产品统计">（2）按产品统计</a><a class="tl l4" href="#3-按地区统计">（3）按地区统计</a><a class="tl l3" href="#频率统计">频率统计</a><a class="tl l2" href="#二-百分比统计">二、百分比统计</a><a class="tl l3" href="#产品销售额占比表">产品销售额占比表</a><a class="tl l3" href="#分析结论">分析结论</a><a class="tl l2" href="#三-时间趋势分析">三、时间趋势分析</a><a class="tl l3" href="#月度销售-环比数据表">月度销售 &amp; 环比数据表</a><a class="tl l3" href="#趋势分析">趋势分析</a><a class="tl l3" href="#销售预测">销售预测</a><a class="tl l2" href="#四-季节性分析">四、季节性分析</a><a class="tl l3" href="#季度销售数据表">季度销售数据表</a><a class="tl l3" href="#季节性分析">季节性分析</a><a class="tl l3" href="#业务建议">业务建议</a><a class="tl l2" href="#五-同比环比分析">五、同比环比分析</a><a class="tl l3" href="#同比环比数据表">同比环比数据表</a><a class="tl l3" href="#分析结论-1">分析结论</a><a class="tl l2" href="#六-异常值检测">六、异常值检测</a><a class="tl l3" href="#异常检测基础参数">异常检测基础参数</a><a class="tl l3" href="#异常值明细">异常值明细</a><a class="tl l3" href="#分析建议">分析建议</a><a class="tl l2" href="#七-相关性-回归分析">七、相关性 &amp; 回归分析</a><a class="tl l3" href="#相关性分析结果">相关性分析结果</a><a class="tl l3" href="#结论">结论</a><a class="tl l3" href="#回归分析">回归分析</a><a class="tl l3" href="#投放建议">投放建议</a><a class="tl l2" href="#八-客户聚类分析">八、客户聚类分析</a><a class="tl l3" href="#高价值客户-20-人">高价值客户（20 人）</a><a class="tl l3" href="#中价值客户-30-人">中价值客户（30 人）</a><a class="tl l3" href="#低价值客户-50-人">低价值客户（50 人）</a><a class="tl l3" href="#营销分层建议">营销分层建议</a><a class="tl l2" href="#案例示例-营销人员分析客户数据">案例示例：营销人员分析客户数据</a><a class="tl l3" href="#场景-1">场景</a><a class="tl l3" href="#Claude-指令示例-1">Claude 指令示例</a><a class="tl l3" href="#Claude-回答示例-1">Claude 回答示例</a><a class="tl l2" href="#客户数据分析报告">客户数据分析报告</a><a class="tl l2" href="#一-客户概况">一、客户概况</a><a class="tl l2" href="#二-客户画像">二、客户画像</a><a class="tl l3" href="#地区分布">地区分布</a><a class="tl l3" href="#年龄分布">年龄分布</a><a class="tl l3" href="#性别分布">性别分布</a><a class="tl l2" href="#三-消费行为分析">三、消费行为分析</a><a class="tl l3" href="#消费频次">消费频次</a><a class="tl l3" href="#产品消费偏好">产品消费偏好</a><a class="tl l2" href="#四-客户价值分层">四、客户价值分层</a><a class="tl l2" href="#五-精细化营销建议">五、精细化营销建议</a><a class="tl l3" href="#VIP-客户维护">VIP 客户维护</a><a class="tl l3" href="#重要客户提升">重要客户提升</a><a class="tl l3" href="#普通客户激活">普通客户激活</a><a class="tl l3" href="#潜力客户开发">潜力客户开发</a><a class="tl l3" href="#区域营销策略">区域营销策略</a><a class="tl l3" href="#年龄分层策略">年龄分层策略</a><a class="tl l2" href="#通用可复用提示词模板-1">通用可复用提示词模板</a><a class="tl l3" href="#模板-1-描述性统计-多维度分组统计">模板 1：描述性统计 + 多维度分组统计</a><a class="tl l3" href="#模板-2-时间序列趋势分析-预测">模板 2：时间序列趋势分析 + 预测</a><a class="tl l3" href="#模板-3-异常值检测-3σ-法则">模板 3：异常值检测（3σ 法则）</a><a class="tl l3" href="#模板-4-相关性-线性回归分析">模板 4：相关性 + 线性回归分析</a><a class="tl l3" href="#模板-5-客户分层聚类分析-营销方案">模板 5：客户分层聚类分析 + 营销方案</a><a class="tl l1" href="#6-3-报告生成">6.3 报告生成</a><a class="tl l2" href="#撰写分析报告">撰写分析报告</a><a class="tl l3" href="#月度销售分析报告">月度销售分析报告</a><a class="tl l2" href="#2026-年-1-月销售分析报告">2026 年 1 月销售分析报告</a><a class="tl l2" href="#一-总体概况">一、总体概况</a><a class="tl l2" href="#二-销售明细">二、销售明细</a><a class="tl l3" href="#1-按产品分类">（1）按产品分类</a><a class="tl l3" href="#2-按地区分类">（2）按地区分类</a><a class="tl l3" href="#3-按销售员分类">（3）按销售员分类</a><a class="tl l2" href="#三-亮点与问题">三、亮点与问题</a><a class="tl l3" href="#亮点">亮点</a><a class="tl l3" href="#问题">问题</a><a class="tl l2" href="#四-下月工作计划">四、下月工作计划</a><a class="tl l2" href="#五-风险提示">五、风险提示</a><a class="tl l2" href="#六-总结">六、总结</a><a class="tl l2" href="#客户分析报告">客户分析报告</a><a class="tl l2" href="#客户分析报告-1">客户分析报告</a><a class="tl l2" href="#一-客户概况-1">一、客户概况</a><a class="tl l2" href="#二-客户分层">二、客户分层</a><a class="tl l3" href="#VIP-客户-50-人-占比-10">VIP 客户（50 人，占比 10%）</a><a class="tl l3" href="#重要客户-100-人-占比-20">重要客户（100 人，占比 20%）</a><a class="tl l3" href="#普通客户-200-人-占比-40">普通客户（200 人，占比 40%）</a><a class="tl l3" href="#潜力客户-150-人-占比-30">潜力客户（150 人，占比 30%）</a><a class="tl l2" href="#三-客户特征分布">三、客户特征分布</a><a class="tl l3" href="#地区分布-1">地区分布</a><a class="tl l3" href="#年龄分布-1">年龄分布</a><a class="tl l2" href="#四-分客群营销建议">四、分客群营销建议</a><a class="tl l3" href="#VIP-客户维护-1">VIP 客户维护</a><a class="tl l3" href="#重要客户提升-1">重要客户提升</a><a class="tl l3" href="#普通客户激活-1">普通客户激活</a><a class="tl l3" href="#潜力客户开发-1">潜力客户开发</a><a class="tl l2" href="#五-总结">五、总结</a><a class="tl l2" href="#通用可复用提示词模板-2">通用可复用提示词模板</a><a class="tl l3" href="#模板-1-数据可视化图表生成">模板 1：数据可视化图表生成</a><a class="tl l3" href="#模板-2-月度销售分析报告通用模板">模板 2：月度销售分析报告通用模板</a><a class="tl l3" href="#模板-3-客户数据分析报告模板">模板 3：客户数据分析报告模板</a><a class="tl l2" href="#案例示例-财务人员生成月度报表">案例示例：财务人员生成月度报表</a><a class="tl l3" href="#场景-2">场景</a><a class="tl l3" href="#Claude-指令示例-2">Claude 指令示例</a><a class="tl l3" href="#Claude-回答示例-2">Claude 回答示例</a><a class="tl l2" href="#2024-年-1-月销售月度报表">2024 年 1 月销售月度报表</a><a class="tl l2" href="#一-销售总览">一、销售总览</a><a class="tl l3" href="#关键指标">关键指标</a><a class="tl l2" href="#二-销售趋势图">二、销售趋势图</a><a class="tl l2" href="#三-产品销售对比">三、产品销售对比</a><a class="tl l3" href="#产品销售额对比柱状图">产品销售额对比柱状图</a><a class="tl l3" href="#产品销售明细表">产品销售明细表</a><a class="tl l2" href="#四-地区销售分布">四、地区销售分布</a><a class="tl l3" href="#各地区销售额占比饼图">各地区销售额占比饼图</a><a class="tl l3" href="#地区销售明细表">地区销售明细表</a><a class="tl l2" href="#五-亮点与问题">五、亮点与问题</a><a class="tl l3" href="#亮点-1">亮点</a><a class="tl l3" href="#问题-1">问题</a><a class="tl l2" href="#六-下月销售目标">六、下月销售目标</a><a class="tl l2" href="#七-重点落地措施">七、重点落地措施</a><a class="tl l2" href="#八-风险提示">八、风险提示</a><a class="tl l2" href="#报表制作小技巧">报表制作小技巧</a><a class="tl l2" href="#通用可复用提示词模板-3">通用可复用提示词模板</a><a class="tl l3" href="#模板-月度综合业务报表生成模板">模板：月度综合业务报表生成模板</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与大模型</div><article><h1>第六章：数据处理与分析</h1><div class="meta">2026-11-09 · <span class="m-src">AI与大模型/大模型实战宝典/raw/15-07-第六章：数据处理与分析.md</span></div><div class="md"><h2 id="6-1-Excel-数据处理">6.1 Excel 数据处理</h2>
+<h3 id="一-数据清洗类操作">一、数据清洗类操作</h3>
+<h4 id="删除重复行">删除重复行</h4>
+<p><strong>Claude 指令示例</strong>：请帮我删除这份 Excel 表格中的重复行，统计原始总行数、删除重复行数、最终剩余有效行数。</p>
+<p><strong>Claude 回答示例</strong>： 已完成表格重复数据清理</p>
+<ul><li>原始数据总行数：150 行</li><li>识别并删除重复数据行：12 行</li><li>清洗后剩余有效数据行数：138 行</li></ul>
+<h4 id="填充空白数据">填充空白数据</h4>
+<p><strong>Claude 指令示例</strong>：填充当前 Excel 表格内所有空白单元格，统一使用文本 “无” 进行填充，统计原始空白单元格数量与已填充数量。</p>
+<p><strong>Claude 回答示例</strong>： 已批量完成空白单元格填充处理</p>
+<ul><li>原始空白单元格总数量：25 个</li><li>已全部填充单元格数量：25 个</li><li>统一填充内容：无 表格内所有空白位置均已补齐，无空值单元格。</li></ul>
+<h4 id="删除空行空列">删除空行空列</h4>
+<p><strong>Claude 指令示例</strong>：清除 Excel 表格中全部无内容的空行与空列，保留所有有效业务数据，输出删除的空行、空列数量。</p>
+<p><strong>Claude 回答示例</strong>： 已完成空行、空列清理</p>
+<ul><li>本次删除空行：8 行</li><li>本次删除空列：3 列</li><li>原有有效业务数据全部完整保留 表格冗余空白内容已清理完毕，表格结构更整洁规范。</li></ul>
+<h3 id="二-数据格式统一类操作">二、数据格式统一类操作</h3>
+<h4 id="统一日期格式">统一日期格式</h4>
+<p><strong>Claude 指令示例</strong>：将表格内所有日期类单元格统一规范为<code>YYYY-MM-DD</code>格式，统计待处理单元格数量，罗列原始多样的日期写法。</p>
+<p><strong>Claude 回答示例</strong>： 已完成全表日期格式标准化统一</p>
+<ul><li>原始日期格式：存在多种样式（2024/1/5、2024-1-5、2024 年 1 月 5 日等）</li><li>目标统一格式：YYYY-MM-DD（示例：2024-01-05）</li><li>本次批量处理单元格总数：45 个</li></ul>
+<h4 id="统一数字-金额-格式">统一数字（金额）格式</h4>
+<p><strong>Claude 指令示例</strong>：将表格内所有金额类数字统一格式，要求保留两位小数、添加千位分隔符，统计处理单元格数量，说明原始多样的数字格式。</p>
+<p><strong>Claude 回答示例</strong>： 已完成全表金额数字格式规范化处理</p>
+<ul><li>原始数字格式：多种样式（1200、1,200、1200.00 等）</li><li>目标统一格式：1,200.00（千位分隔符 + 保留两位小数）</li><li>本次批量处理单元格总数：68 个</li></ul>
+<h4 id="统一文本格式">统一文本格式</h4>
+<p><strong>Claude 指令示例</strong>：对表格所有文本单元格做标准化处理，去除单元格内容首尾多余空格，同时将英文内容统一转换为大写格式，统计本次处理单元格数量。</p>
+<p><strong>Claude 回答示例</strong>： 已完成全表文本格式统一处理</p>
+<ul><li>处理规则：去除文本首尾空格、英文字符全部转为大写</li><li>本次批量处理单元格总数：52 个</li></ul>
+<h3 id="三-数据筛选类操作">三、数据筛选类操作</h3>
+<h4 id="按数值条件筛选">按数值条件筛选</h4>
+<p><strong>Claude 指令示例</strong>：从当前 Excel 销售数据表中，筛选出销售额大于 10 万元的全部业务记录，输出筛选条件、结果明细表格与符合条件的总记录条数。 <strong>Claude 回答示例</strong>： 已按条件完成数据筛选</p>
+<ul><li>筛选条件：销售额 &gt; 100000</li><li>筛选结果明细：</li></ul>
+<p>本次共筛选出 4 条符合条件的业务记录。</p>
+<h4 id="按日期范围筛选">按日期范围筛选</h4>
+<p><strong>Claude 指令示例</strong>：筛选表格内 2024 年 1 月 1 日 - 2024 年 1 月 31 日区间内的全部销售数据，输出筛选时间范围、结果表格与有效记录总数。 <strong>Claude 回答示例</strong>： 已按日期区间筛选数据</p>
+<ul><li>筛选条件：日期范围 2024-01-01 ~ 2024-01-31</li><li>筛选结果明细：</li></ul>
+<p>本次共筛选出 5 条符合时间范围的销售记录。</p>
+<h4 id="按文本精准筛选">按文本精准筛选</h4>
+<p><strong>Claude 指令示例</strong>：筛选表格中销售员字段等于 “张三” 的所有销售记录，输出筛选条件、结果表格与匹配记录总条数。</p>
+<p><strong>Claude 回答示例</strong>： 已按文本条件筛选数据</p>
+<ul><li>筛选条件：销售员 = 张三</li><li>筛选结果明细：</li></ul>
+<p>本次共筛选出 4 条匹配的业务记录。</p>
+<h1 id="案例示例-财务人员整理销售数据">案例示例：财务人员整理销售数据</h1>
+<h3 id="场景">场景</h3>
+<p>财务人员需要对销售数据表开展全流程处理，包含数据清洗、格式标准化、条件筛选、汇总统计分析，最终输出可直接用于报表的规范数据集。</p>
+<h3 id="Claude-指令示例">Claude 指令示例</h3>
+<p>请帮我整理这份销售数据 Excel 表格，依次完成以下操作：</p>
+<ol><li>删除表格内全部重复数据行；</li><li>将所有空白单元格统一填充为文本 “无”；</li><li>日期列统一格式为<code>YYYY-MM-DD</code>；</li><li>金额列统一保留两位小数；</li><li>筛选出销售额大于 50000 元的所有业务记录；</li><li>基于筛选后的数据做整体统计：总销售额、平均销售额、最高 / 最低销售额；</li><li>按销售员维度汇总销售额并降序排名。</li></ol>
+<h3 id="Claude-回答示例">Claude 回答示例</h3>
+<p>已完成销售数据全流程整理工作：</p>
+<h4 id="数据清洗处理">数据清洗处理</h4>
+<ul><li>删除重复数据行：5 行</li><li>空白单元格填充：共 8 个空白单元格，全部填充为 “无”</li></ul>
+<h4 id="数据格式统一">数据格式统一</h4>
+<ul><li>日期格式：全表统一规范为 <code>YYYY-MM-DD</code></li><li>金额格式：所有销售额统一保留两位小数</li></ul>
+<h4 id="条件数据筛选">条件数据筛选</h4>
+<p>筛选规则：销售额 ＞ 50000 筛选结果表：</p>
+<p>本次共筛选出 5 条符合条件的销售记录。</p>
+<h4 id="整体数据分析">整体数据分析</h4>
+<ul><li>总销售额：425000.00 元</li><li>平均销售额：85000.00 元</li><li>最高销售额：105000.00 元（产品 D）</li><li>最低销售额：65000.00 元（产品 A）</li></ul>
+<h4 id="销售员销售额降序排名">销售员销售额降序排名</h4>
+<ol><li>张三：150000.00 元</li><li>赵六：105000.00 元</li><li>王五：92000.00 元</li><li>李四：78000.00 元</li></ol>
+<p>本次销售数据已全部清洗、规范、统计完毕，处理后的数据可直接用于业务报表制作。</p>
+<h1 id="Excel-数据处理小技巧">Excel 数据处理小技巧</h1>
+<ol><li><strong>提前备份原始数据</strong>：执行清洗、批量修改操作前，务必备份源文件，防止误操作无法恢复。</li><li><strong>复杂任务分步执行</strong>：多步骤数据处理建议分步操作，每执行一步就核对结果，避免一次性批量出错。</li><li><strong>先筛选再精细化处理</strong>：优先筛选目标数据集，再针对筛选后内容做格式、填充等处理，大幅提升处理效率。</li><li><strong>完整留存处理过程日志</strong>：记录每一步操作规则、处理数量，方便后续数据溯源、复盘核查。</li><li><strong>处理完成校验数据</strong>：全部操作结束后，抽样核对数据的准确性、完整性，避免格式、数值遗漏错误。</li><li><strong>沉淀复用处理规则</strong>：高频使用的数据清洗、格式规范指令模板保存，后续同类业务可直接复用。</li></ol>
+<h2 id="通用可复用提示词模板">通用可复用提示词模板</h2>
+<h3 id="模板-1-Excel-批量去重清洗">模板 1：Excel 批量去重清洗</h3>
+<p>对上传的Excel表格执行重复行清理：</p>
+<ol><li>基于全列内容匹配识别重复数据；</li><li>保留第一条有效数据，删除后续全部重复行；</li><li>统计原始总行数、删除重复行数、最终有效行数，输出数据清洗明细。</li></ol>
+<h3 id="模板-2-空白数据批量填充">模板 2：空白数据批量填充</h3>
+<p>遍历Excel所有单元格，将全部空白单元格统一填充为【指定填充内容】； 统计原始空白单元格总数、已完成填充单元格数量，输出清洗结果汇总。</p>
+<h3 id="模板-3-表格空行空列清理">模板 3：表格空行空列清理</h3>
+<p>自动识别Excel内完全无内容的空行、空列并批量删除； 统计删除空行数量、删除空列数量，确认原有有效数据完整保留，输出处理明细。</p>
+<h3 id="模板-4-日期-数字-文本格式统一">模板 4：日期 / 数字 / 文本格式统一</h3>
+<p>将Excel指定列全部统一为【目标格式：YYYY-MM-DD/千位分隔两位小数/去首尾空格大写】； 统计待处理单元格总数量，罗列原始多样化格式，输出标准化后的表格数据。</p>
+<h3 id="模板-5-多条件数据筛选通用模板">模板 5：多条件数据筛选通用模板</h3>
+<p>按照【筛选条件：数值区间/日期范围/文本精准匹配】过滤Excel数据； 输出筛选规则、结构化结果表格、符合条件的总记录条数，支持将筛选结果导出为新表格。 数据统计与分析：销售数据全维度解析</p>
+<h1 id="6-2-数据统计与分析">6.2 数据统计与分析</h1>
+<h2 id="一-基本统计">一、基本统计</h2>
+<h3 id="描述性统计">描述性统计</h3>
+<p><strong>Claude 指令示例</strong>：请基于这份销售 Excel 数据表，做整体描述性统计，输出总销售额、平均销售额、中位数、标准差，同时按产品、地区分别汇总销售额、占比、平均单价。</p>
+<p><strong>Claude 回答示例</strong>：</p>
+<p>已生成销售数据基本统计结果</p>
+<h4 id="1-总体统计">（1）总体统计</h4>
+<ul><li>总销售额：1,234,567 元</li><li>平均销售额：12,345.67 元</li><li>中位数：10,500 元</li><li>标准差：8,234.56 元</li></ul>
+<h4 id="2-按产品统计">（2）按产品统计</h4>
+<h4 id="3-按地区统计">（3）按地区统计</h4>
+<h3 id="频率统计">频率统计</h3>
+<p><strong>Claude 指令示例</strong>：统计客户数据表中各个地区的客户数量、对应占比，输出频率统计表。 <strong>Claude 回答示例</strong>： 已生成地区客户频率统计</p>
+<h2 id="二-百分比统计">二、百分比统计</h2>
+<p><strong>Claude 指令示例</strong>：计算各产品销售额的占比，输出占比表格，并结合数据给出业务分析结论。 <strong>Claude 回答示例</strong>：</p>
+<h3 id="产品销售额占比表">产品销售额占比表</h3>
+<h3 id="分析结论">分析结论</h3>
+<ol><li>产品 A 为公司主力产品，销售额占比超 40%；</li><li>产品 A + 产品 B 合计销售额占比接近 70%，是核心营收来源；</li><li>产品 D 营收占比较低，可结合市场情况优化产品线或考虑淘汰。</li></ol>
+<h2 id="三-时间趋势分析">三、时间趋势分析</h2>
+<p><strong>Claude 指令示例</strong>：基于月度销售数据做时间趋势分析，计算每月环比增长率，总结整体走势、累计涨幅、波动情况，同时对下一月销售额做合理预测。 <strong>Claude 回答示例</strong>：</p>
+<h3 id="月度销售-环比数据表">月度销售 &amp; 环比数据表</h3>
+<h3 id="趋势分析">趋势分析</h3>
+<ol><li>整体趋势：销售额持续上行，从 1 月 80000 元增长至 6 月 135000 元；</li><li>增长情况：6 个月累计涨幅 68.8%；</li><li>波动情况：4 月出现小幅环比下滑 4.5%，后续快速恢复增长；</li><li>平均月度增长率约 11.5%。</li></ol>
+<h3 id="销售预测">销售预测</h3>
+<p>在当前增长趋势不变的前提下，预计 7 月销售额可达 150000 元左右。</p>
+<h2 id="四-季节性分析">四、季节性分析</h2>
+<p><strong>Claude 指令示例</strong>：按季度汇总销售数据，计算各季度销售额、营收占比，识别淡旺季，给出库存、营销类业务优化建议。 <strong>Claude 回答示例</strong>：</p>
+<h3 id="季度销售数据表">季度销售数据表</h3>
+<h3 id="季节性分析">季节性分析</h3>
+<ol><li>销售旺季：第二季度，营收占比 29.2%；</li><li>销售淡季：第四季度，营收占比 21.8%；</li><li>季节差值：旺季销售额占比高出淡季 7.4 个百分点；</li><li>规律总结：上半年整体销售表现优于下半年，业绩峰值出现在第二季度。</li></ol>
+<h3 id="业务建议">业务建议</h3>
+<ol><li>旺季来临前提前备货，保障库存充足、供应链稳定；</li><li>淡季加大促销活动投放，拉动整体销售业绩提升。</li></ol>
+<h2 id="五-同比环比分析">五、同比环比分析</h2>
+<p><strong>Claude 指令示例</strong>：结合近两年月度销售数据，分别计算同比、环比增长率，总结整体增长特征、最优表现月份。 <strong>Claude 回答示例</strong>：</p>
+<h3 id="同比环比数据表">同比环比数据表</h3>
+<h3 id="分析结论-1">分析结论</h3>
+<ol><li>全部月份均实现正向同比增长，平均同比增长率 18.1%；</li><li>除 4 月外，其余月份均保持环比正向增长；</li><li>整体销售长期处于稳定上行区间；</li><li>6 月同比增速 22.7%，为全年月度最佳增长表现。</li></ol>
+<h2 id="六-异常值检测">六、异常值检测</h2>
+<p><strong>Claude 指令示例</strong>：采用 3σ 原则检测销售数据中的异常订单，输出统计阈值、异常明细，并给出数据核查与业务分析建议。</p>
+<p><strong>Claude 回答示例</strong>：</p>
+<h3 id="异常检测基础参数">异常检测基础参数</h3>
+<ul><li>检测规则：3σ 原则（数值超出「平均值 ±3 倍标准差」判定为异常）</li><li>平均值：12345.67 元</li><li>标准差：8234.56 元</li><li>合理上限：37049.35 元</li><li>合理下限：-12358.01 元</li></ul>
+<h3 id="异常值明细">异常值明细</h3>
+<h3 id="分析建议">分析建议</h3>
+<ol><li>核实两笔大额订单的业务真实性；</li><li>排查是否存在表格录入错误；</li><li>若订单真实有效，复盘成交经验，可复制推广该类高客单成交方案。</li></ol>
+<h2 id="七-相关性-回归分析">七、相关性 &amp; 回归分析</h2>
+<p><strong>Claude 指令示例</strong>：分析广告投入与销售额两组数据的相关性，输出相关系数、显著性结果、回归方程，并结合拟合度给出投放优化建议。 <strong>Claude 回答示例</strong>：</p>
+<h3 id="相关性分析结果">相关性分析结果</h3>
+<ul><li>皮尔逊相关系数：0.85</li><li>相关强度：强正相关</li><li>显著性 P 值：＜0.01，相关性统计显著</li></ul>
+<h3 id="结论">结论</h3>
+<p>广告投入与销售额存在显著强正向相关关系，广告投放规模会明显影响最终销售业绩。</p>
+<h3 id="回归分析">回归分析</h3>
+<ul><li>回归方程：销售额 = 2.5 × 广告投入 + 10000</li><li>拟合优度 R²=0.72，模型拟合效果良好</li></ul>
+<h3 id="投放建议">投放建议</h3>
+<ol><li>维持现有广告投放力度，保障销售稳定增长；</li><li>持续优化投放渠道与人群策略，提升广告投产效率；</li><li>定期监控投入产出比，确保营销成本合理可控。</li></ol>
+<h2 id="八-客户聚类分析">八、客户聚类分析</h2>
+<p><strong>Claude 指令示例</strong>：基于客户年度消费数据做 K-Means 聚类，将客户划分为高、中、低价值三类，统计每类客户人数、消费总额、平均客单、营收占比，配套输出分层营销策略。</p>
+<p><strong>Claude 回答示例</strong>：</p>
+<h3 id="高价值客户-20-人">高价值客户（20 人）</h3>
+<ul><li>筛选特征：年消费额＞50000 元</li><li>总消费：1200000 元</li><li>平均客单：60000 元</li><li>营收占比：60%</li></ul>
+<h3 id="中价值客户-30-人">中价值客户（30 人）</h3>
+<ul><li>筛选特征：年消费额 20000~50000 元</li><li>总消费：600000 元</li><li>平均客单：20000 元</li><li>营收占比：30%</li></ul>
+<h3 id="低价值客户-50-人">低价值客户（50 人）</h3>
+<ul><li>筛选特征：年消费额＜20000 元</li><li>总消费：200000 元</li><li>平均客单：4000 元</li><li>营收占比：10%</li></ul>
+<h3 id="营销分层建议">营销分层建议</h3>
+<ol><li>高价值客户：配置专属服务、定期回访维系，锁定长期合作；</li><li>中价值客户：推送优惠活动，提升消费频次，向高价值客户转化；</li><li>低价值客户：主推入门款产品，培养消费习惯，挖掘潜在消费潜力。</li></ol>
+<h2 id="案例示例-营销人员分析客户数据">案例示例：营销人员分析客户数据</h2>
+<h3 id="场景-1">场景</h3>
+<p>营销人员基于全量客户数据，搭建客户画像、分层价值体系，定位核心客群，输出可落地的精细化营销策略。</p>
+<h3 id="Claude-指令示例-1">Claude 指令示例</h3>
+<p>请对这份客户 Excel 数据表做全面分析：</p>
+<ol><li>输出客户整体概况（总人数、总消费、均值、中位数）；</li><li>从地区、年龄、性别三个维度做客户分布统计；</li><li>分析消费频次、产品购买偏好；</li><li>按消费价值做客户分层；</li><li>针对不同客群、不同区域、不同年龄层输出精细化营销方案。</li></ol>
+<h3 id="Claude-回答示例-1">Claude 回答示例</h3>
+<h2 id="客户数据分析报告">客户数据分析报告</h2>
+<h2 id="一-客户概况">一、客户概况</h2>
+<ul><li>客户总数量：500 人</li><li>总消费金额：5000000 元</li><li>人均消费：10000 元</li><li>消费中位数：8000 元</li></ul>
+<h2 id="二-客户画像">二、客户画像</h2>
+<h3 id="地区分布">地区分布</h3>
+<h3 id="年龄分布">年龄分布</h3>
+<h3 id="性别分布">性别分布</h3>
+<h2 id="三-消费行为分析">三、消费行为分析</h2>
+<h3 id="消费频次">消费频次</h3>
+<ul><li>高频客户（年消费＞10 次）：50 人，占比 10%，平均消费 20000 元</li><li>中频客户（年消费 5~10 次）：150 人，占比 30%，平均消费 12000 元</li><li>低频客户（年消费＜5 次）：300 人，占比 60%，平均消费 6000 元</li></ul>
+<h3 id="产品消费偏好">产品消费偏好</h3>
+<ul><li>产品 A：购买 300 人，占比 60%</li><li>产品 B：购买 250 人，占比 50%</li><li>产品 C：购买 200 人，占比 40%</li><li>产品 D：购买 150 人，占比 30%</li></ul>
+<h2 id="四-客户价值分层">四、客户价值分层</h2>
+<h2 id="五-精细化营销建议">五、精细化营销建议</h2>
+<h3 id="VIP-客户维护">VIP 客户维护</h3>
+<ul><li>一对一专属客服服务；定期赠送礼品、优惠券；</li><li>优先邀请高端线下活动、新品内测体验资格。</li></ul>
+<h3 id="重要客户提升">重要客户提升</h3>
+<ul><li>个性化产品推荐、定期关怀触达；设置客户升级优惠政策，向 VIP 转化；搭建客户社群提升用户粘性。</li></ul>
+<h3 id="普通客户激活">普通客户激活</h3>
+<ul><li>定向推送促销活动，推荐高适配组合产品；设置首单优惠，引导提升消费频次。</li></ul>
+<h3 id="潜力客户开发">潜力客户开发</h3>
+<ul><li>发放新人专属礼包、产品免费试用；加大线上品牌宣传，通过社交渠道引流拉新。</li></ul>
+<h3 id="区域营销策略">区域营销策略</h3>
+<ul><li>重点深耕北京、上海高消费市场；下沉渗透广州、深圳区域；其他地区以线上轻量化营销为主。</li></ul>
+<h3 id="年龄分层策略">年龄分层策略</h3>
+<ul><li>核心 26-45 岁客群重点精细化运营维护；18-25 岁年轻群体重点培养消费习惯；46 岁以上客群适配适老化服务与产品。</li></ul>
+<h2 id="通用可复用提示词模板-1">通用可复用提示词模板</h2>
+<h3 id="模板-1-描述性统计-多维度分组统计">模板 1：描述性统计 + 多维度分组统计</h3>
+<p>基于上传的Excel销售数据表，完成以下统计：</p>
+<ol><li>输出整体描述性指标：总销售额、均值、中位数、标准差；</li><li>分别按产品、地区维度分组，统计每组销售额、营收占比、平均单价；</li><li>以结构化表格展示结果，附带简要业务解读。</li></ol>
+<h3 id="模板-2-时间序列趋势分析-预测">模板 2：时间序列趋势分析 + 预测</h3>
+<p>基于月度销售数据表，计算各月环比增长率； 梳理整体销售走势、累计涨幅、波动节点； 结合历史数据做合理的下一期销售额预测，输出趋势结论与预测值。</p>
+<h3 id="模板-3-异常值检测-3σ-法则">模板 3：异常值检测（3σ 法则）</h3>
+<p>使用3σ原则对销售额字段做异常值识别，输出均值、标准差、上下合理阈值； 列出所有异常订单明细、异常判定原因； 从业务、数据录入两个维度给出核查优化建议。</p>
+<h3 id="模板-4-相关性-线性回归分析">模板 4：相关性 + 线性回归分析</h3>
+<p>分析自变量（广告投入）与因变量（销售额）的皮尔逊相关系数、显著性P值； 构建一元线性回归模型，输出回归方程、拟合优度； 结合统计结果输出营销投放优化策略。</p>
+<h3 id="模板-5-客户分层聚类分析-营销方案">模板 5：客户分层聚类分析 + 营销方案</h3>
+<p>基于客户年度消费数据，使用聚类算法将客户划分为高、中、低价值三类； 统计每类客群人数、总消费、平均客单、营收占比； 针对每类客户、地域、年龄、性别维度输出精细化可落地的营销策略。</p>
+<h1 id="6-3-报告生成">6.3 报告生成</h1>
+<p>Claude Code 支持生成各类数据可视化图表与专业数据分析报告，将数据直观呈现，辅助业务决策。</p>
+<h2 id="撰写分析报告">撰写分析报告</h2>
+<h3 id="月度销售分析报告">月度销售分析报告</h3>
+<p><strong>Claude 指令示例</strong>：依托上传的销售 Excel 数据表，撰写完整月度销售分析报告，包含总体指标、产品 / 地区 / 销售员多维度明细、亮点问题、下月工作计划、风险提示与总结。</p>
+<p><strong>Claude 回答示例</strong>：</p>
+<h2 id="2026-年-1-月销售分析报告">2026 年 1 月销售分析报告</h2>
+<h2 id="一-总体概况">一、总体概况</h2>
+<p>本月销售业绩完成情况良好，各项经营指标均达成预设目标。</p>
+<ul><li>目标完成率：102.9%</li><li>同比增长率：15.3%</li><li>环比增长率：8.7%</li></ul>
+<h2 id="二-销售明细">二、销售明细</h2>
+<h3 id="1-按产品分类">（1）按产品分类</h3>
+<p><strong>分析</strong></p>
+<ol><li>产品 A 为核心主力产品，营收占比超 40%；</li><li>产品 C 同比增速最快，是全新业务增长点；</li><li>产品 D 增长乏力，需要重点跟进优化。</li></ol>
+<h3 id="2-按地区分类">（2）按地区分类</h3>
+<p><strong>分析</strong> 北京区域市场表现最优，同比增长 18.5%；深圳区域增长滞后，需要加大市场推广投放力度。</p>
+<h3 id="3-按销售员分类">（3）按销售员分类</h3>
+<p><strong>分析</strong> 张三个人业绩突出，销售额占团队总业绩 36.5%；赵六业绩未达预期，需开展专项业务培训辅导。</p>
+<h2 id="三-亮点与问题">三、亮点与问题</h2>
+<h3 id="亮点">亮点</h3>
+<ol><li>整体销售额超额完成月度目标，目标完成率 102.9%；</li><li>产品 C 增速亮眼，成为新的营收增长点；</li><li>北京区域市场增长优异，同比增长 18.5%；</li><li>销售员张三业绩表现突出，同比增长 22.1%。</li></ol>
+<h3 id="问题">问题</h3>
+<ol><li>产品 D 增速缓慢，同比仅增长 5.6%；</li><li>深圳区域市场增长动力不足；</li><li>销售员赵六业绩偏弱，需重点帮扶。</li></ol>
+<h2 id="四-下月工作计划">四、下月工作计划</h2>
+<ol><li><strong>销售目标</strong></li></ol>
+<ul><li>总销售额目标：1,350,000 元</li><li>环比增长目标：9.4%</li></ul>
+<ol><li><strong>重点落地措施</strong></li></ol>
+<ul><li>加大产品 D 市场宣传推广力度；</li><li>增加深圳区域营销资源投入；</li><li>针对赵六开展一对一销售专项培训；</li><li>优化整体销售策略，拉动全渠道业绩提升。</li></ul>
+<h2 id="五-风险提示">五、风险提示</h2>
+<ol><li>行业市场竞争加剧，或对后续销售增长形成压制；</li><li>部分区域宏观经济环境偏弱，居民消费意愿承压；</li><li>产品 D 市场竞争力不足，需尽快迭代优化。</li></ol>
+<h2 id="六-总结">六、总结</h2>
+<p>本月整体销售业绩达标，各项经营指标表现平稳，但产品 D、深圳区域、部分销售人员仍存在短板。下月将针对性补齐薄弱环节，冲刺更高业绩目标。</p>
+<h2 id="客户分析报告">客户分析报告</h2>
+<p><strong>Claude 指令示例</strong>：基于客户 Excel 数据表，撰写专业客户分析报告，包含客户整体概况、客户分层、地域 &amp; 年龄客户特征、分客群精细化营销方案与总结。</p>
+<p><strong>Claude 回答示例</strong>：</p>
+<h2 id="客户分析报告-1">客户分析报告</h2>
+<h2 id="一-客户概况-1">一、客户概况</h2>
+<p>截至 2024 年 1 月，公司累计有效客户 500 人，客户结构健康合理，消费价值贡献稳定。</p>
+<ul><li>客户总数量：500 人</li><li>总消费金额：5,000,000 元</li><li>平均客单价：10,000 元</li><li>客户留存率：85%</li></ul>
+<h2 id="二-客户分层">二、客户分层</h2>
+<h3 id="VIP-客户-50-人-占比-10">VIP 客户（50 人，占比 10%）</h3>
+<ul><li>筛选标准：年消费额＞50000 元</li><li>总消费金额：1,500,000 元</li><li>平均消费：30,000 元</li><li>营收贡献占比：30%</li></ul>
+<p><strong>分析</strong>：VIP 客户虽然人数少，但贡献三成营收，属于企业核心高价值客群。</p>
+<h3 id="重要客户-100-人-占比-20">重要客户（100 人，占比 20%）</h3>
+<ul><li>筛选标准：年消费额 20000~50000 元</li><li>总消费金额：1,500,000 元</li><li>平均消费：15,000 元</li><li>营收贡献占比：30%</li></ul>
+<p><strong>分析</strong>：重要客户是企业主力客群，具备升级转化为 VIP 客户的潜力。</p>
+<h3 id="普通客户-200-人-占比-40">普通客户（200 人，占比 40%）</h3>
+<ul><li>筛选标准：年消费额 5000~20000 元</li><li>总消费金额：1,500,000 元</li><li>平均消费：7,500 元</li><li>营收贡献占比：30%</li></ul>
+<p><strong>分析</strong>：普通客户基数最大，是企业用户基本盘。</p>
+<h3 id="潜力客户-150-人-占比-30">潜力客户（150 人，占比 30%）</h3>
+<ul><li>筛选标准：年消费额＜5000 元</li><li>总消费金额：500,000 元</li><li>平均消费：3,333 元</li><li>营收贡献占比：10%</li></ul>
+<p><strong>分析</strong>：潜力客户当前消费能力偏弱，但具备长期消费挖掘空间。</p>
+<h2 id="三-客户特征分布">三、客户特征分布</h2>
+<h3 id="地区分布-1">地区分布</h3>
+<ul><li>北京：150 人（30%），平均消费 12000 元</li><li>上海：125 人（25%），平均消费 11000 元</li><li>广州：100 人（20%），平均消费 9000 元</li><li>深圳：75 人（15%），平均消费 8000 元</li><li>其他地区：50 人（10%），平均消费 7000 元</li></ul>
+<h3 id="年龄分布-1">年龄分布</h3>
+<ul><li>18-25 岁：100 人（20%），平均消费 6000 元</li><li>26-35 岁：200 人（40%），平均消费 12000 元</li><li>36-45 岁：150 人（30%），平均消费 11000 元</li><li>46 岁以上：50 人（10%），平均消费 8000 元</li></ul>
+<h2 id="四-分客群营销建议">四、分客群营销建议</h2>
+<h3 id="VIP-客户维护-1">VIP 客户维护</h3>
+<ul><li>配置一对一专属客服服务；</li><li>定期赠送礼品、专属优惠券；</li><li>定向邀请高端线下客户活动；</li><li>开放新品优先内测体验权限。</li></ul>
+<h3 id="重要客户提升-1">重要客户提升</h3>
+<ul><li>个性化产品精准推荐，定期客户关怀触达；</li><li>设置客户升级优惠政策，引导向 VIP 客群转化；</li><li>搭建客户社群，提升用户粘性与复购。</li></ul>
+<h3 id="普通客户激活-1">普通客户激活</h3>
+<ul><li>定向推送促销活动，推荐高适配产品组合；</li><li>设置新客首购优惠，刺激消费频次提升。</li></ul>
+<h3 id="潜力客户开发-1">潜力客户开发</h3>
+<ul><li>发放新人专属消费礼包，降低初次消费门槛；</li><li>开放产品免费试用权益，加大线上品牌宣传引流。</li></ul>
+<h2 id="五-总结">五、总结</h2>
+<p>公司客户分层结构均衡合理，各层级客群分布稳定。后续将重点维护高价值 VIP 客户、培育重要客户、激活普通存量客户、挖掘潜力新客户，全方位提升整体客户生命周期价值。</p>
+<h2 id="通用可复用提示词模板-2">通用可复用提示词模板</h2>
+<h3 id="模板-1-数据可视化图表生成">模板 1：数据可视化图表生成</h3>
+<p>基于上传的Excel数据表，生成【柱状图/折线图/饼图】，维度：【产品/时间/地区】； 附上完整明细数据表，结合图表数据输出业务分析结论。</p>
+<h3 id="模板-2-月度销售分析报告通用模板">模板 2：月度销售分析报告通用模板</h3>
+<p>基于销售数据表撰写正式月度销售分析报告，结构要求：</p>
+<ol><li>整体经营指标（目标完成率、同比、环比）；</li><li>按产品、地区、销售员三个维度做数据汇总分析；</li><li>提炼业务亮点、现存问题；</li><li>下月销售目标、落地执行措施；</li><li>市场风险提示与整体总结。</li></ol>
+<h3 id="模板-3-客户数据分析报告模板">模板 3：客户数据分析报告模板</h3>
+<p>基于客户数据撰写专业客户分析报告，包含：</p>
+<ol><li>客户整体核心指标概况；</li><li>客户价值分层，统计每层人数、消费、营收占比并解读；</li><li>地区、年龄、性别客户分布特征分析；</li><li>针对四类客群分别输出精细化可落地营销策略；</li><li>业务总结与后续运营方向。</li></ol>
+<h2 id="案例示例-财务人员生成月度报表">案例示例：财务人员生成月度报表</h2>
+<h3 id="场景-2">场景</h3>
+<p>财务人员依托销售 Excel 数据源，自动生成包含核心指标、多类可视化图表、明细表格、业务分析、下月计划、风险提示的完整月度销售报表。</p>
+<h3 id="Claude-指令示例-2">Claude 指令示例</h3>
+<p>请基于上传的销售 Excel 数据表，生成 2024 年 1 月销售月度报表，要求包含：</p>
+<ol><li>销售总览关键指标；</li><li>月度销售趋势折线图；</li><li>产品销售额对比柱状图 + 产品明细表格；</li><li>各地区销售额占比饼图 + 地区明细表格；</li><li>业务亮点、现存问题梳理；</li><li>下月销售目标、落地执行措施；</li><li>市场经营风险提示。</li></ol>
+<h3 id="Claude-回答示例-2">Claude 回答示例</h3>
+<h2 id="2024-年-1-月销售月度报表">2024 年 1 月销售月度报表</h2>
+<h2 id="一-销售总览">一、销售总览</h2>
+<h3 id="关键指标">关键指标</h3>
+<ul><li>总销售额：1,234,567 元</li><li>目标完成率：102.9%</li><li>同比增长：15.3%</li><li>环比增长：8.7%</li></ul>
+<h2 id="二-销售趋势图">二、销售趋势图</h2>
+<p>使用折线图展示 1-6 月月度销售额走势，整体呈现稳步上升趋势，仅 4 月小幅回落，后续持续回升。</p>
+<h2 id="三-产品销售对比">三、产品销售对比</h2>
+<h3 id="产品销售额对比柱状图">产品销售额对比柱状图</h3>
+<p>直观呈现四款产品营收规模差异，产品 A 销售额最高，产品 D 营收规模最低。</p>
+<h3 id="产品销售明细表">产品销售明细表</h3>
+<h2 id="四-地区销售分布">四、地区销售分布</h2>
+<h3 id="各地区销售额占比饼图">各地区销售额占比饼图</h3>
+<p>北京地区营收贡献最高，深圳地区营收占比最低，区域销售集中度较高。</p>
+<h3 id="地区销售明细表">地区销售明细表</h3>
+<h2 id="五-亮点与问题">五、亮点与问题</h2>
+<h3 id="亮点-1">亮点</h3>
+<ol><li>整体销售额超额完成月度目标，目标完成率 102.9%</li><li>产品 C 增长迅速，同比增长 20.1%，为全新业务增长点</li><li>北京地区市场表现优异，同比增长 18.5%</li></ol>
+<h3 id="问题-1">问题</h3>
+<ol><li>产品 D 增长缓慢，同比仅增长 5.6%，市场竞争力偏弱</li><li>深圳地区增长乏力，同比仅增长 8.7%，需要加大市场投入</li></ol>
+<h2 id="六-下月销售目标">六、下月销售目标</h2>
+<ul><li>总销售额目标：1,350,000 元</li><li>环比增长目标：9.4%</li></ul>
+<h2 id="七-重点落地措施">七、重点落地措施</h2>
+<ol><li>加大产品 D 市场宣传与渠道推广力度</li><li>增加深圳地区营销资源投放，下沉区域市场</li><li>针对销售员赵六开展销售能力专项培训</li><li>优化全渠道销售策略，拉升整体业绩水平</li></ol>
+<h2 id="八-风险提示">八、风险提示</h2>
+<ol><li>行业市场竞争持续加剧，或将制约后续销售增长速度</li><li>部分区域宏观经济环境偏弱，居民消费意愿承压</li><li>产品 D 市场竞争力不足，需尽快完成产品迭代优化</li></ol>
+<h2 id="报表制作小技巧">报表制作小技巧</h2>
+<ol><li><strong>选择合适的图表类型</strong>：结合数据业务场景选择适配图表，对比类数据用柱状图、趋势类用折线图、结构占比类用饼图。</li><li><strong>图表要简洁明了</strong>：减少多余装饰元素，弱化美化样式，重点突出原始业务数据。</li><li><strong>报告结构清晰</strong>：采用层级化标题分段，遵循「总览 - 图表 - 明细 - 分析 - 计划 - 风险」的规范结构。</li><li><strong>数据要准确</strong>：核对原始数据源，保证报表中指标、表格、图表数据完全一致。</li><li><strong>分析要深入</strong>：不能只陈列数据，需要挖掘数据背后的业务原因、增长规律与现存隐患。</li><li><strong>建议要可行</strong>：提出的优化措施必须具体、可落地、可执行，避免空泛化描述。</li></ol>
+<h2 id="通用可复用提示词模板-3">通用可复用提示词模板</h2>
+<h3 id="模板-月度综合业务报表生成模板">模板：月度综合业务报表生成模板</h3>
+<p>基于上传的Excel销售数据表，生成规范月度业务报表，结构要求如下：</p>
+<ol><li>开篇展示核心经营总览指标（总销售额、目标完成率、同比、环比）；</li><li>绘制月度销售趋势折线图，展示周期走势；</li><li>绘制产品销售额对比柱状图，附带产品维度明细数据表；</li><li>绘制区域销售额占比饼图，附带地区维度明细数据表；</li><li>总结业务亮点、现存短板问题；</li><li>设定下一周期销售目标，输出多条可落地执行的优化措施；</li><li>梳理市场、产品、人员三类经营风险并提示。</li></ol></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+
+</body>
+</html>

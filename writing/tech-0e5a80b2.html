@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>创建型设计模式 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">8</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-工厂模式">1.工厂模式</a><a class="tl l2" href="#2-抽象工厂模式">2.抽象工厂模式</a><a class="tl l2" href="#3-单例模式">3.单例模式</a><a class="tl l3" href="#1-简介">1.简介</a><a class="tl l3" href="#2-优缺点-使用场景">2.优缺点 &amp; 使用场景</a><a class="tl l3" href="#3-单例模式的6种写法">3.单例模式的6种写法：</a><a class="tl l2" href="#4-创造者模式">4.创造者模式</a><a class="tl l2" href="#5-原型模式">5.原型模式</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>创建型设计模式</h1><div class="meta">2024-05-18 · <a class="src-link" href="https://flowus.cn/0e5a80b2-3b73-4af6-a227-23ac99bfc8c3" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><p><img alt="image.png" src="/assets/img/flowus-de2c8148ca5aab1a.png"></p>
+<h2 id="1-工厂模式">1.工厂模式</h2>
+<p>其在父类中提供一个创建对象的方法， 允许子类决定实例化对象的类型。</p>
+<h2 id="2-抽象工厂模式">2.抽象工厂模式</h2>
+<h2 id="3-单例模式">3.单例模式</h2>
+<h3 id="1-简介">1.简介</h3>
+<p>这种模式涉及到一个单一的类，<strong>该类负责创建自己的对象，同时确保只有单个对象被创建</strong>。这个类提供了一种访问其唯一的对象的方式，可以直接访问，不需要实例化该类的对象。</p>
+<p>单例模式是一种创建型设计模式，它<strong>确保一个类只有一个实例，并提供了一个全局访问点来访问该实例</strong>。</p>
+<p><strong>注意：</strong></p>
+<ul><li>1、单例类只能有一个实例。—— <strong>将构造函数用private修饰</strong></li></ul>
+<ul><li>2、单例类<strong>必须自己创建自己的唯一实例</strong>。</li></ul>
+<ul><li>3、单例类<strong>必须给所有其他对象提供这一实例</strong>。—— <strong>static关键字</strong></li></ul>
+<h3 id="2-优缺点-使用场景">2.优缺点 &amp; 使用场景</h3>
+<ol><li><strong>优点：</strong></li></ol>
+<ol><li>在内存里只有一个实例，<strong>减少了内存的开销</strong>，尤其是频繁的创建和销毁实例（比如管理学院首页页面缓存）。</li></ol>
+<ol><li>避免对资源的多重占用（比如写文件操作）。</li></ol>
+<ol><li><strong>缺点：</strong></li></ol>
+<p><strong>没有接口，不能继承</strong>，与单一职责原则冲突，一个类应该只关心内部逻辑，而不关心外面怎么样来实例化。</p>
+<ol><li><strong>使用场景：</strong></li></ol>
+<ul><li>1、要求生产唯一序列号。</li></ul>
+<ul><li>2、WEB 中的计数器，不用每次刷新都在数据库里加一次，用单例先缓存起来。</li></ul>
+<ul><li>3、创建的一个对象需要消耗的资源过多，比如 I/O 与数据库的连接等。</li></ul>
+<p><strong>注意事项：</strong>getInstance() 方法中需要使用<strong>同步锁 synchronized</strong> (Singleton.class) <strong>防止多线程同时进入造成 instance 被多次实例化。</strong></p>
+<p><strong>简单实现：</strong></p>
+<p>1.创建一个 Singleton 类。</p>
+<pre><code>public class SingleObject {
+ 
+   //创建 SingleObject 的一个对象
+   private static SingleObject instance = new SingleObject();
+ 
+   //让构造函数为 private，这样该类就不会被实例化
+   private SingleObject(){}
+ 
+   //获取唯一可用的对象
+   public static SingleObject getInstance(){
+      return instance;
+   }
+ 
+   public void showMessage(){
+      System.out.println(&quot;Hello World!&quot;);
+   }
+}</code></pre>
+<p>2.获取单例对象：</p>
+<pre><code>public class SingletonPatternDemo {
+   public static void main(String[] args) {
+ 
+          //不合法的构造函数
+      //编译时错误：构造函数 SingleObject() 是不可见的
+      //SingleObject object = new SingleObject();
+ 
+          //获取唯一可用的对象
+      SingleObject object = SingleObject.getInstance();
+ 
+         //显示消息
+      object.showMessage();
+   }
+}</code></pre>
+<h3 id="3-单例模式的6种写法">3.单例模式的6种写法：</h3>
+<h5 id="1-饿汉模式">1.饿汉模式</h5>
+<p>在<strong>类加载时就完成了初始化</strong>，所以<strong>类加载较慢</strong>，但获取对象的速度快。</p>
+<p>这种方式<strong>基于类加载机制避免了多线程的同步问题</strong>，但是也不能确定有其他的方式（或者其他的静态方法）导致类装载，这时候初始化instance显然没有达到懒加载的效果。</p>
+<pre><code>public class Singleton {  
+     private static Singleton instance = new Singleton(); // 直接静态创建  
+     private Singleton (){
+     }
+     public static Singleton getInstance() {  
+     return instance;  
+     }  
+ }  </code></pre>
+<h5 id="2-懒汉模式-线程不安全">2.懒汉模式(线程不安全)</h5>
+<p>申明了一个静态对象，在<strong>用户第一次调用时初始化</strong>，虽然节约了资源，但第一次加载时需要实例化，反映稍慢一些，而且在多线程不能正常工作。</p>
+<pre><code>public class Singleton {  
+      private static Singleton instance;  
+      private Singleton (){
+      }   
+      public static Singleton getInstance() {  
+      if (instance == null) {  // 首次加载才会初始化
+          instance = new Singleton();  
+      }  
+      return instance;  
+      }  
+ }  </code></pre>
+<h5 id="3-懒汉模式-线程安全">3.懒汉模式(线程安全)</h5>
+<p>使用<strong>synchronized关键字修饰getInstance()。</strong></p>
+<p><strong>每次调用getInstance方法时都需要进行同步</strong>，造成不必要的同步开销，而且大部分时候我们是用不到同步的，所以不建议用这种模式。</p>
+<pre><code>public class Singleton {  
+      private static Singleton instance;  
+      private Singleton (){
+      }
+      //  synchronized关键字修饰，达到同步目的
+      public static synchronized Singleton getInstance() {   
+      if (instance == null) {  
+          instance = new Singleton();  
+      }  
+      return instance;  
+      }  
+ }  </code></pre>
+<h5 id="4-双重校验锁实现对象单例-线程安全"><strong>4.双重校验锁实现对象单例（线程安全）</strong>：</h5>
+<p><strong>volatile关键字修饰单例</strong>，<strong>确保多线程环境下对其的修改能够立即被其他线程可见。</strong></p>
+<pre><code>public class Singleton {
+    private volatile static Singleton uniqueInstance;
+    private Singleton() {
+    }
+
+    public  static Singleton getUniqueInstance() {
+       //先判断对象是否已经实例过，没有实例化过才进入加锁代码
+        if (uniqueInstance == null) { // 第一次校验，排除不必要的同步
+            //类对象加锁
+            synchronized (Singleton.class) {
+                if (uniqueInstance == null) {
+                    uniqueInstance = new Singleton();
+                }
+            }
+        }
+        return uniqueInstance;
+    }
+}</code></pre>
+<p>这种写法<strong>在getSingleton方法中对singleton进行了两次判空：</strong></p>
+<ul><li>第一次是<strong>为了不必要的同步</strong>。</li></ul>
+<p>这是指，<strong>单例已经创建</strong>，此时大量的线程来访问的话，就可以直接将这些线程拒绝掉。</p>
+<ul><li>第二次是<strong>在singleton等于null的情况下才创建实例</strong>。</li></ul>
+<p>这是指，<strong>在单例未创建时，此时涌进大量线程</strong>，但此时只能有一个进行new操作，因此在使用同步锁排除掉并发问题后，再进行一次判空。</p>
+<p><code>uniqueInstance</code> 采用 <code>volatile</code> 关键字修饰也是很有必要的， <code>uniqueInstance = new Singleton();</code> 这段代码其实是分为三步执行：</p>
+<ol><li>为 <code>uniqueInstance</code> 分配内存空间</li></ol>
+<ol><li>初始化 <code>uniqueInstance</code></li></ol>
+<ol><li>将 <code>uniqueInstance</code> 指向分配的内存地址</li></ol>
+<p>但是由于 JVM 具有指令重排的特性，执行顺序有可能变成 <strong>1-&gt;3-&gt;2</strong>。指令重排在单线程环境下不会出现问题，但是在多线程环境下<strong>会导致一个线程获得还没有初始化的实例</strong>。例如，线程 T1 执行了 1 和 3，此时 T2 调用 <code>getUniqueInstance</code>() 后发现 <code>uniqueInstance</code> 不为空，因此返回 <code>uniqueInstance</code>，但此时 <code>uniqueInstance</code> 还未被初始化。</p>
+<ol><li><strong>详细分析：</strong></li></ol>
+<ol><li><code>synchronized (Singleton.class) { ... }</code>：这是一个同步块，使用 <code>Singleton.class</code> 对象作为锁。这意味着<strong>只有一个线程能够同时进入这个同步块</strong>。</li></ol>
+<ol><li><code>if (uniqueInstance == null) { ... }</code>：在同步块中，首先检查 <code>uniqueInstance</code> 是否为 <code>null</code>。这是<strong>第一次检查</strong>，用于避免不必要的同步开销。如果 <code>uniqueInstance</code> 不为 <code>null</code>，说明已经有其他线程创建了 <code>Singleton</code> 实例，这时就不需要再进入同步块。</li></ol>
+<ol><li><code>uniqueInstance = new Singleton();</code>：如果 <code>uniqueInstance</code> 为 <code>null</code>，说明当前线程是第一个尝试创建 <code>Singleton</code> 实例的线程。在同步块内部，创建新的 <code>Singleton</code> 实例，并将其赋值给 <code>uniqueInstance</code> 变量。由于这个操作是原子性的，因此其他线程无法看到未完全初始化的实例。</li></ol>
+<p>通过使用双重检查锁定，可以避免在大多数情况下对同步块进行加锁，从而提高了性能。只有在 <code>uniqueInstance</code> 为 <code>null</code> 且需要创建实例时，才会进入同步块，确保了线程安全性。</p>
+<ol><li><strong>如果不使用volatile，会出现什么情况？</strong></li></ol>
+<p>在没有 <code>volatile</code> 的情况下，一个线程可能在写入 <code>uniqueInstance</code> 的值后，<strong>其他线程无法立即看到修改后的值</strong>，<strong>从而可能导致其他线程在进行第二次检查时仍然认为 <code>uniqueInstance</code> 为 <code>null</code></strong>，从而<strong>导致多个实例被创建</strong>。</p>
+<hr>
+<hr>
+<h5 id="5-静态内部类单例模式-推荐">5.静态内部类单例模式(推荐)</h5>
+<p>此时<strong>将该实例定义在静态内部类中</strong>。</p>
+<ol><li><strong>第一次加载Singleton类时并不会初始化sInstance</strong>，实现<strong>延迟加载</strong></li></ol>
+<ol><li>只有<strong>第一次调用getInstance方法时虚拟机类加载SingletonHolder 并初始化sInstance 。</strong></li></ol>
+<p>只有在第一次调用getInstance()方法时才会初始化单例实例，节省了内存空间。</p>
+<p>这样不仅能确保<strong>线程安全</strong>也能<strong>保证Singleton类的唯一性</strong>，所以推荐使用静态内部类单例模式。</p>
+<p>静态内部类在类加载时会被初始化，由<strong>JVM来保证线程安全性</strong>，因此无需额外的同步措施。</p>
+<pre><code>public class Singleton { 
+    private Singleton(){
+    }
+      public static Singleton getInstance(){ // 获取单例的方法
+        return SingletonHolder.sInstance;  
+    }  
+    private static class SingletonHolder {  // 静态内部类
+        private static final Singleton sInstance = new Singleton();  
+    }  
+} 
+</code></pre>
+<blockquote><p>💡 <strong>Q1：为什么只有在第一次调用时才会加载，不是使用static修饰了吗？</strong></p></blockquote>
+<p>静态内部类中的静态成员变量只有在类第一次被加载时才会初始化，<strong>并且只会被加载一次</strong>。这是因为静态内部类的静态成员变量在类加载时就会被初始化，而<strong>类加载是由类加载器（ClassLoader）负责的</strong>，保证了线程安全。</p>
+<p>而且<strong>静态内部类的加载是在外部类被加载的时候才会进行</strong>，所以<strong>实现了延迟加载</strong>的效果，只有在需要时才会初始化静态内部类，进而初始化单例对象。</p>
+<h5 id="6-枚举类实现单例模式">6.枚举类实现单例模式</h5>
+<p>是的，<strong>单例模式可以使用枚举类实现</strong>。</p>
+<p>在Java中，<strong>枚举类的每个枚举常量都是单例</strong>的，因此使用枚举类实现单例模式是一种简单且线程安全的方式。</p>
+<p>以下是使用枚举类实现单例模式的示例：</p>
+<pre><code>public enum Singleton {
+    INSTANCE; // 定义单例对象
+    
+    // 示例方法
+    public void doSomething() {
+        System.out.println(&quot;Singleton method called&quot;);
+    }
+}</code></pre>
+<h2 id="4-创造者模式">4.创造者模式</h2>
+<h2 id="5-原型模式">5.原型模式</h2></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>JVM · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>JVM</b><small>幕布导图 · 114 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "JVM", "data": {"id": "root", "topic": "<b>JVM<\/b>", "children": [{"id": "n1", "topic": "<b>1.Java内存区域详解<\/b><span class=\"mm-note\">Java 虚拟机在执行 Java 程序的过程中会把它管理的内存划分成若干个不同的数据区域。 JDK 1.8 和之前的版本略有不同，我们这里以 JDK 1.7 和 JDK 1.8 这两个版本为例介绍。<\/span>", "children": [{"id": "n2", "topic": "<b>JDK1.7：<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-ef79962fa781f0.jpg\" style=\"width:320px;height:348px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n3", "topic": "<b>JDK1.8：<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-000fe5c6cc1fd3.jpg\" style=\"width:320px;height:385px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n4", "topic": "<b>线程私有<\/b>：", "children": [{"id": "n5", "topic": "<b>程序计数器（PC）<\/b>", "children": []}, {"id": "n6", "topic": "<b>虚拟机栈<\/b>", "children": []}, {"id": "n7", "topic": "<b>本地方法栈<\/b>", "children": []}]}, {"id": "n8", "topic": "<b>线程共享<\/b>：", "children": [{"id": "n9", "topic": "堆", "children": []}, {"id": "n10", "topic": "方法区", "children": []}, {"id": "n11", "topic": "直接内存 (非运行时数据区的一部分)", "children": []}]}, {"id": "n12", "topic": "<b>1.程序计数器(PC)<\/b><span class=\"mm-note\">程序计数器是一块较小的内存空间，可以看作是<b>当前线程所执行的字节码的行号指示器<\/b>。 一个<a href=\"https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%A4%AE%E5%A4%84%E7%90%86%E5%99%A8\" target=\"_blank\" rel=\"noopener\">中央处理器<\/a>CPU中的<a href=\"https://zh.wikipedia.org/wiki/%E5%AF%84%E5%AD%98%E5%99%A8\" target=\"_blank\" rel=\"noopener\">寄存器<\/a>，其功能是<b>存储下一条要执行的指令（在机器语言中）的内存地址<\/b>。 <b>字节码解释器<\/b>工作时通过改变这个计数器的值来选取下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等功能都需要依赖这个计数器来完成。 另外，为了线程切换<\/span>", "children": [{"id": "n13", "topic": "字节码解释器通过改变程序计数器来依次读取指令，从而实现代码的流程控制，如：顺序执行、选择、循环、异常处理。", "children": []}, {"id": "n14", "topic": "在多线程的情况下，程序计数器用于<b>记录当前线程执行的位置<\/b>，从而当线程被切换回来的时候能够知道该线程上次运行到哪儿了。<span class=\"mm-note\">💡 ⚠️ 注意：程序计数器是<b>唯一一个不会出现 <code>OutOfMemoryError<\/code> 的内存区域<\/b>，它的<b>生命周期随着线程的创建而创建，随着线程的结束而死亡<\/b>。<\/span>", "children": []}]}, {"id": "n15", "topic": "<b>2.虚拟机栈<\/b><span class=\"mm-note\"><b>生命周期和线程相同<\/b>，随着线程的创建而创建，随着线程的死亡而死亡。 方法调用的数据需要通过栈进行传递，<b>每一次方法调用都会有一个对应的栈帧被压入栈中<\/b>，每一个方法调用结束后，都会有一个栈帧被弹出。 <b>栈由一个个栈帧组成<\/b>，而<b>每个栈帧中都拥有<\/b>：<b>局部变量表、操作数栈、动态链接、方法返回地址<\/b>。和数据结构上的栈类似，两者都是先进后出的数据结构，只支持出栈和入栈两种操作。<\/span>", "children": [{"id": "n16", "topic": "<b>局部变量表：<\/b>主要存放了编译期可知的各种数据类型（boolean、byte、char、short、int、float、long、double）、对象引用等", "children": []}, {"id": "n17", "topic": "<b>操作数栈<\/b> 主要作为方法调用的中转站使用，用于存放方法执行过程中产生的中间计算结果。另外，计算过程中产生的<b>临时变量也会放在操作数栈中<\/b>。", "children": []}, {"id": "n18", "topic": "<b>动态链接<\/b> 主要<b>服务一个方法需要调用其他方法的场景<\/b>。<span class=\"mm-note\">Class 文件的常量池里保存有大量的符号引用比如方法引用的符号引用。 当一个方法要调用其他方法，需要将常量池中指向方法的符号引用转化为其在内存地址中的直接引用。动态链接的作用就是为了将符号引用转换为调用方法的直接引用，这个过程也被称为 <b>动态连接<\/b> 。 那么<b>当线程请求栈的深度超过当前 Java 虚拟机栈的最大深度<\/b>的时候，就抛出 <b><code>StackOverFlowError<\/code><\/b> 错误。 Java 方法有两种返回方式，一种是 <b>return 语句正常返回<\/b>，一种是<b>抛出异常<\/b>。不管哪种返回方式，都会导致栈帧被弹出。 简单总结一下程序运行中栈<b>可能会出现两种错误<\/b>：<\/span>", "children": []}, {"id": "n19", "topic": "<b><code>StackOverFlowError<\/code>：<\/b> 若<b>栈的内存大小不允许动态扩展<\/b>，那么当线程请求栈的深度超过当前 Java 虚拟机栈的最大深度的时候，就抛出 <code>StackOverFlowError<\/code> 错误。", "children": []}, {"id": "n20", "topic": "<b><code>OutOfMemoryError<\/code>：<\/b> 如果<b>栈的内存大小可以动态扩展<\/b>， 如果虚拟机在动态扩展栈时<b>无法申请到足够的内存空间<\/b>，则抛出<code>OutOfMemoryError<\/code>异常。", "children": []}]}, {"id": "n21", "topic": "<b>3.本地方法栈<\/b><span class=\"mm-note\">和虚拟机栈所发挥的作用非常相似，区别是：<b>虚拟机栈为虚拟机执行 Java 方法 （也就是字节码）服务，而本地方法栈则为虚拟机使用到的 Native 方法服务。<\/b> 在 HotSpot 虚拟机中和 Java 虚拟机栈合二为一。 本地方法被执行的时候，在本地方法栈也会创建一个栈帧，用于存放该本地方法的局部变量表、操作数栈、动态链接、出口信息。 方法执行完毕后相应的栈帧也会出栈并释放内存空间，也会出现 <code>StackOverFlowError<\/code> 和 <b><code>OutOfMemoryError<\/code><\/b> 两种错误<\/span>", "children": []}, {"id": "n22", "topic": "<b>4.堆<\/b><span class=\"mm-note\">Java 虚拟机所管理的内存中最大的一块，Java 堆是<b>所有线程共享的一块内存区域<\/b>，在虚拟机启动时创建。 <b>此内存区域的唯一目的就是存放对象实例，几乎所有的对象实例以及数组都在这里分配内存。<\/b> Java 世界中“<b>几乎<\/b>”所有的对象都在堆中分配，但是，随着 JIT 编译器的发展与<b>逃逸分析技术<\/b>逐渐成熟，栈上分配、标量替换优化技术将会导致一些微妙的变化，所有的对象都分配到堆上也渐渐变得不那么“绝对”了。从 JDK 1.7 开始已经默认开启逃逸分析，如果<b>某些方法中的对象引用没有被返回或者未被外面使用<\/b>（也就是未逃逸出去），那么对象<b>可以直接在栈上分配内存<\/b>。 <b>Java 堆是垃圾收集器管理的主要区域<\/b><\/span>", "children": []}, {"id": "n23", "topic": "<b>5.方法区<\/b><span class=\"mm-note\">方法区属于是 <b>JVM 运行时数据区域的一块逻辑区域<\/b>，是<b>各个线程共享的内存区域<\/b>。 《Java 虚拟机规范》只是规定了有方法区这么个概念和它的作用，方法区到底要如何实现那就是虚拟机自己要考虑的事情了。也就是说，<b>在不同的虚拟机实现上，方法区的实现是不同<\/b>的。 当虚拟机要使用一个类时，它需要读取并解析 Class 文件获取相关信息，再将信息存入到方法区。 方法区会存储已被虚拟机加载的 <b>类信息、字段信息、方法信息、常量、静态变量、即时编译器编译后的代码等数据<\/b>。<\/span>", "children": [{"id": "n24", "topic": "static final修饰的成员变量都存储于 方法区中", "children": []}, {"id": "n25", "topic": "字符串常量也是存储在方法区中", "children": []}, {"id": "n26", "topic": "<b>1.方法区与元空间、永久代的关系<\/b><span class=\"mm-note\">在 <b>jdk7 及以前<\/b>，习惯上把方法区称为<b>永久代<\/b>。<b>jdk8开始<\/b>，使用<b>元空间<\/b>取代了永久代。 <b>方法区是一种规范<\/b>，不同的虚拟机厂商可以基于规范做出不同的实现，永久代和元空间就是出于不同jdk版本的实现。 方法区和永久代以及元空间的关系很像 <b>Java 中接口和类的关系<\/b>，类实现了接口，这里的类就可以看作是永久代和元空间，接口可以看作是方法区，也就是说<b>永久代以及元空间是 HotSpot 虚拟机对虚拟机规范中方法区的两种实现方式。<\/b> 并且，永久代是 JDK 1.8 之前的方法区实现，JDK 1.8 及以后方法区的实现变成了元空间。 永久代、元空间并不只是名字变了，内部结构也进行了调整。 **永久<\/span>", "children": []}, {"id": "n27", "topic": "<b>2.为什么要将永久代替换为元空间？<\/b>", "children": [{"id": "n28", "topic": "<b>突破内存限制，减少OOM。<\/b><span class=\"mm-note\">整个<b>永久代有一个 JVM 本身设置的固定大小上限<\/b>，无法进行调整（也就是<b>受到 JVM 内存的限制<\/b>）。 由于<b>元空间使用的是本地内存，而不是 JVM 内存<\/b>，因此理论上，其大小只受限于操作系统的实际可用内存。这大大减少了内存溢出的可能性。相较于永久代在 JVM 堆中预分配的有限空间，元空间的引入提供了更大的空间来存储类元数据。<\/span>", "children": []}, {"id": "n29", "topic": "<b>能加载的类多了<\/b><span class=\"mm-note\"><b>元空间里面存放的是类的元数据<\/b>，这样加载多少类的元数据就不由 <code>MaxPermSize<\/code> 控制了, 而<b>由系统的实际可用空间来控制<\/b>，这样能加载的类就更多了。<\/span>", "children": []}, {"id": "n30", "topic": "<b>永久代调优复杂<\/b><span class=\"mm-note\"><b>永久代会为GC带来不必要的复杂性<\/b>，并且<b>回收效率偏低<\/b>。 主要是为了<b>降低 Full GC。<\/b> 在永久代中元数据可能会随着每一次赋GC发生而进行移动，而 hotspot虚拟机每种类型的垃圾回收器都要特殊处理永久代中的元数据，分离出来以后可以简化赋GC，以及以后并发隔离元数据等方面进行优化。<\/span>", "children": []}]}]}, {"id": "n31", "topic": "<b>6.运行时常量池<\/b><span class=\"mm-note\">Class 文件中除了有类的版本、字段、方法、接口等描述信息外，还有用于<b>存放编译期生成的各种字面量<\/b>（Literal）<b>和符号引用<\/b>（Symbolic Reference）的 <b>常量池表(Constant Pool Table)<\/b> 。<\/span>", "children": [{"id": "n32", "topic": "<b>字面量<\/b>：包括字符串、整数、浮点数等常量。", "children": []}, {"id": "n33", "topic": "<b>符号引用<\/b>：包括类和接口的全限定名、字段的名称和描述符、方法的名称和描述符等。<span class=\"mm-note\"><b>常量池表会在类加载后存放到方法区的运行时常量池<\/b>中。 运行时常量池的功能<b>类似于传统编程语言的符号表<\/b>，尽管它包含了比典型符号表更广泛的数据。 既然运行时常量池是方法区的一部分，自然受到方法区内存的限制，当常量池无法再申请到内存时会抛出 <code>OutOfMemoryError<\/code> 错误<\/span>", "children": []}]}, {"id": "n34", "topic": "<b>7.字符串常量池<\/b><span class=\"mm-note\"><b>字符串常量池<\/b> 是 JVM 为了<b>提升性能和减少内存消耗针对字符串<\/b>（String 类）专门开辟的一块区域，主要目的是为了避免字符串的重复创建。<\/span>", "children": []}, {"id": "n35", "topic": "<b>8.直接内存<\/b><span class=\"mm-note\">直接内存是一种<b>特殊的内存缓冲区<\/b>，并不在 Java 堆或方法区中分配的，而是通过 JNI 的方式在<b>本地内存上分配<\/b>的。 <b>直接内存并不是虚拟机运行时数据区的一部分<\/b>，也<b>不是虚拟机规范中定义的内存区域<\/b>，但是这部分内存也被频繁地使用。而且也可能导致 <b><code>OutOfMemoryError<\/code><\/b> 错误出现。<\/span>", "children": []}]}, {"id": "n36", "topic": "<b>2.什么区域会OOM、什么区域不会OOM？<\/b><span class=\"mm-note\"><b>除了PC(程序计数器)<\/b>，其他都可能会发生。 需要注意的是：<\/span>", "children": [{"id": "n37", "topic": "<b>元空间<\/b><span class=\"mm-note\">其使用的是本地内存，因此OOM时，是本地内存不足。<\/span>", "children": []}, {"id": "n38", "topic": "<b>永久代<\/b><span class=\"mm-note\">使用的是JVM内存，OOM时，是JVM的内存不同<\/span>", "children": []}, {"id": "n39", "topic": "<b>虚拟机栈<\/b><span class=\"mm-note\">当虚拟机栈<b>可动态申请内存时，才可能出现OOM<\/b>；否则只会出现stackOverFlowError<\/span>", "children": []}]}, {"id": "n40", "topic": "<b>2. Java 堆中对象创建、内存布局和访问的全过程<\/b>", "children": [{"id": "n41", "topic": "<b>1.对象的创建步骤<\/b>", "children": [{"id": "n42", "topic": "<b>类加载检查<\/b><span class=\"mm-note\">虚拟机遇到一条 new 指令时，首先将去检查这个指令的参数<b>是否能在常量池中定位到这个类的符号引用<\/b>，并且<b>检查这个符号引用<\/b>代表的类<b>是否已被加载过、解析和初始化过<\/b>。如果没有，那必须先执行相应的类加载过程。<\/span>", "children": []}, {"id": "n43", "topic": "<b>分配内存<\/b><span class=\"mm-note\">在<b>类加载检查<\/b>通过后，接下来虚拟机将为新生对象<b>分配内存<\/b>。对象所需的内存大小在类加载完成后便可确定，为对象分配空间的任务等同于把一块确定大小的内存从 Java 堆中划分出来。 <b>分配方式<\/b>有 <b>“指针碰撞”<\/b> 和 <b>“空闲列表”<\/b> 两种，<b>选择哪种分配方式由 Java 堆是否规整决定，而 Java 堆是否规整又由所采用的垃圾收集器是否带有压缩整理功能决定<\/b>。<\/span>", "children": []}, {"id": "n44", "topic": "<b>初始化零值<\/b><span class=\"mm-note\">内存分配完成后，虚拟机需要<b>将分配到的内存空间都初始化为零值<\/b>（不包括对象头），这一步操作保证了对象的实例字段在 Java 代码中<b>可以不赋初始值就直接使用<\/b>，程序能访问到这些字段的数据类型所对应的零值。<\/span>", "children": []}, {"id": "n45", "topic": "<b>设置对象头<\/b><span class=\"mm-note\">初始化零值完成之后，<b>虚拟机要对对象进行必要的设置<\/b>，例如这个对象是哪个类的实例、如何才能找到类的元数据信息、对象的哈希码、对象的 GC 分代年龄等信息。 <b>这些信息存放在对象头中。<\/b> 另外，根据虚拟机当前运行状态的不同，如是否启用偏向锁等，对象头会有不同的设置方式。<\/span>", "children": []}, {"id": "n46", "topic": "<b>执行init方法<\/b><span class=\"mm-note\">在上面工作都完成之后，从虚拟机的视角来看，一个新的对象已经产生了，但从 Java 程序的视角来看，对象创建才刚开始，<code>&lt;init&gt;<\/code> 方法还没有执行，所有的字段都还为零。所以一般来说，执行 new 指令之后会接着执行 <code>&lt;init&gt;<\/code> 方法，<b>把对象按照程序员的意愿进行初始化<\/b>，这样一个真正可用的对象才算完全产生出来。 <img class=\"mm-img\" src=\"fl-adcbb91b3306ee.jpg\" style=\"width:320px;height:128px\" loading=\"lazy\" decoding=\"async\"> 补充第二步的内容：<\/span>", "children": []}, {"id": "n47", "topic": "<b>内存分配的两种方式<\/b>", "children": [{"id": "n48", "topic": "<b>指针碰撞<\/b>：", "children": [{"id": "n49", "topic": "适用场合：<b>堆内存规整<\/b>（即没有内存碎片）的情况下。", "children": []}, {"id": "n50", "topic": "原理：<b>用过的内存全部整合到一边，没有用过的内存放在另一边<\/b>，中间有一个<b>分界指针<\/b>，只需要向着没用过的内存方向将该指针移动对象内存大小位置即可。", "children": []}, {"id": "n51", "topic": "使用该分配方式的 GC 收集器：<b>Serial, ParNew<\/b>", "children": []}]}, {"id": "n52", "topic": "<b>空闲列表<\/b>：", "children": [{"id": "n53", "topic": "适用场合：<b>堆内存不规整<\/b>的情况下。", "children": []}, {"id": "n54", "topic": "原理：虚拟机会维护一个列表，该<b>列表中会记录哪些内存块是可用的<\/b>，在分配的时候，找一块儿足够大的内存块儿来划分给对象实例，最后更新列表记录。", "children": []}, {"id": "n55", "topic": "使用该分配方式的 GC 收集器：<b>CMS<\/b><span class=\"mm-note\">选择以上两种方式中的哪一种，<b>取决于 Java 堆内存是否规整<\/b>。而 Java 堆内存是否规整，取决于 GC 收集器的算法是&quot;标记-清除&quot;，还是&quot;标记-整理&quot;（也称作&quot;标记-压缩&quot;），值得注意的是，复制算法内存也是规整的。<\/span>", "children": []}]}]}, {"id": "n56", "topic": "<b>内存分配并发问题<\/b><span class=\"mm-note\">在创建对象的时候有一个很重要的问题，就是<b>线程安全<\/b>，因为在实际开发过程中，创建对象是很频繁的事情，作为虚拟机来说，必须要保证线程是安全的，通常来讲，虚拟机采用<b>两种方式来保证线程安全<\/b>：<\/span>", "children": [{"id": "n57", "topic": "<b>CAS+失败重试：<\/b> CAS 是乐观锁的一种实现方式。所谓乐观锁就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止。<b>虚拟机采用 CAS 配上失败重试的方式保证更新操作的原子性。<\/b>", "children": []}, {"id": "n58", "topic": "<b>TLAB：<\/b> 为每一个线程预先在 Eden 区分配一块儿内存，JVM 在给线程中的对象分配内存时，首先在 TLAB 分配，当对象大于 TLAB 中的剩余内存或 TLAB 的内存已用尽时，再采用上述的 CAS 进行内存分配", "children": []}]}]}, {"id": "n59", "topic": "<b>2.对象的内存布局<\/b><span class=\"mm-note\">在 Hotspot 虚拟机中，对象在内存中的布局可以分为 <b>3 块区域<\/b>：<\/span>", "children": [{"id": "n60", "topic": "<b>对象头<\/b><span class=\"mm-note\">Hotspot 虚拟机的对象头包括<b>两部分<\/b>信息<b>：<\/b><\/span>", "children": [{"id": "n61", "topic": "<b>第一部分用于存储对象自身的运行时数据<\/b>（哈希码、GC 分代年龄、锁状态标志等等），", "children": []}, {"id": "n62", "topic": "<b>另一部分是类型指针<\/b>，即对象指向它的类元数据的指针，<b>虚拟机通过这个指针来确定这个对象是哪个类的实例<\/b>。", "children": []}]}, {"id": "n63", "topic": "<b>实例数据<\/b><span class=\"mm-note\"><b>实例数据部分是对象真正存储的有效信息<\/b>，也是在程序中所定义的各种类型的字段内容。<\/span>", "children": []}, {"id": "n64", "topic": "<b>对齐填充<\/b><span class=\"mm-note\"><b>对齐填充部分不是必然存在的，也没有什么特别的含义，仅仅起占位作用。<\/b> 因为 Hotspot 虚拟机的自动内存管理系统<b>要求对象起始地址必须是 8 字节的整数倍<\/b>，换句话说就是对象的大小必须是 8 字节的整数倍。而对象头部分正好是 <b>8 字节的倍数<\/b>（1 倍或 2 倍），因此，当对象实例数据部分没有对齐时，就需要通过对齐填充来补全。<\/span>", "children": []}]}, {"id": "n65", "topic": "<b>3.对象的访问定位<\/b><span class=\"mm-note\">建立对象就是为了使用对象，我们的 Java 程序<b>通过栈上的 reference 数据来操作堆上的具体对象<\/b>。 对象的访问方式由虚拟机实现而定，目前主流的访问方式有：<b>使用句柄<\/b>、<b>直接指针<\/b>。<\/span>", "children": [{"id": "n66", "topic": "<b>使用句柄<\/b><span class=\"mm-note\">使用句柄的话，那么 Java 堆中将会划分出一块内存来作为<b>句柄池<\/b>，reference 中存储的就是<b>对象的句柄地址<\/b>， 而<b>句柄中包含了对象实例数据与对象类型数据各自的具体地址信息<\/b>。 <img class=\"mm-img\" src=\"fl-838887a9d43271.jpg\" style=\"width:320px;height:220px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n67", "topic": "<b>直接指针<\/b><span class=\"mm-note\">reference 中存储的<b>直接就是对象的地址。<\/b> <img class=\"mm-img\" src=\"fl-f3ad8e3c3bdfc5.jpg\" style=\"width:320px;height:228px\" loading=\"lazy\" decoding=\"async\"> 这两种对象访问方式各有优势。<\/span>", "children": []}, {"id": "n68", "topic": "使用<b>句柄<\/b>来访问的最大好处是 <b>reference 中存储的是稳定的句柄地址<\/b>，在<b>对象被移动时只会改变句柄中的实例数据指针<\/b>，而 reference 本身不需要修改。", "children": []}, {"id": "n69", "topic": "使用<b>直接指针<\/b>访问方式最大的好处就是<b>速度快<\/b>，它<b>节省了一次指针定位的时间开销。<\/b>", "children": []}]}]}, {"id": "n70", "topic": "<b>3.类加载过程详解<\/b>", "children": [{"id": "n71", "topic": "<b>1.类的生命周期(7个阶段)<\/b><span class=\"mm-note\">类从<b>被加载到虚拟机内存中开始到卸载出内存为止<\/b>，它的整个生命周期可以简单概括为 <b>7 个阶段<\/b>：加载（Loading）、验证（Verification）、准备（Preparation）、解析（Resolution）、初始化（Initialization）、使用（Using）和卸载（Unloading）。其中，验证、准备和解析这三个阶段可以统称为连接（Linking）。 <img class=\"mm-img\" src=\"fl-1f75a947080978.jpg\" style=\"width:320px;height:346px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n72", "topic": "<b>2.类加载过程<\/b><span class=\"mm-note\"><b>Class 文件需要加载到虚拟机中之后才能运行和使用，那么虚拟机是如何加载这些 Class 文件呢？<\/b> 系统加载 Class 类型的文件主要三步：<b>加载-&gt;连接-&gt;初始化<\/b>。<\/span>", "children": [{"id": "n73", "topic": "&quot;<b>加载<\/b>&quot;通常指的是<b>将类加载到内存中的过程，获取二进制字节流<\/b>", "children": []}, {"id": "n74", "topic": "&quot;<b>连接<\/b>&quot;阶段则是<b>将类的二进制数据合并到虚拟机的运行时状态中<\/b>，包括三个步骤。", "children": []}, {"id": "n75", "topic": "最后才是&quot;<b>初始化<\/b>&quot;，即<b>执行类构造器方法的过程<\/b>。<span class=\"mm-note\">连接过程又可分为三步：<b>验证-&gt;准备-&gt;解析<\/b>。<\/span>", "children": []}, {"id": "n76", "topic": "<b>1.加载<\/b><span class=\"mm-note\">类加载过程的第一步，主要完成下面 3 件事情：<\/span>", "children": [{"id": "n77", "topic": "通过<b>全类名获取定义此类的二进制字节流<\/b>。", "children": []}, {"id": "n78", "topic": "将字节流所代表的静态存储结构转换为方法区的运行时数据结构。", "children": []}, {"id": "n79", "topic": "在<b>内存中生成一个代表该类的 <code>Class<\/code> 对象<\/b>，<b>作为方法区这些数据的访问入口<\/b>。<span class=\"mm-note\">加载这一步主要是通过我们后面要讲到的 <b>类加载器<\/b> 完成的。<b>类加载器<\/b>有很多种，当我们想要加载一个类的时候，具体是哪个类加载器加载由 <b>双亲委派模型<\/b> 决定（不过，我们也能打破由双亲委派模型）。 加载阶段与连接阶段的部分动作(如一部分字节码文件格式验证动作)是交叉进行的，加载阶段尚未结束，连接阶段可能就已经开始了。<\/span>", "children": []}]}, {"id": "n80", "topic": "<b>2.验证<\/b><span class=\"mm-note\"><b>验证是连接阶段的第一步，<\/b>这一阶段的<b>目的是确保 Class 文件的字节流中包含的信息符合《Java 虚拟机规范》的全部约束要求，保证这些信息被当作代码运行后不会危害虚拟机自身的安全。<\/b> 验证阶段这一步在整个类加载过程中耗费的资源还是相对较多的，但很有必要，可以<b>有效防止恶意代码的执行<\/b>。任何时候，程序安全都是第一位。 不过，<b>验证阶段也不是必须要执行的阶段<\/b>。如果程序运行的全部代码(包括自己编写的、第三方包中的、从外部加载的、动态生成的等所有代码)都已经被反复使用和验证过，在生产环境的实施阶段就可以考虑使用 <code>-Xverify:none<\/code> 参数来关闭大部分的类验证措施，以缩短虚拟机类加载的时间。 验证阶段主要由四<\/span>", "children": [{"id": "n81", "topic": "文件格式验证（Class 文件格式检查）", "children": []}, {"id": "n82", "topic": "元数据验证（字节码语义检查）", "children": []}, {"id": "n83", "topic": "字节码验证（程序语义检查）", "children": []}, {"id": "n84", "topic": "符号引用验证（类的正确性检查）", "children": []}]}, {"id": "n85", "topic": "<b>3.准备<\/b><span class=\"mm-note\"><b>准备阶段是正式为类变量分配内存并设置类变量初始值的阶段<\/b> 这里所设置的初始值&quot;通常情况&quot;下是<b>数据类型默认的零值<\/b>（如 0、0L、null、false 等），比如我们定义了<code>public static int value=111<\/code> ，那么 value 变量在准备阶段的初始值就是 0 而不是 111（<b>初始化阶段才会赋值<\/b>）。 <b>特殊情况<\/b>：比如给 value 变量加上了 <b>final 关键字<\/b><code>public static final int value=111<\/code> ，那么准备阶段 value 的值就被赋值为 111。<\/span>", "children": []}, {"id": "n86", "topic": "<b>4.解析<\/b><span class=\"mm-note\"><b>解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程<\/b> 💡 <b>符号引用：不直接指向内存中的具体位置<\/b>，而是<b>通过虚拟机的符号引用解析机制，在运行时期动态地转换为直接引用<\/b>，从而定位到内存中的具体对象。<\/span>", "children": [{"id": "n87", "topic": "<b>那为什么要用符号引用呢？<\/b><span class=\"mm-note\">这是因为<a href=\"https://so.csdn.net/so/search?q=%E7%B1%BB%E5%8A%A0%E8%BD%BD&amp;spm=1001.2101.3001.7020\" target=\"_blank\" rel=\"noopener\">类加载<\/a>之前，javac会将源代码编译成.class文件，这个时候javac是不知道被编译的类中所引用的类、方法或者变量他们的引用地址在哪里，所以只能用符号引用来表示 举个例子：在<b>程序执行方法时，系统需要明确知道这个方法所在的位置<\/b>。 在<b>编译阶段<\/b>，<b>Java 虚拟机并不知道类、接口、字段和方法在内存中的具体地址<\/b>，而是<b>使用符号引用来表示<\/b>。解析阶段需要将这些符号引用转换为直接引用，即直接指向内存中的实际对象。 Java 虚拟机为每个<\/span>", "children": []}]}, {"id": "n88", "topic": "<b>5.初始化<\/b><span class=\"mm-note\"><b>执行初始化方法 <code>&lt;clinit&gt; ()<\/code>方法的过程，是类加载的最后一步，这一步 JVM 才开始真正执行类中定义的 Java 程序代码(字节码)。<\/b> 说明：<code>&lt;clinit&gt; ()<\/code>方法是编译之后自动生成的。 对于<code>&lt;clinit&gt; ()<\/code> 方法的调用，虚拟机会自己确保其在多线程环境中的安全性。因为 <b><code>&lt;clinit&gt; ()<\/code> 方法是带锁线程安全<\/b>，所以在多线程环境下进行类初始化的话可能会引起多个线程阻塞，并且这种阻塞很难被发现。<\/span>", "children": []}, {"id": "n89", "topic": "<b>6.卸载<\/b><span class=\"mm-note\"><b>卸载类即该类的 Class 对象被 GC。<\/b> 卸载类需要满足 3 个要求:<\/span>", "children": [{"id": "n90", "topic": "该类的<b>所有的实例对象都已被 GC<\/b>，也就是说堆不存在该类的实例对象。", "children": []}, {"id": "n91", "topic": "该<b>类没有在其他任何地方被引用<\/b>", "children": []}, {"id": "n92", "topic": "该类的<b>类加载器的实例已被 GC<\/b><span class=\"mm-note\">💡 <b>类加载器（ClassLoader）:<\/b>是 Java 虚拟机（JVM）的一个重要组成部分，<b>负责加载 Java 类文件到内存中<\/b>，并<b>生成对应的 Class 对象<\/b>。 类加载器在 Java 程序中起到了承上启下的作用，它负责加载应用程序需要的类文件，同时也是 Java 虚拟机与外部世界（文件系统、网络等）交互的桥梁。 所以，<b>在 JVM 生命周期内，由 jvm 自带的类加载器加载的类是不会被卸载的<\/b>。但是由我们自定义的类加载器加载的类是可能被卸载的。 只要想通一点就好了，JDK 自带的 <code>BootstrapClassLoader<\/code>, <code>ExtClassLoader<\/code>, <code>AppClassLoader<\/code> 负责加载<\/span>", "children": []}]}]}]}, {"id": "n93", "topic": "<b>4.JVM怎么对指令重排序，排序依据是什么<\/b><span class=\"mm-note\">指令重排序是指在<b>不改变程序执行结果<\/b>的前提下，重新排列指令的执行顺序。<\/span>", "children": [{"id": "n94", "topic": "目的是<b>提高程序的执行效率和吞吐量<\/b>，但必须保证程序的执行结果与原始顺序一致，否则会导致程序出现错误。<span class=\"mm-note\">因此，在进行指令重排序时，JVM 会根据数据依赖性和内存屏障来进行限制，确保重排序不会改变程序的语义。 JVM 可以对指令进行<b>重排序的依据<\/b>主要<b>有两个<\/b>：<\/span>", "children": []}, {"id": "n95", "topic": "<b>数据依赖性<\/b>：如果两条指令之间没有数据依赖关系，即它们之间的数据没有直接或间接的依赖关系，那么这两条指令就可以被重排序。", "children": []}, {"id": "n96", "topic": "<b>内存屏障<\/b>：在<b>多线程环境下<\/b>，JVM 会使用<b>内存屏障来确保内存操作的顺序性<\/b>。内存屏障会<b>限制指令的重排序<\/b>，确保特定类型的指令不会被重排序到内存屏障之前或之后。<span class=\"mm-note\">什么是内存屏障：<b>内存屏障是一条指令<\/b>，该指令可以对编译器（软件）和处理器（硬件）的指令重排做出一定的限制，比如，<b>一条内存屏障指令可以禁止编译器和处理器将其后面的指令移到内存屏障指令之前<\/b>。 为什么需要内存屏障：编译器和处理器指令重排只能保证在单线程执行下逻辑正确，在多个线程同时读写多个变量的情况下，如果不对指令重排作出一定限制，代码的执行结果会根据指令重排后的顺序产生不同的结果。指令重排后的顺序每次执行时都可能不一样，显然我们希望我们的代码执行结果与代码顺序是逻辑一致的（可能不太准确），所以我们需要内存屏障。 基于这两个依据，JVM 在执行指令时可以进行<b>多种类型的重排序<\/b>，包括：<\/span>", "children": []}, {"id": "n97", "topic": "<b>指令重排<\/b>：改变指令的<b>执行顺序<\/b>，但不改变程序的执行结果。", "children": []}, {"id": "n98", "topic": "<b>内存重排<\/b>：改变<b>内存操作的顺序<\/b>，但不改变程序的执行结果。", "children": []}, {"id": "n99", "topic": "<b>编译优化<\/b>：对代码进行优化，包括<b>删除无用指令、合并相邻指令<\/b>等。", "children": []}, {"id": "n100", "topic": "<b>突破内存限制，减少OOM。<\/b> 由于元空间使用的是本地内存，而不是 JVM 内存，因此理论上，其大小只受限于操作系统的实际可用内存。这大大减少了内存溢出的可能性。相较于永久代在 JVM 堆中预分配的有限空间，元空间的引入提供了更大的空间来存储类元数据。", "children": []}, {"id": "n101", "topic": "<b>突破内存限制，减少OOM。<\/b> 由于元空间使用的是本地内存，而不是 JVM 内存，因此理论上，其大小只受限于操作系统的实际可用内存。这大大减少了内存溢出的可能性。相较于永久代在 JVM 堆中预分配的有限空间，元空间的引入提供了更大的空间来存储类元数据。", "children": []}]}, {"id": "n102", "topic": "<b>5.指令执行的完整流程<b>，如何得知一条指令的运行时间<\/b>？<\/b><span class=\"mm-note\">指令执行的完整流程通常涉及以下几个步骤：<\/span>", "children": [{"id": "n103", "topic": "<b>指令获取<\/b>：CPU 从指令缓存或内存中获取下一条要执行的指令。", "children": []}, {"id": "n104", "topic": "<b>指令解码<\/b>：CPU 对获取到的指令进行解码，<b>确定指令的类型和操作数<\/b>。", "children": []}, {"id": "n105", "topic": "<b>操作数获取<\/b>：CPU 根据指令中的操作数地址，<b>从寄存器或内存中获取操作数<\/b>。", "children": []}, {"id": "n106", "topic": "<b>指令执行<\/b>：CPU 执行指令对应的操作，例如算术运算、逻辑运算、存储数据等。", "children": []}, {"id": "n107", "topic": "<b>结果写回<\/b>：如果指令执行产生了结果，CPU 将结果写回寄存器或内存中。", "children": []}, {"id": "n108", "topic": "<b>更新程序计数器<\/b>：CPU 更新程序计数器，指向下一条要执行的指令。<span class=\"mm-note\">要得知一条指令的运行时间，通常可以通过以下几种方法：<\/span>", "children": []}, {"id": "n109", "topic": "<b>CPU周期数<\/b>：许多 CPU 架构都会提供关于每个指令的CPU周期数的信息。通过这些信息，可以估算指令的运行时间。", "children": []}, {"id": "n110", "topic": "<b>性能计数器<\/b>：现代的处理器通常会提供一组性能计数器，用于测量不同类型的事件，例如指令执行次数、缓存命中率等。通过分析这些性能计数器的值，可以推断出指令的运行时间。", "children": []}, {"id": "n111", "topic": "<b>模拟器<\/b>：使用指令级别的模拟器来模拟指令的执行过程，并记录每条指令的运行时间。", "children": []}, {"id": "n112", "topic": "<b>基准测试<\/b>：编写基准测试程序，测量某个程序或代码片段的整体执行时间，并将其与执行指令的次数进行比较，从而得出平均每条指令的运行时间。", "children": []}, {"id": "n113", "topic": "<b>CPU性能分析工具<\/b>：使用专门的CPU性能分析工具，如Linux中的perf或Windows中的Windows Performance Toolkit（WPT），来分析程序的执行情况，包括每条指令的运行时间。<span class=\"mm-note\">💡 linux下<b>time命令：<\/b> <b>可以获取到一个程序的执行时间<\/b>，包括程序的<b>实际运行时间(real time)<\/b>，以及程序运行在用户态的时间(user time)和内核态的时间(sys time)。用法是<b>在待执行的命令前加上time<\/b>即可。<\/span>", "children": []}]}], "expanded": true}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

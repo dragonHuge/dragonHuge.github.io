@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>消息队列基础知识 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">10</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-什么是消息队列">1.什么是消息队列？</a><a class="tl l2" href="#2-消息队列有啥用">2.消息队列有啥用？</a><a class="tl l2" href="#3-使用消息队列带来的问题">3.使用消息队列带来的问题</a><a class="tl l2" href="#4-JMS和AMQP">4.JMS和AMQP</a><a class="tl l3" href="#1-什么是JMS">1.什么是JMS？</a><a class="tl l3" href="#2-JMS两种消息模型">2.JMS两种消息模型</a><a class="tl l4" href="#1-P2P-点对点模型">1.P2P(点对点模型)</a><a class="tl l4" href="#2-发布-订阅-Pub-Sub-模型">2.发布/订阅(Pub/Sub)模型</a><a class="tl l2" href="#5-RPC和消息队列的区别">5.RPC和消息队列的区别？</a><a class="tl l2" href="#6-分布式消息队列的技术选型">6.分布式消息队列的技术选型</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>消息队列基础知识</h1><div class="meta">2024-12-19 · <a class="src-link" href="https://flowus.cn/311bc420-b1fe-4b0f-b342-a838d05053e7" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h2 id="1-什么是消息队列">1.什么是消息队列？</h2>
+<p>我们可以把消息队列看作是<strong>一个存放消息的容器</strong>，当我们需要使用消息的时候，直接从容器中取出消息供自己使用即可。</p>
+<p>由于<strong>队列 Queue 是一种先进先出</strong>的数据结构，所以消费消息时也是按照顺序来消费的。</p>
+<p>参与消息传递的双方称为 <strong>生产者</strong> 和 <strong>消费者</strong> ，生产者负责发送消息，消费者负责处理消息。</p>
+<p><img alt="image.png" src="/assets/img/flowus-020991b898d039e7.png"></p>
+<p>我们知道操作系统中的进程通信的一种很重要的方式就是消息队列。我们这里提到的消息队列稍微有点区别，更多指的是各个服务以及系统内部各个组件/模块之前的通信，属于一种 <strong>中间件</strong> 。</p>
+<h2 id="2-消息队列有啥用">2.消息队列有啥用？</h2>
+<p>通常来说，使用消息队列<strong>主要</strong>能为我们的系统带来<strong>下面三点好处</strong>：</p>
+<ol><li>通过<strong>异步处理提高系统性能-减少响应时间</strong></li></ol>
+<p>将<strong>用户的请求数据存储到消息队列之后就立即返回</strong>。随后，系统再对消息进行消费。</p>
+<p>因为用户请求数据写入消息队列之后就立即返回给用户了，但是请求数据在后续的业务校验、写数据库等操作中可能失败。因此，<strong>使用消息队列进行异步处理之后，需要适当修改业务流程进行配合</strong>，比如用户在提交订单之后，订单数据写入消息队列，不能立即返回用户订单提交成功，需要在消息队列的订单消费者进程真正处理完该订单之后，甚至出库后，再通过电子邮件或短信通知用户订单成功，以免交易纠纷。这就类似我们平时手机订火车票和电影票。</p>
+<ol><li><strong>削峰/限流</strong></li></ol>
+<p><strong>先将短时间高并发产生的事务消息存储在消息队列中，然后后端服务再慢慢根据自己的能力去消费这些消息，这样就避免直接把后端服务打垮掉。</strong></p>
+<p><img alt="image.png" src="/assets/img/flowus-d1e7126902cf82b8.png"></p>
+<ol><li><strong>降低系统耦合性</strong></li></ol>
+<p>使用消息队列还可以降低系统耦合性。我们知道如果模块之间不存在直接调用，那么新增模块或者修改模块就对其他模块影响较小，这样系统的可扩展性无疑更好一些。还是直接上图吧：</p>
+<p>生产者（客户端）发送消息到消息队列中去，接受者（服务端）处理消息，需要消费的系统直接去消息队列取消息进行消费即可而不需要和其他系统有耦合，这显然也提高了系统的扩展性。</p>
+<p><strong>消息队列使用发布-订阅模式工作：消息发送者（生产者）发布消息，一个或多个消息接受者（消费者）订阅消息。</strong></p>
+<p>从上图可以看到<strong>消息发送者（生产者）和消息接受者（消费者）之间没有直接耦合</strong>，消息发送者将消息发送至分布式消息队列即结束对消息的处理，消息接受者从分布式消息队列获取该消息后进行后续处理，并不需要知道该消息从何而来。<strong>对新增业务，只要对该类消息感兴趣，即可订阅该消息，对原有系统和业务没有任何影响，从而实现网站业务的可扩展性设计</strong>。</p>
+<p>其他的一些好处：</p>
+<ol><li><strong>顺序保证：</strong></li></ol>
+<p>在很多应用场景中，<strong>处理数据的顺序至关重要</strong>。消息队列保证数据按照特定的顺序被处理，适用于那些对数据顺序有严格要求的场景。</p>
+<p>大部分消息队列，例如 RocketMQ、RabbitMQ、Pulsar、Kafka，都支持顺序消息。</p>
+<ol><li><strong>延时/定时处理</strong></li></ol>
+<p><strong>消息发送后不会立即被消费，而是指定一个时间，到时间后再消费</strong>。大部分消息队列，例如 RocketMQ、RabbitMQ、Pulsar、Kafka，都支持定时/延时消息。</p>
+<ol><li><strong>数据流处理</strong></li></ol>
+<p>针对分布式系统产生的海量数据流，如业务日志、监控数据、用户行为等，消息队列可以实时或批量收集这些数据，并将其导入到大数据处理引擎中，实现高效的数据流管理和处理。</p>
+<h2 id="3-使用消息队列带来的问题">3.使用消息队列带来的问题</h2>
+<ol><li><strong>系统可用性降低：</strong> </li></ol>
+<p>系统可用性在某种程度上降低，为什么这样说呢？<strong>在加入 MQ 之前，你不用考虑消息丢失或者说 MQ 挂掉等等的情况</strong>，但是，引入 MQ 之后你就需要去考虑了！</p>
+<ol><li><strong>系统复杂性提高：</strong> </li></ol>
+<p>加入 MQ 之后，你<strong>需要保证消息没有被重复消费、处理消息丢失的情况、保证消息传递的顺序性</strong>等等问题！</p>
+<ol><li><strong>一致性问题：</strong> </li></ol>
+<p>我上面讲了消息队列可以实现异步，消息队列带来的异步确实可以提高系统响应速度。但是，<strong>万一消息的真正消费者并没有正确消费消息怎么办？</strong>这样就会导致数据不一致的情况了!</p>
+<h2 id="4-JMS和AMQP">4.JMS和AMQP</h2>
+<h3 id="1-什么是JMS">1.什么是JMS？</h3>
+<p>JMS（JAVA Message Service,java 消息服务）是 <strong>Java 的消息服务</strong>，JMS 的客户端之间可以通过 JMS 服务进行异步的消息传输。</p>
+<p><strong>JMS（JAVA Message Service，Java 消息服务）API 是一个消息服务的标准或者说是规范</strong>，允许应用程序组件基于 JavaEE 平台创建、发送、接收和读取消息。它使分布式通信耦合度更低，消息服务更加可靠以及异步性。</p>
+<p>JMS 定义了五种不同的消息正文格式以及调用的消息类型，允许你发送并接收以一些不同形式的数据：</p>
+<ul><li><code>StreamMessage：Java</code> 原始值的数据流</li></ul>
+<ul><li><code>MapMessage</code>：一套名称-值对</li></ul>
+<ul><li><code>TextMessage</code>：一个字符串对象</li></ul>
+<ul><li><code>ObjectMessage</code>：一个序列化的 Java 对象</li></ul>
+<ul><li><code>BytesMessage</code>：一个字节的数据流</li></ul>
+<h3 id="2-JMS两种消息模型">2.JMS两种消息模型</h3>
+<h4 id="1-P2P-点对点模型">1.P2P(点对点模型)</h4>
+<p><img alt="image.png" src="/assets/img/flowus-ceebfddc35454950.png"></p>
+<p>使用<strong>队列（Queue）作为消息通信载体；满足生产者与消费者模式</strong>，<strong>一条消息只能被一个消费者使用</strong>，未被消费的消息在队列中保留直到被消费或超时。</p>
+<p>比如：我们生产者发送 100 条消息的话，两个消费者来消费一般情况下两个消费者会按照消息发送的顺序各自消费一半（也就是<strong>你一个我一个的消费</strong>。）</p>
+<h4 id="2-发布-订阅-Pub-Sub-模型">2.发布/订阅(Pub/Sub)模型</h4>
+<p><img alt="image.png" src="/assets/img/flowus-42cd941685a0b812.png"></p>
+<p>发布订阅模型（Pub/Sub） 使用<strong>主题（Topic）作为消息通信载体，类似于广播模式</strong>；发布者发布一条消息，<strong>该消息通过主题传递给所有的订阅者</strong>。</p>
+<h2 id="5-RPC和消息队列的区别">5.RPC和消息队列的区别？</h2>
+<p>RPC 和消息队列都是分布式微服务系统中重要的组件之一，下面我们来简单对比一下两者：</p>
+<ol><li><strong>从用途来看</strong>：</li></ol>
+<ol><li><strong>RPC</strong> ：主要用来<strong>解决两个服务的远程通信问题</strong>，不需要了解底层网络的通信机制。通过 RPC 可以帮助我们调用远程计算机上某个服务的方法，这个过程就像调用本地方法一样简单。</li></ol>
+<ol><li><strong>消息队列：</strong>主要用来<strong>降低系统耦合性、实现任务异步、有效地进行流量削峰</strong>。</li></ol>
+<ol><li><strong>从通信方式来看</strong>：</li></ol>
+<ol><li><strong>RPC</strong> ：<strong>双向直接网络通讯</strong></li></ol>
+<ol><li><strong>消息队列</strong>：<strong>单向引入</strong>中间载体的网络通讯。</li></ol>
+<ol><li><strong>从架构上来看</strong>：</li></ol>
+<ol><li><strong>消息队列需要把消息存储起来</strong>，<strong>RPC 则没有这个要求</strong>，因为前面也说了 RPC 是双向直接网络通讯。</li></ol>
+<ol><li><strong>从请求处理的时效性来看</strong>：</li></ol>
+<p>通过 <strong>RPC 发出的调用一般会立即被处理</strong>，存放在消息队列中的消息并不一定会立即被处理。</p>
+<blockquote><p>😘 <strong>注意</strong>：RPC 和消息队列<strong>本质上是网络通讯的两种不同的实现机制</strong>，<strong>两者的用途不同</strong>，万不可将两者混为一谈</p></blockquote>
+<h2 id="6-分布式消息队列的技术选型">6.分布式消息队列的技术选型</h2>
+<ol><li>Kafka</li></ol>
+<ol><li>RocketMQ</li></ol>
+<ol><li>RabbitMQ</li></ol>
+<ol><li>Pulsar</li></ol></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

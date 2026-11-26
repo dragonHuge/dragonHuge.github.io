@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>补充2-并发 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>补充2-并发</b><small>幕布导图 · 158 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "补充2-并发", "data": {"id": "mvirtual-root", "topic": "<b>补充2-并发<\/b>", "expanded": true, "children": [{"id": "mJUZOMc0u4J", "topic": "1、并发术语：<br><img class=\"mm-img\" src=\"mm-71a3f1e348ff74.jpg\" style=\"width:260px;height:125px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mT2BTGVfoz3", "topic": "<b>2、线程API：<\/b>", "expanded": false, "children": [{"id": "mMCRYMzQDZt", "topic": "<b>1.<\/b><b><mark>JOIN()<\/mark><\/b><b>：使用join能够<\/b><span style=\"color:#b45309\"><b><span>保证线程的顺序问题。<\/span><\/b><span class=\"mm-note\"><b>比如现在有 A和 B两个线程，如果B线程调用A.join方法，则必须先让A线程执行完毕，才能执行B线程，底层通过通过wait和<\/b><a href=\"https://so.csdn.net/so/search?q=notify&amp;spm=1001.2101.3001.7020\" target=\"_blank\" rel=\"noopener\">notify<\/a><b>实现，核心思想，保证执行顺序。<\/b><\/span>", "expanded": true}]}, {"id": "mAwqF22rfis", "topic": "<b>3、硬件实现锁<\/b>", "expanded": false, "children": [{"id": "myJ7ZcoiL9U", "topic": "<b>1、<\/b><span style=\"color:#0e7a52\"><b><span>中断屏蔽<\/span><\/b><b>方法—<\/b> 利用<span style=\"color:#b45309\"><b><span>“开/关中断指令”实现<\/span><\/b>，<b>进程在开始访问临界区到结束访问都不允许被中断<\/b><span class=\"mm-note\">与原语的实现类似，<b>访问临界区之前关闭中断(不允许中断)<\/b>，<b>访问临界区之后开启中断(允许中断)<\/b><\/span>", "expanded": true, "children": [{"id": "mnc0rnrrpol", "topic": "优点：简单、高效", "expanded": true}, {"id": "mRlMhIS3DLW", "topic": "<b>缺点：<\/b><span style=\"color:#1d4ed8\"><b><span>不适用于多处理机<\/span><\/b><b>；只适用于OS内核进程，不适用于用户进程<\/b><span class=\"mm-note\">原因：一台处理机上的进程可能会来访问另一台处理机上的临界区，而<b>开/关中断指令只能对自己的处理机起作用<\/b>。<\/span>", "expanded": true}]}, {"id": "mypCo3orQZE", "topic": "<b>2、<\/b><span style=\"color:#0e7a52\"><b><span>TSL<\/span><\/b><b>(<\/b><b><mark>TestAndSetLock<\/mark><\/b><b>)指令—<\/b> <span style=\"color:#b45309\"><b><span>硬件实现、执行时不允许被打断，原子交换— <\/span><\/b><span style=\"color:#d92d20\"><b><span>自旋锁<\/span><\/b><br><img class=\"mm-img\" src=\"mm-b510303e8e0bbf.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">TestAndSetLock指令，读字和写字操作保证是不可分割的，即<b>该指令结束之前其他处理器均不允许访问该内存字<\/b>。执\n行TSL指令的CPU将锁住内存总线，以禁止其他CPU在本指令结束之前访问内存。<\/span>", "expanded": true, "children": [{"id": "mQnGzKLbXWR", "topic": "<span style=\"color:#d92d20\"><span>❤ <\/span>核心：<b>TSL<\/b><b><mark>将“上锁” 和 “检查”操作，利用硬件的方式，变成了一个一气呵成的<\/mark><\/b><span style=\"color:#d92d20\"><b><span>原子操作<\/span><\/b><span class=\"mm-note\">解法的本质：当<b>一个进程想进入临界区<\/b>时，先<b>检查是否允许进入<\/b>，若<b>不允许<\/b>，则<b>该进程将原地等待<\/b>，<b>直到允许为止<\/b>。<\/span>", "expanded": true}, {"id": "mLUVm8LlL0X", "topic": "<b><mark>自旋锁<\/mark><\/b><b>：锁被持有时，竞争锁的线程会一直自旋，利用CPU周期，直到锁可用。<\/b><span class=\"mm-note\"><b>自旋锁没有公平性<\/b>，可能导致饿死。<\/span>", "expanded": true}]}, {"id": "mNC9ERSA1kR", "topic": "<b>3、<\/b><span style=\"color:#0e7a52\"><b><span>比较并交换(CAS)指令<\/span><\/b><b>—  硬件实现、执行时不允许被打断<\/b><br><img class=\"mm-img\" src=\"mm-c5dd50ad93f66d.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">基本思路：当要对变量进行修改时，<b>先会将内存位置的值与预期的变量原值进行比较<\/b>，如果<b>一致则将内存位置更新为新值<\/b>，<b>否则不做操作<\/b>，无论哪种情况都会返回内存位置当前的值。<\/span>", "expanded": false, "children": [{"id": "m40uW5htmMR", "topic": "与<b>TSL思路基本相同<\/b>，只是将<b> “读取旧值，设置新值”这一操作变成了“交换两者的值”。<\/b>", "expanded": true}]}, {"id": "mkC404uQKTx", "topic": "<span style=\"color:#d92d20\"><b><span>❤<\/span><\/b> <b><mark>TSL 与 CAS的共同核心思路<\/mark><\/b>：", "expanded": true, "children": [{"id": "m5FzVUxmKqz", "topic": "① <b>记录下此时临界区是否上锁<\/b>(记录在old中)", "expanded": true}, {"id": "mEqNV2FT9Yq", "topic": "②再将上锁标记<b>lock设置为true<\/b>。(表达出当前进程要进入临界区的意愿)— 这一操作是必然完成的", "expanded": true}, {"id": "mdXXk7BwWec", "topic": "③ 最后<b>检查old<\/b>。如果old = false，那么说明此时临界区空闲，可以跳出自旋，进入临界区。如果old = true，说明此时临界区不空闲，持续自旋等待。", "expanded": true}]}, {"id": "mo1rB5fKpPA", "topic": "<b>TSL和CAS的区别：<\/b>", "expanded": false, "children": [{"id": "mvIyupq54Ek", "topic": "<b>功能<\/b>：", "expanded": true, "children": [{"id": "mqccNl0WpEy", "topic": "CAS指令是一种原子操作，用于比较内存中的值是否与预期值相同，如果<b>相同则将新值写入内存，并返回操作结果<\/b>；如果<b>不同，则不执行写操作，返回失败。<\/b>", "expanded": true}, {"id": "mSWD0KMpuEB", "topic": "TestAndSet指令也是一种原子操作，它将内存中的某个标记位设置为指定的值，并返回原来的值。", "expanded": true}]}, {"id": "mJ8mFnrWxFz", "topic": "<b>使用场景<\/b>：", "expanded": true, "children": [{"id": "mquHkjpd3Dt", "topic": "CAS操作常用于实现无锁数据结构，如无锁队列、无锁哈希表等，并发编程中的乐观并发控制（Optimistic Concurrency Control）也经常使用CAS操作。", "expanded": true}, {"id": "miz1ViJ498u", "topic": "TestAndSet操作在一些底层的同步原语中被使用，例如在实现互斥锁时，可以使用TestAndSet指令进行尝试获得锁。", "expanded": true}]}, {"id": "m5i67F9qS4B", "topic": "<b>性能<\/b>：", "expanded": true, "children": [{"id": "mpe82NtSv9h", "topic": "通常情况下，CAS操作的性能比TestAndSet操作要好，因为CAS操作可以避免一些不必要的内存写入，从而减少了总体的开销。", "expanded": true}]}, {"id": "mYfOavx6ID8", "topic": "综上所述，CAS操作更加灵活和广泛应用于高级的并发编程场景，而TestAndSet操作则更适合一些基本的同步原语的实现。", "expanded": true}]}, {"id": "m4BlB27gpuO", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-4aa5c2fa67fc6a.jpg\" style=\"width:260px;height:137px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mSDFhE8n6en", "topic": "4、锁是什么：<b>锁就是1个变量，是一种同步机制，用于控制对共享资源的访问，以确保在多个并发执行线程中，对共享资源的访问是安全的、顺序的，避免出现数据竞争和不一致性的情况。锁可以防止多个线程同时对同一资源进行修改，保证了线程之间的协调和数据的一致性。<\/b><span class=\"mm-note\">锁的基本原理是，当一个线程要访问共享资源时，首先尝试获取锁，如果获取成功（锁是可用的），则该线程可以访问共享资源并且持有锁，其他线程必须等待直到锁被释放；如果获取失败（锁已经被其他线程持有），则该线程被阻塞，直到锁被释放为止。<\/span>", "expanded": false, "children": [{"id": "m4zmBoUqark", "topic": "<b>互斥锁（Mutex）<\/b>：也称为排他锁，同一时刻只允许一个线程持有锁，用于保护临界区（Critical Section）的访问。", "expanded": true}, {"id": "mJvV8ggdjH5", "topic": "<b>读写锁（Read-Write Lock）<\/b>：允许多个线程同时读取共享资源，但只有一个线程能够写入共享资源，可以提高并发读取性能。", "expanded": true}, {"id": "memoEZqegrh", "topic": "<b>自旋锁（Spin Lock）<\/b>：在获取锁失败时不会立即阻塞线程，而是通过循环重试获取锁，适用于临界区执行时间短暂的情况。", "expanded": true}, {"id": "mewtbP0GCUK", "topic": "<b>信号量（Semaphore）<\/b>：用于控制对资源的访问数量，可以允许多个线程同时访问某个资源，但是需要限制访问的总数。", "expanded": true}, {"id": "mO6wbs4HckO", "topic": "<b>条件变量（Condition Variable）<\/b>：配合互斥锁使用，用于线程间的通信和同步，允许线程等待某个条件的发生。", "expanded": true}]}, {"id": "m2dCKY0xaH1", "topic": "<b>4、软件实现锁<\/b>", "expanded": false, "children": [{"id": "mFy5VxppsiJ", "topic": "<b>1、单标志法— 一个<\/b><span style=\"color:#b45309\"><b><span>全局变量int turn<\/span><\/b><b>实现互斥<\/b><br><img class=\"mm-img\" src=\"mm-d0889997207e32.jpg\" style=\"width:260px;height:21px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>turn = 0：当前允许进入临界区的是进程0。<\/b><\/span>", "expanded": true, "children": [{"id": "mNCd8wgcetJ", "topic": "<b>存在的主要问题：<\/b><span style=\"color:#d92d20\"><b><span>违背<\/span><\/b><b><mark>\"空闲让进<\/mark><\/b><b>\"的原则<\/b><span class=\"mm-note\">解释：若此时允许进入临界区的是进程0，但是进程0一直不去访问。造成：<b>进程0不访问，进程1也无法访问<\/b>。<\/span>", "expanded": true}]}, {"id": "mayKDWY9JWe", "topic": "<b>2、双标志<\/b><span style=\"color:#1d4ed8\"><b><span>先<\/span><\/b><b>检查法—<\/b> <span style=\"color:#b45309\"><b><span>先检查，后上锁，<\/span><\/b><b>用一个<\/b><span style=\"color:#b45309\"><b><span>布尔数组flag[]<\/span><\/b><span class=\"mm-note\">flag[0] = true：进程0想进入临界区；\nflag[0] = false：进程0不想进入临界区；<\/span>", "expanded": false, "children": [{"id": "mF0qxex3NTt", "topic": "<b>① 布尔型数组<\/b><span style=\"color:#b45309\"><b><span>flag[]<\/span><\/b><b>,标记<\/b><span style=\"color:#b45309\"><b><span>每个进程想进入临界区的意愿<\/span><\/b>", "expanded": true}, {"id": "m8hqrLHUCPc", "topic": "<b>② 存在的问题：<\/b><span style=\"color:#d92d20\"><b><span>违背<\/span><\/b><b>\"<\/b><b><mark>忙则等待<\/mark><\/b><b>\"原则，导致<\/b><span style=\"color:#d92d20\"><b><span>两个进程可能同时进入临界区<\/span><\/b><span class=\"mm-note\">原因：进入区的<b>“检查” 和 “上锁” 两个操作不是一气呵成<\/b>的。在<b>“检查”后，“上锁”前可能发生进程切换，就会导致：两个进程同时进入临界区。<\/b><\/span>", "expanded": true}]}, {"id": "mS6FS1FL5SI", "topic": "3、<b>双标志<\/b><span style=\"color:#1d4ed8\"><b><span>后<\/span><\/b><b>检查法— <\/b><span style=\"color:#b45309\"><b><span>先上锁，后检查<\/span><\/b>", "expanded": false, "children": [{"id": "mWjkse7ygPQ", "topic": "<b>解决问题：解决了“忙则等待”的问题<\/b>", "expanded": true}, {"id": "mnzYqNRT3MQ", "topic": "<b>存在问题：<\/b><span style=\"color:#d92d20\"><b><span>饥饿问题—<\/span><\/b><b> 谁都无法进入临界区<\/b><span class=\"mm-note\">当两个进程都争着进入临界区，但是谁也不让谁，因此<b>谁都无法进入临界区<\/b>。<\/span>", "expanded": true}]}, {"id": "mXz7GV5p2Q6", "topic": "<b>4、<\/b><b><mark>Peterson算法<\/mark><\/b><b>—<\/b> <span style=\"color:#d92d20\"><b><span>结合<\/span><\/b><span style=\"color:#b45309\"><b><span>单标志(turn) 与 双标志(flag[]) 法<\/span><\/b><span class=\"mm-note\">即：<b>若两进程都想进入临界区<\/b>，那么就<b>互相谦让一下<\/b>，让<b>turn变量来记录一下两个进程的谦让<\/b>。\nturn：表示优先让哪个进程进入临界区。\nflag[0]=true：进程0想进入临界区。<\/span>", "expanded": true, "children": [{"id": "mJjbkSDDo3R", "topic": "<b>进程进入临界区，有<\/b><span style=\"color:#1d4ed8\"><b><span>3个动作<\/span><\/b><b>：<\/b><span class=\"mm-note\"><b>假设此时0号进程进入：\n①主动争取( flag[0]=true;)\n②主动谦让( turn -1：先<\/b>谦让给1号进程<b>)\n③检查对方是否确实想使用(是：那就等待；不是：那就)\n<\/b><\/span>", "expanded": true}, {"id": "m0qvE20gBzg", "topic": "<b>存在的问题：<\/b><span style=\"color:#d92d20\"><b><span>未遵循“<\/span><\/b><b><mark>让权等待<\/mark><\/b><b>”原则<\/b>", "expanded": true}]}, {"id": "mtEauDZV6kQ", "topic": "<span style=\"color:#d92d20\"><b><span>❤<\/span><\/b> <b>双标志检查法存在问题的核心原因：进入区的<\/b><span style=\"color:#d92d20\"><b><span>“检查” 和 “上锁” 两个操作不是一气呵成的<\/span><\/b><b>。在“检查”后，“上锁”前可能发生进程切换。<\/b><span class=\"mm-note\">如果这两个操作是一个原子级操作，那就没有什么问题。（之后会在硬件上，使之成为原子级<\/span>", "expanded": true}, {"id": "mzd36NSLjWZ", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-0547652d84ab29.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mu4SHgaNh6N", "topic": "<b>4、怎样避免自旋过多？<\/b>", "expanded": false, "children": [{"id": "mex9itLryep", "topic": "方案1. <b><mark>原语yield()<\/mark><\/b><b>：<\/b><span style=\"color:#b45309\"><b><span>主动放弃CPU，让其它线程运行<\/span><\/b><br><img class=\"mm-img\" src=\"mm-eae65f817be9a1.jpg\" style=\"width:260px;height:93px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mbERKgDE6bx", "topic": "yield()系统调用能够<b>让运行态变为就绪态<\/b>。", "expanded": true}]}, {"id": "mlFpB91n2ly", "topic": "方案2<b>.<\/b><b><mark>休眠队列<\/mark><\/b><b>：<\/b><span style=\"color:#b45309\"><b><span>休眠替代自旋，<\/span><\/b><b>将等待锁的线程保存在队列中，并使之休眠<\/b>", "expanded": true}, {"id": "miWRogMb79n", "topic": "方案3.<b><mark>两阶段锁<\/mark><\/b><b>：<\/b><span style=\"color:#b45309\"><b><span>自旋+休眠<\/span><\/b><b>，第一阶段会先自旋一段时间，如果自旋阶段没有获取锁，第二阶段的调用者会休眠，直到锁可用<\/b>", "expanded": true}]}, {"id": "mdhIEJm3wPi", "topic": "<b>5、条件变量— 是一个<\/b><b><mark>显式队列<\/mark><\/b>", "expanded": false, "children": [{"id": "m6k6udgJ2a8", "topic": "当某些条件不满足，线程可以把自己加入队列，等待该条件的满足", "expanded": true}, {"id": "mYgFZqSZTxF", "topic": "<b>wait()<\/b>：线程<b>睡眠<\/b>并<b>释放锁（原子的）。<\/b>", "expanded": true}, {"id": "mHgU2DjmIxR", "topic": "<b>signal()<\/b>：<b>线程唤醒<\/b>等待在某个条件变量上的<b>睡眠线程<\/b> 并<b> 获得锁<\/b>。<span class=\"mm-note\">如果被唤醒后不持有锁，那就只能等待，直到获得锁。<\/span>", "expanded": true}, {"id": "m3uuDfDch7O", "topic": "注意：<br><img class=\"mm-img\" src=\"mm-269b2f85e32dc0.jpg\" style=\"width:260px;height:86px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mYhC0V4G7BM", "topic": "<b>5、生产者-消费者问题<\/b>", "expanded": true, "children": [{"id": "m6MDz4RoU6W", "topic": "<b>1、问题分析：<\/b><br><img class=\"mm-img\" src=\"mm-dd9edfba63c208.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mIVSsPdMW2F", "topic": "<b>① <\/b>两个<b>同步关系<\/b>分析<b>：<\/b><span style=\"color:#b45309\"><b><span>缓冲区没满-&gt; 生产者生产<\/span><\/b><b>；<\/b><span style=\"color:#b45309\"><b><span>缓冲区没空-&gt;消费者消费<\/span><\/b><span class=\"mm-note\">因此<b>两个信号量：full 、empty<\/b><\/span>", "expanded": true}, {"id": "m36kkqIZsEb", "topic": "② <b>互斥关系<\/b>分析：缓冲区作为<b>临界资源，必须互斥地访问<\/b><span class=\"mm-note\"><b>一个互斥锁：mutex<\/b><\/span>", "expanded": true}, {"id": "mnEoAAtpaRa", "topic": "<b>③ 初始化：<\/b><span style=\"color:#b45309\"><b><span>mutex = 1、empty = n、full = 0<\/span><\/b><span class=\"mm-note\">mutex：互斥锁，初始为1；\nempty：信号量，表示<b>缓冲区空闲区的数量；<\/b>\nfull：信号量，表示<b>产品的数量<\/b><\/span>", "expanded": true}]}, {"id": "mOoPmvxg9MN", "topic": "<b>2、代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-78c41859ce3ad9.jpg\" style=\"width:260px;height:137px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f7f281ebefe868.jpg\" style=\"width:260px;height:158px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mtoIxbalfLo", "topic": "<b>①<\/b> <span style=\"color:#d92d20\"><b><span>❤<\/span><\/b> <span style=\"color:#d92d20\"><b><span>注意<\/span><\/b><b>：实现<\/b><b><mark>互斥的(P(empty)) 一定要在  实现同步的(P(mutex))  之前<\/mark><\/b><span style=\"color:#d92d20\"><b><span>！！！！！！即：只锁住临界区。<\/span><\/b><span class=\"mm-note\">也就是说，<b>申请临界区时<\/b>，先判断信号量，<b>再锁住临界区来判断<\/b>。否则会造成“<b>循环等待<\/b>”，即死锁。<\/span>", "expanded": true}, {"id": "muiE0qbG68p", "topic": "<b>② 两个V操作倒是可以交换。<\/b>", "expanded": true}, {"id": "mnp5U3A1m5j", "topic": "③ 图中<b>红框的操作也可以放入临界区<\/b>，但后果是：<b>临界区的代码更多，会<\/b><span style=\"color:#b45309\"><b><span>影响到系统的性能<\/span><\/b>", "expanded": true}]}, {"id": "m2UeC9fRJes", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-33d9b715bb094d.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mOMErMKD1p2", "topic": "6、<b>信号量<\/b>— <b>是<\/b><span style=\"color:#b45309\"><b><span>一个变量<\/span><\/b><b>，表示<\/b><span style=\"color:#b45309\"><b><span>系统中<\/span><\/b><span style=\"color:#d92d20\"><b><span>某种资源的数量！！<\/span><\/b>", "expanded": true, "children": [{"id": "mT4talkADJs", "topic": "可以用 <span style=\"color:#d92d20\"><b><span>锁+条件变量<\/span><\/b> 实现信号量。", "expanded": true}]}, {"id": "mbwn5phpl7K", "topic": "<b>6、多生产者-多消费者问题<\/b>", "expanded": false, "children": [{"id": "m02a38zelts", "topic": "<b>1、问题分析：<\/b><br><img class=\"mm-img\" src=\"mm-6b504b98d78427.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "myONH2iNubz", "topic": "<b>① 互斥关系：对<\/b><span style=\"color:#b45309\"><b><span>盘子<\/span><\/b><b>的访问要互斥地进行<\/b>", "expanded": true}, {"id": "mH2wTayBXcm", "topic": "<b>② <\/b>三个<b>同步关系(<\/b><b><mark>一前一后<\/mark><\/b><b>)：<\/b><span style=\"color:#b45309\"><b><span>父亲将苹果放入-&gt;女儿才能取苹果<\/span><\/b><b>；<\/b><span style=\"color:#b45309\"><b><span>母亲将橘子放入-&gt;儿子才能取橘子<\/span><\/b><b>；<\/b><span style=\"color:#b45309\"><b><span>盘子为空-&gt;父亲/母亲才能放入水果<\/span><\/b>", "expanded": true}, {"id": "mxQOZf628Rs", "topic": "③ 因此需要的信号量有：", "expanded": true, "children": [{"id": "m5dW918ZhA6", "topic": "<b>1个互斥锁：mutex = 1<\/b>", "expanded": true}, {"id": "momwmcRSWch", "topic": "<b>3个同步量：orange =0、apple=0、plate=1<\/b><span class=\"mm-note\">初始为：<b>0个苹果、0个橘子、1个盘子<\/b><\/span>", "expanded": true}]}]}, {"id": "mzezKErbeGj", "topic": "2、代码实现：<br><img class=\"mm-img\" src=\"mm-7a65a5615451e3.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mYjbxFF6mTJ", "topic": "3、思考：<b>可不可以不用互斥信号量mutex<\/b>？<br><img class=\"mm-img\" src=\"mm-040bd607b9a28a.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "myjTVvsrVYu", "topic": "<b>结论：可以，此时即使不用互斥锁mutex，也可以实现对盘子的互斥访问<\/b>", "expanded": true}, {"id": "m79Jltd7kwk", "topic": "<b>原因：本题中的<\/b><span style=\"color:#b45309\"><b><span>缓冲区大小为1<\/span><\/b><b>，而<\/b><span style=\"color:#b45309\"><b><span>apple、orange、plate在同一时刻，只可能有一个是1<\/span><\/b><b>，因此有可能实现<\/b><span class=\"mm-note\">注意，当缓冲区大小为1，不用互斥量是<b>有可能，而非一定<\/b>就能实现互斥。<\/span>", "expanded": true}, {"id": "mlKc9T6JOuE", "topic": "<span style=\"color:#d92d20\"><b><span>❤<\/span><\/b> <b>注意：如果<\/b><b><mark>缓冲区大小大于1<\/mark><\/b><b>，那么<\/b><b><mark>必须设置一个互斥信号量mutex<\/mark><\/b><b>来保证互斥地访问缓冲区！<\/b>", "expanded": true}]}, {"id": "mcHrPNxPn1k", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-369ce624021f08.jpg\" style=\"width:260px;height:110px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f56e7be6f1e06f.jpg\" style=\"width:260px;height:152px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mtr0bWAGxsQ", "topic": "<span style=\"color:#0e7a52\"><b><span>7、其它经典PV问题<\/span><\/b>", "expanded": false, "children": [{"id": "mCx1fKkg3Rb", "topic": "<b>1、吸烟者问题— 关键：吸烟者之间的<\/b><b><mark>同步<\/mark><\/b>", "expanded": true, "children": [{"id": "mtBJaCEBXpt", "topic": "<b>1.题目：<\/b><br><img class=\"mm-img\" src=\"mm-df1441531be2e3.jpg\" style=\"width:260px;height:166px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mlurnaUPlbq", "topic": "<b>2.分析：画出分析图，找出互斥关系、同步关系，并将其抽象为信号量<\/b><br><img class=\"mm-img\" src=\"mm-4e5e5aa9884160.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-069b0f879c5669.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mVAXpfJ7HfT", "topic": "<b>3.代码实现：注意，由于此时只有一个桌子，即<\/b><span style=\"color:#b45309\"><b><span>缓冲区空间为1(互斥量为1)<\/span><\/b><b>，因此3个吸烟者在同一时间最多只有1个会拿到材料吸到烟，因此也<\/b><span style=\"color:#b45309\"><b><span>就不需要设置互斥信号量<\/span><\/b><br><img class=\"mm-img\" src=\"mm-8ff3918cdaf280.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mAXLjo5Bc37", "topic": "① 用1个<b>while循环实现生产者的轮流供给<\/b><span class=\"mm-note\">那如果<b>随机地让吸烟<\/b>，那就用一个随机变量来随机地控制生产的材料<\/span>", "expanded": true}, {"id": "mEgtcLrxEl5", "topic": "② 由于<b>不同吸烟者的需求不同<\/b>，因此需要<b>3个不同的信号量<\/b>", "expanded": true}, {"id": "mqJ2GaZvHs4", "topic": "③ <b>供应者需要接收到吸烟完成的信息才会生产<\/b>，因此需要一个<b>finish信号量<\/b>", "expanded": true}]}]}, {"id": "moJ7NAWIPS5", "topic": "<b>2、读者写者问题—<\/b> <b>关键：<\/b><b><mark>计数器count<\/mark><\/b><b>记录<\/b><span style=\"color:#b45309\"><b><span>当前正在访问的共享文件的读进程数<\/span><\/b><b>，用count的值判断当前的进程是否为第一个/最后一个读进程，从而做不同处理。<\/b>", "expanded": true, "children": [{"id": "mLNcamfyWK4", "topic": "<b>1.问题描述与分析：多个读者/写者共享<\/b><span style=\"color:#d92d20\"><b><span>一个文件<\/span><\/b><br><img class=\"mm-img\" src=\"mm-df1240ae9f17d0.jpg\" style=\"width:260px;height:102px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mFIF3WllcHJ", "topic": "① <span style=\"color:#d92d20\"><span>注意：<\/span><b>多个<\/b><span style=\"color:#b45309\"><b><span>读者<\/span><\/b>可以<span style=\"color:#b45309\"><b><span>同时对文件执行读<\/span><\/b>操作", "expanded": true}, {"id": "mfU344XYBG5", "topic": "<b>②<\/b> <span style=\"color:#d92d20\"><span>注意：<\/span><b>同一时刻只允许一个写者向文件中写信息<\/b>", "expanded": true}, {"id": "mlBaTkdz2BP", "topic": "<b>③ 任一写者在完成写操作之前，不允许其它写者/读者工作<\/b>", "expanded": true}, {"id": "mxOgYDhcFkd", "topic": "<b>④ 写者执行写操作前，应让已有的读者和写者全部退出<\/b>", "expanded": true}]}, {"id": "mVzWs3IkifL", "topic": "<b>2.实现：<\/b><br><img class=\"mm-img\" src=\"mm-68c1c148045dc4.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "m5Ooxpqz1wq", "topic": "<b><mark>❤ 核心思路<\/mark><\/b>：设置一个<span style=\"color:#d92d20\"><b><span>计数器count<\/span><\/b><b>记录<\/b><span style=\"color:#b45309\"><b><span>当前正在访问的共享文件的读进程数<\/span><\/b>，用<b>count的值判断当前的进程是否为第一个/最后一个读进程<\/b>，从而做不同处理。<span style=\"color:#d92d20\"><b><span>第一个读进程加锁，最后一个读进程解锁<\/span><\/b>。<span class=\"mm-note\">并且为了防止许多读进程阻塞(由于对coun的检查和赋值不能一气呵成)，用<b>一个mutex来互斥访问count<\/b>。<\/span>", "expanded": true}, {"id": "mejYwEa4gGl", "topic": "上述代码潜在的问题<b>：只要有读进程还在读，写进程就要一直阻塞等待，可能会“饿死”。<\/b>也就是说上述代码是“<b>读优先<\/b> ”的。", "expanded": true}, {"id": "mnpHmmdgDep", "topic": "<b>解决方法：再加一个<\/b><span style=\"color:#b45309\"><b><span>信号量w<\/span><\/b><b>，用于解决上述问题<\/b><br><img class=\"mm-img\" src=\"mm-9596937b3a4890.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mqRNlZ0xRwJ", "topic": "<b>3、哲学家进餐问题— 关键：<\/b><b><mark>解决进程死锁<\/mark><\/b>", "expanded": true, "children": [{"id": "mD0MRXSu6RT", "topic": "<b>1.问题描述：<\/b><span style=\"color:#b45309\"><b><span>左边的筷子— chopstick[i]<\/span><\/b><b>；<\/b><span style=\"color:#b45309\"><b><span>右边的筷子— chopstick[(i+1)%5]<\/span><\/b><br><img class=\"mm-img\" src=\"mm-77d06a624484b9.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mOt647q5ovf", "topic": "2.问题分析，会造成死锁的现象：<b>若每一个哲学家同时拿起左手的筷子<\/b>，就会<b>造成死锁。<\/b><br><img class=\"mm-img\" src=\"mm-5a2c245328cdcf.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mI7ZxneA0Lk", "topic": "<b>3.如何解决上述问题：<\/b>", "expanded": true, "children": [{"id": "mlxCNmO3rvM", "topic": "1.<b>施加限制<\/b>：<span style=\"color:#b45309\"><b><span>最多允许四个哲学家同时进餐<\/span><\/b>。<br><img class=\"mm-img\" src=\"mm-40ea41144e349b.jpg\" style=\"width:260px;height:84px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m3XefWDEpk2", "topic": "<b>2.<\/b><span style=\"color:#b45309\"><b><span>奇数号<\/span><\/b><b>先拿左边，再拿右边；<\/b><span style=\"color:#b45309\"><b><span>偶数号<\/span><\/b><b>先拿右边，再拿左边。<\/b><br><img class=\"mm-img\" src=\"mm-b393d5404ece26.jpg\" style=\"width:260px;height:67px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mFq4ImE5jSZ", "topic": "3.施加限制：<span style=\"color:#b45309\"><b><span>仅当一个哲学家左右两支筷子都可使用时<\/span><\/b>，<b>才允许他抓起筷子<\/b>。（<b>用一个<\/b><span style=\"color:#b45309\"><b><span>互斥量<\/span><\/b>）<br><img class=\"mm-img\" src=\"mm-200b4686853f55.jpg\" style=\"width:260px;height:48px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-492f1f3d264972.jpg\" style=\"width:260px;height:278px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}]}, {"id": "mytrlO7yE7A", "topic": "<b>8、并发的缺陷：<\/b>", "expanded": false, "children": [{"id": "mK3hWB8CRWj", "topic": "<b>1、非死锁缺陷：<\/b>", "expanded": true, "children": [{"id": "mztoefQWPbE", "topic": "<b>① 违反原子性<\/b>", "expanded": true}, {"id": "meRQkPu8tGT", "topic": "<b>② 违反顺序性<\/b><span class=\"mm-note\">也就是不同步了。<\/span>", "expanded": true}]}, {"id": "mXDJAHarhXH", "topic": "2、死锁缺陷：具体看下边的死锁分析吧。", "expanded": true}]}, {"id": "mZOaO117BI6", "topic": "<b>9、死锁<\/b>", "expanded": true, "children": [{"id": "mxPb4Nj6a7s", "topic": "<b>1、概念— <\/b><span style=\"color:#b45309\"><b><span>各进程互相等待对方手里的资源，导致各进程都阻塞<\/span><\/b><b>，无法向前推进的现象<\/b>", "expanded": true}, {"id": "mFRCX4Td02r", "topic": "2、<b>死锁、饥饿、死循环<\/b>的区别", "expanded": false, "children": [{"id": "mkhp13FX5uz", "topic": "<b>死锁：<\/b><span style=\"color:#b45309\"><b><span>至少有两个或两个以上的进程同时发生死锁<\/span><\/b>", "expanded": true}, {"id": "mkMuZSLFebA", "topic": "<b>饥饿：可能只有一个进程发生饥饿<\/b><span class=\"mm-note\">指<b>进程长期得不到处理机运行<\/b><\/span>", "expanded": true}, {"id": "mkPyydXILJu", "topic": "<b>死循环：程序员的问题，而不是OS的问题<\/b><span class=\"mm-note\">死锁和饥饿都是操作系统的问题。<\/span>", "expanded": true}]}, {"id": "mShIkYcoUmn", "topic": "<b>3、<\/b><span style=\"color:#d92d20\"><b><span>❤<\/span><\/b> <b>死锁产生的四个必要条件（<\/b><b><mark>缺一不可<\/mark><\/b><b>）<\/b><br><img class=\"mm-img\" src=\"mm-e0bf85589045ae.jpg\" style=\"width:260px;height:79px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mfrnhiUGbUW", "topic": "<b>注意：<\/b><span style=\"color:#b45309\"><b><span>发生死锁一定有循环等待<\/span><\/b><b>，而<\/b><span style=\"color:#b45309\"><b><span>发生循环等待时未必死锁<\/span><\/b>", "expanded": true}]}, {"id": "mNS0vNjGpfK", "topic": "<b>4、什么时候会发生死锁？— <\/b><b><mark>对不可剥夺资源的不合理分配，可能导致死锁<\/mark><\/b>", "expanded": false, "children": [{"id": "mOOYyKyosFL", "topic": "<b>① 对系统资源的竞争<\/b>", "expanded": true}, {"id": "mQT3d8X6dZN", "topic": "<b>② 进程顺序推进非法 <\/b><span class=\"mm-note\">即：请求和释放资源的顺序不当<\/span>", "expanded": true}, {"id": "m8KaEIbwRM6", "topic": "<b>③ 信号量的使用不当<\/b>", "expanded": true}]}, {"id": "mDtgwdtsRgb", "topic": "<b>5、死锁的处理(三大思路)：<\/b><span style=\"color:#d92d20\"><b><span>预防<\/span><\/b> <span style=\"color:#b45309\"><b><span>&amp;<\/span><\/b> <span style=\"color:#d92d20\"><b><span>避免<\/span><\/b> <span style=\"color:#b45309\"><b><span>&amp;<\/span><\/b><span style=\"color:#d92d20\"><b><span> 检查和恢复<\/span><\/b>", "expanded": true, "children": [{"id": "mou0Iv5K0GB", "topic": "<b>1、处理1— <\/b><span style=\"color:#1d4ed8\"><b><span>预防<\/span><\/b><b>死锁(<\/b>静态策略<b>)<\/b><span class=\"mm-note\"><b>不允许死锁发生。<\/b><\/span>", "expanded": false, "children": [{"id": "mAvnHX8FDOu", "topic": "<b>1、<\/b>破坏<b>互斥条件：将只能互斥使用的资源改造为允许共享使用的资源(<\/b><span style=\"color:#b45309\"><b><span>SPOOLing技术<\/span><\/b><b>)<\/b><span class=\"mm-note\">缺点：有时会<b>破坏系统安全<\/b>，且并<b>不是所有资源都可以如此改造<\/b>，很多时候无法破坏互斥条件。<\/span>", "expanded": true}, {"id": "m01fEbv8CFQ", "topic": "<b>2、<\/b>破坏<b>非抢占条件：<\/b>", "expanded": true, "children": [{"id": "muSuOfe6l90", "topic": "① 方案1：某个进程请求资源得不到满足时，<b>释放保持的全部资源<\/b>，<b>待以后需要时再重新申请<\/b>。", "expanded": true}, {"id": "mPxQTRbuqeN", "topic": "② 方案2：某进程得不到请求资源时，由OS协助，<b>强行剥夺资源<\/b>。<span class=\"mm-note\">一般考虑<b>各进程的优先级<\/b>。<\/span>", "expanded": true}]}, {"id": "muKLPd8zkOL", "topic": "3、破坏<b>持有并等待条件：<\/b><span style=\"color:#b45309\"><b><span>静态分配<\/span><\/b><b>方法，在<\/b><span style=\"color:#b45309\"><b><span>进程运行前一次申请完它所需要的全部资源<\/span><\/b><span class=\"mm-note\">缺点：<b>资源利用率极低，可能导致某些进程饥饿。<\/b><\/span>", "expanded": true}, {"id": "mLNCbAi0ypq", "topic": "4、破坏<b>循环等待条件：<\/b><span style=\"color:#b45309\"><b><span>顺序资源分配法，<\/span><\/b><b>每个进程<\/b><span style=\"color:#b45309\"><b><span>按编号递增的顺序请求资源<\/span><\/b>", "expanded": true}, {"id": "mV4YV8p8iT1", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-22aed3a0106d4e.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mdhf5WjHtc4", "topic": "<b>2、处理2— <\/b><span style=\"color:#1d4ed8\"><b><span>避免<\/span><\/b><b>死锁(<\/b>动态策略<b>)<\/b><span class=\"mm-note\"><b>不允许死锁发生<\/b><\/span>", "expanded": true, "children": [{"id": "mbvxv0I3FrT", "topic": "<b>1、安全序列、不安全状态<\/b><span class=\"mm-note\"><b>安全序列<\/b>：指如果系统按照该序列分配资源，则<b>每个进程都可顺利完成<\/b>。\n<b>安全状态<\/b>：只要有一个安全序列，那么系统就是安全状态。\n<b>不安全状态<\/b>：找不出一个安全序列。<\/span>", "expanded": true, "children": [{"id": "mlqOaxzcnnW", "topic": "<b>系统进入不安全状态-&gt;则<\/b><span style=\"color:#b45309\"><b><span>可能发生死锁<\/span><\/b><b>；发生死锁-&gt;则<\/b><span style=\"color:#b45309\"><b><span>一定是在不安全状态<\/span><\/b><b>；安全状态-&gt; <\/b><span style=\"color:#b45309\"><b><span>一定不会死锁<\/span><\/b>", "expanded": true}, {"id": "m7ZSknQWrJR", "topic": "<b>规则<\/b>：若借给企业的钱总数达不到企业提出的最大要求，那么不管之前给企业借了多少钱，那些钱都拿不回来了<span class=\"mm-note\">下边的银行家算法，也是<b>以此规则为前提<\/b>。<\/span>", "expanded": true}]}, {"id": "mhqZohJiNYZ", "topic": "<b>2、<\/b><span style=\"color:#d92d20\"><b><span>❤<\/span><\/b> <b><mark>银行家算法<\/mark><\/b> ：<b>在<\/b><span style=\"color:#b45309\"><b><span>资源分配之前预先判断这次分配是否会导致系统进入不安全状态。如果会进入<\/span><\/b><b>不安全状态，就<\/b><span style=\"color:#b45309\"><b><span>暂时不答应此次请求<\/span><\/b><b>，让该进程先阻塞等待。<\/b><br><img class=\"mm-img\" src=\"mm-b30a2037064a36.jpg\" style=\"width:260px;height:59px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>将多种资源抽象为多维向量。<\/b><\/span>", "expanded": true, "children": [{"id": "mV4NSjDklxV", "topic": "<b>1、安全性算法：检查当前剩余可用资源是否可以满足某个进程的最大需求<\/b>。如果<b>可以<\/b>，就<b>将该进程加入安全序列，<\/b>然后<span style=\"color:#b45309\"><b><span>将该进程的所有持有资源全部回收<\/span><\/b>。不断重复上述过程，看<b>最终是否能让所有进程都加入安全序列<\/b>。<span class=\"mm-note\">即：看<b>能否让所有进程都加入安全序列。<\/b><\/span>", "expanded": true}, {"id": "mDTJkV2HnEm", "topic": "<b>2、找不到安全序列的例子：<\/b><br><img class=\"mm-img\" src=\"mm-abfac88149617b.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mNctQSATQZi", "topic": "<b>3、代码实现银行家算法：<\/b><br><img class=\"mm-img\" src=\"mm-5bc6af5867fe6b.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "musiTUGVGOI", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-33e494eb03c25d.jpg\" style=\"width:260px;height:155px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "msJe1azqsup", "topic": "<b>3、处理3— <\/b><span style=\"color:#1d4ed8\"><b><span>检查和恢复<\/span><\/b><b>死锁<\/b><span class=\"mm-note\"><b>允许死锁偶尔发生，检查到死锁再采取行动<\/b>。（死锁检测器、恢复技术）<\/span>", "expanded": true, "children": [{"id": "mJCHtKAl9il", "topic": "<b>1、死锁的检查算法：将<\/b><span style=\"color:#b45309\"><b><span>各进程之间的资源要求关系<\/span><\/b><b>，抽象为操作系统的<\/b><b><mark>资源分配有向图<\/mark><\/b>(数据结构)<b>，再<\/b><span style=\"color:#b45309\"><b><span>简化该图<\/span><\/b><b>(即：消除边)。<\/b><span class=\"mm-note\">即：<b>依次消除与不阻塞进程相连的边<\/b>，直到无边可消。<\/span>", "expanded": true, "children": [{"id": "mKDmsgwueLM", "topic": "若<span style=\"color:#b45309\"><b><span>能消除所有边<\/span><\/b>，那该图是<span style=\"color:#b45309\"><b><span>可完全简化<\/span><\/b><b>的。那么此时<\/b><span style=\"color:#b45309\"><b><span>没有死锁<\/span><\/b><b>。<\/b>", "expanded": true}, {"id": "mIcWgx1HQgS", "topic": "若<b>某时刻系统的资源分配图是<\/b><span style=\"color:#b45309\"><b><span>不可完全简化<\/span><\/b>的，那么此时<b>系统<\/b><span style=\"color:#b45309\"><b><span>死锁<\/span><\/b>。", "expanded": true}, {"id": "m4Z3jqxiW4r", "topic": "<b><mark>死锁进程<\/mark><\/b><b>：简化后，仍有边连着的进程。<\/b>", "expanded": true}]}, {"id": "mWcQVVRSCtn", "topic": "<b>2、死锁的解除<\/b><br><img class=\"mm-img\" src=\"mm-94363bcdcf9610.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mF0BM9oOjc4", "topic": "<b>① <\/b><span style=\"color:#b45309\"><b><span>资源剥夺法<\/span><\/b><b>：挂起某些死锁进程，抢占它们资源<\/b>，再将该资源分配给其他进程", "expanded": true}, {"id": "mMermIAf3Uf", "topic": "<b>② <\/b><span style=\"color:#b45309\"><b><span>撤销进程<\/span><\/b><b>法：<\/b>强制撤销部分、甚至全部死锁进程，剥夺这些进程的资源", "expanded": true}, {"id": "mGlz7UeVPVk", "topic": "<b>③ <\/b><span style=\"color:#b45309\"><b><span>进程回退<\/span><\/b><b>法：<\/b>让一个或多个死锁进程<b>回退到足以避免死锁的地步<\/b>", "expanded": true}]}, {"id": "mmO6PEOKsyt", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-fc87f40debfd1f.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}]}, {"id": "mZ1jVqhYTzp", "topic": "<span style=\"color:#d92d20\"><b><span>❤ PV(同步)题目的解题思路<\/span><\/b><b>：<\/b><br><img class=\"mm-img\" src=\"mm-07758d24cce939.jpg\" style=\"width:260px;height:38px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mtoNtszhbm2", "topic": "①<b>关系分析<\/b>：找出题目中的各个进程，分析它们之间的<b>同步(前后)、互斥关系<\/b>", "expanded": true}, {"id": "maxVB0ed9EQ", "topic": "② 根据关系<b>定义同步信号量、互斥信号量<\/b>", "expanded": true}, {"id": "mjTuH7asq92", "topic": "③ 根据题目条件，正确<b>初始化各信号量<\/b>", "expanded": true}, {"id": "m1zv6h9jAY2", "topic": "④ 画出<b>流程图<\/b>，确定各进程的<b>P、V操作的大致顺序<\/b>", "expanded": true}]}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

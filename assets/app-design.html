@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DragonHuge App · 三个设计方向</title>
+<style>
+  :root{
+    --paper:#fbfaf6; --ink:#1b1d1c; --muted:#6b6f6d; --line:#e2e2da; --green:#0e7a52;
+    --term:#0e1110; --term-ink:#d7ded9; --term-dim:#7d8a83; --term-green:#57d39b;
+    --white:#fff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#eceae3;color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif;
+    padding:48px 20px 80px}
+  .head{max-width:1180px;margin:0 auto 40px}
+  .head h1{font-family:"Songti SC","Noto Serif SC",serif;font-size:34px;margin:0 0 10px;letter-spacing:.01em}
+  .head p{margin:0;color:#5d625f;font-size:14px;line-height:1.8;max-width:72ch}
+  .board{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  @media(max-width:1080px){.board{grid-template-columns:1fr;max-width:430px}}
+  .col{display:flex;flex-direction:column;gap:14px}
+  .cap{font-size:13px;line-height:1.7;color:#4c514e}
+  .cap b{display:block;font-size:15px;color:#1b1d1c;margin-bottom:2px}
+  .cap .k{color:#8a8f8b}
+  .phone{position:relative;width:100%;max-width:390px;aspect-ratio:390/844;border-radius:38px;
+    box-shadow:0 24px 60px rgba(0,0,0,.22),0 2px 0 rgba(255,255,255,.6) inset;
+    overflow:hidden;border:1px solid rgba(0,0,0,.12);background:#fff}
+  .status{height:44px;display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px;font-size:12px;letter-spacing:.02em}
+  .tabs{position:absolute;left:0;right:0;bottom:0;height:62px;display:flex;align-items:center;
+    justify-content:space-around;font-size:11px}
+  .tabs span{opacity:.55}
+  .tabs span.on{opacity:1;font-weight:600}
+  .scroll{position:absolute;inset:44px 0 62px 0;overflow:hidden}
+
+  /* ---------- A 纸感档案 ---------- */
+  .a{background:var(--paper);color:var(--ink)}
+  .a .status{color:#6b6f6d}
+  .a .scroll{padding:6px 26px 0}
+  .a .kicker{font-size:10.5px;letter-spacing:.22em;color:#8a8f8b;text-transform:uppercase}
+  .a .date{font-family:"Songti SC","Noto Serif SC",serif;font-size:40px;line-height:1.05;margin:6px 0 4px}
+  .a .weekday{font-size:12px;color:#6b6f6d;margin-bottom:22px}
+  .a .rule{height:1px;background:#d8d6cc;margin:18px 0}
+  .a .feature{padding:18px 0 4px}
+  .a .feature .tag{font-size:10.5px;color:var(--green);letter-spacing:.12em}
+  .a .feature h2{font-family:"Songti SC","Noto Serif SC",serif;font-size:23px;line-height:1.45;margin:8px 0 8px;font-weight:600}
+  .a .feature p{font-size:12.5px;color:#6b6f6d;line-height:1.75;margin:0}
+  .a .list{margin-top:6px}
+  .a .row{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid #e6e4da}
+  .a .row .d{font-size:10.5px;color:#9a9e99;width:38px;flex:none;padding-top:3px}
+  .a .row .t{font-size:13.5px;line-height:1.55}
+  .a .row .s{font-size:10.5px;color:#8a8f8b;margin-top:4px}
+  .a .tabs{background:linear-gradient(#fbfaf600,#fbfaf6 40%);color:#6b6f6d;border-top:1px solid #e6e4da}
+
+  /* ---------- B 终端索引 ---------- */
+  .b{background:var(--term);color:var(--term-ink);border-color:#000}
+  .b .status{color:#6f7c74}
+  .b .scroll{padding:4px 20px 0;font-family:"SF Mono",Menlo,monospace}
+  .b .prompt{font-size:12px;color:var(--term-green)}
+  .b .prompt span{color:#5d6a62}
+  .b .search{margin:14px 0 18px;border:1px solid #26302a;border-radius:8px;padding:10px 12px;
+    font-size:12px;color:#8b978f;display:flex;justify-content:space-between}
+  .b .search em{font-style:normal;color:#4d5a52}
+  .b .stat{display:flex;gap:18px;margin-bottom:16px;font-size:10.5px;color:#6f7c74}
+  .b .stat b{display:block;color:var(--term-ink);font-size:19px;font-weight:600;margin-bottom:2px}
+  .b .item{padding:11px 0;border-bottom:1px dashed #222c26}
+  .b .item .top{display:flex;gap:8px;align-items:baseline}
+  .b .item .idx{font-size:10px;color:#4d5a52;width:22px;flex:none}
+  .b .item .ti{font-size:12.5px;line-height:1.5;color:#dfe7e2}
+  .b .item .meta{font-size:10px;color:#66736b;margin:4px 0 0 30px}
+  .b .item .meta i{font-style:normal;color:var(--term-green)}
+  .b .tabs{background:#0b0e0d;border-top:1px solid #1e2723;color:#6f7c74}
+  .b .tabs span.on{color:var(--term-green)}
+
+  /* ---------- C 画廊笔记 ---------- */
+  .c{background:#fff;color:#141514}
+  .c .status{color:#7a7f7c}
+  .c .scroll{padding:10px 24px 0}
+  .c .brand{font-size:11px;letter-spacing:.28em;color:#9aa09b;text-transform:uppercase}
+  .c .hero{margin:20px 0 26px}
+  .c .hero h2{font-size:30px;line-height:1.3;letter-spacing:-.02em;margin:0 0 12px;font-weight:650}
+  .c .hero p{font-size:12.5px;color:#6f7572;line-height:1.8;margin:0}
+  .c .hero .go{margin-top:18px;font-size:12px;color:#141514;border-bottom:1px solid #141514;display:inline-block;padding-bottom:2px}
+  .c .shelf{display:flex;gap:14px;overflow:hidden;margin:0 -24px;padding:0 24px}
+  .c .cardc{flex:none;width:150px}
+  .c .cardc .sq{height:104px;border-radius:14px;background:#f1f3ef;margin-bottom:10px;position:relative;overflow:hidden}
+  .c .cardc .sq::after{content:"";position:absolute;left:14px;right:14px;bottom:14px;height:1px;background:#d9ded8}
+  .c .cardc .sq i{position:absolute;left:14px;top:14px;font-style:normal;font-size:9.5px;letter-spacing:.14em;color:#8d938e}
+  .c .cardc .ct{font-size:12.5px;line-height:1.5}
+  .c .foot{margin-top:26px;padding-top:18px;border-top:1px solid #eceee9}
+  .c .foot .li{display:flex;justify-content:space-between;font-size:12px;color:#5f6561;padding:8px 0}
+  .c .tabs{background:#fff;border-top:1px solid #eceee9;color:#7a7f7c}
+</style>
+</head>
+<body>
+<div class="head">
+  <h1>DragonHuge App · 三个设计方向</h1>
+  <p>同一份内容（知识卡片 / 问答 / 羊毛 / 需求），三种完全不同的主屏逻辑。按 huashu-design 的三方向门：先选形态，再谈视觉细节。你选一个，我把它做成可点的真机原型（首页 + 列表 + 详情 + 搜索）。</p>
+</div>
+
+<div class="board">
+
+  <!-- A -->
+  <div class="col">
+    <div class="phone a">
+      <div class="status"><span>9:41</span><span>●●● ⌁ ▮</span></div>
+      <div class="scroll">
+        <div class="kicker">DragonHuge</div>
+        <div class="date">11 / 21</div>
+        <div class="weekday">星期五 · 今天收了 3 条</div>
+        <div class="rule"></div>
+        <div class="feature">
+          <div class="tag">今日一页</div>
+          <h2>Agent 长程任务断点续传：从 Checkpoint 到跨进程恢复</h2>
+          <p>框架层 Checkpoint 加任务调度两层，不改源码也能续跑。今天最值得读的一篇。</p>
+        </div>
+        <div class="rule"></div>
+        <div class="list">
+          <div class="row"><div class="d">11-20</div><div><div class="t">Claude 的 4 层记忆是怎么设计的</div><div class="s">外部沉淀 · 微信公众号</div></div></div>
+          <div class="row"><div class="d">11-20</div><div><div class="t">XSS 与 SSRF：原理、攻击前提与防御</div><div class="s">问答沉淀 · 11 个问题</div></div></div>
+          <div class="row"><div class="d">11-19</div><div><div class="t">Google Gemini 黑五五折</div><div class="s">羊毛线报 · 时效未确认</div></div></div>
+        </div>
+      </div>
+      <div class="tabs"><span class="on">今日</span><span>知识</span><span>搜索</span><span>我的</span></div>
+    </div>
+    <div class="cap"><b>A · 纸感档案（推荐）</b><span class="k">主屏形态＝一页日记</span>：每天只有一条主角，其余按日期归档。签名处是"今天"这两个字，颜色只用来标"可读"。适合慢读、适合你想回顾时翻。</div>
+  </div>
+
+  <!-- B -->
+  <div class="col">
+    <div class="phone b">
+      <div class="status"><span>9:41</span><span>●●● ⌁ ▮</span></div>
+      <div class="scroll">
+        <div class="prompt">dh <span>~/knowledge</span></div>
+        <div class="search"><span>搜索标题 / 关键词…</span><em>⌘K</em></div>
+        <div class="stat">
+          <div><b>463</b>卡片</div>
+          <div><b>20</b>问答</div>
+          <div><b>15</b>羊毛</div>
+        </div>
+        <div class="item"><div class="top"><span class="idx">001</span><span class="ti">Agent 长程任务断点续传</span></div><div class="meta">AI与效率 · 2026-09-10 · <i>read</i></div></div>
+        <div class="item"><div class="top"><span class="idx">002</span><span class="ti">Claude 的 4 层记忆是如何设计的</span></div><div class="meta">AI与效率 · 2026-11-11 · <i>read</i></div></div>
+        <div class="item"><div class="top"><span class="idx">003</span><span class="ti">XSS 与 SSRF 原理与防御</span></div><div class="meta">日常问答 · 2026-11-20 · <i>qa</i></div></div>
+        <div class="item"><div class="top"><span class="idx">004</span><span class="ti">Google Gemini 黑五五折</span></div><div class="meta">羊毛线报 · 2026-11-21 · <i>deal</i></div></div>
+        <div class="item"><div class="top"><span class="idx">005</span><span class="ti">REQ-009 个人 App 设计</span></div><div class="meta">需求推进 · active · <i>req</i></div></div>
+      </div>
+      <div class="tabs"><span class="on">索引</span><span>图谱</span><span>搜索</span><span>设置</span></div>
+    </div>
+    <div class="cap"><b>B · 终端索引</b><span class="k">主屏形态＝一张索引表</span>：不做视觉叙事，直接给你全库入口。签名处是搜索框和编号。适合"我知道我要找什么"，快速、克制、信息密度最高。</div>
+  </div>
+
+  <!-- C -->
+  <div class="col">
+    <div class="phone c">
+      <div class="status"><span>9:41</span><span>●●● ⌁ ▮</span></div>
+      <div class="scroll">
+        <div class="brand">DragonHuge</div>
+        <div class="hero">
+          <h2>把每天看到的东西，留成自己的。</h2>
+          <p>知识、问答、羊毛与需求，都在同一个地方慢慢长大。</p>
+          <span class="go">从今天开始 →</span>
+        </div>
+        <div class="shelf">
+          <div class="cardc"><div class="sq"><i>KNOWLEDGE</i></div><div class="ct">Agent 断点续传</div></div>
+          <div class="cardc"><div class="sq"><i>QA</i></div><div class="ct">XSS / SSRF</div></div>
+          <div class="cardc"><div class="sq"><i>DEALS</i></div><div class="ct">Gemini 五折</div></div>
+        </div>
+        <div class="foot">
+          <div class="li"><span>最近更新</span><span>11-21 →</span></div>
+          <div class="li"><span>羊毛线报</span><span>15 条 →</span></div>
+          <div class="li"><span>需求推进</span><span>8 个 →</span></div>
+        </div>
+      </div>
+      <div class="tabs"><span class="on">首页</span><span>内容</span><span>搜索</span><span>我的</span></div>
+    </div>
+    <div class="cap"><b>C · 画廊笔记</b><span class="k">主屏形态＝一面内容墙</span>：大标题、大留白、横向书架，像一本翻开的杂志。签名处是那句"把每天看到的留成自己的"。适合随手翻，但找东西会慢。</div>
+  </div>
+
+</div>
+</body>
+</html>

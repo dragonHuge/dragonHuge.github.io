@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>历史 IP 信誉库重拾 · 接入实时风控平台 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">29</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">简介</a><a class="tl l1" href="#sec-2">历史文档信息总结</a><a class="tl l2" href="#sec-3">1.IP风险计算维度</a><a class="tl l2" href="#sec-4">2.接入文档</a><a class="tl l1" href="#sec-5">资源汇总 &amp; 可用性分析</a><a class="tl l2" href="#sec-6">Risk-admin 数据溯源</a><a class="tl l3" href="#sec-7">IP基础库-详情面板</a><a class="tl l3" href="#sec-8">IP基础库-数据查询</a><a class="tl l4" href="#sec-9">IP基础信息</a><a class="tl l4" href="#sec-10">永安结果</a><a class="tl l4" href="#sec-11">接口调用记录</a><a class="tl l3" href="#sec-12">IP基础库-特征管理</a><a class="tl l3" href="#sec-13">IP基础库-规则管理</a><a class="tl l2" href="#sec-14">IP信誉库接口</a><a class="tl l2" href="#sec-15">IP信誉库-实时任务</a><a class="tl l2" href="#sec-16">IP信誉库-离线任务</a><a class="tl l2" href="#sec-17">永安数据1.0</a><a class="tl l3" href="#sec-18">Http接口</a><a class="tl l3" href="#sec-19">离线数据- 全量包&amp;增量包</a><a class="tl l2" href="#sec-20">永安数据2.0</a><a class="tl l3" href="#sec-21">实时能力</a><a class="tl l3" href="#sec-22">离线数据</a><a class="tl l1" href="#sec-23">Redis中的key-value含义总结</a><a class="tl l1" href="#sec-24">IP信誉库1.0 全数据流转逻辑图解</a><a class="tl l1" href="#sec-25">接入方案</a><a class="tl l2" href="#sec-26">一期：直接使用 永安&amp;爬虫数据</a><a class="tl l3" href="#sec-27">待商议</a><a class="tl l3" href="#sec-28">方案</a><a class="tl l2" href="#sec-29">二期：IP信誉库规则引擎启用</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="solution/index.html">项目方案设计</a></div><article><h1>历史 IP 信誉库重拾 · 接入实时风控平台</h1><div class="meta">2026-02-12<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累 · 我主导的设计&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<blockquote><p>参考文档：</p><p><span class="fs-mention">@IP信誉库PRD</span></p><p><span class="fs-mention">@业务安全风控服务介绍</span></p><p><span class="fs-mention">@IP信誉库介绍文档</span> - 最后维护时间：<strong>2023.10.24</strong></p><p><span class="fs-mention">@IP信誉库 对外 接口文档</span> - 最后维护时间：<strong>2023.20.08</strong></p></blockquote><h1 id="sec-1">简介</h1><p>信誉库是统合历史IP行为与其他IP标签画像而形成的综合IP信誉库，适用于订单、领取红包等薅羊毛行为；</p><h1 id="sec-2">历史文档信息总结</h1><h2 id="sec-3">1.IP风险计算维度</h2><blockquote><p>详情见此文档：<span class="fs-mention">@IP信誉库介绍文档</span></p></blockquote><p>可以看到计算维度比较全面，有：</p><table><tr><td><p><strong>数据维度</strong></p></td><td><p><strong>最小更新时间</strong></p></td><td><p><strong>指标时间跨度</strong></p></td><td><p><strong>备注</strong></p></td></tr><tr><td><ul><li>软件特征</li></ul><ul><li>垃圾注册</li></ul><ul><li><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>爬虫代理平台</strong></mark></li></ul><ul><li><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>自有爬虫平台</strong></mark></li></ul></td><td><p>每1m更新</p></td><td><p>5m/10m/15m/30m/1h/6h/24h/3d/7d/30d</p></td><td><p>不同时间跨度有不同的更新时间，但整体指标中最小更新时间为1m</p></td></tr><tr><td><ul><li><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>永安数据</strong></mark></li></ul></td><td><p>每30s更新</p></td><td><p>5m</p></td><td></td></tr><tr><td><ul><li>关联同C段IP维度</li></ul><ul><li>关联UA维度</li></ul></td><td><p>每5m更新</p></td><td><p>15min</p></td><td></td></tr><tr><td><ul><li>关联公司账号维度</li></ul></td><td><p>每日更新</p></td><td><p>30d</p></td><td></td></tr></table><h2 id="sec-4">2.接入文档</h2><blockquote><p>详情见此文档：<span class="fs-mention">@IP信誉库 对外 接口文档</span> </p></blockquote><ul><li>请求参数：</li></ul><table><tr><td><p>字段</p></td><td><p>字段名</p></td><td><p>类型</p></td><td><p>是否必须</p></td></tr><tr><td><p>ip</p></td><td><p>用户IP</p></td><td><p>string</p></td><td><p>是</p></td></tr><tr><td><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>appId</strong></mark></p></td><td><p>app标识</p></td><td><p>string</p></td><td><p>是</p></td></tr><tr><td><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>appKey</strong></mark></p></td><td><p>密钥</p></td><td><p>string</p></td><td><p>是</p></td></tr><tr><td><p>timestamp</p></td><td><p>请求时间</p></td><td><p>bigint</p></td><td><p>是</p></td></tr></table><ul><li>返回值：</li></ul><table><tr><td><p>字段</p></td><td><p>字段名</p></td><td><p>类型</p></td><td><p>是否必须</p></td><td><p>备注</p></td></tr><tr><td><p>score</p></td><td><p>ip分数</p></td><td><p>int</p></td><td><p>是</p></td><td><p>建议风险区度：</p><ul><li>0分，代表无风险</li></ul><ul><li>1-3分，代表低风险</li></ul><ul><li>4-6分，代表中风险</li></ul><ul><li>7-9分，代表高风险</li></ul></td></tr><tr><td><p><strong>hitRule</strong></p></td><td><p><strong>命中ip规则的ID</strong></p></td><td><p>Int</p></td><td><p>否</p></td><td><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>根据当时的规则配置，可能会有变化。</strong></mark></p><p>主要用于事件回溯。</p></td></tr><tr><td><p><strong>hitSource</strong></p></td><td><p><strong>命中规则中所包含的指标</strong></p></td><td><p>string</p></td><td><p>否</p></td><td><p>目前已有指标ID/对应名称 </p><ul><li>1/软件特征</li></ul><ul><li>2/垃圾注册</li></ul><ul><li>9/同C段IP</li></ul><ul><li>10/关联UA数量</li></ul><ul><li>11/关联账号数量</li></ul><ul><li><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>18/第三方低风险</strong></mark></li></ul><ul><li><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>19/第三方中风险</strong></mark></li></ul><ul><li><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>20/第三方高风险</strong></mark></li></ul><ul><li><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>21/爬虫代理平台</strong></mark></li></ul><ul><li><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>22/私有爬虫平台</strong></mark></li></ul></td></tr></table><ul><li>支持机房：<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>国外不可用</strong></span></mark></li></ul><table><tr><td><p>国内集群</p></td><td><p>c3</p></td><td><p>c3srv</p></td></tr><tr><td><p>国内集群</p></td><td><p>c4</p></td><td><p>c4srv</p></td></tr></table><h1 id="sec-5">资源汇总 &amp; 可用性分析</h1><h2 id="sec-6">Risk-admin 数据溯源</h2><p>[内部链接]</p><p>在risk-admin后台可以看到“永安数据”、“特征管理”等。可以看到还有：手机号基础库、邮箱基础库等。</p><p>并且看了一下数据面板，发现“爬虫平台”依旧有数据更新。回溯了一下数据，发现从此项目落地后，<u>仅有“爬虫平台”有数据，其它数据源从23年开始就没有数据</u>。</p><h3 id="sec-7">IP基础库-详情面板</h3><p><strong>"爬虫平台"数据</strong>有两部分：1️⃣开源IP爬虫2️⃣爬虫平台代理IP池(1个talos)。</p><p>资源传送门：git、matrix、ES、Nacos。</p><p><strong>"爬虫平台"数据流转逻辑：（</strong><mark style="background:#b2f2bb;color:inherit;padding:0 2px;border-radius:3px"><strong>相关实时作业已重启</strong></mark><strong>）</strong></p><figure class="fs-board" data-doc="[内部链接]" data-board="K7eAw4EEfhxnHJbnniGc1woIn1d"><div class="board-ph">正在加载画板…</div></figure><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>条件表达式的映射关系：</strong></mark></p><p>此处risk-admin面板的数据源是ES，是从ES聚合查询后展示到前端。</p><p>ES 参考DSL：</p><pre><code>GET risk_database_ip_meta_log_c4/_search -- 索引：risk_database_ip_meta_log_c4
+{
+  "from": 0,
+  "size": 10,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "logTs": {
+              "from": 1747724041603, 
+              "to": 1747810441603,
+              "include_lower": true,
+              "include_upper": true,
+              "boost": 1
+            }
+          }
+        }
+      ],
+      "adjust_pure_negative": true,
+      "boost": 1
+    }
+  },
+  "aggs": {
+    "source_terms": {
+      "terms": {
+        "field": "source",
+        "size": 50
+      },
+      "aggs": {
+        "distinct_ip": {
+          "cardinality": {
+            "field": "ip",
+            "precision_threshold": 20000
+          }
+        }
+      }
+    }
+  }
+}</code></pre><p>ES的聚合结果示例：</p><h3 id="sec-8">IP基础库-数据查询</h3><p>追溯一下接口看看实现逻辑，这里分为3个板块，分开捋一下。</p><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>IP信誉库接口：</p><ul><li>appId：<code>test</code></li></ul><ul><li>appKey：<code>GBAPfccvTED/4uZ5uKyoI7PfGBKNijArM/xHBI65to/y98rHCf8YEGgSK6q1SkXTs6p1XH4fL3AYFHpMxnsaii0VWc8IuFjU/IiXc3TYAA==</code></li></ul></div></div><h4 id="sec-9">IP基础信息</h4><p>接口：<code>/database/ipRisk/ipInfo</code>。<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>自维护了一个redis(</strong></mark><code>内部主机:5106</code>)。</p><p>接口逻辑：在从IP信誉库拿到ip风险信息后，再从此redis中关联出：<strong><code>近15min关联的ua数量/近15min关联的账号数量/近30天有风险的同C段IP数量 </code></strong>后，返回给前端。</p><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>上图中的关联UA数量、关联账号数量、同C段IP风险IP数量，是由离线任务从其它数据源sink到Redis的，后边会提到。</p></div></div><h4 id="sec-10">永安结果</h4><p>后端使用<strong>Http接口(永安在线IP接口2.0) </strong>查询<em>：</em><a href="https://ipdata.yazx.com/api/ip/check/" target="_blank" rel="noopener">ipdata.yazx.com</a>。</p><h4 id="sec-11">接口调用记录</h4><p>是指<strong>IP信誉库的接口调用记录</strong>。依旧存储在ES中，索引：<code>risk_database_ip_api_log_c4</code>。</p><p>示例DSL：</p><pre><code>GET risk_database_ip_api_log_c4/_search
+{
+  "from": 0,
+  "size": 10,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "targetIp": "117.150.86.123"
+          }
+        }
+      ],
+      "adjust_pure_negative": true,
+      "boost": 1
+    }
+  }
+}</code></pre><h3 id="sec-12">IP基础库-特征管理</h3><p><strong>特征自定义配置</strong>，存储于MYSQL-<code>feature-info</code>表中。</p><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>特征配置中的“指标字段”，正与条件表达式(sourceMap)对应。</strong></mark></p><div class="fs-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div><div class="fs-col"></div></div><ul><li><code>time_unit</code>映射：4-min；5-hour；6-day。</li></ul><h3 id="sec-13">IP基础库-规则管理</h3><p>规则自定义配置，<strong>特征作为规则因子</strong>。看1个例子：</p><h2 id="sec-14">IP信誉库接口</h2><p>测试一下接口是否可以使用。能看到SDK是在23年停止维护。</p><p>接口代码：</p><p>`risk-db-brms/src/main/java/com/xiaomi/infosec/risk/control/server/<strong>IpReputationServer.java</strong>`</p><p>在这里利用risk-admin中配置的特征/规则，捋一下接口逻辑：</p><figure class="fs-board" data-doc="[内部链接]" data-board="Pl8wwMtgJh4wQhbG4IKcsx5onWc"><div class="board-ph">正在加载画板…</div></figure><p>特征计算逻辑细节：</p><figure class="fs-board" data-doc="[内部链接]" data-board="O8MBws3YMhzlJxbcZkacnj7EnN2"><div class="board-ph">正在加载画板…</div></figure><pre><code>public Integer getStringTypeCount(String key) {
+
+    return redisTemplate.hasKey(key) ?
+            Integer.parseInt(redisTemplate.opsForValue().get(key).toString()) : 0;
+
+}
+
+public Integer getZSetTypeCount(String key, Long timeSpan) {
+    int count = 0;
+    long nowTs = System.currentTimeMillis() / 1000;
+    if (redisTemplate.hasKey(key)) {
+        Set set = redisTemplate.opsForZSet().rangeByScore(key, nowTs - timeSpan, nowTs); // 获取指定时间范围内的数据
+        count = CollectionUtils.isNotEmpty(set) ? Integer.parseInt(set.iterator().next().toString()) : count;
+    }
+    return count;
+}</code></pre><h2 id="sec-15">IP信誉库-实时任务</h2><p><a href="https://dt.mi.com/workspace/?wid=10563#/workspace/10563/realtimeJob?jobId=1737938&amp;jobVersion=26" target="_blank" rel="noopener"><span style="color:#d83931"><strong>实时任务</strong></span></a><span style="color:#d83931"><strong>当前全部已停止</strong></span>。</p><ol><li><p>是将永安IP信誉库包里的数据写入Redis。并且将数据同步sink到ES。<strong>对应条件表达式：</strong><span style="color:#d83931"><strong>18、19、20</strong></span>。</p></li><li><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div></li><li>talos topic：<code>risk_database_ip_threat_hunter</code></li><li>ES索引：<code>risk_database_ip_threat_hunter_c4</code></li><li>Redis ：<code>内部主机:5106</code><ul><li>key：<strong><code>ip:20/19/18:5m</code></strong></li></ul><ul><li>value：<strong><code>1</code></strong><strong>，含义：是否命中永安高/中/低风险。</strong></li></ul></li></ol><ol><li><p><strong>对应条件表达式：</strong><span style="color:#d83931"><strong>10、11</strong></span>。</p></li><li>talos：<strong><code>passport_action</code></strong></li><li>Redis ：<code>内部主机:5106</code><ul><li>key：<strong><code>ip:10/11:15m</code></strong></li></ul><ul><li><p>1️⃣10：<strong>IP关联UA数量</strong>。数据范围：最近15分钟命中指标的IP。步长:5 min。</p></li><li><p>2️⃣11：<strong>IP关联公司ID数量</strong>。数据范围：最近15分钟命中指标的IP。步长:5 min</p></li></ul></li></ol><ol><li><p><strong>条件表达式：</strong><span style="color:#d83931"><strong>1、2</strong></span>。</p></li><li><p>FlinkSQL核心逻辑如下：</p><pre><code>insert into
+    sink_talos (
+        SELECT
+            ip,
+            (
+                CASE
+                    when fingerprint&gt;0 then cast(fingerprint as int)
+                    when policyCode&gt;0 then cast(policyCode as int)
+                    ELSE 0
+                end
+            ) as label,
+            cast(UNIX_TIMESTAMP(dateTime) as bigint)*1000 as logTs,
+            (
+                CASE
+                    when fingerprint&gt;0 then 1 -- 软件特征
+                    when policyCode&gt;0 then 2 -- 垃圾注册
+                    ELSE 0
+                end
+            ) as source,
+            -1.0 as confidence
+        from
+            thrift_tb
+        where
+            ip is not null
+            and (
+                policyCode is not null
+                or fingerprint is not null
+            )
+    )</code></pre></li><li>talos1：<code>infosec_risk_user_record</code></li><li>talos2：<code>risk_database_ip_metadata</code></li></ol><ol><li><p>talos2的数据结构：</p></li></ol><ol><li><p><strong>对应条件表达式：</strong><span style="color:#d83931"><strong>1、2、21、22</strong></span></p></li><li><p>FlinkJar：com.xiaomi.infosec.risk.control.sink.flink.IpRealTimeStatistics  </p></li><li><p>FlinkJar数据处理逻辑：</p></li><li><figure class="fs-board" data-doc="[内部链接]" data-board="CmpTwbzuohfd1UbcLANcc2JFnWk"><div class="board-ph">正在加载画板…</div></figure></li><li>talos2：<code>risk_database_ip_metadata</code></li><li>Redis ：<code>内部主机:5106</code><ul><li>key(zset)：<strong><code>ip:1/2/21/22:5m/15m/1h/6h</code></strong></li></ul><ul><li><pre><code>{
+  "count": 1, // 在 5m/15m/1h/6h 的时间窗口内，该 IP 和来源组合出现的次数。
+  "timestamp": 1747970105487 // 数据处理的时间戳，表示数据在 Redis 中存储的时间。
+}
+示例：
+* 命令：ZRANGE 3.219.158.209:22:6h 0 -1 WITHSCORES
+* 结果：
+    1) 1
+    2) 1747897200</code></pre></li></ul></li></ol><h2 id="sec-16">IP信誉库-离线任务</h2><p><a href="https://dt.mi.com/workspace/?wid=10563#/workspace/10563/offlineJob?jobId=1706644&amp;jobVersion=1&amp;type=jobDetail&amp;groupId=327140" target="_blank" rel="noopener"><span style="color:#2ea121"><strong>离线任务</strong></span></a><span style="color:#2ea121"><strong>当前都在运行。</strong></span></p><ol><li><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div></li><li><p>Redis：</p><ul><li>key：<code>ip:6:1d</code></li></ul><ul><li>value：date，白名单日期，如：20250522<strong>。</strong></li></ul></li></ol><ol><li><p><strong>对应条件表达式：</strong><span style="color:#d83931"><strong>9。</strong></span>数据流转逻辑：</p></li><li><figure class="fs-board" data-doc="[内部链接]" data-board="ZhEwwUC7hhxbWmbfbolckMRCnvb"><div class="board-ph">正在加载画板…</div></figure></li></ol><p>Redis：</p><ul><li>key：<code>ip:9:30d</code></li></ul><ul><li>value：<strong>风险IP下，30天内同C段的ip数量。</strong></li></ul><ol><li><p><strong>对应条件表达式：</strong><span style="color:#d83931"><strong>1，2。</strong></span>数据流转逻辑：</p></li><li><figure class="fs-board" data-doc="[内部链接]" data-board="CkeEwgrNYhCZTObxprMcoCW6nHc"><div class="board-ph">正在加载画板…</div></figure></li></ol><p>Redis：</p><ul><li>key：<code>ip:1/2:3/7/30d</code></li></ul><ul><li>value：<strong>此ip在3/7/30天内命中软件特征(1)/垃圾注册(2)的次数</strong></li></ul><h2 id="sec-17"><s>永安数据1.0</s></h2><p><span style="color:#d83931"><strong>永安数据1.0已过期(永安侧停止维护)，不推荐使用。后续使用永安数据2.0。此处的总结仅作历史留痕。</strong></span></p><p>永安数据有两种数据源：1. Http接口  2. 离线数据。</p><h3 id="sec-18">Http接口</h3><p>永安在线IP接口查询2.0<em>：</em><s> https://ipdata.yazx.com/api/ip/check/ </s> </p><blockquote><p>risk-admin后台就是使用此接口进行IP的永安风险查询。</p></blockquote><ul><li>可查询风险IP的时间范围：30天内</li></ul><ul><li>接口耗时：约1000ms</li></ul><ul><li>函数名：<code>getThRiskResult(ip)</code></li></ul><ul><li><pre><code>* Http接口返回值：
+{
+    "ip": "112.37.156.87",
+    "exist": true,
+    "type": "家庭宽带",
+    "location":
+    {
+        "country": "中国",
+        "province": "山东省",
+        "city": "德州市",
+        "district": "陵城区",
+        "owner": "中国移动",
+        "latitude": 37.336445,
+        "longitude": 116.576149,
+        "ad_code": "371403",
+        "continent": "亚洲"
+    },
+    "score_tag":
+    {
+        "name": "代理",
+        "time": "2025-04-08T11:19:05+08:00"
+    },
+    "risk_score": 93,
+    "risk_level": "高"
+}
+* IP增量包数据：
+112.37.156.87  家庭宽带  环境伪造:2023-02-14 23:03:20|代理:2025-04-08 11:19:05|多开分身:2022-07-17 07:59:17  99  高  中国  山东省  德州市   陵城区 中国移动 37.336444        116.576148   371403        CN        亚洲</code></pre></li></ul><h3 id="sec-19">离线数据- 全量包&amp;增量包</h3><p><strong>IP信誉库全量包 - </strong><mark style="background:#ffc9c9;color:inherit;padding:0 2px;border-radius:3px"><strong>暂未使用</strong></mark></p><blockquote><p>全量包 包含软件或数据的完整版本，即包含了所有的文件和数据，无论这些数据是否发生了变化。</p></blockquote><ul><li>URL<em>：</em><a href="https://ipdata.yazx.com/api/v6/initial/" target="_blank" rel="noopener">https://ipdata.yazx.com/api/v6/initial/</a></li></ul><ul><li>数据时间跨度：2020 - 2025</li></ul><ul><li><pre><code>110.89.123.184   数据中心  秒拨:2025-03-21 06:47:45|代理:2025-04-07 05:29:12  98   高 中国   福建省        三明市        三元区        中国电信        26.234032        117.608013        350404        CN        亚洲
+</code></pre></li><li></li></ul><p><strong>IP增量包</strong></p><blockquote><p>增量包只包含自上一个版本以来发生变化的部分，即只包含了新增、修改或删除的内容。</p></blockquote><ul><li>URL<em>：</em>https://ipdata.yazx.com/api/v6/upgrade/</li></ul><ul><li><pre><code>119.41.199.55  家庭宽带 代理:2025-04-08 11:19:05|秒拨:2025-04-05 11:13:43 99 高 中国 海南省 三亚市  天涯区  中国电信  18.298975   109.452325  460204  CN  亚洲
+114.84.90.212  家庭宽带 多开分身:2021-02-21 00:31:31|代理:2025-04-08 11:19:05 99 高 中国 
+上海市 上海市 宝山区 中国电信  31.405242 121.489431 310113 CN 亚洲</code></pre></li><li></li></ul><ul><li>增量包数据更新较频繁，现有定时任务每1min拉取一次数据。</li></ul><ul><li><p>扒代码逻辑发现，在<strong><code>risk-db-etl-server</code></strong><strong>项目</strong>，preview环境，代码中有1个定时任务，<strong>每1分钟拉取更新</strong>永安ip数据。再将数据写入<strong>Talos</strong>(topicName：<code>risk_database_ip_threat_hunter</code>)。</p></li><li><figure class="fs-board" data-doc="[内部链接]" data-board="ErFQwxK61heELcb3YTwcULsbnkh"><div class="board-ph">正在加载画板…</div></figure></li><li><p>但查看容器日志后，并没有在容器中发现此定时任务的执行日志<strong>，定时任务没有开启</strong>。</p></li><li><p>于是<strong>重启容器，查看日志，发现定时任务正常运行，且talos可以查到消费者了。</strong></p></li><li><p>据查，是有实时任务在消费此Talos，并将数据写入Redis。</p></li></ul><h2 id="sec-20">永安数据2.0 </h2><p><span style="color:#d83931"><strong>20250603 跟永安侧对接了下，1.0的数据源已弃用，后续使用2.0的数据。</strong></span></p><p>永安IP画像使用说明书：https://yazx.feishu.cn/docx/JawudFPfho3rshxOuS4czzUznsc</p><ul><li><strong>永安ip风险等级</strong>：高、中、低、无</li></ul><ul></ul><ul><li><strong>永安ip标签</strong> ：代理、秒拨、开源情报、劫持共用代理、搜索引擎爬虫、VPN、云服务、云手机。</li></ul><ul><li><strong>永安ip类型</strong>：家庭宽带、数据中心、移动网络、企业专线、校园单位。</li></ul><h3 id="sec-21">实时能力</h3><p>SAAS接口接入：<a href="https://docs.threathunter.cn/riskip/api3.0.html#%E4%B8%80-%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D" target="_blank" rel="noopener">接口文档</a>。</p><p>提供在线的http resuful接口查询、按量计费。</p><h3 id="sec-22">离线数据</h3><p>离线数据：[内部链接]
+<strong>表名</strong>：<code>risk_ip_th_full_data</code>
+<strong>分区全量表，每天6:00 更新。</strong></p><p>我平台当前使用的是 全量包&amp;增量包 自行拉取后使用，参考文档：</p><h1 id="sec-23">Redis中的key-value含义总结</h1><p>上述内容可知，IP信誉库将各方数据汇总后set进入同一Redis中：<code>内部主机:5106</code>。</p><p>因此总结一下其中的key-value对应的具体含义。</p><ul><li>value：<code>1</code>。含义：近5min是否命中永安高/中/低风险。</li></ul><ul><li>value：<p>1️⃣10：IP关联UA数量。含义：最近15分钟IP关联的UA数量。步长:5 min。</p><p>2️⃣11：IP关联公司ID数量。含义：最近15分钟IP关联的公司ID数量。步长:5 min。</p></li></ul><ul><li>value：</li><li><pre><code>{
+  "count": 1, // 在 5m/15m/1h/6h 的时间窗口内，该 IP 和来源组合出现的次数。
+  "timestamp": 1747970105 // 数据处理的时间戳，表示数据在 Redis 中存储的时间。
+}
+示例：
+* 命令：ZRANGE 3.219.158.209:22:6h 0 -1 WITHSCORES
+* 结果：
+    1) 1
+    2) 1747897200</code></pre></li></ul><ul><li>value：此IP30天内同C段的ip数量。</li></ul><ul><li>value：此ip在3/7/30天内命中软件特征(1)/垃圾注册(2)的次数</li></ul><h1 id="sec-24">IP信誉库1.0 全数据流转逻辑图解</h1><p>数据流转逻辑见下图：</p><figure class="fs-board" data-doc="[内部链接]" data-board="Kbkjw4NsGhYwpJbLioVcvLJVnfM"><div class="board-ph">正在加载画板…</div></figure><h1 id="sec-25">接入方案</h1><h2 id="sec-26"><strong>一期：直接使用 永安&amp;爬虫数据</strong></h2><blockquote><p>离线数据：[内部链接]
+<strong>表名</strong>：<code>risk_ip_th_full_data</code>
+<strong>分区全量表，每天6:00 更新。</strong></p></blockquote><p>接入数据源，两者key加前缀做区分：</p><ul><li>永安：风险等级、风险分、IP类型、logTs(最近作恶时间)、标签(去重)。</li></ul><ul><li>爬虫：source、logTs</li></ul><ul><li>数据结构：</li><li><pre><code>/**
+ * 永安 Ip信誉库数据结构
+ */
+@Data
+public class RiskIPThreatHunterDTO {
+    private String ip;
+    private String level; // 风险等级：
+    private Integer score; // 风险分
+    private String ipType; // IP类型：家庭宽带、数据中心、企业专线、未知、移动网络
+    private Long logTs; // 记录时间：取最近的作恶时间
+    private List&lt;String&gt; labels; //  IP标签：秒拨、环境伪造、代理等。（或有多个tags，如：代理:2023-08-16 14:04:36|秒拨:2023-08-14 16:45:33）
+    private String country;
+    private String province;
+    private String city;
+    private String district;
+    private String operator; // ISP
+    /**
+     * yyyy-MM-dd HH:mm:ss
+     */
+    private String dateTime; // 消息记录时间
+}</code></pre></li><li>样例数据：</li><li><pre><code>{
+    "ip": "175.171.143.173",
+    "level": "高",
+    "score": 98,
+    "ipType": "家庭宽带",
+    "logTs": 1748258783000, // 最近作恶时间
+    "labels": // 多个标签
+    [
+        "秒拨",
+        "代理"
+    ],
+    "country": "中国",
+    "province": "辽宁省",
+    "city": "大连市",
+    "district": "瓦房店市",
+    "operator": "中国联通",
+    "dateTime": "2025-05-26 19:56:41"
+}</code></pre></li></ul><ul><li>数据结构：</li><li><pre><code> 1:required string ip;//eg：13.127.189.186
+ 2:optional i32 label;// 0:可用；1：不可用  -&gt; 后续使用时，仅接入可用IP。
+ 3:optional i64 logTs;// 爬取时的时间戳。eg:1672130128000
+ 4:optional i32 source;// 来源：21-爬虫平台代理IP池 22-自有开源IP爬虫
+ 5:optional double confidence; // 暂时默认为0（含义不详</code></pre></li><li>示例数据：</li></ul><h3 id="sec-27">待商议</h3><p>今天跟永安那边同步了一下IP信誉库数据的最新版本情况。</p><ul><li><strong>标签有效期问题</strong>：“所有标签有效期7天，建议分数降到0分的时间开始计算，7天后删除数据”。<strong>- 需手动清掉。</strong></li></ul><ul><li><strong>SAAS接口可用性问题</strong>（看之前我们管理后台在用，今早说不在我们采购范围，确认一下是什么情况。。。）；-<strong> </strong>是<strong>试用版（总量6000万，目前剩个4000多万）</strong></li></ul><ul><li><strong>全量包的时间范围</strong>是： 是截止当天00:00的全量风险IP数据，拉取了一下0604的全量包，有4.3G，还是挺大的。。。后续分区存入HDFS。</li></ul><ul><li>统计下 风险IP的每日平均增量、全量包的数据量大小。</li></ul><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>组内：</strong></mark></p><ul><li>若需要，方案为：key过期时间15天，覆盖写重置过期时间，插件返回IP的最后一次更新时间。→个人比较推荐这个，<strong>想法：插件加一个"有效时间范围"参数。</strong></li></ul><ul><li>IPV6的全量包、增量包需要吗<strong>。 - 一期不用。</strong></li></ul><ul><li>额外：当前国内外ip在一个包里，后边永安会将国内外ip分开。</li></ul><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>暂定方案：</strong></mark></p><p class="fs-todo"><span class="fs-cb">☐</span> 实时数据写入redis暂定方案：永安全量包拉一次 → 永安增量包每日更新写talos → 写入redis → 插件使用</p><p class="fs-todo"><span class="fs-cb">☐</span> 离线数据暂定方案：每日全量包拉一次，分区写入离线表。细节：spark任务，离线数据转为csv文件，直接写入iceberg。（调研出最简单的实现方案）- <strong>全量包的更新频率。</strong></p><h3 id="sec-28">方案</h3><p>RPC接口。</p><ul><li>入参：ip</li></ul><ul><li>返回值：</li></ul><ul><li><p>全量包写一次。之后：</p></li><li><p>1️⃣重启定时任务，每1min拉一次增量包，将永安增量数据写入<strong>Talos</strong>(topicName：<code>risk_database_ip_threat_hunter</code>)。</p></li><li><p>2️⃣新建DT 实时任务FlinkSQL，将talos中的永安IP数据写入Redis(覆盖写)：<code>内部主机:5106</code>。</p><ul><li>key：<code>ip:</code><strong><code>th:${ip}</code></strong></li></ul><ul><li><pre><code>{
+    "score": "98",
+    "ipType": "家庭宽带",
+    "labels": "秒拨,代理", // 多个标签，用,分割的字符串
+    "logTs": "1748258783000", // 最近作恶时间,毫秒级时间戳
+    "level": "高"
+    "dateTime": "2025-05-26 19:56:41" // 消息记录时间（转为时间戳）
+}</code></pre></li></ul></li><li><p>3️⃣实时风控平台新增插件，多个返回值，补数时直接Redis get拿到永安数据，根据返回值，在风控平台做自定义配置。</p></li></ul><ul><li><p>1️⃣旧爬虫任务下线，新定时任务迁移到ip-reputation。</p></li><li><p>2️⃣新建DT实时任务sinkRedis，Redis：<code>内部主机:5106</code>。</p><ul><li>key：<code>ip:</code><strong><code>crawl:${ip}</code></strong></li></ul><ul><li><pre><code>"logTs"
+// source:21-爬虫平台代理IP池 22-自有开源IP爬虫
+// 爬取时的时间戳。eg:1672130128000</code></pre></li></ul></li><li><p>3️⃣插件中新增两返回值：“是否为爬虫IP”、“爬虫IP记录时间”</p></li></ul><ul><li><pre><code>insert into func_meta(name,
+                      func_name,
+                      description,
+                      func_type,
+                      inputs,
+                      outputs,
+                      created_by,
+                      updated_by) value (
+                                         'IP信誉库插件',
+                                         'IpReputations',
+                                         'Ip信誉库，一期返回永安、爬虫的IP风险信息',
+                                         '1',
+                                         '[
+                                           {
+                                             "arg": "ip",
+                                             "type": 2,
+                                             "required": true,
+                                             "description": "ipv4"
+                                           },
+                                      
+                                         ]',
+                                         '{
+                                           "th_risk_score": {
+                                             "type": 1,
+                                             "description": "ip风险分"
+                                           },
+                                           "th_risk_level": {
+                                             "type": 2,
+                                             "description": "低/中/高；分别对应ip风险分区间：[1-79]、[80-94]、[95-100]"
+                                           },
+                                           "th_ip_type": {
+                                             "type": 2,
+                                             "description": "ip类型(家庭宽带、数据中心、未知、移动网络、企业专线)"
+                                           },
+                                           "th_risk_labels": {
+                                             "type": 3,
+                                             "description": "IP风险标签，如:[秒拨,代理,多开分身,真人作弊,环境伪造,自动化脚本,]"
+                                           },
+                                           "th_log_ts": {
+                                             "type": 2,
+                                             "description": "毫秒级时间戳。最近作恶时间(取多个标签中，最近那个标签的记录时间)。"
+                                           },
+                                           "is_crawl_ip": {
+                                             "type": 8,
+                                             "description": "是否为爬虫ip"
+                                           }
+                                         }',
+                                         'your-account',
+                                         'your-account'
+    );</code></pre></li></ul><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>永安全量包落库</strong></mark>。（安全组那边有离线分析需求）</p></div></div><h2 id="sec-29"><s><strong>二期：IP信誉库规则引擎启用</strong></s></h2><p><s>IP信誉库的规则引擎依据数据来自Redis，而此Redis的数据来自各方talos，由实时任务完成同步。</s></p><p><s>当前这套IP信誉库成本有些高。若需重启，大概有以下工作：</s></p><ol><li><s>所有实时任务重启&amp;逻辑梳理。</s></li></ol><ol><li><s>爬虫平台两数据源-&gt;talos的数据格式化。</s></li></ol><ol><li><s>永安数据拉取定时任务重启。</s></li></ol><ol><li><s>各数据源的溯源与可用性评估。</s></li></ol><ol><li><s>规则引擎逻辑细节剖析。</s></li></ol></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

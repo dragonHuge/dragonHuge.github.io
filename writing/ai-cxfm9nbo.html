@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>RAG创想赛 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">13</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">比赛规则</a><a class="tl l1" href="#sec-2">资源</a><a class="tl l1" href="#sec-3">想法</a><a class="tl l1" href="#sec-4">作品集</a><a class="tl l1" href="#sec-5">作品1：《这班非上不可吗？- 莫急，待AI家给您算上一卦！》</a><a class="tl l2" href="#sec-6">作品思路 - 提示词</a><a class="tl l2" href="#sec-7"></a><a class="tl l2" href="#sec-8">知识库构建</a><a class="tl l3" href="#sec-9">调优：csv知识库 分段配置</a><a class="tl l3" href="#sec-10">调优：离线知识库 -&gt;  在线知识库</a><a class="tl l3" href="#sec-11">调优：检索性能+准确性</a><a class="tl l3" href="#sec-12">生成模型选择？</a><a class="tl l3" href="#sec-13">RAG-元数据是什么？</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="ai/index.html">AI</a></div><article><h1>RAG创想赛</h1><div class="meta">2025-12-28 · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>最终作品介绍：<span class="fs-mention">@赛博卦神-施主,来卜一卦？</span></p><p>投票链接：</p></div></div><h1 id="sec-1">比赛规则</h1><p><strong>参赛作品提交通道将于下周一（12月15日）同步开放，作品上传时间为12月15日-28日。</strong></p><p>每支队伍上限2人。</p><p>核心任务：参赛者需基于公司Mify平台，构建具备RAG（检索增强生成）能力的AI智能体， 以扮演“年度热词解读官”。</p><ul><li><span style="color:#8f959e">知识库：组委会将提供 </span><span style="color:#8f959e">基础热词知识库</span><span style="color:#8f959e">（包含本年度网络热词/流行语及其出处与含义）。</span></li></ul><ul><li><span style="color:#8f959e">参考示例：用户输入个人年度感悟，AI能自动匹配最贴切的热词，并生成一份个性化的趣味年度报告。</span></li></ul><p>评审规则：</p><p>评审分为“大众投票”与“技术评分”两个环节：</p><ul><li>大众投票面向全体公司员工，依投票结果选出TOP30作品进入技术评分环节。</li></ul><p>赋能支持：</p><ul><li>平台支持：<strong>公司Mify平台</strong></li></ul><ul><li>培训支持：组织平台使用及相关技能培训。</li></ul><h1 id="sec-2">资源</h1><p>*请注意，RAG创想赛报名选手需关联IAM系统，此项工作将自报名后起，每两日定期予以分批处理。</p><p><span class="fs-mention">@【Mify 操作手册】基于 RAG 能力搭建问答机器人</span></p><h1 id="sec-3">想法</h1><p><strong>RAG问答机器人</strong><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>选题想法</strong></mark>：</p><ul><li>首先内核是“年度热词解读官”，回复内容要结合知识库中的年度热词。</li></ul><ul><li>其次面向的使用人群是「对AI技术感兴趣的程序员、产品、运营、测试等打工人」。</li></ul><ul><li>目的是吸引这些人群使用我的应用、对应用感兴趣、有好奇心、标题一眼能抓住人的眼球，因此我们要挖掘这些人群感兴趣的点。</li></ul><ul><li>风格：诙谐轻松幽默、有记忆点、口吻是25岁左右的年轻人。</li></ul><ul><li>最后：回应的内容不能固定，尽管针对相同的提问，依旧需要不同的回复（温度&gt;0.7,回复人格随机切换）</li></ul><p>针对以上条件，我们一起脑暴选题吧！</p><p><strong>首先官方题库肯定不够，需自行拓展</strong><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>知识库资源想法</strong></mark>：</p><ol><li>人为调整语料库：基于官方语料，做语义拓展和详情解释。</li></ol><ol><li>人为新增语料库：从网上搜罗2025年的热词，将其加入语料库。从网上搜罗新增语料时，根据我上述的作品说明，对每个门派人员特色、针对性搜罗热词，以及加入一些生活化热词。</li></ol><ol><li><p><span style="color:#f5a623"><strong>文本分段与清洗方式有：</strong></span></p></li><li>通用分段：把文本拆成 “统一大小的块”，检索和召回的是同一个块，适合普通文本的直接检索。</li><li>父子分段：把文本拆成 “父块（上下文）+ 子块（检索单元）”，用小的子块精准检索，再结合父块补充上下文，适合需要关联语境的场景。</li></ol><h1 id="sec-4">作品集</h1><ul><li>1.0-纯问答Agent：[内部链接]</li></ul><ul><li>2.0-</li></ul><h1 id="sec-5">作品1：《这班非上不可吗？- 莫急，待AI家给您算上一卦！》</h1><h2 id="sec-6">作品思路 - 提示词</h2><ul><li>应用名称：《这班非上不可吗？- 莫急，待AI家给您算上一卦！》</li></ul><ul><li>应用简介：专治职场疑难杂症。赛博半仙，在线批命。集RAG热词检索与互联网玄学于一体，今日宜：点开即玩。</li></ul><ul><li>目标人群：程序员、产品、运营、摸鱼群众。</li></ul><ul><li>语言风格：赛博古风（半文半白 + 互联网黑话 + 幽默吐槽）。</li></ul><pre><code># Role: 赛博玄学大师 (Cyber Master)
+
+## 核心定位
+你是一位修炼千年的“赛博算命大师”。你的核心任务是**基于《互联网年度热词库》**为施主解读运势。
+
+## 🎯 目标
+利用 RAG（检索增强生成）检索到的知识库数据，结合用户的【江湖门派】身份，进行**联想式毒舌解读**，生成一份既扎心又幽默的“年度运势签文”。
+
+## ⚡️ 意图识别与流程分发 (Intent Routing) - ⚠️最高优先级
+**在回复前，请先判断用户意图，严格执行以下“二选一”逻辑：**
+
+### 【分支 A：彩蛋结算模式】
+**触发条件**：用户输入中包含“**卦神启动**”或“**卦神，启动**”（忽略标点/表情/空格）。
+**执行动作**：
+1.  **立即终止 RAG 检索**：绝对不要去知识库搜索“卦神启动”。
+2.  **执行功德(轮次)鉴权**：回看对话历史，估算当前对话轮次。
+    *   **❌ 判定失败（功德未满）**：若对话轮次 **&lt; 5**，或感觉用户刚抽完奖没聊几句又来刷。
+        *   *输出动作*：调用 **【🎰 彩蛋专用模版】** 中的 **[拒绝话术]**。
+    *   **✅ 判定通过（功德足够）**：若对话轮次 **&gt;= 5**。
+        *   *输出动作*：调用 **【🎰 彩蛋专用模版】** 中的 **[开奖结果]**。
+3.  **结束本次回复**。
+
+### 【分支 B：标准解签模式】
+**触发条件**：用户输入为正常的职场吐槽、关键词、心情描述等。
+**执行动作**：执行 RAG 检索 -&gt; 数据提取 -&gt; 二创解读 -&gt; 输出 **【🔮 标准回复模版】**。
+
+---
+
+## 🌍 世界观与门派设定 (Identity Context)
+你必须在对话全程维护用户的【江湖门派】身份。
+
+**1. 门派列表：**
+*   **【秃头宗】(程序员)**：关键词：Bug、上线、屎山、脱发。
+*   **【画饼教】(产品经理)**：关键词：需求、闭环、颗粒度。
+*   **【背锅谷】(运营/市场)**：关键词：KPI、预算0、流量。
+*   **【摸鱼派】(广大摸鱼群众)**：关键词：带薪拉屎、早八、演戏。
+
+**2. 身份判定逻辑 (Identity Logic) - ⚠️基于变量 {{role}}：**
+系统已传入用户在开场时选择的身份变量：**【 {{role}} 】**。
+请严格执行以下判断：
+*   **若变量 {{role}} 有具体值**：直接锁定该身份！后续对话无需再确认。
+*   **若变量 {{role}} 为空/默认值**：**默认自动归入【摸鱼派】**，除非用户口头纠正。
+
+## 🧠 知识库解析与生成规则 (RAG Logic)
+*(仅在 分支 B 下生效)*
+
+1.  **判定逻辑**：
+    *   **✅ 命中知识库**：必须使用该行数据的 `Term` 作为签文，`Definition` 作为释义。
+    *   **❌ 未命中/检索为空**：若用户输入过于生僻或无意义，**请静默使用兜底热词：【NPC / 偷感】**。**严禁在回复中解释“因为没搜到所以...”**，直接硬解即可。
+
+2.  **数据提取与二创逻辑 (核心 - 联想共情)**：
+    *   **Punchlines (金句)**：务必从 CSV 的 `|` 分隔中**随机抽取一条**。
+    *   **Contextual Echo (联想回响)**：**⚠️关键步骤！** 不要做复读机。
+        *   在提及用户痛点时，请基于用户的输入进行**合理的联想和夸张**。
+        *   *错误示范*：“听闻施主说自己加班很累...” (太生硬)
+        *   *正确示范*：“贫道隔着屏幕都闻到了**秃头宗**特有的咖啡味，施主这般**连轴转的状态**，怕是连键盘都快被敲出火星子了吧？” (联想：加班-&gt;喝咖啡/敲键盘)
+
+## 🎲 语气风格随机化
+*(仅在 分支 B 下生效)*
+请在生成【大师解签】时，**内部随机**切换以下 3 种口吻（**严禁在回复中注明使用了哪种风格**）：
+1.  **风格 A（神棍风）**：多用“贫道”、“天象”、“孽缘”。
+2.  **风格 B（阴阳风）**：语气尖锐，多用反问。
+3.  **风格 C（红尘风）**：带有淡淡的忧伤和哲学感。
+
+## 🎉 隐藏彩蛋机制 (Easter Egg: Slot Machine)
+*   **判定阈值**：仅在对话轮次大致达到 **1、5、10、13、15、20、25...** (每5轮) 时，才视为“功德圆满”。
+
+*   **主动引导 (在分支 B 标准回复末尾追加)**：
+    *   请自行感知轮次。**当且仅当**轮次刚好达到上述阈值（如第5轮、第10轮）时，追加引导语：“💥 **叮！施主功德圆满（第X轮），获得一次抽奖机会！请输入‘卦神，启动！’以测算明年造化！**”
+
+*   **结果池 (在分支 A 开奖时调用)**：
+    *   **🔴【赛博大吉】(概率 30%)**：
+        *   *内容库*：新年运气+3、晋升成功率+5%、涨薪可能性+5%、发量+100根、需求一次过、老板突发性失语（不骂人）。
+        *   *视觉*：使用红色/喜庆 Emoji (🔴🧧🎉)。
+    *   **🟢【赛博大凶/整活】(概率 40%)**：
+        *   *内容库*：新年掉发+5根、必遇Bug+3、需求变更+10次、咖啡涨价+20%、被裁员概率+1%、周六突发加班、带薪拉屎没纸。
+        *   *视觉*：使用绿色（基金跌）/枯萎 Emoji (🟢🌵📉)。
+    *   **🟡【凶中带吉/反转】(概率 30%)**：
+        *   *内容库*：新年掉发+5根但晋升成功率+5%、被裁员但获赔N+3、项目黄了但不仅不用背锅还涨薪了。
+        *   *视觉*：使用黄色/平衡 Emoji (🟡⚖️💊)。
+
+## 🚫 核心禁忌 (Negative Constraints) - ⚠️必须遵守
+1.  **禁止解释决策过程**：严禁输出 `(随机口吻...)` 或 `(启用兜底...)` 等括号内容。
+2.  **禁止暴露 RAG 逻辑**：不要说“根据数据库检索...”或“没有找到匹配词...”。
+3.  **禁止输出思考标签**：若模型产生 `&lt;think&gt;` 标签，请确保最终输出不包含它。
+4.  **格式严格**：**只**输出下方模版规定的内容，不要有结束语。
+
+---
+
+## 📝 回复模版控制 (Template Control)
+
+### 🔮 标准回复模版 (Standard Template)
+*(仅在用户进行普通对话/吐槽时使用)*
+&gt;
+&gt; 🧘 **老朽掐指一算...**
+&gt;
+&gt; 📜 **年度运势签文：【{{Term}}】**
+&gt;
+&gt; **【🔮 大师解签】：**
+&gt; [⚠️**第一句请进行“联想式吐槽”**：基于用户输入的内容，结合**{{Current_Identity}}**身份特征，进行适当的脑补和夸张，随后自然引出 {{Punchlines}} 进行解读。]
+&gt;
+&gt; **【📜 词源/释义】：**
+&gt; {{Definition}}
+&gt;
+☯️ **【赛博黄历】**
+🟢 **宜：** [从Advice中提取“宜”的内容]
+🔴 **忌：** [从Advice中提取“忌”的内容]
+---
+*[若满足轮次阈值(5/10/15...)，在此处添加引导语]*
+&gt;
+
+### 🎰 彩蛋专用模版 (Lottery Template)
+*(仅在用户输入“卦神启动”且分支A生效时使用)*
+
+**【情况 1：判定通过 (功德足够)】**
+&gt; 🎰 **赛博转盘急速运转中...**
+&gt; *（滴...滴...滴... 💥）*
+&gt;
+&gt; [根据随机结果，严格选择下方一种格式输出]
+&gt;
+&gt; **🔴 🧧 【 鸿运当头 · 赛博大吉 】 🧧 🔴**
+&gt; **📊 运势变更：** **{{Result_Content}}**
+&gt; **💡 大师批注：** [毒舌点评：例如“祖坟冒青烟了”、“建议立刻去买彩票，别写代码了”]
+&gt;
+&gt; [OR]
+&gt;
+&gt; **🟢 🌵 【 警惕水逆 · 赛博下下签 】 🌵 🟢**
+&gt; **📊 运势变更：** **{{Result_Content}}**
+&gt; **💡 大师批注：** [毒舌点评：例如“这就是命，认了吧”、“多喝热水，少看基金”]
+&gt;
+&gt; [OR]
+&gt;
+&gt; **🟡 ⚖️ 【 祸福相依 · 凶中带吉 】 ⚖️ 🟡**
+&gt; **📊 运势变更：** **{{Result_Content}}**
+&gt; **💡 大师批注：** [毒舌点评：例如“变秃了，也变强了”、“献祭了发际线换来了年终奖，这波不亏”]
+&gt;
+&gt; ---
+&gt; *施主已消耗一次抽奖机会，请继续修行（吐槽职场）积攒功德！*
+
+**【情况 2：判定失败 (功德未满)】**
+&gt; 🚫 **施主，功德未满。**
+&gt;
+&gt; 赛博天机不可贪多，贫道看你印堂的班味儿还没散尽。
+&gt; 请继续修行（多聊几句职场苦难）再来启动卦神。
+&gt;</code></pre><h2 id="sec-7"></h2><h2 id="sec-8">知识库构建</h2><ul><li><strong>文件格式：</strong> CSV </li></ul><ul><li><strong>核心逻辑：</strong> <code>用户触发场景</code> -&gt; <code>命中热词</code> -&gt; <code>AI 随机调用素材（释义+金句+宜忌）</code></li></ul><ul><li><strong>Question (索引列)</strong>：用户可能说的话（按门派分类扩充）。</li><li><strong>Term (热词)</strong>：官方热词。</li><li><strong>Definition (赛博释义)</strong>：一句话解释（带点损）。</li><li><strong>Punchlines (金句素材)</strong>：提供 2-3 个不同风格的梗，供 AI 随机组合。</li><li><strong>Advice (宜忌)</strong>：荒谬的行动指南。</li></ul><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><ul><li><strong>分段逻辑</strong>：RAG 平台处理 CSV 时，通常采用**“按行（Row）切分”**。即：每一行数据（Index + Term + Definition...）会被打包成一个独立的知识块。</li></ul><ul><li><strong>优势</strong>：避免了像 TXT 文档那样将上下文切断。用户只要命中 <code>Question</code> 列的关键词，AI 就能获取该行<strong>完整</strong>的 <code>Punchlines</code> 和 <code>Advice</code>，保证回复的逻辑完整性。</li></ul></div></div><h3 id="sec-9">调优：csv知识库 分段配置</h3><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>总结配置单：</strong></p><ol><li><strong>分段标识符</strong>：手动改为 <strong><code>\n</code></strong></li></ol><ol><li><strong>分段最大长度</strong>：<strong>600</strong></li></ol><ol><li><strong>分段重叠长度</strong>：<strong>0</strong></li></ol></div></div><p>针对 <strong>CSV 格式的知识库</strong>（每一行是一个独立的知识点），<strong>“分段设置”</strong>（Chunking）非常关键。</p><p>你的目标是：<strong>让系统把 CSV 的每一行（Row）当作一个独立的“块”</strong>，不要把上一行的内容切断，也不要和下一行混在一起。</p><p>请按照以下参数进行调整：</p><ol><li><strong>现状</strong>：<code>\n\n</code> (两个换行符)</li><li><strong>调整为</strong>：<strong><code>\n</code></strong> (一个换行符)</li><li><strong>理由</strong>：CSV 文件中，每一行数据之间通常只有一个换行符。如果你用 <code>\n\n</code>，系统可能会找不到分隔符，把整个 CSV 文件当成巨大的一块读进去，导致检索失败。<strong>必须改成 </strong><strong><code>\n</code></strong>。</li></ol><ol><li><strong>现状</strong>：1024</li><li><strong>调整为</strong>：<strong>500</strong> (或者 600)</li><li><strong>理由</strong>：<ul><li>回顾你的 CSV 内容，一行（热词+解释+金句+宜忌）大约在 100-200 个汉字左右。</li></ul><ul><li>设置 1024 太大了，万一分隔符失效，可能会把 2-3 个不相关的热词（比如“加班”和“摸鱼”）裹在同一个块里，导致检索不精准。</li></ul><ul><li>500 字足够容纳你的一条完整签文，又足够小，保证“单行单块”。</li></ul></li></ol><ol><li><strong>现状</strong>：50</li><li><strong>调整为</strong>：<strong>0</strong></li><li><strong>理由</strong>：<strong>这是 CSV/表格数据的铁律。</strong><ul><li>重叠（Overlap）是为了防止长文章被切断时丢失上下文。</li></ul><ul><li>但你的数据是独立的（上一行是“秃头宗”，下一行是“画饼教”），它们之间没有逻辑联系。</li></ul><ul><li>如果有重叠，会导致你搜“秃头”时，可能会莫名其妙带出一部分“画饼”的内容。<strong>必须设为 0</strong>。</li></ul></li></ol><ol><li><strong>保持默认勾选</strong>：<code>替换掉连续的空格、换行符和制表符</code>。</li><li>这有助于清洗掉 CSV 里可能意外多出的空格，保持数据干净。</li></ol><ol><li><strong>不要勾选</strong>。</li><li>理由：你的 CSV 已经是结构化的“问答对”形式了。勾选这个会让系统尝试用 AI 去重新拆解你的文本，不仅慢，而且可能会把你设计好的结构打乱。</li></ol><h3 id="sec-10">调优：离线知识库 -&gt;  在线知识库</h3><p><span class="fs-mention">@微调热词知识库-在线文档</span>          <span class="fs-mention">@微调热词知识库-离线文档.csv</span></p><p>1.0是离线知识库，但离线知识库的更新比较麻烦，因此还是在2.0替换成了在线知识库。</p><h3 id="sec-11">调优：检索性能+准确性</h3><p>在初步构成知识库之后，发现知识库的检索时间很高（10s左右），因此这部分必须优化！</p><p>由于使用的是 <strong>CSV 结构化数据</strong>（Question列已经是密集的关键词），且数据量相对较小（几十条到几百条）</p><p>为了在<strong>保证准确度</strong>的前提下<strong>极大提升速度</strong>，建议按以下方案调整：</p><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">👍</div><div class="fs-callout-b"><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>方案总结</strong></mark><strong>：</strong></p><ol><li><strong>索引模式</strong>：保持 <strong>【高质量】</strong>。</li></ol><ol><li><strong>Embedding 模型</strong>：<strong>必须换掉</strong>，找个带 <code>base</code>、<code>small</code> 或 <code>m3</code> 字样的小模型。推荐：<code>bge-large-zh</code>。</li></ol><ol><li><strong>检索设置</strong>：点选 <strong>【向量检索】</strong>。</li></ol><ol><li><strong>Rerank 模型</strong>：<strong>关闭</strong>。</li></ol></div></div><ol><li><strong>推荐</strong>：如果有 <code>bge-large-zh</code>、<code>bge-m3</code>、<code>text-embedding-v3-small</code> 或其他 <strong>Base/Small</strong> 级别的模型，请务必切换。</li><li><strong>理由</strong>：对于 CSV 这种短文本匹配，小模型的效果和 8B 模型几乎没区别，但<strong>索引速度能快 10-20 倍</strong>。</li><li><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>推荐选择</strong></mark>：<ol><li><strong>理由</strong>：这是目前中文检索领域的 <strong>“性价比之王”</strong> 。<ul><li><strong>准确性</strong>：专为中文优化，对你语料库里的“班味”、“脆皮”、“显眼包”等中文俚语理解能力极强，远胜于通用的多语言模型。</li></ul><ul><li><strong>性能</strong>：属于 Base/Large 级别，比你现在的 8B 模型小得多，索引速度快，检索响应也快。</li></ul><ul><li><strong>结论</strong>：这是最适合你的“赛博算命”中文语境的选择。</li></ul></li></ol><ol><li><strong>理由</strong>：极致的速度。<ul><li><strong>性能</strong>：参数量只有 0.6B，比你现在的 8B 模型<strong>小了十几倍</strong>。如果你的应用部署在资源有限的机器上，选这个会让你的对话像闪电一样快。</li></ul><ul><li><strong>准确性</strong>：虽然参数小，但对于你的 CSV 这种“关键词匹配”任务来说，完全够用。</li></ul><ul><li><strong>结论</strong>：如果你觉得 <code>bge-large-zh</code> 还是慢，或者显存不够，选这个。</li></ul></li></ol><ol><li><strong>理由</strong>：OpenAI 的官方小模型。<ul><li><strong>性能</strong>：非常快，专门为高效率设计。</li></ul><ul><li><strong>准确性</strong>：语义理解能力很强，虽是多语言模型，但中文效果依然一线水平。</li></ul><ul><li><strong>结论</strong>：如果你有 Azure 的额度，或者不想折腾本地模型的资源占用，选这个最省心。</li></ul></li></ol><p><span style="color:#d83931"><strong>❌ 绝对不要选（避坑指南）</strong></span>：</p><ol><li><strong><code>qwen/qwen3-embedding-8b</code></strong> (你当前选中的)：<strong>太大了！</strong> 对于只是几十条 CSV 数据的检索，用 8B 模型简直是开着航母去买菜，不仅慢，还浪费资源。</li></ol></li></ol><ol><li><strong>调整建议</strong>： <strong>【向量检索】</strong>。</li><li><strong>理由</strong>：<ul><li>你的 CSV <code>Question</code> 列里填的都是“累,加班,猝死”这种具体的词。</li></ul><ul><li>当用户说“我今天感觉快累死了”时，<strong>向量检索</strong>能完美匹配到“累”这个语义。</li></ul><ul><li><strong>混合检索</strong>会同时跑两遍（一遍查词，一遍查向量），速度慢一倍。</li></ul></li></ol><ol><li><strong>调整建议</strong>：<strong>关闭</strong>。</li><li><strong>理由</strong>：<ul><li>这是最耗时的步骤。8B 的 Rerank 模型每次对话可能增加 2-5 秒的延迟。</li></ul><ul><li>你的知识库条目界限分明（“加班”和“画饼”是完全不同的），<strong>不需要</strong> Rerank 来微调排序，向量检索拿到的 Top 1 通常就是对的。</li></ul></li></ol><ol><li><strong>Top K</strong>：建议改为 <strong>3</strong>。<ul><li>你只需要命中那一行最匹配的热词，不需要召回 5 个让 AI 去挑，召回越少，处理越快。</li></ul></li><li><strong>Score 阈值</strong>：建议设置为 <strong>0.5</strong> 左右。<ul><li>防止用户胡说八道（比如输入“今天天气不错”）时强行匹配到一个热词。设个门槛可以过滤掉不相关的检索，触发你的“脏数据处理”逻辑。</li></ul></li></ol><h3 id="sec-12">生成模型选择？</h3><p>以下四个模型测评中，个人测评效果对比：<strong>deepseek-V3.2-pro &gt; qwen-plus &gt; 其他</strong>。但是deepseek的耗时有点久。</p><p>最后还是选了<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>deepseek-V3.2-pro 深度思考版</strong></mark><strong>。</strong></p><h3 id="sec-13">RAG-元数据是什么？</h3><p><strong>目前</strong><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>不需要配置元数据，直接跳过</strong></span></mark><strong>即可。</strong>原因：</p><ol><li><p>想象你的知识库是一个巨大的图书馆。</p></li><li><strong>文本分块（你的CSV内容）</strong>：是书里的具体<strong>内容</strong>。</li><li><strong>元数据</strong>：是贴在书脊上的<strong>标签</strong>。比如：“这本书是《2024年》出版的”、“这本书的作者是《鲁迅》”、“这本书属于《科幻》类”。</li></ol><p><strong>元数据的作用</strong>：主要是为了<strong>“过滤” (Filtering)</strong> 。
+比如，用户提问时，系统可以先执行一个命令：“只在【年份=2024】且【作者=鲁迅】的书里搜索”。</p><ol><li>用户输入“累死了”。</li><li>系统去 CSV 里找包含“累”的那一行（比如命中了“尸体暖暖的”）。</li><li><strong>关键点来了</strong>：不管用户是“秃头宗”还是“画饼教”，<strong>这一个热词（尸体暖暖的）对所有人都适用</strong>，只是<strong>解读方式不同</strong>。</li><li><p><strong>解读方式的不同，是靠你的 Prompt（提示词）里的“角色扮演”来完成的，而不是靠元数据过滤。</strong></p></li><li><strong>如果硬要加元数据</strong>：你可能需要在 CSV 里加一列“适用门派”。</li><li><strong>后果</strong>：如果你给“尸体暖暖的”贴上“程序员”的标签，那“产品经理”喊累的时候，就搜不到这条了。这反而限制了你的知识库灵活性。</li></ol><ol><li>在<strong>“添加元数据”</strong> 的界面，什么都不用填。</li><li>直接点击右上角的 <strong>“保存”</strong> 或 <strong>“取消”</strong>（如果没有修改项，点保存即可继续）。</li><li>让系统专注于<strong>向量检索</strong>你的关键词（Question列）就好。</li></ol></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>实战智能出行Agent助手-附代码和前后端可视化界面 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">20</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">468</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav>
+<nav class="context-nav" aria-label="当前栏目目录">
+<div class="context-title">外部沉淀分类</div>
+<a class="context-cat active" href="../ext/index.html#c0"><span>AI与大模型</span><span class="nav-count">32</span></a>
+<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">305</span></a>
+<a class="context-cat" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">65</span></a>
+<a class="context-cat" href="../ext/index.html#c3"><span>认知与思维</span><span class="nav-count">12</span></a>
+<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">44</span></a>
+<div class="context-group current">AI与大模型文章</div>
+<a class="art" href="../ext/e001.html">大模型学习资料包（小红书购买 · 18份）</a>
+<a class="art" href="../ext/e002.html">大模型AI Agent知识从0-1笔记-万字详解版本！</a>
+<a class="art" href="../ext/e003.html">大模型Agent实战从0-1笔记：万字详解【迭代版V2】</a>
+<a class="art" href="../ext/e004.html">大模型Transformer架构从0-1架构深度解析</a>
+<a class="art" href="../ext/e005.html">AI开发基础：Langchain框架从入门到实战开发-附代码</a>
+<a class="art" href="../ext/e006.html">AI开发基础：Langgraph框架从入门到实战开发智能体-附带完整可运行代码</a>
+<a class="art" href="../ext/e007.html">万字详解！AI Harness 入门与实践！一篇博文给你讲透！</a>
+<a class="art" href="../ext/e008.html">RAG知识库助手实战-附带前后端和完整可运行服务</a>
+<a class="art active" href="../ext/e009.html">实战智能出行Agent助手-附代码和前后端可视化界面</a>
+<a class="art" href="../ext/e010.html">Vibe Coding指南-AI编辑器全栈开发-附实战和视频</a>
+<a class="art" href="../ext/e011.html">AI大模型面试题-基础篇</a>
+<a class="art" href="../ext/e012.html">AI应用开发+后端面试题</a>
+<a class="art" href="../ext/e013.html">Codex 从小白到实战高手：大厂工程化实战手册</a>
+<a class="art" href="../ext/e014.html">Claude Code 入门到实战全流程详细版</a>
+<a class="art" href="../ext/e015.html">第一章：快速上手</a>
+<a class="art" href="../ext/e016.html">第二章 Claude Code 入门基础操作</a>
+<a class="art" href="../ext/e017.html">第三章： Claude Code 20个常用斜杠指令速查表</a>
+<a class="art" href="../ext/e018.html">第四章：文本处理与创作</a>
+<a class="art" href="../ext/e019.html">第五章：文档管理与处理</a>
+<a class="art" href="../ext/e020.html">第六章：数据处理与分析</a>
+<a class="art" href="../ext/e021.html">第七章 创建常用模板</a>
+<a class="art" href="../ext/e022.html">第八章：提示词优化技巧</a>
+<a class="art" href="../ext/e023.html">第九章：复用文档解决同类问题</a>
+<a class="art" href="../ext/e024.html">第十章：用编程的思维解决问题</a>
+<a class="art" href="../ext/e025.html">第十一章：Claude 高级功能使用</a>
+<a class="art" href="../ext/e026.html">第十二章：让Claude自动解决问题</a>
+<a class="art" href="../ext/e027.html">Claude Code 实战指南</a>
+<a class="art" href="../ext/e028.html">滴云智能办公丨多Agent协同系统</a>
+<a class="art" href="../ext/e029.html">多Agent项目实战：多Agent协同系统</a>
+<a class="art" href="../ext/e030.html">AI应用开发项目实战知识库-详解版</a>
+<a class="art" href="../ext/e031.html">11-Java全套八股文</a>
+<a class="art" href="../ext/e032.html">AI应用开发：RAG技术从小白到深入理解-详细版</a>
+</nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">32</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#项目概述">📌 项目概述</a><a class="tl l1" href="#MCP-Agent-智能助手效果演示">MCP Agent 智能助手效果演示</a><a class="tl l2" href="#一-基础概念入门">一、基础概念入门</a><a class="tl l3" href="#1-1-什么是-MCP-Model-Context-Protocol">1.1 什么是 MCP（Model Context Protocol）？</a><a class="tl l3" href="#1-2-什么是-RAG-检索增强生成">1.2 什么是 RAG（检索增强生成）？</a><a class="tl l3" href="#1-3-什么是-Milvus">1.3 什么是 Milvus？</a><a class="tl l3" href="#1-4-什么是-LangChain-和-LangGraph">1.4 什么是 LangChain 和 LangGraph？</a><a class="tl l2" href="#二-项目架构详解">二、项目架构详解</a><a class="tl l3" href="#2-1-整体架构">2.1 整体架构</a><a class="tl l3" href="#2-2-文件结构">2.2 文件结构</a><a class="tl l3" href="#2-3-数据流程">2.3 数据流程</a><a class="tl l2" href="#三-核心代码详解">三、核心代码详解</a><a class="tl l3" href="#3-1-MCP-服务器配置-serversconfig-json">3.1 MCP 服务器配置 (serversconfig.json)</a><a class="tl l3" href="#3-2-天气服务器-weatherserver-py">3.2 天气服务器 (weatherserver.py)</a><a class="tl l3" href="#3-3-API-服务器-apiserver-py">3.3 API 服务器 (apiserver.py)</a><a class="tl l3" href="#3-4-CLI-客户端-client-py">3.4 CLI 客户端 (client.py)</a><a class="tl l2" href="#四-工作流程详解">四、工作流程详解</a><a class="tl l3" href="#4-1-ReAct-Agent-工作原理">4.1 ReAct Agent 工作原理</a><a class="tl l3" href="#4-2-MCP-通信协议">4.2 MCP 通信协议</a><a class="tl l2" href="#五-快速开始">五、快速开始</a><a class="tl l3" href="#5-1-环境准备">5.1 环境准备</a><a class="tl l3" href="#5-2-配置环境变量">5.2 配置环境变量</a><a class="tl l3" href="#5-3-运行方式">5.3 运行方式</a><a class="tl l2" href="#六-扩展指南">六、扩展指南</a><a class="tl l3" href="#6-1-添加新的-MCP-工具">6.1 添加新的 MCP 工具</a><a class="tl l3" href="#6-2-自定义-Prompt">6.2 自定义 Prompt</a><a class="tl l2" href="#七-常见问题">七、常见问题</a><a class="tl l3" href="#Q1-MCP-服务器启动失败">Q1: MCP 服务器启动失败？</a><a class="tl l3" href="#Q2-API-Key-无效">Q2: API Key 无效？</a><a class="tl l3" href="#Q3-工具调用失败">Q3: 工具调用失败？</a><a class="tl l2" href="#八-技术栈总结">八、技术栈总结</a><a class="tl l2" href="#九-参考资料">九、参考资料</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与大模型</div><article><h1>实战智能出行Agent助手-附代码和前后端可视化界面</h1><div class="meta">2026-11-09 · <span class="m-src">AI与大模型/大模型实战宝典/raw/09-langgraph+mcp智能出行助手项目.md</span></div><div class="md"><ul><li>附代码和前后端可视化界面</li></ul>
+<p><img alt="@同事" src="#"></p>
+<h2 id="项目概述">📌 <strong>项目概述</strong></h2>
+<p>本项目是一个基于 <strong>MCP (Model Context Protocol)</strong> 和 <strong>LangChain/LangGraph</strong> 的智能助手Agent系统。它允许大语言模型（如阿里通义千问）通过标准化协议连接多种外部工具，实现天气查询、文件写入、地图导航等功能。</p>
+<p><img alt="图片展示了智能出行Agent助手的工作流程。用户请求及数据输入后，经LangChain / LangGraph协调管理流程，再由Agent计划并执行任务，通过MCP协议与工具交互，获取工具及结果，最后经LangChain / LangGraph返回结果。流程图中还呈现了各环节对应的具体内容，如用户请求包含需求和数据，Agent执行任务，MCP协议为标准化接口，Map Navigation为地图导航等。" src="#"></p>
+<p>直接可以运行的代码已经整理好了，需要的话找老师拿</p>
+<p><img alt="@同事" src="#"></p>
+<h1 id="MCP-Agent-智能助手效果演示">MCP Agent 智能助手效果演示</h1>
+<p><img alt="@同事" src="#"></p>
+<p><img alt="@同事" src="#"></p>
+<p><img alt="@同事" src="#"></p>
+<hr>
+<h2 id="一-基础概念入门">一、基础概念入门</h2>
+<h3 id="1-1-什么是-MCP-Model-Context-Protocol">1.1 什么是 MCP（Model Context Protocol）？</h3>
+<p><strong>MCP（模型上下文协议）</strong> 是 Anthropic 公司推出的一种开放标准协议，用于连接 AI 模型与外部数据源和工具。</p>
+<p><strong>通俗理解</strong>： 想象你有一个非常聪明的助手（大语言模型），但它被关在一个房间里，只能用已有的知识回答问题。MCP 就像是给这个房间开了很多"窗户"，让助手可以：</p>
+<ul><li>🌤️ 看到外面的天气（天气API）</li><li>📁 操作电脑上的文件（文件系统）</li><li>🗺️ 查询地图信息（地图服务）</li></ul>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                     MCP 的核心思想                          │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│   传统方式：每个工具都需要单独适配                           │
+│   ┌──────┐    ┌──────┐    ┌──────┐                         │
+│   │ 工具A │    │ 工具B │    │ 工具C │                         │
+│   └──┬───┘    └──┬───┘    └──┬───┘                         │
+│      │ 适配A     │ 适配B     │ 适配C                         │
+│      └───────────┴───────────┘                              │
+│                  │                                          │
+│              ┌───┴───┐                                      │
+│              │  LLM  │                                      │
+│              └───────┘                                      │
+│                                                             │
+│   MCP 方式：统一协议，即插即用                               │
+│   ┌──────┐    ┌──────┐    ┌──────┐                         │
+│   │ 工具A │    │ 工具B │    │ 工具C │                         │
+│   └──┬───┘    └──┬───┘    └──┬───┘                         │
+│      │           │           │                              │
+│      └─────── MCP 协议 ──────┘                              │
+│                  │                                          │
+│              ┌───┴───┐                                      │
+│              │  LLM  │                                      │
+│              └───────┘                                      │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="1-2-什么是-RAG-检索增强生成">1.2 什么是 RAG（检索增强生成）？</h3>
+<p><img alt="@同事" src="#"></p>
+<p><strong>RAG（Retrieval-Augmented Generation）</strong> 是另一种增强 AI 能力的技术，与 MCP 有所不同。</p>
+<p><strong>注意</strong>：本项目使用的是 <strong>MCP 技术</strong>，不是 RAG 技术。</p>
+<h3 id="1-3-什么是-Milvus">1.3 什么是 Milvus？</h3>
+<p><strong>Milvus</strong> 是一个开源的向量数据库，主要用于 RAG 场景中存储和检索文档的向量表示。</p>
+<p>由于本项目使用的是 MCP 协议来连接外部工具，而不是基于向量检索的 RAG 架构，因此 <strong>本项目没有使用 Milvus</strong>。</p>
+<p>如果您想构建一个 RAG 系统，Milvus 的基本用法如下：</p>
+<pre><code># RAG 系统中 Milvus 的典型用法（本项目未使用）
+from pymilvus import connections, Collection
+
+# 1. 连接 Milvus
+connections.connect(&quot;default&quot;, host=&quot;localhost&quot;, port=&quot;19530&quot;)
+
+# 2. 创建集合存储向量
+collection = Collection(&quot;documents&quot;)
+
+# 3. 插入文档向量
+collection.insert([document_vectors])
+
+# 4. 检索相似内容
+results = collection.search(query_vector, limit=5)</code></pre>
+<h3 id="1-4-什么是-LangChain-和-LangGraph">1.4 什么是 LangChain 和 LangGraph？</h3>
+<p><strong>LangChain</strong> 是一个用于构建 LLM 应用的框架，提供了：</p>
+<ul><li>模型调用的统一接口</li><li>工具集成能力</li><li>链式调用（Chain）</li></ul>
+<p><strong>LangGraph</strong> 是 LangChain 团队推出的扩展，专注于：</p>
+<ul><li>构建有状态的 AI Agent</li><li>支持多轮对话记忆</li><li>提供 ReAct 模式的 Agent</li></ul>
+<pre><code># 本项目使用 LangGraph 的 ReAct Agent
+from langgraph.prebuilt import create_react_agent
+
+agent = create_react_agent(
+    model=model,      # 大语言模型
+    tools=tools,      # MCP 工具列表
+    prompt=prompt,    # 系统提示词
+    checkpointer=checkpointer  # 记忆存储
+)</code></pre>
+<hr>
+<h2 id="二-项目架构详解">二、项目架构详解</h2>
+<h3 id="2-1-整体架构">2.1 整体架构</h3>
+<p>本项目采用 <strong>客户端-服务器</strong> 架构，包含以下核心组件：</p>
+<pre><code>┌─────────────────────────────────────────────────────────────────────┐
+│                        系统整体架构                                  │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  用户层                                                              │
+│  ┌─────────────┐  ┌─────────────┐                                   │
+│  │  CLI 客户端  │  │ API 客户端  │                                   │
+│  │ (client.py) │  │  (HTTP)     │                                   │
+│  └──────┬──────┘  └──────┬──────┘                                   │
+│         │                │                                          │
+│  ───────┴────────────────┴───────────────────────────────────────   │
+│                                                                     │
+│  应用层                                                              │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │                    LangGraph ReAct Agent                    │    │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │    │
+│  │  │   通义千问   │  │  记忆存储   │  │   Prompt 模板       │ │    │
+│  │  │  (ChatTongyi)│  │ (InMemory)  │  │ (agent_prompts.txt) │ │    │
+│  │  └─────────────┘  └─────────────┘  └─────────────────────┘ │    │
+│  └──────────────────────────┬──────────────────────────────────┘    │
+│                             │                                       │
+│  ───────────────────────────┴───────────────────────────────────    │
+│                                                                     │
+│  MCP 适配层                                                          │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │              MultiServerMCPClient                           │    │
+│  │     (langchain-mcp-adapters)                                │    │
+│  └───────────┬──────────────┬──────────────┬───────────────────┘    │
+│              │              │              │                        │
+│  ───────────┴──────────────┴──────────────┴─────────────────────    │
+│                                                                     │
+│  MCP 服务器层                                                        │
+│  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐            │
+│  │ Weather Server│  │ Write Server  │  │  高德地图 SSE  │            │
+│  │   (STDIO)     │  │   (STDIO)     │  │   (HTTP/SSE)  │            │
+│  └───────┬───────┘  └───────┬───────┘  └───────┬───────┘            │
+│          │                  │                  │                    │
+│  ────────┴──────────────────┴──────────────────┴────────────────    │
+│                                                                     │
+│  外部服务层                                                          │
+│  ┌───────────────┐  ┌───────────────┐  ┌───────────────┐            │
+│  │ OpenWeather   │  │  本地文件系统  │  │   高德地图API  │            │
+│  │     API       │  │               │  │               │            │
+│  └───────────────┘  └───────────────┘  └───────────────┘            │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="2-2-文件结构">2.2 文件结构</h3>
+<pre><code>project/
+├── api_server.py        # FastAPI 服务器（提供 HTTP API）
+├── client.py            # CLI 交互式客户端
+├── client_simple.py     # 单次调用示例
+├── weather_server.py    # 天气查询 MCP 服务器
+├── write_server.py      # 文件写入 MCP 服务器
+├── servers_config.json  # MCP 服务器配置
+├── agent_prompts.txt    # Agent 提示词
+├── requirements.txt     # Python 依赖
+└── .env                 # 环境变量（API Key）</code></pre>
+<h3 id="2-3-数据流程">2.3 数据流程</h3>
+<pre><code>用户输入 &quot;北京今天天气怎么样？&quot;
+           │
+           ▼
+    ┌──────────────┐
+    │  Agent 接收   │
+    └──────┬───────┘
+           │
+           ▼
+    ┌──────────────┐
+    │  LLM 思考    │  &quot;用户询问天气，我应该使用 query_weather 工具&quot;
+    └──────┬───────┘
+           │
+           ▼
+    ┌──────────────┐
+    │ 调用 MCP 工具 │  query_weather(&quot;Beijing&quot;)
+    └──────┬───────┘
+           │
+           ▼
+    ┌──────────────┐
+    │ Weather Server│  → 调用 OpenWeather API
+    └──────┬───────┘
+           │
+           ▼
+    ┌──────────────┐
+    │  返回结果    │  🌡 温度: 15°C, 🌤 天气: 晴
+    └──────┬───────┘
+           │
+           ▼
+    ┌──────────────┐
+    │  LLM 组织回复 │  &quot;北京今天天气晴朗，温度15°C...&quot;
+    └──────┬───────┘
+           │
+           ▼
+      用户看到回复</code></pre>
+<hr>
+<h2 id="三-核心代码详解">三、核心代码详解</h2>
+<h3 id="3-1-MCP-服务器配置-serversconfig-json">3.1 MCP 服务器配置 (servers_config.json)</h3>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;weather&quot;: {
+      &quot;command&quot;: &quot;python&quot;,
+      &quot;args&quot;: [&quot;weather_server.py&quot;],
+      &quot;transport&quot;: &quot;stdio&quot;          // 标准输入输出通信
+    },
+    &quot;write&quot;: {
+      &quot;command&quot;: &quot;python&quot;, 
+      &quot;args&quot;: [&quot;write_server.py&quot;],
+      &quot;transport&quot;: &quot;stdio&quot;
+    },
+    &quot;amap-maps&quot;: {
+      &quot;transport&quot;: &quot;sse&quot;,           // Server-Sent Events 通信
+      &quot;url&quot;: &quot;https://mcp.api-inference.modelscope.net/099239f1c74241/sse&quot;
+    }
+  }
+}</code></pre>
+<p><strong>关键点解析</strong>：</p>
+<h3 id="3-2-天气服务器-weatherserver-py">3.2 天气服务器 (weather_server.py)</h3>
+<pre><code>from mcp.server.fastmcp import FastMCP
+
+# 初始化 MCP 服务器
+mcp = FastMCP(&quot;WeatherServer&quot;)
+
+@mcp.tool()  # 装饰器将函数注册为 MCP 工具
+async def query_weather(city: str) -&gt; str:
+    &quot;&quot;&quot;
+    输入指定城市的英文名称，返回今日天气查询结果。
+    :param city: 城市名称（需使用英文）
+    :return: 格式化后的天气信息
+    &quot;&quot;&quot;
+    data = await fetch_weather(city)  # 调用 OpenWeather API
+    return format_weather(data)       # 格式化返回
+
+@mcp.tool()
+async def get_weather_tips(season: str) -&gt; str:
+    &quot;&quot;&quot;
+    获取指定季节的天气贴士。
+    :param season: 季节名称 (spring, summer, autumn, winter)
+    &quot;&quot;&quot;
+    tips = {
+        &quot;spring&quot;: &quot;🌸 春季多风，注意防风保暖&quot;,
+        &quot;summer&quot;: &quot;☀️ 夏季炎热，注意防暑&quot;,
+        # ...
+    }
+    return tips.get(season.lower(), &quot;❓ 未知季节&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    mcp.run(transport=&#x27;stdio&#x27;)  # 以 STDIO 模式启动</code></pre>
+<p><strong>关键点解析</strong>：</p>
+<ol><li><strong><code>@mcp.tool()</code> 装饰器</strong>：将普通函数注册为 MCP 工具，LLM 可以自动发现和调用</li><li><strong>函数文档字符串</strong>：非常重要！LLM 通过文档字符串理解工具的功能</li><li><strong><code>transport=&#x27;stdio&#x27;</code></strong>：通过标准输入/输出与客户端通信</li></ol>
+<h3 id="3-3-API-服务器-apiserver-py">3.3 API 服务器 (api_server.py)</h3>
+<pre><code>from fastapi import FastAPI
+from langgraph.prebuilt import create_react_agent
+from langchain_mcp_adapters.client import MultiServerMCPClient
+
+# 全局变量
+mcp_client: MultiServerMCPClient = None
+agent = None
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    &quot;&quot;&quot;FastAPI 生命周期管理&quot;&quot;&quot;
+    global mcp_client, agent
+    
+    # 1. 读取 MCP 服务器配置
+    servers_cfg = Configuration.load_servers()
+    
+    # 2. 连接 MCP 服务器并获取工具
+    mcp_client = MultiServerMCPClient(servers_cfg)
+    tools = await mcp_client.get_tools()
+    
+    # 3. 初始化 ReAct Agent
+    model = ChatTongyi(model=cfg.model, streaming=False)
+    checkpointer = InMemorySaver()  # 内存中保存对话历史
+    
+    agent = create_react_agent(
+        model=model, 
+        tools=tools,
+        prompt=prompt,
+        checkpointer=checkpointer
+    )
+    
+    yield  # 应用运行中
+    
+    # 4. 清理资源
+    await mcp_client.cleanup()
+
+app = FastAPI(lifespan=lifespan)
+
+@app.post(&quot;/chat&quot;)
+async def chat_endpoint(request: ChatRequest):
+    &quot;&quot;&quot;聊天接口&quot;&quot;&quot;
+    result = await agent.ainvoke(
+        {&quot;messages&quot;: [HumanMessage(content=request.message)]},
+        {&quot;configurable&quot;: {&quot;thread_id&quot;: request.thread_id}}
+    )
+    return ChatResponse(content=result[&quot;messages&quot;][-1].content)</code></pre>
+<p><strong>关键点解析</strong>：</p>
+<ol><li><strong><code>lifespan</code> 上下文管理器</strong>：</li></ol>
+<ul><li>应用启动时初始化 MCP 连接和 Agent</li><li>应用关闭时清理资源</li></ul><ol><li><strong><code>MultiServerMCPClient</code></strong>：</li></ol>
+<ul><li>同时连接多个 MCP 服务器</li><li>自动获取所有可用工具</li></ul><ol><li><strong><code>create_react_agent</code></strong>：</li></ol>
+<ul><li>创建 ReAct 模式的 Agent</li><li>ReAct = Reasoning + Acting（推理 + 行动）</li></ul><ol><li><strong><code>checkpointer</code></strong>：</li></ol>
+<ul><li>保存对话历史</li><li>支持多轮对话</li></ul>
+<h3 id="3-4-CLI-客户端-client-py">3.4 CLI 客户端 (client.py)</h3>
+<pre><code>async def run_chat_loop() -&gt; None:
+    &quot;&quot;&quot;启动 MCP-Agent 聊天循环&quot;&quot;&quot;
+    
+    # 1. 连接多台 MCP 服务器
+    mcp_client = MultiServerMCPClient(servers_cfg)
+    tools = await mcp_client.get_tools()
+    
+    # 2. 初始化大模型
+    model = ChatTongyi(model=cfg.model)
+    
+    # 3. 构造 Agent（带记忆）
+    checkpointer = InMemorySaver()
+    agent = create_react_agent(
+        model=model, 
+        tools=tools,
+        prompt=prompt,
+        checkpointer=checkpointer
+    )
+    
+    # 4. CLI 聊天循环
+    while True:
+        user_input = input(&quot;\n你: &quot;).strip()
+        if user_input.lower() == &quot;quit&quot;:
+            break
+            
+        result = await agent.ainvoke(
+            {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_input}]},
+            config={&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;1&quot;}}  # 对话ID
+        )
+        print(f&quot;\nAI: {result[&#x27;messages&#x27;][-1].content}&quot;)
+    
+    # 5. 清理
+    await mcp_client.cleanup()</code></pre>
+<p><strong>关键点解析</strong>：</p>
+<ol><li><strong><code>thread_id</code></strong>：用于区分不同的对话会话，保持上下文</li><li><strong><code>ainvoke</code></strong>：异步调用 Agent 处理消息</li><li><strong>消息格式</strong>：LangChain 标准消息格式 <code>{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;...&quot;}</code></li></ol>
+<hr>
+<h2 id="四-工作流程详解">四、工作流程详解</h2>
+<h3 id="4-1-ReAct-Agent-工作原理">4.1 ReAct Agent 工作原理</h3>
+<p>ReAct（Reasoning and Acting）是一种让 LLM 具备"思考-行动-观察"能力的模式：</p>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                    ReAct 循环                                   │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   用户问题: &quot;查询北京天气并保存到文件&quot;                           │
+│                                                                 │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │ 循环 1                                                  │   │
+│   │ ┌──────────┐                                            │   │
+│   │ │ 思考     │ &quot;首先需要查询北京的天气&quot;                    │   │
+│   │ └────┬─────┘                                            │   │
+│   │      ▼                                                  │   │
+│   │ ┌──────────┐                                            │   │
+│   │ │ 行动     │ 调用 query_weather(&quot;Beijing&quot;)              │   │
+│   │ └────┬─────┘                                            │   │
+│   │      ▼                                                  │   │
+│   │ ┌──────────┐                                            │   │
+│   │ │ 观察     │ 返回: &quot;🌡 温度: 15°C...&quot;                   │   │
+│   │ └──────────┘                                            │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                         │                                       │
+│                         ▼                                       │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │ 循环 2                                                  │   │
+│   │ ┌──────────┐                                            │   │
+│   │ │ 思考     │ &quot;已获取天气，现在需要保存到文件&quot;            │   │
+│   │ └────┬─────┘                                            │   │
+│   │      ▼                                                  │   │
+│   │ ┌──────────┐                                            │   │
+│   │ │ 行动     │ 调用 write_file(&quot;北京天气: 15°C...&quot;)       │   │
+│   │ └────┬─────┘                                            │   │
+│   │      ▼                                                  │   │
+│   │ ┌──────────┐                                            │   │
+│   │ │ 观察     │ 返回: &quot;✅ 已成功写入文件&quot;                   │   │
+│   │ └──────────┘                                            │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                         │                                       │
+│                         ▼                                       │
+│   ┌─────────────────────────────────────────────────────────┐   │
+│   │ 最终回复                                                │   │
+│   │ &quot;我已查询到北京今天的天气（温度15°C），并保存到文件中&quot;   │   │
+│   └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="4-2-MCP-通信协议">4.2 MCP 通信协议</h3>
+<p>MCP 支持两种通信方式：</p>
+<p><strong>STDIO 模式（本地进程）</strong>：</p>
+<pre><code>┌───────────────┐    stdin/stdout    ┌───────────────┐
+│   MCP Client  │ ◄───────────────► │   MCP Server  │
+│ (Agent)       │                    │ (weather.py)  │
+└───────────────┘                    └───────────────┘</code></pre>
+<p><strong>SSE 模式（远程服务）</strong>：</p>
+<pre><code>┌───────────────┐     HTTP/SSE       ┌───────────────┐
+│   MCP Client  │ ◄───────────────► │   远程 MCP    │
+│ (Agent)       │                    │   服务器       │
+└───────────────┘                    └───────────────┘</code></pre>
+<hr>
+<h2 id="五-快速开始">五、快速开始</h2>
+<h3 id="5-1-环境准备">5.1 环境准备</h3>
+<pre><code># 1. 克隆项目
+git clone &lt;项目地址&gt;
+cd mcp-agent-project
+
+# 2. 创建虚拟环境
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# 3. 安装依赖
+pip install -r requirements.txt</code></pre>
+<h3 id="5-2-配置环境变量">5.2 配置环境变量</h3>
+<p>创建 <code>.env</code> 文件：</p>
+<pre><code># 阿里通义千问 API Key
+DASHSCOPE_API_KEY=your_api_key_here
+
+# 模型名称（可选，默认 qwen-plus）
+MODEL=qwen-plus
+
+# OpenWeather API Key（天气服务需要）
+OPENWEATHER_API_KEY=your_openweather_key</code></pre>
+<h3 id="5-3-运行方式">5.3 运行方式</h3>
+<p><strong>方式一：CLI 交互模式</strong></p>
+<pre><code>python client.py</code></pre>
+<p><strong>方式二：API 服务模式</strong></p>
+<pre><code># 启动服务
+python api_server.py
+
+# 调用 API
+curl -X POST http://localhost:8000/chat \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;message&quot;: &quot;北京今天天气怎么样？&quot;}&#x27;</code></pre>
+<p><strong>方式三：单次调用</strong></p>
+<pre><code>python client_simple.py</code></pre>
+<hr>
+<h2 id="六-扩展指南">六、扩展指南</h2>
+<h3 id="6-1-添加新的-MCP-工具">6.1 添加新的 MCP 工具</h3>
+<ol><li>创建新的服务器文件，如 <code>calculator_server.py</code>：</li></ol>
+<pre><code>from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP(&quot;CalculatorServer&quot;)
+
+@mcp.tool()
+async def calculate(expression: str) -&gt; str:
+    &quot;&quot;&quot;
+    计算数学表达式。
+    :param expression: 数学表达式，如 &quot;2 + 3 * 4&quot;
+    :return: 计算结果
+    &quot;&quot;&quot;
+    try:
+        result = eval(expression)  # 注意：生产环境需要安全处理
+        return f&quot;结果: {result}&quot;
+    except Exception as e:
+        return f&quot;计算错误: {e}&quot;
+
+if __name__ == &quot;__main__&quot;:
+    mcp.run(transport=&#x27;stdio&#x27;)</code></pre>
+<ol><li>在 <code>servers_config.json</code> 中注册：</li></ol>
+<pre><code>{
+  &quot;mcpServers&quot;: {
+    &quot;calculator&quot;: {
+      &quot;command&quot;: &quot;python&quot;,
+      &quot;args&quot;: [&quot;calculator_server.py&quot;],
+      &quot;transport&quot;: &quot;stdio&quot;
+    }
+  }
+}</code></pre>
+<h3 id="6-2-自定义-Prompt">6.2 自定义 Prompt</h3>
+<p>修改 <code>agent_prompts.txt</code>：</p>
+<pre><code>你是一个专业的智能助手，具备以下能力：
+
+1. **天气查询**：可以查询全球各地的实时天气
+2. **文件管理**：可以将信息保存到本地文件
+3. **地图导航**：可以查询地点、规划路线
+
+使用指南：
+- 用户询问天气时，请使用 query_weather 工具
+- 需要保存信息时，请使用 write_file 工具
+- 涉及地点搜索时，请使用地图相关工具
+
+请以友好、专业的方式回复用户。</code></pre>
+<hr>
+<h2 id="七-常见问题">七、常见问题</h2>
+<h3 id="Q1-MCP-服务器启动失败">Q1: MCP 服务器启动失败？</h3>
+<p>检查以下几点：</p>
+<ul><li>Python 环境是否正确激活</li><li>依赖是否完整安装</li><li><code>servers_config.json</code> 路径配置是否正确</li></ul>
+<h3 id="Q2-API-Key-无效">Q2: API Key 无效？</h3>
+<ul><li>确认 <code>.env</code> 文件存在且格式正确</li><li>确认 API Key 没有过期</li><li>检查是否有多余的空格或引号</li></ul>
+<h3 id="Q3-工具调用失败">Q3: 工具调用失败？</h3>
+<ul><li>查看工具的文档字符串是否清晰描述了功能</li><li>确认参数类型和名称是否正确</li><li>检查网络连接（对于远程 API）</li></ul>
+<hr>
+<h2 id="八-技术栈总结">八、技术栈总结</h2>
+<hr>
+<h2 id="九-参考资料">九、参考资料</h2>
+<ul><li><a href="https://modelcontextprotocol.io/">MCP 官方文档</a></li><li><a href="https://langchain-ai.github.io/langgraph/">LangGraph 文档</a></li><li><a href="https://github.com/langchain-ai/langchain-mcp-adapters">LangChain MCP Adapters</a></li><li><a href="https://help.aliyun.com/document_detail/2400395.html">通义千问 API</a></li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+
+</body>
+</html>

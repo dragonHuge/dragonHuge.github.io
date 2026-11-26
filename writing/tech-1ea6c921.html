@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>索引 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">30</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l3" href="#1-索引的分类">1.索引的分类</a><a class="tl l2" href="#2-联合索引的范围查询">2.联合索引的范围查询</a><a class="tl l2" href="#3-索引下推优化-MYSQL-5-6之后">3.索引下推优化(MYSQL 5.6之后)</a><a class="tl l2" href="#4-索引区分度">4.索引区分度</a><a class="tl l2" href="#5-联合索引进行排序-Order-BY-GROUP-BY">5.联合索引进行排序(Order BY/GROUP BY)</a><a class="tl l2" href="#6-什么时候需要-不需要索引">6.什么时候需要/不需要索引</a><a class="tl l3" href="#1-需要">1.需要</a><a class="tl l3" href="#2-不需要">2.不需要</a><a class="tl l2" href="#7-索引的缺点">7.索引的缺点</a><a class="tl l2" href="#8-优化索引的方法">8.优化索引的方法</a><a class="tl l3" href="#1-前缀索引优化">1.前缀索引优化</a><a class="tl l3" href="#2-覆盖索引优化">2.覆盖索引优化</a><a class="tl l3" href="#3-主键索引最好自增">3.主键索引最好自增</a><a class="tl l3" href="#4-索引最好设置为NOT-NULL">4.索引最好设置为NOT NULL</a><a class="tl l3" href="#5-防止索引失效">5.防止索引失效</a><a class="tl l2" href="#9-Explain">9.Explain</a><a class="tl l2" href="#10-为何使用B-Tree作为索引">10.为何使用B+Tree作为索引</a><a class="tl l4" href="#1-单点查询">1、单点查询</a><a class="tl l4" href="#2-插入和删除效率较高">2、插入和删除效率较高</a><a class="tl l4" href="#3-范围查询">3、范围查询</a><a class="tl l2" href="#11-Count-1-和Count-的区别-哪个性能最好">11.Count(1)和Count()的区别、哪个性能最好？</a><a class="tl l3" href="#1-Count">1.Count()</a><a class="tl l3" href="#2-Count-1">2.Count(1)</a><a class="tl l3" href="#3-Count-主键字段">3.Count(主键字段)</a><a class="tl l3" href="#4-Count-字段--执行效率最差">4.Count(字段)-执行效率最差</a><a class="tl l3" href="#5-如何优化Count">5.如何优化Count()</a><a class="tl l4" href="#1-近似值">1.近似值</a><a class="tl l4" href="#2-额外保存计数值count">2.额外保存计数值count</a><a class="tl l2" href="#12-模糊查询的IN会走索引吗">12.模糊查询的IN会走索引吗？</a><a class="tl l2" href="#13-MySQL-使用-like-x-索引一定会失效吗">13.MySQL 使用 like “%x“，索引一定会失效吗？</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>索引</h1><div class="meta">2024-05-08 · <a class="src-link" href="https://flowus.cn/1ea6c921-ad07-4112-a912-122e4c6ccae0" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h3 id="1-索引的分类">1.索引的分类</h3>
+<ul><li>按「数据结构」分类：<strong>B+tree索引、Hash索引、Full-text索引(全文索引)</strong>。</li></ul>
+<blockquote><p>💡 <strong>哈希索引</strong>：基于哈希表实现，只有匹配所有列的查询才有效。对于每一行数据，存储引擎都会对所有索引列计算一个哈希码，哈希码是一个较小的值，不同键值的行计算出的哈希码也不一样。哈希索引将所有的哈希码存储在索引中，同时保存指向每个数据行的指针。</p></blockquote>
+<p><img alt="image.png" src="/assets/img/flowus-a85772ab4034513e.png"></p>
+<ul><li>按「物理存储」分类：<strong>聚簇索引（主键索引）、二级索引（辅助索引）</strong>。</li></ul>
+<blockquote><p>🥰 <strong>聚簇索引</strong>（Clustered Index）是一种数据库索引类型，它对数据表中的行进行物理排序，并<strong>将索引键与数据行存储在同一数据页</strong>（或数据页的连续集合）中。换句话说，<strong>聚簇索引决定了数据在磁盘上的物理存储顺序</strong>。</p></blockquote>
+<p>在<strong>一个数据库表上，只能有一个聚簇索引</strong>，因为它决定了数据行的物理排序。聚簇索引可以提高特定条件下的查询性能。</p>
+<ul><li>聚簇索引的叶子节点存放的是<strong>实际数据</strong>，所有完整的用户记录都存放在聚簇索引的叶子节点；</li></ul>
+<ul><li>二级索引的叶子节点存放的是<strong>主键值</strong>，而<strong>不是实际数据。</strong></li></ul>
+<ul><li>按「字段特性」分类：<strong>主键索引、唯一索引、普通索引、前缀索引</strong>。</li></ul>
+<blockquote><p>🥰 <strong>主键索引</strong>：一张表最多只有一个主键索引，索引列的值<strong>不允许有空值</strong>。</p></blockquote>
+<blockquote><p>🥰 <strong>唯一索引</strong>：建立在 <strong>UNIQUE</strong> 字段上的索引，<strong>一张表可以有多个唯一索引</strong>，索引列的值必须唯一，但是<strong>允许有空值</strong>。</p></blockquote>
+<p>这意味着在索引列中可以有多个空值（NULL 值），因为 <strong>NULL 不算作唯一的值</strong>。这种情况在数据库中是允许的，但请注意，如果<strong>在索引列中有多个 NULL 值，它们之间并不被视为相等</strong>。</p>
+<blockquote><p>🥰 <strong>前缀索引</strong>：指<strong>对字符类型字段的前几个字符建立的索引</strong>，而不是在整个字段上建立的索引，前缀索引可以建立在字段类型为 char、 varchar、binary、varbinary 的列上。</p></blockquote>
+<p>使用前缀索引的目的是为了减少索引占用的存储空间，提升查询效率。</p>
+<p>```SQL CREATE INDEX index_name ON table_name(column_name(length)); // 创建了一个前缀索引 ```</p>
+<ul><li>按「字段个数」分类：<strong>单列索引、联合索引</strong>。</li></ul>
+<blockquote><p>🥰 联合索引：<strong>最左匹配原则。</strong>如果不遵循「最左匹配原则」，联合索引会失效。因为：<strong>利用索引的前提是索引里的 key 是有序的</strong>。</p></blockquote>
+<p>例如：对于联合索引(a,b,c)，如果where中没有a，那么是用不到这个索引的。因为b、c在B+Tree 的叶子结点是“<strong>全局无序，局部有序</strong>”。</p>
+<p>需要注意的是，因为有<strong>查询优化器</strong>，所以 a 字段在 where 子句的顺序并不重要。</p>
+<p><strong>覆盖索引</strong>：是指<strong>需要查询的字段正好是索引的字段，那么直接根据该索引，就可以查到数据了，而无需回表查询</strong>。（即：一个索引覆盖所有需要查询的字段的值），比如下边的语句：</p>
+<pre><code>select id from product where product_no = &#x27;0002&#x27;; // 这条语句查询的是id(主键)，因此可以直接在二级索引的B+tree中找到。</code></pre>
+<p>覆盖索引的好处：</p>
+<ol><li><strong>减少回表次数</strong>。</li></ol>
+<ol><li><strong>将随机IO变成顺序IO加快查询效率</strong>。</li></ol>
+<p>覆盖索引是按键值对的顺序存储的，对于IO密集型的范围查找，比起随机从磁盘读取每一行数据，IO要少得多。</p>
+<h2 id="2-联合索引的范围查询">2.联合索引的范围查询</h2>
+<p>联合索引的最左匹配原则会一直向右匹配直到遇到「范围查询」就会停止匹配。也就是<strong>范围查询的字段可以用到联合索引，</strong>但是<strong>在范围查询字段的后面的字段无法用到联合索引</strong>。有如下四种情况。</p>
+<ol><li><strong>情况1：&gt;</strong></li></ol>
+<p>```SQL select * from t_table where a &gt; 1 and b = 2; //哪个字段用到了联合索引？ ```</p>
+<blockquote><p>🥰 <strong>a用到了，但b没有用到</strong>。原因：<strong>在a&gt;1的范围里，b是全局无序的</strong>。因此不能根据查询条件 b = 2 来进一步减少需要扫描的记录数量。</p></blockquote>
+<ol><li><strong>情况2：≥</strong></li></ol>
+<p>```SQL select * from t_table where a &gt;= 1 and b = 2; // 哪个字段用到了呢 ```</p>
+<blockquote><p>🥰 <strong>a和b都用到了</strong>。原因：在<strong>a=1的范围内，b是局部有序</strong>的，因此可以用到索引。而在<strong>a&gt;1的范围内，b是全局无序</strong>的，这部分就用不到了。</p></blockquote>
+<ol><li><strong>情况3：between ... and (在MYSQL中，它是 ≤ val ≤ )</strong></li></ol>
+<p>```SQL SELECT * FROM t_table WHERE a BETWEEN 2 AND 8 AND b = 2; // 哪个用到了索引呢？ ```</p>
+<blockquote><p>🥰 <strong>a 和 b 字段都用到了联合索引进行索引查。原因：</strong>类似于 Q2 查询语句。</p></blockquote>
+<ol><li><strong>情况4：Like</strong></li></ol>
+<p>```SQL SELECT * FROM t_user WHERE name like 'j%' and age = 22; // ```</p>
+<blockquote><p>🥰 a、b都可以用到索引。<strong>等于j的部分中，age可以用到索引</strong>；但对于其他部分，用不到。</p></blockquote>
+<p>原因：在符合前缀为 ‘j’ 的 name 字段的二级索引记录的范围里，age 字段的值是「全局无序」的，但是<strong>对于符合 name = j 的二级索引记录的范围里，age字段的值是「有序」的。</strong></p>
+<blockquote><p>🥰 综上所示，<strong>联合索引的最左匹配原则，在遇到范围查询（如 &gt;、&lt;）的时候，就会停止匹配，也就是范围查询的字段可以用到联合索引，但是在范围查询字段的后面的字段无法用到联合索引。</strong></p></blockquote>
+<p><strong>注意，对于 &gt;=、&lt;=、BETWEEN、like 前缀匹配的范围查询，并不会停止匹配。</strong></p>
+<h2 id="3-索引下推优化-MYSQL-5-6之后">3.索引下推优化(MYSQL 5.6之后)</h2>
+<p>通常<strong>应用于 SQL 查询中的联合索引。</strong></p>
+<p>现在我们知道，对于联合索引（a, b），在执行 <code>select * from table where a &amp;gt; 1 and b = 2</code> 语句的时候，只有 a 字段能用到索引，那在联合索引的 B+Tree 找到第一个满足条件的主键值（ID 为 2）后，还需要判断其他条件是否满足（看 b 是否等于 2），那是在联合索引里判断？还是回主键索引去判断呢？</p>
+<ul><li>在 MySQL 5.6 之前，只能从 ID2 （主键值）开始一个个回表，到「主键索引」上找出数据行，再对比 b 字段值。</li></ul>
+<ul><li>而 MySQL 5.6 引入的<strong>索引下推优化</strong>（index condition pushdown)， <strong>可以在联合索引遍历过程中，对联合索引中包含的字段先做判断，直接过滤掉不满足条件的记录，减少回表次数</strong>。</li></ul>
+<p>当你的查询语句的执行计划里，出现了 Extra 为 <strong><code>Using index condition</code></strong>，那么说明使用了索引下推的优化。</p>
+<p>覆盖索引和索引下推优化是两种常见的数据库查询优化技术，它们都可以提高查询性能，但是它们的实现方式和优化效果有所不同。</p>
+<ol><li><strong>覆盖索引</strong>：</li></ol>
+<ul><li>覆盖索引是指<strong>索引包含了查询所需的所有字段</strong>，即索引本身就包含了查询需要的数据，不需要再回表查询数据行。</li></ul>
+<ul><li>当数据库执行查询时，如果可以通过覆盖索引直接获取到查询所需的数据，就不需要再去检索主表或者聚集索引，从而减少了磁盘 IO 操作和数据传输开销，提高了查询性能。</li></ul>
+<ul><li>覆盖索引通常用于满足查询的选择列、过滤条件、排序、分组等操作，可以减少不必要的数据读取和排序操作。</li></ul>
+<ol><li><strong>索引下推优化</strong>：</li></ol>
+<ul><li>索引下推优化是在执行查询时，<strong>尽可能地将查询条件下推到索引层级</strong>，<strong>从而减少不必要的数据读取。</strong></li></ul>
+<ul><li>当查询条件涉及到了索引的字段时，数据库可以利用索引下推优化，将查询条件直接应用于索引层级，从而<strong>减少了需要扫描的数据量</strong>，提高了查询效率。</li></ul>
+<ul><li>索引下推优化特别适用于范围查询等场景，可以避免将所有数据加载到内存中进行筛选，而是在索引层级就能够得到满足条件的数据。</li></ul>
+<p>总的来说，覆盖索引和索引下推优化都可以提高数据库查询性能，但是它们的实现方式和优化效果有所不同。</p>
+<p>覆盖索引主要是通过<strong>索引本身包含所需的数据来减少回表查询</strong>，而<strong>索引下推优化主要是通过将查询条件直接应用于索引层级来减少不必要的数据读取</strong>。</p>
+<p>在实际应用中，可以根据具体的查询场景来选择合适的优化技术。</p>
+<h2 id="4-索引区分度">4.索引区分度</h2>
+<p><strong>区分度</strong>= <strong>某个字段 column 不同值的个数 / 表的总行数</strong></p>
+<p>那么在创建联合索引的时候，<strong>把区分度大的字段排在前面，这样区分度大的字段越有可能被更多的 SQL 使用到</strong>。</p>
+<h2 id="5-联合索引进行排序-Order-BY-GROUP-BY">5.联合索引进行排序(Order BY/GROUP BY)</h2>
+<p>这里出一个题目，针对针对下面这条 SQL，你怎么通过索引来提高查询效率呢？</p>
+<pre><code>select * from order where status = 1 order by create_time asc</code></pre>
+<ul><li>单独给 status 建立一个索引                   <strong>×</strong></li></ul>
+<ul><li><strong>给 status 和 create_time 列建立一个联合索引</strong>，<strong>√</strong> (这样可以<strong>避免 MySQL 数据库发生文件排序</strong>)。</li></ul>
+<blockquote><p>🥰 原因：因为在查询时，如果只用到 status 的索引，<strong>但是这条语句还要对 create_time 排序</strong>，这时就要用文件排序 filesort，也就是在 SQL 执行计划中，Extra 列会出现 Using filesort。</p></blockquote>
+<p>所以，要<strong>利用索引的有序性，在 status 和 create_time 列建立联合索引</strong>，这样<strong>根据 status 筛选后的数据就是按照 create_time 排好序的</strong>，<strong>避免在文件排序</strong>，提高了查询效率。</p>
+<h2 id="6-什么时候需要-不需要索引">6.什么时候需要/不需要索引</h2>
+<h3 id="1-需要">1.需要</h3>
+<ol><li>字段有<strong>唯一性限制</strong></li></ol>
+<ol><li>经常出现在<strong>where字段后</strong></li></ol>
+<ol><li>经常用于<strong>GROUP BY 或 ORDER BY(查询时就不需要去做一次排序)</strong></li></ol>
+<h3 id="2-不需要">2.不需要</h3>
+<ol><li><code>WHERE</code> 条件，<code>GROUP BY</code>，<code>ORDER BY</code> 里用不到的字段</li></ol>
+<ol><li>字段中存在大量重复数据</li></ol>
+<ol><li>表数据太少</li></ol>
+<ol><li><strong>经常更新的字段不用创建索引</strong></li></ol>
+<h2 id="7-索引的缺点">7.索引的缺点</h2>
+<ol><li>需要<strong>占用物理空间</strong>，数量越大，占用空间越大；</li></ol>
+<ol><li><strong>创建索引和维护索引要耗费时间</strong>，这种时间随着数据量的增加而增大；</li></ol>
+<ol><li>会<strong>降低表的增删改的效率</strong>，因为每次增删改索引，<strong>B+ 树为了维护索引有序性，都需要进行动态维护</strong>。</li></ol>
+<h2 id="8-优化索引的方法">8.优化索引的方法</h2>
+<h3 id="1-前缀索引优化">1.前缀索引优化</h3>
+<p>使用某个字段中字符串的前几个字符建立前缀索引。</p>
+<p>使用前缀索引是<strong>为了减小索引字段大小</strong>，可以<strong>增加一个索引页中存储的索引值</strong>，有效提高索引的查询速度。在一些大字符串的字段作为索引时，使用前缀索引可以帮助我们减小索引项的大小。</p>
+<p>不过，前缀索引有一定的<strong>局限性</strong>，例如：</p>
+<ul><li>order by 就无法使用前缀索引；</li></ul>
+<ul><li>无法把前缀索引用作覆盖索引；</li></ul>
+<h3 id="2-覆盖索引优化">2.覆盖索引优化</h3>
+<p>就是说，将我们<strong>经常Query的字段，存放在二级索引的叶子结点</strong>中，那么<strong>查询时可以直接从二级索引中查询到数据</strong>，而<strong>不需要回表</strong>查找。</p>
+<p>也就是说，可以<strong>多建立联合索引。</strong></p>
+<p>假设我们只需要查询商品的名称、价格，有什么方式可以避免回表呢？</p>
+<p>我们可以建立一个联合索引，即<strong>「商品ID、名称、价格」</strong>作为一个联合索引。如果索引中存在这些数据，查询将不会再次检索主键索引，从而避免回表。</p>
+<p>所以，使用覆盖索引的好处就是，<strong>不需要查询出包含整行记录的所有信息，也就减少了大量的 I/O 操作</strong>。</p>
+<h3 id="3-主键索引最好自增">3.主键索引最好自增</h3>
+<ul><li><strong>使用自增主键：</strong></li></ul>
+<p>那么每次插入的新数据就会按顺序添加到当前索引节点的位置，不需要移动已有的数据，当页面写满，就会自动开辟一个新页面。因为每次<strong>插入一条新记录，都是追加操作，不需要重新移动数据</strong>，因此这种插入数据的方法效率非常高。</p>
+<ul><li><strong>使用非自增主键：</strong></li></ul>
+<p>由于每次插入主键的索引值都是随机的，因此每次插入新的数据时，就可能会插入到现有数据页中间的某个位置，这将不得不移动其它数据来满足新数据的插入，甚至需要从一个页面复制数据到另外一个页面，我们通常将这种情况称为<strong>页分裂</strong>。<strong>页分裂还有可能会造成大量的内存碎片，导致索引结构不紧凑，从而影响查询效率</strong>。</p>
+<h3 id="4-索引最好设置为NOT-NULL">4.索引最好设置为NOT NULL</h3>
+<ul><li>第一原因：</li></ul>
+<p>索引列存在 NULL 就会导致<strong>优化器在做索引选择的时候更加复杂</strong>，更加难以优化。因为可为 NULL 的列会使索引、索引统计和值比较都更复杂，比如进行索引统计时，count 会省略值为NULL 的行。</p>
+<ul><li>第二个原因：</li></ul>
+<p><strong>NULL 值是一个没意义的值</strong>，但是它<strong>会占用物理空间</strong>，所以会带来的存储空间的问题，因为 InnoDB 存储记录的时候，如果表中存在允许为 NULL 的字段，那么<a href="https://xiaolincoding.com/mysql/base/row_format.html#innodb-%E8%A1%8C%E6%A0%BC%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B">行格式 </a>中<strong>至少会用 1 字节空间存储 NULL 值列表。</strong></p>
+<h3 id="5-防止索引失效">5.防止索引失效</h3>
+<p>发生<strong>索引失效的情况</strong>：</p>
+<ul><li>1.使用<strong>左或者左右模糊匹配</strong>的时候，也就是 <code>like %xx</code> 或者 <code>like %xx%</code>这两种方式都会造成索引失效；</li></ul>
+<ul><li>2.<strong>在查询条件中对索引列做了计算、函数、类型转换操作</strong>，这些情况下都会造成索引失效；</li></ul>
+<blockquote><p>😍 因为<strong>索引保存的是索引字段的原始值</strong>，而<strong>不是经过函数计算后的值</strong>，自然就没办法走索引了。</p></blockquote>
+<p>不过，从 MySQL 8.0 开始，索引特性增加了<strong>函数索引</strong>，即可以针对函数计算后的值建立一个索引，也就是说该索引的值是函数计算后的值，所以就可以通过扫描索引来查询数据。</p>
+<ul><li>3.<strong>没有遵循最左匹配原则</strong>。联合索引要能正确使用需要遵循最左匹配原则，也就是按照最左优先的方式进行索引的匹配，否则就会导致索引失效。</li></ul>
+<ul><li>4.在 WHERE 子句中，如果<strong>在 OR 前的条件列是索引列，而在 OR 后的条件列不是索引列</strong>，那么索引会失效。</li></ul>
+<p>```SQL select * from t_user where id = 1 or age = 18; ```</p>
+<blockquote><p>🥰 原因： <strong>OR 的含义就是两个只要满足一个即可</strong>，因此只有一个条件列是索引列是没有意义的，<strong>只要有条件列不是索引列，就会进行全表扫描</strong>。数据库系统在执行查询时通常只能使用一个索引，而<strong>无法同时利用多个索引</strong>。</p></blockquote>
+<p>因为 OR 连接的条件是逻辑上的 "或" 关系，数据库系统需要检查所有可能满足其中一个条件的行，所以即使索引列前的条件使用了索引，索引也可能会失效，导致数据库系统选择全表扫描而不是使用索引。</p>
+<p>在上边的例子中，<strong>id用了索引，因此会走索引查找；但是age没有索引，那么数据库会全表查询，从而导致整个句子变成了全表扫描</strong>。</p>
+<p>解决办法很简单：将 age 字段也设置为索引即可。</p>
+<ul><li>5. <strong>对索引隐式函数转换</strong>的时候。</li></ul>
+<p>MySQL 在遇到字符串和数字比较的时候，会自动把字符串转为数字，然后再进行比较。</p>
+<p>如果字符串是索引列，而条件语句中的输入参数是数字的话，那么索引列会发生隐式类型转换，由于<strong>隐式类型转换是通过 CAST 函数实现</strong>的，等同于对索引列使用了函数，所以就会导致索引失效。</p>
+<h2 id="9-Explain">9.Explain</h2>
+<ul><li><strong>作用</strong>：可以<strong>模拟 优化器 执行SQL查询语句</strong>，并<strong>不会去真正的执行这条SQL</strong>，从而知道 MySQL 是如何处理你的SQL语句的。可用来分析你的查询语句或是表结构的性能瓶颈。</li></ul>
+<ul><li>示例图：</li></ul>
+<p><img alt="image.png" src="/assets/img/flowus-89be781041d395d7.png"></p>
+<ul><li>参数：</li></ul>
+<ul><li><strong>possible_keys ：</strong>表示<strong>可能用到的索引</strong>；</li></ul>
+<ul><li><strong>key</strong> ：表示<strong>实际用的索引</strong>，如果这一项为 NULL，说明没有使用索引；</li></ul>
+<ul><li><strong>key_len</strong> ：表示索引的长度；</li></ul>
+<ul><li><strong>rows ：</strong>表示<strong>扫描的数据行数</strong>。</li></ul>
+<ul><li><strong>type</strong> ：表示<strong>数据扫描类型</strong>，我们需要重点看这个。</li></ul>
+<ul><li>常见扫描类型的<strong>执行效率从低到高的顺序为</strong>：</li></ul>
+<ul><li><strong>All</strong>（全表扫描）；</li></ul>
+<ul><li><strong>index</strong>（全索引扫描）；</li></ul>
+<ul><li><strong>range</strong>（索引范围扫描）；</li></ul>
+<ul><li><strong>ref</strong>（非唯一索引扫描）；</li></ul>
+<ul><li><strong>eq_ref</strong>（唯一索引扫描）；</li></ul>
+<ul><li><strong>const</strong>（结果只有一条的主键或唯一索引扫描）。</li></ul>
+<ul><li><strong>Extra</strong>字段中，<strong>几个重要的参考指标</strong>：</li></ul>
+<ul><li><strong>Using filesort</strong> ：当查询语句中包含 group by 操作，而且无法利用索引完成排序操作的时候， 这时不得不选择相应的排序算法进行，甚至可能会通过文件排序，效率是很低的，所以要避免这种问题的出现。</li></ul>
+<ul><li><strong>Using temporary</strong>：使了用<strong>临时表</strong>保存中间结果，MySQL 在对查询结果排序时使用临时表，常见于排序 order by 和分组查询 group by。效率低，要避免这种问题的出现。</li></ul>
+<ul><li><strong>Using index</strong>：所需数据只需在索引即可全部获得，不须要再到表中取数据，也就是<strong>使用了覆盖索引</strong>，避免了回表操作，效率不错。</li></ul>
+<h2 id="10-为何使用B-Tree作为索引">10.为何使用B+Tree作为索引</h2>
+<p>原因如下：</p>
+<ul><li>B+ 树的<strong>非叶子节点不存放实际的记录数据</strong>，仅存放索引，因此数据量相同的情况下，相比存储即存索引又存记录的 B 树，<strong>B+树的非叶子节点可以存放更多的索引</strong>，因此 B+ 树可以比 B 树更「矮胖」，查询底层节点的<strong>磁盘 I/O次数会更少</strong>。</li></ul>
+<ul><li>B+ 树有<strong>大量的冗余节点</strong>（所有非叶子节点都是冗余索引），这些<strong>冗余索引让 B+ 树在插入、删除的效率都更高</strong>，比如删除根节点的时候，不会像 B 树那样会发生复杂的树的变化；</li></ul>
+<ul><li>B+ 树<strong>叶子节点之间用链表连接了起来</strong>，<strong>有利于范围查询</strong>，而 B 树要实现范围查询，因此只能通过树的遍历来完成范围查询，这会涉及多个节点的磁盘 I/O 操作，范围查询效率不如 B+ 树。</li></ul>
+<h4 id="1-单点查询">1、单点查询</h4>
+<p>B 树进行单个索引查询时，最快可以在 O(1) 的时间代价内就查到，而从平均时间代价来看，会比 B+ 树稍快一些。</p>
+<p>但是 B 树的查询波动会比较大，因为每个节点即存索引又存记录，所以有时候访问到了非叶子节点就可以找到索引，而有时需要访问到叶子节点才能找到索引。</p>
+<p><strong>B+ 树的非叶子节点不存放实际的记录数据，仅存放索引，因此数据量相同的情况下，相比存储即存索引又存记录的 B 树，B+树的非叶子节点可以存放更多的索引，因此 B+ 树可以比 B 树更「矮胖」，查询底层节点的磁盘 I/O次数会更少</strong>。</p>
+<h4 id="2-插入和删除效率较高">2、插入和删除效率较高</h4>
+<p><strong>B+ 树有大量的冗余节点</strong>，这样使得<strong>删除一个节点的时候，可以直接从叶子节点中删除，甚至可以不动非叶子节点，这样删除非常快</strong>，</p>
+<p>比如下面这个动图是删除 B+ 树 0004 节点的过程，因为非叶子节点有 0004 的冗余节点，所以在删除的时候，树形结构变化很小：</p>
+<p><img alt="25508b0cd9c44ef6937fdd737020a7f1.gif" src="/assets/img/flowus-48c4f564d3895472.gif"></p>
+<p>下面这个动图是删除 B 树 0008 节点的过程，可能会导致树的复杂变化：</p>
+<p><img alt="2be62679487640bbaac663fa96c7f35f.gif" src="/assets/img/flowus-9a98a96e97526148.gif"></p>
+<p>甚至，B+ 树在删除根节点的时候，由于存在冗余的节点，所以不会发生复杂的树的变形，比如下面这个动图是删除 B+ 树根节点的过程：</p>
+<p><img alt="23730b5af987480fabff0f1d142a2b6c.gif" src="/assets/img/flowus-c0f399659a988bdb.gif"></p>
+<p>B 树则不同，B 树没有冗余节点，删除节点的时候非常复杂，比如删除根节点中的数据，可能涉及复杂的树的变形，比如下面这个动图是删除 B 树根节点的过程：</p>
+<p><img alt="7552002f9b8195ab650d431bfe66cce2.gif" src="/assets/img/flowus-bd6d1dc77ddd6415.gif"></p>
+<p>B+ 树的插入也是一样，有冗余节点，插入可能存在节点的分裂（如果节点饱和），但是最多只涉及树的一条路径。而且 B+ 树会自动平衡，不需要像更多复杂的算法，类似红黑树的旋转操作等。</p>
+<p>因此，<strong>B+ 树的插入和删除效率更高</strong>。</p>
+<h4 id="3-范围查询">3、范围查询</h4>
+<p>B 树和 B+ 树等值查询原理基本一致，先从根节点查找，然后对比目标数据的范围，最后递归的进入子节点查找。</p>
+<p>因为 <strong>B+ 树所有叶子节点间还有一个链表进行连接，这种设计对范围查找非常有帮助。</strong></p>
+<p>而 B 树没有将所有叶子节点用链表串联起来的结构，因此只能通过树的遍历来完成范围查询，这会涉及多个节点的磁盘 I/O 操作，范围查询效率不如 B+ 树。</p>
+<blockquote><p>😍 并且MYSQL的B+树中，<strong>叶子节点之间是用「双向链表」进行连接。</strong>这样的好处是既能向右遍历，也能向左遍历。</p></blockquote>
+<p>因此，存在大量范围检索的场景，适合使用 B+树，比如数据库。而对于大量的单个索引查询的场景，可以考虑 B 树，比如 nosql 的MongoDB。</p>
+<h2 id="11-Count-1-和Count-的区别-哪个性能最好">11.Count(1)和Count(*)的区别、哪个性能最好？</h2>
+<p><img alt="image.png" src="/assets/img/flowus-e096b029bd35b77e.png"></p>
+<p>Count()函数的作用：<strong>统计符合查询条件的记录中，函数指定的参数不为 NULL 的记录有多少个</strong>。</p>
+<h3 id="1-Count">1.Count(*)</h3>
+<p>看到 <code>*</code> 这个字符的时候，是不是大家觉得是读取记录中的所有字段值？</p>
+<p>对于 <code>selete *</code> 这条语句来说是这个意思，但是在 count(*) 中并不是这个意思。</p>
+<p><strong>count(<code>*</code>) 其实等于 count(<code>0</code>)</strong>，也就是说，当你使用 count(<code>*</code>) 时，<strong>MySQL 会将 <code>*</code> 参数转化为参数 0 来处理</strong>。</p>
+<p><strong>count(*) 执行过程跟 count(1) 执行过程基本一样的</strong>，性能没有什么差异.</p>
+<h3 id="2-Count-1">2.Count(1)</h3>
+<pre><code>select count(1) from t_order;</code></pre>
+<p>这条语句是统计「 t_order 表中，<strong>1 这个表达式不为 NULL 的记录</strong>」有多少个。</p>
+<p>1 这个表达式就是单纯数字，它永远都不是 NULL，所以上面这条语句，其实是<strong>在统计 t_order 表中有多少个记录</strong>。</p>
+<h3 id="3-Count-主键字段">3.Count(主键字段)</h3>
+<ul><li>在通过 count 函数统计有多少个记录时，MySQL 的 server 层会维护一个名叫 <strong>count 的变量</strong>。</li></ul>
+<ul><li>server 层会循环向 InnoDB 读取一条记录，<strong>如果 count 函数指定的参数不为 NULL，那么就会将变量 count 加 1</strong>，直到符合查询的全部记录被读完，就退出循环。最后将 count 变量的值发送给客户端。</li></ul>
+<p>如果<strong>表里只有主键索引，没有二级索引</strong>时，那么，InnoDB <strong>循环遍历聚簇索引</strong>，然后读取记录中的 id 值，就会 id 值判断是否为 NULL，如果不为 NULL，就将 count 变量加 1。</p>
+<p>如果<strong>表里有二级索引</strong>时，InnoDB <strong>循环遍历的对象就不是聚簇索引，而是二级索引</strong>。</p>
+<p>原因：因为相同数量的二级索引记录可以比聚簇索引记录占用更少的存储空间，所以二级索引树比聚簇索引树小，这样遍历二级索引的 I/O 成本比遍历聚簇索引的 I/O 成本小，因此「优化器」优先选择的是二级索引。</p>
+<h3 id="4-Count-字段--执行效率最差">4.Count(字段)-执行效率最差</h3>
+<p>会采用<strong>全表扫描的方式来计数</strong>，<strong>统计这个字段不为NULL的行数</strong>，所以它的执行效率是比较差的。</p>
+<h3 id="5-如何优化Count">5.如何优化Count(*)</h3>
+<h4 id="1-近似值">1.近似值</h4>
+<p>如果你的业务对于统计个数不需要很精确，比如搜索引擎在搜索关键词的时候，给出的搜索结果条数是一个大概值。</p>
+<h4 id="2-额外保存计数值count">2.额外保存计数值count</h4>
+<p>可以将这个<strong>计数值保存到单独的一张计数表中</strong>。</p>
+<p>当我们<strong>在数据表插入一条记录的同时，将计数表中的计数字段 + 1</strong>。也就是说，在新增和删除操作时，我们需要额外维护这个计数表。</p>
+<h2 id="12-模糊查询的IN会走索引吗">12.模糊查询的IN会走索引吗？</h2>
+<p>先说结论：<strong>不能</strong>。</p>
+<ol><li>通常情况下，模糊查询中使用<strong><code>IN</code>操作符会导致索引失效</strong>，因为<strong><code>IN</code>操作符需要逐个比较每个值是否匹配</strong>，这会<strong>导致无法有效使用索引</strong>。索引在这种情况下可能会被忽略，数据库引擎可能会选择全表扫描来执行查询。</li></ol>
+<ol><li><code>IN</code>操作符的影响索引的<strong>主要原因</strong>：<strong>它需要逐个比较列表中的每个值</strong>。</li></ol>
+<p>这意味着<strong>数据库引擎需要逐个检查索引中的条目是否匹配<code>IN</code>列表中的任何值</strong>。这<strong>与索引的设计初衷相悖</strong>，索引的作用是为了加速数据检索，通过查找索引中的特定值来快速定位数据行，而不是逐个比较每个值。</p>
+<p>举个例子，考虑以下查询：</p>
+<pre><code>SELECT * FROM table_name WHERE column_name IN (&#x27;value1&#x27;, &#x27;value2&#x27;, &#x27;value3&#x27;);</code></pre>
+<p>如果<code>column_name</code>上有索引，数据库引擎可能会选择忽略该索引，因为它不能直接使用索引来快速确定满足条件的行。相反，它必须扫描整个索引，并逐个检查每个条目是否在<code>&#x27;value1&#x27;, &#x27;value2&#x27;, &#x27;value3&#x27;</code>这个列表中。</p>
+<p>另外一个原因是，<code>IN</code>操作符经常用于查询多个值，而且这些值可能是任意的，这使得优化变得更加困难。相比之下，如果使用范围查询（比如<code>BETWEEN</code>）或等值查询（比如<code>=</code>），数据库引擎可以更容易地利用索引。</p>
+<h2 id="13-MySQL-使用-like-x-索引一定会失效吗">13.MySQL 使用 like “%x“，索引一定会失效吗？</h2>
+<p><strong>不一定。</strong>左模糊查找不一定会走全表扫描，关键还是<strong>看数据表中的字段</strong>。</p>
+<blockquote><p>😍 如果<strong>数据库表中的字段只有主键+二级索引</strong>，那么即使使用左模糊匹配（like "%xx"），也不会走全表扫描（type=all），而是走<strong>全扫描二级索引树</strong>(type=index)。</p></blockquote>
+<p>再说一个类似的情况：我们都知道<strong>联合索引要遵循最左匹配才能走索引</strong>，但是如果数据库表中的字段都是索引的话，即使查询过程中，没有遵循最左匹配原则，也是走<strong>全扫描二级索引树</strong>(type=index)。</p>
+<p>不失效的情况：</p>
+<p><strong>一张表的字段没有「非索引」字段</strong>，所以 <code>select *</code> 相当于 <code>select id,name</code>，然后<strong>这个查询的数据都在二级索引的 B+ 树，因为二级索引的 B+ 树的叶子节点包含「索引值+主键值」，所以查二级索引的 B+ 树就能查到全部结果了，这个就是覆盖索引。</strong></p>
+<ol><li><strong>为什么选择全扫描二级索引树，而不扫描聚簇索引树呢？</strong></li></ol>
+<p>因为二级索引树的记录东西很少，就只有「索引列+主键值」，而聚簇索引记录的东西会更多，比如聚簇索引中的叶子节点则记录了主键值、事务 id、用于事务和 MVCC 的回滚指针以及所有的剩余列。</p>
+<p>再加上，这个 select * 不用执行回表操作。</p>
+<p>所以， MySQL 优化器认为直接遍历二级索引树要比遍历聚簇索引树的成本要小的多，因此 MySQL 选择了「全扫描二级索引树」的方式查询数据。</p>
+<ol><li><strong>为什么这个数据表加了非索引字段，执行同样的查询语句后，怎么变成走的是全表扫描呢？</strong></li></ol>
+<p>加了其他字段后，<code>select * from t_user where name like &quot;%xx&quot;;</code> 要查询的数据就不能只在二级索引树里找了，得需要回表操作才能完成查询的工作，再加上是左模糊匹配，无法利用索引树的有序性来快速定位数据，所以得在二级索引树逐一遍历，获取主键值后，再到聚簇索引树检索到对应的数据行，这样实在太累了。</p>
+<p>所以，优化器认为上面这样的查询过程的成本实在太高了，所以直接选择全表扫描的方式来查询数据。</p>
+<hr>
+<p>从这个思考题我们知道了，使用左模糊匹配（like "%xx"）<strong>并不一定会走全表扫描，关键还是看数据表中的字段</strong>。</p>
+<p>如果数据库表中的字段只有主键+二级索引，那么即使使用了左模糊匹配，也不会走全表扫描（type=all），而是走全扫描二级索引树(type=index)。</p>
+<p>再说一个类似的情况：我们都知道联合索引要遵循最左匹配才能走索引，但是如果数据库表中的字段都是索引的话，即使查询过程中，没有遵循最左匹配原则，也是走全扫描二级索引树(type=index)。</p></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

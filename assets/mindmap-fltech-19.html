@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>synchronized、volatile、ReentrantLock、CountDownLatch、Condition · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>synchronized、volatile、ReentrantLock、CountDownLatch、Condition</b><small>幕布导图 · 67 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "synchronized、volatile、ReentrantLock、CountDownLatch、Condition", "data": {"id": "root", "topic": "<b>synchronized、volatile、ReentrantLock、CountDownLatch、Condition<\/b>", "children": [{"id": "n1", "topic": "<b>1.sychronized— 可重入不公平锁<\/b>", "children": [{"id": "n2", "topic": "<b>1.什么是sychronized<\/b><span class=\"mm-note\"><code>synchronized<\/code> 是 <b>Java 中的一个关键字<\/b>，翻译成中文是同步的意思，主要解决的是多个线程之间访问资源的同步性，可以保证被它修饰的方法或者代码块在任意时刻只能有一个线程执行。<\/span>", "children": []}, {"id": "n3", "topic": "<b>2.怎么使用sychronized关键字<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-b2744b95b079ad.jpg\" style=\"width:320px;height:156px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": [{"id": "n4", "topic": "<b>修饰实例方法<\/b>：锁当前<b>对象实例<\/b>。<span class=\"mm-note\">给当前对象实例加锁，进入同步代码前要获得 <b>当前对象实例的锁<\/b> 。<\/span>", "children": []}, {"id": "n5", "topic": "修饰<b>静态方法<\/b>：锁当前<b>类<\/b>。<span class=\"mm-note\">该<b>类的所有实例对象用的是同一把锁。<\/b>因为：<b>静态方法是属于类而不属于对象的<\/b>。会作用于类的所有对象实例 ，进入同步代码前要获得 <b>当前 class 的锁<\/b>。<\/span>", "children": []}, {"id": "n6", "topic": "修饰<b>代码块：<\/b>锁指定<b>对象/类<\/b><span class=\"mm-note\">对括号里指定的对象/类加锁：<\/span>", "children": [{"id": "n7", "topic": "<code>synchronized(object)<\/code> 表示进入同步代码库前要获得 <b>给定对象的锁<\/b>。<span class=\"mm-note\">一般来说，你会传入一个特定的对象，来<b>确保多个代码块在相同的对象上同步执行<\/b>。如果多个线程需要同步执行一些代码，但<b>这些代码不属于任何特定的对象<\/b>，你可以创建一个新的对象，使用它来作为锁对象。<\/span>", "children": []}, {"id": "n8", "topic": "<code>synchronized(类.class)<\/code> 表示进入同步代码前要获得 <b>给定 Class 的锁<\/b><span class=\"mm-note\">在整个类的范围内只有一个线程可以执行同步代码块 <b>总结：<\/b><\/span>", "children": []}]}, {"id": "n9", "topic": "<code>synchronized<\/code> 关键字加到 <code>static<\/code> 静态方法和 <code>synchronized(class)<\/code> 代码块上都是是给 Class 类上锁；", "children": []}, {"id": "n10", "topic": "<code>synchronized<\/code> 关键字加到实例方法上是给对象实例上锁；", "children": []}, {"id": "n11", "topic": "尽量不要使用 <code>synchronized(String a)<\/code> 因为 JVM 中，字符串常量池具有缓存功能。", "children": []}]}, {"id": "n12", "topic": "<b>3.构造方法可以用sychronized吗？<\/b><span class=\"mm-note\">先说结论：<b>构造方法不能使用 synchronized 关键字修饰。<\/b> <b>构造方法本身就属于线程安全<\/b>的，不存在同步的构造方法一说 构造方法不需要同步化，因为<b>它只可能发生在一个线程里<\/b>，<b>在构造方法返回值前没有其他线程可以使用该对象<\/b>。 （一个线程已经在构造方法里面了，另外一个线程也可以调用构造方法，第一个线程里面生成的对象和第二个线程里面生成的对象是不同的对象。）<\/span>", "children": []}, {"id": "n13", "topic": "<b>4.sychronized底层原理了解吗？<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-91c7c28d127da4.jpg\" style=\"width:320px;height:354px\" loading=\"lazy\" decoding=\"async\"> <img class=\"mm-img\" src=\"fl-fe227c6785b7ff.jpg\" style=\"width:320px;height:351px\" loading=\"lazy\" decoding=\"async\"> <code>synchronized<\/code> 同步语句块的实现使用的是 <code>monitorenter<\/code> 和 <code>monitorexit<\/code> 指令，其中 <b><code>monitorenter<\/code> 指令指向同步代码块的开始位置<\/b>，<b><code>monitorexit<\/code> 指令则指明同步代码块的结束位置<\/b>。 💡 <b>Q1：这两个指令的作用是？<\/b> <code>monitorenter<\/code> 指令和 <code>monitorexit<\/code> 指令是 <b>Java 虚拟机（JVM）中用于实现同步的指令<\/b>。<\/span>", "children": [{"id": "n14", "topic": "<b><code>monitorenter<\/code><\/b> 指令用于在<b>进入同步代码块之前获取对象的监视器<\/b>（monitor），即<b>获取对象的锁<\/b>。当线程执行到 <code>monitorenter<\/code> 指令时，会尝试获取对象的锁，如果对象的锁没有被其他线程占用，则当前线程获取到锁，并继续执行同步代码块，否则当前线程会被阻塞，直到获取到锁为止。", "children": []}, {"id": "n15", "topic": "<b><code>monitorexit<\/code><\/b> 指令用于在<b>退出同步代码块之后释放对象的监视器<\/b>，即释放对象的锁。当线程执行完同步代码块后，会执行 <code>monitorexit<\/code> 指令来释放对象的锁，这样其他线程就有机会获取该对象的锁并执行同步代码块。<span class=\"mm-note\">这两个指令通常会成对出现，确保同步代码块的正确性和线程安全性。在 Java 中，synchronized 关键字就是通过这两个指令来实现同步的。 <code>synchronized<\/code> 修饰的方法并没有 <code>monitorenter<\/code> 指令和 <code>monitorexit<\/code> 指令，取得代之的确实是 <code>ACC_SYNCHRONIZED<\/code> 标识，该标识指明了该方法是一个同步方法。<\/span>", "children": []}, {"id": "n16", "topic": "当<b>执行 <code>monitorenter<\/code> 指令时<\/b>，线程试图获取锁也就是获取 <b>对象监视器 <code>monitor<\/code><\/b> 的持有权。", "children": []}, {"id": "n17", "topic": "<b>对象锁的的拥有者线程才可以执行 <code>monitorexit<\/code> 指令来释放锁<\/b>。在执行 <code>monitorexit<\/code> 指令后，将锁计数器设为 0，表明锁被释放，其他线程可以尝试获取锁。<span class=\"mm-note\"><b>不过两者的本质都是对对象监视器 monitor 的获取。<\/b><\/span>", "children": []}]}]}, {"id": "n18", "topic": "<b>2.volatile<\/b>", "children": [{"id": "n19", "topic": "<b>1.sychronized和volatile的关系<\/b><span class=\"mm-note\"><code>synchronized<\/code> 关键字和 <code>volatile<\/code> 关键字是<b>两个互补<\/b>的存在，而不是对立的存在！<\/span>", "children": [{"id": "n20", "topic": "<code>volatile<\/code> 关键字是线程同步的轻量级实现，所以 <code>volatile<\/code>性能肯定比<code>synchronized<\/code>关键字要好 。<span class=\"mm-note\">但是 <b><code>volatile<\/code> 关键字只能用于变量<\/b>而 <b><code>synchronized<\/code> 关键字可以修饰方法以及代码块<\/b> 。<\/span>", "children": []}, {"id": "n21", "topic": "<code>volatile<\/code> 关键字<b>能保证数据的可见性<\/b>，但<b>不能保证数据的原子性<\/b>。<b><code>synchronized<\/code> 关键字两者都能保证<\/b>。", "children": []}, {"id": "n22", "topic": "<code>volatile<\/code>关键字主要用于<b>解决变量在多个线程之间的可见性<\/b>，而 <code>synchronized<\/code> 关键字解决的是多个线程之间访问资源的<b>同步性<\/b>。", "children": []}]}, {"id": "n23", "topic": "<b>2.如何保证变量可见性？<\/b><span class=\"mm-note\"><code>volatile<\/code> 关键字其实并非是 Java 语言特有的，在 C 语言里也有，它最原始的意义就是<b>禁用 CPU 缓存，也不用寄存器<\/b>。 如果我们将一个变量使用 <code>volatile<\/code> 修饰，这就指示编译器，这个变量是共享且不稳定的，<b>每次使用它都到主存中进行读取,不会由于编译器优化造成数据不一致错误<\/b>。<\/span>", "children": []}, {"id": "n24", "topic": "<b>3.如何禁止指令重排序？<\/b><span class=\"mm-note\"><b><code>volatile<\/code> 关键字除了可以保证变量的可见性，还有一个重要的作用就是防止 JVM 的指令重排序。<\/b> 如果我们将变量声明为 <b><code>volatile<\/code><\/b> ，在对这个变量进行读写操作的时候，会通过插入特定的 <b>内存屏障<\/b> 的方式来禁止指令重排序。 在 Java 中，<code>Unsafe<\/code> 类提供了三个开箱即用的<b>内存屏障相关的方法<\/b>，屏蔽了操作系统底层的差异：<\/span>", "children": []}]}, {"id": "n25", "topic": "<b>3.ReentrantLock<\/b><span class=\"mm-note\">注意一点：<b>必须在finally块中释放锁。<\/b><\/span>", "children": [{"id": "n26", "topic": "<b>1.什么是ReentrantLock？<\/b><span class=\"mm-note\"><code>ReentrantLock<\/code> 实现了 <code>Lock<\/code> 接口，是一个<b>可重入且独占式的锁<\/b>，和 <code>synchronized<\/code> 关键字类似。<\/span>", "children": [{"id": "n27", "topic": "可重入：ReentrantLock锁<b>可以被同一个线程多次获取<\/b>。<span class=\"mm-note\">不过，<code>ReentrantLock<\/code> 更灵活、更强大，增加了<b>轮询、超时、中断<\/b>、<b>公平锁和非公平锁<\/b>等高级功能。 <code>ReentrantLock<\/code> 里面有一个<b>内部类 <code>Sync<\/code><\/b>，<code>Sync<\/code> <b>继承 AQS<\/b>（<code>AbstractQueuedSynchronizer<\/code>），添加锁和释放锁的大部分操作实际上都是在 <code>Sync<\/code> 中实现的。 <code>Sync<\/code> 有公平锁 <code>FairSync<\/code> 和非公平锁 <code>NonfairSync<\/code> 两个子类。 <code>ReentrantLock<\/code> <b>默认使用非公平锁<\/b>，也可以通过构造器来显式的指定使用公平锁。 从上面的内容可以看出， <code>ReentrantLock<\/code> 的**底层就是由 AQS 来<\/span>", "children": []}]}, {"id": "n28", "topic": "<b>2.公平锁和非公平锁的区别<\/b><span class=\"mm-note\">ReentraantLock是通过一个<b>FIFO的等待队列<\/b>来管理获取该锁所有线程的。<\/span>", "children": [{"id": "n29", "topic": "<b>公平锁<\/b>(fairSync)：线程依次排队获取锁；<span class=\"mm-note\">性能较差一些，因为公平锁为了保证时间上的绝对顺序，<b>上下文切换更频繁<\/b>。<\/span>", "children": []}, {"id": "n30", "topic": "<b>非公平锁<\/b>(NonfairSync)：锁被释放之后，后申请的线程可能会先获取到锁，是随机或者按照其他优先级排序的。<span class=\"mm-note\">性能更好，但<b>可能会导致某些线程永远无法获取到锁<\/b><\/span>", "children": []}]}, {"id": "n31", "topic": "<b>3.sychronized和ReentrantLock的区别<\/b><span class=\"mm-note\">两者<b>均为可重入锁<\/b>。区别如下：<\/span>", "children": [{"id": "n32", "topic": "<code>synchronized<\/code> 是依赖于 <b>JVM<\/b> 实现；<code>ReentrantLock<\/code> 是 <b>JDK<\/b> 层面实现", "children": []}, {"id": "n33", "topic": "<code>synchronized<\/code><b>不公平<\/b>；<code>ReentrantLock<\/code><b>两者均可<\/b>", "children": []}, {"id": "n34", "topic": "<code>synchronized<\/code><b>不可中断<\/b>；<code>ReentrantLock<\/code><b>可中断<\/b><span class=\"mm-note\">synchronized一旦尝试获取锁就会一直等待直到获取到锁→不可中断。 具体解释： ReentrantLock中的<b>lockInterruptibly()方法<\/b>使得线程可以在被阻塞时响应中断。 比如一个线程t1通过lockInterruptibly()方法获取到一个可重入锁，并执行一个长时间的任务，另一个线程通过interrupt()方法就可以立刻打断t1线程的执行，来获取t1持有的那个可重入锁。而通过ReentrantLock的lock()方法或者Synchronized持有锁的线程是不会响应其他线程的interrupt()方法的，直到该方法主动释放锁之后才会响应interrupt()方法。<\/span>", "children": []}, {"id": "n35", "topic": "<code>synchronized<\/code>不可<b>限时<\/b>，<code>ReentrantLock<\/code>可以。<span class=\"mm-note\">超时不能获得锁，就返回false，不<b>会永久等待构成死锁<\/b>。 使用<b>ReentrantLock.tryLock(long timeout, TimeUnit unit)<\/b>来实现可限时锁，参数为时间和单位。<\/span>", "children": []}, {"id": "n36", "topic": "<b>可实现等待/通知模式（锁可以绑定多个条件）<\/b>:", "children": [{"id": "n37", "topic": "<code>synchronized<\/code>关键字与<code>wait()<\/code>和<code>notify()<\/code>/<code>notifyAll()<\/code>方法相结合可以实现等待/通知机制。", "children": []}, {"id": "n38", "topic": "<code>ReentrantLock<\/code>类当然也可以实现，但是<b>需要借助于<code>Condition<\/code>接口<\/b>与<code>newCondition()<\/code>方法。", "children": []}]}]}, {"id": "n39", "topic": "<b>4.可中断锁和不可中断锁<\/b><span class=\"mm-note\"><b>可中断锁<\/b>：<b>获取锁的过程中可以被中断<\/b>，不需要一直等到获取锁之后 才能进行其他逻辑处理。<code>ReentrantLock<\/code> 就属于是可中断锁。 <b>不可中断锁<\/b>：一旦线程申请了锁，就只能等到拿到锁以后才能进行其他的逻辑处理。 <code>synchronized<\/code> 就属于是不可中断锁<\/span>", "children": []}]}, {"id": "n40", "topic": "<b>4.CountDownLatch<\/b>", "children": [{"id": "n41", "topic": "<b>1.什么是CountDownLatch？<\/b><span class=\"mm-note\">Java 中的一种同步工具，用于<b>控制一个或多个线程等待其他线程完成执行<\/b>。 它的作用类似于<b>一个计数器<\/b>，<b>只有计数器的值变为零时，等待的线程才能继续执行。<\/b>CountDownLatch 的计数器<b>计数的是需要等待的事件数量。<\/b> <code>CountDownLatch<\/code> <b>允许 <code>count<\/code> 个线程阻塞在一个地方，直至所有线程的任务都执行完毕。<\/b> <code>CountDownLatch<\/code> 是<b>一次性的<\/b>，<b>计数器的值只能在构造方法中初始化一次，之后没有任何机制再次对其设置值<\/b>，当 <code>CountDownLatch<\/code> 使用完毕后，它不能再次被使用。<\/span>", "children": []}, {"id": "n42", "topic": "<b>2.原理<\/b><span class=\"mm-note\"><code>CountDownLatch<\/code> 是<b>共享锁的一种实现<\/b>，它默认构造 <b>AQS 的 <code>state<\/code> 值为 <code>count<\/code><\/b>。这个我们通过 <code>CountDownLatch<\/code> 的构造方法即可看出。 CountDownLatch 主要包含两个方法：<\/span>", "children": [{"id": "n43", "topic": "<b><code>await()<\/code><\/b>：<b>调用该方法的线程会阻塞，直到计数器的值减为零<\/b>。如果计数器的值已经是零，那么该方法会立即返回。", "children": []}, {"id": "n44", "topic": "<b><code>countDown()<\/code><\/b>：<b>每次调用该方法会将计数器的值减一<\/b>。一般情况下，该方法应该在某个任务完成后被调用，以通知 CountDownLatch 有一个事件已经发生。", "children": []}]}, {"id": "n45", "topic": "<b>3.实战(一般用在哪儿？)<\/b><span class=\"mm-note\"><b>CountDownLatch 的两种典型用法<\/b>：<\/span>", "children": [{"id": "n46", "topic": "<b>某一线程在开始运行前等待 n 个线程执行完毕<\/b> :<span class=\"mm-note\">将 <code>CountDownLatch<\/code> 的计数器初始化为 n （<code>new CountDownLatch(n)<\/code>），每当一个任务线程执行完毕，就将计数器减 1 （<code>countdownlatch.countDown()<\/code>），当计数器的值变为 0 时，在 <code>CountDownLatch 上 await()<\/code> 的线程就会被唤醒。 &gt; 💡 典型应用场景：启动一个服务时，主线程需要等待多个组件加载完毕，之后再继续执行。<\/span>", "children": []}, {"id": "n47", "topic": "<b>实现多个线程开始执行任务的最大并行性<\/b>：<span class=\"mm-note\">注意是并行性，不是并发，<b>强调的是多个线程在某一时刻同时开始执行。<\/b> &gt; 💡 类似于赛跑，将多个线程放到起点，等待发令枪响，然后同时开跑。 做法是：<b>初始化一个共享的 <code>CountDownLatch<\/code> 对象<\/b>，将<b>其计数器初始化为 1<\/b> （<code>new CountDownLatch(1)<\/code>），<b>多个线程在开始执行任务前首先 <code>coundownlatch.await()<\/code><\/b>，当主线程调用 <code>countDown()<\/code> 时，计数器变为 0，多个线程同时被唤醒。<\/span>", "children": []}]}]}, {"id": "n48", "topic": "<b>5.Condition<\/b>", "children": [{"id": "n49", "topic": "<b>1.什么是Condition？<\/b>", "children": [{"id": "n50", "topic": "是一个<b>Java多线程接口<\/b>，Condition接口提供了<b>类似Object的监视器方法。<\/b>", "children": []}, {"id": "n51", "topic": "<b>作用<\/b>：<b>与Lock配合可以实现等待/通知模式<\/b>。", "children": []}, {"id": "n52", "topic": "它的作用是<b>对原生的wait()、notify()/notifyAll()方法进行增强。<\/b><span class=\"mm-note\">这种方式相比于传统的 wait()/notify() 方法更加灵活，因为它<b>允许线程等待在不同的条件下<\/b>，并且<b>可以唤醒一个或多个等待的线程<\/b>。 这种灵活性使得 Condition 可以更好地用于复杂的线程协作场景，例如生产者-消费者模式、读写锁等。<\/span>", "children": []}]}, {"id": "n53", "topic": "<b>2.与Object的区别<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-32c4020ee8d597.jpg\" style=\"width:320px;height:147px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n54", "topic": "<b>3.使用注意事项<\/b>", "children": [{"id": "n55", "topic": "<b>Condition依赖于Lock对象→Lock.newCondition()<\/b><span class=\"mm-note\">Condition对象是由Lock对象（调用Lock对象的newCondition()方法），<b>获取一个Condition必须通过Lock的newCondition()方法<\/b> <img class=\"mm-img\" src=\"fl-2c39fe27c320c0.jpg\" style=\"width:320px;height:128px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n56", "topic": "<b>与Lock配合实现等待/通知模式<\/b><span class=\"mm-note\">Condition定义了等待(await)/通知(signal)两种类型的方法。 <b>当前线程调用这些方法时<\/b>，<b>需要提前获取到Condition对象关联的锁。<\/b> <img class=\"mm-img\" src=\"fl-bf316a2849af5e.jpg\" style=\"width:320px;height:200px\" loading=\"lazy\" decoding=\"async\"> Condition 接口定义了以下几个重要的方法：<\/span>", "children": []}, {"id": "n57", "topic": "<b><code>await()<\/code><\/b>：<b>使当前线程进入等待状态<\/b>，并<b>释放当前线程持有的锁<\/b>。<span class=\"mm-note\">当其他线程调用 signal() 或 signalAll() 方法时，当前线程会被唤醒，并且重新竞争锁。<\/span>", "children": []}, {"id": "n58", "topic": "<code>await(long time, TimeUnit unit)<\/code>：使<b>当前线程等待指定的时间<\/b>，如果在指定的时间内没有被唤醒，则会自动唤醒。", "children": []}, {"id": "n59", "topic": "<code>signal()<\/code>：<b>唤醒一个等待在 Condition 上的线程<\/b>。", "children": []}, {"id": "n60", "topic": "<code>signalAll()<\/code>：唤醒<b>所有等待在 Condition 上的线程<\/b>。<span class=\"mm-note\">Condition 可以与 Lock 接口的实现类（如 ReentrantLock）一起使用，通过 Lock 的 newCondition() 方法创建 Condition 实例。 线程可以在 Condition 上等待特定条件的出现，当条件满足时，其他线程可以通过调用 signal() 或 signalAll() 方法来通知等待线程。<\/span>", "children": []}]}, {"id": "n61", "topic": "<b>4.常见用法举例<\/b><span class=\"mm-note\">Condition 的常见用法包括：<\/span>", "children": [{"id": "n62", "topic": "<b>生产者-消费者模式<\/b>：在多线程环境中，生产者线程负责生产数据，消费者线程负责消费数据。可以使用 Condition 来实现生产者等待消费者消费完毕后再生产，消费者等待生产者生产完毕后再消费的机制。", "children": []}, {"id": "n63", "topic": "<b>有界队列<\/b>：在多线程环境中，使用队列作为共享数据结构，可以使用 Condition 来实现对队列的长度进行限制，当队列满时，生产者线程等待队列不满，当队列为空时，消费者线程等待队列不空。", "children": []}, {"id": "n64", "topic": "<b>线程等待/唤醒<\/b>：在多线程环境中，可以使用 Condition 来实现线程的等待和唤醒机制。例如，一个线程等待某个条件满足后再继续执行，另一个线程在某个条件满足时唤醒等待的线程。", "children": []}, {"id": "n65", "topic": "<b>读写锁<\/b>：在读写锁的实现中，通常会使用两个 Condition 分别来管理读线程和写线程。读线程在写锁被占用时等待，写线程在读锁和写锁都被占用时等待。", "children": []}, {"id": "n66", "topic": "<b>定时任务等待/唤醒<\/b>：在定时任务执行的场景中，可以使用 Condition 来实现线程等待一定时间后再继续执行的机制。当定时任务超时时，可以通过 Condition 的 signal() 方法唤醒等待的线程。<span class=\"mm-note\">总的来说，Condition 提供了一种灵活的线程协作机制，可以根据具体的需求和场景灵活地实现线程的等待和唤醒，从而更好地控制线程的执行顺序和并发度。<\/span>", "children": []}]}]}], "expanded": true}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

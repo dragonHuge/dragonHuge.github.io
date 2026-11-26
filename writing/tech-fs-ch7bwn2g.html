@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>ES理论&amp;实践总结 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">17</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">理论</a><a class="tl l2" href="#sec-2">1.简介</a><a class="tl l2" href="#sec-3">2.正排索引 &amp; 倒排索引</a><a class="tl l3" href="#sec-4">正排索引</a><a class="tl l3" href="#sec-5">倒排索引</a><a class="tl l3" href="#sec-6">两者对比</a><a class="tl l1" href="#sec-7">实战(SpringBoot中的ES)</a><a class="tl l2" href="#sec-8">1.ES数据源配置</a><a class="tl l3" href="#sec-9">方法1：令牌(Token)连接</a><a class="tl l3" href="#sec-10">方法2：账号/密码连接</a><a class="tl l2" href="#sec-11">2.ES滚动搜索（Scroll Search）</a><a class="tl l3" href="#sec-12">1.简介</a><a class="tl l3" href="#sec-13">2.执行逻辑解析</a><a class="tl l3" href="#sec-14">3.示例代码与分析</a><a class="tl l2" href="#sec-15">3.分组Bulk向ES写入数据</a><a class="tl l2" href="#sec-16">4.Kibana中的DSL查询</a><a class="tl l3" href="#sec-17">注意点：</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>ES理论&amp;实践总结</h1><div class="meta">2025-08-16<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<h1 id="sec-1">理论</h1><blockquote><ul><li>学习文章：<a href="https://www.cnblogs.com/buchizicai/p/17093719.html" target="_blank" rel="noopener">https://www.cnblogs.com/buchizicai/p/17093719.html</a></li></ul><ul><li>一篇很不错的入门文章：<a href="https://mp.weixin.qq.com/s/wlh2AHpNLrz9dHxPw9UrkQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/wlh2AHpNLrz9dHxPw9UrkQ</a></li></ul><ul><li>ES缓存讲解文章：https://www.easyice.cn/archives/367</li></ul></blockquote><p>以下进行个人理解总结。</p><h2 id="sec-2">1.简介</h2><ol><li><p>一个开源的<strong>分布式搜索引擎</strong>，可以用来实现搜索、日志统计、分析、系统监控等功能。</p></li><li><blockquote><p>注意： 在没有创建库的时候搜索，ES会创建一个库并自动创建该字段并且设置为String类型也就是text。elasticsearch是一款非常强大的开源搜索引擎，具备非常多强大功能，可以帮助我们从海量数据中快速找到需要的内容。</p></blockquote></li></ol><h2 id="sec-3">2.正排索引 &amp; 倒排索引</h2><h3 id="sec-4">正排索引</h3><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>其实就是<strong>MYSQL中的索引方式：</strong><span style="color:#d83931">"</span><span style="color:#d83931"><strong>根据索引找数据</strong></span>"</p><p>MYSQL中使用"<strong>聚簇索引</strong>"的数据存储方式，且如果设置了索引，那么可以根据索引在B+树上进行快速查找，找到索引对应的数据。这种根据索引找数据的方式，就是所谓的正向索引。</p></div></div><ul><li><blockquote><p>如果是根据id查询，那么直接走索引，查询速度非常快。</p><p>但如果是基于title做模糊查询，只能是逐行扫描数据，流程如下：</p><pre><code>1）用户搜索数据，条件是title符合"%手机%"
+2）逐行获取数据，比如id为1的数据
+3）判断数据中的title是否符合用户搜索条件
+4）如果符合则放入结果集，不符合则丢弃。回到步骤1</code></pre><p>逐行扫描，也就是全表扫描，随着数据量增加，其查询效率也会越来越低。当数据量达到数百万时，就是一场灾难。</p></blockquote></li></ul><h3 id="sec-5">倒排索引</h3><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>是指<span style="color:#d83931"><strong>将文档中的每个单词映射到包含它的文档id</strong></span>上（是&lt;单词,文档id&gt;的一个映射关系）。</p><p>倒排索引中有两个非常重要的概念：</p><ul><li><strong>词条（</strong><strong><code>Term</code></strong><strong>）-Key</strong>：<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">对</mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>文档数据或用户的搜索数据，利用某种算法分词</strong></mark>，<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>得到的具备含义的词语就是词条</strong></mark>。例如：我是中国人，就可以分为：我、是、中国人、中国、国人这样的几个词条</li></ul><ul><li><strong>文档（</strong><strong><code>Document</code></strong><strong>）-Value</strong>：<strong>实际数据，</strong><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>每一条数据其实就是一个文档(Json)</strong></mark>。例如一个网页、一个商品信息</li></ul></div></div><ul><li><strong>分词</strong>：将每一个文档的数据利用算法分词，得到一个个词条</li><li><strong>创建表</strong>：每行数据包括词条、词条所在文档id、位置等信息</li><li><strong>给词条创建索引</strong>：因为<strong>词条唯一性</strong>，可以给词条创建索引，例如hash表结构索引</li></ul><ul><li>用户输入条件<code>"华为手机"</code>进行搜索。</li><li>对用户输入内容<strong>分词</strong>，得到词条：<code>华为</code>、<code>手机</code>。</li><li>拿着词条<strong>在倒排索引中查找</strong>，可以得到<strong>包含词条的文档id：1、2、3</strong>。</li><li>拿着<strong>文档id到正向索引中查找具体文档</strong>。</li><li><p>如图：</p></li><li><blockquote><p>虽然要先查询倒排索引，再查询倒排索引，但是无论是词条、还是文档id都建立了索引，查询速度非常快！无需全表扫描。</p></blockquote></li></ul><h3 id="sec-6">两者对比</h3><p>概念区别：</p><ul><li><p>但<strong>根据词条查询时，必须先逐条获取每个文档</strong>，然后判断文档中是否包含所需要的词条，是<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>根据文档找词条</strong></mark>的过程。</p></li></ul><ul><li><p>是<strong>先找到用户要搜索的词条</strong>，根据词条<strong>得到包含词条的文档的id</strong>，然后根据id获取文档。是<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>根据词条找文档</strong></mark>的过程。</p></li><li><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>倒排索引由两个主要部分组成：</p><ul><li><strong>词汇表</strong>（Vocabulary）→ 词汇表<strong>存储了所有不同的单词</strong></li></ul><ul><li><strong>倒排列表</strong>（Inverted List）→ 倒排列表<strong>存储了每个单词文档中的分布情况</strong>。</li></ul></div></div></li></ul><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><mark style="background:#ffc9c9;color:inherit;padding:0 2px;border-radius:3px"><strong>核心浓缩</strong></mark>：</p><ul><li>正排索引是<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>从文档到关键字</strong></mark>的映射（已知文档求关键字）</li></ul><ul><li>倒排索引是<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>从关键字到文档</strong></mark>的映射（已知关键字求文档）</li></ul></div></div><h1 id="sec-7">实战(SpringBoot中的ES)</h1><h2 id="sec-8">1.ES数据源配置</h2><p>在Java项目中连接ES的话，主要是依靠一个工具类：<strong>ElasticSearchHelper。</strong></p><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>因此构建ES连接的核心思想就是：</p><ol><li>做好<strong>xml、yml配置后</strong>。</li></ol><ol><li>以此配置定义好<strong>ElasticSearchHelper，再将其注入为Bean。</strong></li></ol><ol><li>使用时，<strong>注入该Bean，直接使用</strong>即可。</li></ol></div></div><p>连接ES共有下边两种方法。</p><h3 id="sec-9">方法1：令牌(Token)连接</h3><ol><li><pre><code>&lt;properties&gt;
+&lt;dt.elasticsearch.token&gt;
+GDCxzo33Z+K6QOc6JcvFMDr1+Ji8Ai9HIduilmRTObiwF2Oa5vQ4I0E8d7JQPtMvEJsYEqBSUuhAlkGMlR4TuHNJ3M/4/xgQd7eSe15YTUqFbaqGtcFc9BgUEIXSjB9hiHcLZ1YK9s+bEEPY3oIA
+&lt;/dt.elasticsearch.token&gt;
+&lt;dt.elasticsearch.host&gt;内部主机&lt;/dt.elasticsearch.host&gt;
+&lt;dt.elasticsearch.catalog&gt;es_c4_log&lt;/dt.elasticsearch.catalog&gt;
+&lt;/properties&gt;</code></pre></li></ol><ol><li><pre><code>dt:
+  elasticsearch:
+    host: @dt.elasticsearch.host@
+    token: @dt.elasticsearch.token@
+    token@kc-sid: ${kc.sid}
+    catalog: @dt.elasticsearch.catalog@
+    index:
+      mobile-device-log: infosec_risk_mobile_device_monitor_data*
+      dlp-device-log: infosec_risk_dlp_monitor_data*
+      feishu-audit-log: infosec_risk_audit_feishu_hit_rule_c4*</code></pre></li></ol><ol><li><strong>然后</strong><strong><code>@Configuration</code></strong>进行配置注入，并<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>将配置好的ElasticSearchHelper注入为Bean</strong></mark><strong>。</strong></li></ol><ol><li>可以看到此时做了一个ES数据源的配置，此时若想使用，直接将<strong>ElasticSearchHelper装配后使用即可，如下：</strong></li></ol><pre><code>@Slf4j
+@Service
+public class ElasticSearchService {
+    public static final String SORT_FIELD_TIMESTAMP = "logtime";
+    public static final String FIELD_TIMESTAMP = "timestamp";
+    private final ElasticSearchHelper esHelper; // 执行实体EsHelper
+  // 此函数将EsHelper注入：
+  // @Autowired注解告诉Spring容器，当创建ElasticSearchService对象时，需要提供一个ElasticSearchHelper对象。
+  // Spring容器会查找其管理的所有bean，找到与ElasticSearchHelper类型匹配的bean，并将其注入到ElasticSearchService的构造函数中。
+    @Autowired
+    public ElasticSearchService(ElasticSearchHelper intranetLogEs) {
+        esHelper = intranetLogEs;
+    }
+    private ElasticSearchHelper getEsHelper() {
+        return esHelper;
+    }
+    public SearchResponse search(SearchRequest request) throws IOException {
+        return esHelper.search(request); // 这里就是在执行ES搜索了
+    }
+    public long count(CountRequest countRequest) throws IOException {
+        return esHelper.count(countRequest);
+    }
+}</code></pre><h3 id="sec-10">方法2：账号/密码连接</h3><p>VPN日志需求需要用到的ES数据源，使用<strong>账号/密码的方式进行连接</strong>。</p><p>方式有所改变，但本质是一样的。</p><p>首先要用到的信息如下示例：</p><pre><code>账号：11111
+密码：222222222
+api地址：33333333</code></pre><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>一定别忘了</strong>：<strong>涉及到明文密码时，</strong>一定要<strong>走一步</strong><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>"KeyEnter"的数据加密</strong></mark>。</p><p>因此，在xml文件中，填写上述密码时，将其加密后再写。</p></div></div><ol><li><pre><code>&lt;!-- 此处添加VPN日志所需ES数据源的配置(以 账号-密码 的方式)--&gt;
+&lt;!-- 开始--&gt;
+&lt;!-- ES 配置 --&gt;
+&lt;es.vpn.hosts&gt;11111&lt;/es.vpn.hosts&gt;
+&lt;es.vpn.username&gt;222222222&lt;/es.vpn.username&gt;
+&lt;es.vpn.password&gt;
+   GBBvzbCQIymbDIV379B3HKvPGBKRwsBKd5hMt4KJFqyAZA+knQEYEH/yUcowpEQBqtkC4/IAcrwYFIeqv6+twSR1/KA0P1aQCB1MulpZAA==
+&lt;/es.vpn.password&gt;
+&lt;!--  结束--&gt;</code></pre></li></ol><ol><li><pre><code>es.vpn.hosts=${es.vpn.hosts}
+es.vpn.username=${es.vpn.username}
+es.vpn.password=${es.vpn.password}
+es.vpn.password@kc-sid=${kc.sid}</code></pre></li></ol><ol><li><p>由于已经有配置类(见方法1)，因此直接添加我们所需的Bean即可，如下所示：</p></li><li><pre><code>@Configuration
+@PropertySource({"classpath:intranet-db.properties"}) // 指明配置数据来源文件
+@Slf4j
+public class IntranetRiskConfig {
+    @Value("${es.audit.hosts}")
+    private String host;
+    @Value("${es.audit.username}")
+    private String esUsername;
+    @Value("${es.audit.password}")
+    private String esPassword;
+    @Value("${pegasus.table.name}")
+    private String pegasusTableName;
+    @Value("${fly.open.access.id}")
+    private String flyApiId;
+    @Value("${fly.open.access.secret}")
+    private String flyApiSecret;
+    @Bean
+    @Primary
+    public ElasticSearchHelper intranetLogEs() throws Exception {
+        if (StringUtils.isNotBlank(pegasusTableName)) {
+            log.info("pegasus table={}", pegasusTableName);
+            PegasusStorageUtils.setTableName(pegasusTableName);
+        }
+        FlyOpenApiUtils.setApiKey(flyApiId);
+        FlyOpenApiUtils.setApiSecret(flyApiSecret);
+        return new ElasticSearchHelper(new String[] {host}, esUsername, esPassword);
+    }
+    // 添加VPN日志所需的参数：
+    @Value("${es.vpn.hosts}")
+    private String vpnHost;
+    @Value("${es.vpn.username}")
+    private String vpnUsername;
+    @Value("${es.vpn.password}")
+    private String vpnPassword;
+    @Bean(name = "vpnElasticSearch") // 使用此Bean的时候，那就使用按名字注入吧
+    public ElasticSearchHelper vpnElasticSearch() throws Exception {
+        return new ElasticSearchHelper(new String[] {vpnHost}, vpnUsername, vpnPassword);
+    }
+}</code></pre></li></ol><ol><li><pre><code>@Autowired
+@Qualifier("vpnElasticSearch") // 通过指定名称来注入不同的bean(此时注入我们指明的特定的Bean)
+private ElasticSearchHelper vpnElasticSearch;</code></pre></li></ol><p>然后再执行ES的搜索等行为。</p><h2 id="sec-11">2.ES滚动搜索<strong>（Scroll Search）</strong></h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>Scroll 是一种<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>基于游标</strong></mark><strong>的分页方式</strong>，允许用户在大量数据上进行高效的分页查询。</p><p>它通过<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>创建一个快照来保存搜索上下文</strong></mark>，并使用一个<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>滚动ID（scroll_id）来获取后续的数据</strong></mark>。</p><ul><li><strong>优点</strong>：Scroll 分页适用于需要按顺序获取大量数据的场景，如数据导出。</li></ul><ul><li><strong>缺点</strong>：但<strong>不支持随机访问页</strong>面，且会消耗更多服务器资源来维护搜索上下文和快照。</li></ul></div></div><ul><li><strong>业务背景：</strong>此时需要从ES中读取日志信息，再以一定的业务逻辑进行风险计算，若此条日志计算后存在风险，则将其存入MYSQL持久化。</li></ul><ul><li><strong>方案分析</strong>：此需求的常见做法是，从ES中读出所有日志，在逐条风险计算后，将风险日志存入MYSQL。但这样的实现方式，时间复杂度/空间复杂度都是很高的。因为它先要从ES读出所有日志，再分析完成后，统一批量导入MYSQL。</li></ul><p>那么这个时候，<strong>ES滚动搜索就很香</strong>了。</p><h3 id="sec-12">1.简介</h3><p>Elasticsearch的<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>滚动搜索（Scroll Search）</strong></mark>是一种用于高效检索大量数据的机制。</p><ul><li>允许用户在大量数据中进行分页查询，而无需使用传统的<code>from</code>和<code>size</code>参数，这在<strong>处理大数据集时特别有用</strong>。</li></ul><ul><li>通过保持搜索上下文的活跃状态，允许用户在多个请求之间连续检索数据，而不需要对每个请求重新计算。</li></ul><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>滚动搜索<strong>不适用于实时用户请求</strong>，而是<strong>用于批量处理数据</strong>，例如日志分析或大规模数据迁移。</p></div></div><h3 id="sec-13">2.执行逻辑解析</h3><p><strong>滚动搜索的主要逻辑</strong>解析：</p><ol><li><p>用户提交一个带有<strong><code>scroll</code></strong><strong>参数的搜索请求</strong>，例如<code>scroll=1m</code>，这指示Elasticsearch保持搜索上下文打开一段时间（这里是1分钟）</p></li></ol><ol><li><p>Elasticsearch执行搜索并返回第一批结果，同时返回一个<strong><code>_scroll_id</code></strong>，这个<strong>ID用于后续检索更多的结果。</strong></p></li></ol><ol><li><p>用户<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">使用返回的</mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong><code>_scroll_id</code></strong></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>和</strong></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong><code>scroll</code></strong></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>参数发起新的请求</strong></mark>，以检索后续批次的结果。这个<strong>过程可以重复执行</strong>，直到检索完所有结果。</p></li></ol><ol><li><p>Elasticsearch通过在每次滚动请求中<strong>指定</strong><strong><code>scroll</code></strong><strong>参数来重置搜索上下文的超时时间</strong>。</p></li></ol><ol><li><p>一旦完成数据检索，用户应该使用<strong><code>_clear_scroll</code></strong><strong> API来清除滚动上下文</strong>，释放服务器资源。这可以通过传递<code>scroll_id</code>完成，或者使用<code>_all</code>参数清除所有滚动上下文</p></li></ol><h3 id="sec-14">3.示例代码与分析</h3><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>核心工具类有：</p><ul><li><strong>Scroll</strong>：滚动搜索</li></ul><ul><li><strong>SearchScrollRequest</strong>：滚动请求</li></ul><ul><li><strong>ClearScrollRequest：</strong>清除滚动搜索</li></ul></div></div><p>示例代码：</p><pre><code>/**
+ * 使用 Elasticsearch的滚动搜索功能来处理特定时间范围内的日志数据，并执行风险计算的逻辑。
+ * @param start
+ * @param end
+ */
+public void run(long start, long end) {
+    final Scroll scroll = new Scroll(TimeValue.timeValueMinutes(1L)); // 设置滚动搜索的持续时间为1minute
+    SearchRequest searchRequest = new SearchRequest(midunLogIndex);
+    searchRequest.scroll(scroll); // 打入滚动搜索参数
+    BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery(); // 布尔查询构造器
+    queryBuilder.filter(QueryBuilders.matchQuery("reqUri", "/afterservice/afterservice!api.action"));
+    queryBuilder.filter(QueryBuilders.matchQuery("reqMethod", "GET"));
+    queryBuilder.filter(QueryBuilders.matchQuery("logicRouter", "router=service_info_detail"));
+    queryBuilder.filter(QueryBuilders.rangeQuery("ts").gte(start).lte(end));
+    SearchSourceBuilder sourceBuilder = new SearchSourceBuilder(); // 搜索源构造器
+    sourceBuilder
+            .size(500)
+            .timeout(TimeValue.timeValueSeconds(60))
+            .query(queryBuilder);
+    searchRequest.source(sourceBuilder); // 将搜索源构造器设置到搜索请求中
+    SearchResponse searchResponse = null;
+    try {
+        searchResponse = searchHelper.search(searchRequest); // 执行搜索获得响应
+
+    } catch (IOException e) {
+        log.error("查询失败", e);
+        return;
+    }
+    // 获取滚动搜索的ID和初次搜索的结果集
+    String scrollId = searchResponse.getScrollId();
+    SearchHit[] searchHits = searchResponse.getHits().getHits();
+    // 滚动搜索，直到没有更多结果
+    while (searchHits != null &amp;&amp; searchHits.length &gt; 0) {
+        // 业务代码逻辑，即：计算风险，最终的结果是存入MYSQL
+        calcRisk(searchHits);
+        // 创建滚动请求，继续获取下一批结果
+        SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId);
+        scrollRequest.scroll(scroll);
+        try {
+            searchResponse = searchHelper.getRestClient().scroll(scrollRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            log.error("查询失败", e);
+            return;
+        }
+        // 更新滚动ID和获取新一批结果集
+        scrollId = searchResponse.getScrollId();
+        searchHits = searchResponse.getHits().getHits();
+    }
+    // 清除滚动搜索，释放服务器资源
+    ClearScrollRequest clearScrollRequest = new ClearScrollRequest();
+    clearScrollRequest.addScrollId(scrollId);
+    ClearScrollResponse clearScrollResponse = null;
+    try {
+        clearScrollResponse = searchHelper.getRestClient().clearScroll(clearScrollRequest, RequestOptions.DEFAULT);
+    } catch (IOException ignore) {
+    }
+    // 检查滚动搜索是否成功清除
+    boolean succeeded = clearScrollResponse.isSucceeded();
+}</code></pre><h2 id="sec-15">3.分组Bulk向ES写入数据</h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>ES的概念学习中学到，ES元数据中 <strong>index，type，id 唯一标识一个文档</strong>，因此在进行ES的写入工作时，必须指定此三者元素，再进行数据写入。</p></div></div><ul><li><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>BulkRequest</strong></mark><strong>：</strong>用于<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>批量执行索引、删除、更新</strong></mark>等操作<p>使用 <code>BulkRequest</code>，你可以添加多个 <code>IndexRequest</code>、<code>DeleteRequest</code> 或 <code>UpdateRequest</code> 对象，然后一次性发送到 Elasticsearch </p></li><li><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>IndexRequest</strong></mark><strong>：</strong>用于<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>创建或更新 Elasticsearch 索引中的单个文档</strong></mark>。<p>你可以设置文档的索引名、类型（通常是 <code>_doc</code>）、ID、源数据（通常是 JSON 格式）和其他元数据。</p><p><code>IndexRequest</code> 通常与 <strong><code>RestHighLevelClient</code></strong><strong> 的 </strong><strong><code>index</code></strong><strong> 方法一起使用来执行单个文档的索引操</strong>作。</p></li><li><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>XContentType.JSON</strong></mark><strong>：</strong>Elasticsearch 中的一个<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>枚举类型</strong></mark>，表示 <mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>JSON 格式的内容</strong></mark><p>在创建或更新文档时，你可以使用 <code>XContentType.JSON</code> 作为参数，以指定传递给 Elasticsearch 的数据是 JSON 格式的。这确保了 Elasticsearch 能够正确解析文档的源数据。</p></li><li><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>RestHighLevelClient</strong></mark><strong>：</strong>Elasticsearch Java 高级客户端的入口点，<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>用于与 Elasticsearch 服务进行通信</strong></mark>。<p>通过 <code>RestHighLevelClient</code>，你可以执行各种操作，如索引、查询、更新、删除文档，以及执行批量和搜索操作。</p></li></ul><ul><li><pre><code>/**
+* List 分组bulk写入es
+* @param workOrders
+*/
+public void splitPush(List&lt;String&gt; workOrders) {
+  if (CollectionUtils.isEmpty(workOrders)) {
+      return;
+  }
+  log.info("工单数据插入，数量: {}", workOrders.size());
+  List&lt;List&lt;String&gt;&gt; partitionOrders = Lists.partition(workOrders, 500); // 将一个工单列表workOrders分割成多个子列表，每个子列表包含最多500个元素。
+  partitionOrders.forEach(this::workOrderWrite); // 将所有子列表写入ES
+}
+
+private String workOrderIndex = "infosec_risk_xms_work_order"; // 写入的文档索引
+/**
+* 工单实质写入ES的逻辑
+*/
+public void workOrderWrite(List&lt;String&gt; workOrders) {
+//      BulkRequest对象，用于批量写入
+  BulkRequest request = new BulkRequest();
+  for (String workOrderStr : workOrders) {
+      try {
+//              分割单个工单字符串，获取其属性。因为此时工单的存储方式是String，即：一个String就是一条工单数据。
+          String[] workOrderSplit = workOrderStr.split(SEPARATOR);
+          String brandClassId = workOrderSplit[0].trim();
+          String goodsName = workOrderSplit[1].trim();
+          String imei = workOrderSplit[2].trim();
+          int flashType = Integer.parseInt(workOrderSplit[3].trim());
+          long createTime = Long.parseLong(workOrderSplit[4].trim());
+          long updateTime = Long.parseLong(workOrderSplit[5].trim());
+          long createPerson = Long.parseLong(workOrderSplit[6].trim());
+          long updatePerson = Long.parseLong(workOrderSplit[7].trim());
+          String incId = workOrderSplit[8].trim();
+          String workOrderId = workOrderSplit[9].trim();
+          String orderId = workOrderSplit[10].trim();
+          String sn = workOrderSplit[11].trim();
+          String docId = DigestUtils.sha1Hex(createPerson + createTime + updateTime + incId); // 构造文档id，使用SHA1散列值
+          request.add(new IndexRequest(workOrderIndex + DateTime.now().toString(NormalConst.ES_EXTERNAL_DATE))
+                  .id(docId)
+                  .source(XContentType.JSON,        // 设置文档的_source，包含工单数据的JSON表示
+                          "brandClassId", brandClassId,
+                          "imei", imei,
+                          "goodsName", goodsName,
+                          "flashType", flashType,
+                          "createTime", createTime,
+                          "updateTime", updateTime,
+                          "createPerson", createPerson,
+                          "updatePerson", updatePerson,
+                          "workOrderId", workOrderId,
+                          "orderId", orderId,
+                          "sn", sn,
+                          "timestamp", System.currentTimeMillis()));
+      } catch (Exception ignore) {
+      }
+  }
+  try {
+      elasticSearchHelper.getRestClient().bulk(request, RequestOptions.DEFAULT); // 执行批量写入
+    // 这里的elasticSearchHelper.getRestClient()其实就是一个RestHighLevelClient，只不过自定义包装了一层
+  } catch (IOException e) {
+      log.info("bulk error", e);
+  }
+}</code></pre></li></ul><h2 id="sec-16">4.Kibana中的DSL查询</h2><ol></ol><ol><li><strong>左边</strong>：输入DSL查询语句；</li><li><strong>右边</strong>：展示查询结果。</li></ol><ol><li><p>详细见官网：<a href="https://www.elastic.co/guide/cn/elasticsearch/guide/current/bool-query.html" target="_blank" rel="noopener">https://www.elastic.co/guide/cn/elasticsearch/guide/current/bool-query.html</a></p></li><li><blockquote><p>个人觉得ES的官网是很不错的！值得一看！</p></blockquote></li></ol><p>看一个简单的Demo吧：</p><pre><code>GET /infosec_cas_login_log_c4/_doc/_search // GET/索引名/类型/_search
+{
+    "from": 0,  // 偏移量，指定查询结果的起始位置  ,  这里属于是‘ES分页查询’的一种写法
+    "size": 10, // 返回的数据条数
+    "query":    // 正式的query语句
+    {
+        "bool": // 布尔查询器，可以组合多个查询条件
+        {
+            "must": // must子句，表示所有条件必须满足
+            [
+                {
+                    "bool": // 嵌套布尔查询，可以处理更复杂的查询逻辑
+                    {
+                        "should": // should子句，表示满足任意一个条件即可
+                        [
+                            {
+                                "range": // // range查询，用于查询数值型字段的范围
+                                {
+                                    "timestamp":
+                                    {
+                                        "from": 1721491200000,
+                                        "to": 1721750400000,
+                                        "include_lower": true, // 是否包含下限值
+                                        "include_upper": true, // 是否包含上限值
+                                        "boost": 1.0 // 查询权重
+                                    }
+                                }
+                            }
+                        ],
+                        "adjust_pure_negative": true, // 调整纯否定查询，影响查询结果的评分
+                        "boost": 1.0
+                    }
+                }
+            ],
+            "adjust_pure_negative": true,
+            "boost": 1.0
+        }
+    },
+    "_source": // 定义返回的_source字段，即指定返回的文档内容
+    {
+        "includes": // 包含的字段，空数组表示不包含任何字段
+        [],
+        "excludes": // 排除的字段，指定不希望返回的字段列表
+        [
+            "bytes_sent",
+            "req_time",
+            "req_body_args",
+            "req_length",
+            "body_args_length",
+            "content_type",
+            "content_length",
+            "upstream_addr",
+            "upstream_resp_time",
+            "upstream_status",
+            "upstream_connect_time",
+            "upstream_header_time",
+            "res_content_type",
+            "res_content_length",
+            "http_cookie",
+            "ssl_protocol",
+            "request_id",
+            "loginStepMessage",
+            "hostname"
+        ]
+    },
+    "sort": // 排序
+    [
+        {
+            "logtime": // 排序字段为'logtime'
+            {
+                "order": "desc" // 排序类型为'降序排列'
+            }
+        }
+    ]
+}</code></pre><h3 id="sec-17">注意点：</h3><ul><li><pre><code>{
+    "_source": {
+        "includes": ["field1", "field2"]
+    }
+}
+// 在这个例子中，只有field1和field2将被包含在返回的_source中，其他所有字段都将被排除。</code></pre></li></ul><ul><li><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>"excludes"</strong></mark>：是一个数组，指定了应该<strong>从返回的_source中排除的字段名列表</strong>。无论"includes"是否为空，这些字段都不会被包含在_source中。</li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

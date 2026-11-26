@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>第四章-网络层 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>第四章-网络层</b><small>幕布导图 · 212 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "第四章-网络层", "data": {"id": "mvirtual-root", "topic": "<b>第四章-网络层<\/b>", "expanded": true, "children": [{"id": "mmUSfgMKcVq", "topic": "<b>一、网络层提供的两种服务<\/b>", "expanded": true, "children": [{"id": "mPegyxkDqgy", "topic": "1.<b>面向连接的<\/b><span style=\"color:#b45309\"><b><span>虚电路服务<\/span><\/b><b>：通信之前先建立虚电路 (Virtual Circuit)，以保证双方通信所需的一切网络资源<\/b><br><img class=\"mm-img\" src=\"mm-7eab7950fb9520.jpg\" style=\"width:260px;height:100px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">虚电路表示这只是一条<b>逻辑上的连接<\/b>，分组都沿着这条逻辑连接按照存储转发方式传送，而并不是真正建立了一条物理连接。\n请注意，电路交换的电话通信是先建立了一条真正的连接。\n因此分组交换的虚连接和电路交换的连接只是类似，但并不完全一样。<\/span>", "expanded": false, "children": [{"id": "m562wacsovr", "topic": "<b>发送方 <\/b>发送给 <b>接收方 <\/b>的所有分组都沿着同一条虚电路传送。", "expanded": true}]}, {"id": "m6E6UamZuLd", "topic": "2.<b>无连接的<\/b><span style=\"color:#b45309\"><b><span>数据报服务<\/span><\/b><b>：网络层向上只提供简单灵活的、无连接的、尽最大努力交付的数据报服务，网络层不提供服务质量的承诺。<\/b><br><img class=\"mm-img\" src=\"mm-2a11b6603a78a5.jpg\" style=\"width:260px;height:96px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>尽最大努力交付。<\/b>\n如果主机（即端系统）中的进程之间的通信需要是可靠的，那么就由网络的<b>主机中的运输层负责可靠交付（包括差错处理、流量控制等） <\/b>。\n<b>采用这种设计思路的好处是<\/b>：网络的造价大大降低，运行方式灵活，能够适应多种应用。\n互连网能够发展到今日的规模，充分证明了当初采用这种设计思路的正确性。<\/span>", "expanded": false, "children": [{"id": "mblbXRKjklX", "topic": "<b>发送方 <\/b>发送给 <b>接收方 <\/b>的分组可能沿着不同路径传送", "expanded": true}]}]}, {"id": "mlRC5n67zbo", "topic": "<b>二、<\/b><b><mark>IPV4<\/mark><\/b><b>：给因特网上的每一台主机的每一个接口分配一个在全世界范围内是唯一的<\/b><span style=\"color:#b45309\"><b><span>32比特的标识符<\/span><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-2c0bfa34772dfa.jpg\" style=\"width:260px;height:63px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "m59Un3fdBhC", "topic": "<b>1.分类编址(注意A、B、C中，有<\/b><span style=\"color:#d92d20\"><b><span>网络地址(主机号全0)、广播地址(主机号全1)不可以分配<\/span><\/b><br><img class=\"mm-img\" src=\"mm-da6f8956ec6dd9.jpg\" style=\"width:260px;height:116px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mQYsWDx8fKE", "topic": "每一类地址都由两个固定长度的字段组成:(<span style=\"color:#b45309\"><b><span>网络号<\/span><\/b> <b>net-id<\/b> +  <span style=\"color:#b45309\"><b><span>主机号<\/span><\/b><b> host-id)<\/b>。", "expanded": true}, {"id": "mbKhFJP6SDJ", "topic": "<b>① 只有A、B、C可以分配,<\/b><b><mark>网络地址、广播地址不可以分配<\/mark><\/b><b>。并且A中，还有一些不指派。<\/b>", "expanded": true}, {"id": "mAeEHm0Mge7", "topic": "② <mark>主机号<\/mark><b>全0：网络地址(代表网络本身)<\/b>", "expanded": true}, {"id": "mbS6OqpMRww", "topic": "③ 主机号<b>全1：广播地址(代表本子网的广播地址)<\/b>", "expanded": true}, {"id": "mmuT2PFmbuR", "topic": "<b>A类地址：不指派的有：<\/b><span style=\"color:#d92d20\"><b><span>最小网络号0<\/span><\/b>  <b>&amp;<\/b>  <span style=\"color:#d92d20\"><b><span>最小本地回环测试地址(127.0.0.1)<\/span><\/b>  <b>&amp;<\/b>  <span style=\"color:#d92d20\"><b><span>最大本地回环测试地址(127.255.255.254)<\/span><\/b> <b>&amp;<\/b> <span style=\"color:#d92d20\"><b><span>广播地址(主机号全1)<\/span><\/b>  <b>&amp; <\/b><span style=\"color:#d92d20\"><b><span>网络地址(主机号全0)<\/span><\/b><br><img class=\"mm-img\" src=\"mm-55ea4ef602605e.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mmMQEf4jcbu", "topic": "<b>B类地址：<\/b><br><img class=\"mm-img\" src=\"mm-e6c0d37d7eb1a3.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mtPoFRvX0BO", "topic": "<b>C类地址：<\/b><br><img class=\"mm-img\" src=\"mm-1683cd3808ddba.jpg\" style=\"width:260px;height:97px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mj31UrdZvNb", "topic": "练习：<br><img class=\"mm-img\" src=\"mm-f2b590d5b2fa66.jpg\" style=\"width:260px;height:123px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "myfG0Suo4ve", "topic": "<b>2.划分子网编址— <\/b><span style=\"color:#b45309\"><b><span>三级编址<\/span><\/b><b>(网络号，子网号，主机号)<\/b><br><img class=\"mm-img\" src=\"mm-c39c18e5e372f9.jpg\" style=\"width:260px;height:195px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mHSVQrGzX0W", "topic": "1.为何划分子网？", "expanded": true, "children": [{"id": "mM4GhtZCzYU", "topic": "① <b>IP 地址空间的利用率有时很低<\/b>。", "expanded": true}, {"id": "m9cLS6dftp1", "topic": "② 给每一个物理网络分配一个网络号会使<b>路由表变得太大因而使网络性能变坏<\/b>。", "expanded": true}, {"id": "maIvem9tq7h", "topic": "③ 两级的 IP 地址不够灵活。", "expanded": true}]}, {"id": "mZ9HdsTPhX3", "topic": "<b>2.划分子网的基本思路：从主机号中借用若干位作为子网号。<\/b><br><img class=\"mm-img\" src=\"mm-7bd329672a8b05.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mJBiJoGUqix", "topic": "注意：划分子网后，<b>对外仍是一个网络<\/b>。", "expanded": true}, {"id": "mgf42jPXNQX", "topic": "<b>优点：<\/b>", "expanded": true, "children": [{"id": "m3FbFzMgiG6", "topic": "1. <b>减少了 IP 地址的浪费<\/b>", "expanded": true}, {"id": "mXBFttqtsUA", "topic": "2. 使网络的组织<b>更加灵活<\/b>", "expanded": true}, {"id": "mMC9DoMt9Ln", "topic": "3. 更便于<b>维护和管理<\/b>", "expanded": true}]}]}, {"id": "mMLHJ8vw8gW", "topic": "<b>3.<\/b><b><mark>子网掩码<\/mark><\/b><b>：<\/b>用于<b>区分 IP 地址的网络部分和主机部分<\/b>的掩码，与 IP 地址一起用于确定一个主机是否在同一个子网中。<br><img class=\"mm-img\" src=\"mm-81bc0a2d61b8f3.jpg\" style=\"width:260px;height:106px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "m7MHKQEK0A6", "topic": "<span style=\"color:#d92d20\"><span>网络地址 = <\/span><span style=\"color:#d92d20\"><b><span>IP 地址 &amp; 子网掩码<\/span><\/b>", "expanded": true}, {"id": "mEUyUj8RlqX", "topic": "<b>连续的比特1<\/b>：对应<b>网络号和子网号<\/b>。", "expanded": true}, {"id": "mZxkJ0ytTEu", "topic": "<b>连续的比特0<\/b>：对应<b>主机号<\/b>。", "expanded": true}]}, {"id": "mG3aTKqUDuc", "topic": "<b>4.子网划分例题：<\/b>", "expanded": false, "children": [{"id": "mkMqtL0CpFw", "topic": "例题1：<br><img class=\"mm-img\" src=\"mm-6caa40e6d3fd2a.jpg\" style=\"width:260px;height:288px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mvZ7GglmDtb", "topic": "例题2：<br><img class=\"mm-img\" src=\"mm-9995cfaab06710.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mUNptp8yNVG", "topic": "<b>5.默认子网掩码：<\/b><br><img class=\"mm-img\" src=\"mm-4e7456704ce2ad.jpg\" style=\"width:260px;height:185px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mFvXMrGXyks", "topic": "<b>已知网络地址、掩码，进行<\/b><span style=\"color:#d92d20\"><b><span>子网划分时的<\/span><\/b><span style=\"color:#d92d20\"><b><span>思路<\/span><\/b><b>：<\/b>", "expanded": true, "children": [{"id": "mXGvuoRLSI9", "topic": "① 根据前三位网络号，判断<b>网络类型<\/b>(<b>A/B/C<\/b>)<span class=\"mm-note\">A：0；B：10；：C：110<\/span>", "expanded": true}, {"id": "mWvJEFlihqf", "topic": "② 根据网络类型，<b>判断网络地址的构成<\/b>(网络号多少位、主机号多少位)<span class=\"mm-note\">A：8+24；B：16+16；C：24+8.<\/span>", "expanded": true}, {"id": "mcE8YGJa4fu", "topic": "③ 再将网络地址与子网掩码相与，计算出<b>子网划分使用了几位主机号<\/b>，<b>计算出划分子网的个数<\/b>", "expanded": true}, {"id": "m26QGvQ9X47", "topic": "④ 再计算<b>每个子网的可分配地址个数<\/b>(一般要<b>减2<\/b>(网络地址、广播地址))。", "expanded": true}, {"id": "mcNpraItZvk", "topic": "⑤ 写出划分细节。", "expanded": true}]}]}, {"id": "mtbbnJSvDjY", "topic": "3.<b>无分类编址的IPv4地址(<\/b><b><mark>CIDR—<\/mark><\/b> <span style=\"color:#b45309\"><b><span>无分类域间路由选择<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-1315d3a25a2f26.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">无分类就是指：不再将网络分为A、B、C类了。<\/span>", "expanded": true, "children": [{"id": "mfTY9KJiV0Q", "topic": "<b>1.为何使用无分类编址？<\/b><br><img class=\"mm-img\" src=\"mm-a768cf9efcb892.jpg\" style=\"width:260px;height:113px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "myqqsoduIVS", "topic": "2.CIDR的主要特点：", "expanded": false, "children": [{"id": "mSmeXMl7IEs", "topic": "CIDR使用各种长度的“<b>网络前缀<\/b>”来代替分类地址中的网络号和子网号。", "expanded": true}, {"id": "mPFycbL5OQ1", "topic": "<b>IP <\/b><b>地址从三级编址（使用子网掩码）又回到了两级编址<\/b>。", "expanded": true}]}, {"id": "mV9ILuSDKlE", "topic": "3.使用方式：<b><mark>斜线记法—<\/mark><\/b> 在IPV4后加上<b>斜线\"/\"<\/b>，斜线后写上<span style=\"color:#d92d20\"><b><span>网络前缀所占的比特数量<\/span><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-b277d8ee658651.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "maVhF51PWe2", "topic": "4.例题：根据CIDR地址块，得出全部细节信息。<br><img class=\"mm-img\" src=\"mm-add002e150a9d7.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mxFAiQrkxbZ", "topic": "<span style=\"color:#d92d20\"><b><span>聚合C类网的数量 = 地址数量 / 2^8<\/span><\/b>：聚合 C 类网的数量计算中除以 2 的 8 次方是<b>因为 C 类网的主机位占 8 位<\/b>。", "expanded": true}]}]}, {"id": "mDCwmtG4fK2", "topic": "<b>4.<\/b><b><mark>路由聚合<\/mark><\/b><b>(构造超网)：<\/b>用于减少路由表的规模，提高路由器的性能和网络的效率。它通过<b>合并多个较小的路由前缀<\/b>（<b>或CIDR地址块<\/b>）<b>成为一个更大的路由前缀<\/b>，从而<b>减少了路由表中的条目数量<\/b>。<br><img class=\"mm-img\" src=\"mm-18d354af034dbd.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mHiM2Zqg7aL", "topic": "理解：就是<b>找出不同CIDR地址块的共同前缀<\/b>，<span style=\"color:#b45309\"><b><span>合并成一个CIDR地址块<\/span><\/b>。", "expanded": true}, {"id": "mQEqeAZrWSG", "topic": "<b>网络前缀越长，地址块越小，路由越具体。<\/b>", "expanded": true}, {"id": "mbld1AStY5P", "topic": "<b><mark>最长前缀匹配<\/mark><\/b>：若<b>路由器查表转发时发现有多条路可选<\/b>，那就<b>选择网络前缀最长的那条线路<\/b>。<span class=\"mm-note\">因为这样路由更具体。<\/span>", "expanded": true}]}, {"id": "msQavUiII3H", "topic": "<b>不同类别的指派范围：<\/b><br><img class=\"mm-img\" src=\"mm-cc1111a9e04eeb.jpg\" style=\"width:260px;height:70px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mm0FGP2phFa", "topic": "<b>不可使用的特殊IP：<\/b><span style=\"color:#b45309\"><b><span>广播地址<\/span><\/b> <b>&amp;<\/b> <span style=\"color:#b45309\"><b><span>网络地址<\/span><\/b> <b>&amp;<\/b> <span style=\"color:#b45309\"><b><span>本地环回<\/span><\/b><b>测试地址 &amp; <\/b><span style=\"color:#b45309\"><b><span>最小网络号0<\/span><\/b><br><img class=\"mm-img\" src=\"mm-17410631ec6c56.jpg\" style=\"width:260px;height:92px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mQJvmtaePyw", "topic": "<b>三、IPV4地址的应用规划<\/b><span class=\"mm-note\">即指：给定一个IPv4地址块，<b>如何将其划分成几个更小的地址块<\/b>，并<b>将这些地址块分配给互联网中不同网络<\/b>，进而可以给各网络中的主机和路由器接口分配IPv4地址。<\/span>", "expanded": false, "children": [{"id": "mOggf2v1Zc1", "topic": "1<mark>.<\/mark><b><mark>定长<\/mark><\/b><b>的子网掩码<\/b><b><mark>FLSM<\/mark><\/b><b>（Fixed Length Subnet Mask）— 即指：<\/b><span style=\"color:#b45309\"><b><span>划分子网<\/span><\/b>", "expanded": true, "children": [{"id": "m08UC9bZUn7", "topic": "<b>1.特点 or 缺点：<\/b>", "expanded": false, "children": [{"id": "m0jXU6XGUQ6", "topic": "① 使用<b>1个子网掩码划分子网<\/b>", "expanded": true}, {"id": "mFGRu6BEO55", "topic": "② 子网的<b>划分方式不灵活<\/b>，只能划分出<span style=\"color:#b45309\"><b><span>2^n个子网<\/span><\/b>(n是指从主机号中借出来的作为子网比特号的数量)。", "expanded": true}, {"id": "mJyVZoaLkuW", "topic": "③ <span style=\"color:#b45309\"><b><span>每个子网分配的IP地址数量相同<\/span><\/b>，容易造成<b>IP地址浪费<\/b>。", "expanded": true}]}, {"id": "mBt0N2wjISy", "topic": "<b>2.例题：<\/b>", "expanded": false, "children": [{"id": "m9eNFipPGbW", "topic": "<b>例题1：<\/b><br><img class=\"mm-img\" src=\"mm-410f1090f55c65.jpg\" style=\"width:260px;height:123px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-692ce12452229b.jpg\" style=\"width:260px;height:96px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mAaKks9s67C", "topic": "<b>例题2：<\/b><br><img class=\"mm-img\" src=\"mm-0a3be6b14c326a.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mE4EXqJGNZ7", "topic": "2.<b><mark>变长<\/mark><\/b><b>的子网掩码<\/b><b><mark>VLSM<\/mark><\/b><b>（Variable Length Subnet Mask）— 即指：<\/b><span style=\"color:#b45309\"><b><span>无分类编址(CIDR)<\/span><\/b>", "expanded": true, "children": [{"id": "mchcvDBrATS", "topic": "<b>1.特点：<\/b>", "expanded": false, "children": [{"id": "mXPUgfBwliR", "topic": "① 使用<b>不同的子网掩码划分子网<\/b>", "expanded": true}, {"id": "muSd08vynQ2", "topic": "② 子网划分<b>方式灵活<\/b>：可以<span style=\"color:#b45309\"><b><span>按需分配<\/span><\/b>", "expanded": true}, {"id": "mdb79uDh9IK", "topic": "③ <b>每个子网划分到的IP地址数量可以不同<\/b>，减少对IP地址的浪费。", "expanded": true}]}, {"id": "m7T91s8dKSo", "topic": "2.例题：", "expanded": true, "children": [{"id": "mXUr21F2Sz3", "topic": "例题1：<br><img class=\"mm-img\" src=\"mm-0843d5d1fe79c3.jpg\" style=\"width:260px;height:123px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m6ESPl3w5p9", "topic": "例题2：<br><img class=\"mm-img\" src=\"mm-5f2113114e58c0.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}]}, {"id": "mhqYzxSoxqt", "topic": "<b>四、IP数据报的发送<\/b>与<b>转发过程<\/b><span class=\"mm-note\">主要包含两部分：① 主机发送IP数据报 ② 路由器转发IP数据报<\/span>", "expanded": false, "children": [{"id": "mF7kMDOdu8Z", "topic": "1.源主机如何知道目的主机是否与自己在同一个网络中，是<b>直接交付<\/b>，还是<b>间接交付<\/b>？— 同一网络中，直接交付；不同网络中，间接交付。<br><img class=\"mm-img\" src=\"mm-491914bf82ad69.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "m5cpanA7Ij6", "topic": "答：可以通过<span style=\"color:#b45309\"><b><span>目的地址IP<\/span><\/b><span style=\"color:#b45309\"><span>和<\/span><span style=\"color:#b45309\"><b><span>源地址的子网掩码<\/span><\/b><span style=\"color:#b45309\"><span>进行<\/span><span style=\"color:#b45309\"><b><span>逻辑与<\/span><\/b><b>运算<\/b>得到<b>目的网络地址。<\/b>", "expanded": true, "children": [{"id": "mVPWr34bRZt", "topic": "① 如果<b>目的网络地址<\/b>和<b>源网络地址 相同<\/b>，就是<b>在同一个网络<\/b>中，属于<b>直接交付<\/b>", "expanded": true}, {"id": "mB2eEK8quY9", "topic": "② 如果<b>目的网络地址<\/b>和<b>源网络地址 不相同<\/b>，就<b>不在同一个网络<\/b>中，属于<b>间接交付<\/b>，传输给主机所在网络的<b><mark>默认网关（路由器<\/mark><\/b>——下图会讲解）,由默认网关帮忙转发。", "expanded": true}]}]}, {"id": "m6X7XpBc37T", "topic": "2.<b>主机C如何知道路由器R<\/b>的存在？— <b><mark>默认网关<\/mark><\/b>", "expanded": false, "children": [{"id": "megpWTHRo5l", "topic": "答：用户为了让本网络中的主机能和其他网络中的主机进行通信，就<b>必须给其指定本网络的一个路由器<\/b>的接口，由该路由器帮忙进行转发，<span style=\"color:#b45309\"><b><span>所指定的路由器<\/span><\/b>，也被称为<span style=\"color:#b45309\"><b><span>默认网关<\/span><\/b><br><img class=\"mm-img\" src=\"mm-ad3b7e2302cca3.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "ma2jKGxXKF5", "topic": "3.<b>路由器收到IP数据报后如何转发<\/b>？", "expanded": true, "children": [{"id": "mlGMqkPIkMm", "topic": "1. 检查<span style=\"color:#b45309\"><b><span>IP数据报首部是否出错<\/span><\/b><br><img class=\"mm-img\" src=\"mm-8cc4de13423828.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mniu0uxwyxF", "topic": "若<b>出错<\/b>，则直接<b>丢弃<\/b>该IP数据报并通告源主机", "expanded": true}, {"id": "mXQGrx8GDOG", "topic": "若没有出错，则进行转发(<b>路由器取出数据报首部各地址字段的值<\/b>)", "expanded": true}]}, {"id": "mMVbCwD6QB6", "topic": "2. 根据IP数据报的目的地址<span style=\"color:#b45309\"><b><span>在路由表中查找匹配的条目<\/span><\/b>：(将<span style=\"color:#d92d20\"><b><span>目的地址与路由表中的子网掩码相与<\/span><\/b>，得出<span style=\"color:#d92d20\"><b><span>目的网络地址<\/span><\/b>)<br><img class=\"mm-img\" src=\"mm-ade1022901fe75.jpg\" style=\"width:260px;height:167px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mP62XJ6bymk", "topic": "若<b>找到<\/b>匹配的条目，则转发给条目中指示的下一跳。", "expanded": true}, {"id": "mzNzjLQRgLP", "topic": "若<b>找不到<\/b>，则<b>丢弃该数据<\/b>报并<b>通告源主机<\/b>", "expanded": true}]}]}, {"id": "mMd8HRu25M4", "topic": "4.<b>路由器是<\/b><span style=\"color:#d92d20\"><b><span>隔离广播域<\/span><\/b><b>的。<\/b><br><img class=\"mm-img\" src=\"mm-16b9388d053e2c.jpg\" style=\"width:260px;height:119px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>广播域：<\/b>指所有处于同一个网络（子网）中的设备所组成的范围，<b>当一个设备发送广播消息<\/b>时，<b>所有在同一广播域内的设备都会接收到这个消息<\/b>。<\/span>", "expanded": true}]}, {"id": "maHvKr9ZC1u", "topic": "<b>五、静态路由配置 <\/b>及其 可能产生的<b>路由环路问题<\/b>", "expanded": false, "children": [{"id": "mSMBHzYMvqn", "topic": "1.静态路由配置(<b>人工配置<\/b>)：适用于<span style=\"color:#b45309\"><b><span>小规模网络<\/span><\/b><br><img class=\"mm-img\" src=\"mm-e06cf121e9c433.jpg\" style=\"width:260px;height:87px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d4cf88ad915554.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mvgHTQcoL5z", "topic": "2<b><mark>.默认路由<\/mark><\/b>：默认路由可以被所有网络匹配，但路由匹配有优先级，<b>默认路由是优先级最低的<\/b>", "expanded": true}, {"id": "mKiCfmyI18q", "topic": "<b>3.<\/b><span style=\"color:#b45309\"><b><span>路由环路<\/span><\/b>", "expanded": false, "children": [{"id": "m4lZcFKfuu1", "topic": "<b><mark>黑洞路由<\/mark><\/b>：黑洞路由的<b>下一跳为null0<\/b>，这是路由器内部的虚拟接口，<b>IP数据报进入它后就被丢弃。<\/b>", "expanded": true}, {"id": "mljsgkzaPWC", "topic": "① <b>静态路由配置错误<\/b>导致环路", "expanded": true}, {"id": "mwMLUnQUGUx", "topic": "②<b>聚合了不存在的网络<\/b>而导致路由环路<br><img class=\"mm-img\" src=\"mm-1e66a8e987be4e.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mTUZERxR3NQ", "topic": "解决方法：<b>黑洞路由(将不存在的目的网络下一跳置为null0)<\/b><br><img class=\"mm-img\" src=\"mm-f633e171c442bf.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mZWkgLD7ytK", "topic": "③ <b>网络故障<\/b>而导致路由环路", "expanded": true, "children": [{"id": "mjRd9Fs9Xkt", "topic": "解决方法：添加故障的网络为<b>黑洞路由<\/b>", "expanded": true}]}]}]}, {"id": "mWvDa3RYDLI", "topic": "<b>六、路由选择协议(动态路由)<\/b>", "expanded": false, "children": [{"id": "mLoCE8Ris6Z", "topic": "1.特点：", "expanded": true, "children": [{"id": "mhNyE5ngqD0", "topic": "① <b>自适应<\/b>：<b>动态路由<\/b>选择，可以较好适应网络状态的变化", "expanded": true}, {"id": "mTJgbHKZaAo", "topic": "② <b>分布式<\/b>：<b>路由器之间交换路由信息<\/b>", "expanded": true}, {"id": "mZPi3jmHlal", "topic": "③ <b>分层次<\/b>：将整个因特网划分为许多较小的<b>自治系统<\/b><b><mark>AS<\/mark><\/b>", "expanded": true}]}, {"id": "metfcNs354V", "topic": "2.<b><mark>自治系统(AS)—<\/mark><\/b> <b>在单一的技术管理下的一组路由器<\/b><br><img class=\"mm-img\" src=\"mm-2bfbbc6f7e7b8e.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "m4eeASHRPD9", "topic": "<b>域内路由选择：自治系统内部的路由选择。— IGP协议<\/b><br><img class=\"mm-img\" src=\"mm-53ff5ca61152ac.jpg\" style=\"width:260px;height:89px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mtFXuzsu3ux", "topic": "<b>域间路由选择<\/b>：自治系统<b>之间<\/b>的路由选择。—  <b>EGP协议<\/b>", "expanded": true}]}, {"id": "mcKQiG85pA8", "topic": "<b>3.常见的路由选择协议 <\/b><br><img class=\"mm-img\" src=\"mm-522e0c1418d36e.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mISbrzO0LXp", "topic": "<b>4、路由器的基本结构—<\/b> 路由器是一种<b>具有多个输入、输出端口的专用计算机<\/b>，其任务是<b>转发分组<\/b><br><img class=\"mm-img\" src=\"mm-b7b9b19289dba6.jpg\" style=\"width:260px;height:126px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-48983c060723f5.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "moNvMJDlzpA", "topic": "1.<b>分组转发部分<\/b>(三部分构成)<br><img class=\"mm-img\" src=\"mm-f93aeb96d8e113.jpg\" style=\"width:260px;height:113px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mEn7tAIfSSd", "topic": "<b>①交换结构<\/b>", "expanded": true}, {"id": "mpsKrWvEg7r", "topic": "<b>②一组输入端口<\/b>", "expanded": true}, {"id": "m0n9qFsXAUS", "topic": "<b>③一组输出端口<\/b>", "expanded": true}]}, {"id": "mYzWQc519uU", "topic": "2.<b>路由选择部分—<\/b> 核心构件：<b><mark>路由选择处理机<\/mark><\/b>", "expanded": true, "children": [{"id": "mh2FwYvufkR", "topic": "1<b>.路由选择处理机的作用<\/b>：根据所使用的路由选择协议。<span style=\"color:#b45309\"><b><span>周期性地与其他路由器 进行路由信息的交互<\/span><\/b>，来<span style=\"color:#b45309\"><b><span>更新路由表<\/span><\/b>", "expanded": true}]}]}]}, {"id": "m9V7spvCxa7", "topic": "七、<b>路由信息协议<\/b><b><mark>RIP<\/mark><\/b>（内部网关协议）— 基于<span style=\"color:#b45309\"><b><span>距离向量算法<\/span><\/b>", "expanded": false, "children": [{"id": "mKmtQQpRraR", "topic": "1.RIP协议的内容：<br><img class=\"mm-img\" src=\"mm-185e2347ea445d.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mph7tRxxZel", "topic": "1.<b>AS内部每一个路由器<\/b>都要<b>维护从它自己到AS内其他每一个网络的距离记录<\/b>—<mark> <\/mark><b><mark>\"距离向量 D-V\"<\/mark><\/b>", "expanded": true}, {"id": "mMT6gUHeaP5", "topic": "2.RIP使<b>用“<\/b><b><mark>跳数<\/mark><\/b><b>”来衡量到达目的网络的距离<\/b>。", "expanded": false, "children": [{"id": "m1cLClA6IwN", "topic": "① 到直连网络的距离—<b>跳数为1<\/b>", "expanded": true}, {"id": "meUJGaXtyDs", "topic": "② 到非直连网络的距离— <b>所经过的路由器数+1<\/b>", "expanded": true}]}, {"id": "mKugVhly8cm", "topic": "3.并且允许<span style=\"color:#d92d20\"><b><span>一条路径最多只包含15个路由器<\/span><\/b>，<b>距离 &gt;= 16时就不可达<\/b>了。<span class=\"mm-note\">因此<b>RIP只适合小型互联网<\/b>。<\/span>", "expanded": true}]}, {"id": "mikvUbVqYKF", "topic": "2.<b><mark>等价负载均衡<\/mark><\/b>— 当<b>到达同一目的网络有多条“距离相等”的路由<\/b>时<br><img class=\"mm-img\" src=\"mm-c87ae62279bc7f.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mnz7yfQz54o", "topic": "<b>3.<\/b><span style=\"color:#d92d20\"><b><span>❤<\/span><\/b> <b>RIP的三个要点：<\/b><br><img class=\"mm-img\" src=\"mm-845ea55e32123e.jpg\" style=\"width:260px;height:90px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mpgwlYDMojB", "topic": "1.<span style=\"color:#b45309\"><b><span>只和相邻的路由器交换信息<\/span><\/b>", "expanded": true}, {"id": "mglRDuyDg30", "topic": "2.交换的信息是：<span style=\"color:#b45309\"><b><span>自己的路由表<\/span><\/b>", "expanded": true}, {"id": "mUvu9AIodo8", "topic": "3.何时交换信息？ — <span style=\"color:#b45309\"><b><span>周期性交换<\/span><\/b>", "expanded": true}]}, {"id": "mTRWhD4WWMS", "topic": "4.RIP的<b>基本工作过程<\/b>：<br><img class=\"mm-img\" src=\"mm-eb0c433a630593.jpg\" style=\"width:260px;height:115px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m1HId8Q9AQU", "topic": "<b>5.RIP路由条目的更新规则：<\/b>", "expanded": false, "children": [{"id": "mrCLW7yohhW", "topic": "<b>主要规则：<\/b>", "expanded": true, "children": [{"id": "mpK4mkxvyDB", "topic": "① 发现<b>新的网络就添加<\/b>", "expanded": true}, {"id": "mPyNH3sxFtz", "topic": "② 到达的目的网络相同，<b>下一跳<\/b><span style=\"color:#b45309\"><b><span>不同<\/span><\/b>，<b>新路由优势(距离短)<\/b>，就<b>更新<\/b>", "expanded": true}, {"id": "mn7yIwB5cmt", "topic": "③ 到达的目的网络相同，<b>下一跳<\/b><span style=\"color:#b45309\"><b><span>不同<\/span><\/b>，<b>新路由劣势<\/b>，就不<b>更新<\/b>", "expanded": true}, {"id": "mmDwHPn46s9", "topic": "④ 到达的目的网络相同，<b>下一跳<\/b><span style=\"color:#b45309\"><b><span>不同<\/span><\/b>，<b>等价负载均衡(距离相等)<\/b>，就将其<b>添加<\/b>", "expanded": true}, {"id": "mJnpGJ73bti", "topic": "⑤ 到达的目的网络相同，<b>下一跳<\/b><span style=\"color:#b45309\"><b><span>相同<\/span><\/b>，说明是<b>最新消息<\/b>，那就<b>更新<\/b>", "expanded": true}]}, {"id": "mdE1hIlJROF", "topic": "例1：", "expanded": true, "children": [{"id": "m0FNGAIQL87", "topic": "①C将自己的路由表信息发送给D。<br><img class=\"mm-img\" src=\"mm-9d98f288996d55.jpg\" style=\"width:260px;height:160px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m0e7oTl8hqZ", "topic": "② <b>C能到达的网络地址，其相邻的路由器D肯定也能到达<\/b>，<b>只是距离+1罢了<\/b>。据此<b>更新路由器D中的路由表。<\/b><br><img class=\"mm-img\" src=\"mm-279ec8c5641636.jpg\" style=\"width:260px;height:116px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-07fb352ac4cef5.jpg\" style=\"width:260px;height:82px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mdVRftm8XaP", "topic": "例2：<br><img class=\"mm-img\" src=\"mm-c66269eee245dd.jpg\" style=\"width:260px;height:91px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mJhrUJA95e5", "topic": "<b>6.RIP存在的“<\/b><b><mark>坏消息传的慢<\/mark><\/b><b>”的问题，又称“<\/b><span style=\"color:#b45309\"><b><span>路由环路<\/span><\/b> <b>或 <\/b><span style=\"color:#b45309\"><b><span>距离无穷计数<\/span><\/b><b>”<\/b><br><img class=\"mm-img\" src=\"mm-9d7b2be423c9e9.jpg\" style=\"width:260px;height:52px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">指<b>当网络中的某个路由器出现故障或链路状态发生改变时<\/b>，RIP<b>需要一定的时间才能将这个变化通知到整个网络中的其他路由器，由于RIP协议的工作机制所决定的。<\/b><\/span>", "expanded": false, "children": [{"id": "mLATn6shV0o", "topic": "解决方法：<span class=\"mm-note\">这些方法也不能完全解决“坏消息传播得慢”的问题，这是距离向量的本质决定<\/span>", "expanded": true, "children": [{"id": "mRAaQa9Wc3Y", "topic": "① 限制最大路径距离为15", "expanded": true}, {"id": "mTTLhBv0ln2", "topic": "② 将周期性发送信息机制改为“<b>只要路由器变更，那就进行发送<\/b>”", "expanded": true}]}]}, {"id": "mMIad9xK7GG", "topic": "<b>7.RIP协议的优缺点：<\/b>", "expanded": false, "children": [{"id": "mDydy7M0Hn5", "topic": "<b>优点：<\/b>实现简单，开销较小。", "expanded": true}, {"id": "mf6D6oPk121", "topic": "<b>缺点<\/b>：", "expanded": true, "children": [{"id": "mDpAvUT0Oz5", "topic": "1. RIP <b>限制了网络的规模<\/b>，它能使用的<b>最大距离为 15<\/b>（16 表示不可达）。", "expanded": true}, {"id": "mBIva86GHka", "topic": "2. 路由器之间<b>交换的路由信息是路由器中的完整路由表<\/b>，因而随着网络规模的扩大，开销也就增加", "expanded": true}, {"id": "mbwF7BTWnja", "topic": "3. <b>“坏消息传播得慢<\/b>”，使<b>更新过程的收敛时间过长<\/b>。", "expanded": true}]}]}]}, {"id": "mYwDravjWXY", "topic": "八、<b>开放最短路径优先<\/b><b><mark>OSPF<\/mark><\/b>（内部网关协议）— 基于<span style=\"color:#b45309\"><b><span>链路状态<\/span><\/b><b>(使用Dijkstra算法)<\/b>", "expanded": false, "children": [{"id": "mXqzqN8c9fY", "topic": "<b>1.概念<\/b>", "expanded": true}]}, {"id": "mCIydHdyTIl", "topic": "<b>九、边界网关协议<\/b><b><mark>BGP<\/mark><\/b> <b>—<\/b> <span style=\"color:#b45309\"><b><span>不同自治系统的路由间<\/span><\/b>交换路由信息的协议—  <span style=\"color:#d92d20\"><b><span>TCP连接<\/span><\/b><span class=\"mm-note\">BGP（Border Gateway Protocol）<\/span>", "expanded": true, "children": [{"id": "mp5eKxPWDCy", "topic": "1.概念<br><img class=\"mm-img\" src=\"mm-6ed5bad9086203.jpg\" style=\"width:260px;height:46px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-9411cfb6bcb296.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mCBy4fgdCot", "topic": "2.BGP适用于<b>多级结构的因特网<\/b><br><img class=\"mm-img\" src=\"mm-32c3b1f2bf821d.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m2eJZZzRsD8", "topic": "3.<b>BGP-4的报文<\/b>有：<br><img class=\"mm-img\" src=\"mm-8e294538d6fe82.jpg\" style=\"width:260px;height:77px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mMP2Pdl8qJP", "topic": "<b>十、直接封装RIP、OSPF、BGP报文的协议<\/b><br><img class=\"mm-img\" src=\"mm-2f0797a6b5b41c.jpg\" style=\"width:260px;height:137px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mQcglJy0v5o", "topic": "<b>十一、IPV4数据报的首部格式<\/b>", "expanded": false, "children": [{"id": "mYbd8309ror", "topic": "<b>1.各字段的作用：IP数据报的<\/b><span style=\"color:#b45309\"><b><span>首部长度一定是4字节的整数倍<\/span><\/b><br><img class=\"mm-img\" src=\"mm-3b1eea5ed78f03.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-efc6e04fd1a875.jpg\" style=\"width:260px;height:47px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mbk5mH6hLlw", "topic": "<b>① 版本<\/b><br><img class=\"mm-img\" src=\"mm-01d0725a4e4bbf.jpg\" style=\"width:260px;height:32px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mQ84uuyRu0b", "topic": "②<b>首部长度<\/b>：<span style=\"color:#d92d20\"><b><span>一个单位4字节<\/span><\/b>，所以<span style=\"color:#d92d20\"><b><span>IP首部长度的最大值为60字节<\/span><\/b><br><img class=\"mm-img\" src=\"mm-24e0815086e2ca.jpg\" style=\"width:260px;height:36px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mSa52luV5RH", "topic": "③ 区分服务<br><img class=\"mm-img\" src=\"mm-2275e07908dc1d.jpg\" style=\"width:260px;height:74px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mbV6Di6Nozb", "topic": "④ 总长度 =  <b>首部+数据载荷<\/b><br><img class=\"mm-img\" src=\"mm-637d17bfdc2805.jpg\" style=\"width:260px;height:43px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m6y86HlQdPl", "topic": "⑤ 标识、标志、片偏移：用于IP分片", "expanded": true}, {"id": "mWZTPdlSD3C", "topic": "⑥ <b>生存时间<\/b><span style=\"color:#d92d20\"><b><span>TTL：<\/span><\/b><span style=\"color:#b45309\"><b><span>确保数据报不会永远在网络中循环<\/span><\/b><b>，每当数据报经过一台路由器，该字段-1。<\/b><span style=\"color:#d92d20\"><b><span>TTL=0时，丢弃该数据报。<\/span><\/b><br><img class=\"mm-img\" src=\"mm-d8b91da231d42e.jpg\" style=\"width:260px;height:48px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mOscUHUocU0", "topic": "<b>⑦协议：<\/b>指出此<b>数据包携带的数据<\/b>使用<b>何种协议<\/b>以便<b>目的主机的IP层将数据部分上交给哪个处理过程<\/b>。<br><img class=\"mm-img\" src=\"mm-8cfda733503aff.jpg\" style=\"width:260px;height:65px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mEN6L7Bq0NS", "topic": "⑧ 首部检验和(CRC冗余校验)：只检验<b>数据报的首部<\/b><br><img class=\"mm-img\" src=\"mm-66daa8f4b75a3e.jpg\" style=\"width:260px;height:61px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m46IspLkQAv", "topic": "<b>2.数据载荷长度 = <\/b><span style=\"color:#b45309\"><b><span>总长度 - 首部长度<\/span><\/b><br><img class=\"mm-img\" src=\"mm-f2e2a0a8e120aa.jpg\" style=\"width:260px;height:39px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m0SZhvwC0jm", "topic": "<b>十二、<\/b><b><mark>IP分片<\/mark><\/b>", "expanded": false, "children": [{"id": "mriNKttoX34", "topic": "1.宏观概览：<b><mark>最大传输单元MTU<\/mark><\/b>（1500字节）<br><img class=\"mm-img\" src=\"mm-18d22692922ace.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-cc8238ceda0d3c.jpg\" style=\"width:260px;height:16px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mxuyQEu1Rx8", "topic": "<span style=\"color:#b45309\"><b><span>标识<\/span><\/b><span style=\"color:#b45309\"><span>(<\/span>2字节)：属于<b>同一数据报的各分片<\/b>有<b>相同的标识<\/b>", "expanded": true}, {"id": "mqGoFA4ilZF", "topic": "<span style=\"color:#b45309\"><b><span>标志<\/span><\/b><b>(<\/b>3比特)：<b>DF位  |  MF位  |  保留位<\/b><span class=\"mm-note\"><b>DF位<\/b>(Don't Frame)：1-&gt;不允许分片；0-&gt;允许分片\n<b>MF位<\/b>(More Frame):1-&gt;非最后一片，还有其他片；0-&gt;最后一片，没有其他片了。<\/span>", "expanded": true}, {"id": "m5Xcey0CACY", "topic": "<span style=\"color:#b45309\"><b><span>片偏移<\/span><\/b>(1字节)：指示<b>分片的位置。<\/b>", "expanded": true}]}, {"id": "mhHPi6tXB8D", "topic": "2.通常分片时，<b>除最后一个分片<\/b>，<b>其他分片均分为MTU允许的最大分片<\/b>。", "expanded": true}, {"id": "mh7iMRVbgQM", "topic": "3.<span style=\"color:#d92d20\"><span>❤ <\/span>一个<b>最大分片可封装的数据应该是<\/b><span style=\"color:#d92d20\"><b><span>8字节的倍数<\/span><\/b>", "expanded": false, "children": [{"id": "mSCwXN65xMu", "topic": "① 一个<b>最大分片可封装的数据<\/b>为：<br><img class=\"mm-img\" src=\"mm-5073230ba1dda0.jpg\" style=\"width:260px;height:78px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m5tTssuBSe3", "topic": "② 需要的<b>总片数<\/b>：<br><img class=\"mm-img\" src=\"mm-f63fcffb8a4711.jpg\" style=\"width:260px;height:89px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mEE8fcMLXcH", "topic": "<b>十三、网络控制报文协议<\/b><b><mark>ICMP<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-486405403a3054.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>为了更有效地转发IP数据报和提高交付成功的机会<\/b>，在<b>网络层就使用了ICMP<\/b>。<\/span>", "expanded": false, "children": [{"id": "mg6DcI7XCHV", "topic": "1.架构IP网络时需要特别注意两点：<span class=\"mm-note\"><b>而ICMP就是实现这些问题的协议 <\/b><\/span>", "expanded": false, "children": [{"id": "mNz3tK0TT7w", "topic": "① 确认网络<b>是否正常工作<\/b>", "expanded": true}, {"id": "m8WzpdgpVtc", "topic": "② 遇到<b>异常时进行问题诊断<\/b>", "expanded": true}]}, {"id": "mstIJ3SaGRg", "topic": "2<b>.ICMP的主要功能<\/b>：<span class=\"mm-note\"><b>有了这些功能以后，就可以获得网络是否正常，设置是否有误以及设备有何异常等信息，从而便于进行网络上的问题诊断<\/b><\/span>", "expanded": false, "children": [{"id": "mHGa72wloXq", "topic": "① <b>确认IP包是否成功送达目标地址<\/b>", "expanded": true}, {"id": "mMUqYsTvHds", "topic": "② <b>通知在发送过程当中IP包被废弃的具体原因<\/b>", "expanded": true}, {"id": "mChjfMyQ8VU", "topic": "③ 改善网络设置等", "expanded": true}]}, {"id": "mxkfvbkxSk5", "topic": "<b>3.<\/b><span style=\"color:#d92d20\"><b><span>ICMP被封装在IP数据报中，作为其中的数据部分。<\/span><\/b><br><img class=\"mm-img\" src=\"mm-b01cef9969f5bb.jpg\" style=\"width:260px;height:78px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mFICJs0xAC7", "topic": "常用的ICMP询问报文：<br><img class=\"mm-img\" src=\"mm-e26171ca591890.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m49RgdJJujx", "topic": "<b>4.ICMP的报文格式：<\/b><br><img class=\"mm-img\" src=\"mm-d4fba3ecb95a04.jpg\" style=\"width:260px;height:115px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mMKHeXbRM7D", "topic": "<b>5.ICMP<\/b><b><mark>差错报告报文<\/mark><\/b>", "expanded": false, "children": [{"id": "mfqQIHd7kNV", "topic": "<b>1.<\/b><span style=\"color:#b45309\"><b><span>终点不可达<\/span><\/b><b>：<\/b>当<b>目的主机不能交付数据报，<\/b>就向源点发送“终点不可达报文”<br><img class=\"mm-img\" src=\"mm-933b3fb21e9d6a.jpg\" style=\"width:260px;height:103px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mK7L0V3dZVB", "topic": "2<span style=\"color:#b45309\"><span>.<\/span><span style=\"color:#b45309\"><b><span>源点抑制<\/span><\/b><b>：<\/b>当<b>主机或路由器由于拥塞而丢弃数据报，<\/b>就向源点发送“源点抑制”报文", "expanded": true}, {"id": "mszeSgNXnfh", "topic": "<b>3.<\/b><span style=\"color:#b45309\"><b><span>时间超过<\/span><\/b><b>：TTL=0，丢弃数据报后，<\/b>向源点发送“时间超过”报文。<br><img class=\"mm-img\" src=\"mm-17c5db77931bdc.jpg\" style=\"width:260px;height:115px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mqgYQ9gOmRV", "topic": "<b>4.<\/b><span style=\"color:#b45309\"><b><span>参数问题<\/span><\/b><b>：<\/b><br><img class=\"mm-img\" src=\"mm-90625aa8d28628.jpg\" style=\"width:260px;height:92px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mRkinnRNArJ", "topic": "<b>5.<\/b><span style=\"color:#b45309\"><b><span>改变路由(<\/span><\/b><b>重定向)<\/b><br><img class=\"mm-img\" src=\"mm-d5938b89f2dca9.jpg\" style=\"width:260px;height:196px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mIBqKEjdlzW", "topic": "<b>6.ICMP应用举例<\/b>", "expanded": true, "children": [{"id": "mlKwlhNjsZV", "topic": "1.<span style=\"color:#b45309\"><b><span>ping<\/span><\/b>：测试主机或路由间的连通性<br><img class=\"mm-img\" src=\"mm-e2e783122498ed.jpg\" style=\"width:260px;height:113px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m3Raitjd5K2", "topic": "2.<span style=\"color:#b45309\"><b><span>traceroute(跟踪路由)<\/span><\/b><b>：<\/b>测试IP数据报从源主机到目的主机要<b>经过哪些路由器<\/b>。", "expanded": true}]}]}, {"id": "mfT8QYaAn9Q", "topic": "<b>十四<\/b>、<b>虚拟专用网<\/b><b><mark>VPN<\/mark><\/b><span class=\"mm-note\"><b>Virtual Private Network<\/b><\/span>", "expanded": true, "children": [{"id": "mC2uKxeQ9MP", "topic": "1.为何要用虚拟专用网？", "expanded": true, "children": [{"id": "m688PgknrTU", "topic": "由于 <b>IP <\/b><b>地址的紧缺<\/b>，一个机构能够申请到的IP地址数往往远小于本机构所拥有的主机数。考虑到<b>互联网并不很安全<\/b>，一个机构内也并不需要把所有的主机接入到外部的互联网。", "expanded": true}, {"id": "mZUgE36fQRu", "topic": "假定在一个机构内部的计算机通信也是采用 TCP/IP 协议，那么从原则上讲，对于这些仅在<b>机构内部使用<\/b>的计算机就可以由本机构<span style=\"color:#b45309\"><b><span>自行分配其 IP 地址<\/span><\/b>。", "expanded": true}]}, {"id": "m4c6GWL5ULy", "topic": "<b>2.私有地址<\/b><br><img class=\"mm-img\" src=\"mm-f44ddc0f664e6c.jpg\" style=\"width:260px;height:45px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mC7Kfdcd5Bv", "topic": "① <b>只能用于一个机构的内部通信<\/b>，不能用于和因特网上的主机通信", "expanded": true}, {"id": "mL4yZxFrhvH", "topic": "② 私有地址<b>只能用作内部地址，不能用作全球地址<\/b>。", "expanded": true}]}, {"id": "mJxnaq5qUlL", "topic": "3.<b>本地地址 VS  全球地址    —<\/b> <span style=\"color:#b45309\"><b><span>地址二义性问题<\/span><\/b><br><img class=\"mm-img\" src=\"mm-7f0aad4249def7.jpg\" style=\"width:260px;height:62px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mbsOTDHktXx", "topic": "4.<b><mark>IP隧道技术<\/mark><\/b>：数据报在因特网上需要经过多个网络与路由器，但从逻辑上看，R1与R2之间好像是一条直通的点对点链路<br><img class=\"mm-img\" src=\"mm-bf3823c852ed61.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mqPxNtiuGbs", "topic": "<b>十五、网络地址转换<\/b><b><mark>NAT<\/mark><\/b><b>— 依旧是为了<\/b><span style=\"color:#b45309\"><b><span>缓解IPV4地址即将耗尽的问题<\/span><\/b><br><img class=\"mm-img\" src=\"mm-f9aca405010dc0.jpg\" style=\"width:260px;height:85px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>Network Address Translation<\/b><\/span>", "expanded": false, "children": [{"id": "mGk3OmRM4ZD", "topic": "1.NAT作用：在<b>私有网络和公共网络之间进行地址转换<\/b>，使得<b>私有网络中的多个设备可以共享公共网络的IP地址<\/b>。<br><img class=\"mm-img\" src=\"mm-0c80e69077b54a.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mcxrTqPyfYD", "topic": "2.<b>NAT路由器<\/b>：下图中，是只根据IP地址，不根据端口。<br><img class=\"mm-img\" src=\"mm-5915958cb48f98.jpg\" style=\"width:260px;height:82px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mguzkOcXWpj", "topic": "3.上边<b>不加端口的转换方式<\/b>存在以下问题：<br><img class=\"mm-img\" src=\"mm-46593f2b44e57f.jpg\" style=\"width:260px;height:48px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "moyNSmGGcAe", "topic": "4.解决方法：<span style=\"color:#d92d20\"><b><span>网络地址与端口号<\/span><\/b><b>转换<\/b><b><mark>NAPT<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-b23fcfda802958.jpg\" style=\"width:260px;height:93px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mEAZpTCXUk3", "topic": "<b>5.NAT的一些问题：<\/b>", "expanded": true, "children": [{"id": "m9IjjWJPE8C", "topic": "1.对于一些P2P应用，<b>外网主机主动向内网主机通信时<\/b>，<b>会遇到问题<\/b>。这是因为<b><mark>NAT向外网屏蔽了内网主机的网络地址<\/mark><\/b>。—&gt; 不过这样也<b>为内网的主机提供了一些安全保护<\/b>。<br><img class=\"mm-img\" src=\"mm-a56bb0a78ce8a5.jpg\" style=\"width:260px;height:100px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">具体来说，外部主机试图与内部主机进行通信时，由于NAT路由器的存在，会导致以下问题：\n<b>地址不可达<\/b>：外部主机无法直接通过公共网络访问私有网络中的设备，因为<b>私有网络中的设备使用的是NAT路由器分配的私有IP地址<\/b>，而不是公共IP地址。\n<b>端口映射问题<\/b>：即使外部主机知道了私有网络中设备的IP地址，<b>NAT路由器也会阻止传入的连接请求<\/b>，因为它<b>没有关于这个连接的端口映射规则<\/b>。\n<b>对称NAT问题<\/b>：某些NAT路由器会使用对称NAT技术，每次会话都会分配不同的端口映射，这会导致外部主机无法预测到内部主机的端口映射情况，从而无法建立连接。<\/span>", "expanded": true}]}]}, {"id": "mcollj3Xv52", "topic": "网络层的主要任务是<b>实现网络互连<\/b>，进而<b>实现数据包在各网络之间的传输。以下是一些协议：<\/b><br><img class=\"mm-img\" src=\"mm-1026787c0a1f14.jpg\" style=\"width:260px;height:95px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m6RodlKVJSD", "topic": "网络层所<b>要解决的三个问题<\/b>：<br><img class=\"mm-img\" src=\"mm-b675ca663ea2f6.jpg\" style=\"width:260px;height:54px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>Hadoop：分布式系统基本架构 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{max-width:none;max-height:none;transform-origin:0 0;will-change:transform;
+  user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * 15px);line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * 15px - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px 16px;position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:6px;top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc .dnode>.dnode,#doc .dnode>.dleaf,#doc .dnode>details{margin-left:14px}
+#doc .dnode>summary{font-weight:600}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>Hadoop：分布式系统基本架构</b><small>幕布导图 · 255 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "Hadoop：分布式系统基本架构", "data": {"id": "mk1bNICvIuQ", "topic": "一图道尽Hadoop。<br><img class=\"mm-img\" src=\"mm-fe45738a922c78.jpg\" style=\"width:260px;height:170px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mFzIy07qDyC", "topic": "一、<b>Zookeeper<\/b>：分布式协调服务<span class=\"mm-note\">符合“CAP协议”中的 <b>CP<\/b>。\n​Java开发。<\/span>", "expanded": true, "children": [{"id": "my0csSB3gxg", "topic": "<b>为何符合CAP协议中的「<\/b><span style=\"color:#d92d20\"><b><span>CP <\/span><\/b><b>- 一致性、分区容错性」？<\/b>", "expanded": true, "children": [{"id": "mcGaK6eS7Bu", "topic": "一致性：ZAB协议实现", "expanded": true}, {"id": "mVBNFr4yQQo", "topic": "分区容错性：主从节点+选举制", "expanded": true}, {"id": "mW0UhZgvzHn", "topic": "<span style=\"color:#d92d20\"><b><span>ZK牺牲可用性<\/span><\/b><span class=\"mm-note\">在网络分区或Leader选举期间，ZK无法处理写入请求，直到新的Leader节点选举出来。<\/span>", "expanded": true}]}, {"id": "mMtwQTuvzcr", "topic": "<b>特点<\/b>", "expanded": true, "children": [{"id": "m8YPe7Ehiqd", "topic": "1. 最终一致性", "expanded": true}, {"id": "mhLgldI4YsU", "topic": "2. 可靠性", "expanded": true}, {"id": "mKLoF97eo79", "topic": "3. 实时性", "expanded": true}, {"id": "mW0AnIEwH47", "topic": "4. 顺序性", "expanded": true}, {"id": "m2qhI5Q0rhM", "topic": "<b>5. <\/b><span style=\"color:#d92d20\"><b><span>原子性（无中间态）<\/span><\/b><b>-「写」与「读」<\/b>", "expanded": true, "children": [{"id": "mIhi6gj3ZXL", "topic": "<b>写<\/b>：ZK会保证写操作不是失败就是成功，不会出现部分写成功的情况。<span class=\"mm-note\">如何保证的？\n答：\n&gt; <b>写原子性<\/b> = ZAB 原子广播（要么全成功，要么全失败）\n&gt; 广播模式下，服务端接收客户端请求，所有的写请求转发给主节点，再由主节点发送广播给从节点。<b>当半数以上<\/b>的从节点完成数据的写请求后，主节点才会提交这个更新，客户端才会收到一个更新成功的响应。<\/span>", "expanded": true}, {"id": "mYH7laBtFBY", "topic": "<b>读<\/b>：客户端在读取1个znode数据时，要么读到所有数据，要么读操作失败，不会存在只读到部分数据的情况。<span class=\"mm-note\">如何保证的？\n答：<b>读原子性<\/b> = 全局顺序 + 可选 sync → 任何副本给客户端的都是<b>已提交且不会回退<\/b>的视图。\n1. <b>单一全局顺序<\/b>\n任何节点内存里的数据都是 <b>按 zxid 全序排列<\/b> 的同一历史；客户端永远读不到“比过去更旧”的数据（no time-travel）。\n2. <b>Sync 屏障<\/b>（可选强一致）\n如果客户端在读取前显式调用  <b>sync()，当前连接的节点会强制与 Leader 同步，确保读到已提交的最新数据  ，达到 线性一致性<\/b> 。\n3. <b>会话单调性<\/b>\n即使不调用 sync，同一客户端会话内的 <b>读写顺序<\/b> 与全局提交顺序一致，因此不会出现“写入成功后立刻读到旧值”的异常。<\/span>", "expanded": true}]}]}, {"id": "m56AshIzfQr", "topic": "<b>工作核心<\/b>：原子广播协议（<span style=\"color:#d92d20\"><b><span>ZAB<\/span><\/b>）-&gt;保证<b>最终一致性<\/b><span class=\"mm-note\">ZAB：ZK Atomic Broadcast。<\/span>", "expanded": true, "children": [{"id": "micz3ZShWxr", "topic": "<b>原子广播<\/b>：就是对ZK集群的所有主机发送数据包。<span class=\"mm-note\">实现这个机制在ZK内部有一个内部协议，这个协议有两种模式：恢复模式/广播模式<\/span>", "expanded": true}, {"id": "mv7o6pgU8j5", "topic": "<b>恢复模式<\/b>：服务启动或主节点崩溃后，进入恢复模式。当主节点再次被选举出来，且大多服务端完成和主节点的状态同步，恢复模式结束，进入广播模式。", "expanded": true}, {"id": "mb4WiXh3Eae", "topic": "<b>广播模式<\/b>：广播模式下，服务端接收客户端请求，所有的写请求转发给主节点，再由主节点发送广播给从节点。<b>当半数以上<\/b>的从节点完成数据的写请求后，主节点才会提交这个更新，客户端才会收到一个更新成功的响应。", "expanded": true}]}, {"id": "mfi9RmtiR0Q", "topic": "<b>节点<\/b>", "expanded": true, "children": [{"id": "mappUwvdvZS", "topic": "1. 临时节点", "expanded": true}, {"id": "mCb4eKejZPI", "topic": "2. 顺序节点", "expanded": true}, {"id": "mizH7nqSelv", "topic": "3. 临时顺序节点", "expanded": true}, {"id": "mD2t5pCFxst", "topic": "4. 持久节点", "expanded": true}]}, {"id": "mcbbMYbdxnG", "topic": "观察机制：<b>watch dog - 「看门狗」机制<\/b><span class=\"mm-note\">用以实现分布式的“注册-通知”功能<\/span>", "expanded": true}]}, {"id": "mCDlkIwq0qp", "topic": "二、<b>HDFS<\/b>（Hadoop Distributed File System）：<b>分布式文件管理系统<\/b><span class=\"mm-note\">Java开发。<\/span>", "expanded": true, "children": [{"id": "mdI8xrRKC8u", "topic": "核心设计目标：", "expanded": true, "children": [{"id": "mlFo9dklGrM", "topic": "1. 支持超大文件存储（TB、PB）<span class=\"mm-note\">1TB = 1024GB<\/span>", "expanded": true}, {"id": "mEkz1aygues", "topic": "2. 流式数据访问", "expanded": true}, {"id": "mI1o5Zf7kZJ", "topic": "3. 简单的一致性模型", "expanded": true}, {"id": "m7e6Z0xvo6h", "topic": "4. 硬件故障的检测与快速定位", "expanded": true}, {"id": "m0XfOYW5hp0", "topic": "5.  高容错", "expanded": true}]}, {"id": "m4ZyhnIolKw", "topic": "<span style=\"color:#1d4ed8\"><span>NameNode<\/span>：HDFS 的元数据管理节点，<b>所有文件元数据在内存中。<\/b>", "expanded": true}, {"id": "mavx8el5mPp", "topic": "系统架构", "expanded": true, "children": [{"id": "mXJTSWuSTdU", "topic": "<b>NameNode<\/b> - SecondaryNameNode(备用节点) - DataNode", "expanded": true}]}, {"id": "mQ00iJUAhW0", "topic": "数据块（Block）：Hadoop 2.x版后默认 128MB。<span class=\"mm-note\">为何这么大？-&gt; <b>最小化寻址开销<\/b>。<\/span>", "expanded": true}, {"id": "mBhDUQHd7Za", "topic": "优点：", "expanded": true, "children": [{"id": "mCFNssa4UEs", "topic": "1. 高容错", "expanded": true}, {"id": "mEPYQqFhMpT", "topic": "2. 大数据处理", "expanded": true}, {"id": "muJ8MujAyyt", "topic": "3. 流式文件访问", "expanded": true}, {"id": "msXZwRIz2Rp", "topic": "4. 机器廉价，成本低", "expanded": true}]}, {"id": "mJnj3CwZf8E", "topic": "缺点：", "expanded": true, "children": [{"id": "mvhrzz3aQF7", "topic": "1. 数据访问延时高", "expanded": true}, {"id": "mhGo3MOJQqd", "topic": "2. 不适合大量小文件存储", "expanded": true}, {"id": "mfZC6QtDwdg", "topic": "3. 不适合并发写入、不适合文件随机修改、不允许多线程写入<span class=\"mm-note\">1个文件只能有1个写操作，只支持文件的追加写入。<\/span>", "expanded": true}]}, {"id": "mcB3CKeyhc1", "topic": "<b>副本存放策略<\/b>", "expanded": true, "children": [{"id": "mazEhQt3iuj", "topic": "目的：高容错。", "expanded": true}, {"id": "mY0san9pYy9", "topic": "是什么：实际就是NameNode选择在哪个DataNode存储副本的问题。<span class=\"mm-note\">块副本存放的位置选择严重影响HDFS的可靠性和性能。<\/span>", "expanded": true}, {"id": "mVRYKKwZTBE", "topic": "副本技术的优点：", "expanded": true, "children": [{"id": "mYee44qTkYK", "topic": "1. 提高系统可靠性", "expanded": true}, {"id": "miJXPkeFO0p", "topic": "2. 负载均衡", "expanded": true}, {"id": "mrH1mWix5Bx", "topic": "3. 提高访问效率<span class=\"mm-note\">将副本创建在访问频度较大的区域，减少通信开销，提高访问效率。<\/span>", "expanded": true}]}, {"id": "mHhlITZNhtQ", "topic": "HDFS的副本存放策略：<b>机架感知（Rack Awareness）<\/b><br><img class=\"mm-img\" src=\"mm-a6c773c10e1da9.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">含义：将副本放置在不同的机架上，防止了机架故障时的数据丢失，并且在读数据时可充分利用不同机架的带宽。\n这个方式均匀地将副本数据分散在集群中，这就简单地实现了组件故障时的负载均衡。<\/span>", "expanded": true}]}, {"id": "muTI0cwA5Tu", "topic": "高可用机制(HA)", "expanded": true, "children": [{"id": "mKbFU2eZlNq", "topic": "1. 备用NameNode方案<span class=\"mm-note\">由两个NameNode组成：1. Active状态  2. StandBy状态<\/span>", "expanded": true}, {"id": "mJfxuHYiefv", "topic": "2. 主备切换控制器<span class=\"mm-note\">检测NameNode的状态，并且依赖ZK做主备选举和切换。<\/span>", "expanded": true}, {"id": "mzXih9rMm1h", "topic": "3. 共享存储系统<span class=\"mm-note\">主备NameNode依赖此系统实现「元数据」同步。<\/span>", "expanded": true}, {"id": "m9GX1UVtiS4", "topic": "图例：<br><img class=\"mm-img\" src=\"mm-dc088ec8e734fb.jpg\" style=\"width:260px;height:162px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m02VZqqhmFj", "topic": "<b>联邦机制<\/b>", "expanded": true, "children": [{"id": "mZa4EO3MhOE", "topic": "目的：解决系统扩展性、整体性能、隔离性的问题。<span class=\"mm-note\">系统扩展性：元数据存储在NameNode内存中，受内存上限制约。\n整体性能：吞吐量受单个NameNode影响。\n隔离性：一个程序可能会影响其他运行的程序，如1个程序消耗过多资源导致其他程序无法顺利运行，HDFS HA本质上还是单名称节点。<\/span>", "expanded": true}, {"id": "mwz0pnfPKcF", "topic": "是什么：HDFS联邦机制设计了多个相互独立的NameNode，使得HDFS命名服务可水平扩展。<span class=\"mm-note\">这些NameNode可以分别进行各自命名空间和块的管理，无需彼此协调。<\/span>", "expanded": true}, {"id": "mAawYOMlCkH", "topic": "<b>但注意<\/b>：每个DataNode要向集群中所有的NameNode注册，并周期性发送心跳和块信息，上报状态。<br><img class=\"mm-img\" src=\"mm-6d424de19aff06.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mf3ZKgqscmQ", "topic": "<span style=\"color:#d92d20\"><b><span>注意：<\/span><\/b>HDFS在写操作时，<b>写完的块才是可见的<\/b>，<b>正在写的块对客户端是不可见的<\/b><span class=\"mm-note\">客户端在调用write()操作后，只有调用 <b>sync()<\/b> 方法，客户端才确保该文件的写操作已经全部完成。\n且当客户端调用close()方法时，会默认调用sync()方法。<\/span>", "expanded": true}]}, {"id": "mXWY5CX3cKu", "topic": "三、<b>YARN<\/b>（Yet Another Resource Negotitar）：<b>分布式资源调度框架<\/b><span class=\"mm-note\">Java开发。<\/span>", "expanded": false, "children": [{"id": "mv3I5vyDLdC", "topic": "<b>出现原因<\/b>：解决原MapReduce框架的不足，<b>把 MapReduce 的资源管理功能独立出来<\/b>。<span class=\"mm-note\">MapReduce V1的可维护性很差，于是在MapReduceV2中，将「资源管理(YARN)」和「作业管理(Application Master)」分开了。\n&gt; 在MapReduce V1中，这两者均由JobTracker实现。<\/span>", "expanded": true}, {"id": "m20ktXusNLg", "topic": "<b>基本架构<\/b>", "expanded": true, "children": [{"id": "mXFYvhZydDC", "topic": "1. 资源管理器（Resource Manager）<span class=\"mm-note\">全局资源管理器，负责整个系统的资源管理和调度。<\/span>", "expanded": true}, {"id": "mSp7H1vJFsS", "topic": "2. 应用程序管理器（Application Master）<span class=\"mm-note\">1. 负责与资源管理器协商获取资源，并将得到的资源分配给内部具体任务。\n​2. 负责与节点管理器通信，启动或停止具体的任务，监控所有任务的运行状态，若任务运行失败，则负责重启。<\/span>", "expanded": true}, {"id": "mh2uWgVgIxq", "topic": "3. 节点管理器（Node Manager）<span class=\"mm-note\">作为Yarn主从架构的从节点，是作业的执行者。<\/span>", "expanded": true}, {"id": "mgzwZUnmfvF", "topic": "4. 容器（Container）：对资源的抽象", "expanded": true}, {"id": "mLIwwxH3D5e", "topic": "工作流程图<br><img class=\"mm-img\" src=\"mm-c357adb78195b8.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m2j8I8nfId7", "topic": "<b>通用性<\/b>：YARN也可以作为其他计算框架的资源管理系统。<span class=\"mm-note\">如：Spark on yarn、MapReduce on yarn。<\/span>", "expanded": true}, {"id": "mkYYDhwgs8Z", "topic": "<b>容错性<\/b>保障", "expanded": true, "children": [{"id": "mSGsj3MGbZi", "topic": "1. <b>资源管理器<\/b> 故障：配置主备节点，主节点故障时，切换到备用节点即可。<span class=\"mm-note\">针对单点故障。<\/span>", "expanded": true}, {"id": "mHkJK3fQuKM", "topic": "2. <b>应用程序管理器<\/b> 故障：task失败后，由资源管理器负责重启。", "expanded": true}, {"id": "mqT0KBqulza", "topic": "3. <b>节点管理器任务<\/b> 故障：task失败后，将失败任务通知到对应的应用程序管理器，由应用程序管理器决定如何处理。", "expanded": true}]}, {"id": "mK6AbOm8lum", "topic": "<b>高可用(HA)<\/b>", "expanded": true, "children": [{"id": "mBwxxCBqOQu", "topic": "1. 主备切换<span class=\"mm-note\">需要注意的是：\n&gt; YARN的主备切换控制器属于“资源管理器”的一部分。\n&gt; 而在如HDFS中的NameNode HA中，主切换控制器作为「单独服务」运行。<\/span>", "expanded": true}, {"id": "mOmJU08CuA7", "topic": "2. 共享存储系统<span class=\"mm-note\">保证主备节点的元信息一致。<\/span>", "expanded": true}, {"id": "mI5qSZeCJLQ", "topic": "YARN HA架构原理图：<br><img class=\"mm-img\" src=\"mm-6d04c8d3f1222a.jpg\" style=\"width:260px;height:121px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mWXUuHHgc9m", "topic": "<b>资源调度器<\/b>", "expanded": true, "children": [{"id": "mm59WOhvsZb", "topic": "1. FIFO", "expanded": true}, {"id": "m28UtCGjoEY", "topic": "2. Capacity 调度器（容量调度器）：类似OS中的「多级反馈队列(MLFQ)调度算法」", "expanded": true}, {"id": "mCRfAmSzG2C", "topic": "3. Fair调度器（公平调度器）", "expanded": true}]}]}, {"id": "mtY48UWosBl", "topic": "四、<b>MapReduce<\/b>：分布式计算框架 - <b><mark>离线计算<\/mark><\/b><span class=\"mm-note\">一个编程模型、一种大数据分布式并行计算方法论、一个基于集群的高性能并行计算平台。\nJava开发。<\/span>", "expanded": false, "children": [{"id": "mKDWrzAVu07", "topic": "<b>思想：<\/b>", "expanded": true, "children": [{"id": "metJ7HaeGfs", "topic": "1. 函数式编程<span class=\"mm-note\">map()、reduce()<\/span>", "expanded": true}, {"id": "mE7zQjgyOjg", "topic": "2. 分而治之<span class=\"mm-note\">若一个大数据文件可分为具有同样计算过程的多个数据块，且这些数据块之间不存在数据依赖关系，那么提高速度最好的方法就是分而治之。<\/span>", "expanded": true}]}, {"id": "makZzxpxqep", "topic": "<b>目的：<\/b>实现自动化的并行计算，隐藏底层复杂逻辑。", "expanded": true}, {"id": "mIAVhzF9bBy", "topic": "<b>核心操作<\/b>：将大数据处理过程拆分为两步<span class=\"mm-note\">用户使用时，仅需编写map()与reduce()函数，即可实现大数据分布式计算。<\/span>", "expanded": true, "children": [{"id": "m4zBZSJyN1B", "topic": "1. <span style=\"color:#d92d20\"><b><span>Map<\/span><\/b>：映射、分解", "expanded": true}, {"id": "mbFawY0jkKw", "topic": "2. <span style=\"color:#d92d20\"><b><span>Reduce<\/span><\/b>：化简、映射", "expanded": true}]}, {"id": "me6vt2hXYD8", "topic": "优点：", "expanded": true, "children": [{"id": "mfwtGsON53e", "topic": "1. 易于编程", "expanded": true}, {"id": "mP49U2iC0YC", "topic": "2. 良好的扩展性：增加机器即可扩展集群的计算能力。", "expanded": true}, {"id": "mL5hwjNaurR", "topic": "3. 高容错", "expanded": true}, {"id": "mm3flWegx69", "topic": "4. 适合PB级海量数据的离线处理", "expanded": true}]}, {"id": "mkx5elh0p8B", "topic": "缺点：", "expanded": true, "children": [{"id": "myw5iScrds7", "topic": "1. 不适合实时计算", "expanded": true}, {"id": "mJEKcyH1B2O", "topic": "2. 不适合流式计算", "expanded": true}, {"id": "m7QjWMWF6s8", "topic": "3. 不适合DAG的计算，即不适合“有依赖关系数据的计算”。<span class=\"mm-note\">因为：若有此情况，那么被依赖方的MapReduce会将每个作业的输出结果写入磁盘，依赖方再从磁盘读取，会造成大量的磁盘IO。<\/span>", "expanded": true}, {"id": "mQeV3QUAcnk", "topic": "<span style=\"color:#d92d20\"><b><span>MapReduce本身就是为离线数据分析而设计。<\/span><\/b>", "expanded": true}]}, {"id": "mIXTsWPVVVh", "topic": "<b> 编程模型<\/b><br><img class=\"mm-img\" src=\"mm-c84f153500eff2.jpg\" style=\"width:260px;height:170px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mdjsSWha9GN", "topic": "五、<b>Hive<\/b>：构建在Hadoop上的<b>开源数据仓库工具，本质是 “SQL 引擎 + 表结构”<\/b>。像一个“翻译器 + 任务编排器\"<b>。<\/b><span class=\"mm-note\">Java开发。\n本质：把 SQL 翻译成 MapReduce/Tez 跑在 HDFS 上的<b> “表格式约定”<\/b>。<\/span>", "expanded": false, "children": [{"id": "mcnKbSce8Cp", "topic": "<b>作用：<\/b>", "expanded": true, "children": [{"id": "mymE262CwCO", "topic": "1. 存储与处理海量结构化数据，<b>数据存储在HDFS中。<\/b>", "expanded": true}, {"id": "mSsBuA2A0N9", "topic": "2. Hive可以将其上的数据文件映射为一张数据库表，提供完整的类SQL查询功能（<span style=\"color:#d92d20\"><b><span>HQL<\/span><\/b>）", "expanded": true}]}, {"id": "mkvMHeb9lJ4", "topic": "<b>特点：<\/b>", "expanded": true, "children": [{"id": "mFExC4eheab", "topic": "1. 构建在Haddop之上，数据存储在HDFS。", "expanded": true}, {"id": "mME15nnrfzE", "topic": "2. Hive通过SQL，将SQL语句转换为MapReduce，实现数据的分析处理。", "expanded": true}]}, {"id": "miSSaDTmpyd", "topic": "<b>设计原理：<\/b>", "expanded": true, "children": [{"id": "m8xwa4ZGK12", "topic": "1. 支持索引", "expanded": true}, {"id": "mrpTegzFZiT", "topic": "2. 内置大量UDF（User Define Function）", "expanded": true}, {"id": "mN2TgL9xWmI", "topic": "3. 类SQL的查询方式", "expanded": true}, {"id": "m3xBCOmjwDx", "topic": "4. 元数据保存在关系型数据库中(MySql、Oracle等)：大大减少了查询过程中执行语义检查的时间。<span class=\"mm-note\">1. 因此，在安装Hive时，得先安装MySQL等关系性数据库。\n2. 为何减少了查询过程中执行语义检查的时间？\n&gt; 答：执行任何 HQL 时，<b>语义检查只需在元数据库里做一次或几次主键/索引查找<\/b>，即可瞬间完成；而 Hive 本身的分布式计算引擎<b>只负责真正的数据扫描与计算<\/b>，两者职责分离，避免了 <b>“为了查个表名或字段类型而去扫 HDFS 上巨大元数据文件”<\/b> 的耗时操作，因此 <b>大大减少了语义检查时间<\/b>。<\/span>", "expanded": true}, {"id": "m3brnEp63wO", "topic": "5. 用户接口包括：Cli、Web、JDBC。", "expanded": true}]}, {"id": "meRf6vIOHQa", "topic": "优点：", "expanded": true, "children": [{"id": "mVtOm4eJTh5", "topic": "1. 适合数据大批量处理", "expanded": true}, {"id": "mny2am2MtWD", "topic": "2. 拓展性强", "expanded": true}, {"id": "m5k7fUmOCNY", "topic": "3. 构建在Hadoop上", "expanded": true}]}, {"id": "m4XFHxvrPST", "topic": "缺点：", "expanded": true, "children": [{"id": "mxX086J6LBZ", "topic": "1. HQL的表达能力有限，不支持迭代计算", "expanded": true}, {"id": "mgcOLqpqJtK", "topic": "2. Hive的运行效率低、延迟高<span class=\"mm-note\">毕竟底层还是用的MapReduce、离线计算。<\/span>", "expanded": true}, {"id": "mgzAxC1Dx5x", "topic": "3. 调优困难<span class=\"mm-note\">想调优就得调Hadoop。<\/span>", "expanded": true}]}, {"id": "mmdrLS1fqpP", "topic": "<b>数据模型<\/b>", "expanded": true, "children": [{"id": "mMAX1heOJ8f", "topic": "1. <b>Table<\/b>：与数据库表概念类似，每个表在Hive中都有一个对应的存储目录。", "expanded": true}, {"id": "mdFXwzwu9er", "topic": "2.<b> 分区（Partition）<\/b>：表中的1个分区对应于表下的1个目录，所有此分区的数据都存储在相应的目录中。", "expanded": true}, {"id": "msogseXJ5B3", "topic": "3. <b>桶（Bucket）<\/b>：对指定列计算Hash，根据Hash值切分数据。", "expanded": true}, {"id": "mM7B3PhFjgh", "topic": "4. <b>外部表（Extrnal Table）<\/b>：指向已经在HDFS中存在的数据，External Table只是一个过程。<span class=\"mm-note\">外部表使用时：“Create External table ...... Location ${HDFS路径}”，其实际数据存储在后边指定的HDFS路径中，而不是移动到当前的Hive目录中。\n因此当删除1个External Table时，仅删除了当前Hive工作空间下的表的元数据，但实际数据不会删除。<\/span>", "expanded": true}]}]}, {"id": "mYtdpEFkYH3", "topic": "六、<b>Spark<\/b>：基于「内存」的大数据<b>「并行计算」框架<\/b> - <b><mark>\"微批式\"实时计算<\/mark><\/b><span class=\"mm-note\">Scala+Java 开发。支持 流处理(\"微批式\") 与 批处理。<\/span>", "expanded": false, "children": [{"id": "mRtJiuVSQre", "topic": "<b>Spark架构：<\/b>", "expanded": true, "children": [{"id": "m0nN6E3N6PY", "topic": "架构总图：Master/Slave模型<br><img class=\"mm-img\" src=\"mm-4c4b6bb4ac3839.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">Master：整个集群的控制器，负责整个集群的正常运行。\n​Slaver：集群中含有Worker进程的节点。<\/span>", "expanded": true}]}, {"id": "muLGKD9EtLM", "topic": "<b>优点：<\/b>", "expanded": true, "children": [{"id": "mZhfkohpcdn", "topic": "1. 运行速度快 -&gt; 原因：", "expanded": true, "children": [{"id": "m12ga5Y2YDZ", "topic": "1. Spark基于内存计算", "expanded": true}, {"id": "moWSXqAdG4M", "topic": "2. Spark运行基于线程模型", "expanded": true}, {"id": "msjr8qhogdR", "topic": "3. Spark框架内部有“优化器”", "expanded": true}]}, {"id": "m8cC7yqmYBJ", "topic": "2. 生态好，易用：Java、python、Scala API", "expanded": true}, {"id": "mhny8g8znlE", "topic": "3. 支持复杂查询：Map、Reduce、SQL查询、流式计算、机器学习、图计算", "expanded": true}, {"id": "mYMsF6YzA9E", "topic": "4. 实时流处理<span class=\"mm-note\">实则是“微批”<\/span>", "expanded": true}, {"id": "m1Tb7n0IZzX", "topic": "5. 容错性：Spark引入了<b>「弹性分布式数据集RDD」<\/b>", "expanded": true}]}, {"id": "mYLevcH73x2", "topic": "<b>缺点：<\/b>", "expanded": true, "children": [{"id": "mI7CcJ5bC14", "topic": "1. 内存饥渴<span class=\"mm-note\">纯内存计算 + 缓存机制，1 GB 数据常占 3–5 GB RAM，易 OOM<\/span>", "expanded": true}, {"id": "mxI09RXAMtn", "topic": "2. 实时能力有限<span class=\"mm-note\">Structured Streaming 仍是微批，<b>毫秒级场景不如 Flink<\/b><\/span>", "expanded": true}]}, {"id": "mlP7OEM0zCB", "topic": "<span style=\"color:#d92d20\"><b><span>RDD（弹性分布式数据集）<\/span><\/b><span class=\"mm-note\">Resilient Distributed Dataset<\/span>", "expanded": true, "children": [{"id": "mtTTyQdpz45", "topic": "<b>1. 概念理解<\/b>", "expanded": true, "children": [{"id": "m7KbaimL8kd", "topic": "1. 数据集：RDD是一种元素集合，单从逻辑上看，类似于Java List或 MySQL Table。", "expanded": true}, {"id": "mnES47T6OeV", "topic": "2. 分布式：RDD可分区，每个分区可分布在集群中不同节点上。<span class=\"mm-note\">从而可以对RDD中的数据进行并行计算。<\/span>", "expanded": true}, {"id": "mWnfKcJry1f", "topic": "3. 弹性：RDD默认在内存，若内存不足，才会放入磁盘。", "expanded": true}, {"id": "mFBumHXOIED", "topic": "简单理解：RDD可以抽象地理解为一个大的数组(Array)，但此数组分布在集群上。逻辑上RDD的每个分区是一个Partition。", "expanded": true}]}, {"id": "mVnj2btWghE", "topic": "2. 是什么？", "expanded": true, "children": [{"id": "mrWoNcDAs1M", "topic": "1. Spark主要的编程抽象、Spark数据存储的核心、核心数据模型。", "expanded": true}, {"id": "mHVYuAoaj3S", "topic": "2. 表示分布在多个计算节点上，可并行操作的元素集合。", "expanded": true}, {"id": "mREgeWsbGDl", "topic": "3. 是<b>分布在一组节点上的只读对象集合<\/b>，这些对象集合是弹性的，若丢失了一部分，Spark可根据父RDD对它们进行计算。", "expanded": true}, {"id": "mZo4gPhgKPW", "topic": "4. 在对RDD做转换计算时，可通过<b>CheckPoint<\/b>方法，将数据持久化到HDFS，实现容错。", "expanded": true}]}, {"id": "mBDanCeGQ2p", "topic": "3. 创建方式：", "expanded": true, "children": [{"id": "mPaeWsbpGwZ", "topic": "1. 外部数据引入", "expanded": true}, {"id": "mN0w5jssi01", "topic": "2. 从父RDD转换得到新RDD", "expanded": true}]}, {"id": "msTJFB3nw0K", "topic": "4. 两种操作算子", "expanded": true, "children": [{"id": "mO7AohOZaic", "topic": "<b>1. Transformation(转换算子) ：<\/b><span style=\"color:#1d4ed8\"><b><span>延迟计算<\/span><\/b><span class=\"mm-note\">延迟计算是指：从1个RDD到另一个RDD的转换操作，并非马上执行，而是等到有Action操作才会真正运算。\n常用的算子：map、filter、distinct、union(合并RDD)、reduceByKey(元素为kv对的RDD中key相同元素的value进行聚合)。<\/span>", "expanded": true}, {"id": "mu7g91ayb38", "topic": "<b>2. Action(行动算子)<\/b> ：会触发Spark提交作业(Job)，并将数据输出到Spark系统。<span class=\"mm-note\">常见的算子：count()、first()、foreach()、collect、top、saveAsTextFile()<\/span>", "expanded": true}, {"id": "mchvgyfSagF", "topic": "<b>拓展<\/b>：Pair RDD及算子 -&gt; 通常用来做聚合计算<span class=\"mm-note\">Pair RDD即键值对RDD。<\/span>", "expanded": true}]}, {"id": "mffixUAZSwG", "topic": "5. <span style=\"color:#1d4ed8\"><b><span>Lineage(血统)机制<\/span><\/b>：RDD之间通过血统机制产生依赖关系。<span class=\"mm-note\">逻辑上每经历一次变换，就会讲RDD转换为一个新的RDD。<\/span>", "expanded": true}, {"id": "mIXV2geX74S", "topic": "6. RDD的数据存储模型：", "expanded": true, "children": [{"id": "mMt5rQRigfY", "topic": "在物理上，RDD对象实质上是<b>1个元数据结构，存放着Block、Node等映射关系<\/b>。<br><img class=\"mm-img\" src=\"mm-3598cefc7660a2.jpg\" style=\"width:260px;height:204px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mTsOaCN90sb", "topic": "Spark的运行模式：", "expanded": false, "children": [{"id": "m4XRh5yUzo8", "topic": "1. Local模式：本地使用N个线程。", "expanded": true}, {"id": "mo4NpV1aJal", "topic": "2. Standalone模式：Spark自己部署类似于yarn的框架运行", "expanded": true}, {"id": "m1pyMYQRJck", "topic": "3. Spark on yarn模式：将Spark运行在Yarn上，无需Spark启动任何进程服务。<span class=\"mm-note\">只需选1个节点安装Spark作为客户端，能将Spark作业提交到Yarn运行即可。<\/span>", "expanded": true}]}, {"id": "m7cX2oMR0KW", "topic": "Spark SQL<span class=\"mm-note\">是Spark用来处理结构化数据的1个模块，提供两个编程抽象<\/span>", "expanded": true, "children": [{"id": "mtEPrOrSAOl", "topic": "1. DataFrame<span class=\"mm-note\">与RDD类似，DataFrame也是一个分布式数据容器。<\/span>", "expanded": true}, {"id": "me8Ux0gNztH", "topic": "2. DataSet<span class=\"mm-note\">是特定域对象中的强类型集合。<\/span>", "expanded": true}]}, {"id": "mLuJXNB6eWK", "topic": "<b>拓展：<\/b>", "expanded": true, "children": [{"id": "mUg7GxaZcbq", "topic": "1. Spark有个实验模式（Spark Continus Processing），是“实验式真流”，可达毫秒级延迟，但并不成熟。", "expanded": true}]}]}, {"id": "m4PLaByIMOn", "topic": "七、<b>Flink<\/b>：基于「内存」的大数据<b>「实时并行计算」<\/b>框架 - <b><mark>\"真\"实时计算<\/mark><\/b><span class=\"mm-note\">Java开发。<\/span>", "expanded": true, "children": [{"id": "mI6VuU6JiL5", "topic": "<b>特性<\/b>", "expanded": true, "children": [{"id": "meDXnegYI6Z", "topic": "1. 支持<b>有状态计算的“<\/b><span style=\"color:#1d4ed8\"><b><span>Exactly - once<\/span><\/b><b>”语义<\/b><span class=\"mm-note\">解释：是指在发生任何失败重启后，每条输入记录只被计算一次，其产生的中间/中间结果及对应状态，既不丢失也不重复，永远保持幂等一致。<\/span>", "expanded": true}, {"id": "mXibkFzJZpA", "topic": "2. 支持高吞吐、低延迟、高性能的流处理", "expanded": true}, {"id": "mGVhN3OSf6O", "topic": "3. 内存基于JVM，但自己管理内存", "expanded": true}, {"id": "m9CBsa67O8M", "topic": "4. 支持带有事件时间(Event Time)的流处理和窗口处理。<span class=\"mm-note\">优点：使流计算结果更精确，尤其事件到达无序或延迟的情况下。<\/span>", "expanded": true}, {"id": "mvZllMpaxgF", "topic": "5. 毫秒级延迟", "expanded": true}, {"id": "m6OJjizj51o", "topic": "6. 支持<span style=\"color:#1d4ed8\"><span>**CEP(复杂事件处理)**<\/span>：Spark不支持，是因为其“微批式”伪实时计算。<span class=\"mm-note\">Complex Event Processing：是指在<b>实时数据流<\/b>中，按<b>时间顺序和逻辑规则<\/b>把多条简单事件组合、识别成一条<b>“复杂事件”<\/b>，并立即触发后续动作的技术。\n&gt; 典型例子：“5 秒内连续 3 次登录失败 → 立刻风控报警” 这条规则就是一条 CEP 模式。<\/span>", "expanded": true}, {"id": "mPnd2Lq4bAs", "topic": "<b>一句话总结：<\/b><span style=\"color:#d92d20\"><b><span>FLINK = 内存计算 + 流优先 + 自管内存 + 毫秒级容错<\/span><\/b>", "expanded": true}]}, {"id": "mnB1yjpxkg3", "topic": "<span style=\"color:#d92d20\"><b><span>微批模型<\/span><\/b> ：把实时流切成毫秒～秒级的小批量，一次处理一批，而非逐条处理。<span class=\"mm-note\">Micro-Batch 模型。\n实时计算分为  「真流式」与「微批式」。<\/span>", "expanded": true, "children": [{"id": "mjIhf8gxd34", "topic": "1. <span style=\"color:#1d4ed8\"><b><span>真流式(Flink)<\/span><\/b>：来一条算一条，延迟低。<span class=\"mm-note\">默认耗时：毫秒级。<\/span>", "expanded": true}, {"id": "m6UmLTUtFMH", "topic": "2. <span style=\"color:#1d4ed8\"><b><span>微批式(Spark)<\/span><\/b>：延迟高，复用批处理引擎，代码/资源复用，成本低<span class=\"mm-note\">默认耗时：百毫秒 ～ 秒级<\/span>", "expanded": true}, {"id": "myOAwMK8H56", "topic": "<b>2.1.&nbsp;Spark “微批”的理解：<\/b>\"<span style=\"color:#1d4ed8\"><span>微批 = 按<\/span><span style=\"color:#d92d20\"><span>时间间隔<\/span><span style=\"color:#1d4ed8\"><span>（如 500ms）把流入的数据聚合成一批 RDD，然后按 RDD 计算<\/span>\"<br><img class=\"mm-img\" src=\"mm-f7cdfefb45d719.jpg\" style=\"width:260px;height:250px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m4szkWbGdTL", "topic": "Flink运行模式：", "expanded": false, "children": [{"id": "mkdyKgLyR8i", "topic": "1. Local模式", "expanded": true}, {"id": "mpGX6OuJJvK", "topic": "2. Standalone模式", "expanded": true}, {"id": "mLVdkTyzeJ7", "topic": "3. Flink on yarn模式", "expanded": true}]}]}, {"id": "mFx73EIzGNC", "topic": "八、<b>HBase<\/b>：在HDFS上开发的「<b>面向列<\/b>」的「<b>NoSQL KV分布式数据库<\/b>」<span class=\"mm-note\">高可靠、高性能、面向列、可伸缩、随机读写的分布式存储系统。\n基于 HDFS 的随机读写，毫秒级点查。\nJava开发。<\/span>", "expanded": false, "children": [{"id": "m5Jq4PMMcH2", "topic": "<b>什么是HBase？<\/b>", "expanded": true, "children": [{"id": "mGkca8Dg4Kd", "topic": "1. 高可靠、高性能、面向列、可伸缩的NoSQL分布式存储系统", "expanded": true}, {"id": "mDHcPfJBmhX", "topic": "2. 用HDFS做文件存储系统、用MapReduce做数据计算、用Zookeeper作协同服务", "expanded": true}, {"id": "mHNd3hmg9Ih", "topic": "若需要 <span style=\"color:#1d4ed8\"><b><span>实时地、随机读写<\/span><\/b> <b>超大规模数据集<\/b>，可用HBase。", "expanded": true}]}, {"id": "mMxsOXbtNjJ", "topic": "<b>特点<\/b>", "expanded": true, "children": [{"id": "mYmpwDpw3En", "topic": "1. <b>容量巨大<\/b>：单表百亿行、数百万列。", "expanded": true}, {"id": "m4uVkvmqk3M", "topic": "2. <b>无模式<\/b>：<b>同一个表的不同行，可以有截然不同的列<\/b>。", "expanded": true}, {"id": "mceuA9ovct0", "topic": "3. <b>面向列<\/b>：面向列存储和权限控制，支持列独立索引。", "expanded": true}, {"id": "m3IIV7heEJy", "topic": "4. <b>稀疏性<\/b>：<b>值为空的列不占用存储<\/b>。", "expanded": true}, {"id": "moc9zZF9en2", "topic": "5. 扩展性：底层存储依赖HDFS，天生可扩展。与Hadoop类似，主要依靠「<b>横向扩展」<\/b>，通过增加廉价的商用服务器，达到扩展目的。", "expanded": true}, {"id": "mYFmCxv5fFH", "topic": "6. <b>高可靠<\/b>：<b>预写日志(WAL)<\/b> 和 <b>副本机制(Replication)<\/b> ，防止数据丢失。", "expanded": true}, {"id": "mtbOxDKDIXw", "topic": "7. <b>高性能<\/b>：底层的 <b>LSM(Log-Structured Merge Tree)<\/b> 与 <b>RowKey有序排列<\/b>，使HBase具备非常高的写入性能。", "expanded": true}, {"id": "mcxSB2T76bN", "topic": "8. 主要存储「非结构化」 和 「半结构化数据」<span class=\"mm-note\">非结构化：视频、图片；半结构化：XML、Html。\n原因：HBase 的「<b>稀疏列式 + 动态列族 + 无 Schema<\/b>」天生适合字段差异大、字段频繁增减、数据规模巨大的场景，而这正是「非/半结构化数据」的典型特征。<\/span>", "expanded": true}]}, {"id": "mhPN2VHDMOO", "topic": "<b>逻辑模型<\/b>", "expanded": true, "children": [{"id": "m5d4TZfBAuv", "topic": "1. HBase的<span style=\"color:#1d4ed8\"><b><span>基本单位是列，一列或多列构成行，行有行键(RowKey)，行键唯一<\/span><\/b>。", "expanded": true, "children": [{"id": "mNDiiGfyxzJ", "topic": "<span class=\"mm-tbl\"><table><thead><tr><th>RowKey<\/th><th>Timestamp<\/th><\/tr><\/thead><tbody><tr><td>1<\/td><td><\/td><\/tr><tr><td>1<\/td><td><\/td><\/tr><tr><td>1<\/td><td><\/td><\/tr><tr><td>2<\/td><td><\/td><\/tr><tr><td>2<\/td><td><\/td><\/tr><\/tbody><\/table><\/span><span class=\"mm-note\">那么此时认为，仅有两行数据 -&gt; Rowkey = 1 、 RowKey = 2<\/span>", "expanded": true}]}, {"id": "m6xWaK38HRx", "topic": "2. <b>列是由<\/b> <span style=\"color:#1d4ed8\"><b><span>「列簇前缀」和「修饰符(Qualifier)」连接而成<\/span><\/b>，分隔符是英文冒号。", "expanded": true, "children": [{"id": "mBmpzeVsXS6", "topic": "<span class=\"mm-tbl\"><table><thead><tr><th>RowKey<\/th><th>TimeStamp<\/th><th>a:A<\/th><th>a:B<\/th><th>b:A<\/th><\/tr><\/thead><tbody><tr><td>1<\/td><td><\/td><td>test<\/td><td><\/td><td><\/td><\/tr><tr><td>1<\/td><td><\/td><td><\/td><td>test2<\/td><td><\/td><\/tr><tr><td>1<\/td><td><\/td><td><\/td><td><\/td><td>test3<\/td><\/tr><tr><td>2<\/td><td><\/td><td><\/td><td><\/td><td>test4​<\/td><\/tr><tr><td>3<\/td><td><\/td><td><\/td><td><\/td><td><\/td><\/tr><\/tbody><\/table><\/span><span class=\"mm-note\">那么此时：\n1. 有两个列簇：a、b ；有3个列。\n​2. 列簇a有2个列：a:A、a:B\n3. 列簇b有1个列：b:A<\/span>", "expanded": true}]}]}, {"id": "mH0wY3ciM0U", "topic": "<b>数据模型核心概念<\/b>", "expanded": true, "children": [{"id": "m2XnxU0hHFX", "topic": "1. <b>表(Table)：<\/b>与传统的不同的是，<b>HBase同一列可存储不同时刻的值<\/b>，且多个列可以组成1个列簇(Colunm Family)。", "expanded": true, "children": [{"id": "mO4OT20789m", "topic": "为何同一列可以存储不同时刻的值呢？原因：<span style=\"color:#d92d20\"><b><span>HBase的\"同一列\"其实是「 &lt;列簇:修饰符&gt;,时间戳 」的三级坐标<\/span><\/b>。那么不同的时间戳就保证了可以存同一数据的多个版本。", "expanded": true}, {"id": "maGh5fOGdZm", "topic": "<span class=\"mm-tbl\"><table><thead><tr><th>RowKey<\/th><th>TimeStamp(时间戳)<\/th><th>a:A<\/th><th>a:B<\/th><th>b:A<\/th><\/tr><\/thead><tbody><tr><td>1<\/td><td>17368920123<\/td><td>test<\/td><td><\/td><td><\/td><\/tr><tr><td>1<\/td><td>17368920000<\/td><td>test3<\/td><td>test2<\/td><td><\/td><\/tr><tr><td>1<\/td><td>18900020000<\/td><td>test4<\/td><td><\/td><td>test3<\/td><\/tr><tr><td>2<\/td><td><\/td><td><\/td><td><\/td><td>test4​<\/td><\/tr><tr><td>3<\/td><td><\/td><td><\/td><td><\/td><td><\/td><\/tr><\/tbody><\/table><\/span><span class=\"mm-note\">如这张HBase表中，就存储了 <b>第一行(RowKey=1) 第a:A列数据 共3个时间版本的数据<\/b><\/span>", "expanded": true}]}, {"id": "m6oXajCQkbb", "topic": "2. <b>行键(RowKey)<\/b> ：行键唯一，是 <span style=\"color:#d92d20\"><b><span>HBase的主键<\/span><\/b>。", "expanded": true, "children": [{"id": "mVqCtqqtfJa", "topic": "1. RowKey <u>不宜过长<\/u>，否则既占存储，又影响效率。", "expanded": true}, {"id": "mVtliQpy8dh", "topic": "2. RowKey 应尽量<u>均匀分布<\/u>，避免产生热点问题。", "expanded": true}, {"id": "mH9dYUSCs2g", "topic": "3. 保证RowKey的 <u>唯一性<\/u>。", "expanded": true}]}, {"id": "mgVNbaSPAXl", "topic": "3. <b>列簇(Column Family)<\/b>", "expanded": true, "children": [{"id": "mAnq48t47d6", "topic": "1. HBase表中的每个列都归属于某个列簇，1个列簇中的所有列成员都有相同的前缀。", "expanded": true}, {"id": "mDNq7wm0VHD", "topic": "2. <span style=\"color:#d92d20\"><b><span>列簇是表的schema的一部分，必须在使用表之前定义列簇<\/span><\/b>。<span class=\"mm-note\">但列非必需，可以在写数据时动态加入。<\/span>", "expanded": true}]}, {"id": "m23Uvvo9Kkr", "topic": "4. <b>单元格(Cell)<\/b>", "expanded": true, "children": [{"id": "mk2m6jU4IlQ", "topic": "1. HBase中 <b>通过RowKey和Column确定的1个存储单元<\/b> 称为Cell。", "expanded": true}, {"id": "mKLCa5Or4vy", "topic": "2. <span style=\"color:#1d4ed8\"><b><span>每个Cell保存着同一份数据的多个版本<\/span><\/b>，不同时间版本的数据，按时间顺序倒序排序。最新时间的数据排在最前边。", "expanded": true}, {"id": "mvzaFRXzvgr", "topic": "3. 时间戳：64位整数。可在写入时赋值，也可以自动赋值。", "expanded": true}, {"id": "m7tvvx6ErJl", "topic": "4. 数据版本回收方式：", "expanded": true, "children": [{"id": "mwRUSFyetrb", "topic": "1. 保存数据的<u>最后N个版本<\/u>", "expanded": true}, {"id": "mM2wUNfNDOJ", "topic": "2. 保存<u>最近一段时间内的数据版本<\/u>(如：7天内)<span class=\"mm-note\">用户可针对每个列簇进行设置。<\/span>", "expanded": true}]}]}]}, {"id": "m6sVdtsS31y", "topic": "<b>物理模型<\/b>", "expanded": false, "children": [{"id": "mMLchc3lGKC", "topic": "1. 物理上，表按列分开存储。HBase的列按列簇分组，HFile是面向列的，存放行的不同列的物理文件。", "expanded": true}, {"id": "mPzywx4riqk", "topic": "2. 1个列簇的数据存放在多个File中，重要的是：「<span style=\"color:#1d4ed8\"><b><span>1个列簇的数据会被同一个Region管理，物理上存放在一起<\/span><\/b>」", "expanded": true}, {"id": "mywHN8kXu3l", "topic": "3. HBase中<b>所有的行按Rowkey的字典序排列<\/b>，在<b>行的方向上分割为多个Region<\/b>。", "expanded": true, "children": [{"id": "mjIoqOdmMH7", "topic": "<br><img class=\"mm-img\" src=\"mm-79483a9b59dc18.jpg\" style=\"width:260px;height:264px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mv6g12np7Vo", "topic": "<span style=\"color:#d92d20\"><b><span>Region<\/span><\/b><b>：是HBase<\/b><span style=\"color:#d92d20\"><b><span>数据管理的基本单位<\/span><\/b><b>，是HBase<\/b><span style=\"color:#d92d20\"><b><span>分布式存储 和 负载均衡的最小单元<\/span><\/b><b>。<\/b><span class=\"mm-note\">注意：但并不是最小的存储单元，Region由1个或多个store组成，每个store保存一个Column Family。<\/span>", "expanded": true, "children": [{"id": "muKWxox9iuE", "topic": "<br><img class=\"mm-img\" src=\"mm-927a60957d1849.jpg\" style=\"width:260px;height:160px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mExE6gb3cCn", "topic": "HBase调优", "expanded": true, "children": [{"id": "m1Lh7RNCz8e", "topic": "1. 内存：一般分配整个可用内存的70%给Java堆。", "expanded": true}, {"id": "mGpo1hNA7cQ", "topic": "2. CPU：核越多越好。", "expanded": true}, {"id": "mL98x8vDV7I", "topic": "3. 查询性能优化：Scan缓存、显示指定列、关闭WAL。", "expanded": true}]}, {"id": "mKoEgjI6dLN", "topic": "HBase： 一个<b>巨大的、持久的、按 key 排序的、分布式的<\/b> <span style=\"color:#d92d20\"><b><span>TreeMap<\/span><\/b>（而不是 HashMap）。", "expanded": true}]}, {"id": "muH9owcwcwj", "topic": "九、<b>Iceberg<\/b>：<b>一种<\/b><span style=\"color:#1d4ed8\"><b><span>表格式规范<\/span><\/b>，定义数据文件怎么组织、元数据怎么管理，可被多种引擎读写。", "expanded": true, "children": [{"id": "m903e4uknL1", "topic": "<br><img class=\"mm-img\" src=\"mm-cfd868dc520681.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mgKWb6k2fzq", "topic": "<br><img class=\"mm-img\" src=\"mm-59589892e71f59.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mvgm5oFxbNJ", "topic": "在公司工作时，之前常用的是 Iceberg，而不是 Hive 表，为什么？<br><img class=\"mm-img\" src=\"mm-9a9dbb172e93fc.jpg\" style=\"width:260px;height:114px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">Hive 表是“文件放哪里的约定”，Iceberg 是“数据库级别的表格式”<\/span>", "expanded": true}, {"id": "mPLGNRvXbCX", "topic": "（空节点）", "expanded": true}]}, {"id": "mGNd3WNgHwe", "topic": "<b>十、JuiceFS：是一个<\/b><span style=\"color:#1d4ed8\"><b><span>POSIX 兼容的分布式文件系统<\/span><\/b><b>。<\/b>", "expanded": true, "children": [{"id": "mtZxuQSTxah", "topic": "<br><img class=\"mm-img\" src=\"mm-215c7f99a321d3.jpg\" style=\"width:260px;height:203px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mCyaZ9WMUcn", "topic": "<b>与 HDFS 架构的对比：<\/b><br><img class=\"mm-img\" src=\"mm-3e99ee32943fc9.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mWaJZ98z5ox", "topic": "<b>POSIX 介绍<\/b>", "expanded": true, "children": [{"id": "mNTNvCdpfGK", "topic": "1. POSIX 是什么？     <b>Portable Operating System Interface（可移植操作系统接口）<\/b>。它是<span style=\"color:#1d4ed8\"><span> IEEE 定义的一套操作系统 API 标准规范，规定了文件系统应该提供哪些接口、行为是什么<\/span>。<br><img class=\"mm-img\" src=\"mm-e43a2b3ec3f011.jpg\" style=\"width:260px;height:106px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mXq25e6SgSz", "topic": "2.&nbsp;为什么它对 JuiceFS 重要。这就是 <span style=\"color:#d92d20\"><span>JuiceFS 相比 HDFS 的一个核心优势<\/span>：<b><mark>任何语言、任何程序都能用，不绑定 Hadoop 生态。<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-f36f73428f2f58.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mqcBLbf80Nr", "topic": "在公司看到，<span style=\"color:#d92d20\"><b><span>相比于 HDFS 存储，用 JuiceFs 存储能减少 80% 的成本<\/span><\/b>。非常好奇是为什么？", "expanded": true, "children": [{"id": "mI9XodtVYWj", "topic": "（空节点）", "expanded": true}]}]}, {"id": "mYVKBiJlETm", "topic": "<span style=\"color:#d92d20\"><b><span>HDFS vs Hive vs HBase 之间的关系<\/span><\/b>", "expanded": false, "children": [{"id": "mNEDLELXuWg", "topic": "<br><img class=\"mm-img\" src=\"mm-39b888a99fdbf8.jpg\" style=\"width:260px;height:156px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mbLmiz1aBZV", "topic": "Hive 怎么查 HBase 表？-&gt; 通过 HBaseStorageHandler 做映射<br><img class=\"mm-img\" src=\"mm-008aefafa9cf5a.jpg\" style=\"width:260px;height:119px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  lbstage.addEventListener('dblclick', function(e){
+    var r = lbRect;
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, e.clientX - r.left, e.clientY - r.top, true);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

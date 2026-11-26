@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>常问面试题 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>常问面试题</b><small>幕布导图 · 150 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "常问面试题", "data": {"id": "root", "topic": "<b>常问面试题<\/b>", "children": [{"id": "n1", "topic": "<b>1.MYSQL自增主键，在删除数据后，主键依然按删除数据的最大主键增长，而不是按已有数据的主键连续增长<\/b>", "children": [{"id": "n2", "topic": "场景：每次在数据库删除数据，再插入数据后，其自增主键就会按已删除数据的最大主键自增。而不是已有数据的最大主键自增。", "children": []}, {"id": "n3", "topic": "解决方法：<b>每次删除后执行这句就好了：<\/b>", "children": []}, {"id": "n4", "topic": "原理：<span class=\"mm-note\">&gt; 😍 将<b>AUTO_INCREMENT =1表示将下次主键自增长启始位置设置为1<\/b>，但<b>如果表中已经有比1大的主键了就默认下次自增从已有的最大主键+1开始。<\/b> 比如表中已经有1,2,3,4这4个id,删掉1这个id后，就算执行AUTO_INCREMENT =1，下一次自增的id也会是5。<\/span>", "children": []}]}, {"id": "n5", "topic": "<b>2.使用limit查询100w行数据，这样有啥问题？<\/b>", "children": [{"id": "n6", "topic": "<b>回表<\/b><span class=\"mm-note\">我们一般对于查询频率比较高的字段会建立索引。索引会提高我们的查询效率。我们上面的语句使用了<b>SELECT * FROM user<\/b>，但是我们并不是所有的字段都建立了索引。当从<b>索引文件<\/b>中查询到符合条件的数据后，还需要从<b>数据文件<\/b>中查询到没有建立索引的字段。那么这个过程称之为<b>回表<\/b>。<\/span>", "children": []}, {"id": "n7", "topic": "<b>覆盖索引<\/b><span class=\"mm-note\">如果查询的字段正好创建了索引了，比如 <b>SELECT create_time FROM user<\/b>，我们查询的字段是我们创建的索引，那么这个时候就不需要再去数据文件里面查询，也就<b>不需要回表<\/b>。这种情况我们称之为<b>覆盖索引<\/b>。<\/span>", "children": []}, {"id": "n8", "topic": "<b>IO<\/b><span class=\"mm-note\"><b>回表操作通常是IO操作<\/b>，因为需要根据索引查找到数据行后，再根据数据行的主键或唯一索引去聚簇索引中查找具体的数据行。 聚簇索引一般是<b>存储在磁盘上<\/b>的数据文件，因此在执行回表操作时需要从磁盘读取数据，而磁盘IO是相对<b>较慢<\/b>的操作。<\/span>", "children": []}, {"id": "n9", "topic": "<b>LIMTI 2000,10 ？<\/b><span class=\"mm-note\">你有木有想过<b>LIMIT 2000,10<\/b>会不会扫描1-2000行，你之前有没有跟我一样，觉得数据是直接从2000行开始取的，前面的根本没扫描或者不回表。其实这样的写法，一个完整的流程是查询数据，如果不能覆盖索引，那么也是要回表查询数据的。 现在你知道为什么越到后面查询越慢了吧！<\/span>", "children": []}, {"id": "n10", "topic": "<b>问题总结<\/b><span class=\"mm-note\">我们现在知道了LIMIT 遇到后面查询的性能越差，<b>性能差的原因是因为要回表<\/b>，既然已经找到了问题那么我们只需要<b>减少回表的次数<\/b>就可以提升查询性能了。<\/span>", "children": []}, {"id": "n11", "topic": "<b>解决方案<\/b><span class=\"mm-note\">既然覆盖索引可以防止数据回表，那么我们可以先查出来主键id（主键索引），然后将查出来的数据作为<b>临时表<\/b>然后 <b>JOIN<\/b> 原表就可以了，这样只需要对查询出来的5条结果进行数据回表，大幅减少了IO操作。<\/span>", "children": []}]}, {"id": "n12", "topic": "<b>3.MYSQL支持哪些存储引擎？默认使用哪个？<\/b>", "children": [{"id": "n13", "topic": "MySQL 支持多种存储引擎，你可以通过 <b><code>SHOW ENGINES<\/code> 命令<\/b>来查看 MySQL 支持的所有存储引擎。", "children": []}, {"id": "n14", "topic": "MySQL 当前<b>默认的存储引擎是 InnoDB<\/b>。并且，所有的存储引擎中<b>只有 InnoDB 是事务性存储引擎<\/b>，也就是说只有 InnoDB 支持事务。", "children": []}]}, {"id": "n15", "topic": "<b>4.MYISAM和InnoDB的区别<\/b><span class=\"mm-note\">MySQL 5.5 之前，MyISAM 引擎是 MySQL 的默认存储引擎，可谓是风光一时。 虽然，MyISAM 的性能还行，各种特性也还不错（比如全文索引、压缩、空间函数等）。但是，<b>MyISAM 不支持事务和行级锁<\/b>，而且<b>最大的缺陷就是崩溃后无法安全恢复<\/b>。 MySQL 5.5 版本之后，InnoDB 是 MySQL 的默认存储引擎。 <b>区别：<\/b><\/span>", "children": [{"id": "n16", "topic": "InnoDB 支持行级别的锁粒度，<b>MyISAM 只支持表级别的锁粒度<\/b>。<span class=\"mm-note\">MyISAM 只有表级锁(table-level locking)，而 InnoDB 支持行级锁(row-level locking)和表级锁,默认为行级锁。<\/span>", "children": []}, {"id": "n17", "topic": "<b>MyISAM 不提供事务支持<\/b>。InnoDB 提供事务支持，实现了 SQL 标准定义了四个隔离级别。", "children": []}, {"id": "n18", "topic": "<b>MyISAM 不支持外键<\/b>，而 InnoDB 支持。", "children": []}, {"id": "n19", "topic": "<b>MyISAM 不支持 MVCC<\/b>，而 InnoDB 支持。<span class=\"mm-note\">毕竟 MyISAM 连行级锁都不支持，而MVCC其实就是行级锁的一个升级，可以有效减少加锁，提升性能。<\/span>", "children": []}, {"id": "n20", "topic": "虽然 <b>MyISAM 引擎和 InnoDB 引擎都是使用 B+Tree 作为索引结构<\/b>，但是两者的实现方式不太一样。<span class=\"mm-note\">InnoDB 引擎中，<b>其数据文件本身就是索引文件<\/b>。相比 MyISAM，索引文件和数据文件是分离的，其表数据文件本身就是按 B+Tree 组织的一个索引结构，树的叶节点 data 域保存了完整的数据记录。<\/span>", "children": []}, {"id": "n21", "topic": "<b>MyISAM 不支持数据库异常崩溃后的安全恢复<\/b>，而 InnoDB 支持。<span class=\"mm-note\">因为这个恢复依赖于redo log，而MYISAM不支持事务呀。<\/span>", "children": []}, {"id": "n22", "topic": "<b>InnoDB 的性能比 MyISAM 更强大<\/b>。", "children": []}]}, {"id": "n23", "topic": "<b>5.哪些操作会加表级锁？哪些操作会加行级锁？简单举例说一下<\/b>", "children": [{"id": "n24", "topic": "表级锁包括：<b>表锁、元数据锁、意向锁、AUTO-INC锁<\/b>。", "children": [{"id": "n25", "topic": "对于<b>表锁<\/b>而言，当存储引擎不支持行级锁时，使用表锁。<b>SQL 语句没有匹配到索引时，使用表锁。<\/b>", "children": []}, {"id": "n26", "topic": "对于<b>元数据锁而<\/b>言，对表做<b>增删改查时，会加上 MDL 读锁<\/b>。对<b>表结构做变更时，会加上 MDL 写锁。<\/b>", "children": []}, {"id": "n27", "topic": "对于<b>意向锁<\/b>而言，对<b>表中的行记录加锁<\/b>时，会用到意向锁。", "children": []}]}, {"id": "n28", "topic": "而对于行级锁而言，增删改查<b>匹配到索引时，会使用行级锁<\/b>。那<b>如果匹配不到索引，就会将使用表锁将整张表锁住。<\/b>", "children": []}]}, {"id": "n29", "topic": "<b>6.MYSQL如何使用乐观锁和悲观锁？<\/b><span class=\"mm-note\">悲观锁与乐观锁是人们定义出来的概念，你可以理解为一种思想，是<b>处理并发资源的常用手段<\/b>。<\/span>", "children": [{"id": "n30", "topic": "<b>悲观锁<\/b><span class=\"mm-note\">对于数据的处理持悲观态度，总认为会发生并发冲突，获取和修改数据时，别人会修改数据。所以<b>在整个数据处理过程中，需要将数据锁定<\/b>。 悲观锁的实现，通常<b>依靠数据库提供的锁机制实现<\/b>，比如 <b>mysql 的排他锁，select …. for update 来实现悲观锁。<\/b><\/span>", "children": []}, {"id": "n31", "topic": "<b>乐观锁<\/b><span class=\"mm-note\">对数据的处理持乐观态度，乐观的认为数据一般情况下不会发生冲突，<b>只有提交数据更新时，才会对数据是否冲突进行检测。<\/b> 如果发现冲突了，则返回错误信息给用户，让用户自已决定如何操作。 乐观锁的实现不依靠数据库提供的锁机制，需要我们自已实现，<b>实现方式一般是记录数据版本<\/b>， 一种是通过<b>版本号<\/b>，一种是通过<b>时间戳<\/b>。 给表加一个版本号或时间戳的字段，读取数据时，将版本号一同读出，数据更新时，将版本号加 1。 当我们提交数据更新时，判断当前的版本号与第一次读取出来的版本号是否相等。如果相等，则予以更新，否则认为数据过期，拒绝更新，让用户重新操作。<\/span>", "children": []}]}, {"id": "n32", "topic": "<b>7.为什么索引可以提高查询速度？<\/b><span class=\"mm-note\">建立了索引的数据，就是通过<b>事先排好序<\/b>，从而在查找时可以应用<b>二分查找<\/b>来提高查询效率。 二分查找的时间复杂度为<b>O(logn)<\/b>，而用B+树进行二分查找，<b>n个结点的m阶B+树查找<\/b>，时间复杂度(树高)达到： <img class=\"mm-img\" src=\"fl-945e541f1b8c5d.jpg\" style=\"width:76px;height:40px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n33", "topic": "<b>8.B+树做索引比红黑树好在哪里？<\/b><span class=\"mm-note\">B/B+树与红黑树等相比，<b>最大的优势<\/b>是：<b>树高更小<\/b>。<\/span>", "children": [{"id": "n34", "topic": "<b>BST<\/b>：中序遍历有序，左小右大，一般用于构建二分查找树。但是<b>有时会退化为链表<\/b>，复杂度为O(n)，因此引入AVL。", "children": []}, {"id": "n35", "topic": "<b>AVL<\/b>：严格平衡二叉树，左右节点的高度差<b>(平衡因子)不大于1，但插入、删除时，为了维护树形，旋转效率太低，引入红黑树。<\/b>", "children": []}, {"id": "n36", "topic": "<b>红黑树<\/b>：在红黑树中，插入、删除一般不会破坏红黑特性，不需要频繁地调整树的形态，即使需要，也可以<b>在常数级时间内完成<\/b>。保证了：<b>最长路径 ≤ 最短路径的2倍。但在磁盘中，树还是太高，所需的IO次数还是太多。因此引入B树。<\/b>", "children": []}, {"id": "n37", "topic": "<b>B树<\/b>：将二叉树改为多路平衡查找树，B树的每个非叶子结点可以有多个子树。<b>树高降低<\/b>。", "children": []}, {"id": "n38", "topic": "<b>B+树<\/b>：<b>进一步降低树高<\/b>，且<b>叶结点用双向链表连接成链表<\/b>，范围查询更高效。<span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-ef18d9d0439112.jpg\" style=\"width:320px;height:122px\" loading=\"lazy\" decoding=\"async\"> MySQL 支持多种存储引擎，你可以通过 <code>SHOW ENGINES<\/code> 命令来查看 MySQL 支持的所有存储引擎<\/span>", "children": []}]}, {"id": "n39", "topic": "<b>9、行级锁的使用有什么注意事项？<\/b><span class=\"mm-note\"><b>锁全表！！！<\/b> <b>InnoDB 的行锁是针对索引字段加的锁<\/b>，<b>表级锁是针对非索引字段加的锁<\/b>。 当我们执行 <code>UPDATE<\/code>、<code>DELETE<\/code> 语句时，<b>如果 <code>WHERE<\/code>条件中字段没有命中唯一索引或者索引失效的话<\/b>，<b>就会导致扫描全表对表中的所有行记录进行加锁<\/b>。这个在我们日常工作开发中经常会遇到，一定要多多注意！！！<\/span>", "children": []}, {"id": "n40", "topic": "<b>10、当前读和快照读的区别<\/b>", "children": [{"id": "n41", "topic": "<b>快照读<\/b>（一致性非锁定读）就是<b>单纯的 <code>SELECT<\/code> 语句<\/b>，但不包括下面这两类 <code>SELECT<\/code> 语句：<span class=\"mm-note\">快照即记录的历史版本，<b>每行记录可能存在多个历史版本（多版本技术）<\/b>。 快照读的情况下，如果读取的记录正在执行 UPDATE/DELETE 操作，读取操作不会因此去等待记录上 X 锁的释放，而是会去读取行的一个快照。 只有在事务隔离级别 RC(读取已提交) 和 RR（可重读）下，InnoDB 才会使用一致性非锁定读：<\/span>", "children": [{"id": "n42", "topic": "在 RC 级别下，对于快照数据，一致性非锁定读总是<b>读取被锁定行的最新一份快照数据<\/b>。", "children": []}, {"id": "n43", "topic": "在 RR 级别下，对于快照数据，一致性非锁定读总是<b>读取本事务开始时的行数据版本<\/b>。<span class=\"mm-note\">快照读比较适合对于数据一致性要求不是特别高且追求极致性能的业务场景。<\/span>", "children": []}]}, {"id": "n44", "topic": "<b>当前读<\/b> （一致性锁定读）就是<b>给行记录加 X 锁或 S 锁<\/b>。<span class=\"mm-note\">当前读的一些常见 SQL 语句类型如下：<\/span>", "children": []}]}, {"id": "n45", "topic": "<b>11.聚集索引和非聚集索引的区别？非聚集索引一定回表查询吗？<\/b>", "children": [{"id": "n46", "topic": "<b>聚簇索引<\/b>（Clustered Index）即<b>索引结构和数据一起存放的索引<\/b>，并不是一种单独的索引类型。InnoDB 中的<b>主键索引就属于聚簇索引<\/b>。<span class=\"mm-note\">优点：<\/span>", "children": [{"id": "n47", "topic": "<b>查询速度非常快<\/b>：聚簇索引的查询速度非常的快，因为整个 B+树本身就是一颗多叉平衡树，叶子节点也都是有序的，定位到索引的节点，就相当于定位到了数据。<b>相比于非聚簇索引， 聚簇索引少了一次读取数据的 IO 操作<\/b>。", "children": []}, {"id": "n48", "topic": "<b>对排序查找和范围查找优化<\/b>：聚簇索引对于主键的排序查找和范围查找速度非常快。<span class=\"mm-note\"><b>缺点<\/b>：<\/span>", "children": []}, {"id": "n49", "topic": "<b>依赖于有序的数据<\/b>：因为 B+树是多路平衡树，如果索引的数据不是有序的，那么就需要在插入时排序，如果数据是整型还好，否则类似于字符串或 UUID 这种又长又难比较的数据，插入或查找的速度肯定比较慢。", "children": []}, {"id": "n50", "topic": "<b>更新代价大<\/b>：如果对索引列的数据被修改时，那么对应的索引也将会被修改，而且聚簇索引的叶子节点还存放着数据，修改代价肯定是较大的，所以对于主键索引来说，主键一般都是不可被修改的。", "children": []}]}, {"id": "n51", "topic": "<b>非聚簇索引<\/b>(Non-Clustered Index)即<b>索引结构和数据分开存放的索引<\/b>，并不是一种单独的索引类型。<b>二级索引(辅助索引)就属于非聚簇索引<\/b>。MySQL 的 MyISAM 引擎，不管主键还是非主键，使用的都是非聚簇索引。<span class=\"mm-note\">非聚簇索引的叶子节点并不一定存放数据的指针，因为二级索引的叶子节点就存放的是主键，根据主键再回表查数据。 <b>优点<\/b>：<\/span>", "children": [{"id": "n52", "topic": "<b>更新代价比聚簇索引要小<\/b> 。非聚簇索引的更新代价就没有聚簇索引那么大了，非聚簇索引的叶子节点是不存放数据的。<span class=\"mm-note\"><b>缺点<\/b>：<\/span>", "children": []}, {"id": "n53", "topic": "<b>依赖于有序的数据<\/b>:跟聚簇索引一样，非聚簇索引也依赖于有序的数据", "children": []}, {"id": "n54", "topic": "<b>可能会二次查询(回表)<\/b>:这应该是非聚簇索引最大的缺点了。 当查到索引对应的指针或主键后，可能还需要根据指针或主键再到数据文件或表中查询。", "children": []}]}, {"id": "n55", "topic": "<b>非聚簇索引一定回表查询吗<\/b>？<span class=\"mm-note\"><b>非聚簇索引不一定回表查询。<\/b> 试想一种情况，用户准备使用 SQL 查询用户名，而用户名字段正好建立了索引。 那么这个索引的 key 本身就是 name，查到对应的 name 直接返回就行了，无需回表查询。 即使是 MYISAM 也是这样，虽然 MYISAM 的主键索引确实需要回表，因为它的主键索引的叶子节点存放的是指针。但是！<b>如果 SQL 查的就是主键呢?<\/b> 主键索引本身的 key 就是主键，查到返回就行了。这种情况就称之为<b>覆盖索引<\/b>了。 如果一个索引包含（或者说覆盖）所有需要查询的字段的值，我们就称之为 <b>覆盖索引。<\/b><\/span>", "children": []}]}, {"id": "n56", "topic": "<b>12、Hash索引和B+树索引的优劣分析<\/b><span class=\"mm-note\">MySQL 的 InnoDB 存储引擎不直接支持常规的哈希索引，但是，InnoDB 存储引擎中存在一种特殊的“<b>自适应哈希索引<\/b>”，自适应哈希索引并不是传统意义上的纯哈希索引，而是结合了 B+Tree 和哈希索引的特点，以便更好地适应实际应用中的数据访问模式和性能需求。 自适应哈希索引的<b>每个哈希桶实际上是一个小型的 B+Tree 结构<\/b>。这个 B+Tree 结构可以存储多个键值对，而不仅仅是一个键。这有助于<b>减少哈希冲突链的长度，提高了索引的效率<\/b>。 既然哈希表这么快，<b>为什么 MySQL 没有使用其作为索引的数据结构呢？<\/b> 主要是因为： <b>Hash 索引不支持顺序和范围查询，只支持等值查询。<\/b>假如我们要对表中<\/span>", "children": []}, {"id": "n57", "topic": "<b>13、char和varchar的区别？<\/b><span class=\"mm-note\">两者的主要区别在于：<b>CHAR 是定长字符串，VARCHAR 是变长字符串。<\/b><\/span>", "children": [{"id": "n58", "topic": "<b>存储长度区别：<\/b>", "children": []}, {"id": "n59", "topic": "CHAR 在存储时会在<b>右边填充空格以达到指定的长度<\/b>，<b>检索时会去掉空格<\/b>；", "children": []}, {"id": "n60", "topic": "VARCHAR 在<b>存储时需要使用 1 或 2 个额外字节记录字符串的长度<\/b>，<b>检索时不需要处理<\/b>。", "children": []}, {"id": "n61", "topic": "<b>适合数据类型：<\/b>", "children": []}, {"id": "n62", "topic": "CHAR 更适合存储长度较短或者长度都差不多的字符串，例如 Bcrypt 算法、MD5 算法加密后的密码、身份证号码。", "children": []}, {"id": "n63", "topic": "VARCHAR 类型适合存储长度不确定或者差异较大的字符串，例如用户昵称、文章标题等。<span class=\"mm-note\">CHAR(M) 和 VARCHAR(M) 的 M 都代表能够保存的字符数的最大值，<b>无论是字母、数字还是中文，每个都只占用一个字符.<\/b><\/span>", "children": []}]}, {"id": "n64", "topic": "<b>14、VARCHAR(100)和 VARCHAR(10)的区别？<\/b><span class=\"mm-note\">VARCHAR(100)和 VARCHAR(10)都是变长类型，表示能存储最多 100 个字符和 10 个字符。因此，VARCHAR (100) 可以满足更大范围的字符存储需求，有更好的业务拓展性。而 VARCHAR(10)存储超过 10 个字符时，就需要修改表结构才可以。 虽说 VARCHAR(100)和 VARCHAR(10)能存储的字符范围不同，但<b>二者存储相同的字符串<\/b>，<b>所占用磁盘的存储空间其实是一样的，这也是很多人容易误解的一点。<\/b> 不过，<b>VARCHAR(100) 会消耗更多的内存<\/b>。这是因为 VARCHAR 类型在内存中操作时，通常会分配固定大小的内存块来保存值，即使用字符类型中定义的长度。例如在进行排序<\/span>", "children": []}, {"id": "n65", "topic": "<b>15、DECIMAL 和 FLOAT/Double 的区别<\/b><span class=\"mm-note\">DECIMAL 和 FLOAT 的区别是：<b>DECIMAL 是定点数，FLOAT/DOUBLE 是浮点数。DECIMAL 可以存储精确的小数值，FLOAT/DOUBLE 只能存储近似的小数值。<\/b> 💡 <b>定点数<\/b>：<b>小数点的位置<\/b>在计算机的存储是<b>固定的<\/b>。一个小数的整数部分和小数部分分别转化为二进制的表示。 <b>定点数并不是仅仅只能表示整数，定点数也可以表示小数。 浮点数同样可以表示小数和整数；定点数和浮点数只是计算机表示数据的两种不同方式而已。<\/b> DECIMAL 用于存储具有精度要求的小数，例如与货币相关的数据，可以避免浮点数带来的精度损失。 在 Java 中，MySQL 的 DECIMAL 类型对应的是 Jav<\/span>", "children": [{"id": "n66", "topic": "<b>Decimal的底层实现：<\/b><span class=\"mm-note\">BigDecimal保证精度的解决思路其实极其的简单朴素，还是用一句话来解释： <b>十进制整数在转化成二进制数时不会有精度问题<\/b>，那么<b>把十进制小数扩大N倍让它在整数的维度上进行计算<\/b>，并<b>保留相应的精度信息(小数点的位置)<\/b>。<\/span>", "children": []}, {"id": "n67", "topic": "<b>使用Decimal时需要注意的事项：<\/b>", "children": [{"id": "n68", "topic": "1.MySql中的统计函数：sum()、avg()等等，<b>给JAVA应用默认返回的是Double类型<\/b>！在处理小数的时候可能产生精度问题，此时<b>把预处理的字段数据用cast强转成decimal类型<\/b>，那么MySql给JAVA应用返回的就是BigDecimal类型。", "children": []}, {"id": "n69", "topic": "2.<b>不要使用BigDecimal（double）<\/b>，存在精度损失风险，因为实际存储的值是double数值的二进制表示，可能会有精度损失。", "children": []}, {"id": "n70", "topic": "3.使用除法注意事项：使用roundingMode指明结果的保留规则，否则遇到无限循环小数时，会报错。", "children": []}, {"id": "n71", "topic": "4.BigDecimal<b>等值比较时，使用CompareTo（）<\/b>，而不是equals（），因为<b>equals会比较精度，而compareTo会忽略精度<\/b>，那些无实际意义的0会自动忽略。", "children": []}]}]}, {"id": "n72", "topic": "<b>16、为啥不推荐使用text和blob？<\/b><span class=\"mm-note\">TEXT 类型<b>类似于 CHAR（0-255 字节）和 VARCHAR（0-65,535 字节）<\/b>，但可以存储更长的字符串，即长文本数据，例如博客内容。 BLOB 类型主要用于<b>存储二进制大对象<\/b>，例如图片、音视频等文件。 在日常开发中，很少使用 TEXT 类型，但偶尔会用到，而 BLOB 类型则基本不常用。如果预期长度范围可以通过 VARCHAR 来满足，建议避免使用 TEXT。 数据库规范通常不推荐使用 BLOB 和 TEXT 类型，这两种类型具有一些缺点和限制，例如：<\/span>", "children": [{"id": "n73", "topic": "<b>不能有默认值<\/b>。", "children": []}, {"id": "n74", "topic": "在使用临时表时无法使用内存临时表，只能在磁盘上创建临时表。", "children": []}, {"id": "n75", "topic": "<b>检索效率较低<\/b>。", "children": []}, {"id": "n76", "topic": "<b>不能直接创建索引，需要指定前缀长度<\/b>。", "children": []}, {"id": "n77", "topic": "可能会消耗大量的网络和 IO 带宽。", "children": []}, {"id": "n78", "topic": "<b>可能导致表上的 DML 操作变慢<\/b>。", "children": []}]}, {"id": "n79", "topic": "<b>17、如何排查慢SQL？<\/b>", "children": [{"id": "n80", "topic": "<b>开启慢查询日志<\/b>，记录执行时间超过阈值的SQL语句。", "children": []}, {"id": "n81", "topic": "使用<b><code>EXPLAIN<\/code><\/b>或其他数据库分析工具分析这些慢查询，查看执行计划，识别是否有全表扫描、索引失效等情况。", "children": []}, {"id": "n82", "topic": "根据分析结果，优化SQL语句，比如添<b>加合适的索引，调整查询条件<\/b>，或者改写查询逻辑。", "children": []}, {"id": "n83", "topic": "对于复杂查询，可以考虑分解成多个<b>简单查询<\/b>，减少单次查询负担。", "children": []}]}, {"id": "n84", "topic": "<b>18、数据库连接池是怎么加快数据库访问的？<\/b><span class=\"mm-note\">● 客户端连接池：减少多次创建数据库连接时，频繁出现的TCP三次握手、四次挥手、SSL握手等过程。 ○ 客户端连接池<b>免了等待网络握手的时间<\/b> ● 服务端连接池：减少多次创建数据库连接时，频繁创建和销毁工作线程造成的资源开销。 ○ 服务端连接池<b>避免了等待线程创建的时间<\/b> ...<\/span>", "children": [{"id": "n85", "topic": "<b>1.什么是连接池<\/b><span class=\"mm-note\">数据库连接池负责<b>分配、管理和释放数据库连接<\/b>，它<b>允许应用程序重复使用一个现有的数据库连接<\/b>，而不是再重新建立一个。 在<b>程序初始化时，预先创建一定数量的数据库连接<\/b>，并对其进行集中管理，就构成了数据库连接池，由程序动态地对池中的连接进行申请、使用和释放，既保证了较快的数据库读写速度，又提高了安全可靠性。<\/span>", "children": []}, {"id": "n86", "topic": "<b>2.为何要用连接池/使用连接池的好处<\/b><span class=\"mm-note\">使用数据库连接池好处：<\/span>", "children": [{"id": "n87", "topic": "<b>资源重用<\/b>：避免了频繁的创建、释放连接引起的性能开销，在减少系统消耗的基础上，也增进了系统运行环境的平稳性（减少内存碎片以及数据库临时进程/线程的数量）", "children": []}, {"id": "n88", "topic": "<b>更快的系统响应速度<\/b>：数据库连接池在初始化过程中，往往已创建了若干数据库连接于池中备用，此时连接的初始化工作均已完成，对于业务请求处理而言，直接利用现有可用连接，避免了从数据库连接初始化和释放过程的开销，从而缩减了系统整体响应时间", "children": []}, {"id": "n89", "topic": "<b>统一的连接管理<\/b>，<b>避免连接数据库连接泄漏<\/b>：在较为完备的数据库连接池实现中，可根据预先的连接占用超时设定，强制收回被占用连接。从而避免了常规数据库连接操作中可能出现的资源泄漏。", "children": []}]}, {"id": "n90", "topic": "<b>3.传统的连接机制与数据库连接池的运行机制区别<\/b>", "children": [{"id": "n91", "topic": "<b>不使用连接池的流程<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-d622d219a5e8b7.jpg\" style=\"width:320px;height:368px\" loading=\"lazy\" decoding=\"async\"> &gt; <b>TCP<\/b>建立连接的三次握手 &gt; <b>MySQL认证<\/b>的三次握手 &gt; 真正的SQL执行 &gt; MySQL的关闭 &gt; TCP的<b>四次握手<\/b>关闭<\/span>", "children": []}, {"id": "n92", "topic": "<b>使用连接池：<\/b><span class=\"mm-note\">第一次访问的时候，需要建立连接。 但是<b>之后的访问，均会复用之前创建的连接<\/b>，直接执行SQL语句。<\/span>", "children": []}]}, {"id": "n93", "topic": "<b>4.连接池和线程池的区别<\/b>", "children": [{"id": "n94", "topic": "<b>连接池<\/b>：被动分配，用完放回。", "children": []}, {"id": "n95", "topic": "<b>线程池<\/b>：主动干活，有任务到来，线程不断取出任务执行。", "children": []}]}, {"id": "n96", "topic": "<b>5.在项目中用到了连接池吗<\/b><span class=\"mm-note\">用到了<b>hikari连接池<\/b>。<\/span>", "children": []}]}, {"id": "n97", "topic": "<b>19、MYSQL中为什么要用自增主键，有什么好处？<\/b><span class=\"mm-note\">在 MySQL 中使用自增主键有以下几个好处：<\/span>", "children": [{"id": "n98", "topic": "<b>唯一性和简洁性：<\/b> 自增主键可以确保每行数据在表中都有唯一的标识符。由于它是自增的，所以不需要应用程序来生成唯一标识符，这使得数据库设计更简单，避免了可能出现的重复键的问题。", "children": []}, {"id": "n99", "topic": "<b>快速查找和排序：<\/b> 自增主键通常基于整数类型，例如 <code>INT<\/code> 或 <code>BIGINT<\/code>。由于这些类型的索引是按顺序排列的，因此查询、排序和连接等操作都会更加高效。数据库可以利用这种顺序来更快地查找和访问数据，而无需执行额外的排序操作。", "children": []}, {"id": "n100", "topic": "<b>降低索引碎片：<\/b> 自增主键的值是连续的，因此插入新数据时，不会造成数据页的分裂和索引碎片的产生。这有助于减少数据库维护所需的资源，并提高插入性能。", "children": []}, {"id": "n101", "topic": "<b>提高性能：<\/b> 使用自增主键的表在插入新数据时通常比具有复合主键或其他类型的主键更快，因为数据库引擎不需要检查和维护主键的唯一性。这可以提高插入操作的性能。", "children": []}, {"id": "n102", "topic": "<b>减少存储空间：<\/b> 相比使用复合主键或其他类型的主键，自增主键通常占用更少的存储空间，因为它们只是简单的整数值，而不需要存储多个列的组合。<span class=\"mm-note\">总的来说，使用自增主键可以简化数据库设计、提高查询和排序性能、减少索引碎片、提高插入性能，并节省存储空间。这些优点使得自增主键成为设计数据库表时常用的一种方式。<\/span>", "children": []}]}, {"id": "n103", "topic": "<b>20、MYSQL中加密数据的模糊查询怎么完成<\/b><span class=\"mm-note\"><a href=\"https://blog.csdn.net/CXikun/article/details/130883272\" target=\"_blank\" rel=\"noopener\">https://blog.csdn.net/CXikun/article/details/130883272<\/a><\/span>", "children": [{"id": "n104", "topic": "<b>先解密再查询。数据预加载，在解密后保存至内存数据库<\/b> OR  <b>实时解密查询(用到的时候再解密查询)<\/b><span class=\"mm-note\">此方案是程序启动的时候，预先把数据库的数据解密，并加载至内存中，比如采用MongoDB。 <b>缺点：<\/b>模糊查询的过程是在内存中进行的，如果数据量特别大，很容易导致<a href=\"https://so.csdn.net/so/search?q=%E5%86%85%E5%AD%98%E6%BA%A2%E5%87%BA&amp;spm=1001.2101.3001.7020\" target=\"_blank\" rel=\"noopener\">内存溢出<\/a>。<\/span>", "children": []}, {"id": "n105", "topic": "<b>明文映射表<\/b>。新建一张映射表，存储<b>敏感字段解密后的数据与目标表主键的映射表<\/b>，需要模糊查询的时候，先对明文映射表进行模糊查询，得到符合条件的目标数据的主键，再返回来根据主键查询目标表；<span class=\"mm-note\">缺点：<b>违背了加密的初衷<\/b>。<\/span>", "children": []}, {"id": "n106", "topic": "<b>数据库层面进行解密查询<\/b>。后台在执行查询sql时对敏感字段先解密，然后再执行like。<span class=\"mm-note\">&gt; 💡 数据库有一个函数可以对数据库表中的某个字段进行加密，这个函数为：<b>AES_ENCRYPT(String value,String key)<\/b> 使用这个函数可以对数据库字段进行加密存储。（也有对应的解密函数）<\/span>", "children": [{"id": "n107", "topic": "<b>缺点<\/b>：该字段无法通过数据库索引来优化查询，另外有一些数据库无法保证数据库的加解密算法与程序的加解密算法一致，可能会导致可以程序中加密，但是无法在数据库中解密的或者可以在数据库加密无法在程序中解密的问题，因此不推荐在生产中使用这种方法；", "children": []}]}, {"id": "n108", "topic": "<b>分词密文映射表<\/b>。对第二种思路的基础上进行延伸优化，也是主流的方法。<span class=\"mm-note\">&gt; 💡 新建一张分词密文映射表，在敏感字段数据新增、修改的后，对敏感字段进行分词组合。 如“15503770537”的分词组合有“155”、“0377”、“0537”等，<b>再对每个分词进行加密<\/b>，建立起<b>敏感字段的分词密文与目标数据行主键的关联关系<\/b>； 在处理模糊查询的时候，对模糊查询关键字进行加密，用加密后的模糊查询关键字，对分词密文映射表进行like查询，得到目标数据行的主键，再以目标数据行的主键为条件返回目标表进行精确查询。<\/span>", "children": []}]}, {"id": "n109", "topic": "<b>21、B+树能存多少数据<\/b><span class=\"mm-note\">3层B+树大概可以存：<\/span>", "children": [{"id": "n110", "topic": "<b>主键为bigint<\/b>：约<b>2000w<\/b>", "children": []}, {"id": "n111", "topic": "<b>主键为int<\/b>：约<b>4000w<\/b><span class=\"mm-note\">在<a href=\"https://so.csdn.net/so/search?q=Innodb%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E&amp;spm=1001.2101.3001.7020\" target=\"_blank\" rel=\"noopener\">Innodb存储引擎<\/a>里面，<b>最小存储单元是页，而一个页的大小默认是16KB。<\/b> 一个节点的大小就是一页。 在MySQL Innodb存储引擎中的B+树的<b>一个节点大小为“1页”，也就是16k。<\/b> 也即代表<b>B+树的每个节点可以存16KB数据<\/b>。<\/span>", "children": []}, {"id": "n112", "topic": "<b>非叶子节点<\/b>：存储内容：<b>主键+指针<\/b><span class=\"mm-note\"><b>指针是用来指向下一个“节点”的<\/b>。<\/span>", "children": [{"id": "n113", "topic": "假设主键类型为bigint，占用8Byte，指针可以设置为占用6Byte，总共14Byte。这样就可以算出一个非叶子节点大概可以存放16KByte/14Byte=1170个“主键+指针”的组合。", "children": []}, {"id": "n114", "topic": "假设主键类型为int，占用4Byte，指针可以设置为占用6Byte，总共10Byte。这样就可以算出<b>一个非叶子节点大概可以存放16KByte/10Byte≈1600<\/b>个“主键+指针”的组合。", "children": []}]}, {"id": "n115", "topic": "<b>叶子节点<\/b>：存储<b>真实数据<\/b><span class=\"mm-note\">在B+树中，真正的数据是只存储在叶子节点中的。 这里我们假设我们的一行数据大小是1K，那么我们一个叶子节点就可以存16KByte/10Byte=<b>16条（行）数据<\/b>。 由此，可以推算出公式： <b>两层总数 = 非叶子节点(根) * 叶子节点<\/b>。 <b>三层总数 = 非叶子节点(根) * 非叶子节点 * 叶子节点<\/b>。<\/span>", "children": []}, {"id": "n116", "topic": "<b>主键为bigint<\/b>（约2000w）：<span class=\"mm-note\">2层B+树的话：可以存放1170个*16条=18720条（行）数据。 3层B+树的话：可以存放1170个**1170个*16条=21902400条（行）数据。<\/span>", "children": []}, {"id": "n117", "topic": "<b>主键为int<\/b>（<b>约4000w<\/b>）：<span class=\"mm-note\">思路：<b>根节点存放于1页中(16KB)<\/b>，<b>&quot;主键+指针&quot;大小为10B<\/b>，因此1页可以存放16KB/10B=1600个非叶子结点。<b>此时就属于1600阶B+树。<\/b> 而<b>一个叶子节点也是一页<\/b>，<b>&quot;一条数据为1KB<\/b>&quot;，那么<b>1页可以存放16条数据<\/b>。 因此有：<\/span>", "children": [{"id": "n118", "topic": "2层B+树的话：可以存放1600个*16条=25600条（行）数据。*", "children": []}, {"id": "n119", "topic": "*3层B+树的话：可以存放1600个**1600个*16条=40960000条（行）数据。", "children": []}]}]}, {"id": "n120", "topic": "<b>22、SQL中关键字的执行顺序是？<\/b><span class=\"mm-note\">在 SQL 查询语句中，关键字的执行顺序通常按照以下顺序进行：<\/span>", "children": [{"id": "n121", "topic": "<b>FROM：<\/b> 指定要查询的数据表或者视图。", "children": []}, {"id": "n122", "topic": "<b>WHERE：<\/b> 对数据进行筛选，仅选择满足指定条件的行。", "children": []}, {"id": "n123", "topic": "<b>GROUP BY：<\/b> 将查询结果按照指定的列分组，通常与聚合函数一起使用。", "children": []}, {"id": "n124", "topic": "<b>HAVING：<\/b> 对分组后的数据进行筛选，仅选择满足指定条件的分组。", "children": []}, {"id": "n125", "topic": "<b>SELECT：<\/b> 选择要查询的列，或者进行一些列的运算。", "children": []}, {"id": "n126", "topic": "<b>DISTINCT：<\/b> 对查询结果进行去重，仅保留不同的行。", "children": []}, {"id": "n127", "topic": "<b>ORDER BY：<\/b> 对查询结果进行排序，可以指定一个或多个列，并指定排序方式（升序或降序）。", "children": []}, {"id": "n128", "topic": "<b>LIMIT / OFFSET：<\/b> 对查询结果进行分页，指定返回结果的起始位置和数量。<span class=\"mm-note\">在实际使用中，有些情况下并不一定按照这个顺序执行，例如子查询、联合查询等复杂情况可能会改变执行顺序。但通常情况下，上述顺序是执行查询语句时的一般规则。 举例： 💡 <b>每步关键字执行的结果都会形成一个虚表<\/b>，<b>编号大的关键字执行的动作都是在编号小的关键字执行结果所得的虚表上进行<\/b>（或者说编号大的关键字处理的对象是编号小的关键执行过后得到的虚表），以此类推。<\/span>", "children": []}]}, {"id": "n129", "topic": "<b>23、Join、Left Join、Inner Join、right Join<\/b><span class=\"mm-note\">JOIN操作用于<b>将两个或多个表的行组合在一起<\/b>，<b>基于这些表之间的共同列<\/b>。常见的JOIN类型有LEFT JOIN、RIGHT JOIN和INNER JOIN。<\/span>", "children": [{"id": "n130", "topic": "<b>Inner Join（内连接）<\/b><span class=\"mm-note\">内连接是最常用的JOIN类型，它会返回两个表中具有匹配值的行。 如果<b>某个表中的行在另一个表中没有匹配的值<\/b>，则<b>不会返回该行<\/b>。<\/span>", "children": []}, {"id": "n131", "topic": "<b>LEFT JOIN（左连接）<\/b><span class=\"mm-note\">左连接会<b>返回左表中的所有行<\/b>，即使在右表中没有匹配的值。 如果<b>在右表中没有匹配的值，则会返回NULL<\/b>。<\/span>", "children": []}, {"id": "n132", "topic": "<b>RIGHT JOIN（右连接）<\/b><span class=\"mm-note\"><b>返回右表中的所有行，即使在左表中没有匹配的值。<\/b> 如果在左表中<b>没有匹配的值，则会返回NULL。<\/b> 总结：<\/span>", "children": []}, {"id": "n133", "topic": "<b>left join: 包含左表的所有行，对应的右表行可能为空。<\/b>", "children": []}, {"id": "n134", "topic": "<b>right join: 包含右表的所有行，对应的左表行可能为空。<\/b>", "children": []}, {"id": "n135", "topic": "<b>inner join: 只包含左右表都匹配并且不为空的行。<\/b>", "children": []}]}, {"id": "n136", "topic": "<b>24、数据库大量请求读写时，性能问题主要是什么带来的？<\/b>", "children": [{"id": "n137", "topic": "<b>数据库连接池瓶颈：<\/b> 大量请求可能导致数据库连接池的资源竞争，当连接池中的连接数不足以满足请求时，会造成连接等待和排队，<b>降低了数据库的响应速度<\/b>。", "children": []}, {"id": "n138", "topic": "<b>数据库锁竞争：<\/b> 大量并发的读写请求可能导致数据库中的<b>行级锁<\/b>、表级锁或者其他类型的锁发生竞争，当多个请求试图同时修改同一行数据或者同一张表时，会导致锁等待和阻塞，降低了数据库的并发处理能力。", "children": []}, {"id": "n139", "topic": "<b>索引性能问题：<\/b> 大量的读写请求可能导致数据库中的索引出现性能问题，例如频繁的更新操作可能导致索引失效或者产生大量的碎片，影响了查询性能。", "children": []}, {"id": "n140", "topic": "<b>SQL语句效率问题：<\/b> 大量的 SQL 查询和更新操作可能导致数据库服务器的 CPU 和内存资源消耗过高，例如查询语句中的 join 操作或者子查询过于复杂，更新语句中的索引更新过于频繁等，都会影响数据库的性能。", "children": []}, {"id": "n141", "topic": "<b>硬件资源限制：<\/b> 大量的请求可能超出了数据库服务器的硬件资源限制，例如 CPU、内存、磁盘 IO 等资源的限制，导致数据库服务器的性能达到瓶颈。", "children": []}, {"id": "n142", "topic": "<b>数据库设计问题：<\/b> 数据库的设计问题也可能影响性能，例如表结构设计不合理、索引设计不恰当、数据库范式设计不合适等，都会影响数据库的性能。", "children": []}]}, {"id": "n143", "topic": "<b>25、数据库调优由几部分构成：<\/b><span class=\"mm-note\">总的来说分为以下三部分：<\/span>", "children": [{"id": "n144", "topic": "<b>SQL调优<\/b><span class=\"mm-note\">这是<b>最常用、每一个技术人员都应该掌握基本的SQL调优手段（包括方法、工具、辅助系统等）<\/b>。这里以MySQL为例，最常见的方式是，由<b>自带的慢查询日志或者开源的慢查询系统<\/b>定位到具体的出问题的SQL，然后使用<b>explain、profile<\/b>等工具来逐步调优，最后经过测试达到效果后上线。这方面的细节，可以参考<a href=\"http://tech.meituan.com/mysql-index.html\" target=\"_blank\" rel=\"noopener\">MySQL索引原理及慢查询优化<\/a>。<\/span>", "children": []}, {"id": "n145", "topic": "<b>架构层面的调优<\/b><span class=\"mm-note\">这一类调优包括<b>读写分离、多从库负载均衡、水平和垂直分库分表<\/b>等方面，一般需要的改动较大，但是频率没有SQL调优高，而且一般需要DBA来配合参与。那么什么时候需要做这些事情？我们可以通过内部监控报警系统（比如Zabbix），定期跟踪一些指标数据是否达到瓶颈，一旦达到瓶颈或者警戒值，就需要考虑这些事情。通常，DBA也会定期监控这些指标值。<\/span>", "children": []}, {"id": "n146", "topic": "<b>连接池调优<\/b><span class=\"mm-note\">我们的应用为了实现数据库连接的高效获取、对数据库连接的限流等目的，通常会采用连接池类的方案，即每一个应用节点都管理了一个到各个数据库的连接池。随着业务访问量或者数据量的增长，原有的连接池参数可能不能很好地满足需求，这个时候就需要结合<b>当前使用连接池的原理、具体的连接池监控数据和当前的业务量<\/b>作一个综合的判断，通过反复的几次调试得到最终的调优参数。<\/span>", "children": []}]}, {"id": "n147", "topic": "<b>26.MYSQL的分库分表<\/b>", "children": [{"id": "n148", "topic": "<b>为什么要分表<\/b><span class=\"mm-note\"><b>核心原因<\/b>：MYSQL的单表性能问题。 <b>详细解释<\/b>：当MYSQL的单表数据量超过一定大小，基于B+Tree的这种索引结构，高度会增加，而每增加一层高度，整个索引的扫描就会多一次IO，对应的响应时间会增加。<\/span>", "children": []}, {"id": "n149", "topic": "<b>为什么要分库<\/b><span class=\"mm-note\"><b>核心原因<\/b>：MYSQL容量上写入是很昂贵的资源 <b>详细解释<\/b>：MYSQL即使做了很多优化，但在存入数据时，依旧存在很多放大(维护索引结构等)，同时主从的架构，从库需要完整地复制写入容量，因此一套主从集群地写入容量，完全依赖于主库的硬件。如果写入超过了硬件的上限，就需要分库。<\/span>", "children": []}]}], "expanded": true}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

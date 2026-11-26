@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>3.新项目-线上开发环境搭建 SOP流程总结 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">4</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#sec-1">1.Gitlab上建库并将代码push上去</a><a class="tl l2" href="#sec-2">2.新建流水线MiFlow</a><a class="tl l2" href="#sec-3">3.Matrix下创建应用 &amp; 部署空间</a><a class="tl l2" href="#sec-4">4.申请域名 &amp; 开放端口</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>3.新项目-线上开发环境搭建 SOP流程总结</h1><div class="meta">2025-08-23<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>Tips</strong>：</p><p>本文记录如何为一个新项目搭建线上开发/部署环境，涉及到GitLab、MiFlow、Matrix 等工具的使用。</p><p>为之后新项目的搭建提供过程参考（下文所示配置为测试环境）。</p></div></div><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">👍</div><div class="fs-callout-b"><p><strong>知识回顾：</strong></p><p><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>部署空间(Matrix)</strong></mark>：为项目的启动提供环境条件(容器)，部署镜像时是从公司的镜像仓库里拉出来的。</p><p><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>流水线(MiFlow)</strong></mark>：从代码到镜像构建的一系列过程，构建镜像成功后就将镜像放入镜像仓库。</p><p><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>镜像仓库IAM</strong></mark>：存储 公共/私有 镜像，构建好的镜像会自动放里边，需要用到镜像时，也是从里边pull。</p></div></div><p>背景：将本地项目同步到GitLab，并为其健全开发/部署流程配置。</p><h2 id="sec-1">1.Gitlab上建库并将代码push上去</h2><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>记得开权限</strong></mark></p><ol><li>在gitlab新建仓库后，首先<strong>随便新建一个文件，完成项目的初始化(</strong>不然后续push时会遇到问题<strong>)</strong>。</li></ol><ol><li>然后创建一个<strong>master分支</strong>，将其作为默认主分支。</li></ol><blockquote><p>在设置里将其设置为<strong>默认分支、受保护(protected)的分支</strong>。</p></blockquote><ol><li>再将本地项目与远程项目建立连接，之后将本地push</li></ol><p>一般在分支有问题的时候(落后、超前)，导致无法pull或push的时候，往往此时首先需要<strong>解决冲突rebase</strong>，那此时就去ide中的图形化界面操作吧，更简单。</p><h2 id="sec-2">2.新建流水线MiFlow</h2><blockquote><p>操作参考文档：[内部链接]</p></blockquote><blockquote><p>构建流水线时参考risk-web-static即可，难点是要根据自己项目的配置文件，调整流水线配置文件。</p></blockquote><p>构建流水线时，由于<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">此时</mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>还没有创建Matrix容器用以发布镜像</strong></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">，因此</mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>先不添加最后的'Matrix镜像发布'行为</strong></mark>，只配置镜像的构建流程，如下图：</p><blockquote><p>Tips：每一步都记得去开好权限(GitLab的访问权限、IAM镜像的访问权限、部署空间的操作权限等)。</p></blockquote><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>后续在完成Matrix部署空间、应用的配置后，再回过头来完善流水线即可。</p></div></div><p>构建流水线时就会遇到很多问题，以风控平台-web-static项目作为参考，记录如下：</p><p><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>Q1</strong></mark><strong>：需要根据项目修改DockerFile文件，适配不同版本的node。</strong></p><p>因为风控平台-web-static项目中，node版本是18.18.2，因此需要<strong>去镜像仓库IAM里找到对应的版本</strong>，再<strong>将其拉取路径写到DockerFile文件中。</strong></p><p>镜像仓库快速入口：内网统一认证 (Central Authentication Service)</p><pre><code># 去IAM镜像管理下找到想要的node版本镜像
+FROM [内部链接]  
+COPY ./ /home/work
+WORKDIR /home/work
+RUN yarn install &amp;&amp; yarn run build:prod
+
+FROM [内部链接]
+WORKDIR /home/work
+RUN mkdir -p /home/work/log/ &amp;&amp; \
+    mkdir -p /home/work/dist
+COPY --from=0 /home/work/dist /home/work/dist
+COPY nginx.conf /etc/nginx/nginx.conf</code></pre><p><mark style="background:#d0ebff;color:inherit;padding:0 2px;border-radius:3px"><strong>Q2</strong></mark><strong>：在完成 "构建并推送docker镜像" 这一步时，配置好前置处理操作</strong></p><p>即：在<strong>“高级配置</strong>”这里，根据我们的项目文件，配置好对应的执行脚本。</p><blockquote><p>此处的执行脚本如下，含义是：</p><p><strong>使用 </strong><strong><code>sed</code></strong><strong> 工具来处理文本文件 </strong><strong><code>风控平台-web-static/nginx/nginx-matrix.conf</code></strong><strong>，将文件中的所有 </strong><strong><code>[内部链接]</code></strong><strong> 替换为 </strong><strong><code>[内部链接]</code></strong><strong>，并将结果输出到 </strong><strong><code>风控平台-web-static/nginx.conf</code></strong><strong> 文件中。</strong></p><pre><code>sed 's/[内部链接] 风控平台-web-static/nginx/nginx-matrix.conf &gt; 风控平台-web-static/nginx.conf</code></pre></blockquote><h2 id="sec-3">3.Matrix下创建应用 &amp; 部署空间</h2><ol></ol><ol></ol><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">🎉</div><div class="fs-callout-b"><p>因此在操作Matrix前，需要提前 <strong>建好Git代码仓库</strong> 和 <strong>对应流水线</strong>。</p></div></div><p>在此时，就可以回过头去，完善上边的流水线了，如下：</p><p>在下图中可以看到在最后一步"Matrix发布"中，需要绑定"部署空间"：</p><h2 id="sec-4">4.申请域名 &amp; 开放端口</h2><p>在代码仓库→流水线→Matrix发布容器配置好后，就去申请域名，如下图（测试环境）。</p><p>申请好后，记得一定要 “<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>申请解析 → 并上线</strong></mark>”</p><p>然后再进行<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>转发配置</strong></mark>，使该域名映射到我们的项目容器，并转发到对应端口。</p><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><span style="color:#d83931"><strong>注意</strong></span><strong>：在进行转发配置之前，需首先去部署空间，配置好项目的暴露端口。如此一来，访问该域名时才可以访问到项目。</strong></p><p>如下图：</p></div></div></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

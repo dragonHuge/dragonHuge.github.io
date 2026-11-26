@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>AI开发基础：Langchain框架从入门到实战开发-附代码 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">20</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">468</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav>
+<nav class="context-nav" aria-label="当前栏目目录">
+<div class="context-title">外部沉淀分类</div>
+<a class="context-cat active" href="../ext/index.html#c0"><span>AI与大模型</span><span class="nav-count">32</span></a>
+<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">305</span></a>
+<a class="context-cat" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">65</span></a>
+<a class="context-cat" href="../ext/index.html#c3"><span>认知与思维</span><span class="nav-count">12</span></a>
+<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">44</span></a>
+<div class="context-group current">AI与大模型文章</div>
+<a class="art" href="../ext/e001.html">大模型学习资料包（小红书购买 · 18份）</a>
+<a class="art" href="../ext/e002.html">大模型AI Agent知识从0-1笔记-万字详解版本！</a>
+<a class="art" href="../ext/e003.html">大模型Agent实战从0-1笔记：万字详解【迭代版V2】</a>
+<a class="art" href="../ext/e004.html">大模型Transformer架构从0-1架构深度解析</a>
+<a class="art active" href="../ext/e005.html">AI开发基础：Langchain框架从入门到实战开发-附代码</a>
+<a class="art" href="../ext/e006.html">AI开发基础：Langgraph框架从入门到实战开发智能体-附带完整可运行代码</a>
+<a class="art" href="../ext/e007.html">万字详解！AI Harness 入门与实践！一篇博文给你讲透！</a>
+<a class="art" href="../ext/e008.html">RAG知识库助手实战-附带前后端和完整可运行服务</a>
+<a class="art" href="../ext/e009.html">实战智能出行Agent助手-附代码和前后端可视化界面</a>
+<a class="art" href="../ext/e010.html">Vibe Coding指南-AI编辑器全栈开发-附实战和视频</a>
+<a class="art" href="../ext/e011.html">AI大模型面试题-基础篇</a>
+<a class="art" href="../ext/e012.html">AI应用开发+后端面试题</a>
+<a class="art" href="../ext/e013.html">Codex 从小白到实战高手：大厂工程化实战手册</a>
+<a class="art" href="../ext/e014.html">Claude Code 入门到实战全流程详细版</a>
+<a class="art" href="../ext/e015.html">第一章：快速上手</a>
+<a class="art" href="../ext/e016.html">第二章 Claude Code 入门基础操作</a>
+<a class="art" href="../ext/e017.html">第三章： Claude Code 20个常用斜杠指令速查表</a>
+<a class="art" href="../ext/e018.html">第四章：文本处理与创作</a>
+<a class="art" href="../ext/e019.html">第五章：文档管理与处理</a>
+<a class="art" href="../ext/e020.html">第六章：数据处理与分析</a>
+<a class="art" href="../ext/e021.html">第七章 创建常用模板</a>
+<a class="art" href="../ext/e022.html">第八章：提示词优化技巧</a>
+<a class="art" href="../ext/e023.html">第九章：复用文档解决同类问题</a>
+<a class="art" href="../ext/e024.html">第十章：用编程的思维解决问题</a>
+<a class="art" href="../ext/e025.html">第十一章：Claude 高级功能使用</a>
+<a class="art" href="../ext/e026.html">第十二章：让Claude自动解决问题</a>
+<a class="art" href="../ext/e027.html">Claude Code 实战指南</a>
+<a class="art" href="../ext/e028.html">滴云智能办公丨多Agent协同系统</a>
+<a class="art" href="../ext/e029.html">多Agent项目实战：多Agent协同系统</a>
+<a class="art" href="../ext/e030.html">AI应用开发项目实战知识库-详解版</a>
+<a class="art" href="../ext/e031.html">11-Java全套八股文</a>
+<a class="art" href="../ext/e032.html">AI应用开发：RAG技术从小白到深入理解-详细版</a>
+</nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">41</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#LangChain-实战教程-从入门到实战">LangChain 实战教程：从入门到实战</a><a class="tl l2" href="#写在前面">写在前面</a><a class="tl l2" href="#1-LangChain-是什么">1. LangChain 是什么？</a><a class="tl l3" href="#一句话解释">一句话解释</a><a class="tl l3" href="#架构图">架构图</a><a class="tl l3" href="#核心能力">核心能力</a><a class="tl l2" href="#2-环境搭建">2. 环境搭建</a><a class="tl l3" href="#安装依赖">安装依赖</a><a class="tl l3" href="#配置-API-Key">配置 API Key</a><a class="tl l3" href="#验证安装">验证安装</a><a class="tl l2" href="#3-核心概念速览">3. 核心概念速览</a><a class="tl l3" href="#概念地图">概念地图</a><a class="tl l3" href="#四大核心">四大核心</a><a class="tl l2" href="#4-Prompt-提示词模板">4. Prompt 提示词模板</a><a class="tl l3" href="#工作流程">工作流程</a><a class="tl l3" href="#4-1-最简单的模板">4.1 最简单的模板</a><a class="tl l3" href="#4-2-聊天模板-常用">4.2 聊天模板（常用）</a><a class="tl l3" href="#4-3-Few-shot-示例模板">4.3 Few-shot 示例模板</a><a class="tl l3" href="#4-4-动态日期模板">4.4 动态日期模板</a><a class="tl l2" href="#5-Tools-工具定义">5. Tools 工具定义</a><a class="tl l3" href="#5-1-用装饰器定义-最简单">5.1 用装饰器定义（最简单）</a><a class="tl l3" href="#5-2-更复杂的工具">5.2 更复杂的工具</a><a class="tl l3" href="#5-3-用类定义-需要更多控制时">5.3 用类定义（需要更多控制时）</a><a class="tl l3" href="#5-4-把工具绑定到模型">5.4 把工具绑定到模型</a><a class="tl l2" href="#6-Agent-智能代理">6. Agent 智能代理</a><a class="tl l3" href="#Agent-思考循环">Agent 思考循环</a><a class="tl l3" href="#6-1-LangChain-1-0-新版-Agent">6.1 LangChain 1.0+ 新版 Agent</a><a class="tl l3" href="#6-2-Agent-处理多个问题">6.2 Agent 处理多个问题</a><a class="tl l3" href="#6-3-带记忆的-Agent">6.3 带记忆的 Agent</a><a class="tl l3" href="#6-4-流式输出">6.4 流式输出</a><a class="tl l2" href="#7-完整项目-全能智能助手">7. 完整项目：全能智能助手</a><a class="tl l3" href="#7-1-项目结构">7.1 项目结构</a><a class="tl l3" href="#7-2-工具定义">7.2 工具定义</a><a class="tl l3" href="#7-3-主程序">7.3 主程序</a><a class="tl l3" href="#7-4-运行效果">7.4 运行效果</a><a class="tl l2" href="#8-进阶技巧与最佳实践">8. 进阶技巧与最佳实践</a><a class="tl l3" href="#8-1-工具描述要写好">8.1 工具描述要写好</a><a class="tl l3" href="#8-2-错误处理要完善">8.2 错误处理要完善</a><a class="tl l3" href="#8-3-调整温度参数">8.3 调整温度参数</a><a class="tl l3" href="#8-4-使用-LangSmith-调试">8.4 使用 LangSmith 调试</a><a class="tl l3" href="#8-5-控制迭代次数">8.5 控制迭代次数</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与大模型</div><article><h1>AI开发基础：Langchain框架从入门到实战开发-附代码</h1><div class="meta">2026-11-09 · <span class="m-src">AI与大模型/大模型实战宝典/raw/05-Langchain手册.md</span></div><div class="md"><p><img alt="这张图是LangChain核心概念与工作流程的示意图，展示了AI开发中该框架的工作逻辑：从用户输入开始，先经过1.提示词模板处理，这种处理包括标准化提问、定义相关角色示例等；再到3.智能代理环节，该环节以核心思考引擎为支撑，可自主决定行动，还能处理复杂任务与多轮对话；过程中还会调用2.工具，这类工具涵盖查询天气、计算器操作、知识库查询等AI可调用的能力，同时依托Memory记忆模块记住对话的历史内容，最终通过模型（LLM）负责生成推理内容，完成从用户提问到返回用户的最终生成。" src="#"></p>
+<h1 id="LangChain-实战教程-从入门到实战">LangChain 实战教程：从入门到实战</h1>
+<blockquote><p>一份接地气的 LangChain 学习指南，带你从零开始构建 AI 应用</p></blockquote>
+<hr>
+<h2 id="写在前面">写在前面</h2>
+<p>这份教程不会堆砌概念，我会用最直白的话告诉你 LangChain 是什么、怎么用。代码都是能跑的，直接抄就行。 <strong>适合学AI应用开发，或者后端转AI开发的想快速上手的同学。</strong></p>
+<p><strong>适合谁看：</strong></p>
+<ul><li>听说过 ChatGPT，想自己做点 AI 应用的开发者</li><li>被官方文档绕晕的同学</li><li>想快速上手实战项目的人</li></ul>
+<p><img alt="@同事" src="#"></p>
+<hr>
+<h2 id="1-LangChain-是什么">1. LangChain 是什么？</h2>
+<h3 id="一句话解释">一句话解释</h3>
+<p><strong>LangChain = 让大模型能"动手干活"的框架</strong></p>
+<p>光靠 ChatGPT 只能聊天，但通过 LangChain，你可以让 AI：</p>
+<ul><li>查天气、搜网页</li><li>读文件、写代码</li><li>调用你公司的内部 API</li><li>自己决定该做什么</li></ul>
+<h3 id="架构图">架构图</h3>
+<p><img alt="@同事" src="#"></p>
+<h3 id="核心能力">核心能力</h3>
+<hr>
+<h2 id="2-环境搭建">2. 环境搭建</h2>
+<h3 id="安装依赖">安装依赖</h3>
+<pre><code># 创建虚拟环境（推荐）
+python -m venv langchain_env
+source langchain_env/bin/activate  # Mac/Linux
+# langchain_env\Scripts\activate   # Windows
+
+# 安装 LangChain 核心包
+pip install langchain langchain-core langchain-community
+
+# 根据你用的模型安装对应包
+pip install langchain-openai       # OpenAI
+pip install langchain-anthropic    # Claude
+pip install dashscope              # 通义千问
+
+# 其他常用包
+pip install python-dotenv          # 环境变量管理
+pip install langgraph             # Agent 运行时（新版必装）</code></pre>
+<h3 id="配置-API-Key">配置 API Key</h3>
+<p>创建 <code>.env</code> 文件：</p>
+<pre><code># OpenAI
+OPENAI_API_KEY=sk-xxx
+
+# 或者通义千问
+DASHSCOPE_API_KEY=sk-xxx
+
+# Claude
+ANTHROPIC_API_KEY=sk-xxx</code></pre>
+<h3 id="验证安装">验证安装</h3>
+<pre><code>from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+# 通义千问示例
+from langchain_community.chat_models import ChatTongyi
+
+llm = ChatTongyi(
+    model=&quot;qwen-turbo&quot;,
+    dashscope_api_key=os.getenv(&quot;DASHSCOPE_API_KEY&quot;)
+)
+
+response = llm.invoke(&quot;你好，请用一句话介绍自己&quot;)
+print(response.content)</code></pre>
+<p>跑通了就说明环境 OK！</p>
+<hr>
+<h2 id="3-核心概念速览">3. 核心概念速览</h2>
+<p>LangChain 的核心就四个东西，搞懂了就入门了：</p>
+<h3 id="概念地图">概念地图</h3>
+<p><img alt="@同事" src="#"></p>
+<h3 id="四大核心">四大核心</h3>
+<p><strong>关系是这样的：</strong></p>
+<pre><code>用户提问 → Prompt 格式化 → Agent 思考 → 调用 Tool → Model 生成回答 → 返回用户</code></pre>
+<hr>
+<h2 id="4-Prompt-提示词模板">4. Prompt 提示词模板</h2>
+<p>提示词模板就是把"问问题"这件事标准化。不用每次都手写完整的提示词。</p>
+<h3 id="工作流程">工作流程</h3>
+<p><img alt="@同事" src="#"></p>
+<h3 id="4-1-最简单的模板">4.1 最简单的模板</h3>
+<pre><code>from langchain_core.prompts import PromptTemplate
+
+# 定义模板，用 {} 占位
+template = PromptTemplate.from_template(
+    &quot;请用{language}语言介绍一下{topic}，不超过100字。&quot;
+)
+
+# 填充变量
+prompt = template.format(language=&quot;中文&quot;, topic=&quot;人工智能&quot;)
+print(prompt)
+# 输出: 请用中文语言介绍一下人工智能，不超过100字。</code></pre>
+<h3 id="4-2-聊天模板-常用">4.2 聊天模板（常用）</h3>
+<p>做聊天应用一般用这个，可以设置 system 和 user 角色：</p>
+<pre><code>from langchain_core.prompts import ChatPromptTemplate
+
+# 定义多轮对话模板
+chat_template = ChatPromptTemplate.from_messages([
+    (&quot;system&quot;, &quot;你是一位{role}，擅长用简洁易懂的方式解释复杂概念。&quot;),
+    (&quot;human&quot;, &quot;请解释一下：{concept}&quot;),
+])
+
+# 生成消息列表
+messages = chat_template.format_messages(
+    role=&quot;物理学教授&quot;,
+    concept=&quot;量子纠缠&quot;
+)
+
+# 调用模型
+response = llm.invoke(messages)
+print(response.content)</code></pre>
+<h3 id="4-3-Few-shot-示例模板">4.3 Few-shot 示例模板</h3>
+<p>通过给几个例子，教 AI 按你想要的格式输出：</p>
+<pre><code># 定义示例
+examples = [
+    {&quot;input&quot;: &quot;开心&quot;, &quot;output&quot;: &quot;我今天非常开心！&quot;},
+    {&quot;input&quot;: &quot;难过&quot;, &quot;output&quot;: &quot;我感到有些难过...&quot;},
+]
+
+# 创建包含示例的模板
+few_shot_template = ChatPromptTemplate.from_messages([
+    (&quot;system&quot;, &quot;你是一个情绪表达助手。&quot;),
+    (&quot;human&quot;, &quot;示例：\n情绪: 开心\n表达: 我今天非常开心！\n\n情绪: 难过\n表达: 我感到有些难过...&quot;),
+    (&quot;human&quot;, &quot;现在请表达这个情绪: {emotion}&quot;)
+])
+
+messages = few_shot_template.format_messages(emotion=&quot;兴奋&quot;)
+response = llm.invoke(messages)</code></pre>
+<h3 id="4-4-动态日期模板">4.4 动态日期模板</h3>
+<p>有些变量想自动填充（比如当前日期）：</p>
+<pre><code>from datetime import datetime
+from langchain_core.prompts import PromptTemplate
+
+template = PromptTemplate(
+    template=&quot;今天是{date}，请告诉我关于{topic}的最新消息。&quot;,
+    input_variables=[&quot;topic&quot;],
+    partial_variables={
+        &quot;date&quot;: datetime.now().strftime(&quot;%Y年%m月%d日&quot;)  # 自动填充
+    }
+)
+
+# 只需要传 topic
+prompt = template.format(topic=&quot;AI发展&quot;)</code></pre>
+<hr>
+<h2 id="5-Tools-工具定义">5. Tools 工具定义</h2>
+<p>工具就是让 AI 能调用的函数。定义好工具后，AI 会自己决定什么时候用、怎么用。</p>
+<h3 id="5-1-用装饰器定义-最简单">5.1 用装饰器定义（最简单）</h3>
+<pre><code>from langchain_core.tools import tool
+
+@tool
+def get_weather(city: str) -&gt; str:
+    &quot;&quot;&quot;
+    获取城市的天气信息
+    
+    Args:
+        city: 城市名称，如&quot;北京&quot;、&quot;上海&quot;
+    &quot;&quot;&quot;
+    # 模拟天气数据（实际项目中调用天气 API）
+    weather_data = {
+        &quot;北京&quot;: &quot;晴天，25°C&quot;,
+        &quot;上海&quot;: &quot;多云，22°C&quot;,
+        &quot;深圳&quot;: &quot;小雨，28°C&quot;,
+    }
+    return weather_data.get(city, f&quot;{city}的天气暂时无法获取&quot;)
+
+
+# 测试工具
+result = get_weather.invoke({&quot;city&quot;: &quot;北京&quot;})
+print(result)  # 输出: 晴天，25°C
+
+# 查看工具信息
+print(f&quot;工具名称: {get_weather.name}&quot;)
+print(f&quot;工具描述: {get_weather.description}&quot;)
+print(f&quot;参数结构: {get_weather.args}&quot;)</code></pre>
+<p><strong>重点：docstring 写清楚！</strong> AI 就是靠这个描述来决定什么时候调用这个工具。</p>
+<h3 id="5-2-更复杂的工具">5.2 更复杂的工具</h3>
+<pre><code>from typing import Optional
+
+@tool
+def search_database(query: str, category: Optional[str] = None) -&gt; str:
+    &quot;&quot;&quot;
+    在数据库中搜索信息
+    
+    Args:
+        query: 搜索关键词
+        category: 可选的分类过滤器，如&quot;科技&quot;、&quot;健康&quot;、&quot;教育&quot;
+    &quot;&quot;&quot;
+    database = {
+        &quot;科技&quot;: [&quot;人工智能正在改变世界&quot;, &quot;5G技术的应用&quot;],
+        &quot;健康&quot;: [&quot;健康饮食的重要性&quot;, &quot;运动与长寿的关系&quot;],
+        &quot;教育&quot;: [&quot;在线学习的趋势&quot;, &quot;终身学习的价值&quot;]
+    }
+    
+    results = []
+    
+    if category and category in database:
+        for item in database[category]:
+            if query.lower() in item.lower():
+                results.append(f&quot;[{category}] {item}&quot;)
+    else:
+        for cat, items in database.items():
+            for item in items:
+                if query.lower() in item.lower():
+                    results.append(f&quot;[{cat}] {item}&quot;)
+    
+    if results:
+        return &quot;找到以下结果:\n&quot; + &quot;\n&quot;.join(results)
+    else:
+        return f&quot;没有找到关于 &#x27;{query}&#x27; 的结果&quot;</code></pre>
+<h3 id="5-3-用类定义-需要更多控制时">5.3 用类定义（需要更多控制时）</h3>
+<pre><code>from langchain_core.tools import BaseTool
+from pydantic import BaseModel, Field
+from typing import Type
+
+# 定义输入参数结构
+class CalculatorInput(BaseModel):
+    expression: str = Field(description=&quot;数学表达式，如 &#x27;2+2&#x27; 或 &#x27;10*5&#x27;&quot;)
+
+class Calculator(BaseTool):
+    name: str = &quot;calculator&quot;
+    description: str = &quot;执行数学计算&quot;
+    args_schema: Type[BaseModel] = CalculatorInput
+    
+    def _run(self, expression: str) -&gt; str:
+        &quot;&quot;&quot;同步执行&quot;&quot;&quot;
+        try:
+            result = eval(expression)
+            return f&quot;计算结果: {expression} = {result}&quot;
+        except Exception as e:
+            return f&quot;计算错误: {str(e)}&quot;
+    
+    async def _arun(self, expression: str) -&gt; str:
+        &quot;&quot;&quot;异步执行（可选实现）&quot;&quot;&quot;
+        return self._run(expression)
+
+# 使用
+calc = Calculator()
+result = calc.invoke({&quot;expression&quot;: &quot;123 * 456&quot;})
+print(result)  # 计算结果: 123 * 456 = 56088</code></pre>
+<h3 id="5-4-把工具绑定到模型">5.4 把工具绑定到模型</h3>
+<p>定义好工具后，需要"告诉"模型这些工具的存在：</p>
+<pre><code># 创建工具列表
+tools = [get_weather, search_database, Calculator()]
+
+# 绑定到模型
+llm_with_tools = llm.bind_tools(tools)
+
+# 现在模型知道有这些工具可用了
+response = llm_with_tools.invoke(&quot;北京今天天气如何？&quot;)
+
+# 检查模型是否决定调用工具
+if response.tool_calls:
+    for tool_call in response.tool_calls:
+        print(f&quot;模型想调用: {tool_call[&#x27;name&#x27;]}&quot;)
+        print(f&quot;传入参数: {tool_call[&#x27;args&#x27;]}&quot;)</code></pre>
+<hr>
+<h2 id="6-Agent-智能代理">6. Agent 智能代理</h2>
+<p>Agent 是 LangChain 最酷的部分。它不是按固定流程执行，而是自己思考、自己决定该干啥。</p>
+<h3 id="Agent-思考循环">Agent 思考循环</h3>
+<p><img alt="@同事" src="#"></p>
+<h3 id="6-1-LangChain-1-0-新版-Agent">6.1 LangChain 1.0+ 新版 Agent</h3>
+<p>新版用 <code>create_agent</code>，底层基于 LangGraph，更稳定：</p>
+<pre><code>from langchain.agents import create_agent
+from langchain_core.tools import tool
+from langchain_community.chat_models import ChatTongyi
+import os
+
+# 1. 初始化模型
+llm = ChatTongyi(
+    model=&quot;qwen-plus&quot;,
+    temperature=0.7,
+    dashscope_api_key=os.environ.get(&quot;DASHSCOPE_API_KEY&quot;)
+)
+
+# 2. 定义工具
+@tool
+def get_weather(city: str) -&gt; str:
+    &quot;&quot;&quot;获取城市天气信息&quot;&quot;&quot;
+    weather_db = {
+        &quot;北京&quot;: &quot;晴天，15-25度&quot;,
+        &quot;上海&quot;: &quot;多云，18-28度&quot;,
+        &quot;深圳&quot;: &quot;小雨，20-30度&quot;,
+    }
+    return weather_db.get(city, f&quot;{city}的天气信息暂不可用&quot;)
+
+@tool
+def calculator(expression: str) -&gt; str:
+    &quot;&quot;&quot;执行数学计算&quot;&quot;&quot;
+    try:
+        result = eval(expression)
+        return f&quot;计算结果: {expression} = {result}&quot;
+    except:
+        return &quot;计算错误&quot;
+
+@tool  
+def search_knowledge(query: str) -&gt; str:
+    &quot;&quot;&quot;搜索知识库&quot;&quot;&quot;
+    knowledge = {
+        &quot;LangChain&quot;: &quot;LangChain是一个用于开发LLM应用的框架，支持工具、代理、内存管理等功能。&quot;,
+        &quot;机器学习&quot;: &quot;机器学习是AI的子集，让系统能从数据中自动学习和改进。&quot;,
+    }
+    for key, value in knowledge.items():
+        if key in query:
+            return value
+    return f&quot;未找到关于&#x27;{query}&#x27;的信息&quot;
+
+# 3. 创建 Agent
+agent = create_agent(
+    model=llm,
+    tools=[get_weather, calculator, search_knowledge],
+    system_prompt=&quot;你是一个专业的中文助手。仔细分析用户问题，选择合适的工具来回答。&quot;
+)
+
+# 4. 使用 Agent
+result = agent.invoke({
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;北京今天天气怎么样？&quot;}]
+})
+
+# 获取回答
+final_message = result[&quot;messages&quot;][-1]
+print(f&quot;回答: {final_message.content}&quot;)</code></pre>
+<h3 id="6-2-Agent-处理多个问题">6.2 Agent 处理多个问题</h3>
+<pre><code>test_queries = [
+    &quot;北京今天天气怎么样？&quot;,
+    &quot;给我讲讲什么是机器学习&quot;,
+    &quot;计算 123 * 456&quot;,
+]
+
+for query in test_queries:
+    print(f&quot;\n用户: {query}&quot;)
+    
+    result = agent.invoke({
+        &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: query}]
+    })
+    
+    final_message = result[&quot;messages&quot;][-1]
+    print(f&quot;助手: {final_message.content}&quot;)</code></pre>
+<h3 id="6-3-带记忆的-Agent">6.3 带记忆的 Agent</h3>
+<p>让 Agent 记住对话历史：</p>
+<pre><code>from langgraph.checkpoint.memory import MemorySaver
+
+# 创建记忆存储
+checkpointer = MemorySaver()
+
+# 创建带记忆的 Agent
+agent = create_agent(
+    model=llm,
+    tools=[get_weather, calculator, search_knowledge],
+    system_prompt=&quot;你是一个专业助手，能记住之前的对话。&quot;,
+    checkpointer=checkpointer  # 启用记忆
+)
+
+# 会话配置（同一个 thread_id 共享记忆）
+config = {&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;session_001&quot;}}
+
+# 第一轮对话
+result1 = agent.invoke(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;我叫小明&quot;}]},
+    config
+)
+print(result1[&quot;messages&quot;][-1].content)
+
+# 第二轮对话（Agent 会记得用户叫小明）
+result2 = agent.invoke(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;我叫什么名字？&quot;}]},
+    config
+)
+print(result2[&quot;messages&quot;][-1].content)  # 会回答&quot;小明&quot;</code></pre>
+<h3 id="6-4-流式输出">6.4 流式输出</h3>
+<p>让回答一个字一个字输出，体验更好：</p>
+<pre><code># 流式调用
+for chunk in agent.stream(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;北京天气如何？&quot;}]},
+    config,
+    stream_mode=&quot;values&quot;
+):
+    messages = chunk.get(&quot;messages&quot;)
+    if messages:
+        last_message = messages[-1]
+        if hasattr(last_message, &quot;content&quot;) and last_message.content:
+            print(last_message.content, end=&quot;&quot;, flush=True)
+print()  # 换行</code></pre>
+<hr>
+<h2 id="7-完整项目-全能智能助手">7. 完整项目：全能智能助手</h2>
+<p>现在把前面学的串起来，做一个能干实事的智能助手。</p>
+<h3 id="7-1-项目结构">7.1 项目结构</h3>
+<pre><code>smart_assistant/
+├── .env                 # API Key
+├── main.py             # 主程序
+├── tools/              # 工具定义
+│   ├── __init__.py
+│   ├── weather.py
+│   ├── calculator.py
+│   ├── translator.py
+│   └── knowledge.py
+└── requirements.txt</code></pre>
+<h3 id="7-2-工具定义">7.2 工具定义</h3>
+<p><strong>tools/weather.py</strong></p>
+<pre><code>from langchain_core.tools import tool
+from datetime import datetime
+
+@tool
+def get_weather(city: str) -&gt; str:
+    &quot;&quot;&quot;
+    获取指定城市的实时天气信息
+    
+    Args:
+        city: 城市名称，支持北京、上海、广州、深圳、杭州等
+    &quot;&quot;&quot;
+    weather_database = {
+        &quot;北京&quot;: {&quot;condition&quot;: &quot;晴天&quot;, &quot;temp&quot;: &quot;15-25°C&quot;, &quot;aqi&quot;: &quot;优&quot;},
+        &quot;上海&quot;: {&quot;condition&quot;: &quot;多云&quot;, &quot;temp&quot;: &quot;18-28°C&quot;, &quot;aqi&quot;: &quot;良&quot;},
+        &quot;深圳&quot;: {&quot;condition&quot;: &quot;小雨&quot;, &quot;temp&quot;: &quot;22-30°C&quot;, &quot;aqi&quot;: &quot;优&quot;},
+        &quot;杭州&quot;: {&quot;condition&quot;: &quot;阴天&quot;, &quot;temp&quot;: &quot;17-26°C&quot;, &quot;aqi&quot;: &quot;良&quot;},
+        &quot;广州&quot;: {&quot;condition&quot;: &quot;晴天&quot;, &quot;temp&quot;: &quot;20-32°C&quot;, &quot;aqi&quot;: &quot;良&quot;},
+    }
+    
+    if city not in weather_database:
+        return f&quot;暂无{city}的天气数据，支持城市：北京、上海、深圳、杭州、广州&quot;
+    
+    data = weather_database[city]
+    return f&quot;&quot;&quot;
+{city} 天气预报
+━━━━━━━━━━━━━━━━
+天气：{data[&#x27;condition&#x27;]}
+温度：{data[&#x27;temp&#x27;]}
+空气质量：{data[&#x27;aqi&#x27;]}
+更新时间：{datetime.now().strftime(&quot;%H:%M&quot;)}
+    &quot;&quot;&quot;.strip()</code></pre>
+<p><strong>tools/calculator.py</strong></p>
+<pre><code>from langchain_core.tools import tool
+
+@tool
+def calculator(expression: str) -&gt; str:
+    &quot;&quot;&quot;
+    执行数学计算
+    
+    Args:
+        expression: 数学表达式，如 &quot;2+2&quot;、&quot;(10*5)+20&quot;、&quot;2**8&quot;
+    &quot;&quot;&quot;
+    try:
+        # 安全检查
+        allowed_chars = set(&#x27;0123456789+-*/(). &#x27;)
+        if not all(c in allowed_chars for c in expression.replace(&#x27;**&#x27;, &#x27;&#x27;)):
+            return &quot;表达式包含非法字符&quot;
+        
+        result = eval(expression, {&quot;__builtins__&quot;: {}}, {})
+        
+        if isinstance(result, float) and result.is_integer():
+            result = int(result)
+        
+        return f&quot;计算结果：{expression} = {result}&quot;
+    except ZeroDivisionError:
+        return &quot;错误：除数不能为零&quot;
+    except Exception as e:
+        return f&quot;计算错误：{str(e)}&quot;</code></pre>
+<p><strong>tools/translator.py</strong></p>
+<pre><code>from langchain_core.tools import tool
+
+@tool
+def translate(text: str, target_language: str = &quot;英文&quot;) -&gt; str:
+    &quot;&quot;&quot;
+    将中文文本翻译成其他语言（模拟）
+    
+    Args:
+        text: 要翻译的中文文本
+        target_language: 目标语言，支持&quot;英文&quot;、&quot;日文&quot;、&quot;韩文&quot;
+    &quot;&quot;&quot;
+    translations = {
+        &quot;你好&quot;: {&quot;英文&quot;: &quot;Hello&quot;, &quot;日文&quot;: &quot;こんにちは&quot;, &quot;韩文&quot;: &quot;안녕하세요&quot;},
+        &quot;谢谢&quot;: {&quot;英文&quot;: &quot;Thank you&quot;, &quot;日文&quot;: &quot;ありがとう&quot;, &quot;韩文&quot;: &quot;감사합니다&quot;},
+        &quot;再见&quot;: {&quot;英文&quot;: &quot;Goodbye&quot;, &quot;日文&quot;: &quot;さようなら&quot;, &quot;韩文&quot;: &quot;안녕히 가세요&quot;},
+    }
+    
+    if text in translations and target_language in translations[text]:
+        result = translations[text][target_language]
+        return f&quot;翻译结果：&#x27;{text}&#x27; → [{target_language}] {result}&quot;
+    
+    return f&quot;暂不支持&#x27;{text}&#x27;的{target_language}翻译&quot;</code></pre>
+<h3 id="7-3-主程序">7.3 主程序</h3>
+<p><strong>main.py</strong></p>
+<pre><code>import os
+from dotenv import load_dotenv
+from langchain.agents import create_agent
+from langchain_community.chat_models import ChatTongyi
+from langgraph.checkpoint.memory import MemorySaver
+
+# 导入工具
+from tools.weather import get_weather
+from tools.calculator import calculator
+from tools.translator import translate
+
+# 加载环境变量
+load_dotenv()
+
+# 系统提示词
+SYSTEM_PROMPT = &quot;&quot;&quot;
+你是小智，一个全能智能助手。
+
+你可以帮用户：
+• 查询天气：查询中国主要城市的天气
+• 数学计算：进行各种数学运算
+• 文本翻译：将中文翻译成其他语言
+
+工作原则：
+1. 先理解用户意图，选择合适的工具
+2. 如果不确定，可以询问用户
+3. 回答简洁明了，有帮助
+&quot;&quot;&quot;
+
+def create_assistant():
+    &quot;&quot;&quot;创建智能助手&quot;&quot;&quot;
+    # 初始化模型
+    llm = ChatTongyi(
+        model=&quot;qwen-plus&quot;,
+        temperature=0.7,
+        dashscope_api_key=os.environ.get(&quot;DASHSCOPE_API_KEY&quot;)
+    )
+    
+    # 创建记忆
+    checkpointer = MemorySaver()
+    
+    # 创建 Agent
+    agent = create_agent(
+        model=llm,
+        tools=[get_weather, calculator, translate],
+        system_prompt=SYSTEM_PROMPT,
+        checkpointer=checkpointer
+    )
+    
+    return agent
+
+def main():
+    &quot;&quot;&quot;主函数&quot;&quot;&quot;
+    print(&quot;=&quot; * 50)
+    print(&quot;      小智 - 全能智能助手 v1.0&quot;)
+    print(&quot;=&quot; * 50)
+    print(&quot;输入 &#x27;quit&#x27; 退出\n&quot;)
+    
+    agent = create_assistant()
+    config = {&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;main&quot;}}
+    
+    while True:
+        user_input = input(&quot;你: &quot;).strip()
+        
+        if user_input.lower() in [&#x27;quit&#x27;, &#x27;退出&#x27;, &#x27;exit&#x27;]:
+            print(&quot;再见！&quot;)
+            break
+        
+        if not user_input:
+            continue
+        
+        try:
+            result = agent.invoke(
+                {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: user_input}]},
+                config
+            )
+            
+            response = result[&quot;messages&quot;][-1].content
+            print(f&quot;小智: {response}\n&quot;)
+            
+        except Exception as e:
+            print(f&quot;出错了: {str(e)}\n&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    main()</code></pre>
+<h3 id="7-4-运行效果">7.4 运行效果</h3>
+<pre><code>==================================================
+      小智 - 全能智能助手 v1.0
+==================================================
+输入 &#x27;quit&#x27; 退出
+
+你: 北京天气怎么样
+小智: 
+北京 天气预报
+━━━━━━━━━━━━━━━━
+天气：晴天
+温度：15-25°C
+空气质量：优
+更新时间：14:30
+
+你: 帮我算一下 125 * 88
+小智: 计算结果：125 * 88 = 11000
+
+你: 把&quot;你好&quot;翻译成日文
+小智: 翻译结果：&#x27;你好&#x27; → [日文] こんにちは
+
+你: quit
+再见！</code></pre>
+<hr>
+<h2 id="8-进阶技巧与最佳实践">8. 进阶技巧与最佳实践</h2>
+<h3 id="8-1-工具描述要写好">8.1 工具描述要写好</h3>
+<p>AI 完全靠工具的 description 来决定什么时候调用。写得不清楚，它就不会用。</p>
+<p><strong>坏例子：</strong></p>
+<pre><code>@tool
+def func(x: str) -&gt; str:
+    &quot;&quot;&quot;处理数据&quot;&quot;&quot;  # 太模糊了！
+    pass</code></pre>
+<p><strong>好例子：</strong></p>
+<pre><code>@tool
+def get_stock_price(symbol: str) -&gt; str:
+    &quot;&quot;&quot;
+    获取股票实时价格
+    
+    当用户询问某只股票的价格、涨跌情况时使用此工具。
+    
+    Args:
+        symbol: 股票代码，如 &quot;AAPL&quot;（苹果）、&quot;GOOGL&quot;（谷歌）
+    
+    Returns:
+        包含当前价格、涨跌幅的字符串
+    &quot;&quot;&quot;
+    pass</code></pre>
+<h3 id="8-2-错误处理要完善">8.2 错误处理要完善</h3>
+<p>工具可能会失败（网络错误、参数错误等），一定要有兜底：</p>
+<pre><code>@tool
+def fetch_data(url: str) -&gt; str:
+    &quot;&quot;&quot;从URL获取数据&quot;&quot;&quot;
+    try:
+        response = requests.get(url, timeout=10)
+        response.raise_for_status()
+        return response.text
+    except requests.Timeout:
+        return &quot;请求超时，请稍后重试&quot;
+    except requests.RequestException as e:
+        return f&quot;请求失败：{str(e)}&quot;
+    except Exception as e:
+        return f&quot;未知错误：{str(e)}&quot;</code></pre>
+<h3 id="8-3-调整温度参数">8.3 调整温度参数</h3>
+<ul><li><code>temperature=0</code>：输出最确定，适合事实查询</li><li><code>temperature=0.7</code>：有一定创意，适合对话</li><li><code>temperature=1.0</code>：输出多样，适合创作</li></ul>
+<h3 id="8-4-使用-LangSmith-调试">8.4 使用 LangSmith 调试</h3>
+<p>遇到奇怪问题时，用 LangSmith 看看 Agent 到底在想什么：</p>
+<pre><code>import os
+
+# 在代码最前面添加
+os.environ[&quot;LANGCHAIN_TRACING_V2&quot;] = &quot;true&quot;
+os.environ[&quot;LANGCHAIN_API_KEY&quot;] = &quot;你的LangSmith API Key&quot;</code></pre>
+<p>然后去 smith.langchain.com 就能看到每一步的详细 trace。</p>
+<h3 id="8-5-控制迭代次数">8.5 控制迭代次数</h3>
+<p>防止 Agent 陷入死循环：</p>
+<pre><code>agent = create_agent(
+    model=llm,
+    tools=tools,
+    # 其他选项
+)
+
+# 调用时限制最大步数
+result = agent.invoke(
+    {&quot;messages&quot;: [...]},
+    config,
+    recursion_limit=10  # 最多10步
+)</code></pre></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+
+</body>
+</html>

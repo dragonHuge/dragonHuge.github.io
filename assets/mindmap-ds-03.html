@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>第六章-图 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>第六章-图</b><small>幕布导图 · 245 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "第六章-图", "data": {"id": "mvirtual-root", "topic": "<b>第六章-图<\/b>", "expanded": true, "children": [{"id": "mqjnw2YSKs4", "topic": "<b>一、图的基本概念<\/b>", "expanded": false, "children": [{"id": "mVdzCSGa44I", "topic": "<b>1、图的定义：G=(V,E) — 图不可以是空图(图中可以没有边，但不能没有顶点)<\/b><br><img class=\"mm-img\" src=\"mm-5afee475358693.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>顶点集（V）：<\/b>V(G)表示图G中顶点的<b>有限非空集<\/b>。<b>\n边集（E）：<\/b>E(G)表示图G中顶点之间关系的集合<b>。\n|V|：<\/b>图G中的顶点个数，也称为<b>图G的阶<\/b> <b>；\n|E|：<\/b>图G中边的条数<b>。\nV：vertex   ； E：edge。\n线性表可以是空表、树可以是空树、图不能是空图。<\/b><\/span>", "expanded": true}, {"id": "mHnpISQQjQ4", "topic": "<b>2、有向图：<\/b><span style=\"color:#1d4ed8\"><b><span>&lt;v,w&gt;:<\/span><\/b>从v到w的弧<br><img class=\"mm-img\" src=\"mm-f3bfdb38f83921.jpg\" style=\"width:260px;height:69px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">有了方向，也称：v邻接到了w。<\/span>", "expanded": true, "children": [{"id": "m5VxxCOLugU", "topic": "<b>度：<\/b><span style=\"color:#1d4ed8\"><b><span>入度<\/span><\/b> <b>&amp; <\/b><span style=\"color:#1d4ed8\"><b><span>出度<\/span><\/b>", "expanded": true}]}, {"id": "mLeskqxNZ6K", "topic": "<b>3、无向图:<\/b><span style=\"color:#1d4ed8\"><b><span> (v,w)<\/span><\/b><br><img class=\"mm-img\" src=\"mm-bcea5aa4fb4caf.jpg\" style=\"width:260px;height:75px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是没有方向呗。即：v和w相互关联。<\/span>", "expanded": true, "children": [{"id": "m9zKOUG7KoS", "topic": "<b>度<\/b>", "expanded": true}]}, {"id": "m9ut3Ejo5sb", "topic": "<b>4、简单图：<\/b><br><img class=\"mm-img\" src=\"mm-3d1168ea34c2c2.jpg\" style=\"width:260px;height:215px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">也分为有向和无向两种情况。<\/span>", "expanded": true}, {"id": "mBGrHB935bB", "topic": "<b>5、多重图：<\/b><br><img class=\"mm-img\" src=\"mm-4d70581c5907df.jpg\" style=\"width:260px;height:222px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m8a3bfTPwc7", "topic": "<b>6、无向图中顶点的度：<\/b><span style=\"color:#0e7a52\"><b><span>依附于该顶点的边的条数(TD(v))<\/span><\/b><br><img class=\"mm-img\" src=\"mm-996227bbb42759.jpg\" style=\"width:260px;height:69px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mVUMnJmQ59s", "topic": "<b><mark>​无向图顶点的度数之和 = 2 * 边的条数<\/mark><\/b><span class=\"mm-note\">因为加一条边连接两个顶点，度数就会+2。且度包括：入度、出度<\/span>", "expanded": true}]}, {"id": "mSCF8QBwnry", "topic": "<b>7、有向图中顶点的入度与出度<\/b><br><img class=\"mm-img\" src=\"mm-ec7f98115a5e75.jpg\" style=\"width:260px;height:63px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为加一条边后，就会给一个顶点的入度+1，而另一个顶点的出度+1.\n因此有向图中的<b>入度 = 出度 ，且等于边的条数。<\/b><\/span>", "expanded": true, "children": [{"id": "mG4WcCRRGFt", "topic": "<b>1、入度(<\/b><span style=\"color:#0e7a52\"><b><span>ID(v)<\/span><\/b><b>)：以<\/b><span style=\"color:#0e7a52\"><b><span>顶点v为终点<\/span><\/b><b>的有向边的数目<\/b>", "expanded": true}, {"id": "mBhshSgdluH", "topic": "<b>2、出度(<\/b><span style=\"color:#0e7a52\"><b><span>OD(v)<\/span><\/b><b>)：以<\/b><span style=\"color:#0e7a52\"><b><span>顶点v为起点<\/span><\/b><b>的有向边的数目<\/b>", "expanded": true}]}, {"id": "mtsSt8Tjmih", "topic": "<b>8、顶点-顶点的关系描述：<\/b><br><img class=\"mm-img\" src=\"mm-fe47ce912504d3.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">要注意有向图和无向图路径的区别。\n正如上边有向图中，E到A的路径长度应该为无穷，而A到E的路径长度为1<\/span>", "expanded": true, "children": [{"id": "m0EmEHdvvgT", "topic": "<b>1、路径：<\/b>顶点到顶点之间一条路径，就是一个顶点序列<span class=\"mm-note\">该序列就体现出了从一个顶点到一个顶点的路径。\n当然不同教材对路径的定义也会有所不同。\n而：关联的边也可以理解为路径的构成要素。\n即：<b>路径就是由顶点和相邻顶点的序偶构成的边所形成的序列。<\/b><\/span>", "expanded": true}, {"id": "m46drpZ7mjh", "topic": "<b>2、回路(环)：第一个顶点与最后一个顶点相同的路径。<\/b>", "expanded": true}, {"id": "mG8xDGEnGo3", "topic": "<b>3、简单路径：在路径序列中，不出现重复顶点.<\/b>", "expanded": true}, {"id": "mCe3JqQVXUe", "topic": "<b>4、简单回路：除第一个和最后一个顶点外，其余顶点不重复出现<\/b><span class=\"mm-note\">就是中间顶点上不出现环。<\/span>", "expanded": true}, {"id": "mwza4euKJuk", "topic": "<b>5、路径长度：路径上边的数目<\/b>", "expanded": true}, {"id": "mAangGlzY7G", "topic": "<b>6、点到点的距离：点到点之间<\/b><span style=\"color:#0e7a52\"><b><span>最短路径的长度。<\/span><\/b><span style=\"color:#d92d20\"><b><span>（注意：有向图的路径也是有向的）<\/span><\/b><span class=\"mm-note\">如果两个顶点之间不存在路径，那么该距离为无穷。<\/span>", "expanded": true}, {"id": "msnsQQkskCA", "topic": "<b>7、连通(无向图) 与 强连通(有向图)<\/b><br><img class=\"mm-img\" src=\"mm-811733df3d1815.jpg\" style=\"width:260px;height:17px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>强连通只是针对有向图中而言<\/b>。\n并且注意强连通是两个顶点之间有路径。<\/span>", "expanded": true}]}, {"id": "mdHBCqC8P8T", "topic": "<b>9、连通图 ：<\/b><span style=\"color:#b45309\"><b><span>无向图<\/span><\/b><b>中任意两顶点均连通<\/b><br><img class=\"mm-img\" src=\"mm-a1aef3ab943d28.jpg\" style=\"width:260px;height:198px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">即：所有顶点都连通。<\/span>", "expanded": true, "children": [{"id": "mXmoF9vLFVN", "topic": "<span style=\"color:#1d4ed8\"><b><span>连通图<\/span><\/b><b>：<\/b><b><mark>最少<\/mark><\/b><b>有<\/b><b><mark>n-1<\/mark><\/b><b>条边<\/b>", "expanded": true}, {"id": "melgxOYfOmV", "topic": "<span style=\"color:#1d4ed8\"><b><span>非连通图<\/span><\/b>：<b><mark>最多<\/mark><\/b>有<b><mark>C n-1 2<\/mark><\/b><mark> <\/mark> 条边。<span class=\"mm-note\">将<b>n-1个顶点两两连接，而孤立一个结点<\/b>，这样就保证了非连通且边数最多。\n​正如上图，n=5时，将4个结点两两组合即可。<\/span>", "expanded": true}, {"id": "mYpeuO3Mn8O", "topic": "因此有：<b>无向图<\/b>中，<span style=\"color:#b45309\"><b><span>n个结点<\/span><\/b><span style=\"color:#b45309\"><span>，<\/span><b>保证<\/b><span style=\"color:#b45309\"><b><span>非连通<\/span><\/b><b>的<\/b><span style=\"color:#b45309\"><b><span>最多边数<\/span><\/b><b>为：<\/b><b><mark>C n-1 2 <\/mark><\/b>条边", "expanded": true}, {"id": "mKa7lK66e7P", "topic": "因此有：<b>无向图<\/b>中，<span style=\"color:#b45309\"><b><span>n个结点，<\/span><\/b><b>保证<\/b><span style=\"color:#b45309\"><b><span>连通<\/span><\/b><b>的<\/b><span style=\"color:#b45309\"><b><span>最<\/span><\/b><span style=\"color:#b45309\"><b><span>少边数<\/span><\/b><b>为：<\/b><b><mark>n-1<\/mark><\/b><b>条<\/b><span class=\"mm-note\">若<b>再加一条边<\/b>，在不考虑重边的情况下，<b>必然会构成环路<\/b>。<\/span>", "expanded": true}]}, {"id": "mfjqIQ3Hxi1", "topic": "<b>10、强连通图：<\/b><span style=\"color:#b45309\"><b><span>有向图<\/span><\/b><b>中任何一对顶点都强连通<\/b><br><img class=\"mm-img\" src=\"mm-2331fd490121ab.jpg\" style=\"width:260px;height:209px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">强连通图，<b>最少有n条边<\/b>，因为有向图中路径也有向，且n条边时就<b>构成一个回路<\/b>。<\/span>", "expanded": true}, {"id": "msrW5a9BNic", "topic": "<b>11、子图 与 生成子图：<\/b><br><img class=\"mm-img\" src=\"mm-fb585424a90376.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-c6b0e1489bd54c.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">且并非V和E的所有子集都能构成G的子图，因为这样的子图可能不是图，正如上图所示，该边本应连A和D，此时却缺了D，因此它不是图。<\/span>", "expanded": true, "children": [{"id": "mebIi9iXYCH", "topic": "<span style=\"color:#b45309\"><b><span>生成子图<\/span><\/b><b>：一个<\/b><span style=\"color:#1d4ed8\"><b><span>包含<\/span><\/b><b>了图的<\/b><span style=\"color:#1d4ed8\"><b><span>所有顶点的子图<\/span><\/b><span class=\"mm-note\">无所谓连不连通，反正要包含所有顶点。<\/span>", "expanded": true}]}, {"id": "meqaFxtK96c", "topic": "<b>12、连通分量(<\/b><span style=\"color:#b45309\"><b><span>无向图<\/span><\/b><b>)：<\/b><b><mark>极大<\/mark><\/b><span style=\"color:#0e7a52\"><b><span>连通子图<\/span><\/b><br><img class=\"mm-img\" src=\"mm-3284b18d80b3ef.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">注意这里的极大二字，即<b>尽可能包含连通的顶点<\/b>。\n连通图：只有一个极大连通子图，也就是它本身（唯一）。\n非连通图：有多个极大连通子图，每一个极大连通子图叫作连通分量。\n<b>称为极大是因为如果此时加入任何一个不在图的点集中的点都会导致它不再连通。<\/b>​<\/span>", "expanded": true}, {"id": "m5RHD8EKvIG", "topic": "<b>13、强连通分量(<\/b><span style=\"color:#b45309\"><b><span>有向图<\/span><\/b><b>)：<\/b><b><mark>极大<\/mark><\/b><span style=\"color:#0e7a52\"><b><span>强连通子图<\/span><\/b><br><img class=\"mm-img\" src=\"mm-46c1cfd0e3953d.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">极大：尽可能多的包含强连通顶点。\n极大强连通子图：\n1.强连通图的极大强连通子图为其本身。（是唯一的）\n2.<b>非强连通图有多个极大强连通子图<\/b>。（非强连通图的极大强连通子图叫做强连通分量）<\/span>", "expanded": true}, {"id": "mMkFH7Ec2Sh", "topic": "<b>14、最小生成树(<\/b><span style=\"color:#b45309\"><b><span>连通图<\/span><\/b>中<b>)：<\/b><span style=\"color:#0e7a52\"><b><span>包含<\/span><\/b><b><mark>连通图<\/mark><\/b><span style=\"color:#0e7a52\"><b><span>中<\/span><\/b><b><mark>所有顶点<\/mark><\/b><b>的一个<\/b><b><mark>极小<\/mark><\/b><span style=\"color:#0e7a52\"><b><span>连通子图<\/span><\/b><br><img class=\"mm-img\" src=\"mm-01dab9e8067e81.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">极小连通子图：<b>既要保持图连通，又要使得边数最少<\/b>。\n若图中顶点数为n，那么<b>生成树就只有n-1条边<\/b>。\n并且<b>最小生成树并不唯一<\/b>。<\/span>", "expanded": true, "children": [{"id": "mi0LIoLCBCQ", "topic": "<b>注意：<\/b><span style=\"color:#1d4ed8\"><b><span>生成树是针对连通图说的<\/span><\/b><span class=\"mm-note\">即：<b>非连通图没有生成树<\/b>，<b>只有生成森林<\/b>。<\/span>", "expanded": true}, {"id": "m6ig1nx8HJD", "topic": "<b>最小生成树中，有<\/b><b><mark>n-1<\/mark><\/b><b>条边。<\/b>", "expanded": true}, {"id": "m8JjMbV9NMt", "topic": "<b>注意：最小生成树<\/b><span style=\"color:#1d4ed8\"><b><span>不是连通分量<\/span><\/b><span class=\"mm-note\">因为<b>连通分量是指极大连通子图<\/b>，而<b>最小生成树是极小连通子图<\/b>。\n这里的：\n“极大”是指：<b>尽可能包含最多顶点<\/b>。\n“极小”是指：<b>包含全部顶点的前提下，边数最小<\/b>。<\/span>", "expanded": true}]}, {"id": "mptC5EnYAEg", "topic": "<b>15、生成森林(<\/b><span style=\"color:#b45309\"><b><span>非连通<\/span><\/b>图中<b>)：<\/b>非连通图中，连通分量的生成树构成了非连通图的生成森林<br><img class=\"mm-img\" src=\"mm-59a66e9f5e036b.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "muo2XUY1Mu4", "topic": "<b>16、边的权 与 带权图(网)<\/b><br><img class=\"mm-img\" src=\"mm-3c527243613ab4.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mW5MnpvZyTL", "topic": "<b>17、无向完全图：<\/b>无向图中任意两点均存在一条边<br><img class=\"mm-img\" src=\"mm-ca2c9dfec5f06f.jpg\" style=\"width:260px;height:271px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">完全图就是说：只要能再加一条边，那就加上<b>加满<\/b>，<b>边是最多的<\/b>。<\/span>", "expanded": true, "children": [{"id": "mEENuKDlx2O", "topic": "<b>边的条数<\/b> = <b>C<\/b> <b>n 2<\/b> = <b><mark>n*(n-1)/2<\/mark><\/b>", "expanded": true}]}, {"id": "muty0bBucHz", "topic": "<b>18、有向完全图：<\/b>任意两点均存在两条边<br><img class=\"mm-img\" src=\"mm-dc211761c096f2.jpg\" style=\"width:260px;height:292px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mqNovAF24PZ", "topic": "<b>边的条数<\/b> = <b>2 * C n 2 = 2 * n*(n-1)/2<\/b> <b>=<\/b> <b><mark>n*(n-1)<\/mark><\/b>", "expanded": true}]}, {"id": "mIS3nZQIy9W", "topic": "<b>19、稀疏图(边少) 与 稠密图(边多)<\/b><br><img class=\"mm-img\" src=\"mm-fbde25cf0cdb27.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这个边多边少并没有一个绝对的界限。<\/span>", "expanded": true}, {"id": "m3WVZLZboku", "topic": "<b>20、树 与 森林<\/b><br><img class=\"mm-img\" src=\"mm-c828c5b5e242f3.jpg\" style=\"width:260px;height:236px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">如果边的数目 &gt; n-1，那么一定会出现回路。因为<b>最小生成树中，边的数目就是n-1<\/b>.<\/span>", "expanded": true}, {"id": "mHUEiys7x9W", "topic": "<b>21、有向树：<\/b><br><img class=\"mm-img\" src=\"mm-6b712c7a52d3a9.jpg\" style=\"width:260px;height:232px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mOEoqB2uZKy", "topic": "数据结构课程里只探讨简单图。<span class=\"mm-note\">就不用管多重图啦。<\/span>", "expanded": true}, {"id": "m5XN7jQxVdQ", "topic": "<b><mark>极大<\/mark><\/b>：<span style=\"color:#1d4ed8\"><b><span>尽可能多的包含<\/span><\/b><b>连通<\/b><span style=\"color:#1d4ed8\"><b><span>顶点<\/span><\/b><b>。<\/b><span class=\"mm-note\">这个极大就是说，顶点个数极大。<\/span>", "expanded": true}, {"id": "mxsD1aAOMh7", "topic": "<span style=\"color:#d92d20\"><b><span>❤ <\/span><\/b><b>极大连通子图与极小连通子图补充知识点：<\/b><span class=\"mm-note\">极小和极大是在满足连通的前提下，<b>针对边的数目<\/b>而言的。<\/span>", "expanded": true, "children": [{"id": "mppbSNRtpDe", "topic": "1、<b>极大连通子图<\/b>：包含<b>连通分量的全部边<\/b>。<span class=\"mm-note\">是无向图(不一定连通)的连通分量。<\/span>", "expanded": true}, {"id": "mm4aq0DebEt", "topic": "2、<b>极小连通子图(生成树)：<\/b>包含<b>连通图的全部顶点<\/b>，且使其<b>连通的边数最少<\/b>。", "expanded": true}]}, {"id": "m5M90JGoPs8", "topic": "知识回顾：<a href=\"https://blog.csdn.net/qq_37134008/article/details/85325251?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522168958969316800184128060%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=168958969316800184128060&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-85325251-null-null.142^v88^koosearch_v1,239^v2^insert_chatgpt&amp;utm_term=%E6%9E%81%E5%A4%A7%E8%BF%9E%E9%80%9A%E5%AD%90%E5%9B%BE&amp;spm=1018.2226.3001.4187\" target=\"_blank\" rel=\"noopener\">(67条消息) 极大连通子图与极小连通子图（带图讲解）_cxq1557的博客-CSDN博客<\/a><br><img class=\"mm-img\" src=\"mm-0a69409c9cda65.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mcDm6fUOvbZ", "topic": "<b>二、图的存储与基本操作<\/b>", "expanded": true, "children": [{"id": "mvvYxEfVq6J", "topic": "<b>1、邻接矩阵法(顺序存储)<\/b><span class=\"mm-note\">二维数组<\/span>", "expanded": false, "children": [{"id": "mMME1lh22rU", "topic": "1、用一个<b>二维数组<\/b>存储顶点之间的<b>邻接关系<\/b><br><img class=\"mm-img\" src=\"mm-ba0fb089a6de0e.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-fbd6290ed7c7e1.jpg\" style=\"width:260px;height:46px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">左边一列元素是出发结点，上边一行元素是终点结点。\n1表示有边相连、0表示无边相连。<\/span>", "expanded": true}, {"id": "mcXptjPIReG", "topic": "2、<b>邻接矩阵法求顶点的度<\/b>：<br><img class=\"mm-img\" src=\"mm-76b788cc2b85b6.jpg\" style=\"width:260px;height:42px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">特别注意有向图中出度和入度的计算。<\/span>", "expanded": true, "children": [{"id": "meHffMuG0Zt", "topic": "<b>1、无向图：邻接矩阵第i行或列 <\/b><span style=\"color:#1d4ed8\"><b><span>非0元素的个数<\/span><\/b><b>是顶点i的度。<\/b>", "expanded": true}, {"id": "mMrnOYsZTz2", "topic": "<b>2、有向图：<\/b>", "expanded": true, "children": [{"id": "mj56SaOuAvi", "topic": "<b>出度：第<\/b><span style=\"color:#1d4ed8\"><b><span>i行<\/span><\/b>非0元素的个数", "expanded": true}, {"id": "mH1Z949qPzM", "topic": "<b>入度：第<\/b><span style=\"color:#1d4ed8\"><b><span>i列<\/span><\/b>非0元素的个数", "expanded": true}]}]}, {"id": "mcRzus0WFSC", "topic": "<b>3、邻接矩阵存储带权图<\/b><br><img class=\"mm-img\" src=\"mm-9db9e4bb0beb0d.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">将两顶点之间<b>无边的情况置为无穷<\/b>。\n注意：在有的题目中，会将<b>自己指向自己的位置置为0<\/b>，与无穷是一个概念。<\/span>", "expanded": true}, {"id": "mjL3y9qavs8", "topic": "<b>4、邻接矩阵性能分析(无向图邻接矩阵：<\/b><span style=\"color:#0e7a52\"><b><span>压缩存储<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-540115407178bd.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">空间复杂度较高，为O(n2)。\n并且在无向图中，邻接矩阵是一个对称矩阵，可以进行<b>压缩存储(上/下三角矩阵)<\/b>。\n基于此种性质，邻接矩阵法适合存储<b>稠密图<\/b>，即：边数较多的图。<\/span>", "expanded": true}, {"id": "m571mlCCJ1O", "topic": "<b>5、邻接矩阵的性质<\/b>", "expanded": true, "children": [{"id": "mG4U4Gau0qN", "topic": "1、<span style=\"color:#1d4ed8\"><b><span>邻接矩阵的n次方<\/span><\/b>的含义：由<b><mark>顶点i到顶点j的长度为n的路径的数目<\/mark><\/b>。<br><img class=\"mm-img\" src=\"mm-b102461f89d0f6.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mtwM5NKNecs", "topic": "<b>2、很容易确定图中任意两顶点是否有边相连。<\/b><span class=\"mm-note\">但是要确定图中有多少边，必须按行、案列对每一个元素监测，时间复杂度很高。<\/span>", "expanded": true}, {"id": "m7b6pWx9DWx", "topic": "<b>3、主要缺点：<\/b><span style=\"color:#1d4ed8\"><b><span>空间复杂度高<\/span><\/b>", "expanded": true}]}]}, {"id": "mpnj7V0jxba", "topic": "<b>2、邻接表法(顺序存储+链式存储)<\/b>", "expanded": true, "children": [{"id": "m1n1B3X00Ih", "topic": "<b>1、定义：对图G的<\/b><span style=\"color:#1d4ed8\"><b><span>每个顶点建立一个单链表<\/span><\/b><span class=\"mm-note\">第i个单链表中的结点表示依附于顶点Vi的边。\n这个<b>单链表<\/b>就称为顶点Vi的<b>边表<\/b>(有向图中就叫作<b>出边表<\/b>)。\n边表的头指针和结点的数据信息使用<b>顺序表存储<\/b>(称为<b>顶点表<\/b>)。\n因此在邻接表中，存在两种结点：<b>顶点表结点<\/b> 与 <b>边表结点<\/b>。<\/span>", "expanded": true}, {"id": "mnh9KQSFemY", "topic": "<b>2、邻接表存储结构的定义：<\/b><br><img class=\"mm-img\" src=\"mm-a3042726843a97.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-106249859e1e48.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">其实就类似于树中的孩子表示法。\n并且注意，<b>在无向图中：每条边会出现两次<\/b>，因此空间复杂度更高些。<\/span>", "expanded": true}, {"id": "mGoCwy95dlx", "topic": "<b>3、求顶点的度<\/b>", "expanded": true, "children": [{"id": "msBoBX1yGje", "topic": "<b>1、无向图：计算该结点的邻接表中的结点个数。<\/b>", "expanded": true}, {"id": "mgXIOpY2hsC", "topic": "<b>2、有向图<\/b>", "expanded": true, "children": [{"id": "mCjXMbNaKqC", "topic": "<b>入度：需遍历全部的邻接表。<\/b><span class=\"mm-note\">时间复杂度较高。<\/span>", "expanded": true}, {"id": "mhm7FozLgY1", "topic": "<b>出度：计算该结点的邻接表中的结点个数。<\/b>", "expanded": true}]}]}, {"id": "mNG0iGQZNIT", "topic": "<b>4、邻接矩阵特点：<\/b>", "expanded": true, "children": [{"id": "mLf6lgExlp1", "topic": "1、适用于<b>稀疏图<\/b>", "expanded": true}, {"id": "mMKWLWS5X1k", "topic": "2、图的<b>邻接表并不唯一<\/b>，各边结点的链接次序可以是任意的<span class=\"mm-note\">这取决于建立邻接表的算法以及边的输入次序。<\/span>", "expanded": true}, {"id": "mxGU26EP4SC", "topic": "3、找<b>有向图的入边不方便<\/b><span class=\"mm-note\">必须遍历整个邻接表<\/span>", "expanded": true}]}, {"id": "mBi5Rhgmop5", "topic": "<b>5、邻接表 与 邻接矩阵的对比<\/b><br><img class=\"mm-img\" src=\"mm-320ece4bdfb1cd.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "maoFtSK3i5U", "topic": "<b>3、十字链表法(<\/b><span style=\"color:#0e7a52\"><b><span>有向图<\/span><\/b><b>的链式存储)<\/b><span class=\"mm-note\">注意：十字链表法只用于存储有向图。<\/span>", "expanded": false, "children": [{"id": "myS4MTmssTu", "topic": "1、有向图中，每条弧有一个节点，对应于每个顶点也有一个结点。<span class=\"mm-note\">就是将边用一个结点来表示。<\/span>", "expanded": true}, {"id": "mPeM0kAMJdJ", "topic": "<b>2、十字链表的存储结构(<\/b><span style=\"color:#d92d20\"><b><span>重点理解<\/span><\/b><b>)：<\/b><a href=\"https://www.bilibili.com/video/BV1b7411N798?p=58&amp;vd_source=9ad0367981c6b25a427b9623356dac8b\" target=\"_blank\" rel=\"noopener\">6.2_3_十字链表、邻接多重表_哔哩哔哩_bilibili<\/a><br><img class=\"mm-img\" src=\"mm-b4b3305ef5cdea.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">注意区分这里<b>弧尾与弧头的含义<\/b>：\n假如有一条弧：<b>A---&gt;B<\/b> ,那么它的<b>弧尾就是A，它的弧头就是B。\n<\/b>因此：\n​顺着顶点结点的firstout(绿色)，就能找到所有从该顶点出发的所有的边。\n顺着顶点结点的firstin(橙色)，就能找到所有指向该顶点的边，<\/span>", "expanded": true}, {"id": "m4m7SHyi7qd", "topic": "<b>3、注意：顶点结点之间是顺序存储的。<\/b><span class=\"mm-note\">如上图中，ABCD结点是存储在线性表中的。<\/span>", "expanded": true}, {"id": "mZQHDC4DaAn", "topic": "<b>4、十字链表性能分析：<\/b><br><img class=\"mm-img\" src=\"mm-513e6069bb9c7c.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m5KgzdgYJfb", "topic": "<b>4、邻接多重表(<\/b><span style=\"color:#0e7a52\"><b><span>无向图<\/span><\/b><b>的另一种链式存储结构)<\/b><span class=\"mm-note\">因为在存储无向图时，邻接矩阵法空间复杂度较高。\n​而邻接表法中，因为每条边会被存储两次(冗余)，\n​因此在删除顶点、删除边等操作中，时间复杂度较高。\n​以此，提出了邻接多重表。<\/span>", "expanded": true, "children": [{"id": "mhGuA0I91zS", "topic": "<b>1、邻接多重表的存储结构：<\/b><br><img class=\"mm-img\" src=\"mm-52bf6e0c09a310.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>每条边用一个结点表示<\/b>，并且这个结点中不需要区分什么弧头弧尾。\n所有依附于同一顶点的边串联在同一链表中，\n并且由于每条边依附于两个顶点，因此<b>每个边结点同时链接在两个链表中<\/b>。<\/span>", "expanded": true}, {"id": "mEFPwSN97UP", "topic": "<b>2、性能分析：<\/b><br><img class=\"mm-img\" src=\"mm-351128a70fd9c7.jpg\" style=\"width:260px;height:125px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">删除边、结点等很方便。<\/span>", "expanded": true}, {"id": "mVhwS16BW4L", "topic": "<b>3、知识回顾：<\/b><br><img class=\"mm-img\" src=\"mm-ecde5a507d87df.jpg\" style=\"width:260px;height:123px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">邻接多重表也不唯一哦！<\/span>", "expanded": true}]}, {"id": "mkfXAhaYXl5", "topic": "<b>5、图的基本操作<\/b>", "expanded": true, "children": [{"id": "mt4p0rbwkYK", "topic": "1、<b>判断某边是否存在：<\/b><br><img class=\"mm-img\" src=\"mm-3ac7c339b759ea.jpg\" style=\"width:260px;height:100px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "miIy2seFRh4", "topic": "<b>2、列出与某个顶点相连的所有的边：<\/b><br><img class=\"mm-img\" src=\"mm-b02fbb8a97034e.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-3cca6f291e7dc1.jpg\" style=\"width:260px;height:109px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mm4r7yUXz6j", "topic": "<b>3、插入一个新的顶点：<\/b><br><img class=\"mm-img\" src=\"mm-f1d7218105e828.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m2FeJ925OtN", "topic": "<b>4、删除一个顶点：<\/b><br><img class=\"mm-img\" src=\"mm-c08631fce36f6a.jpg\" style=\"width:260px;height:109px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-2db81cc26d5a6b.jpg\" style=\"width:260px;height:82px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">从邻接矩阵中删除，是将删除的顶点进行标记。<\/span>", "expanded": true}, {"id": "mE6dzTQxYwM", "topic": "<b>5、插入一条边<\/b>：<br><img class=\"mm-img\" src=\"mm-5d0a0428e006d0.jpg\" style=\"width:260px;height:106px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mTV6qSkFmJm", "topic": "<b>6、找顶点的第一个邻接点：<\/b><br><img class=\"mm-img\" src=\"mm-7b6950cde4402f.jpg\" style=\"width:260px;height:108px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-c670ecb854dbac.jpg\" style=\"width:260px;height:107px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mYH3plOGGqR", "topic": "<b>7、找顶点除某个邻接点外的下一个邻接点：<\/b><br><img class=\"mm-img\" src=\"mm-b8ef6d3b21bfe6.jpg\" style=\"width:260px;height:107px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mTpVXeMA4l9", "topic": "<b>8、边权值的设置与获取：<\/b><br><img class=\"mm-img\" src=\"mm-3d7e61b6576cf4.jpg\" style=\"width:260px;height:121px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mhnrE6XLyWX", "topic": "9、知识点回顾：<br><img class=\"mm-img\" src=\"mm-98ba19d6931d59.jpg\" style=\"width:260px;height:110px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mEWKGofSXCK", "topic": "<b>三、图的遍历算法<\/b>", "expanded": false, "children": [{"id": "mkzq3gd94YD", "topic": "<b>1、广度优先遍历(BFS)<\/b><span class=\"mm-note\">与树的层序遍历类似，是一种<b>分层的查找过程。\n<\/b>是一种<b>非递归的算法<\/b>，需要借助一个<b>辅助队列。\n<\/b><\/span>", "expanded": true, "children": [{"id": "mbXCZDpoHmG", "topic": "<b>1、初级代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-b35aa6cd4a9f39.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-829d1a966e6785.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>标记访问数组<\/b>用来<b>标记当前已经被访问过的结点。\n<\/b>在算法的实现过程中，主要就是用到上述的两个函数<b>。\n为何是初级代码实现？\n：该代码只是从一个节点出发，在非连通图中无法遍历全部结点。\n<\/b>(下边有完整代码)<\/span>", "expanded": true}, {"id": "m1N3pMcl2qg", "topic": "<b>2、遍历序列的可变性：<\/b><br><img class=\"mm-img\" src=\"mm-bec70196b3c3b1.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>邻接表：<\/b>存储时顺序的随意性(邻接表不唯一)，因此在BFS时<b>遍历序列也不唯一<\/b>。\n<b>邻接矩阵：<\/b>邻接矩阵唯一，因此BFS<b>遍历序列也唯一<\/b><\/span>", "expanded": true}, {"id": "mmHdj00vpM1", "topic": "<b>3、终极代码实现(<\/b><span style=\"color:#0e7a52\"><b><span>调用BFS的次数 = 连通分量数<\/span><\/b><b>)：<\/b><br><img class=\"mm-img\" src=\"mm-5234405b015824.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>visited[]<\/b>：标记顶点是否已经被遍历。\n为了保证在非连通图中，也能遍历所有结点。\n因此加了一段逻辑：\n<b>当BFS结束后，再在标记数组中寻找标记为False的结点(未被遍历的结点)，如果有，那就继续从这个结点开始BFS，直到所有结点都被遍历。\n<\/b>(也就是在执行BFS代码的外层套了一层for循环)<\/span>", "expanded": true}, {"id": "mn35WN7fzG0", "topic": "<b>4、空间复杂度：<\/b><b><mark>O(|V|)：结点个数<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-6cfb8e1f4df294.jpg\" style=\"width:260px;height:233px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>最坏的情况：当前结点连着所有其他结点。<\/b><\/span>", "expanded": true}, {"id": "mm6zN7W2aN2", "topic": "<b>5、时间复杂度：<\/b><b><mark>与<\/mark><\/b><b><mark>具体的存储结构有关<\/mark><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-86aa2a426420f3.jpg\" style=\"width:260px;height:110px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">时间复杂度 = <b>找顶点 + 找与该顶点相邻的边。\n<\/b>邻接矩阵：<b>\n                  找顶点：O( |V| )<\/b>\n                  <b>找相邻边：O( |V| * |V| )\n<\/b>邻接表：\n                  <b>找顶点：O( |V| )<\/b>\n                  <b>找相邻边：O(|V| + |E| )<\/b>​\n​\n记住：这里是对于找所有点和所有点的邻接点的复杂度，而不是单个点。<\/span>", "expanded": true, "children": [{"id": "m3kMpwy6tVE", "topic": "主要思路：<b>对于找所有点和所有点的邻接点的复杂度<\/b>，而不是单个点", "expanded": true}]}, {"id": "muEM0pSkN8w", "topic": "<b>6、广度优先生成树<\/b><br><img class=\"mm-img\" src=\"mm-ee6ce6ea1c583e.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">之前说因为邻接表的不唯一性，BFS的遍历序列也不唯一。\n同理，<b>邻接表<\/b>的广度优先生成树也<b>不唯一<\/b>。\n当然，<b>邻接矩阵<\/b>的广度优先生成树是<b>唯一<\/b>的。<\/span>", "expanded": true}, {"id": "mVL2ND3NK1F", "topic": "<b>7、广度优先生成森林<\/b><br><img class=\"mm-img\" src=\"mm-147a057830e584.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是对于非连通图中，每一个连通分量都有一棵广度优先生成树，这些树放到一起就是所谓的：广度优先生成森林。<\/span>", "expanded": true}, {"id": "mkfb6gASeP3", "topic": "8、可以求解：<span style=\"color:#0e7a52\"><b><span>非带权图<\/span><\/b><b>的<\/b><span style=\"color:#0e7a52\"><b><span>单源最短路径<\/span><\/b><b>问题<\/b><span class=\"mm-note\">这是由：<b>BFS总是按照距离由近到远来遍历图中每个顶点<\/b>的性质决定的。<\/span>", "expanded": true}, {"id": "mcbBZLCOb8q", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-801793969b6e7b.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mqYxnid9H8c", "topic": "<b>2、深度优先遍历(DFS)<\/b><span class=\"mm-note\">类似于树的：<b>先序遍历；<\/b>因此属于<b>：递归实现。\n<\/b><\/span>", "expanded": true, "children": [{"id": "mN9p13nXuqJ", "topic": "<b>1、完整代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-743b1a5ed1b34b.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">与BFS同理，<b>为了在非连通图中遍历全部结点<\/b>：\n​              在DFS外层套一层for来寻找DFS结束后，还没有被访问的结点，再进行DFS。\n并且与BFS同理，邻接表的遍历序列不唯一，邻接矩阵的遍历序列唯一。<\/span>", "expanded": true}, {"id": "mHGjq7ZNq5m", "topic": "<b>2、空间复杂度(<\/b><span style=\"color:#0e7a52\"><b><span>递归调用栈<\/span><\/b><b>)：依旧是<\/b><b><mark>O(|V|)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-139bb7e1188a3e.jpg\" style=\"width:260px;height:163px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为在递归时需要用到<b>递归调用栈<\/b>，因此空间复杂度依旧为：<b>O(|V|)<\/b><\/span>", "expanded": true}, {"id": "mSBZi6XMF9D", "topic": "<b>3、时间复杂度：<\/b><b><mark>与BFS一样<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-cfd80df6ddc037.jpg\" style=\"width:260px;height:119px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">BFS与DFS的时间复杂度类似。<\/span>", "expanded": true}, {"id": "m3GnhaJQftv", "topic": "<b>4、根据邻接表，写出DFS的遍历序列(<\/b><span style=\"color:#0e7a52\"><b><span>高频<\/span><\/b><b>)：<\/b><br><img class=\"mm-img\" src=\"mm-17cfec6a1c4422.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">根据邻接表存储的顺序来遍历！！！！<\/span>", "expanded": true}, {"id": "m6gyP2ovW6C", "topic": "<b>5、深度优先生成树 &amp; 深度优先生成森林<\/b><br><img class=\"mm-img\" src=\"mm-e0803d1c581f9b.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">也与BFS一样。<\/span>", "expanded": true}, {"id": "mbagoK4Zi7h", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-65ec6b265127ef.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mBYed47vXAr", "topic": "<b>3、图的遍历与图的连通性<\/b>", "expanded": true, "children": [{"id": "mffL7wsIA7z", "topic": "<b>1、无向图：<\/b><br><img class=\"mm-img\" src=\"mm-5480e71510db9a.jpg\" style=\"width:260px;height:112px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m2L8SBZCCNE", "topic": "<b>2、有向图：<\/b><br><img class=\"mm-img\" src=\"mm-6099d0f384051d.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mumUsGawu89", "topic": "<b>关键：<\/b>", "expanded": false, "children": [{"id": "mbVGuH22Ws0", "topic": "<b>① <\/b><span style=\"color:#1d4ed8\"><b><span>标记访问数组<\/span><\/b><b>(visited[][])<\/b>", "expanded": true}, {"id": "m5JZTkR98wc", "topic": "<b>② 广搜队列，深搜栈。<\/b>", "expanded": true}]}]}, {"id": "mjFcUgwvmLN", "topic": "<b>四、图的应用<\/b>", "expanded": true, "children": [{"id": "mD8gzUlZfZT", "topic": "<b>1、最小生成树(MST:Minimun-Spanning-Tree)：<\/b><span style=\"color:#1d4ed8\"><b><span>Prim算法 <\/span><\/b><b>&amp;<\/b><span style=\"color:#1d4ed8\"><b><span> Kruskal算法<\/span><\/b>", "expanded": false, "children": [{"id": "mUVZI4qdhnz", "topic": "<b>1、Prim算法(普里姆)：<\/b><b><mark>对顶点贪心<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-33f4dd2b8f8869.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-0fe7f3e7158dd4.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">其实这个算法就是使用<b>贪心<\/b>的思路。\n算法：\n<b>从某个顶点开始，每次将当前生成树中邻接代价最小的新顶点纳入生成树中，直到所有顶点都被纳入。<\/b><\/span>", "expanded": true, "children": [{"id": "mydhbZ2hRUf", "topic": "<b>1、适合：<\/b><b><mark>边稠密图<\/mark><\/b><span class=\"mm-note\">因为时间复杂度与边的数目无关。(下边会说明)<\/span>", "expanded": true}, {"id": "mO91bOmmIaU", "topic": "<b>2、Prim的代码实现思路：<\/b><br><img class=\"mm-img\" src=\"mm-ee9ad9b574236e.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是：<b>一个顶点标记数组isJoin + 一个各顶点的lowCost数组<\/b>\n<b>isJoin<\/b>：标记该顶点是否已经加入MST。\n<b>lowCost<\/b>：标记未加入顶点在要加入MST时，边的最小权值。\n<b>步骤：<\/b>\n         1、<b>遍历所有顶点<\/b>，找到<b>当前未加入顶点中，lowCost值最小的顶点<\/b>，将之加入。\n         2、遍历lowCost数组，更新每个还没加入顶点的lowCost值。\n<b>从上述步骤看出：<\/b>\n        一共进行n-1轮处理，每次处理遍历时间复杂度为O(2n)，因此总时间复杂度为O(n*n)。<\/span>", "expanded": true, "children": [{"id": "mGtOXwm3H6d", "topic": "<span style=\"color:#d92d20\"><b><span>细节<\/span><\/b>(与Kruskal对比记忆<b>)：<\/b><span style=\"color:#b45309\"><b><span>选择点<\/span><\/b><b>时，<\/b><b><mark>需要考虑与当前已选择点的连通性<\/mark><\/b><span class=\"mm-note\">就是<b>在保证可以与当前已选择点连通的前提下<\/b>，<b>选择代价最小<\/b>的那个点。<\/span>", "expanded": true}]}, {"id": "mWYN4jTZ57v", "topic": "<b>3、时间复杂度：<\/b><b><mark>O(n*n)<\/mark><\/b><span class=\"mm-note\">具体分析看上边代码的实现思路。<\/span>", "expanded": true}]}, {"id": "mDTFWFFltW0", "topic": "<b>2、Kruskal算法(克鲁斯卡尔)：<\/b><b><mark>对边贪心<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-51037884e8e746.jpg\" style=\"width:260px;height:158px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">与Prim不同的是，此算法是一种<b>对边作贪心，<\/b>即：按权值的递增次序选择合适的边。\n算法：\n<b>每次选择当前图中权值最小的边加入生成树(已经连通的不选)，直到所有结点均连通。<\/b><\/span>", "expanded": true, "children": [{"id": "m9DkGVGRWiX", "topic": "<b>1、适合：<\/b><span style=\"color:#0e7a52\"><b><span>边稀疏而顶点较多的图<\/span><\/b>", "expanded": true}, {"id": "mnttnkERRcA", "topic": "<b>2、Kruskal算法实现思想：<\/b><br><img class=\"mm-img\" src=\"mm-292c31a7ff366a.jpg\" style=\"width:260px;height:158px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为每次<b>判断两个顶点是否属于同一集合时<\/b>，是在<b>并查集中进行Find操作。\n<\/b>而在并查集中，不进行路径压缩的话，每次Find都是<b>O(logn)<\/b>的时间复杂度。\n而<b>算法总共会执行|E|轮。\n综上，时间复杂度为：O(E*lognE)<\/b><\/span>", "expanded": true, "children": [{"id": "mC7XwmShvhr", "topic": "<b>细节：在<\/b><span style=\"color:#b45309\"><b><span>选择边<\/span><\/b><b>时，<\/b><span style=\"color:#b45309\"><b><span>不必考虑与已选择点的连通性<\/span><\/b><b>。<\/b><span class=\"mm-note\">就单纯<b>选剩下边中<\/b>，<b>权值最小的边<\/b>即可。<\/span>", "expanded": true}]}, {"id": "mIpSpgc8wiL", "topic": "<b>3、时间复杂度：<\/b><b><mark>O(E*lognE)<\/mark><\/b>", "expanded": true}]}, {"id": "mD3r1tXRQdL", "topic": "<b>3、知识点回顾：<\/b><br><img class=\"mm-img\" src=\"mm-b755ec258ee38d.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mB8LkH6gqXy", "topic": "<b>定义：<\/b><br><img class=\"mm-img\" src=\"mm-75e1afca3ec9f8.jpg\" style=\"width:260px;height:153px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">只有连通图才会有生成树，非连通图只有生成森林。\n并且是在带权连通无向图中讨论。\n同一个图，MST可能会有多个，但是<b>MST的权值之和总是唯一<\/b>的。<\/span>", "expanded": true}, {"id": "mJrgXI7hD5x", "topic": "注意：<b>MST中的n-1条边<\/b><span style=\"color:#1d4ed8\"><b><span>并不能保证是图中权值最小的n-1条边<\/span><\/b><b>。<\/b><span class=\"mm-note\">因为：<b>权值最小的n-1条边并不能保证使图连通<\/b>。<\/span>", "expanded": true}]}, {"id": "mIgWJwSPd7q", "topic": "<b>2、最短路径 ：<\/b><span style=\"color:#1d4ed8\"><b><span>BFS算法<\/span><\/b><b>  &amp; <\/b> <span style=\"color:#1d4ed8\"><b><span>Dijkstra算法<\/span><\/b>  <b>&amp; <\/b> <span style=\"color:#1d4ed8\"><b><span>Floyed算法<\/span><\/b>", "expanded": true, "children": [{"id": "mhNHsOzWoRv", "topic": "<b>1、<\/b><span style=\"color:#b45309\"><b><span>单源最短路径<\/span><\/b><span class=\"mm-note\">即：求图中<b>某一顶点到其他各顶点的最短路径<\/b>。<\/span>", "expanded": true, "children": [{"id": "mRMdwFtxVbl", "topic": "<b>1、BFS算法：<\/b><b><mark>无权图<\/mark><\/b><span class=\"mm-note\">主要就是在无权图中寻找最短路径。\n将无权图的每条边的权值设置为1进行讨论。<\/span>", "expanded": true, "children": [{"id": "mBTWdDSzimR", "topic": "<b>1、代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-0264c7ae405cb3.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>path[]<\/b>：记录最<b>短路径的直接前驱顶点<\/b>。\n<b>d[]<\/b>：记录<b>到达该顶点的最短路径长度<\/b>。\n步骤：\n           就是从指定点开始，在BFS的过程中，不断更新d[] 和 path[] 数组，从而找到从某一点开始到其他点的最短路径。<\/span>", "expanded": true}, {"id": "mDJdr1RCfqb", "topic": "<b>2、根据d[] 和 path[]数组寻找最短路径：<\/b><br><img class=\"mm-img\" src=\"mm-60ddb87a6a0d81.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">1、首先在d[]数组中找到最短路径。\n2、然后根据<b>path[]<\/b>找到每一次的前驱结点，这样就会将路径反向回串起来，翻转一下就可以得到最短路径。<\/span>", "expanded": true}]}, {"id": "m82IPoQip6x", "topic": "<b>2、Dijkstra算法：带权图、无权图<\/b><span class=\"mm-note\">重点！！！\n依旧是基于：<b>贪心策略。<\/b><\/span>", "expanded": true, "children": [{"id": "muPrlHCeNUc", "topic": "<b>1、<\/b><span style=\"color:#1d4ed8\"><b><span>BFS的局限性<\/span><\/b><b>：只适合用来<\/b><span style=\"color:#1d4ed8\"><b><span>求无权图或边权值都相等的图<\/span><\/b><b>的单源最短路径。<\/b><br><img class=\"mm-img\" src=\"mm-c6be14a4f9832e.jpg\" style=\"width:260px;height:150px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mAaOohq9LXK", "topic": "<b>2、<\/b><span style=\"color:#0e7a52\"><b><span>带权路径长度<\/span><\/b><b>：一条路径上所有边的权值之和。<\/b>", "expanded": true}, {"id": "mMqUi5iPpmp", "topic": "<b>3、算法思路：<\/b><br><img class=\"mm-img\" src=\"mm-0ea45a28477242.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">源点的path值为-1 、dist值为0。<b>\n <\/b>算法关键点就在于：\n<b>        1、每一次处理顶点，是选择当前dist[]中值最小的那个(当前距离源点路径长度最小的那个)\n        2、每一次开始处理一个新节点，就要根据当前的已经处理的顶点(包括当前这个)，更新源点到其他全部顶点(未处理顶点)的最短路径长度值。也就是dist[]和path[]都要更新。<\/b><\/span>", "expanded": true, "children": [{"id": "mwgJLO7OYXm", "topic": "<span style=\"color:#1d4ed8\"><b><span>final[]<\/span><\/b>：标记各顶点<b>是否已经找到最短路径<\/b>。", "expanded": true}, {"id": "mlXdwZeIxsN", "topic": "<span style=\"color:#1d4ed8\"><b><span>dist[]<\/span><\/b>：记录<b>从源点<\/b>到其他各顶点<b>当前的最短路径长度<\/b>。", "expanded": true}, {"id": "mdnWPSIItFn", "topic": "<span style=\"color:#1d4ed8\"><b><span>path[]<\/span><\/b>：从源点到顶点i之间的最短路径的<b>前驱结点。<\/b>", "expanded": true}, {"id": "mjs2b7gjRWs", "topic": "<b>关键：每次<\/b><span style=\"color:#b45309\"><b><span>选择新的结点<\/span><\/b><b>时，是<\/b><span style=\"color:#b45309\"><b><span>从未加入结点<\/span><\/b><b>中<\/b><b>，<\/b><b><mark>选择当前dist[]中值最小的那个<\/mark><\/b><b>(当前路径长度最小的那个)<\/b><span class=\"mm-note\">如果当前有几个dist值最小且相同的点，那就按照顺序选择即可。<\/span>", "expanded": true}]}, {"id": "m8cJEeiKctt", "topic": "<b>4、时间复杂度：<\/b><b><mark>O(n*n)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-ef97d2df9c9fde.jpg\" style=\"width:260px;height:125px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为有n个顶点，因此<b>总共有n-1轮<\/b>处理。\n而在每一轮处理中，都要：\n              1、首先<b>扫描一下dist数组<\/b>，找出路径长度最小的那个顶点(记作v)，将之置为true。                                                             ---------- 时间复杂度：O(n)\n              2、然后<b>检查所有邻接v的顶点<\/b>，若此时有新路径的长度比这些顶点当前的最短路径长度还要短，那就更新它们。---------- 时间复杂度：O(n)\n因此在每一轮处理中，时间复杂度为：O(n+n) = O(2n) = <b>O(n)\n综上所述：\n             Dijkstra的时间复杂度为：O(n*n)<\/b><\/span>", "expanded": true}, {"id": "mlhVNYkoqD1", "topic": "<b>5、Dijkstra<\/b><span style=\"color:#1d4ed8\"><b><span>不适合带有负权值<\/span><\/b><b>的图<\/b><span style=\"color:#1d4ed8\"><b><span>（<\/span><\/b><span style=\"color:#d92d20\"><b><span>坑！！<\/span><\/b><span style=\"color:#1d4ed8\"><b><span>）<\/span><\/b><br><img class=\"mm-img\" src=\"mm-76fd015f9a8b13.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">如果有<b>权重为负数的边<\/b>：Dijkstra会终止但是结果是错误的。\n如果有<b>负权环<\/b>：Dijkstra会死循环。\n<b>根本原因<\/b>在于：\n     Dijkstra在每次处理顶点时，会优先选择dist[]中值最小的顶点来处理，在处理后就会将该顶点在final[]中标记为true(已完成)。\n     但如果出现了负权值的边，那么在之后的处理中，已经被标记了的顶点的最短路径，还是会出现缩短的现象，而因为Dijkstra已经将该顶点标记为已处理了，因此已经无法更新。\n​(正如上图中：初始化之后，Dijkstra就会选择V2进行处理，且当前V0到V2的最短路径为7，然后将V2标记为true。接着再访问V1，V1的最短路径为10。但是很明显，V0到V2 的最短路径为10-5=5。)<\/span>", "expanded": true}, {"id": "mbAOfStB6Vt", "topic": "<b>6、但是：它是<\/b><span style=\"color:#1d4ed8\"><b><span>适合求有环路的最短路径<\/span><\/b><b>的。<\/b><span class=\"mm-note\">这得益于：<b>标记数组<\/b>。因为虽然有环路，但是在正想要开始环路的时候就会发现，诶????我正要环回去的这个结点已经访问过了?！可恶！！那么就不会环路啦！<\/span>", "expanded": true}]}]}, {"id": "mRvHhqEtHRt", "topic": "<b>2、<\/b><span style=\"color:#b45309\"><b><span>各顶点之间最短路径<\/span><\/b><b>问题<\/b><span class=\"mm-note\">即：将<b>每个顶点到其他所有顶点的最短路径<\/b>。\n算法思想：<b>动态规划<\/b><\/span>", "expanded": true, "children": [{"id": "m8mTQTfUlQ3", "topic": "<b>1、Floyd算法：带权图、无权图<\/b>", "expanded": false, "children": [{"id": "mrPp9yqZzGm", "topic": "<b>1、算法思想：<\/b><span style=\"color:#0e7a52\"><b><span>动态规划：<\/span><\/b><b><mark>d[i][j] = min(d[i][j], d[i][k]+d[k][j])<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-62df5b8e138f98.jpg\" style=\"width:260px;height:112px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">floyed算法实际上是动态规划。\n算法思想：\n           <b>对于任意两个点u,v，看是否存在一个点w，使得从u到w再到v的距离比从u直接到v的距离短  (w作为中转点)。\n<\/b>\n因此得到状态转移方程： <b>\n​          d[i][j] = min(d[i][j], d[i][k]+d[k][j])<\/b><\/span>", "expanded": true}, {"id": "mtTVHyGROQu", "topic": "<b>2、执行过程：<\/b><br><img class=\"mm-img\" src=\"mm-9690fa4a542590.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">path[]：记录<b>两个顶点之间的中转点<\/b>。\nA[]：其实就是d[],记录<b>两顶点之间的最短路径<\/b>。\n初始时：path[]全部置为-1，表明无需中转节点 ；A[]全部根据图填上无需中转点就能到达的路径长度。<\/span>", "expanded": true}, {"id": "mXOlocYj9gN", "topic": "<b>3、核心代码：<\/b><br><img class=\"mm-img\" src=\"mm-60a6d49dcb950b.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">三层for循环，最外层是<b>中转点<\/b>，里边两层来遍历二维矩阵。\n<b>思路：<\/b>\n          外层for遍历所有顶点作为中转点的情况，在每一次遍历中，根据当前中转点遍历二维数组，进行递推，更新A[]与path[]。\n<b>综上所述，时间复杂度分析：<\/b>\n         外层：n    ；内层：n*n\n时间复杂度为：<b>O（n*n*n）<\/b><\/span>", "expanded": true}, {"id": "mxDrab6KlQe", "topic": "<b>4、根据A[]和path[]推理最短路径：<\/b><br><img class=\"mm-img\" src=\"mm-5d1a446670d019.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>总体思路：<\/b>1、先从A[]中看两者是否连通。\n                         2、再去path[]中寻找两顶点的中转点，\n                                                   如果有(不为-1)：就<b>递归地<\/b>找到完全路径。\n                                                   如果没有(为-1)：那就没有中转点，直接到达。\n这个<b>\"递归地\"，<\/b>很重要<b>。\n<\/b>如上图，找V0到V4的最短路径，先在A[]中找发现最短路径长度为4，再去path[]找中转点，发现有个中转点为V3，因此此时最短路径为：V0-V3-V4。\n然后再<b>递归地<\/b>去找<b>V0到V3、V3到V4<\/b>的最短路径 ，又发现V0到V3中间有一个中转点为V2，然后再去<b>递归地<\/b>找<b>V0到V2、V2到V3<\/b>的最短路径.......以此类推<\/span>", "expanded": true}, {"id": "mHmGo1paSZ6", "topic": "<b>5、Floyed<\/b><span style=\"color:#1d4ed8\"><b><span>可以解决负权图<\/span><\/b><b>：<\/b><br><img class=\"mm-img\" src=\"mm-0c986685192ad4.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m4Iv2CqOQGr", "topic": "<b>6、不可以解决：<\/b><span style=\"color:#0e7a52\"><b><span>带负权值回路<\/span><\/b><b>的图<\/b><br><img class=\"mm-img\" src=\"mm-cbadde421d8609.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为越走越小。永无止境。<\/span>", "expanded": true}]}]}, {"id": "m3c9305qtfj", "topic": "概述：<br><img class=\"mm-img\" src=\"mm-ef4e47789a0d98.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mV92szuP6KG", "topic": "<b>知识点回顾与算法对比图：<\/b><br><img class=\"mm-img\" src=\"mm-8a724777bd410a.jpg\" style=\"width:260px;height:173px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m0n5QjP5orA", "topic": "<b>3、<\/b><span style=\"color:#0e7a52\"><b><span>DAG<\/span><\/b><b>(Dynamic Acyclic Graph)：<\/b><b><mark>有向无环图<\/mark><\/b>", "expanded": true, "children": [{"id": "m79AlU5Gown", "topic": "<b>1、定义：<\/b><br><img class=\"mm-img\" src=\"mm-8901cbef787d28.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是<b>有向图中不存在环路<\/b>，就叫无环有向图。<\/span>", "expanded": true}, {"id": "mOZeIhnTyrI", "topic": "<b>2、作用：描述<\/b><span style=\"color:#1d4ed8\"><b><span>含有公共子表达式<\/span><\/b><b>的表达式<\/b><br><img class=\"mm-img\" src=\"mm-a833a02d6e9b09.jpg\" style=\"width:260px;height:159px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">其实就是编译原理里边：\"<b>识别公共子表达式，并优化<\/b>\"。<b>\n<\/b><\/span>", "expanded": true, "children": [{"id": "m20R5rof1YB", "topic": "<b>思路：<\/b><span style=\"color:#b45309\"><b><span>顶层的运算符一定衔接了表达式两个最大部分的运算<\/span><\/b><b>，以此类推，逐层向下按照这个原则选择运算符。<\/b><span class=\"mm-note\">比如上图中，表达式的第4个乘号就衔接了当前表达式两个最大部分的计算。\n再向下一层，第4个乘号左边的表达式中，是第三个等号衔接了该表达式，因此选择它。\n再下一层，第3个加号左边那一部分表达式中，第一个乘号衔接了该表达式，因此选择它.......................一直类推。\n最在进行划分时，<b>最后将重复部分进行合并<\/b>即可。<\/span>", "expanded": true}]}]}, {"id": "mivWthzXrxp", "topic": "<b>4、拓扑排序：<\/b><b><mark>有环无拓扑、有拓扑无环<\/mark><\/b>", "expanded": true, "children": [{"id": "mGNGyuY7Pju", "topic": "<b>1、<\/b><span style=\"color:#1d4ed8\"><b><span>AOV网<\/span><\/b><b>：用<\/b><b><mark>顶点表示活动<\/mark><\/b><b>的图<\/b><span style=\"color:#d92d20\"><b><span>(一定是DAG<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-116575e5b7167c.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">顶点表示活动。\n有向边&lt;Vi,Vj&gt;：表示<b>活动Vi必须先于活动Vj进行<\/b>。<\/span>", "expanded": true}, {"id": "mugVzIfm4wQ", "topic": "<b>2、拓扑排序的定义：<\/b><br><img class=\"mm-img\" src=\"mm-2efc96136ddd68.jpg\" style=\"width:260px;height:98px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">由一个<b>DAG的顶点<\/b>组成的序列，当且仅当满足下列条件时，是一个拓扑排序：\n                            1、每个顶点出现且只出现一次。\n                             2、若顶点A在顶点B的前面，则在图中不存在从B到A的路径。\n\n每个AOV网都有<b>一个或多个<\/b>拓扑排序。\n一个：每个顶点有<b>唯一的前驱和后继<\/b>。\n多个：一个顶点有<b>多个直接后继<\/b>。<\/span>", "expanded": true}, {"id": "m9jJ9afatco", "topic": "<b>3、拓扑排序的实现：<\/b><br><img class=\"mm-img\" src=\"mm-20653e6ff041d2.jpg\" style=\"width:260px;height:177px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-976ea0b243c0d3.jpg\" style=\"width:260px;height:187px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">如果该图不是DAG(即：<b>图中有环路时<\/b>)，\n就会出现图二中<b>不存在顶点入度为0<\/b>的情况，那就不存在拓扑排序。<\/span>", "expanded": true}, {"id": "mkoojgIwETs", "topic": "<b>4、拓扑排序的代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-2eb7c1313f724d.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">indegree[]：记录<b>每个顶点的入度。<\/b>\nprint[]：记录<b>拓扑序列<\/b>。\nS：记录度为0的顶点。\n<b>算法过程：<\/b>\n          1、首先将所有<b>入度为0的顶点入栈<\/b>。加一个<b>计数器count<\/b>，计算入栈的顶点个数。\n          2、循环逐个出栈，将每个出栈顶点指向的顶点的入度减一，同时进行判断，如果有顶点的入度变为0，那就继续入栈，一直套娃，直到栈空。\n         3、最后在出栈循环外，加一步判断，如果<b>count &lt; 图中的顶点个数<\/b>，那就说明图中<b>不存在顶点入度为0且顶点没有遍历完全，<\/b>那就说明<b>图中有回路<\/b>。<\/span>", "expanded": true}, {"id": "mkOoqABSFN4", "topic": "<b>5、拓扑排序的时间复杂度：<\/b><br><img class=\"mm-img\" src=\"mm-510f401421b58d.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">拓扑排序中，<b>处理一次所有边 + 所有点。\n<\/b><\/span>", "expanded": true, "children": [{"id": "m1sHKJC563C", "topic": "<b>邻接表<\/b>中：<span style=\"color:#b45309\"><b><span>O(|V| + |E|)<\/span><\/b>", "expanded": true}, {"id": "mqg8Sahrtl5", "topic": "<b>邻接矩阵<\/b>中<b>：<\/b><span style=\"color:#b45309\"><b><span>O(|V| * |V|)<\/span><\/b>", "expanded": true}]}, {"id": "m5T9UNnFQbs", "topic": "<b>6、<\/b><span style=\"color:#1d4ed8\"><b><span>逆拓扑排序<\/span><\/b><b>：（字面意思）<\/b><br><img class=\"mm-img\" src=\"mm-fd78f47394111e.jpg\" style=\"width:260px;height:225px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-e626566c0d6a83.jpg\" style=\"width:260px;height:37px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">考量顶点的出度。<\/span>", "expanded": true}, {"id": "m8uWJcD26Y5", "topic": "<b>7、逆拓扑排序的代码实现与时间复杂度：<\/b><br><img class=\"mm-img\" src=\"mm-d5ab227b72de56.jpg\" style=\"width:260px;height:155px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>不同的存储结构对逆拓扑排序的时间复杂度影响还是挺大的。<\/b>\n因为：\n在删除一个出度为0的结点后，就要将所有指向它的顶点的出度-1，那么如果在<b>邻接表中<\/b>，就要通过遍历所有边找到所有指向它的顶点，时间复杂度近乎O(|V|*|E|).\n但是在邻接矩阵中的话，只需要将其所在那列的元素-1即可(即出度-1)。\n\n(注意：上边的代码是拓扑排序的，逆拓扑的还是有事件再实现吧。)\n<b>逆邻接表：<\/b>每个顶点存储的边的信息是<b>指向它的边<\/b>。<\/span>", "expanded": true}, {"id": "mU9FOYXNyby", "topic": "<b>8、<\/b><span style=\"color:#1d4ed8\"><b><span>DFS实现逆拓扑<\/span><\/b><b>：就是<\/b><b><mark>在DFS每个顶点退栈之前<\/mark><\/b><b>，<\/b><b><mark>将该顶点输出<\/mark><\/b><b>即可。<\/b><br><img class=\"mm-img\" src=\"mm-82806ff8b72fbb.jpg\" style=\"width:260px;height:156px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>思考问题：<\/b>\n            如果有回路，那么逆拓扑排序序列就不会存在，那么用DFS实现时，如何判断回路？\n            解答：遍历查看当前顶点所有邻接点的邻接点(记作s)，如果有s已被标记为True，那么就存在回路。（不知道对不对）<\/span>", "expanded": true}, {"id": "mcTjmjn2axk", "topic": "若图中<span style=\"color:#b45309\"><b><span>出现环路<\/span><\/b>，那么<span style=\"color:#b45309\"><b><span>不存在<\/span><\/b><b>拓扑排序/逆拓扑排序<\/b>。<span class=\"mm-note\">原因：存在环路，那么在拓扑过程中，会出现“未拓扑结束，但是没有入度为0的结点了”。<\/span>", "expanded": true}, {"id": "mjuvwnnHos7", "topic": "反之亦然<b>：若一个有向图顶点<\/b><span style=\"color:#b45309\"><b><span>不能排成一个拓扑序列<\/span><\/b><b>，则判定其中<\/b><span style=\"color:#b45309\"><b><span>存在一个顶点数目大于1的回路(环)<\/span><\/b><span class=\"mm-note\">即可知：在该有向图中，<b>含有顶点数目大于1的强连通分量<\/b>。<\/span>", "expanded": true}, {"id": "mI5uLA3lnEQ", "topic": "<b>知识点回顾：<\/b><br><img class=\"mm-img\" src=\"mm-9f39ad4dcd06ff.jpg\" style=\"width:260px;height:170px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "ms2TXuF7ZsF", "topic": "<span style=\"color:#d92d20\"><b><span>知识点补充：<\/span><\/b>", "expanded": true, "children": [{"id": "mj6XnYssDhz", "topic": "<b>1、\"有向无环图的拓扑序列唯一\"这一条件 <\/b><span style=\"color:#0e7a52\"><b><span>并不能唯一确定该图<\/span><\/b><b>。<\/b>", "expanded": true}]}]}, {"id": "mLz7wC6PMbm", "topic": "<b>5、关键路径<\/b>", "expanded": true, "children": [{"id": "mum5x8Cwl65", "topic": "<b>1、AOE网：<\/b><b><mark>顶点<\/mark><\/b><b><mark>表示<\/mark><\/b><b><mark>事件<\/mark><\/b><b><mark>，<\/mark><\/b><b><mark>有向边<\/mark><\/b><b><mark>表示<\/mark><\/b><b><mark>活动<\/mark><\/b><b>，<\/b><span style=\"color:#1d4ed8\"><b><span>边权值<\/span><\/b><b>表示完成该活动的<\/b><span style=\"color:#1d4ed8\"><b><span>开销<\/span><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-e4ee377bc9e22b.jpg\" style=\"width:260px;height:155px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8ac9886e24c2dc.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">与之前所学的AOV网的区别是：\n它们的<b>边和顶点所代表的含义是不同的：\n<\/b>               1、AOV：顶点表示活动，边无权值，仅表示顶点之间的前后关系。\n               2、AOE：顶点表示事件，边表示活动，边权值表示完成该活动的开销。<\/span>", "expanded": true, "children": [{"id": "mZVJJnkCNTU", "topic": "AOE中，有些<b>活动是可以并行进行<\/b>的。", "expanded": true}, {"id": "myX9Du2QZf1", "topic": "AOE中：<b>仅有一个<\/b>入度为0的点：<span style=\"color:#1d4ed8\"><b><span>源点<\/span><\/b><b>。  仅有一个<\/b>出度为0的点<b>：<\/b><span style=\"color:#1d4ed8\"><b><span>汇点<\/span><\/b><b>。<\/b>", "expanded": true}]}, {"id": "mf3hovnmnZk", "topic": "<b>2、关键路径和关键活动：<\/b><br><img class=\"mm-img\" src=\"mm-7de1fb7b982774.jpg\" style=\"width:260px;height:167px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mdlAqfkQASA", "topic": "<b>关键路径<\/b>：从<b>源点到汇点<\/b>，<span style=\"color:#1d4ed8\"><b><span>最大路径长度的路径<\/span><\/b>。<span class=\"mm-note\">也是：由<b>所有时间余量为0的活动组成的路径序列<\/b>。<\/span>", "expanded": true}, {"id": "mZj2vcrwSuO", "topic": "<b>关键活动<\/b>：<span style=\"color:#1d4ed8\"><b><span>关键路径上的活动<\/span><\/b>。<span class=\"mm-note\"><b>时间余量为0的所有活动<\/b>。也可以说：关键路径上的活动，时间余量均为0。<\/span>", "expanded": true}]}, {"id": "mg4czWd2KoL", "topic": "<b>3、寻找关键活动所用参数及思路：（<\/b><span style=\"color:#d92d20\"><b><span>难点！！重点！！<\/span><\/b><b>）<\/b>", "expanded": true, "children": [{"id": "mhTsjWbxlbH", "topic": "<b>1、事件Vk的最早发生时间(<\/b><span style=\"color:#b45309\"><b><span>ve(k)<\/span><\/b><b>) 与 活动ai的最早开始时间（<\/b><span style=\"color:#d92d20\"><b><span>e(i)<\/span><\/b><b>）：<\/b><br><img class=\"mm-img\" src=\"mm-61f4e75dbb0c14.jpg\" style=\"width:260px;height:171px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">记住：<b>事件是在顶点上，活动是在边上<\/b>。<\/span>", "expanded": true, "children": [{"id": "mWxXjg5dygg", "topic": "<b><mark>ve(源点) = 0<\/mark><\/b> <b>；<\/b><b><mark>vl(汇点) = ve(汇点)<\/mark><\/b>", "expanded": true}, {"id": "m8RmSjnsOJ1", "topic": "<b>事件<\/b>的最早发生时间(<span style=\"color:#b45309\"><b><span>Ve(i)<\/span><\/b>)：指<b>从源点V1到顶点Vk的<\/b><span style=\"color:#b45309\"><b><span>最长路径长度.<\/span><\/b>即：<b><mark>Ve(k) = Max<\/mark><\/b><b>{<\/b><span style=\"color:#d92d20\"><b><span>ve(j)<\/span><\/b><b> + Weigh(Vj,Vk)}。// 取最大<\/b><span class=\"mm-note\"><b>从前向后，按拓扑顺序计算。\n为何是最长<\/b>的路径长度呢？\n答：因为指向该事件的活动有很多，<b>只有在最长的那个活动结束后<\/b>，<b>才能保证指向它的所有活动全都结束<\/b>。\n         因此事件的的最早发生时间选择最长的。<\/span>", "expanded": true}, {"id": "mtfKMfq7h7n", "topic": "<b>事件<\/b>的最迟发生时间(<span style=\"color:#b45309\"><b><span>Vl(i)<\/span><\/b>)：指不推迟整个工程的前提下，<b>该事件<\/b><span style=\"color:#b45309\"><b><span>最迟必须发生的时间.<\/span><\/b>即：<b><mark>Vl(k) = Min<\/mark><\/b><span style=\"color:#1d4ed8\"><b><span>{<\/span><\/b><span style=\"color:#d92d20\"><b><span>vl(j)<\/span><\/b><span style=\"color:#1d4ed8\"><b><span> - Weigh(Vk,Vj)}<\/span><\/b><b>。 // 取最小<\/b><span class=\"mm-note\"><b>从后向前，按逆拓排序计算。\n为何取最小<\/b>呢？\n答：本质上是要保证：它的后继事件在最迟发生时间vl(j)可以完成。\n         并且它的后继事件有很多，<b>如果要保证可以满足所有后继事件的完成要求<\/b>，那么就<b>将该事件的最迟发生时间尽量提前<\/b>，给后边留下足够的时间。<\/span>", "expanded": true}]}, {"id": "miMAvJjgRyH", "topic": "2、<b>事件Vk的最迟发生时间(<\/b><span style=\"color:#7c3aed\"><b><span>vl(k)<\/span><\/b><b>) 与 活动ai的最迟开始时间（<\/b><span style=\"color:#0e7a52\"><b><span>l<\/span><\/b><span style=\"color:#0e7a52\"><b><span>(i)<\/span><\/b><b>）：<\/b><br><img class=\"mm-img\" src=\"mm-0356d29fb9ba82.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">谨记：<b>活动是弧，事件是结点<\/b>。<\/span>", "expanded": true, "children": [{"id": "mxoD7PjordT", "topic": "<b>活动<\/b>的最早开始时间(<span style=\"color:#b45309\"><b><span>e(i)<\/span><\/b>)：指<b>该活动弧的起点所表示的事件<\/b>的<b>最早发生时间<\/b>。 即：若<b>边&lt;Vk,Vj&gt;表示活动ai<\/b>，则有：<b><mark>e(i) = ve(k)<\/mark><\/b>", "expanded": true}, {"id": "mmR62ztSEaw", "topic": "<b>活动<\/b>的最迟开始时间(<span style=\"color:#b45309\"><b><span>l(i)<\/span><\/b>)：指<b>该活动弧的终点所表示的<\/b><b><mark>事件的最迟发生时间 - 该活动所需时间<\/mark><\/b><b>。          <\/b>即：若<b>边&lt;Vk,Vj&gt;表示活动ai，则有：<\/b><b><mark>l(i) =<\/mark><\/b> <span style=\"color:#d92d20\"><b><span>Vl(j)<\/span><\/b> <b><mark>- weigh(i)<\/mark><\/b>", "expanded": true}, {"id": "mHsN4HgKzj5", "topic": "如下图：<br><img class=\"mm-img\" src=\"mm-9796ea2ac6be4b.jpg\" style=\"width:260px;height:54px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">活动的最迟开始时间 = <b>事件2<\/b> <b>的最迟发生时间 - 活动所需时间<\/b>。因为要<b>保证事件2有充足的时间来完成<\/b>。\n活动的最早开始时间 = <b>事件1 <\/b>的最早发生时间<\/span>", "expanded": true}]}, {"id": "m0JzWIRBKGK", "topic": "<b>3、求关键活动的大致思路：<\/b><br><img class=\"mm-img\" src=\"mm-04480e379d97ac.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">时间余量表示：\n        在不增加整个工程所需总时间的情况下，活动<b>可以拖延的时间<\/b>。<\/span>", "expanded": true, "children": [{"id": "m6Z4HsNb4CM", "topic": "<span style=\"color:#b45309\"><b><span>时间余量<\/span><\/b><b> =<\/b> <b><mark>活动的最迟开始时间(l(i)) - 活动的最早开始时间(e(i))<\/mark><\/b><b>。<\/b>", "expanded": true}, {"id": "mYeOGLenwwj", "topic": "<b>关键活动：<\/b><span style=\"color:#1d4ed8\"><b><span>时间余量 = 0<\/span><\/b><b>(一点都不能拖延！！！)<\/b>", "expanded": true}]}]}, {"id": "mqpMN8Pm1Qi", "topic": "<b>4、求关键路径的步骤：( <\/b><span style=\"color:#0e7a52\"><b><span>拓扑 与 逆拓扑 的顺序)<\/span><\/b><br><img class=\"mm-img\" src=\"mm-108f2c422c14fb.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-7f0fe345ab5aa8.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8d583b669e23ac.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-e769875e3a89c9.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-06958934ad8b84.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-56e7caf71407ae.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">步骤：\n     1、从<b>源点出发<\/b>[ve(源点) = 0]，按<b>拓扑有序<\/b>计算所有顶点(事件)的<b>最早发生时间ve(k)\n<\/b>                             即：顺向计算，根据拓扑排序的顺序计算哦！！\n     2、从<b>汇点出发<\/b>[vl(汇点)=ve(汇点)]，按<b>逆拓扑有序<\/b>求其余顶点的<b>最迟发生时间vl(k)\n<\/b>                             即：首先写出逆拓扑排序的序列，然后根据该序列，从后向前一个个计算。<b>\n<\/b>     3<b>、根据各顶点的ve()值，计算各活动(边)的最早开始时间e()。\n<\/b>                             即：顺向计算，从源点开始。<b>\n<\/b>     4<b>、根据各顶点的vl()值，计算各活动(边)的最迟开始时间l()。\n<\/b>                             即：逆向计算，从汇点开始。一个活动的最迟开始时间 = 该条弧指向事件的 vl() - 该弧的权值<b>\n<\/b>     5、求AOE中所有活动的<b>活动余量d() = l(k) - e(k)，找出所有d() = 0的活动构成关键路径。<\/b><\/span>", "expanded": true}, {"id": "mFnErUuXwoZ", "topic": "<b>5、关键活动、关键路径的特性：<\/b>", "expanded": true, "children": [{"id": "m7H6MJNKhSp", "topic": "1、<b>缩短到一定程度，<\/b><span style=\"color:#0e7a52\"><b><span>关键路径可能会变成非关键活动<\/span><\/b><br><img class=\"mm-img\" src=\"mm-1215b0d3488abc.jpg\" style=\"width:260px;height:198px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mbs29RHGFQI", "topic": "<b>2、可能有<\/b><span style=\"color:#0e7a52\"><b><span>多条关键路径<\/span><\/b><br><img class=\"mm-img\" src=\"mm-c7dd40a9cb6c12.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">那么想缩短整个工程的工期，就<b>必须加快所有关键路径上的关键活动。<\/b><\/span>", "expanded": true}, {"id": "m2OQZZaWC2N", "topic": "<b>3、关键路径上的所有活动都是关键活动<\/b>", "expanded": true}, {"id": "me9zx6yaFmi", "topic": "<b>4、只有<\/b><span style=\"color:#1d4ed8\"><b><span>关键路径上的活动时间<\/span><\/b><b><mark>同时减少<\/mark><\/b><b>，才能<\/b><span style=\"color:#1d4ed8\"><b><span>缩短工期<\/span><\/b>", "expanded": true}]}, {"id": "mwJmkUunSEh", "topic": "<b>关键路径：是<\/b><b><mark>由时间余量为0的所有活动组成的序列<\/mark><\/b><b>。<\/b>", "expanded": true}, {"id": "mycz5g1rJVX", "topic": "<b>知识点回顾：<\/b><br><img class=\"mm-img\" src=\"mm-de68e7145b3c00.jpg\" style=\"width:260px;height:152px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mUKE7pFxvnT", "topic": "<b>五、图论拓展<\/b>", "expanded": true, "children": [{"id": "msz3pkFfjGb", "topic": "<b>1、欧拉图<\/b>", "expanded": true, "children": [{"id": "mIFGR4KvtHG", "topic": "1、定义：俗称为<b>“一笔画”问题<\/b>，关键在于<b><mark>不重复地遍历所有边<\/mark><\/b>。<br><img class=\"mm-img\" src=\"mm-d9d3f7b947ef6c.jpg\" style=\"width:260px;height:83px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-bf253cc9993c7b.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "myLjnMEYzR8", "topic": "<b>2、欧拉图的判定<\/b>", "expanded": true, "children": [{"id": "mnnoSt8wvBQ", "topic": "<b>无向图：<\/b>", "expanded": true, "children": [{"id": "mJnCnEq6KJT", "topic": "无向图G是<b>欧拉图<\/b>⟺<b>G是连通的<\/b> 且 <span style=\"color:#1d4ed8\"><b><span>不存在度数为奇数的顶点<\/span><\/b>", "expanded": true}, {"id": "mt6W8BZ7hCW", "topic": "无向图 G 是<b>半欧拉图<\/b> ⟺ <b>G 是连通的<\/b> 且 <span style=\"color:#1d4ed8\"><b><span>恰好存在两个度数为奇数的顶点<\/span><\/b><span class=\"mm-note\">这两个点 <b>一个为起点，一个为终点<\/b><\/span>", "expanded": true}]}, {"id": "m6CzUwilwt1", "topic": "<b>有向图：<\/b>", "expanded": true, "children": [{"id": "mlHGfwAnk2T", "topic": "有向图 D 是<b>欧拉图<\/b> ⟺ D 是<b>强连通的<\/b> 且 <b>每个顶点的出度均等于入度 <\/b>", "expanded": true}, {"id": "mwERCSMa08t", "topic": "有向图 D 是<b>半欧拉图<\/b> ⟺ D 是<b>单向连通的<\/b> 且 <b>恰有两个奇度顶点，其中一个顶点的入度比出度大1（终点），另一个顶点的出度比入度大1（起点），而其余顶点的入度均等于出度.<\/b>", "expanded": true}]}]}, {"id": "m69aGuvUAut", "topic": "3、DFS搜索求解欧拉回路", "expanded": true}]}, {"id": "mdrJvMSBYmV", "topic": "<b>2、哈密顿图<\/b>", "expanded": true, "children": [{"id": "mAWcyK37Yw4", "topic": "<span style=\"color:#d92d20\"><b><span>注意：<\/span><\/b>", "expanded": true, "children": [{"id": "mwR8bA1Wvdg", "topic": "① <b>欧拉图<\/b>要求遍历所有的边，同时也<b>必然遍历了所有的顶点（<\/b><span style=\"color:#1d4ed8\"><b><span>顶点可能会重复遍历<\/span><\/b><b>）<\/b>；", "expanded": true}, {"id": "med4RgQ57DX", "topic": "② <b>哈密顿图<\/b>则是遍历所有的顶点，会有很多边不会被遍历到，而<span style=\"color:#1d4ed8\"><b><span>不会存在某条边被重复遍历<\/span><\/b>。", "expanded": true}]}, {"id": "mk3NBAZ6sJ6", "topic": "1、定义：哈密顿图关键在于<b><mark>不重复地遍历到所有的顶点<\/mark><\/b>。<br><img class=\"mm-img\" src=\"mm-e9dc470f78b048.jpg\" style=\"width:260px;height:116px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mlEJKYDdlVb", "topic": "<b>六、做题总结<\/b>", "expanded": true, "children": [{"id": "mN3HbNzQei5", "topic": "<b>1、判断一个无向图是否为一棵树：<\/b>", "expanded": true, "children": [{"id": "mzUw2TFBNc3", "topic": "<b>思路1：G必须<\/b><b>是<\/b><span style=\"color:#1d4ed8\"><b><span>无回路的连通图<\/span><\/b>", "expanded": true}, {"id": "m79XhppcSEB", "topic": "<b>思路2：G是有<\/b><span style=\"color:#1d4ed8\"><b><span>n-1条边的连通图<\/span><\/b><span class=\"mm-note\">代码实现：\n① DFS计算<b>结点个数(vNum)<\/b>与<b>边的个数(eNum)。\n​② 最后判断if (vNum == n &amp;&amp; eNum/2 == n-1)<\/b><\/span>", "expanded": true}]}, {"id": "m83cyMWKFzE", "topic": "<b>2、“<\/b><b><mark>破圈法<\/mark><\/b><b>”求最小生成树：正确的<\/b>", "expanded": true}, {"id": "mUGDJWfB0C6", "topic": "<b>3、强连通分量个数的解题思路：<\/b>当某个顶点只有出弧没有入弧时，其它顶点无法达到这个顶点，因此不可能与其它顶点组成强连通分量<b>。<\/b><span class=\"mm-note\">强连通分量：<b>有向图中，若任意两个顶点之间都有路径可达<\/b>，那就叫做强连通。<\/span>", "expanded": true}, {"id": "m7rXXA0jOXY", "topic": "<b>4、DFS如何实现拓扑排序：<\/b>", "expanded": true, "children": [{"id": "mEssq1O6ODJ", "topic": "方法：<b>深搜时，加一个<\/b><span style=\"color:#1d4ed8\"><b><span>时间标记<\/span><\/b><b>，在<\/b><span style=\"color:#1d4ed8\"><b><span>DFS调用结束时，对各结点计时<\/span><\/b><b>。最后<\/b><span style=\"color:#1d4ed8\"><b><span>按照时间从大到小排序<\/span><\/b><span class=\"mm-note\">原因：(DFS中，<b>孩子先于祖先结束<\/b>)孩子的结束时间小于祖先的结束时间。<\/span>", "expanded": true}]}, {"id": "mqv0chDe7Wv", "topic": "<b>5、DFS如何实现逆拓扑排序：<\/b>", "expanded": true, "children": [{"id": "mGegoGHZauG", "topic": "方法：DFS在<span style=\"color:#1d4ed8\"><b><span>出栈前将访问节点输出<\/span><\/b>即可。", "expanded": true}]}, {"id": "maa3dvZvP3J", "topic": "<b>6、哪些活动加速可以缩短完成工程所需时间？<\/b>", "expanded": true, "children": [{"id": "m4iY4tiAwAB", "topic": "注意：<span style=\"color:#1d4ed8\"><b><span>同时处于所有关键路径上的关键活动<\/span><\/b><b>！！<\/b><span class=\"mm-note\">如果关键路径<b>只有一条<\/b>，那么<b>这条关键路径上的所有关键活动缩短<\/b>。\n如果关键路径<b>有n条<\/b>，那么<b>求这n条关键路径上，关键活动的交集<\/b>，将<b>交集中的关键活动缩短<\/b>。<\/span>", "expanded": true}, {"id": "meQl93P02ch", "topic": "<b>因此：<\/b><span style=\"color:#1d4ed8\"><b><span>加速某一关键活动，不一定能缩短整个工期<\/span><\/b><b>。<\/b>", "expanded": true}]}, {"id": "mMvnI9SY1mL", "topic": "<b>7、如何求关键路径？<\/b>", "expanded": true, "children": [{"id": "m1Zdm7uVgEx", "topic": "<b>方法：求出<\/b><span style=\"color:#1d4ed8\"><b><span>所有活动的<\/span><\/b><b><mark>时间余量(l(i) - e(i))<\/mark><\/b><b>,<\/b><b><mark>时间余量为0的所有活动<\/mark><\/b><b>组成了关键路径。<\/b><span class=\"mm-note\">当然：简单图中可以直接看出来。<\/span>", "expanded": true}]}, {"id": "mf64lZXoFtZ", "topic": "<b>8、注意：AOE网中，只有<\/b><b><mark>一个源点，一个汇点<\/mark><\/b><b>。<\/b>", "expanded": true}, {"id": "mfo61MjId50", "topic": "<b>9、任意的带权连通图，满足什么条件时，<\/b><b><mark>MST是唯一的<\/mark><\/b><b>？<\/b>", "expanded": true, "children": [{"id": "mRhObMKHKak", "topic": "条件：带权连通图中的<span style=\"color:#1d4ed8\"><b><span>任意一个环中所包含的边的权值均不相同时<\/span><\/b>。<span class=\"mm-note\">也可以说：<b>任意两点之间<\/b>，<b>没有两条或两条以上长度相等的路径<\/b>时，MST唯一。<\/span>", "expanded": true}]}, {"id": "mCTFSUlw5jm", "topic": "<b>10、Dijkstra算法不能得到一棵最小生成树<\/b>", "expanded": true}]}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>分布式基本理论、协议、算法 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>分布式基本理论、协议、算法</b><small>幕布导图 · 87 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "分布式基本理论、协议、算法", "data": {"id": "root", "topic": "<b>分布式基本理论、协议、算法<\/b>", "children": [{"id": "n1", "topic": "<b>分布式和微服务的区别<\/b>", "children": [{"id": "n2", "topic": "<b>微服务<\/b><span class=\"mm-note\"><b>定义<\/b>：微服务是一种<b>软件架构风格<\/b>，它将一个<b>单一的应用程序拆分成一组小的、独立部署的服务<\/b>。每个服务都围绕一个特定的业务功能构建，并通过轻量级的通信协议（通常是HTTP/REST或消息队列）进行交互。 <b>特点<\/b>：<\/span>", "children": [{"id": "n3", "topic": "<b>模块化<\/b>：每个服务都是独立的模块，具有明确的边界和职责。", "children": []}, {"id": "n4", "topic": "<b>独立部署<\/b>：各个服务可以独立部署、更新和扩展，而不影响其他服务。", "children": []}, {"id": "n5", "topic": "<b>技术异构性<\/b>：不同的服务可以使用不同的编程语言、框架和数据库。", "children": []}, {"id": "n6", "topic": "<b>容错性<\/b>：服务之间松耦合，某个服务的故障不会导致整个系统的崩溃。", "children": []}]}, {"id": "n7", "topic": "<b>分布式系统<\/b><span class=\"mm-note\"><b>定义<\/b>：分布式系统是一种<b>系统架构<\/b>，其中的<b>组件分布在不同的网络节点上，通过网络进行通信和协同工作，以实现共同的目标<\/b>。这些节点可以是物理上的分散（如不同的服务器）或逻辑上的分散（如不同的数据中心）。 <b>特点<\/b>：<\/span>", "children": [{"id": "n8", "topic": "<b>资源分布<\/b>：系统资源（计算能力、存储等）分布在多个节点上。", "children": []}, {"id": "n9", "topic": "<b>并发处理<\/b>：多个节点可以并发处理任务，提高系统的吞吐量和响应速度。", "children": []}, {"id": "n10", "topic": "<b>容错性和高可用性<\/b>：通过冗余和容错机制提高系统的可靠性和可用性。", "children": []}, {"id": "n11", "topic": "<b>一致性<\/b>：分布式系统需要解决数据的一致性问题，常见方法包括分布式事务和一致性算法（如Paxos、Raft）。", "children": []}]}, {"id": "n12", "topic": "<b>联系和区别<\/b><span class=\"mm-note\"><b>联系<\/b>：<\/span>", "children": [{"id": "n13", "topic": "<b>分布式特性<\/b>：微服务架构本质上是一种分布式系统，因为各个微服务通常部署在不同的服务器或容器上，通过网络通信进行协作。", "children": []}, {"id": "n14", "topic": "<b>通信机制<\/b>：两者都依赖网络通信来进行数据交换和协作，常用的协议包括HTTP、gRPC和消息队列。", "children": []}, {"id": "n15", "topic": "<b>容错性和伸缩性<\/b>：两者都强调系统的容错性和伸缩性，通过分布式部署实现高可用性和可扩展性。<span class=\"mm-note\"><b>区别<\/b>：<\/span>", "children": []}, {"id": "n16", "topic": "<b>架构目标<\/b>：微服务架构主要关注的是将应用程序按业务功能模块化，以提高开发和部署的灵活性；而分布式系统的目标是利用分布式资源实现高性能和高可用性。", "children": []}, {"id": "n17", "topic": "<b>粒度<\/b>：微服务的粒度通常较细，每个服务对应一个具体的业务功能；分布式系统的组件粒度可以更大，可能包括完整的子系统或服务群。", "children": []}, {"id": "n18", "topic": "<b>技术栈和实现<\/b>：微服务架构通常涉及DevOps实践、容器化（如Docker）、服务发现和API网关等技术；分布式系统更多地涉及分布式计算、分布式存储、一致性协议和分布式事务等。", "children": []}]}, {"id": "n19", "topic": "<b>总结<\/b><span class=\"mm-note\">微服务和分布式系统虽然在概念上有所不同，但在实际应用中常常结合使用。微服务架构通过将应用程序拆分成小的、独立的服务来实现模块化和灵活性，而分布式系统则通过将这些服务部署在不同的节点上来实现高可用性和可扩展性。理解这两者的区别和联系，有助于设计和实现高效、可靠的现代软件系统。<\/span>", "children": []}]}, {"id": "n20", "topic": "<b>1.分布式概述<\/b>", "children": [{"id": "n21", "topic": "<b>1.什么是分布式？谈谈你对分布式的理解？<\/b><span class=\"mm-note\">分布式系统，通俗点讲就<b>把整个业务系统拆分成很多的服务<\/b>，每个服务责任到人，服务之间代码都没有冲突，服务可以自治，每个服务到技术也可以自己选型，<b>只要遵循统一的服务调用协议<\/b>就可以了。 每次发布如果就改动一个服务那就上线一个服务，不用所有人一起联调，这样每次发布牵扯到的改动影响也是可控的。不像传统单体架构服务，动辄几百万行代码融在一起。 💡 <b>简单来说：<\/b><\/span>", "children": [{"id": "n22", "topic": "<b>为了解决传统单体服务架构带来的各种问题<\/b>：代码数量庞大，迭代测试维护困难，可能因为一处改动测试不到位造成整个服务瘫痪等问题。分布式系统就是将一个大的服务拆分成几十个甚至上百个微小的服务。如果把单体架构服务器比做篮子，那代码就是鸡蛋，不要让所有鸡蛋别装在一个篮子里，也方便大家分工开发，代码不在一个项目里，也不会冲突，最主要的是项目自己维护。", "children": []}, {"id": "n23", "topic": "<b>提升开发效率，业务更便于维护和发展：<\/b>从开发角度来讲单体应用的代码都集中在一起，而分布式系统的代码根据业务被拆分。所以，<b>每个团队可以负责一个服务的开发<\/b>，这样提升了开发效率。另外，代码根据业务拆分之后更加便于维护和扩展。", "children": []}, {"id": "n24", "topic": "<b>提高系统性能<\/b>：我觉得将系统拆分成分布式之后不光便于系统扩展和维护，更能提高整个系统的性能。你想一想嘛？把整个系统拆分成不同的服务/系统，然后每个服务/系统 单独部署在一台服务器上，是不是很大程度上提高了系统性能呢？<span class=\"mm-note\">比如阿里的 <b>Dubbo<\/b>，还有 Spring 全家桶里的 <b>Spring Cloud<\/b>，都是解决分布式微服务架构的优秀框架。<\/span>", "children": []}]}, {"id": "n25", "topic": "<b>2.分布式有什么优点?<\/b>", "children": [{"id": "n26", "topic": "系统<b>可用性提升<\/b><span class=\"mm-note\">传统的集中式存储在遇到单点故障时，很容易造成整个服务不可用。而分布式下的服务体系，<b>在单台机器有故障时，不至于造成整个服务不可用<\/b>。<\/span>", "children": []}, {"id": "n27", "topic": "系统<b>并发能力提升<\/b><span class=\"mm-note\">请求会通过<b>Nginx负载均衡<\/b>被分发到不同的服务器上，运行同样代码的服务器可以有 1 台或 N 台，通常情况下会根据实际用户访问量随时增加机器，无论是数据库或者服务，都可以做到随时水平扩展。 比如双 11 活动，平时订单少 50 台机器就够了，到了 11 订单量剧增，服务器增加到 100 台，每台机器之间相互独立，互不影响。<\/span>", "children": []}, {"id": "n28", "topic": "系统<b>容错能力提升<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-1c97174057fd4c.jpg\" style=\"width:320px;height:190px\" loading=\"lazy\" decoding=\"async\"> 同一组服务分别部署在北京上海杭州，杭州的机房突发断电或者火灾，杭州机房的流量会被自动分发到北京和上海的机房，不影响用户使用。<\/span>", "children": []}, {"id": "n29", "topic": "<b>低延迟<\/b><span class=\"mm-note\">参考上一个图，北京的用户请求自动分发到北京，上海的用户请求被分发到上海，<b>服务器会根据用户的 IP 选择距离自己最近的机房<\/b>，<b>降低网络延迟<\/b>。<\/span>", "children": []}]}, {"id": "n30", "topic": "<b>3.有什么缺点？<\/b>", "children": [{"id": "n31", "topic": "<b>分布式服务依赖网络<\/b><span class=\"mm-note\">服务器间通讯依赖网络，不可靠网络包括网络延时，丢包、中断、异步，一个完整的服务请求依赖一连串服务调用，<b>任意一个服务节点网络出现问题，都可能造成本次请求失败。<\/b><\/span>", "children": []}, {"id": "n32", "topic": "<b>运维成本上升<\/b><span class=\"mm-note\">传统单体式服务只需要维护一个站点就可以。 分布式服务系统被拆分成若干个小服务，服务从 1 变为几十个上百个服务后，增加运维成本。<\/span>", "children": []}, {"id": "n33", "topic": "一致性、可用性、分区容错性 <b>无法同时满足— CAP无法同时满足<\/b><span class=\"mm-note\">这个是最主要的，这三种特性就是平时说的 CAP 定理，在分布式系统中，这三种特性分区容错性必须满足，剩下二选一，需要根据实际情况去调整牺牲掉其中哪个。<\/span>", "children": []}]}, {"id": "n34", "topic": "<b>4.分布式和微服务有什么联系？<\/b><span class=\"mm-note\"><b>微服务是分布式系统的一种具体落地方案<\/b>。 💡  分布式系统和微服务，<b>两者都只是一种概念<\/b>。如果你采用微服务，就意味着系统一定是分布式的，分布式系统具有的优缺点在微服务理都会体现。<\/span>", "children": []}]}, {"id": "n35", "topic": "<b>2.CAP理论-分布式系统设计理论<\/b><span class=\"mm-note\">💡 <b>Q1：为何也叫它布鲁尔理论？<\/b> 由加州大学伯克利分校的 Eric Brewer 教授在分布式计算原理研讨会（PODC）上提出，因此 CAP 定理又被称作 <b>布鲁尔定理（Brewer’s theorem）<\/b> <img class=\"mm-img\" src=\"fl-75ec46973514f0.jpg\" style=\"width:320px;height:175px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": [{"id": "n36", "topic": "<b>1.简介<\/b><span class=\"mm-note\">在理论计算机科学中，CAP 定理（CAP theorem）指出对于一个分布式系统来说，<b>当设计读写操作时，只能同时满足以下三点中的两个<\/b>：<\/span>", "children": [{"id": "n37", "topic": "<b>一致性（Consistency<\/b>） : <b>所有节点访问同一份最新的数据副本<\/b>", "children": []}, {"id": "n38", "topic": "<b>可用性（Availability）<\/b>: 非故障的节点在<b>合理的时间内返回合理的响应<\/b>（不是错误或者超时的响应）。<span class=\"mm-note\">指：用户看到的是正常的响应。<\/span>", "children": []}, {"id": "n39", "topic": "<b>分区容错性（Partition Tolerance）<\/b> : 分布式系统<b>出现网络分区的时候，仍然能够对外提供服务<\/b>。<span class=\"mm-note\">💡 <b>Q1：何为网络分区？<\/b> <b>网络分区只在分布式集群中<\/b>，节点之间由于网络不通，导致<b>集群中节点形成不同的子集<\/b>，<b>子集中节点之间网络互通，而子集与子集之间网络不通<\/b>，整个网络就分成了几块区域，这就叫 网络分区。 指的是网络中的<b>通信延迟或者丢包率<\/b>，即网络中存在的问题，比如网络连接不稳定、带宽限制、数据包丢失等。<\/span>", "children": []}]}, {"id": "n40", "topic": "<b>2.不是所谓的“3选2”<\/b><span class=\"mm-note\">💡 <b>总结<\/b>：如果<b>系统发生“分区”<\/b>，我们要<b>考虑选择 CP 还是 AP<\/b>。如果系统<b>没有发生“分区<\/b>”的话，我们要<b>思考如何保证 CA<\/b> 。 大部分人解释这一定律时，常常简单的表述为：“一致性、可用性、分区容忍性三者你只能同时达到其中两个，不可能同时达到”。实际上这是一个非常具有误导性质的说法，而且在 CAP 理论诞生 12 年之后，CAP 之父也在 2012 年重写了之前的论文。 因此，并不是三选二。而是分情况讨论：<\/span>", "children": [{"id": "n41", "topic": "当<b>系统会发生分区时<\/b>：<b>分区容错性(P)必须保证<\/b>，在保证P的基础上，再在一致性(C)和可用性(A)中<b>二选一<\/b>。 →即选择：<b>CP 还是 AP<\/b><span class=\"mm-note\">即：在<b>分区后，分区容错性是要首先保证的！！在此基础上，再考虑C还是A。<\/b><\/span>", "children": []}, {"id": "n42", "topic": "当<b>系统不会发生分区时<\/b>：节点间的网络连接通信正常的话，也就不存在 P 了。这个时候，我们就<b>可以同时保证 C 和 A<\/b> 了。→ 即选择：<b>CA<\/b><span class=\"mm-note\">💡 <b>Q1：因此分布式系统理论上不可能选择 CA 架构，只能选择 CP 或者 AP 架构。<\/b> 因为分布式系统本身就要分区呀，单体系统才不用分区。 比如 ZooKeeper、HBase 就是 CP 架构，Cassandra、Eureka 就是 AP 架构，Nacos 不仅支持 CP 架构也支持 AP 架构。 💡 <b>Q2：系统发生分区时，为何不可能选CA架构呢？<\/b> 举个例子： 若系统出现“分区”，系统中的某个节点在进行写操作。 为了保证 C， 必须要禁止(上锁)其他节点的读写操作，这就和 A 发生冲突了。 如果为了保证 A，其他节点的读写操作正常的话，那就和 C 发生冲突了。 😘 <b>Q3：单体架构中，CA可以同时保证吗？<\/b><\/span>", "children": [{"id": "n43", "topic": "<b>CP<\/b>的应用场景：银行", "children": []}, {"id": "n44", "topic": "<b>AP<\/b>的应用场景：<b>电商<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-2f091210a3553f.jpg\" style=\"width:320px;height:306px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}]}]}, {"id": "n45", "topic": "<b>3.美团适合选择哪个方法？<\/b><span class=\"mm-note\">到家：外卖；到点： 美团是一个提供各种服务的平台，涵盖了餐饮外卖、酒店预订、旅游、电影票务、生活服务等多个领域。对于美团这样的服务平台，可以根据其不同的业务场景来选择合适的一致性和可用性模型：<\/span>", "children": [{"id": "n46", "topic": "<b>餐饮外卖<\/b>：<b>AP<\/b>", "children": [{"id": "n47", "topic": "<b>选择 AP<\/b>：在餐饮外卖业务中，用户<b>更加关注系统的可用性<\/b>，即使在网络分区或者节点故障的情况下，也希望能够继续下单和享受外卖服务。因此，对于美团外卖这样的业务，高可用性是非常重要的，可以选择 AP 模型，牺牲一致性来保证系统的可用性。", "children": []}]}, {"id": "n48", "topic": "<b>酒店预订<\/b>：<b>CP<\/b>", "children": [{"id": "n49", "topic": "<b>选择 CP<\/b>：在酒店预订业务中，用户更加关注数据的一致性和准确性，希望能够确保预订的酒店信息是准确无误的。因此，对于美团酒店预订这样的业务，一致性是非常重要的，可以选择 CP 模型，牺牲一部分可用性来保证数据的一致性。", "children": []}]}, {"id": "n50", "topic": "<b>旅游和电影票务<\/b>：<b>电影票务AP、旅游CP<\/b>", "children": [{"id": "n51", "topic": "<b>根据具体情况选择<\/b>：对于旅游和电影票务等业务，可能会根据具体的业务场景来选择一致性和可用性模型。", "children": []}, {"id": "n52", "topic": "比如，在<b>电影票务中<\/b>，用户更加关注<b>系统的实时性和可用性<\/b>，因此可能会倾向于选择 AP 模型；而在旅游业务中，用户更加关注数据的一致性和准确性，可能会倾向于选择 CP 模型。<span class=\"mm-note\">综上所述，针对美团的不同业务场景，可以根据用户需求和业务特点选择合适的一致性和可用性模型。<\/span>", "children": []}]}]}, {"id": "n53", "topic": "<b>3.实际案例<\/b><span class=\"mm-note\">💡 <b>Q1：什么是注册中心？<\/b> 注册中心是<b>分布式系统中的一种关键组件<\/b>，用于<b>管理和维护服务实例的注册信息<\/b>。 在微服务架构中，通常会有多个服务实例运行在不同的节点上，这些服务实例可能会动态地启动、停止或者扩容。 <b>注册中心的作用就是通过服务注册和服务发现的机制，帮助各个服务实例能够互相感知、发现和调用彼此。<\/b> &gt; 😘 具体而言：当一个服务实例启动时，它会向注册中心注册自己的信息，包括服务名、IP地址、端口号等。注册中心会将这些信息存储起来，形成服务的注册表。其他服务想要调用某个服务时，首先会向注册中心查询该服务的信息，然后根据获取到的信息，直接调用相应的服务实例。 注册中心可以是一个独立的服务，也可以是集成在服务<\/span>", "children": [{"id": "n54", "topic": "<b>ZooKeeper 保证的是 CP。<\/b><span class=\"mm-note\">任何时刻对 ZooKeeper 的读请求<b>都能得到一致性的结果<\/b>，但是， ZooKeeper <b>不保证每次请求的可用性。<\/b> 比如在 Leader 选举过程中或者半数以上的机器不可用的时候服务就是不可用的。<\/span>", "children": []}, {"id": "n55", "topic": "<b>Eureka 保证的则是 AP。<\/b><span class=\"mm-note\">Eureka 在设计的时候就是<b>优先保证 A （可用性）<\/b>。在 <b>Eureka 中不存在什么 Leader 节点<\/b>，每个节点都是一样的、平等的。 因此 Eureka 不会像 ZooKeeper 那样出现选举过程中或者半数以上的机器不可用的时候服务就是不可用的情况。 Eureka <b>保证即使大部分节点挂掉也不会影响正常提供服务<\/b>，<b>只要有一个节点是可用的就行了<\/b>。只不过这个节点上的数据可能并不是最新的。<\/span>", "children": []}, {"id": "n56", "topic": "<b>Nacos 不仅支持 CP 也支持 AP。<\/b><span class=\"mm-note\">😘 推荐阅读：<\/span>", "children": [{"id": "n57", "topic": "<a href=\"https://medium.com/@ravindraprasad/cap-theorem-simplified-28499a67eab4\" target=\"_blank\" rel=\"noopener\">CAP 定理简化open in new window<\/a> （英文，有趣的案例）", "children": []}, {"id": "n58", "topic": "<a href=\"https://juejin.im/post/6844903936718012430\" target=\"_blank\" rel=\"noopener\">神一样的 CAP 理论被应用在何方open in new window<\/a> （中文，列举了很多实际的例子）", "children": []}, {"id": "n59", "topic": "<a href=\"https://martin.kleppmann.com/2015/05/11/please-stop-calling-databases-cp-or-ap.html\" target=\"_blank\" rel=\"noopener\">请停止呼叫数据库 CP 或 APopen in new window<\/a> （英文，带给你不一样的思考）", "children": []}]}]}]}, {"id": "n60", "topic": "<b>3.BASE理论-CAP理论中AP方案的延伸<\/b><span class=\"mm-note\"><b>CAP 理论中 AP 方案的补充延伸<\/b>。<\/span>", "children": [{"id": "n61", "topic": "<b>1.简介<\/b><span class=\"mm-note\"><b>BASE<\/b> 是 <b>Basically Available（基本可用）<\/b>、<b>Soft-state（软状态）<\/b> 和 <b>Eventually Consistent（最终一致性）<\/b> 三个短语的缩写。 BASE 理论是<b>对 CAP 中一致性 C 和可用性 A 权衡的结果<\/b>，其来源于对大规模互联网系统分布式实践的总结，是<b>基于 CAP 定理逐步演化而来<\/b>的，它大大降低了我们对系统的要求。<\/span>", "children": []}, {"id": "n62", "topic": "<b>2.核心思想<\/b><span class=\"mm-note\">即使<b>无法做到强一致性，但每个应用都可以根据自身业务特点<\/b>，<b>采用适当的方式来使系统达到最终一致性<\/b>。 也就是牺牲数据的一致性来满足系统的高可用性，系统中一部分数据不可用或者不一致时，仍需要保持系统整体“主要可用”。 😘 <b>Q1：为什么说BASE是对CAP中AP方案的一个延伸？<\/b> CAP 理论这节我们也说过了： &gt; 如果系统没有发生“分区”的话，节点间的网络连接通信正常的话，也就不存在 P 了。这个时候，我们就可以同时保证 C 和 A 了。因此，<b>如果系统发生“分区”，我们要考虑选择 CP 还是 AP。如果系统没有发生“分区”的话，我们要思考如何保证 CA 。<\/b> 因此，**AP 方案只是在系统发生分区的时候放弃一致性<\/span>", "children": []}, {"id": "n63", "topic": "<b>3.BASE理论三要素<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-f937694712d617.jpg\" style=\"width:320px;height:280px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": [{"id": "n64", "topic": "<b>1.基本可用<\/b><span class=\"mm-note\">基本可用是指<b>分布式系统在出现不可预知故障的时候，允许损失部分可用性<\/b>。但是，这<b>绝不等价于系统不可用<\/b>。 😘 Q1：<b>什么叫允许损失部分可用性呢？<\/b><\/span>", "children": [{"id": "n65", "topic": "<b>响应时间上的损失<\/b>: 正常情况下，处理用户请求需要 0.5s 返回结果，但是由于系统出现故障，<b>处理用户请求的时间变为 3 s<\/b>。", "children": []}, {"id": "n66", "topic": "<b>系统功能上的损失<\/b>：正常情况下，用户可以使用系统的全部功能，但是由于系统访问量突然剧增，系统的<b>部分非核心功能无法使用<\/b>", "children": []}]}, {"id": "n67", "topic": "<b>2.软状态<\/b><span class=\"mm-note\">软状态指<b>允许系统中的数据存在中间状态<\/b>（<b>CAP 理论中的数据不一致<\/b>），并<b>认为该中间状态的存在不会影响系统的整体可用性<\/b>，即<b>允许系统在不同节点的数据副本之间进行数据同步的过程存在延时。<\/b><\/span>", "children": []}, {"id": "n68", "topic": "<b>3.最终一致性<\/b><span class=\"mm-note\">最终一致性强调的是系统中所有的数据副本，<b>在经过一段时间的同步后，最终能够达到一个一致的状态<\/b>。因此，最终一致性的本质是需要系统保证最终数据能够达到一致，而不需要实时保证系统数据的强一致性。 😘 <b>分布式一致性的 3 种级别：<\/b><\/span>", "children": [{"id": "n69", "topic": "<b>强一致性<\/b>：系统写入了什么，读出来的就是什么。", "children": []}, {"id": "n70", "topic": "<b>弱一致性<\/b>：不一定可以读取到最新写入的值，也不保证多少时间之后读取到的数据是最新的，只是会<b>尽量保证某个时刻达到数据一致的状态<\/b>。", "children": []}, {"id": "n71", "topic": "<b>最终一致性<\/b>：弱一致性的升级版，系统会<b>保证在一定时间内达到数据一致的状态<\/b>。<span class=\"mm-note\"><b>业界比较推崇是最终一致性级别，但是某些对数据一致要求十分严格的场景比如银行转账还是要保证强一致性。<\/b> 😘 <b>Q1：那实现最终一致性的具体方式<\/b>是什么呢?<\/span>", "children": []}, {"id": "n72", "topic": "<b>读时修复<\/b> : 在<b>读取数据时，检测数据的不一致，进行修复<\/b>。比如 Cassandra 的 Read Repair 实现，具体来说，在向 Cassandra 系统查询数据的时候，如果检测到不同节点的副本数据不一致，系统就自动修复数据。", "children": []}, {"id": "n73", "topic": "<b>写时修复<\/b> : 在<b>写入数据，检测数据的不一致时，进行修复<\/b>。比如 Cassandra 的 Hinted Handoff 实现。具体来说，Cassandra 集群的节点之间远程写数据的时候，如果写失败 就将数据缓存下来，然后定时重传，修复数据的不一致性。 → <b>推荐(对性能消耗较低)<\/b>", "children": []}, {"id": "n74", "topic": "<b>异步修复<\/b> : 这个是最常用的方式，通过<b>定时对账检测副本数据的一致性<\/b>，并修复。", "children": []}]}]}]}, {"id": "n75", "topic": "<b>4.Paxos算法<\/b>", "children": [{"id": "n76", "topic": "<b>1.简介<\/b><span class=\"mm-note\">兰伯特在 1990 年提出了一种<b>分布式系统共识算法。<\/b> <b>第一个被证明完备的分布式系统共识算法<\/b>。 😘 共识算法的<b>作用<\/b>：让<b>分布式系统中的多个节点之间对某个提案（Proposal）达成一致的看法<\/b>。 ​ 提案的含义在分布式系统中十分宽泛，像哪一个节点是 Leader 节点、多个事件发生的顺序等等都可以是一个提案。 兰伯特当时提出的 Paxos 算法主要包含 2 个部分:<\/span>", "children": [{"id": "n77", "topic": "<b>Basic Paxos 算法<\/b>：描述的是<b>多节点之间如何就某个值(提案 Value)达成共识<\/b>。", "children": []}, {"id": "n78", "topic": "<b>Multi-Paxos 思想<\/b>：描述的是<b>执行多个 Basic Paxos 实例，就一系列值达成共识<\/b>。<span class=\"mm-note\"><b>Multi-Paxos 说白了就是执行多次 Basic Paxos<\/b> ，核心还是 Basic Paxos 。 😘 下面我们来对 Paxos 算法的定义做一个总结：<\/span>", "children": [{"id": "n79", "topic": "Paxos 算法是兰伯特在 <b>1990<\/b> 年提出了一种分布式系统共识算法。", "children": []}, {"id": "n80", "topic": "兰伯特当时提出的 Paxos 算法主要包含 <b>2 个部分: Basic Paxos 算法和 Multi-Paxos 思想<\/b>。", "children": []}, {"id": "n81", "topic": "<b>Raft 算法、ZAB 协议<\/b>、 <b>Fast Paxos 算法都是基于 Paxos 算法<\/b>改进而来。", "children": []}]}]}, {"id": "n82", "topic": "<b>2.Basic Paxos算法<\/b><span class=\"mm-note\">Basic Paxos 中存在 3 个重要的角色：<\/span>", "children": [{"id": "n83", "topic": "<b>提议者（Proposer）<\/b>：也可以叫做协调者（coordinator），提议者负责<b>接受客户端的请求并发起提案<\/b>。<span class=\"mm-note\">提案信息通常包括提案编号 (Proposal ID) 和提议的值 (Value)。<\/span>", "children": []}, {"id": "n84", "topic": "<b>接受者（Acceptor）<\/b>：也可以叫做投票员（voter），负责<b>对提议者的提案进行投票，同时需要记住自己的投票历史<\/b>；", "children": []}, {"id": "n85", "topic": "<b>学习者（Learner）<\/b>：如果<b>有超过半数接受者就某个提议达成了共识，那么学习者就需要接受这个提议<\/b>，并就该提议<b>作出运算，然后将运算结果返回给客户端<\/b>。<span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-8729eb91b7716e.jpg\" style=\"width:320px;height:222px\" loading=\"lazy\" decoding=\"async\"> 😘 为了减少实现该算法所需的节点数，<b>一个节点可以身兼多个角色<\/b>。 并且，<b>一个提案被选定需要被半数以上的 Acceptor 接受<\/b>。这样的话，Basic Paxos 算法还<b>具备容错性<\/b>，在<b>少于一半的节点出现故障时<\/b>，<b>集群仍能正常工作。<\/b><\/span>", "children": []}]}, {"id": "n86", "topic": "<b>3.Multi-Paxos算法<\/b><span class=\"mm-note\"><b>Basic Paxos 算法的仅能就单个值达成共识<\/b>，<b>为了能够对一系列的值达成共识<\/b>，我们需要<b>用到 Multi Paxos 思想<\/b>。 😘 ⚠️<b>注意<\/b>：<b>Multi-Paxos 只是一种思想<\/b>，这种思想的核心就是<b>通过多个 Basic Paxos 实例就一系列值达成共识<\/b>。 也就是说，Basic Paxos 是 Multi-Paxos 思想的核心，Multi-Paxos 就是多执行几次 Basic Paxos。 由于兰伯特提到的 Multi-Paxos 思想缺少代码实现的必要细节(比如怎么选举领导者)，所以在理解和实现上比较困难。 不过，也不需要担心，我们并不需要自己实现基于 Multi-Paxos 思<\/span>", "children": []}]}], "expanded": true}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

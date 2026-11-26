@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>Callable/Runnable/Future · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">7</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#Runnable">Runnable</a><a class="tl l2" href="#Callable">Callable</a><a class="tl l3" href="#1-简介">1.简介</a><a class="tl l3" href="#2-使用方式">2.使用方式</a><a class="tl l3" href="#3-Runnable-VS-Callable">3.Runnable VS Callable</a><a class="tl l2" href="#Future">Future</a><a class="tl l2" href="#FutureTask">FutureTask</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>Callable/Runnable/Future</h1><div class="meta">2024-08-13 · <a class="src-link" href="https://flowus.cn/0fd70ffe-4fb4-4a5c-8379-5615bbd58345" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h2 id="Runnable">Runnable</h2>
+<p>先说一下java.lang.Runnable吧，它是一个接口，在它里面只声明了一个<strong>run()</strong>方法：</p>
+<pre><code>public interface Runnable {
+    public abstract void run();
+}</code></pre>
+<p>由于<strong>run()方法返回值为void类型</strong>，所以在<strong>执行完任务之后无法返回任何结果</strong>。</p>
+<h2 id="Callable">Callable</h2>
+<h3 id="1-简介">1.简介</h3>
+<p>Callable位于<strong>java.util.concurrent</strong>包下，它也是一个接口，在它里面也只声明了一个方法，只不过这个方法叫做<strong>call()</strong>：</p>
+<pre><code>public interface Callable&lt;V&gt; {
+    /**
+     * Computes a result, or throws an exception if unable to do so.
+     *
+     * @return computed result
+     * @throws Exception if unable to compute a result
+     */
+    V call() throws Exception;
+}</code></pre>
+<p>可以看到，这是一个<strong>泛型接口</strong>，该接口声明了一个名称为call()的方法，同时这个方法<strong>可以有返回值V，也可以抛出异常。</strong></p>
+<p><strong>call()方法返回的类型就是传递进来的V类型</strong>。</p>
+<h3 id="2-使用方式">2.使用方式</h3>
+<p>那么怎么使用Callable呢？一般情况下是<strong>配合ExecutorService来使用</strong>的，在ExecutorService接口中声明了<strong>若干个submit方法的重载版本：</strong></p>
+<pre><code>&lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task);
+&lt;T&gt; Future&lt;T&gt; submit(Runnable task, T result);
+Future&lt;?&gt; submit(Runnable task);</code></pre>
+<ul><li>第一个方法：submit提交一个<strong>实现Callable接口</strong>的任务，并且<strong>返回封装了异步计算结果的Future</strong>。</li></ul>
+<ul><li>第二个方法：submit提交一个<strong>实现Runnable接口</strong>的任务，并且指定了<strong>在调用Future的get方法时返回的result对象</strong>。</li></ul>
+<ul><li>第三个方法：submit提交一个<strong>实现Runnable接口</strong>的任务，并且<strong>返回封装了异步计算结果的Future</strong>。</li></ul>
+<p>因此我们只要创建好我们的线程对象（实现Callable接口或者Runnable接口），然后通过上面3个方法提交给线程池去执行即可。</p>
+<h3 id="3-Runnable-VS-Callable">3.Runnable VS Callable</h3>
+<p>两者的区别有：</p>
+<ol><li>Runnable是自从java1.1就有了，而Callable是1.5之后才加上去的。</li></ol>
+<ol><li>Callable规定的方法是<strong>call()；</strong>Runnable规定的方法是<strong>run()</strong>。</li></ol>
+<ol><li>Callable的任务执行后<strong>有返回值</strong>；而Runnable的任务是<strong>没有返回值(是void)</strong>。</li></ol>
+<ol><li>call方法<strong>可以抛出异常</strong>，run方法<strong>不可以抛出异常</strong>。</li></ol>
+<ol><li><strong>运行Callable任务可以拿到一个Future对象，表示异步计算的结果</strong>。</li></ol>
+<p>它提供了检查计算是否完成的方法，以等待计算的完成，并检索计算的结果。通过Future对象可以了解任务执行情况，可取消任务的执行，还可获取执行结果。</p>
+<ol><li>加入<strong>线程池</strong>运行，<strong>Runnable使用ExecutorService的execute方法</strong>，<strong>Callable使用submit()</strong>方法。</li></ol>
+<h2 id="Future">Future</h2>
+<p>Future就是对于<strong>具体的Runnable或者Callable任务的执行结果进行取消、查询是否完成、获取结果</strong>。</p>
+<p>必要时可以<strong>通过get方法获取执行结果</strong>，该<strong>方法会阻塞直到任务返回结果</strong>。</p>
+<p><strong>Future接口是用来获取异步计算结果的。</strong></p>
+<p>说白了就是对具体的Runnable或者Callable对象任务执行的结果进行<strong>获取(get())，取消(cancel())</strong>，判断是否完成等操作。</p>
+<p>我们看看Future接口的源码：</p>
+<pre><code>public interface Future&lt;V&gt; {
+    boolean cancel(boolean mayInterruptIfRunning);
+    boolean isCancelled();
+    boolean isDone();
+    V get() throws InterruptedException, ExecutionException;
+    V get(long timeout, TimeUnit unit)
+        throws InterruptedException, ExecutionException, TimeoutException;
+}</code></pre>
+<p>在Future接口中声明了5个方法，下面依次解释每个方法的作用：</p>
+<ul><li><strong>cancel():</strong></li></ul>
+<p>用来<strong>取消任务</strong>，如果取消任务成功则返回true，如果取消任务失败则返回false。</p>
+<p>参数<code>mayInterruptIfRunning</code>表示 是否允许取消正在执行却没有执行完毕的任务.</p>
+<p>如果设置true，则表示可以取消正在执行过程中的任务。如果任务已经完成，则无论mayInterruptIfRunning为true还是false，此方法肯定返回false，即如果取消已经完成的任务会返回false；如果任务正在执行，若mayInterruptIfRunning设置为true，则返回true，若mayInterruptIfRunning设置为false，则返回false；如果任务还没有执行，则无论mayInterruptIfRunning为true还是false，肯定返回true。</p>
+<ul><li><strong>isCancelled()</strong>:</li></ul>
+<p>表示<strong>任务是否被取消成功</strong>，如果在任务正常完成前被取消成功，则返回 true。</p>
+<ul><li><strong>isDone()</strong>:</li></ul>
+<p>方法表示<strong>任务是否已经完成</strong>，若任务完成，则返回true；</p>
+<ul><li><strong>get():</strong></li></ul>
+<p>方法用来<strong>获取执行结果</strong>，这个<strong>方法会产生阻塞</strong>，会<strong>一直等到任务执行完毕才返回</strong>；</p>
+<ul><li><strong>get(long timeout, TimeUnit unit)</strong>:</li></ul>
+<p>用来<strong>获取执行结果</strong>，<strong>如果在指定时间内，还没获取到结果，就直接返回null</strong>。</p>
+<p>也就是说Future提供了三种功能：</p>
+<p>1）判断任务是否完成；</p>
+<p>2）能够中断(取消)任务；</p>
+<p>3）能够获取任务执行结果。</p>
+<p>因为<strong>Future只是一个接口</strong>，所以是<strong>无法直接用来创建对象使用</strong>的，因此就有了下面的FutureTask。</p>
+<h2 id="FutureTask">FutureTask</h2>
+<p>我们先来看一下FutureTask的实现：</p>
+<pre><code>public class FutureTask&lt;V&gt; implements RunnableFuture&lt;V&gt;{}</code></pre>
+<p>FutureTask类<strong>实现了RunnableFuture接口</strong>，我们看一下RunnableFuture接口的实现：</p>
+<pre><code>public interface RunnableFuture&lt;V&gt; extends Runnable, Future&lt;V&gt; {
+    void run();
+}</code></pre>
+<p>可以看出RunnableFuture继承了Runnable接口和Future接口，而FutureTask实现了RunnableFuture接口。</p>
+<p>所以它<strong>既可以作为Runnable被线程执行</strong>，又<strong>可以作为Future得到Callable的返回值</strong>。</p>
+<p><strong>分析：</strong></p>
+<p>FutureTask除了实现了Future接口外还实现了Runnable接口，因此FutureTask也可以直接提交给Executor执行。</p>
+<p>当然也可以调用线程直接执行（FutureTask.run()）。</p>
+<p>接下来我们根据FutureTask.run()的执行时机来分析其所处的3种状态：</p>
+<ol><li><strong>未启动</strong></li></ol>
+<p>FutureTask.run()方法还没有被执行之前，FutureTask处于未启动状态，当创建一个FutureTask，而且没有执行FutureTask.run()方法前，这个FutureTask也处于未启动状态。</p>
+<ol><li><strong>已启动</strong></li></ol>
+<p>FutureTask.run()被执行的过程中，FutureTask处于已启动状态。</p>
+<ol><li><strong>已完成</strong></li></ol>
+<p>FutureTask.run()方法执行完正常结束，或者被取消或者抛出异常而结束，FutureTask都处于完成状态。</p></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>Redis 使用规则 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">18</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-适用范围">1. 适用范围</a><a class="tl l2" href="#2-版本-依赖">2. 版本 / 依赖</a><a class="tl l2" href="#3-标准骨架">3. 标准骨架</a><a class="tl l3" href="#3-1-单例工厂">3.1 单例工厂</a><a class="tl l3" href="#3-2-Pipeline-批写-高吞吐场景">3.2 Pipeline 批写（高吞吐场景）</a><a class="tl l3" href="#3-3-重试-固定-backoff-整批重试">3.3 重试（固定 backoff，整批重试）</a><a class="tl l3" href="#3-4-fail-open-读场景">3.4 fail-open（读场景）</a><a class="tl l3" href="#3-5-partial-error-检测">3.5 partial error 检测</a><a class="tl l2" href="#4-配置项">4. 配置项</a><a class="tl l2" href="#5-监控与日志">5. 监控与日志</a><a class="tl l2" href="#6-常见踩坑">6. 常见踩坑</a><a class="tl l3" href="#6-1-写操作-fail-open">6.1 🔴 写操作 fail-open</a><a class="tl l3" href="#6-2-pipeline-内单条命令报错导致整批失败">6.2 🔴 pipeline 内单条命令报错导致整批失败</a><a class="tl l3" href="#6-3-connection-pool-配置不当">6.3 🟠 connection pool 配置不当</a><a class="tl l3" href="#6-4-海外-region-没-Redis">6.4 🟠 海外 region 没 Redis</a><a class="tl l3" href="#6-5-用-Jedis-单实例-非-JedisPooled">6.5 🟢 用 Jedis 单实例（非 JedisPooled）</a><a class="tl l3" href="#6-6-大-key-没监控">6.6 🟢 大 key 没监控</a><a class="tl l2" href="#7-边界">7. 边界</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>Redis 使用规则</h1><div class="meta">2026-07-09<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;本地沉淀 · 风控工程知识库&quot;</em></div><div class="md"><blockquote><p>本文是工程<strong>规则</strong>（团队约定 + 踩坑结论），不是入门教程： 适合「已经知道要做什么，只想知道怎么做才不出事」的场景。</p></blockquote>
+<h2 id="1-适用范围">1. 适用范围</h2>
+<p>风控服务用 Jedis 4.x 直连 Redis（<strong>不</strong>走 spring-data-redis，<strong>不</strong>走 Lettuce）。覆盖：在线服务读写、Flink 窗口算子批写、离线 Spark 直写回灌。</p>
+<hr>
+<h2 id="2-版本-依赖">2. 版本 / 依赖</h2>
+<table><thead><tr><th>坐标</th><th>版本</th><th>备注</th></tr></thead><tbody><tr><td><code>redis.clients:jedis</code></td><td>4.4.6</td><td>4.x 主线，新项目对齐</td></tr><tr><td><code>com.github.fppt:jedis-mock</code></td><td>1.1.4</td><td>仅 test scope，BVT 进程内 Redis</td></tr></tbody></table>
+<p><strong>关键 API</strong>：</p>
+<ul><li><code>JedisPooled</code>（连接池单例）— 替代旧的 <code>JedisCluster</code> / <code>Jedis</code> 模式</li><li><code>Pipeline</code> — 批写</li><li><code>Pipeline.syncAndReturnAll()</code> — 拿回每条命令的返回值，做 partial error 检测</li></ul>
+<hr>
+<h2 id="3-标准骨架">3. 标准骨架</h2>
+<h3 id="3-1-单例工厂">3.1 单例工厂</h3>
+<pre><code>public final class ${jedisFactoryClass} {
+    private static volatile JedisPooled INSTANCE;
+
+    public static JedisPooled createJedisPooled(String host, int port, String password) {
+        // 走 JedisPooled 而不是 new JedisCluster；
+        // 连接池参数走 Duration API（jedis 4.x 风格）
+        ConnectionPoolConfig poolCfg = new ConnectionPoolConfig();
+        poolCfg.setMaxTotal(${redisMaxTotal});
+        poolCfg.setMaxIdle(${redisMaxIdle});
+        poolCfg.setMinIdle(${redisMinIdle});
+        // ... timeout / blockWhenExhausted / testOnBorrow
+
+        if (password == null || password.isEmpty()) {
+            return new JedisPooled(poolCfg, host, port);
+        }
+        return new JedisPooled(poolCfg, host, port, ${connectTimeoutMs}, password);
+    }
+}</code></pre>
+<h3 id="3-2-Pipeline-批写-高吞吐场景">3.2 Pipeline 批写（高吞吐场景）</h3>
+<pre><code>try (Pipeline p = jedis.pipelined()) {
+    for (WriteOp op : ops) {
+        if (op instanceof WriteOp.Hset) {
+            p.hset(redisKey, op.field(), op.value());
+        } else if (op instanceof WriteOp.Hdel) {
+            p.hdel(redisKey, op.field());
+        } else if (op instanceof WriteOp.Del) {
+            p.del(redisKey);
+        }
+    }
+    List&lt;Object&gt; results = p.syncAndReturnAll();
+    throwIfPipelineHasPartialErrors(results);
+}</code></pre>
+<p><strong>铁律</strong>：</p>
+<ul><li>用 <code>try-with-resources</code> 包 <code>Pipeline</code></li><li>用 <code>syncAndReturnAll()</code> 拿返回值检查 partial error，而不是无脑 <code>sync()</code></li><li>单批操作数控制在 100~500 之间，过大批量 Redis 响应慢</li></ul>
+<h3 id="3-3-重试-固定-backoff-整批重试">3.3 重试（固定 backoff，整批重试）</h3>
+<pre><code>private boolean flushOpsWithRetry(List&lt;WriteOp&gt; ops, String key) {
+    JedisException last = null;
+    for (int attempt = 1; attempt &lt;= ${maxRedisRetries}; attempt++) {
+        try {
+            flushOps(ops, key);
+            return true;
+        } catch (JedisException e) {
+            last = e;
+            PerfCounter.setMeterCount(&quot;${metricPrefix}.redis.pipeline.retry&quot;, 1);
+            if (attempt &lt; ${maxRedisRetries}) {
+                if (!sleepBeforeRetry()) return false;  // 中断信号
+            }
+        }
+    }
+    PerfCounter.setMeterCount(&quot;${metricPrefix}.redis.pipeline.exhausted&quot;, 1);
+    log.error(&quot;Pipeline flush exhausted, key={}, ops={}, err={}&quot;,
+        key, ops.size(), last != null ? last.getMessage() : &quot;unknown&quot;);
+    return false;
+}
+
+private static boolean sleepBeforeRetry() {
+    try {
+        Thread.sleep(${redisRetryBackoffMs});  // 典型 10ms
+        return true;
+    } catch (InterruptedException ex) {
+        Thread.currentThread().interrupt();
+        return false;
+    }
+}</code></pre>
+<p>实测：<code>${maxRedisRetries}=3</code> + <code>${redisRetryBackoffMs}=10ms</code> 在网络抖动场景下整批重试成功率 &gt; 99%。</p>
+<h3 id="3-4-fail-open-读场景">3.4 fail-open（读场景）</h3>
+<pre><code>try {
+    DeviceValue v = repo.hget(key, field);
+    return toResp(v);
+} catch (${ExceptionType} e) {
+    if (e.getCode() == 50301) {
+        log.warn(&quot;query fail-open, key={}&quot;, key);
+        PerfCounter.setMeterCount(&quot;${metricPrefix}.service.query.fail_open&quot;, 1);
+        return defaultResp();  // 返回默认未命中
+    }
+    throw e;
+}</code></pre>
+<p><strong>铁律</strong>：</p>
+<ul><li>fail-open 只用在"<strong>读 + 业务允许默认值</strong>"场景（如查不到信任度返回未信任）</li><li><strong>写操作</strong>：不能 fail-open，必须抛错让上层重试或人工介入</li><li><strong>强一致读</strong>：不能 fail-open</li></ul>
+<h3 id="3-5-partial-error-检测">3.5 partial error 检测</h3>
+<pre><code>static void throwIfPipelineHasPartialErrors(List&lt;Object&gt; results) {
+    int errors = 0;
+    for (Object r : results) {
+        if (r instanceof JedisDataException) {
+            errors++;
+        }
+    }
+    if (errors &gt; 0) {
+        PerfCounter.setMeterCount(&quot;${metricPrefix}.redis.pipeline.partial_error&quot;, errors);
+        throw new JedisException(&quot;Pipeline partial errors: &quot; + errors);
+    }
+}</code></pre>
+<p>partial error 通常是单条命令服务端报错（如 OOM），与整批连接级失败（JedisConnectionException）区分。</p>
+<hr>
+<h2 id="4-配置项">4. 配置项</h2>
+<table><thead><tr><th>key</th><th>默认</th><th>说明</th></tr></thead><tbody><tr><td><code>redis.${configPrefix}.host</code></td><td>由 maven profile 注入</td><td><code>host:port</code> 明文形式</td></tr><tr><td><code>redis.${configPrefix}.password</code></td><td>AES 加密</td><td>由 AESUtils 解密，绝不明文</td></tr><tr><td><code>redis.${configPrefix}.key.prefix</code></td><td>由使用方提供</td><td>业务 key 前缀，如 <code>${redisKeyPrefix}</code></td></tr><tr><td><code>${redisMaxTotal}</code></td><td>由 实测 32-64</td><td>连接池最大连接数</td></tr></tbody></table>
+<hr>
+<h2 id="5-监控与日志">5. 监控与日志</h2>
+<p>必备 PerfCounter 指标：</p>
+<table><thead><tr><th>指标</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td><code>${metricPrefix}.redis.{op}.all</code></td><td>timer</td><td>单次 op 耗时（HMGET / pipeline.flush）</td></tr><tr><td><code>${metricPrefix}.redis.{op}.failed</code></td><td>meter</td><td>单次 op 失败数</td></tr><tr><td><code>${metricPrefix}.redis.pipeline.retry</code></td><td>meter</td><td>重试次数</td></tr><tr><td><code>${metricPrefix}.redis.pipeline.exhausted</code></td><td>meter</td><td>重试耗尽</td></tr><tr><td><code>${metricPrefix}.redis.pipeline.partial_error</code></td><td>meter</td><td>单条命令错误</td></tr><tr><td><code>${metricPrefix}.service.{method}.fail_open</code></td><td>meter</td><td>fail-open 触发</td></tr></tbody></table>
+<hr>
+<h2 id="6-常见踩坑">6. 常见踩坑</h2>
+<h3 id="6-1-写操作-fail-open">6.1 🔴 写操作 fail-open</h3>
+<p>后果：脏数据 / 业务一致性破坏。 正确：写只重试 + 抛错，绝不 fail-open。</p>
+<h3 id="6-2-pipeline-内单条命令报错导致整批失败">6.2 🔴 pipeline 内单条命令报错导致整批失败</h3>
+<p>现象：服务端 OOM，部分 hset 成功部分失败，业务以为整批失败重试，导致重复写。 正确：用 <code>syncAndReturnAll()</code> + 显式 partial error 检测（§3.5）。</p>
+<h3 id="6-3-connection-pool-配置不当">6.3 🟠 connection pool 配置不当</h3>
+<ul><li>maxTotal 太小：高峰期阻塞</li><li>maxIdle 远小于 maxTotal：频繁创建销毁连接</li><li>没设 <code>testOnBorrow</code>：拿到死连接报错才发现</li></ul>
+<p>正确：参考 实测值，maxTotal 32-64，maxIdle 同 maxTotal，开 <code>testOnBorrow</code>。</p>
+<h3 id="6-4-海外-region-没-Redis">6.4 🟠 海外 region 没 Redis</h3>
+<p>某些 region 部署时 Redis Bean 可能为 null（如纯查询服务 + 海外只读模式）。 正确：调用方加 <code>if (jedis != null)</code> 守卫，或在 BeanConfiguration 用条件 Bean。</p>
+<h3 id="6-5-用-Jedis-单实例-非-JedisPooled">6.5 🟢 用 <code>Jedis</code> 单实例（非 JedisPooled）</h3>
+<p>后果：高并发抢锁，吞吐降一个量级。 正确：永远用 <code>JedisPooled</code>。</p>
+<h3 id="6-6-大-key-没监控">6.6 🟢 大 key 没监控</h3>
+<p>后果：单个 hash &gt; 10k field 时 hgetall 卡线程池。 正确：业务侧设计阶段就考虑分桶 / 阈值 + HLEN 提前预警。</p>
+<hr>
+<h2 id="7-边界">7. 边界</h2>
+<ul><li><strong>AES 解密</strong>：见 <a href="springboot.md">springboot.md</a> §3.2 + maven filtering 占位符</li><li><strong>多 region 走 maven profile</strong>：<a href="springboot.md">springboot.md</a> §6.5</li><li><strong>Flink 窗口算子内的 Redis 用法</strong>：<a href="flink.md">flink.md</a> §3.4</li></ul>
+<hr>
+<blockquote><p>引用约束见 <a href="../CONSTRAINTS.md">../CONSTRAINTS.md</a>。</p></blockquote></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

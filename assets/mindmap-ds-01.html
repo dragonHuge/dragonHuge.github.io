@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>第七章-查找 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>第七章-查找</b><small>幕布导图 · 317 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "第七章-查找", "data": {"id": "mvirtual-root", "topic": "<b>第七章-查找<\/b>", "expanded": true, "children": [{"id": "mpd45j8W0kY", "topic": "<b>一、基本概念<\/b>", "expanded": false, "children": [{"id": "mQyMeIHqvaz", "topic": "<b>1、定义：<\/b><br><img class=\"mm-img\" src=\"mm-82eaa1820f70e0.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">查找表并不是一种新的数据结构，只是将查找的数据集合称为查找表。\n(<b>由同一类型的数据元素组成<\/b>)\n\n<b>关键字<\/b>：数据元素中<b>唯一标识<\/b>该元素的某个数据项的值。<\/span>", "expanded": true}, {"id": "mOi9cdUh8tM", "topic": "<b>2、对查找表的常见操作：查找、插入/删除<\/b><br><img class=\"mm-img\" src=\"mm-74cb413d795a90.jpg\" style=\"width:260px;height:125px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>静态查找表：只查找，不删除/插入。\n动态查找表：查找+删除+插入。<\/b><\/span>", "expanded": true}, {"id": "msJtOBJXxiQ", "topic": "<b>3、查找算法的评价指标(<\/b><b><mark>ASL-平均查找长度)<\/mark><\/b><b>：<\/b><br><img class=\"mm-img\" src=\"mm-74a73366ee46ff.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-3c7057fe22ef26.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>平均查找长度：<\/b>所有查找过程中进行<b>关键字比较次数的平均值<\/b>。\n\n并且ASL的数量级反映了查找算法的时间复杂度(<b>ASL是衡量查找算法效率的最主要指标<\/b>)。\n通常会考虑查找成功/查找失败 两种情况的ASL。<\/span>", "expanded": true, "children": [{"id": "m8rpc7LslZc", "topic": "<b>查找长度：<\/b>在查找的过程中，<span style=\"color:#1d4ed8\"><b><span>对比关键字的次数<\/span><\/b>。", "expanded": true}, {"id": "myoHS8Xjrsz", "topic": "<b><mark>ASL = ∑ Pi * Ci<\/mark><\/b><span class=\"mm-note\"><b>Pi<\/b>：<b>查找每个元素的概率<\/b>。\n<b>Ci<\/b>：找到<b>第i个元素所需进行的比较次数<\/b>。<\/span>", "expanded": true}]}, {"id": "mmLQ03PZdSO", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-3a756f1376c9d7.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mt9Y1Eh6x55", "topic": "<b>二、顺序查找+折半查找<\/b>", "expanded": false, "children": [{"id": "mdLfGbeG44q", "topic": "<b>一、顺序查找<\/b><span class=\"mm-note\">又称<b>线性查找<\/b>。\n对于顺序表和链表都适用。<\/span>", "expanded": false, "children": [{"id": "mIbHzOm129Z", "topic": "<b>1、算法思想：<\/b><br><img class=\"mm-img\" src=\"mm-1e0e3b67517368.jpg\" style=\"width:260px;height:186px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">简简单单顺序(或倒序)查找呗。<\/span>", "expanded": true}, {"id": "m3gSvfH47hx", "topic": "<b>2、顺序查找的实现<\/b>", "expanded": true, "children": [{"id": "mOHSkWc3Eh5", "topic": "<b>1、普通版：<\/b><br><img class=\"mm-img\" src=\"mm-dca628b593693e.jpg\" style=\"width:260px;height:158px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是数组啦。<\/span>", "expanded": true}, {"id": "mkXzL99aGNs", "topic": "<b>2、进阶版(<\/b><span style=\"color:#0e7a52\"><b><span>哨兵<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-a790e2478f0b7c.jpg\" style=\"width:260px;height:167px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是<b>将要查找的元素放在下标为0的位置<\/b>，作为<b>哨兵<\/b>。\n查找时：<b>从后往前进行查找<\/b>。因此当查到下标为0的元素时，就停止了(毕竟那个地方放的它自己)。\n\n优点就是：效率提高一点，因为从后向前遍历，<b>无需判断是否越界，避免掉了很多不必要的判断语句<\/b>。<\/span>", "expanded": true}]}, {"id": "m2oXBXLtzAf", "topic": "<b>3、查找效率分析：<\/b><b><mark>O(n)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-f4bfa50099982d.jpg\" style=\"width:260px;height:180px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mBuPnk96ijT", "topic": "<b>查找<\/b><span style=\"color:#b45309\"><b><span>成功<\/span><\/b><b>ASL：<\/b><b><mark>(n+1)/2<\/mark><\/b><span class=\"mm-note\"><b>查找成功<\/b>：假设从前向后查找，且查找效率都相同，如果第n次找到该元素，那么第一个元素对比1次，第2个对比2次......第n个对比n次，<b>依次累加后同乘1/n(每个元素的查找概率都相同，为1/n)<\/b>，就得到了平均查找长度。<\/span>", "expanded": true}, {"id": "mmtpSx50eHP", "topic": "<b>查找<\/b><span style=\"color:#b45309\"><b><span>失<\/span><\/b><b>败ASL：<\/b><b><mark>n+1<\/mark><\/b><span class=\"mm-note\"><b>查找失败：<\/b>那么说明表中无该元素，而<b>表中有n+1个元素<\/b>(此时有n个元素，但是<b>哨兵占一个位置<\/b>，哨兵也要和自己比较一次，程序才会停下来呀)，因此此时的ASL就是n+1。<\/span>", "expanded": true}]}, {"id": "mqWcFG3aVYZ", "topic": "<b>4、顺序查找的优化<\/b>", "expanded": true, "children": [{"id": "mrRvB4PW35F", "topic": "<b>1、<\/b><span style=\"color:#1d4ed8\"><b><span>有序表<\/span><\/b><b>的优化：<\/b><br><img class=\"mm-img\" src=\"mm-45421a60ad43c5.jpg\" style=\"width:260px;height:163px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>查找成功<\/b>：ASL与一般线性表的顺序查找一样。\n<b>查找失败<\/b>：那么查找指针就走到了我们<b>虚构的失败结点<\/b>中，而这样子的<b>失败节点一共有n+1个。\n<\/b>\n<b>失败节点<\/b>：描述的是<b>不在表中的数据元素的那些集合<\/b>，具体看上图中的<b>矩形结点<\/b>。\n\n<b>查找失败后的ASL计算：\n<\/b>        因为如果查找失败，那么就是说<b>：在n+1个失败节点中查找   <\/b>且<b>   没有找到。\n<\/b>        因此其<b>查找数据元素总共有n+1个失败节点，因此分母就是n+1。\n<\/b>        且：<b>最后两个失败节点，均只需要对比n次，因此分子上加了两个n，而不是一个n一个n+1。<\/b><\/span>", "expanded": true, "children": [{"id": "mJXyMlgZWJ8", "topic": "<b>查找<\/b><span style=\"color:#b45309\"><b><span>失败<\/span><\/b><b>ASL：<\/b><b><mark>n/2 + n/(n+1)<\/mark><\/b><mark>  <\/mark>—— 关键：<span style=\"color:#d92d20\"><b><span>n+1个失败结点中查找<\/span><\/b><b>，最后两个结点均只需要对比n次<\/b><span class=\"mm-note\"><b>查找失败<\/b>：那么查找指针就走到了我们<b>虚构的失败结点<\/b>中，而这样子的<b>失败节点一共有n+1个。\n<\/b>\n<b>失败节点<\/b>：描述的是<b>不在表中的数据元素的那些集合<\/b>，具体看上图中的<b>矩形结点<\/b>。\n\n<b>查找失败后的ASL计算：\n<\/b>        因为如果查找失败，那么就是说<b>：在n+1个失败节点中查找   <\/b>且<b>   没有找到。\n<\/b>        因此其<b>查找数据元素总共有n+1个失败节点，因此分母就是n+1。\n<\/b>        且：<b>最后两个失败节点，均只需要对比n次(<\/b>n个真实元素<b>)，因此分子上加了两个n，而不是一个n一个n+1。<\/b><\/span>", "expanded": true}, {"id": "m8LyZdUq0D1", "topic": "<b>查找<\/b><span style=\"color:#b45309\"><b><span>成功<\/span><\/b><b>ASL：<\/b>与顺序查找一样，是<span style=\"color:#1d4ed8\"><b><span>(n+1)/2<\/span><\/b>", "expanded": true}, {"id": "mRsx1cZly0B", "topic": "<b>根据<\/b><b><mark>查找判定树<\/mark><\/b><b>分析ASL：<\/b><br><img class=\"mm-img\" src=\"mm-101e711e51bbfb.jpg\" style=\"width:260px;height:191px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是画出所有的<b>n+1个失败节点<\/b>。<\/span>", "expanded": true, "children": [{"id": "mEXqghcW9y8", "topic": "<b>失败节点<\/b>的查找长度：其<span style=\"color:#1d4ed8\"><b><span>父结点所在的层数<\/span><\/b>。<span class=\"mm-note\">也就是说，<b>查找长度是与真实结点的比较次数<\/b>。<\/span>", "expanded": true}, {"id": "mYzPKTD9WKT", "topic": "<b>成功节点<\/b>的查找长度：其<span style=\"color:#1d4ed8\"><b><span>自身所在的层数<\/span><\/b>。", "expanded": true}]}]}, {"id": "mPoH98UWheM", "topic": "<b>2、<\/b><span style=\"color:#b45309\"><b><span>被查概率不相等<\/span><\/b><b>时的优化：<\/b><b>将<\/b><span style=\"color:#1d4ed8\"><b><span>被查概率大的放在靠前的位置<\/span><\/b><br><img class=\"mm-img\" src=\"mm-05b5a56f4b7a41.jpg\" style=\"width:260px;height:162px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">当查找的概率不相等时，我们倾向于经过  <b>排序 <\/b>  <b>将被查概率大的放在靠前的位置<\/b>。<\/span>", "expanded": true}]}, {"id": "mFlGnBOK9qS", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-e9bc9a87250c01.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m6JXRrFP1NJ", "topic": "<b>二、折半查找<\/b><span class=\"mm-note\">又称：二分查找。\n适用于：<b>有序的顺序表<\/b>。算法细节去看Typora二分算法的笔记。<\/span>", "expanded": true, "children": [{"id": "mAEJ4iMyyXH", "topic": "<b>1、代码实现：<\/b><br><img class=\"mm-img\" src=\"mm-5c6105ab228df9.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">二分查找实现时，注意<b>两个因素<\/b>：\n          1、元素是<b>升序 or 降序<\/b>排列\n          2、二分查找时的<b>区间遵循什么规定<\/b>：左闭右开 or 左闭右闭 or 左开右开。\n\n很明显在上边的实现代码中，遵循的是：\n         <b>升序 且 左闭右闭区间<\/b> 。\n并且<b>取中间位置mid<\/b>的时候，mid = （left+right）/2 ==&gt; <b>向下取整<\/b>。(除法默认向下取整)<\/span>", "expanded": true}, {"id": "mSl13OuSa9K", "topic": "<b>2、折半查找时间复杂度：<\/b><b><mark>O(logn)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-5f78e817d89b2c.jpg\" style=\"width:260px;height:177px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">依旧如图：\n圆形结点：记录的关键字值。共有<b>n个<\/b>。\n方形结点：查找不成功的情况。共有<b>n+1个<\/b>。\n因此：查找到给定值的<b>比较次数最多不会超过树的高度<\/b>。\n因此查找效率为：<b>O(logn)\n<\/b><\/span>", "expanded": true}, {"id": "m3M7lufyLp9", "topic": "<b>3、折半查找平均查找长度(<\/b><b><mark>ASL<\/mark><\/b><b>)的计算<\/b><br><img class=\"mm-img\" src=\"mm-d6606c3f1d566f.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "m9oBUk9ScxW", "topic": "<b>1、查找<\/b><span style=\"color:#b45309\"><b><span>成功<\/span><\/b><b>：<\/b>计算<span style=\"color:#1d4ed8\"><b><span>圆形结点<\/span><\/b><b>(成功结点)的ASL <\/b>", "expanded": true}, {"id": "mqwoyqLai3T", "topic": "<b>2、查找<\/b><span style=\"color:#b45309\"><b><span>失败<\/span><\/b><b>：<\/b>计算<span style=\"color:#1d4ed8\"><b><span>方形结点上一层<\/span><\/b><b>(圆形节点)<\/b><b>的ASL<\/b>。<span class=\"mm-note\">即：<b>失败结点的个数确实是方形结点的个数，                                                \n         但是失败节点的比较次数却是对应方形结点上一层圆形结点的比较次数(也就是树高)。<\/b><\/span>", "expanded": true}, {"id": "mqNm08aYxfy", "topic": "<b>因此，每个元素的平均查找长度为：<\/b><b><mark>log(n+1)<\/mark><\/b><span class=\"mm-note\">原因：<b>查找判定树的树高为：log(n+1)<\/b><\/span>", "expanded": true}]}, {"id": "mOr2TqKENZl", "topic": "<b>4、折半查找判定树的构造：<\/b>", "expanded": true, "children": [{"id": "m3XEnHeQt8y", "topic": "<b>1、结论：<\/b><b><mark>右子树结点数 - 左子树结点数 = 0或1<\/mark><\/b><b>(原因：<\/b><span style=\"color:#d92d20\"><b><span>取mid时向下取整<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-452dcbe2bf1d37.jpg\" style=\"width:260px;height:174px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-3463fcd4e50d33.jpg\" style=\"width:260px;height:62px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因此<b>如果mid是向上取整<\/b>，那么对应的<b>二叉判定树的构造方法就要有所调整<\/b>了。\n           即：左子树结点数 - 右子树结点数 = 0 或 1<\/span>", "expanded": true}, {"id": "mArh7CmEdtr", "topic": "<b>2、构造练习：画出顺序表的折半查找判定树<\/b><br><img class=\"mm-img\" src=\"mm-6b5b376bd4ebb1.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">上图中，题目对于mid是向下取整的，因此在构造判定树时，始终遵循：\n<b>                    右子树结点数 - 左子树结点数 = 0或1。\n<\/b>因此可以看到，在上图中<b>，编号顺序就是构造顺序。<\/b><\/span>", "expanded": true, "children": [{"id": "mdW2DBuLlYg", "topic": "构造过程：<br><img class=\"mm-img\" src=\"mm-798a4e631fbba0.jpg\" style=\"width:260px;height:113px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-90741d989ea8fd.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d4e3bc4e8856e2.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-a562671a08863e.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-87f2c934820dcd.jpg\" style=\"width:260px;height:155px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-0008f9ed6b31da.jpg\" style=\"width:260px;height:153px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mSx2OcfBO3F", "topic": "<b>3、判定树结点关键字<\/b><span style=\"color:#b45309\"><b><span>满足二叉排序树<\/span><\/b><b>的定义：<\/b><br><img class=\"mm-img\" src=\"mm-13e4bda789947f.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mE0tVtHjhxg", "topic": "<b>5、折半查找的<\/b><span style=\"color:#1d4ed8\"><b><span>判定树<\/span><\/b><b>一定是<\/b><b><mark>平衡二叉树(AVL)<\/mark><\/b><span style=\"color:#1d4ed8\"><b><span>。<\/span><\/b><br><img class=\"mm-img\" src=\"mm-0b5cc1ae973dc4.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">并且<b>只有最下边一层不满。\n<\/b>并且这里的<b>树高判定是不包含失败节点<\/b>的，<b>如果包含失败节点<\/b>来计算树高，那应该是<b>h+1<\/b>。<\/span>", "expanded": true, "children": [{"id": "mzsPxKCg1ZK", "topic": "<b>即：也一定是<\/b><span style=\"color:#1d4ed8\"><b><span>二叉排序树(BST)<\/span><\/b><span class=\"mm-note\">符合：<b>左小右大<\/b><\/span>", "expanded": true}]}, {"id": "mU6FMChSIUZ", "topic": "<b>6、<\/b>判定树<span style=\"color:#1d4ed8\"><b><span>树高与完全二叉树的树高一样<\/span><\/b>。", "expanded": true}, {"id": "mKz3hXF3gJY", "topic": "<b>7、折半查找的经典题目：<\/b>", "expanded": true, "children": [{"id": "mfJ0XOAHEqq", "topic": "<span style=\"color:#d92d20\"><b><span>❤ <\/span><\/b><b>1、折半查找找到给定值的<\/b><span style=\"color:#0e7a52\"><b><span>比较次数，<\/span><\/b><b>最多<\/b><span style=\"color:#0e7a52\"><b><span>不会超过判定树的高度。<\/span><\/b>", "expanded": true}, {"id": "mjM0f3HShvD", "topic": "<span style=\"color:#d92d20\"><b><span>❤ <\/span><\/b><b>2、在一个顺序表中，折半查找<\/b><span style=\"color:#1d4ed8\"><b><span>找一个不存在的元素<\/span><\/b><b>，比较的次数<\/b><span style=\"color:#b45309\"><b><span>至多是？至少是？<\/span><\/b><br><img class=\"mm-img\" src=\"mm-a4dfc1f719264e.jpg\" style=\"width:260px;height:29px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-89cc4241650e9e.jpg\" style=\"width:260px;height:82px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">见课后题12题。选(A、B)。<\/span>", "expanded": true, "children": [{"id": "m6wwxPTXvA6", "topic": "<b>1、画<\/b><span style=\"color:#1d4ed8\"><b><span>判定树<\/span><\/b><b>：<\/b><span style=\"color:#b45309\"><b><span>最短的分支<\/span><\/b>就是<span style=\"color:#b45309\"><b><span>至少<\/span><\/b>的比较次数；<span style=\"color:#b45309\"><b><span>最长的分支<\/span><\/b>就是<span style=\"color:#b45309\"><b><span>至多<\/span><\/b>的比较次数。", "expanded": true}, {"id": "m0NPw8xmF2x", "topic": "<b>2、判断<\/b><span style=\"color:#1d4ed8\"><b><span>判定树是否为满树<\/span><\/b>：", "expanded": true, "children": [{"id": "mnGhVaVA1CF", "topic": "<b>是<\/b>满树：<b>至少 = 至多<\/b>", "expanded": true}, {"id": "mLuqDRdkwnA", "topic": "<b>不是<\/b>满树：<b>至多 = 树高；至少 = 树高-1<\/b>。", "expanded": true}]}, {"id": "mGKm9VXfwTn", "topic": "<b>树高：<\/b><b><mark>log(n+1)—<\/mark><\/b> <span style=\"color:#d92d20\"><b><span>向上取整<\/span><\/b><span class=\"mm-note\">即：<b>最多的比较次数。<\/b><\/span>", "expanded": true}]}, {"id": "mnGN8piX3n6", "topic": "<b>3、<\/b><span style=\"color:#d92d20\"><b><span>❤<\/span><\/b><span style=\"color:#d92d20\"><span> <\/span><span style=\"color:#0e7a52\"><b><span>计算折半查找的ASL<\/span><\/b><b>：查找成功 &amp;&amp; 查找失败<\/b><br><img class=\"mm-img\" src=\"mm-522b287efa491d.jpg\" style=\"width:260px;height:32px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-121c26d42c5ebd.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">一般方法：<b>画出判定树，计算即可。\n<\/b>但如果只需要计算查找成功的ASL，那就<b>根据判定树规律计算即可<\/b>。\n<b>ASL： \n      1、查找成功：<\/b>计算<b>圆形结点(成功结点)的ASL。<\/b>\n     <b> 2、查找失败：<\/b>计算<b>方形结点上一层(圆形节点)的ASL<\/b>。\n                                       即：<b>失败结点的个数确实是方形结点的个数，\n                                                但是失败节点的比较次数却是对应方形结点上一层圆形结点的比较次数(也就是树高)。<\/b>​<\/span>", "expanded": true}]}, {"id": "mWToG6uVj23", "topic": "<span style=\"color:#d92d20\"><b><span>❤  <\/span><\/b><b>为何判定树不一定是完全二叉树？<\/b><span class=\"mm-note\">答：这跟折半查找的具体实现有关(向上/向下取整)。\n 若 <b>向下取整<\/b>：那么在取mid时，就会偏左取，这样一来，留给右子树的结点就多了，导致右子树的树高大于等于左子树，这不符合完全二叉树的定义。\n 若 <b>向上取整<\/b>：那么在取mid时，就会偏右取，这样一来，留给左子树的结点就多了，导致左子树的树高大于等于右子树，此时是符合完全二叉树的定义的。<\/span>", "expanded": true}, {"id": "mkxHncKz8sW", "topic": "<b>知识点回顾：<\/b><br><img class=\"mm-img\" src=\"mm-c54e7bd4831f57.jpg\" style=\"width:260px;height:155px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mZL0iZwNlQf", "topic": "<b>拓展思考：<\/b>", "expanded": true, "children": [{"id": "mYRxvrIZzRF", "topic": "<b>1、折半查找速度一定比顺序查找更快吗？<\/b><br><img class=\"mm-img\" src=\"mm-69790c32e0895d.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">当然不是，一定快就太绝对了。\n正如上图，要找的元素7就在顺序表的第一个元素，啪的一下就找到了，很快啊~~<\/span>", "expanded": true}, {"id": "mxG0vOE7BM5", "topic": "<b>2、计算mid时向上取整，调整判定树的构造方法：<\/b><br><img class=\"mm-img\" src=\"mm-d0565eae4981ec.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f3e9b551511811.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "m38ZME2LLdg", "topic": "<b>三、分块查找<\/b><span class=\"mm-note\">又称：<b>索引顺序查找。\n<\/b>因为：第一次查找是在<b>索引表<\/b>中查找，第二次查找在对应的<b>块中顺序查找<\/b>。<\/span>", "expanded": false, "children": [{"id": "mepR9MnqXad", "topic": "<b>1、定义：吸取了顺序查找和折半查找各自的优点。<\/b><span class=\"mm-note\">既有动态结构，又适用于快速查找。\n就是<b>将一个顺序表，分成不同的块<\/b>，<b>同一块中的元素是在同一个大小范围内<\/b>的元素。<\/span>", "expanded": true}, {"id": "mw5Z0amaXCu", "topic": "<b>2、算法思想：(<\/b><span style=\"color:#0e7a52\"><b><span>索引表<\/span><\/b><b>)<\/b><br><img class=\"mm-img\" src=\"mm-d28dad92b4b397.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">算法思想：\n       将查找表分为<b>若干子块<\/b>，<b>块内的元素<\/b>可以<b>无序<\/b>，但是<b>块间的元素是有序<\/b>的。\n       且将这些块组织起来，建立一个<b>索引表(按关键字有序排列)。\n<\/b><\/span>", "expanded": true, "children": [{"id": "mTOrTvqsq94", "topic": "<b>索引表<\/b>：会<b>保存<\/b><span style=\"color:#1d4ed8\"><b><span>每个分块的最大关键字<\/span><\/b> 和 <span style=\"color:#1d4ed8\"><b><span>块中元素的存储区间(<\/span><\/b><b><mark>low / high<\/mark><\/b><span style=\"color:#1d4ed8\"><b><span>)<\/span><\/b>。", "expanded": true}, {"id": "mCtMjJmVFGz", "topic": "特点：<span style=\"color:#1d4ed8\"><b><span>块内元素无序，块间元素有序<\/span><\/b><span class=\"mm-note\">即：索引表<\/span>", "expanded": true}]}, {"id": "mrhmMZFo1bv", "topic": "<b>3、分块查找过程：<\/b><span class=\"mm-note\">分为两步：\n<b>           1、在索引表中确定待查记录所在的块(顺序/折半)\n           2、在块内顺序查找\n                   注：<\/b>当然并不是在块内一定要用顺序查找，也可以用折半之类的。<\/span>", "expanded": true, "children": [{"id": "mvduFArcAej", "topic": "1、用<span style=\"color:#b45309\"><b><span>折半查找<\/span><\/b><b>查索引表(在<\/b><b><mark>low所指的分块<\/mark><\/b><b>中查找)<\/b><br><img class=\"mm-img\" src=\"mm-d8a768adf15355.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-b1598f04adac46.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为是在<b>索引表中折半查找<\/b>，而索引表中存储的是某个分块中的最大元素和分块区间，\n因此有两种情况：\n<b>1、直接在索引表中找到该目标元素。\n<\/b>            即：索引表中包含目标元素。\n<b>2、在索引表中没有找到目标元素，要去块内元素继续寻找。<\/b>\n            即：若索引表中不包含目标元素，\n            那么<b>查找索引表最终停在 low &gt; high,此时要在low所指的分块中查找。\n\n分析：<\/b>\n           因为此时折半查找取mid时， 是<b>默认向下取整<\/b>的，因此在low &gt; high这一      \n           步之前，肯定是low=high的，且此时取mid的话，也是<b>mid=low=high<\/b>。那么此 \n           时比较查找元素(记作<b>key<\/b>)和索引表元素，如果：\n\n           1、<b>key&gt;mid<\/b> ：那么就说明此时<b>要查找元素依旧是在右半区间<\/b>，即：<b>此时mid所指的\n                                           下一个块内<\/b>。因此<b>low = mid+1<\/b>。且此时加1后 low&gt;high 了，是最后一\n                                            次查找，因此是在low所在的区间。\n           2、<b>key&lt; mid<\/b>：那么就说明此时<b>要查找元素依旧是在左半区间，<\/b>因此<b>high = mid - 1<\/b>。\n                                            那么此时就low&gt;high ,又因为<b>索引表中元素是每一个块的最大值，因此\n                                            就说明key是小于当前这个块中的最大值的，那key是可能存在于这个\n                                            块中的，<\/b>因此 就会在当前mid指向的块中寻找元素，即：也是low所在\n                                            的区间。\n​\n综上两种情况，在low&gt;high时，就在low所指向的块中查找该元素。\n当然喽~~查找失败的例子也是很常见的喽~如上图2.<\/span>", "expanded": true}]}, {"id": "mL9hegLmVQQ", "topic": "<b>4、查找效率分析(ASL)：<\/b><b><mark>ASL = Li + Ls<\/mark><\/b><span class=\"mm-note\"><b>分块查找的平均查找长度 = 索引查找平均长度(Li) + 块内查找平均长度(Ls)。\n<\/b>就是将索引表和块内的查找长度分别计算出来，相加即可。\n但是因为一般分块是不均匀的，所以计算这个会很复杂，下边我们会讨论一种特殊情况的查找效率：均匀分块<\/span>", "expanded": true, "children": [{"id": "mTbP4PYBdXc", "topic": "若<b>顺序查找<\/b>，则有：<span style=\"color:#1d4ed8\"><b><span>Li = (b+1)/2 ；Ls = (s+1)/2<\/span><\/b>", "expanded": true}]}, {"id": "mq19Rkvvviv", "topic": "<b>5、<\/b><span style=\"color:#1d4ed8\"><b><span>均匀分块的ASL<\/span><\/b><b>计算：<\/b><span class=\"mm-note\">就是<b>将长度为n的查找表均匀地分为b块<\/b>，<b>每块有s个记录<\/b>。即：<b>n = s*b<\/b><\/span>", "expanded": true, "children": [{"id": "mjyZrKbYecC", "topic": "<b>1、<\/b><span style=\"color:#0e7a52\"><b><span>顺序查找<\/span><\/b><b>索引表：<\/b><br><img class=\"mm-img\" src=\"mm-a946a33ff37d6b.jpg\" style=\"width:260px;height:161px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">那么根据ASL = Li + Ls 和 n = s*b 可以得到<b>ASL关于s的一个方程<\/b>。\n方程求导之后，可以得到：\n           在 <b>s=√n<\/b> 时，ASL取得<b>极小值<\/b>。且此时<b>ASL = √n + 1。\n<\/b><\/span>", "expanded": true, "children": [{"id": "mevH2yyOh2c", "topic": "结论：<b>将长度为n的查找表分为<\/b><b><mark>√n块<\/mark><\/b><b>，每一块有<\/b><b><mark>√n个记录<\/mark><\/b><b>，所得到的的ASL为最小值(<\/b><b><mark>√n+1<\/mark><\/b><b>)。<\/b><span class=\"mm-note\">例：上图中n=10000时，分为100块，每一块100个记录，ASL = 101。<\/span>", "expanded": true}]}, {"id": "mZMY7AiWCWM", "topic": "<b>2、折半查找索引表：<\/b><br><img class=\"mm-img\" src=\"mm-cd906678d5fa5a.jpg\" style=\"width:260px;height:166px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这个不太重要。<\/span>", "expanded": true}]}, {"id": "mkckn6ONbDe", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-1fb8adef6caa58.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mVd24Kn7jlc", "topic": "<b>拓展思考：<\/b>", "expanded": true, "children": [{"id": "mo1dA2K5ytQ", "topic": "<b>若查找表是<\/b><span style=\"color:#1d4ed8\"><b><span>动态查找表<\/span><\/b><b>，用：<\/b><span style=\"color:#0e7a52\"><b><span>链式存储<\/span><\/b><br><img class=\"mm-img\" src=\"mm-636d0432fabbf2.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-0dcc3914c184fe.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">即：如果一个查找表有插入、删除的需求，那么顺序表的实现方式是不可行的，因为每一次删除、插入元素，都需要重新构建索引表，很不方便。\n那么就用：链式存储喽~<\/span>", "expanded": true}]}]}]}, {"id": "mdU34OwaBZH", "topic": "<b>三、树型查找<\/b>", "expanded": true, "children": [{"id": "mXrbU5rLu82", "topic": "<b>一、二叉排序树(BST)<\/b><span class=\"mm-note\">也称：<b>二叉查找树 。\n<\/b>构建BST的目的不是为了排序，而是为了提高查找、插入、删除等操作的速度。<\/span>", "expanded": false, "children": [{"id": "mAwzPfg1R9f", "topic": "<b>1、定义：<\/b><b><mark>左小右大<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-7211cb95c7c113.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">性质：<b>左子树结点值 &lt; 根结点值 &lt; 右子树结点值 。\n<\/b>因此中序遍历BST，就能得到一个递增的有序序列。<\/span>", "expanded": true}, {"id": "m1D53ftptBO", "topic": "<b>2、BST的查找：<\/b><span class=\"mm-note\">查找很简单，利用左小右大的特性。\n<b>算法思想：（递归过程）<\/b>\n        从根节点开始逐层向下比较，若BST非空，那就比较定值与当前根节点的大小：\n             <b> 相等：<\/b>查找成功；\n            <b>  不相等<\/b>：若小于根节点的关键字，则去根节点的左子树继续寻找；反之去根节点的右子树寻找。<\/span>", "expanded": true, "children": [{"id": "mNm1wnqHK8u", "topic": "<b>1、非递归：<\/b><br><img class=\"mm-img\" src=\"mm-12ac44d0c81929.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mMLZC34cYib", "topic": "<b>2、递归：空间复杂度较高<\/b><br><img class=\"mm-img\" src=\"mm-5b9c24b2b7de80.jpg\" style=\"width:260px;height:137px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">递归时的空间复杂度较高，因为函数执行时<b>递归调用栈<\/b>。<\/span>", "expanded": true}]}, {"id": "m0Zmm2Smkna", "topic": "<b>3、BST的插入：<\/b><br><img class=\"mm-img\" src=\"mm-6357070e0ab5fd.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>动态树表<\/b>，特点是树的结构通常不是一次生成的，而是在查找过程中，当树中不存在关键字值等于给定的节点值时再插入的。<\/span>", "expanded": true, "children": [{"id": "moBXGyQBCkZ", "topic": "<b>1、不能插入已经存在的关键字       <\/b>", "expanded": true}, {"id": "maWrjarRcjo", "topic": "<b>2、新插入的一定是叶子结点<\/b>", "expanded": true}]}, {"id": "mKDiwn1QEex", "topic": "<b>4、BST的构造：<\/b><span style=\"color:#1d4ed8\"><b><span>不同关键字序列可能得到同款BST、也可能得到不同款BST。<\/span><\/b><br><img class=\"mm-img\" src=\"mm-0f066454af1883.jpg\" style=\"width:260px;height:115px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-3c8821fe00f56e.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mha8Y1d8319", "topic": "<b>5、BST的删除：<\/b><span class=\"mm-note\">删除要<b>分三种情况来处理<\/b>。\n原则：<b>不破坏BST的性质<\/b>。<\/span>", "expanded": true, "children": [{"id": "ms4pb231p1T", "topic": "<b>1、删除结点(z)是<\/b><span style=\"color:#b45309\"><b><span>叶结点<\/span><\/b><b>：<\/b><span style=\"color:#1d4ed8\"><b><span>直接删除<\/span><\/b><br><img class=\"mm-img\" src=\"mm-2bbb26f3909c03.jpg\" style=\"width:260px;height:132px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">不会破坏BST的性质。<\/span>", "expanded": true}, {"id": "misFhcgQhEJ", "topic": "<b>2、删除结点(z)<\/b><span style=\"color:#b45309\"><b><span>只有一颗左子树 or 右子树<\/span><\/b><b>：直接<\/b><span style=\"color:#1d4ed8\"><b><span>让z的子树代替z<\/span><\/b><br><img class=\"mm-img\" src=\"mm-c3a8b6ec4f290b.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mkVDdnrpO2O", "topic": "<b>3、删除结点(z)<\/b><span style=\"color:#b45309\"><b><span>既有左子树，又有右子树<\/span><\/b><b>：<\/b>", "expanded": true, "children": [{"id": "mQrVyWvSpQm", "topic": "<b>方案一：找<\/b><span style=\"color:#1d4ed8\"><b><span>z的直接后继<\/span><\/b><b>来替代z<\/b><br><img class=\"mm-img\" src=\"mm-d0a6c6218d8664.jpg\" style=\"width:260px;height:126px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d2d62bbd639fc7.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">根据中序遍历的遍历结果而言。\n并且z的直接后继就是：<b>z的右子树中最左下的结点。\n<\/b>                                                     其是在<b>右子树中的最小值、一定没有左子树。<\/b><\/span>", "expanded": true}, {"id": "m4UlMJhR8V3", "topic": "<b>方案二<\/b>：<b>找<\/b><span style=\"color:#1d4ed8\"><b><span>z的直接前驱<\/span><\/b><b>来替代z<\/b><br><img class=\"mm-img\" src=\"mm-09eb6df30b03e8.jpg\" style=\"width:260px;height:131px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-1aaebecc322185.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">并且z的直接前驱就是：<b>z的左子树中最右下的结点。\n                                                     <\/b>其是在<b>左子树中的最大值、没有右子树。<\/b><\/span>", "expanded": true}]}, {"id": "mnaestGHc7r", "topic": "<b>4、查找效率分析：<\/b><span style=\"color:#0e7a52\"><b><span>取决于树的高度<\/span><\/b><br><img class=\"mm-img\" src=\"mm-e8512fbb75ed88.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mzFrv6tJOUN", "topic": "<b>最好<\/b>：<span style=\"color:#1d4ed8\"><b><span>O(logn)<\/span><\/b><span class=\"mm-note\">最好：平衡二叉树。<\/span>", "expanded": true}, {"id": "mfdbilOOOC7", "topic": "<b>最坏<\/b>：<span style=\"color:#1d4ed8\"><b><span>O(n)<\/span><\/b><span class=\"mm-note\">最坏：<b>倾斜的单支树<\/b>；<\/span>", "expanded": true}, {"id": "mFi63Fwk2Ou", "topic": "<b>平均复杂度：<\/b><b><mark>O(n)<\/mark><\/b>", "expanded": true}]}, {"id": "mg8DtcwiqD2", "topic": "<b>5、ASL的计算：<\/b>", "expanded": true, "children": [{"id": "mkVJRWO1K2l", "topic": "<b>1、查找成功：<\/b><br><img class=\"mm-img\" src=\"mm-8061b4256ddf76.jpg\" style=\"width:260px;height:113px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mwGJSpQSgIL", "topic": "<b>2、查找失败：<\/b><br><img class=\"mm-img\" src=\"mm-8da0e6ae7bd410.jpg\" style=\"width:260px;height:116px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">和上一节的折半查找类似：\n     <b>先加上查找失败结点(方块)，然后计算ASL即可。\n\n<\/b>需要注意的依旧是：\n     失败节点(方形结点)的查找次数依旧是其上一层成功结点(圆形节点)的查找次数。<\/span>", "expanded": true}]}, {"id": "mm5aQRyTWm3", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-55968715ce1830.jpg\" style=\"width:260px;height:163px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mfxyM9qibM8", "topic": "<b>二、平衡二叉树(AVL树)<\/b><span class=\"mm-note\">这个简称来自平衡二叉树的发明者。\nAVL是<b>BST的进阶版<\/b>，<b>新加了平衡特性<\/b>。<\/span>", "expanded": false, "children": [{"id": "mk5A8TMJLF3", "topic": "<b>1、定义：树上任一结点的<\/b><span style=\"color:#1d4ed8\"><b><span>左右子树高度之差不超过1<\/span><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-c43a68ac311e34.jpg\" style=\"width:260px;height:153px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">空树也是AVL。<\/span>", "expanded": true, "children": [{"id": "mewGP2jbdsX", "topic": "<b><mark>结点的平衡因子 =  左子树高度 - 右子树高度<\/mark><\/b><span class=\"mm-note\">AVL的平衡因子只可能是：<b>-1/0/1.<\/b><\/span>", "expanded": true}]}, {"id": "mGUIPtNlldX", "topic": "<b>2、AVL的插入：<\/b><br><img class=\"mm-img\" src=\"mm-5695f1440b0944.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-6d7a9cfc5f6a3a.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">AVL保证平衡的思想是：\n        当插入一个节点时，首先检查其插入路径上的结点是否因为此次操作导致了不平衡，\n        则先找到插入路径上，<b>距离插入节点最近的且平衡因子绝对值大于1的结点A<\/b>，再对以\n        A为根的子树，进行调整，使之重新达到平衡。\n\n在上述步骤中，以A为根的子树就是<b>最小不平衡子树<\/b>。<\/span>", "expanded": true, "children": [{"id": "mgNzzRMhw9v", "topic": "<b>每次调整的对象都是<\/b><b><mark>最小不平衡子树<\/mark><\/b><b>。<\/b><span class=\"mm-note\">这里一定注意。<\/span>", "expanded": true}]}, {"id": "mjp2qjCXRWH", "topic": "<b>3、调整最小不平衡树：<\/b><br><img class=\"mm-img\" src=\"mm-c59101899e39f9.jpg\" style=\"width:260px;height:102px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这里的<b>A是指最小不平衡子树的根节点<\/b>。\n一共有四种情况。\n并且在旋转调整时，紧紧抓住两个准则：\n                                                       <b>1、恢复平衡。\n                                                       2、保持二叉排序树(BST)的特性。\n<\/b>\n并且在调整时，一定要明确：<b>对哪个节点进行左旋右旋的操作。<\/b><\/span>", "expanded": false, "children": [{"id": "mMWgdruuaf6", "topic": "<b>BST的特性：<\/b><span style=\"color:#1d4ed8\"><b><span>左 &lt; 中 &lt; 右<\/span><\/b>", "expanded": true}, {"id": "mcgkrKoseqO", "topic": "<b>判断LL/RR/LR/RL的依据是：<\/b><span style=\"color:#1d4ed8\"><b><span>孙子相对于最小不平衡子树根节点的相对位置<\/span><\/b><b>。<\/b>", "expanded": true}, {"id": "mFbkzPtqLBT", "topic": "<span style=\"color:#d92d20\"><span>❤<\/span>  调整时，一定要<b>明确<\/b>：<span style=\"color:#d92d20\"><b><span>对哪个节点进行左旋右旋的操作<\/span><\/b><b>。<\/b><span class=\"mm-note\">这个问题在每一种类型下都有解释，向下看。<\/span>", "expanded": true, "children": [{"id": "mDvOd2gvHcx", "topic": "<b>LL： 对最小不平衡子树的<\/b> <b><mark>左子树的根节点<\/mark><\/b> <span style=\"color:#1d4ed8\"><b><span>右旋<\/span><\/b><span class=\"mm-note\">儿子旋转<\/span>", "expanded": true}, {"id": "mqQEzocYjcx", "topic": "<b>RR：对最小不平衡子树的<\/b> <b><mark>右子树的根节点<\/mark><\/b> <span style=\"color:#1d4ed8\"><b><span>左旋<\/span><\/b><span class=\"mm-note\">儿子旋转。<\/span>", "expanded": true}, {"id": "mQVvODCRqvD", "topic": "<b>RL：对最小不平衡子树的<\/b> <b><mark>右孩子左子树的根节点<\/mark><\/b> <b>进行<\/b> <span style=\"color:#1d4ed8\"><b><span>右旋+左旋<\/span><\/b><span class=\"mm-note\">孙子旋转。<\/span>", "expanded": true}, {"id": "ma6gxIaJK5M", "topic": "<b>LR：对最小不平衡子树的<\/b> <b><mark>左孩子右子树的根节点<\/mark><\/b> <b>进行<\/b> <span style=\"color:#1d4ed8\"><b><span>左旋+右旋<\/span><\/b><span class=\"mm-note\">孙子旋转。<\/span>", "expanded": true}]}, {"id": "m2lgsDoirsJ", "topic": "<b>1、LL(右单旋转)：<\/b><br><img class=\"mm-img\" src=\"mm-6089bb0d5afa0b.jpg\" style=\"width:260px;height:147px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">LL：在结点A的<b>左孩子的左子树上插入节点后<\/b>导致不平衡。\n此时以A为根的子树就是最小不平衡子树。\n<b>\n调整思路<\/b>：调整时一定要遵循BST的特性，在此题中，一定紧紧抓住各结点之间的关系：<b>BL&lt;B&lt;BR&lt;A&lt;AR。<\/b>然后根据这个特性来右旋。\n对A的左孩子B节点进行右旋操作。\n\n<b>调整步骤：<\/b>将<b>A的左孩子B右上旋作为新的根节点<\/b>，然后根据BST特性，将<b>A右下旋<\/b>作为B的右孩子，且将B的右孩子作为A的左孩子。<\/span>", "expanded": true}, {"id": "m24u1Hdjecu", "topic": "<b>2、RR(左单旋转)：<\/b><br><img class=\"mm-img\" src=\"mm-bc0995d94eb7e7.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">RR：在结点A的<b>右孩子的右子树上插入节点后<\/b>导致不平衡。\n此时以A为根的子树就是最小不平衡子树。\n<b>\n调整思路<\/b>：调整时一定要遵循BST的特性，在此题中，一定紧紧抓住各结点之间的关系：A<b>L&lt;A&lt;BL&lt;B&lt;BR。<\/b>然后根据这个特性来右旋。\n\n<b>调整步骤：<\/b>将<b>A的右孩子B左上旋作为新的根节点<\/b>，然后根据BST特性，将<b>A左下旋<\/b>作为B的左孩子，且将B的左孩子作为A的右孩子。<\/span>", "expanded": true}, {"id": "mEvAVVDwuwT", "topic": "<b>LL 与 RR 的代码思路：<\/b><br><img class=\"mm-img\" src=\"mm-3da1550b31ddb1.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">思路很简单。<\/span>", "expanded": true}, {"id": "mSc1ndKtAr6", "topic": "<b>3、LR(<\/b><span style=\"color:#1d4ed8\"><b><span>先左后右<\/span><\/b><b>双旋转)：<\/b><br><img class=\"mm-img\" src=\"mm-a3a10cf20ea1d5.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-34a561258a9e6a.jpg\" style=\"width:260px;height:107px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-89af0636e6ddc6.jpg\" style=\"width:260px;height:159px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">LR：在结点A的<b>左孩子的右子树上插入节点后<\/b>导致不平衡。\n                                   即：在CL或CR位置插入新节点。\n此时A的平衡因子由1增至2。\n<b>\n调整思路<\/b>：需要进行两次旋转操作，先左旋再右旋，且调整时一定要遵循BST的特性，在此题中，一定紧紧抓住各结点之间的关系：<b>BL&lt;B&lt;CL&lt;C&lt;CR&lt;A&lt;AR。<\/b>\n\n将<b>根节点A左孩子的右子树的根节点(C)<\/b>作为目标结点，进行调整操作。\n<b>调整步骤：\n                    第一次旋转：左旋C<\/b>\n                                 先将A结点的左孩子B  的右子树 的根节点C 左上旋提升到B的位置。\n                    <b>第二次旋转：右旋C\n<\/b>                                 再将C右上旋提升到A结点的位置。<\/span>", "expanded": true}, {"id": "mNZB4v2k8OT", "topic": "<b>4、RL(<\/b><span style=\"color:#1d4ed8\"><b><span>先右后左<\/span><\/b><b>双旋转)：<\/b><br><img class=\"mm-img\" src=\"mm-e772c9c5598071.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-7e9670a47c7d70.jpg\" style=\"width:260px;height:109px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-4b920a5c5bbcdf.jpg\" style=\"width:260px;height:164px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">RL：在结点A的<b>右孩子的左子树上插入节点后<\/b>导致不平衡。\n                                   即：在CL或CR位置插入新节点。\n此时A的平衡因子由1增至2。\n<b>\n调整思路<\/b>：需要进行两次旋转操作，先右旋再左旋，且调整时一定要遵循BST的特性，在此题中，一定紧紧抓住各结点之间的关系：<b>AL&lt;A&lt;CL&lt;C&lt;CR&lt;B&lt;BR。\n<\/b>\n将<b>根节点A右孩子的左子树的根节点(C)<\/b>作为目标结点，进行调整操作。\n\n<b>调整步骤：先右旋再左旋\n                    第一次旋转：右旋C<\/b>\n                                 先将A结点的右孩子B的左孩子C右上旋提升到B的位置。\n                    <b>第二次旋转：左旋C\n<\/b>                                 再将此时A结点的右孩子C左上旋到A的位置。<\/span>", "expanded": true}, {"id": "mqlODBgXW3U", "topic": "<b>总结：<\/b><br><img class=\"mm-img\" src=\"mm-dfe9f4001c4ddd.jpg\" style=\"width:260px;height:159px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>只有左孩子才能右旋，只有右孩子才能左旋。\n<\/b>\nLL：右旋。\nRR：左旋。\nLR：先左旋再右旋。\n         <b>解释：<\/b>因为是插入在左孩子的右孩子上，因此<b>自下向上处理时，先处理的是右孩子，再处理左孩子，因此是先左旋再右旋。<\/b>\n\nRL：先右旋再左旋。\n        <b> 解释<\/b>：与LR同理。<\/span>", "expanded": true}]}, {"id": "mwKM06jV6BZ", "topic": "<b>4、解释：为何说插入时，只要将最小不平衡子树调整平衡，则其他祖先节点都会恢复平衡？<\/b><br><img class=\"mm-img\" src=\"mm-43a4a9c93a835b.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为：插入后，最小不平衡子树高度+1，那么在<b>经过左旋右旋的调整后，高度就会恢复，<\/b>因此更高的祖先树的平衡因子都会恢复。<\/span>", "expanded": true}, {"id": "m5Z3VgjLUuR", "topic": "<b>5、<\/b><span style=\"color:#d92d20\"><b><span>❤<\/span><\/b><span style=\"color:#d92d20\"><span> <\/span><span style=\"color:#7c3aed\"><b><span>插入练习<\/span><\/b><b>：<\/b>", "expanded": false, "children": [{"id": "meLR0ms4POF", "topic": "<b>的思路步骤<\/b>为：", "expanded": true, "children": [{"id": "m8484Qohr25", "topic": "①：将插入元素根据左小右大的规则，插入", "expanded": true}, {"id": "mH2uFNVclET", "topic": "②：找最小不平衡子树，找到其根节点", "expanded": true}, {"id": "mimzg2yLdAQ", "topic": "③：判断插入类型<span class=\"mm-note\">根据插入位置与当前最小不平衡子树根节点的相对位置<\/span>", "expanded": true}, {"id": "m687xcXVvZQ", "topic": "④：根据类型找到要旋转的结点，并选择方法", "expanded": true}]}, {"id": "mIXKt1ErFhy", "topic": "<b>练习1（RR）：<\/b><br><img class=\"mm-img\" src=\"mm-18e673434bd802.jpg\" style=\"width:260px;height:106px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8b6f86e008a0ef.jpg\" style=\"width:260px;height:110px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">1、计算出最小不平衡子树：此时的<b>最小不平衡子树就是：以66为根节点的子树。\n<\/b>2、判断类型：<b>90是插在了66右孩子的右子树上<\/b>，属于<b>RR型<\/b>。\n3、判断需要旋转的结点：RR型，操作<b>根节点(66)的右孩子(68)<\/b>即可。\n4、操作：左旋一次即可：\n                将66的右孩子68左上旋作为新根，50左下旋作为68的左孩子，剩下的按照BST特性调整。<\/span>", "expanded": true}, {"id": "mlwg6eCyArh", "topic": "<b>练习2（RL）：<\/b><br><img class=\"mm-img\" src=\"mm-82831a0d24df95.jpg\" style=\"width:260px;height:106px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-ac2828f2874eb0.jpg\" style=\"width:260px;height:102px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-6ba5704b16595f.jpg\" style=\"width:260px;height:97px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">1、计算出最小不平衡子树：此时的<b>最小不平衡子树就是：以50为根节点的子树。\n<\/b>2、判断类型：<b>63是插在了50右孩子的左子树上<\/b>，属于<b>RL型<\/b>。\n3、判断需要旋转的结点：RL型，操作<b>根节点(50)的右孩子的左子树的根节点(66)<\/b> 即可\n4、操作：先右旋后左旋\n           1、<b>右旋<\/b>：将50的右孩子68左子树的根节点66右上旋替换掉68，68右下旋作为66的右孩子，剩下的按照BST特性调整。\n            2、<b>左旋<\/b>：再将66左上旋替换掉50,50左下旋作为66的左子树。<\/span>", "expanded": true}, {"id": "mKhetTAsReZ", "topic": "<b>练习3（LR）：<\/b><br><img class=\"mm-img\" src=\"mm-502114f07ba933.jpg\" style=\"width:260px;height:106px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f1f1963e13d90b.jpg\" style=\"width:260px;height:107px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">1、计算出最小不平衡子树：此时的<b>最小不平衡子树就是：以66为根节点的子树。\n<\/b>2、判断类型：<b>57是插在了66左孩子的右子树上<\/b>，属于<b>LR型<\/b>。\n3、判断需要旋转的结点：LR型，操作<b>根节点(50)的左孩子的右子树的根节点(60)<\/b> 即可\n4、操作：<b>先左旋后右旋<\/b>\n           1、<b>左旋<\/b>：将66的左孩子50的右子树的根节点60左上旋替换掉50，50左下旋作为60的左孩子，剩下的按照BST特性调整。\n            2、<b>右旋<\/b>：再将60右上旋替换掉66,66右下旋作为60的右子树。<\/span>", "expanded": true}]}, {"id": "m1Il0g8jxfz", "topic": "<b>6、查找效率分析：<\/b><br><img class=\"mm-img\" src=\"mm-4f783d88201bff.jpg\" style=\"width:260px;height:92px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "myMeeyi1fEu", "topic": "<b>1、AVL的ASL：<\/b><span style=\"color:#1d4ed8\"><b><span>O(logn)<\/span><\/b><span class=\"mm-note\">1、含有n个结点的AVL的最大深度为：O(logn)\n2、二叉平衡树的平均查找长度为：O(logn)\n<b>注意：\n      <\/b>上述均为<b>近似而非等式<\/b>，也就是说，含有n个结点的AVL的最大深度近似为O(logn)，<b>具体的树高是需要使用下边的递推关系式来推出来的<\/b>。<\/span>", "expanded": true}, {"id": "mmbuF09oEgm", "topic": "<b>2、AVL的树高递推公式：<\/b><b><mark>Nh = Nh-1 + Nh-2 + 1<\/mark><\/b><span class=\"mm-note\">Nh:表示<b>深度为h的平衡树中含有的最少结点数 。<\/b>也可以说是：<b>用n个结点数，能构建的AVL树的高度最高为h。\n<\/b>简单理解<b>：用最少的结点，组合最高的AVL树。\n<\/b>这个<b>+1就是加上了根节点<\/b>。\n<b>\n<\/b>N0 = 0；N1 = 1；N2 = 2 ；N3 = 4 ；N4 = 7 ；N5 = 12.......\n\n此递推公式可以用来求解：\n      <b>给定结点数的平衡二叉树的查找所需的最多比较次数。\n\n<\/b>例：在含有12个结点的平衡二叉树中查找某个结点的最多比较次数为？\n答：\n      <b>分析<\/b>：要求最多比较次数，也就是说<b>要使得AVL树的高度尽可能高。<\/b>\n                    也就是探究：结点数为12的AVL的最大高度是多少？(或：用这12个结点，最高你能构建多高的AVL树)\n                    因此<b>结合上边的递推公式<\/b>，可以得出：h = 5的最小结点数就是12。\n                    因此最多比较次数就是5.<\/span>", "expanded": true, "children": [{"id": "mqDWXipiaZL", "topic": "其实就是：<b>动态规划思想<\/b><span class=\"mm-note\"><b>Nh-1<\/b>就是<b>左子树最少结点数<\/b>，<b>Nh-2<\/b>就是<b>右子树最少结点数<\/b>，<b>加的1就是根节点<\/b>。<\/span>", "expanded": true}]}]}, {"id": "mYLD9JnMMQm", "topic": "<b>7、平衡二叉树的删除：<\/b>", "expanded": true, "children": [{"id": "mpAt23BW4Qx", "topic": "<b>1、插入 &amp; 删除的对比：<\/b><br><img class=\"mm-img\" src=\"mm-0887f9579375a7.jpg\" style=\"width:260px;height:114px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">相似，都有四种情况：LL、RR、LR、RL。<\/span>", "expanded": true}, {"id": "mlFExxbubCW", "topic": "<b>2、<\/b><span style=\"color:#d92d20\"><b><span>❤<\/span><\/b><span style=\"color:#d92d20\"><span> <\/span><b>删除步骤：<\/b><br><img class=\"mm-img\" src=\"mm-d1394e3c4b3188.jpg\" style=\"width:260px;height:201px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">一共有如上五步：\n     1、先按照<b>BST删除结点的方法<\/b>将结点删除\n     2、<b>向上寻找最小不平衡子树<\/b>，若有：进行下一步处理；没有：结束。\n     3、在最小不平衡子树中，<b>先找到个头最高的儿子<\/b>，然后<b>在这个儿子的子树中，找\n             到个头最高的孙子<\/b>。\n     4、根据<b>孙子相较于最小不平衡子树根节点所在的位置<\/b>，判断类型，进行调整。\n     5、判断：不平衡性是否向上传导，是：回到第二步再次处理；否：结束。\n\n下边举例具体讲解删除步骤。<\/span>", "expanded": true, "children": [{"id": "m53v8GTap4i", "topic": "<b>①：根据<\/b><b><mark>BST删除结点的规则<\/mark><\/b><b>删除结点<\/b><br><img class=\"mm-img\" src=\"mm-21a4fc83f44790.jpg\" style=\"width:260px;height:114px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">切记：要<b>按照在BST中删除结点的方法<\/b>来删除，毕竟为了保持BST左小右大的特性。\n\n而此时要删除的结点55是叶子结点，因此直接删除即可。\n如果要删除的结点(Z)既有左子树又有右子树：\n         根据BST的结点删除规则，那么<b>使用Z的直接前驱或者直接后继来顶替Z都是可以的。<\/b><\/span>", "expanded": true}, {"id": "mmmPqKU2fze", "topic": "<b>②：从删除结点的位置，一路向上寻找最小不平衡子树<\/b><br><img class=\"mm-img\" src=\"mm-96e543773c25a5.jpg\" style=\"width:260px;height:99px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到，此时最小不平衡子树就是以75为根节点的子树。<\/span>", "expanded": true}, {"id": "mnhlVWBupt8", "topic": "<b>③：在最小不平衡子树中，寻找<\/b><span style=\"color:#1d4ed8\"><b><span>个头最高的儿子和孙子<\/span><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-f342461c98583a.jpg\" style=\"width:260px;height:95px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时最小不平衡子树是：以75为根节点的子树。\n<b>1、找个头最高的儿子：\n<\/b>       此时最小不平衡子树的儿子有：60、80。很明显，以80为根节点的子树高度远高于60，因此选择80。\n\n<b>2、找个头最高的孙子：\n<\/b>       同理，因为此时80的儿子有77和90，很明显，以90为根的子树的高度远高于77，因此选择90。\n\n如果：有两个儿子/孙子<b>高度一样高<\/b>，那么<b>选哪一个都行<\/b>。<\/span>", "expanded": true}, {"id": "mb0Byc0KlVJ", "topic": "<b>④：<\/b><span style=\"color:#1d4ed8\"><b><span>根据孙子的位置<\/span><\/b><b>，判断类型(LL/RR/LR/RL)并调整平衡:<\/b><br><img class=\"mm-img\" src=\"mm-9b76bf4f52417b.jpg\" style=\"width:260px;height:121px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-c51f23a5f07e80.jpg\" style=\"width:260px;height:179px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这里调整时，步骤如下：\n1、判断此时<b>孙子相较于最小不平衡子树的根节点<\/b>，是在哪个位置(LL/RR/LR/RL)。\n2、并且根据不同的位置进行不同的调整。具体见上图。\n\n并且调整的方法和插入时一致。\n并且此题中，孙子90在根节点75的右孩子的右子树上，属于<b>RR型<\/b>，因此直接将儿子80左上旋。<\/span>", "expanded": true}, {"id": "m6Ewwfq6N07", "topic": "<b>⑤：检查<\/b><span style=\"color:#7c3aed\"><b><span>不平衡性是否有向上传导<\/span><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-ec493a2ea3c1db.jpg\" style=\"width:260px;height:89px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">因为在删除结点和调整最小不平衡子树后，是有可能造成：\n<b>                调整后子树的高度减1。 <\/b>因此会向上影响到其祖先结点们平衡因子的改变，<b>可能会造成祖先节点们的不平衡。\n\n<\/b>简单来说：就是<b>在此次处理结束后，该树依旧不平衡，那就继续从第②步开始调整呗。\n\n<\/b>基于此种情况考虑，那么在处理完此次删除结点的调整后，就要<b>从此时处理完的结点向上排查<\/b>这种情况，如果有，那就从第二步开始继续调整，直到全树平衡。\n\n当前的例子中，是没有这种情况的，因此直接结束。<\/span>", "expanded": true}]}, {"id": "mTWoM5cTCJv", "topic": "<b>3、删除练习：<\/b>", "expanded": true, "children": [{"id": "mFdZxSbaFVk", "topic": "<b>练习1：<\/b>", "expanded": true, "children": [{"id": "mNMjoTMQrcx", "topic": "①：根据BST的结点删除规则，删除32<br><img class=\"mm-img\" src=\"mm-54e61697346884.jpg\" style=\"width:260px;height:101px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">那么32是叶子结点，直接删除。<\/span>", "expanded": true}, {"id": "m7IoALtiizN", "topic": "②：一路向上寻找最小不平衡子树<br><img class=\"mm-img\" src=\"mm-161672883c2815.jpg\" style=\"width:260px;height:97px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">那么此时就找到了以44为根节点的子树。<\/span>", "expanded": true}, {"id": "mwGAwyvJxaX", "topic": "③：找最小不平衡子树下，个头最高的儿子和孙子<br><img class=\"mm-img\" src=\"mm-79830e500957a7.jpg\" style=\"width:260px;height:95px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">很明显：\n1、高儿子：78\n2、高孙子：50<\/span>", "expanded": true}, {"id": "mUxwyGKprmc", "topic": "④：根据孙子的位置，判断类型，调整平衡<br><img class=\"mm-img\" src=\"mm-677b9c465787aa.jpg\" style=\"width:260px;height:108px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-db87b29194b6e6.jpg\" style=\"width:260px;height:110px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">很明显，对于44来说，50位于44右孩子的左子树上，属于<b>RL型<\/b>。\n因此将孙子50先右上旋，再左上旋。<\/span>", "expanded": true}, {"id": "mLugGHjJlhA", "topic": "⑤：判断不平衡性是否向上传导<br><img class=\"mm-img\" src=\"mm-0fc67dbaef0f53.jpg\" style=\"width:260px;height:110px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到全树平衡，因此<b>没有向上传导<\/b>，处理结束。<\/span>", "expanded": true}]}, {"id": "mAI5E6tBQsB", "topic": "<b>练习2(存在不平衡向上传导)：<\/b>", "expanded": true, "children": [{"id": "m2SfzyAPjat", "topic": "①：根据BST的删除规则，删除结点32<br><img class=\"mm-img\" src=\"mm-96840fd9ee5ad1.jpg\" style=\"width:260px;height:96px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m72h7VDEXzy", "topic": "②-④：一路向上，寻找最小不平衡子树；找到最小不平衡子树中，个头最高的儿子和孙子；并且完成调整。<br><img class=\"mm-img\" src=\"mm-426c964325c171.jpg\" style=\"width:260px;height:85px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">为了方便，直接将第二步到第四步完成了。<\/span>", "expanded": true}, {"id": "mulOZnx3q2B", "topic": "⑤：判断不平衡性是否向上传导了：<br><img class=\"mm-img\" src=\"mm-5c9bc1f32320c2.jpg\" style=\"width:260px;height:83px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到，此时在调整后，33右子树的高度由4变为3.而33左子树的高度为5，因此导致不平衡了。那么这就叫做“不平衡性向上传导”。\n\n因此：回到第②步，从50开始寻找最小不平衡子树，并进行后续操作：<\/span>", "expanded": true, "children": [{"id": "mt5TeFUzC5Q", "topic": "②：找最小不平衡子树：<br><img class=\"mm-img\" src=\"mm-fffcd411e0c197.jpg\" style=\"width:260px;height:89px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时的最小不平衡子树为33。<\/span>", "expanded": true}, {"id": "mOFDcaJInho", "topic": "③：找个头最高的儿子、孙子：<br><img class=\"mm-img\" src=\"mm-7ec52a7d9a7b56.jpg\" style=\"width:260px;height:103px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">1、儿子：10\n2、孙子：20<\/span>", "expanded": true}, {"id": "mCRwhzCFcG4", "topic": "④：根据孙子的位置调整：<br><img class=\"mm-img\" src=\"mm-61918617120e2d.jpg\" style=\"width:260px;height:98px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时孙子在33左孩子的右子树，属于<b>LR型<\/b>。\n因此：<b>先左旋再右旋。<\/b><\/span>", "expanded": true}, {"id": "muPQMDg8OQA", "topic": "⑤：再次判断不平衡性是否向上传导<br><img class=\"mm-img\" src=\"mm-039e25acb5932d.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">很明显，这下平衡了！！！结束！！<\/span>", "expanded": true}]}]}]}, {"id": "mkUmKh1O2gL", "topic": "<b>4、AVL删除操作的时间复杂度：<\/b><span style=\"color:#0e7a52\"><b><span>O(logn)<\/span><\/b>", "expanded": true}, {"id": "m5XxpHbSvTE", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-8741cb39a6381b.jpg\" style=\"width:260px;height:126px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "meskBJnGAu8", "topic": "<b>知识点回顾：<\/b><br><img class=\"mm-img\" src=\"mm-dc9cfd3389be13.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mp6fwUVXv73", "topic": "<b>三、红黑树(RBT)<\/b>", "expanded": false, "children": [{"id": "mWPwDrO3vMC", "topic": "<b>1、红黑树的定义与性质：<\/b><span class=\"mm-note\">红黑树是二叉排序树(BST)的一种优化，<b>是满足红黑性质的二叉排序树<\/b>。<\/span>", "expanded": true, "children": [{"id": "m87duK0h6Iy", "topic": "<b>1、为什么要发明红黑树？<\/b><br><img class=\"mm-img\" src=\"mm-06a53e27c197ae.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">上图可以看出，红黑树的增、删、查的性能与AVL类似。那为啥还要发明红黑树呢？\n\n因为：在AVL树中，<b>为了保持AVL的平衡特性<\/b>，插入和删除操作后，需要非常频繁地调整全树的拓扑结构，<b>代价很大<\/b>。\n\n而<b>在红黑树中<\/b>，<b>插入、删除一般不会破坏红黑特性<\/b>，<b>不需要频繁地调整树的形态<\/b>，即使需要，也可以<b>在常数级时间内完成<\/b>。\n​<\/span>", "expanded": true}, {"id": "mzXnyvCA4Al", "topic": "<b>2、定义：<\/b>", "expanded": true, "children": [{"id": "mgqHkPF47Fo", "topic": "<b>口诀：<\/b><b><mark>左根右，根叶黑，不红红，黑路同<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-7585e7d1f041c2.jpg\" style=\"width:260px;height:110px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">注意几个点： \n1、首先它是BST：左 &lt; 中 &lt; 右\n2、根节点、叶结点均为黑。\n3、不存在两个连续的红结点。\n                       <b>注意：<\/b>是<b>针对竖向关系<\/b>说的，即：红结点的孩子和父亲必须是黑结\n                                      点。<b>水平关系无影响<\/b>，即：兄弟节点均为红。\n\n4、对<b>任一结点<\/b>，从<b>该结点到其下任意一叶结点<\/b>的简单路径上，所含<b>黑结点的数量相同。<\/b><\/span>", "expanded": true}, {"id": "moxm9IBbsa6", "topic": "<b>(<\/b><span style=\"color:#d92d20\"><b><span>注意！！！<\/span><\/b><b>)红黑树中的<\/b><span style=\"color:#0e7a52\"><b><span>叶结点<\/span><\/b><b>：是<\/b><span style=\"color:#7c3aed\"><b><span>虚构的外部结点、NULL结点<\/span><\/b><br><img class=\"mm-img\" src=\"mm-baa94d7b5db135.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">并<b>不是传统意义上树的最下边一层，那种包含关键字的叶结点，<\/b>而是类似于BST中的查找失败结点(方形)，具体见上图中的NIL结点。<\/span>", "expanded": true}]}, {"id": "mppAlJzwR98", "topic": "<b>3、结点的<\/b><span style=\"color:#1d4ed8\"><b><span>黑高(bh)<\/span><\/b><b>：<\/b><br><img class=\"mm-img\" src=\"mm-a842a509df87f7.jpg\" style=\"width:260px;height:164px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">定义：从<b>某结点出发(不含该结点)<\/b>到达<b>任一空叶结点<\/b>的路径上<b>黑结点的总数(包含叶子结点)。\n\n根节点的黑高<\/b>称为<b>红黑树的黑高<\/b>。<\/span>", "expanded": true, "children": [{"id": "mGF2gmJYJ82", "topic": "<b>推论：<\/b><b><mark>若根节点黑高为h，则内部节点数 n  ≥  2^h-1  个<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-4c308f289f9832.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>内部节点数<\/b>：就是不包含叶子结点NULL。\n且黑高h一定时，内部节点最少的情况为：<b>h层黑结点且满树。\n\n<\/b>为何满树？<b>\n      答：因为黑高一定时，要使内部节点最少，<\/b>那就<b>只能全部是黑结点，又为了满足特性5(黑路同).<\/b><\/span>", "expanded": true}]}, {"id": "mNAJcPYq5KG", "topic": "<b>4、性质：<\/b><br><img class=\"mm-img\" src=\"mm-83c67ecf2ee7fe.jpg\" style=\"width:260px;height:60px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">性质由红黑树的定义推导而来。<\/span>", "expanded": true, "children": [{"id": "mJb3tT0HHAf", "topic": "<b>性质1：<\/b><b>从根到叶结点的 <\/b><span style=\"color:#7c3aed\"><b><span> 最长路径 ≤  最短路径的2倍<\/span><\/b><b>。<\/b><span class=\"mm-note\">这个性质根据RBT的定义④和定义⑤得到，如下。\n1、由定义⑤可知：当根到任意一个叶结点的简单路径<b>最短<\/b>时，这条<b>路径必然全部由黑结点构成<\/b>。\n\n2、由性质④可以：当根到任意一个叶结点的最短路径<b>最长<\/b>时，这条路径必然是<b>由红黑结点相间组成<\/b>的。\n\n综上两者，就能得出这条性质。<\/span>", "expanded": true}, {"id": "mAtEPGdjZfZ", "topic": "<b>性质2：<\/b><span style=\"color:#7c3aed\"><b><span>有n个内部节点的红黑树的高度<\/span><\/b> <b><mark>h ≤ 2* ㏒₂(n+1)<\/mark><\/b><span class=\"mm-note\">因此RBT的查找效率为：<b>O(logn)。\n简单推理：\n        1、<\/b>由\"<b>不红红\"的特性<\/b>可知：若总高度为h，则根节点的黑高 <b>bh ≥ h/2 。<\/b>\n        <b>2、<\/b>再由上边<b>黑高的推论<\/b>可知：此时的内部结点数 <b>n ≥ 2^(h/2)-1\n        3、<\/b>因此可得<b>：h ≤ ㏒₂(n+1)<\/b><\/span>", "expanded": true}, {"id": "mRLuMSwlQci", "topic": "两个性质的解释：<br><img class=\"mm-img\" src=\"mm-8abd2faa592fa0.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mUfn4dlLdOe", "topic": "<b>2、红黑树的插入：<\/b><b><mark>只需看插入时是否破坏\"不红红\"<\/mark><\/b><span class=\"mm-note\">插入时，违反的总是<b>“不红红”<\/b>的特性。\n其他的左根右、根叶黑、黑路同的定义均不会被破坏。原因：\n        左根右：毕竟插入时就按这个来插入，肯定不会被破坏。\n        根叶黑：根一直为黑，而叶是虚拟的外结点(NULL)，一直为黑。\n        黑路同：插入时，若非根，那就新结点是红色，因此肯定不会影响黑高。<\/span>", "expanded": true, "children": [{"id": "mPGjk3mEGV2", "topic": "<b>1、插入方法：<\/b><b><mark>看叔叔的脸色行事！<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-f5a292d38f22d7.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">按如下步骤插入：\n1、根据BST的特性，确定插入位置\n2、判断新结点是<b>根<\/b>还是<b>非根<\/b>，染色。<b>根：黑色；非根：红色\n<\/b>                            why？：为了满足黑路同这条特性。\n3、判断此时全树<b>是否满足红黑树的定义<\/b>。\n        满足：结束。\n       不满足：根据红黑树的定义，进行<b>调整(重新着色、旋转)\n            \n<\/b>4、如何调整：根据插入节点的<b>叔结点的红黑来决定调整方式<\/b>。\n                                                                   叔结点：<b>父结点的兄弟结点。\n<\/b>5、调整：\n        ①：叔为<b>黑：旋转+染色<\/b>\n                  LL：右单旋，父换爷+染色\n                  RR：左单旋，父换爷+染色\n                  LR：左、右旋，儿换爷+染色\n                  RL：右、左旋，儿换爷+染色\n         解释一下：这里的染色，是指<b>对原来的两个互换的结点(父、爷 或者 孙、爷)进行红变黑、黑变红<\/b>的操作。\n\n        ②：叔为<b>红：染色+变新\n                   <\/b>叔、父、爷染色(即：将这三个结点<b>红变黑、黑变红<\/b>)，爷变为新结点<b>(<\/b>即：<b>此时将爷结点看作新结点，用上述的逻辑再处理一遍此时的爷)<\/b><\/span>", "expanded": true}, {"id": "m2PiGIaZGM3", "topic": "<b>2、练习：<\/b>", "expanded": true, "children": [{"id": "mVirlBqgCws", "topic": "①：插入20/10/5<br><img class=\"mm-img\" src=\"mm-bbe3ed5a7b09f3.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">插入20：此时20作为根节点，直接染成黑色即可。\n\n插入10：根据BST特性，将10插入到20的左子树位置，并且此时10非根，因此染成红色。再观察整棵树发现，符合RBT的定义，over。\n\n插入5：根据BST特性且其非根，插入到10的左子树且染色为红色，发现此时违反了\"不红红特性\"，需要调整。\n                 因此看<b>此时叔叔(10的兄弟结点)<\/b>的脸色，发现<b>叔叔的脸色是黑色(叶结点)<\/b>，因此需要：<b>旋转+着色。<\/b>并且此时5属于<b>LL型<\/b>：<b>父换爷+染色<\/b>。因此：将父结点10右上旋，然后重新染色(10变黑、20变红)。<\/span>", "expanded": true}, {"id": "md8mCS3B1AZ", "topic": "②：插入30:<br><img class=\"mm-img\" src=\"mm-701df0162d3b80.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">插入30：\n      此时发现<b>违反\"不红红\"<\/b>，因此开始调整：看<b>叔叔的脸色(5)<\/b>,此时为红色，因此\n      需要：<b>叔父爷染色+爷变为新结点<\/b>。\n            ①：叔父爷染色：红变黑、黑变红(如上图)\n            ②：爷变为新结点：意思是将此时的爷结点，当做新结点去再次处理。即：此时处理结点10：因为10此时是根节点，所以将其染黑。再观察全树，此时满足RBT的定义，结束。<\/span>", "expanded": true}, {"id": "mSOEiElOYdz", "topic": "③：插入40：<span style=\"color:#1d4ed8\"><b><span>RR型<\/span><\/b><br><img class=\"mm-img\" src=\"mm-3643508473ed86.jpg\" style=\"width:260px;height:137px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">插入5：根据BST特性且其非根，插入到30的右子树且染色为红色，发现此时违反了\"不红红特性\"，需要调整。\n                 因此看<b>此时叔叔(NULL)<\/b>的脸色，发现<b>叔叔的脸色是黑色(叶结点)<\/b>，因此需要：<b>旋转+着色。<\/b>并且此时5属于<b>RR型<\/b>：<b>父换爷+染色<\/b>。因此：将父结点30左上旋，然后重新染色(30变黑、20变红)。<\/span>", "expanded": true}, {"id": "mKZxdCqAdCR", "topic": "④：插入57：<br><img class=\"mm-img\" src=\"mm-046bf5e7f0619e.jpg\" style=\"width:260px;height:153px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">插入57：\n      此时发现<b>违反\"不红红\"<\/b>，因此开始调整：看<b>叔叔的脸色(20)<\/b>,此时为红色，因此\n      需要：<b>叔父爷染色+爷变为新结点<\/b>。\n            ①：叔父爷染色：红变黑、黑变红(如上图蓝色框框里边三个变色)\n            ②：爷变为新结点：意思是将此时的爷结点，当做新结点去再次处理。即：此时处理结点30：观察全树，此时已经满足RBT的定义，结束。<\/span>", "expanded": true}, {"id": "mYwgbO6wUnI", "topic": "⑤：插入3/2：<span style=\"color:#1d4ed8\"><b><span>LL型<\/span><\/b><br><img class=\"mm-img\" src=\"mm-6849c96e43fe43.jpg\" style=\"width:260px;height:126px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">插入3：不违反特性。\n插入2：违反不红红，且其叔叔(NULL)为黑，且2属于LL型，因此：父换爷+染色。<\/span>", "expanded": true}, {"id": "m6ARdPea3HC", "topic": "⑥：插入4/32/25/18<br><img class=\"mm-img\" src=\"mm-abb1a54b551de1.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-2ccf807080737d.jpg\" style=\"width:260px;height:162px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这几个都不影响。<\/span>", "expanded": true}, {"id": "merQ00Dk6Pl", "topic": "⑦：插入22：<span style=\"color:#1d4ed8\"><b><span>叔为红，把爷当做新结点<\/span><\/b><br><img class=\"mm-img\" src=\"mm-11d5616a6f3b15.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这个插入过程，好好体会：什么叫<b>把爷变为新结点<\/b>。<\/span>", "expanded": true}, {"id": "mOqeMGnfsj2", "topic": "⑧：插入23：<span style=\"color:#1d4ed8\"><b><span>LR型<\/span><\/b><br><img class=\"mm-img\" src=\"mm-11049a46ff380f.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-78f357412caa0d.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-193550c911bd32.jpg\" style=\"width:260px;height:148px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-86c807d7fc2fba.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m514GviSk8P", "topic": "⑨：插入24<br><img class=\"mm-img\" src=\"mm-6798324b7784e9.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-23546f5d8c660a.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-06690f8769ac05.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-626224cc52db1d.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-a7bd22daaa87fd.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mWoCXCl9sP9", "topic": "⑩：插入19/18<br><img class=\"mm-img\" src=\"mm-2210781eae2951.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-b8a9bbba00a151.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-ef4504e1922de1.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-b92b322661b947.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">插入19：不会破坏特性。\n插入18：发现此时RBT中已经有18了，那么其实我们不妨自定义将数据结构定义为数相等时，优先插入到右子树，那么就是上述图片中的情况。\n（数据结构是应用科学，不同场景下自定义不同的用法即可）<\/span>", "expanded": true}]}]}, {"id": "mLkq8Vbc2wW", "topic": "<b>3、红黑树的删除：<\/b><br><img class=\"mm-img\" src=\"mm-16a9b4147a1078.jpg\" style=\"width:260px;height:159px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">很难，比插入难多了...一般不会考。\n记得上边三个理论即可：\n1、时间复杂度：<b>O(logn)\n<\/b>2、删除结点的处理方式与<b>BST的删除处理方式一样<\/b>的。\n3、在删除后，<b>排查全树的红黑属性是否被破坏<\/b>，做出相应的调整。<\/span>", "expanded": true}, {"id": "mLYBhYeiZ9m", "topic": "<b>4、红黑树(<\/b><span style=\"color:#0e7a52\"><b><span>适度平衡<\/span><\/b><b>) VS AVL树(<\/b><span style=\"color:#0e7a52\"><b><span>高度平衡<\/span><\/b><b>)<\/b><span class=\"mm-note\">红黑树是适度平衡的二叉查找树；AVL是高度平衡的二叉查找树。\n\n红黑树的“<b>适度平衡<\/b>”，由AVL的<b>“高度平衡”<\/b>，降低到“<b>任意一个结点左右子树的高度，相差不超过两倍<\/b>”，也降低了动态操作时的调整频率。\n​\nJAVA中的TreeMap和TreeSet就是用红黑树实现的。<\/span>", "expanded": true}]}, {"id": "mO01l9QRMzN", "topic": "<b>四、B树<\/b><span class=\"mm-note\">Balanced Tree：<b>多路平衡查找树<\/b>。（<b>绝对平衡！！！<\/b>）\n在文件系统中很有用，多用于磁盘辅助存储数据、数据库等....\nB树中所有结点的孩子个数的最大值称为B树的阶，通常用m表示。\nB树也可以是空树。\nB树的非叶结点中，是包含关键字所指信息的存储地址的，区别于B+树。<\/span>", "expanded": false, "children": [{"id": "mRetI4EuyHW", "topic": "<b>1、定义：m阶B树是<\/b><span style=\"color:#1d4ed8\"><b><span>所有结点平衡因子全为0<\/span><\/b><b>(<\/b><b><mark>绝对平衡<\/mark><\/b><b>)的m路平衡查找树<\/b>。<br><img class=\"mm-img\" src=\"mm-33367c75dff0e9.jpg\" style=\"width:260px;height:158px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f9beb91f24297d.jpg\" style=\"width:260px;height:55px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-6882e43bd28d6e.jpg\" style=\"width:260px;height:65px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">抓住B树的<b>核心特性(绝对平衡)<\/b>：\n1、根节点(不是终端结点)：子树数量<b>至少为2<\/b>；非根节点：子树数量<b>至少<\/b>为<b> m/2(向上取整)。\n<\/b>2、<b>任一节点<\/b>，其<b>所有子树的高度相同<\/b>。\n3、关键字的值，肯定是 左 &lt; 中 &lt; 右。\n4、所有叶结点(失败节点)在同一层。\n且：\n<b>叶结点<\/b>：指失败节点，也就是虚拟的外结点。\n<b>终端结点<\/b>：最后一层带关键字的真实结点。\n​<\/span>", "expanded": true}, {"id": "mAoUOXKPSdU", "topic": "<b>2、5 阶B树示例：<\/b><br><img class=\"mm-img\" src=\"mm-d3ca7263669b3b.jpg\" style=\"width:260px;height:137px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">如上图的五阶B树。就是在一个节点中，最多有四个关键字，而这四个关键字划分了最多五个区间，因此一个节点最多五个孩子。\n并且：<b>块内关键字有序<\/b>。<\/span>", "expanded": true}, {"id": "m1Hcomf1F44", "topic": "<b>3、B树的高度(磁盘存取次数)：<\/b><span class=\"mm-note\">大多数学校中，B树的<b>高度不包括叶子结点(失败节点)<\/b>。<\/span>", "expanded": true, "children": [{"id": "m6JFy0qw8eB", "topic": "<b>最小高度：<\/b><span style=\"color:#1d4ed8\"><b><span>让每个结点尽可能地满<\/span><\/b><b>(即：每个结点m-1个关键字、m个分叉)<\/b><br><img class=\"mm-img\" src=\"mm-f4ae79291ebbe3.jpg\" style=\"width:260px;height:173px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">由于求最小高度，那就把关键字放满每一个结点。\n<b>每个结点含有m-1个关键字<\/b>，有m个分叉。\n\n<b>可以知道：<\/b>\n​第一层1个结点；第二层m个结点；第三层m*m个结点......\n由此可知，根据等比数列求和求出节点数量，再 * (m-1)，就计算出来了结点数量。\n根据不等式就能得出上述最小高度。<\/span>", "expanded": true}, {"id": "mZ5aZLTWgqq", "topic": "<b>最大高度：<\/b><span style=\"color:#1d4ed8\"><b><span>每个结点尽可能地空、各层分叉尽可能地少<\/span><\/b><br><img class=\"mm-img\" src=\"mm-bc7eff3a56a09f.jpg\" style=\"width:260px;height:165px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>思路1：推理的桥梁<\/b>就是：<b>第h+1层叶子结点的个数<\/b>。\n\n推理分两步：\n<b>一、计算出第h+1层叶子结点的个数<\/b>\n由于让每个结点尽可能空、分叉尽可能少，且根节点(非终端结点)最少为2个子树，非根节点最少为m/2(向上取整)个子树，因此<b>结点数的分布<\/b>为：\n第一层：1个；第二层：2个；第三层：2*(m-1)..........\n据此就能推出上边第h+1层共有叶子结点的个数。\n\n<b>二、根据已知结论：n个关键字的B树必有n+1个叶子结点\n\n<\/b>综上两步就能推出上边的关系式和结论。<\/span>", "expanded": true, "children": [{"id": "mm8pbhK5Ttg", "topic": "<b><mark>n个关键字的B树必有n+1个叶子结点(失败结点)<\/mark><\/b><span class=\"mm-note\">B树就相当于在某个区间上插入n个数，这<b>n个数把这个区间分成了n+1段<\/b>。\n那么就有n+1个失败节点喽。<\/span>", "expanded": true}, {"id": "mftp5TnQq2c", "topic": "<b>推理思路2：从关键字的最少个数入手<\/b><br><img class=\"mm-img\" src=\"mm-621a47e413576e.jpg\" style=\"width:260px;height:175px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mYth9XH975q", "topic": "<b>4、B树的查找：<\/b><span class=\"mm-note\">与BST的查找很相似，只是<b>每一个节点都是多个关键字的有序表<\/b>，在每个节点上做的不是两路分支决定，而是根据该结点的子树所做的多路分支决定。\n\n<b>只支持多路随机查找，不支持顺序查找。<\/b><\/span>", "expanded": true, "children": [{"id": "m1pJMZf7a6t", "topic": "<b>步骤(两步)：<\/b>", "expanded": true, "children": [{"id": "mwK8d78NbwI", "topic": "<b>①：在B树中找结点<\/b><span class=\"mm-note\">因为B树常存储在磁盘上，因此这一步是<b>在磁盘上进行<\/b>的。即：找到目标结点，<b>将目标结点读入内存<\/b>。<\/span>", "expanded": true}, {"id": "m3u5hTjpih0", "topic": "<b>②：在节点内找关键字<\/b><span class=\"mm-note\">而这一步是<b>在内存中进行<\/b>的。即：在上一步读入内存的节点中，使用顺序查找/折半查找查找关键字。<\/span>", "expanded": true}]}]}, {"id": "mtvWjJEne7J", "topic": "<b>5、B树的插入：<\/b><span class=\"mm-note\">B树中查找到插入位置之后，并不能简单地将其添加到终端结点，因为此时可能会导致整棵树不再满足B树定义中的要求。<\/span>", "expanded": true, "children": [{"id": "mmKcEeAjBif", "topic": "<b>1、核心要求：<\/b><br><img class=\"mm-img\" src=\"mm-73c42164f37a0d.jpg\" style=\"width:260px;height:103px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">两个核心要求：\n1、<b>除根节点外<\/b>，<b>结点关键字的个数<\/b>在区间<b>[m/2(向上取整)-1,m-1]<\/b>中\n2、必须<b>保证有序性<\/b>。(结点内、结点均有序)<\/span>", "expanded": true}, {"id": "mpwWUnT7Q3Y", "topic": "<b>2、步骤(两步)：<\/b>", "expanded": true, "children": [{"id": "mztnPJVHcez", "topic": "<b>1、定位：新元素的<\/b><span style=\"color:#1d4ed8\"><b><span>插入位置一定是最底层中某个终端结点<\/span><\/b><span class=\"mm-note\">根据B树的查找，确定新元素在终端结点中要插入的位置。<\/span>", "expanded": true}, {"id": "mQDXeRQrl3D", "topic": "<b>2、插入：若<\/b><span style=\"color:#1d4ed8\"><b><span>插入后关键字个数 &gt; m-1,<\/span><\/b><b>要进行<\/b><b><mark>分裂<\/mark><\/b><b>操作<\/b><span class=\"mm-note\">因为在一个结点中，关键字的个数在区间<b>[m/2(向上取整)-1,m-1]。\n<\/b>若插入后：\n<b>1、结点个数 &gt; m-1个，对结点进行分裂操作。\n2、结点个数 ≤ m-1个，直接插入。\n​<\/b><\/span>", "expanded": true}, {"id": "mWsyZqolau6", "topic": "<b><mark>分裂的方法：<\/mark><\/b><span class=\"mm-note\">若需要分裂，分为以下步骤：\n1、从中间位置(m/2)将其中的关键字分为两个部分：\n2、<b>左部分放在原结点<\/b>，<b>右部分放到新结点<\/b>中，并且将<b>中间位置的关键字插入父结点的对应位置(没有父亲那就new一个父结点)<\/b>。\n3、若此时父亲也到达了上限，那父亲就继续这种分裂，直到这个过程传到根节点，进而导致B树的高度+1。\n​<\/span>", "expanded": true, "children": [{"id": "mkDxNXD3HFm", "topic": "实例说明：(<b>5阶B树<\/b>)", "expanded": true, "children": [{"id": "m2VOwnuvZPB", "topic": "①：在[25,38,49,60]中插入80<br><img class=\"mm-img\" src=\"mm-583bb04820c744.jpg\" style=\"width:260px;height:117px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-5b8f5d747d2fca.jpg\" style=\"width:260px;height:89px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可知此时结点的关键字个数在区间[2,4]之间。\n​\n此时插入80后，明显需要分裂，因此：\n1、从49分为左右两部分，左部分：[25,38];右部分：[60,80];中间结点：49\n2、将左部分放到原结点，右部分放到新结点，中间节点放到父结点的对应位置，此时无父结点，因此new一个结点将49放入即可。\n且此时B树高度+1.<\/span>", "expanded": true}, {"id": "mBMGHBIwDAQ", "topic": "②：插入99<br><img class=\"mm-img\" src=\"mm-31c52e4b45045d.jpg\" style=\"width:260px;height:72px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-a0dcf7a911d3a4.jpg\" style=\"width:260px;height:84px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">1、中间节点：88；左部分：[60,80]；右部分：[90,99]。\n2、将88放到父结点的对应位置(如上图)，同时将左右部分放到对应结点。\n3、再将<b>指针调整正确指向<\/b>。<\/span>", "expanded": true}, {"id": "mLqpL6Ye1TI", "topic": "③：插入80<br><img class=\"mm-img\" src=\"mm-d7bb521d79f746.jpg\" style=\"width:260px;height:84px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8f46db1c3e9153.jpg\" style=\"width:260px;height:81px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">注意：<b>始终保持节点中关键字有序！！！\n<\/b>可以看到，此时将中间节点80放到父结点中时，要保证有序，因此<b>将80插到49和88之间<\/b>，并且<b>同时更新所有对应的指针指向<\/b>。<\/span>", "expanded": true}, {"id": "mjf0ht8E6fb", "topic": "④：插入93(<b>父结点继续分裂的情况)<\/b><br><img class=\"mm-img\" src=\"mm-be6c7603530d34.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-2d4acfdc4b9a1e.jpg\" style=\"width:260px;height:84px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}]}]}, {"id": "mQMSCMVuo24", "topic": "<b>6、B树的删除<\/b><span class=\"mm-note\">在删除时，如果节点中的<b>关键字个数 &lt; m/2(向上取整)-1<\/b> 时,那就要涉及到<b>结点的合并问题<\/b>，因此会有一些麻烦。<\/span>", "expanded": true, "children": [{"id": "mluqkLoouZx", "topic": "<b>情况1：<\/b><span style=\"color:#7c3aed\"><b><span>被删关键字在非终端结点<\/span><\/b><br><img class=\"mm-img\" src=\"mm-4238ae32092d8a.jpg\" style=\"width:260px;height:27px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">那么就可以直接使用<b>直接前驱或者直接后继<\/b>来代替被删除的关键字(与BST的删除异曲同工)，就<b>转化为：对终端结点的删除操作。<\/b><\/span>", "expanded": true, "children": [{"id": "mwdOL0vTP49", "topic": "示例1(删除80)：用<b>直接前驱替换<\/b>被删除结点<br><img class=\"mm-img\" src=\"mm-3ab59c5e5cd332.jpg\" style=\"width:260px;height:106px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-6f0e4efa54f53e.jpg\" style=\"width:260px;height:86px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到：此时80的直接前驱就是77(左孩子最右下的关键字)。\n那么在此时，如果此次删除导致终端结点不符合定义要求，那么就需要进行情况2的处理了。<\/span>", "expanded": true}, {"id": "mS48MfGbqVp", "topic": "示例2(删除77)：用<b>直接后继替换<\/b>被删除结点<br><img class=\"mm-img\" src=\"mm-450b6e146b930e.jpg\" style=\"width:260px;height:92px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-e6c411ad36c093.jpg\" style=\"width:260px;height:83px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到：用77的直接后继82替换掉了77，并且<b>将剩下的关键字依次前移<\/b>。<\/span>", "expanded": true}]}, {"id": "mWgmAkyarq9", "topic": "<b>情况2：<\/b><span style=\"color:#7c3aed\"><b><span>被删除结点在终端结点中<\/span><\/b><b>(三种情况<\/b><span style=\"color:#7c3aed\"><b><span>)<\/span><\/b>", "expanded": true, "children": [{"id": "mgLkfqtGjDU", "topic": "<b>1、删除该关键字后，结点中关键字个数依旧满足定义<\/b><span class=\"mm-note\">即：删除该结点后，结点中关键字的个数依旧在区间<b>[m/2(向上取整)-1,m-1]<\/b>内。\n那就<b>直接删除即可<\/b>，反正又不破坏B树的定义。<\/span>", "expanded": true}, {"id": "my0sUqlyaVK", "topic": "<b>2、<\/b><span style=\"color:#0e7a52\"><b><span>兄弟够借：<\/span><\/b><b>那就借<\/b><span class=\"mm-note\">顾名思义，就是从<b>左右兄弟结点中借关键字，调整该结点、左/右兄弟结点、父结点(父子换位法)，<\/b>来达到新的平衡。\n\n<b>本质<\/b>：保证<b>永远保持B树的特性<\/b>。<\/span>", "expanded": true, "children": [{"id": "mZKHuMiiiKZ", "topic": "<b>(1)借右兄弟：用当前结点的后继、后继的后继填补<\/b><br><img class=\"mm-img\" src=\"mm-e2313d6dbd1b88.jpg\" style=\"width:260px;height:80px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-242c4cf9931595.jpg\" style=\"width:260px;height:113px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d8a0f8d9167b98.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时：删除38。\n可以发现：第一个终端结点关键字个数不满足定义，而它的右兄弟的关键字个数绰绰有余，因此<b>从右兄弟那里借一个关键字过来<\/b>(右兄弟中的第一个关键字70)。\n\n但是<b>注意<\/b>：\n       借过来之后，并不是将70直接放到25的后边，而是要<b>根据父结点进行调整(父\n       子换位法)。\n<\/b>       此时<b>25的后继<\/b>：49；<b>25后继的后继<\/b>：70。\n       因此用49和70来进行替换操作。\n       可以看到，上图中是将70放到父结点的对应位置，然后将父结点的第一个关键\n       字49放到原结点处。\n\n这样是为了<b>满足B树有序性<\/b>的特性。<\/span>", "expanded": true}, {"id": "mOmJc3WPUpe", "topic": "<b>(2)借左兄弟：用当前结点的前驱、前驱的前驱填补<\/b><br><img class=\"mm-img\" src=\"mm-0711b8a26779bb.jpg\" style=\"width:260px;height:115px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d6695c39d2a20a.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">此时，在上边的基础上，再删除关键字90。\n可以看到：92所在结点的右兄弟结点不宽裕，而做兄弟结点很宽裕，因此考虑<b>从左兄弟借关键字。<\/b>\n\n且<b>：92的前驱<\/b>：88；<b>92前驱的前驱<\/b>：87。\n因此：将88放到92之后，再将87放到父结点的对应位置即可。<\/span>", "expanded": true}]}, {"id": "mjCove9ZPUb", "topic": "<b>3、<\/b><span style=\"color:#0e7a52\"><b><span>兄弟不够借：<\/span><\/b><b><mark>合并<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-ad9eebe22165a8.jpg\" style=\"width:260px;height:116px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">左右兄弟都不够借了，那就将：<b>关键字删除后结点+左/右兄弟结点+父结点中的特定关键字<\/b>合并。\n\n父结点中的特定关键字：\n          就是处于<b> 删除后结点<\/b> 与 <b>左/右兄弟结点中间<\/b>的那个关键字。<\/span>", "expanded": true, "children": [{"id": "mz1Rq1CFsFT", "topic": "①：合并1<br><img class=\"mm-img\" src=\"mm-6cc67ada520a29.jpg\" style=\"width:260px;height:82px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-fa446d0b169ca3.jpg\" style=\"width:260px;height:81px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到，此时父结点中的特定关键字为：70，因此有上述的合并结果。\n\n并且合并后发现，73所在结点也违反了定义，因此继续进行合并。<\/span>", "expanded": true}, {"id": "mWHGjttPo2S", "topic": "②：合并2:<br><img class=\"mm-img\" src=\"mm-22a33b06746e6b.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到：合并后，原根节点为空，因此可以直接原根节点删除。\n\n​因此可知：在合并过程中，双亲节点中的关键字个数会减1。若双亲节点是根节点且关键字的个数减少至0，直接将根节点删除即可。<\/span>", "expanded": true}]}]}]}, {"id": "mlMieNM5vQs", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-0073ac03996d75.jpg\" style=\"width:260px;height:140px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mqAa3ktd3JE", "topic": "<b>五、B+树<\/b><span class=\"mm-note\">应<b>数据库所需<\/b>而出现的一种B树变形树。\n并且注意：<b>B+树中的叶子结点与B树中的叶子结点有所不同\n即：\n<\/b>          B树中的叶结点：指<b>最后一层虚拟的NULL结点<\/b>，不包含关键字。\n          B+树的叶结点：指<b>最后一层包含关键字的结点<\/b>。(见下图中的绿色块)\n\n<b>既<\/b>支持<b>顺序查找<\/b>，<b>又<\/b>支持<b>多路随机查找<\/b>。<\/span>", "expanded": true, "children": [{"id": "mBzeLToOE3L", "topic": "<b>1、定义(m阶B+树)：<\/b><br><img class=\"mm-img\" src=\"mm-76f614cba9c927.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-ad5b6de119d98b.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>五个条件：\n<\/b>\n1、每个分支节点最多有m棵子树(孩子结点)\n\n2、<b>非叶根节点<\/b>至少有2棵子树，其它每个<b>分支结点至少有m/2(向上取整)<\/b>棵子树。\n                                原因：依旧是为了追求绝对平衡，与B树一样。\n\n3、<b>结点的子树个数与关键字的个数相等\n<\/b>                                原因：与第5个条件相关，因此有几个子树就有几个关键字，并且关键字都\n                                               是子树中的最大值。\n<b>\n<\/b>4、所有<b>叶结点包含全部的关键字<\/b>和<b>指向相应实际记录的指针<\/b>，叶结点中将<b>关键字按大小顺序排列<\/b>，且使用一个<b>指针(p)将相邻叶结点按大小顺序链接起来<\/b>。\n                                原因：因为B+树是为了数据库设计，在上图中可以看到，叶结点下有关键\n                                               字所指向的指针(记录)，<b>该指针指向的地址才是存储实际信息的地\n                                               方<\/b>。且我们可以从p指针开始，按照顺序遍历完所有叶结点(即：所\n                                               有关键字)，因此：<b>B+树支持顺序查找<\/b>。\n\n5、所有<b>分支结点<\/b>中<b>仅包含<\/b>它的各个<b>子结点中关键字的最大值<\/b>及<b>指向其子结点的指针<\/b>。\n                               解释：与分块查找类似。<\/span>", "expanded": true}, {"id": "mP4KhDoizc8", "topic": "<b>2、B+树的查找：<\/b><span style=\"color:#7c3aed\"><b><span>无论成功与否，都要查到最下边一层的叶结点<\/span><\/b><span class=\"mm-note\">与B树不同的是，B+树的查找，<b>无论成功与否，都要查到最下边一层的叶结点。\n\n<\/b>因为：<b>B+树的分支结点<\/b> 中 <b>仅包含<\/b>它的<b>各个子结点中关键字的最大值。<\/b>而<b>只有在最后一层叶结点保存了指向记录的指针。\n<\/b>也就是说：只有到最后一层，才能找到实际信息的存放地址。<b>\n<\/b><\/span>", "expanded": true, "children": [{"id": "mS2grkD4BcX", "topic": "<b>1、多路查找：<\/b><br><img class=\"mm-img\" src=\"mm-6d483f2179ab0c.jpg\" style=\"width:260px;height:136px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-bae86f6c82ec90.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是从<b>根节点出发<\/b>，<b>逐层向下<\/b>查找。<\/span>", "expanded": true}, {"id": "mKP4ONZkbbC", "topic": "<b>2、顺序查找：<\/b><br><img class=\"mm-img\" src=\"mm-4a9b87af7f1a79.jpg\" style=\"width:260px;height:130px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">就是使用<b>指针P<\/b>，直接顺序查找。\n因为：最下边一层的叶结点是使用指针p链接起来了的，相当于一个有序链表。<\/span>", "expanded": true}]}, {"id": "mqeIGxnn7l6", "topic": "<b>3、<\/b><b><mark>B+ 树 VS B树 <\/mark><\/b><b>(<\/b><span style=\"color:#d92d20\"><b><span>重点<\/span><\/b><b>)<\/b>", "expanded": true, "children": [{"id": "mO9vMwGF9bR", "topic": "<b>1、结点中<\/b><span style=\"color:#7c3aed\"><b><span>关键字与子树的数量关系<\/span><\/b><b>不同<\/b><span class=\"mm-note\">B树：<b>n个关键字对应n+1棵子树<\/b>；B+树：<b>n个关键字对应n棵子树<\/b>。\n核心原因：\n      B树：用<b>n个关键字分成了n+1个区间<\/b>，<b>每个区间一颗子树，<\/b>因此对应n+1棵子树。\n      B+树：<b>每一个关键字对应一棵子树<\/b>，因此对应n棵子树。<\/span>", "expanded": true}, {"id": "mhhZTkdtksi", "topic": "<b>2、<\/b><span style=\"color:#7c3aed\"><b><span>结点中关键字的个数<\/span><\/b><b>有所不同<\/b><br><img class=\"mm-img\" src=\"mm-cc91b6f076474f.jpg\" style=\"width:260px;height:111px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-429f7d256da0e0.jpg\" style=\"width:260px;height:72px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>m阶B树<\/b>中：\n      ①<b>根节点<\/b>关键字数：<b>[1,m-1]<\/b>\n      ②<b>非根节点<\/b>关键字数：<b>[m/2(向上取整)-1,m-1]\n\nm阶B+树<\/b>中<b>：\n      <\/b>①<b>根节点<\/b>关键字数<b>：[1,m]\n      <\/b>②<b>非根节点<\/b>关键字数<b>：[m/2(向上取整),m]\n\n本质原因：\n    <\/b>  B树中m个关键字对应m+1个分支；B+树中m个关键字对应m个分支。<b>\n    <\/b><\/span>", "expanded": true}, {"id": "mxUD9wytm2J", "topic": "<b>3、<\/b><span style=\"color:#7c3aed\"><b><span>关键字的重复性<\/span><\/b><br><img class=\"mm-img\" src=\"mm-289f0d68d35634.jpg\" style=\"width:260px;height:22px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-28ebdeda28f478.jpg\" style=\"width:260px;height:45px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>B+树<\/b>：叶结点包含了全部的关键字，因此在非叶结点中，<b>关键字会重复出现<\/b>。\n<b>B树<\/b>：各结点中，<b>关键字不重复出现<\/b>。\n​<\/span>", "expanded": true}, {"id": "m91NkH33k6i", "topic": "<b>4、<\/b><span style=\"color:#7c3aed\"><b><span>结点是否存储实际信息(<\/span><\/b><span style=\"color:#d92d20\"><b><span>核心！！！<\/span><\/b><span style=\"color:#7c3aed\"><b><span>)<\/span><\/b><br><img class=\"mm-img\" src=\"mm-b521196a8066ed.jpg\" style=\"width:260px;height:32px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-cc1fa1c1ff2131.jpg\" style=\"width:260px;height:36px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">B树：所有结点中都包含了关键字对应的记录的存储地址。\nB+树：<b>只有叶结点包含<\/b>关键字对应的记录的<b>存储地址，<\/b>其它<b>分支节点<\/b>只起一个<b>索引作用<\/b>。<\/span>", "expanded": true}]}, {"id": "mzABJqzojoS", "topic": "<b>4、B+树的设计原理：<\/b><span style=\"color:#b45309\"><b><span>为何B+的分支结点不含关键字对应记录的存储地址？<\/span><\/b><br><img class=\"mm-img\" src=\"mm-d2ddec746fcb9d.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">答：为了<b>使树高更矮<\/b>，OS<b>读磁盘次数减少<\/b>，<b>查找速度加快<\/b>。\n\n分析：\n        因为其实B+树是为了数据库而设计，因此主要涉及数据的读取。B+树在实际使用中，每一个结点都是一个<b>磁盘块<\/b>，操作系统在读取数据时，<b>以块为单位<\/b>，会先将目标块(根节点)从磁盘读取到内存中，然后根据读  \n        取到的信息，在磁盘上查找下一个目标块，以此类推....\n        而<b>OS读取磁盘的速度是很慢<\/b>的，且<b>每一个块(簇)的大小是有限的。\n<\/b>        因此：为了减少磁盘的读取，那就<b>尽量在块中保存尽可能多的关键字<\/b>，因此，就不会保存关键字对应记录的存储地址。<\/span>", "expanded": true}]}]}, {"id": "mj7dHJ3hgQw", "topic": "<b>四、散列查找<\/b>", "expanded": true, "children": [{"id": "mlnCrTAOh4t", "topic": "<b>1、基本概念<\/b>", "expanded": true, "children": [{"id": "mgNRHutuJ3g", "topic": "<b>1、散列表(Hash Table)：建立了<\/b><b><mark>关键字和存储地址的直接映射关系<\/mark><\/b><span style=\"color:#7c3aed\"><b><span>。<\/span><\/b><span class=\"mm-note\">因此可以通过关键字直接访问数据。\n因此：<b>带有随机性的函数不能成为散列函数<\/b>。<\/span>", "expanded": true}, {"id": "mp3bj6MACPC", "topic": "<b>2、散列函数：<\/b><span style=\"color:#7c3aed\"><b><span>Hash(key)=Addr<\/span><\/b><span class=\"mm-note\">将查找表中的关键字映射成该关键字对应的地址。\nAddr可以是：数组下标、索引、内存地址........<\/span>", "expanded": true}, {"id": "mOzaaFtDAFL", "topic": "<b>3、<\/b><span style=\"color:#b45309\"><b><span>冲突<\/span><\/b><b>：将两个或两个以上的不同关键字映射到同一地址。<\/b><span class=\"mm-note\">冲突不可避免，在之后会有处理冲突的方法。<\/span>", "expanded": true}, {"id": "mxgiBXTJ0RR", "topic": "<b>4、<\/b><span style=\"color:#b45309\"><b><span>同义词<\/span><\/b><b>：发生碰撞的不同关键字。<\/b>", "expanded": true}, {"id": "mC8zuO7Ili5", "topic": "定义：<br><img class=\"mm-img\" src=\"mm-aa481fb451906c.jpg\" style=\"width:260px;height:157px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mW78L2dCQvP", "topic": "<b>2、散列查找<\/b><span class=\"mm-note\">这里以<b>拉链法<\/b>为例。<\/span>", "expanded": false, "children": [{"id": "mEHvCaTh5Bp", "topic": "1、<b>查找长度<\/b>：在查找运算中，<b>需要对比关键字的次数<\/b>", "expanded": false, "children": [{"id": "m6LWxKtUbNV", "topic": "<br><img class=\"mm-img\" src=\"mm-6ce3462b5f2efd.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">这是大多数学校的计算方法。\n即：比如在散列查找的拉链法中，如果查找到的指针为空，那么查找次数为0次(<b>不将判断指针为空的操作计入在内<\/b>)。\n\n当然，有的教材还是会将判断指针为空的操作计入在内。(视具体情况而定)<\/span>", "expanded": true}]}, {"id": "mrXQ8Dk7cW8", "topic": "<b>2、平均查找长度(ASL)<\/b>", "expanded": false, "children": [{"id": "mJaiXe7z6zQ", "topic": "<b>查找成功<\/b>的ASL：<br><img class=\"mm-img\" src=\"mm-6c8cc096b32860.jpg\" style=\"width:260px;height:152px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-1128ec2dc240e3.jpg\" style=\"width:260px;height:114px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以看到：\n      计算方法1： 查找长度为1的共有6个元素(第一层蓝色)、查找长度为2的有4个元素(第二层蓝).......\n                                  以此类推，就得到上图中的查找成功 ASL。\n      计算方法2：\n                                 将每个元素的比较次数累加即可。<\/span>", "expanded": true}, {"id": "m89Co2CegU3", "topic": "<b>冲突越多，查找效率就会越低<\/b>", "expanded": true}, {"id": "mm4eIJ4FdaN", "topic": "<b>查找失败<\/b>的ASL：<br><img class=\"mm-img\" src=\"mm-4d819dc09de905.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">计算思路：\n     下标0处比较0次、下标1处比较4次、下标2处比较0次..........以此类推，其实就是<b>计算出\n      该哈希表中的记录个数，<\/b>且每个元素的查找概率一致均为1/13，就有如上所示的结果。<\/span>", "expanded": true}, {"id": "m5S5r949W6X", "topic": "注意事项：每个元素查找失败和查找成功的查找概率不同：<b>查找成功时是除元素个数(12)，查找失败时是除表长(13)<\/b>。", "expanded": true}]}, {"id": "m6AKLqTao7O", "topic": "<b><mark>装填因子(α)<\/mark><\/b><mark> <\/mark><b><mark>= 表中记录数(n)/散列表长度(m)<\/mark><\/b><span class=\"mm-note\">装填因子<b>越大<\/b>，散列表装得<b>越满<\/b>。\n装填因子<b>直接影响<\/b>散列表的<b>查找效率<\/b>。越大越慢。<\/span>", "expanded": true}]}, {"id": "mAI9Wn3jvJP", "topic": "<b>3、常见的散列函数<\/b><span class=\"mm-note\">构建散列函数时，注意以下几点：\n1、散列函数的<b>定义域<\/b>必须<b>包含全部需要存储的关键字<\/b>，而值域的范围则依赖于散列表的大小或地址范围。\n2、散列函数计算出来的地址尽可能<b>等概率、均匀地分布在整个地址空间<\/b>，<b>减少冲突的发生<\/b>。\n3、散列函数<b>尽可能简单<\/b>，在较短时间内计算出任意一个关键字对应的散列地址。<\/span>", "expanded": true, "children": [{"id": "mvb7H3Btt1m", "topic": "<b>1、除留余数法 — <\/b><b><mark>H(key) = key % p<\/mark><\/b><span class=\"mm-note\">就是直接取余，但是对谁取余，是有讲究的哦~<\/span>", "expanded": true, "children": [{"id": "mBKShqw2GLU", "topic": "<br><img class=\"mm-img\" src=\"mm-b709f922c336b1.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mIF66o2M3eI", "topic": "<b>关键：<\/b><span style=\"color:#d92d20\"><b><span>选p<\/span><\/b> <b>—取一个<\/b><b><mark>不大于m<\/mark><\/b><span style=\"color:#0e7a52\"><b><span>但<\/span><\/b><b><mark>最接近或等于m<\/mark><\/b><span style=\"color:#0e7a52\"><b><span>的质数<\/span><\/b><span class=\"mm-note\">m：<b>散列表表长<\/b>为m。\n\n为什么要这样选P？\n解释：\n     一般来说，用<b>质数取模<\/b>，<b>分布会更加均匀<\/b>，<b>冲突也会更少<\/b>。\n\n但是在实际运用中，还是需要具体调整选择p，不用太死板。<\/span>", "expanded": true}]}, {"id": "mdCLflNceFK", "topic": "<b>2、直接定址法 — <\/b><b><mark>H(key) = key<\/mark><\/b><b>   或<\/b>  <b><mark>H(key) = a*key + b<\/mark><\/b><span class=\"mm-note\">即：直接取关键字的某个<b>线性函数<\/b>为散列地址。\n优点：<b>简单<\/b> 且 <b>不会产生冲突。<\/b>但是这需要事先知道关键字的分布情况。<b>\n<\/b><\/span>", "expanded": true, "children": [{"id": "mKjkCb53qXQ", "topic": "<br><img class=\"mm-img\" src=\"mm-98770afa7d2083.jpg\" style=\"width:260px;height:116px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mkHX6DbCVlm", "topic": "<b>适合：<\/b><span style=\"color:#0e7a52\"><b><span>关键字分布连续且查找表较小<\/span><\/b><span class=\"mm-note\">限制较高，因此实际中不常用。<\/span>", "expanded": true}]}, {"id": "mZmaFxDiiPB", "topic": "<b>3、数字分析法<\/b>", "expanded": true, "children": [{"id": "meYmPpG5qW3", "topic": "<br><img class=\"mm-img\" src=\"mm-c06593aecc7848.jpg\" style=\"width:260px;height:134px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">即：\n若关键字是位数较多的数字，且这些数字<b>部分存在某些规律<\/b>，则可以采用<b>抽取剩余不同规律部分<\/b>作为<b>散列地址<\/b>。<b>\n\n<\/b>比如手机号前三位是接入号，中间四位是 HLR 识别号，只有后四位才是真正的用户号\n也就是说，如果手机号作为关键字，那么极有可能前 7 位是相同的\n此时我们选择后四位作为散列地址就是不错的选择。\n<b>\n<\/b>同时，对于抽取出来的数字，还可以<b>再进行反转、右环位移、左环位移等操作\n\n<\/b>数字分析法通常<b>适合处理关键字位数比较大的情况。\n\n<\/b>适用于<b>：已知关键字集合的情况<\/b>。若换了关键字，那就需要重新构建对应的散列函数。<b>\n\n​<\/b><\/span>", "expanded": true}]}, {"id": "mUVlzHbTyIQ", "topic": "<b>4、平方取中法—取<\/b><b><mark>关键字平方值的中间几位<\/mark><\/b><b>作为散列地址<\/b>", "expanded": true, "children": [{"id": "mSHS1eptdyM", "topic": "<br><img class=\"mm-img\" src=\"mm-6356821d73e9a4.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">即：取<b>关键字平方的中间位数<\/b>作为<b>散列地址<\/b>\n比如假设关键字是 4321，那么它的平方就是 18671041，抽取中间的 3 位就可以是 671，也可以是 710，用做散列地址\n平方取中法比较<b>适合<\/b>于<b>不知道关键字的分布<\/b>，而<b>位数又不是很大<\/b>的情况。\n如：\n       身份证号。<\/span>", "expanded": true}]}]}, {"id": "m3INhH59j4x", "topic": "<b>4、处理冲突的方法：<\/b>", "expanded": true, "children": [{"id": "m34nIcIdDMP", "topic": "<b>1、拉链法(<\/b><b><mark>开散列<\/mark><\/b><b>)：<\/b><span class=\"mm-note\">即：数组元素中存储的是一个链表，在这个<b>链表中<\/b>，<b>存储了所有的同义词<\/b>。\n(<b>将所有关键字为同义词的结点链接在同一个单链表中)<\/b>。\n​\n在实际应用中较广，像Java中的HashMap等，其实底层都是拉链法。<\/span>", "expanded": true, "children": [{"id": "mr6oUklKFez", "topic": "<br><img class=\"mm-img\" src=\"mm-8fbd30230558be.jpg\" style=\"width:260px;height:173px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mtxOwkQQers", "topic": "<b>拉链法的小优化：<\/b><span style=\"color:#0e7a52\"><b><span>插入新元素时，保持关键字有序<\/span><\/b><br><img class=\"mm-img\" src=\"mm-9017b4af211b0b.jpg\" style=\"width:260px;height:171px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">可以稍微提高查找效率，至于为何，其实就是顺序查找的第一种优化方式，可以<b>将有序单链表转化为树<\/b>，提高查找效率。<\/span>", "expanded": true}]}, {"id": "mbx0ZRIaw2n", "topic": "<b>2、开放定址法：<\/b><b><mark>Hi = (H(key) + di) % m<\/mark><\/b><span class=\"mm-note\">即：\n          一旦产生了冲突(该地址已经有其它元素)，就按照<b>某种规则<\/b>去<b>寻找另一空地址<\/b>。\n<b>di：增量序列；\nm：表长；\ni：第i次发生冲突。\nH(key)：散列函数。\nHi：冲突处理函数。<\/b>\n\n根据对<b>di的不同取值序列<\/b>，有了下列几种不同的处理冲突的方法：<\/span>", "expanded": true, "children": [{"id": "mL23NViDbSL", "topic": "<b>1、<\/b><b><mark>线性探测<\/mark><\/b><span style=\"color:#d92d20\"><b><span>再散列法(重点！！！)<\/span><\/b><b>：发生冲突时，按增量<\/b><span style=\"color:#7c3aed\"><b><span>顺序查看下一个单元，直到找到一个空闲单元<\/span><\/b>", "expanded": true, "children": [{"id": "mrMafXukci3", "topic": "<b>1、查找元素：<\/b><span style=\"color:#1d4ed8\"><b><span>效率较低<\/span><\/b><br><img class=\"mm-img\" src=\"mm-69a52664382956.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-a5e521812a7692.jpg\" style=\"width:260px;height:133px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-a46a4cf9dd947d.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">如上图：\n\n     1、 查找27(图1)：从位置1开始顺序向后，共发生了4次冲突，并且同义词和非 \n                                           同义词都需要比较，效率极低。\n\n     2、查找21(图2)：从位置8开始，一直查找到位置13发现为空，总计查找长度为\n                                           6(<b>空位置的判断也是一次比较，<\/b>与<b>拉链法中空指针的比较不计\n                                          入<\/b>作<b>对比<\/b>记忆)\n\n    3、查找21(图3)：可以看到位置10中为空，那么在线性探测查找时，查找到位置\n                                          10时，就会发现没有元素，那么就会直接判定表中无21，查找结束，此时的查找效率就会高。\n                (那么<b>这种查找特性也导致了下边所讲的删除操作<\/b>)<\/span>", "expanded": true}, {"id": "mkJPOaPPF4m", "topic": "<b>2、删除元素：<\/b><b><mark>逻辑删除<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-535ab793cd9d39.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-f31f884ef051b2.jpg\" style=\"width:260px;height:137px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">在开放定址法中，<b>不能随便物理删除表中已有的元素<\/b>。\n因为若删除元素，则会<b>截断其他具有相同散列地址的元素的查找地址。\n\n<\/b>但这样做的一个<b>弊端<\/b>就是：<b>\n         <\/b>在执行多次删除后，<b>表面上看起来散列表很满<\/b>，<b>实际<\/b>上是<b>有许多位置未利用<\/b>的，因此需<b>要定期维护散列表<\/b>，将删除标记的元素物理删除。<\/span>", "expanded": true}, {"id": "mv2pZOzWeLu", "topic": "<b>3、查找效率(ASL):<\/b>", "expanded": true, "children": [{"id": "my2rFD9Nbyx", "topic": "<b>查找成功：<\/b><br><img class=\"mm-img\" src=\"mm-7ac68ceebef44e.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">共有12个元素，各元素的查找概率均为1/12，再将每一个元素根据线性探测法查找的查找次数累加，后相乘，就得到ASL。<\/span>", "expanded": true, "children": [{"id": "m8nmOM800gG", "topic": "<b>查找成功ASL计算思路：<\/b><span style=\"color:#1d4ed8\"><b><span>算出所有元素的查找成功次数，累加<\/span><\/b><b>，最后<\/b><span style=\"color:#1d4ed8\"><b><span>除以所有元素的个数<\/span><\/b><b>。<\/b>", "expanded": true}]}, {"id": "m2qsPOp0BEz", "topic": "<b>查找失败：<\/b><br><img class=\"mm-img\" src=\"mm-715f5a3e185700.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">考虑方式：\n           哈希函数是对13取余，即：<b>H(key) = 0~ 12，<\/b>即<b>查找失败时对应的地址有13个<\/b>，且<b>每种情\n           况发生的概率是相同的<\/b>，因此均为<b>1/13<\/b>。再<b>将每一个元素查找失败的次数累加，<\/b>最后相乘，即可得到查找失败ASL。\n\n如上图：\n           位置<b>0为空<\/b>，因此查找<b>比较次数为1<\/b>(第一次探查就找到其位置为空)。\n           位置<b>1不为空<\/b>，因此根据线性探测，依次顺序向下查找，直到查找到位置13查找失败，才会停止，<b>共比 较13次<\/b>..........以此类推。\n           位置<b>2不为空<\/b>，依次向下进行线性探测，<b>共比较12次<\/b>。就得到了上边的失败ASL。\n           位置<b>3不为空<\/b>，依次向下...........，共<b>比较11次<\/b>。\n                      ....................\n           位置<b>12不为空<\/b>，向下线性探测，共<b>比较2次<\/b>。\n\n​综上，将所有查找失败的次数累加，再除以13。<\/span>", "expanded": true, "children": [{"id": "meihHeQeERK", "topic": "<b>查找失败ASL计算思路：<\/b>", "expanded": true, "children": [{"id": "mYQVLJ9sqfF", "topic": "① 根据散列函数取余的m，观察<b>：查找失败可能对应的地址有几个<\/b><span class=\"mm-note\">如果散列函数为：H(key) = key%7,那么此时查找失败可能对应的地址有0~6，共7个。<\/span>", "expanded": true}, {"id": "mdsThY1lL5d", "topic": "② <b>算出所有地址查找失败时的比较次数。最后再<\/b><span style=\"color:#1d4ed8\"><b><span>除以失败地址的个数<\/span><\/b><b>。（<\/b>假设概率相等<b>）<\/b><span class=\"mm-note\">根据当前散列表，计算这0~6地址，确定查找失败时的比较次数。<\/span>", "expanded": true}]}]}, {"id": "mEI2zPA8NtU", "topic": "<b>查找失败ASL  VS  查找成功ASL：<\/b>", "expanded": true, "children": [{"id": "mgzdKJA0zTl", "topic": "<b>1.<\/b> <span style=\"color:#b45309\"><b><span>元素个数不同<\/span><\/b>", "expanded": true, "children": [{"id": "mQMFEkJPI3v", "topic": "① <b>查找成功<\/b>是计算：<span style=\"color:#1d4ed8\"><b><span>散列表中所有元素<\/span><\/b>，根据散列函数与线性探测，<b>查找成功时的比较次数<\/b>。", "expanded": true}, {"id": "mX8Ba8i1Rcy", "topic": "② <b>查找失败<\/b>是计算：<b>根据取余数m，得到<\/b><span style=\"color:#1d4ed8\"><b><span>失败元素地址个数<\/span><\/b>后，对所有可能失败地址，根据散列函数与线性探测，<b>确定查找失败时的比较次数<\/b>。<span class=\"mm-note\">例如：H(key) = key%7 --&gt; 可能失败为：0 ~ 6 （总计7个）\n               H(key)= key%13 --&gt; 可能失败地址为：0 ~ 12（总计13个）<\/span>", "expanded": true}]}, {"id": "mSLWKOfA86n", "topic": "<b>2. <\/b><span style=\"color:#b45309\"><b><span>比较次数计算方式不同<\/span><\/b>", "expanded": true, "children": [{"id": "m0Btfm8CI0C", "topic": "① 查找成功是计算：散列表中每一个元素，根据散列函数+线性探测，<b>看<\/b><span style=\"color:#1d4ed8\"><b><span>比较几次后可以找到该元素<\/span><\/b><b>。<\/b>", "expanded": true}, {"id": "mEolJP5JeRL", "topic": "② 查找失败是计算：所有可能失败地址，要<span style=\"color:#1d4ed8\"><b><span>比较多少次才能确定查找失败<\/span><\/b>。<span class=\"mm-note\">实质：<b>从失败地址开始，线性向后探测，需要比较几次才能找到空位<\/b>。\n因为，如果地址不空，那就可能本该存在这里的元素，为了解决冲突，根据线性探测法存在后边的的位置了，因此还不能确定查找失败。\n​那就继续向后寻找，重复此过程，直到找到一个空位，这样才能保证，确实查找失败了！！！<\/span>", "expanded": true}]}]}, {"id": "mVoqQzbFhbr", "topic": "<b>查找效率较低的原因：<\/b><b><mark>\"堆积\"问题<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-7221795b403161.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">线性探测法：可能<b>使第i个散列地址的同义词存入第i+1个散列地址<\/b>，这样第i+1个散列地址的元素就争夺第i+2个散列地址元素的地址.......从而造成大量元素在相邻的散列地址上的<b>堆积<\/b>，大大降低查找效率。<\/span>", "expanded": true}]}, {"id": "muioEwEu3lt", "topic": "<br><img class=\"mm-img\" src=\"mm-a54df149691a0a.jpg\" style=\"width:260px;height:135px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-6d583ddc2846ea.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>di = 0,1,2,3,4........m-1<\/b>\n当探测到表尾地址m-1时，下一个探测地址是表首地址0.\n\n上图可以看到：\n           放入1时，H(1)=1%13=1,而此时下标为1的位置有了14，冲突。因此再次\n           H(1+d1)%16 = 2，就将1放到了下标为2的位置。<b>\n\n<\/b>因此可以看出(图2)：\n           <b>哈希函数的值域为[0,12]；冲突处理函数的值域为[0,15]。<\/b>\n           两者值域有所区别，Hi能到达H到不了的地方。\n          (<b>根本原因<\/b>在于：两个取余的数字不同，一个是不大于表长m的最大质数，一个是表长m。)<\/span>", "expanded": true}, {"id": "mVJgjv8qNfs", "topic": "<b>公式：<\/b><b><mark>Hi=(H(key)+di)%m<\/mark><\/b><span class=\"mm-note\">一定注意：\n         在<b>初始散列函数<\/b>中，是<b>对P取余数<\/b>；\n         在<b>发生冲突<\/b>后，使用线性探测法时，是对<b>表长m取余<\/b>。<\/span>", "expanded": true}, {"id": "mLsLYeKDrfQ", "topic": "<b><mark>特别注意<\/mark><\/b><b>：<\/b><span style=\"color:#d92d20\"><b><span>发生冲突后<\/span><\/b><b>，线性探测再散列时，<\/b><span style=\"color:#1d4ed8\"><b><span>是利用冲突处理函数，将元素散列到整个散列表中<\/span><\/b><b>，是<\/b><span style=\"color:#d92d20\"><b><span>对表长取余<\/span><\/b><b>。而不是对散列函数中的p(小于表长的最大素数)取余。<\/b><span class=\"mm-note\">也就是说：这里<b>特别注意一个细节！！！！！！<\/b>：\n          在初始散列函数中，对1哈希的时候，是根据<b>散列函数(H(key))<\/b>，<b>对13取余<\/b>；\n          但是在<b>发生冲突后<\/b>，就要根据<b>冲突处理函数Hi，对16取余。<\/b><\/span>", "expanded": true}]}, {"id": "m3B9Fh4nZtC", "topic": "<b>2、平方探测法(<\/b><b><mark>二次探测<\/mark><\/b><b>法)：<\/b><span class=\"mm-note\"><b>di = 0²,1²,-1²,2².-2²,3²,-3²........k²,-k²<\/b>。（<b>k&lt; = m/2<\/b>）\n\n相比于线性探测法，这个可以<b>避免出现“堆积问题”。\n缺点：\n      不能探测<\/b>到散列表上的<b>所有单元<\/b>，但<b>至少能探测<\/b>到<b>一半<\/b>单元。<\/span>", "expanded": true, "children": [{"id": "mo5qg4B2VIW", "topic": "<br><img class=\"mm-img\" src=\"mm-3b83df54a93305.jpg\" style=\"width:260px;height:143px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mvylFpbN7PR", "topic": "<b><mark>此外<\/mark><\/b><b>：m(表长)必须是一个可以表示为<\/b><span style=\"color:#1d4ed8\"><b><span>4k+3<\/span><\/b><b>的<\/b><span style=\"color:#1d4ed8\"><b><span>素数<\/span><\/b><b>，才能探测到所有位置<\/b><br><img class=\"mm-img\" src=\"mm-ea355309f68255.jpg\" style=\"width:260px;height:123px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">数学推导问题了属于是。<\/span>", "expanded": true}]}, {"id": "m8Z54Cb276o", "topic": "<b>3、伪随机序列法<\/b><span class=\"mm-note\"><b>di<\/b>：是一个伪随机序列。<\/span>", "expanded": true, "children": [{"id": "mZSIaiQpJwQ", "topic": "<br><img class=\"mm-img\" src=\"mm-aa472869c35cdf.jpg\" style=\"width:260px;height:94px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mDtD1lNmwpt", "topic": "<b>注意：这里<\/b><b><mark>取余的数m是表长！！！！<\/mark><\/b><span class=\"mm-note\">这里一定要与前边，散列函数中，“取余的数取不大于表长的最大素数” 区分开来。<\/span>", "expanded": true}, {"id": "mxgbomDnR5p", "topic": "<b>默认情况下，<\/b><span style=\"color:#1d4ed8\"><b><span>增量为1<\/span><\/b><b>.<\/b><br><img class=\"mm-img\" src=\"mm-e6b535391ce8ad.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mQ5TQlBnodY", "topic": "<b>3、再散列法：<\/b><span class=\"mm-note\">这种方法是同时构造<b>多个不同的哈希函数<\/b>：\n<b>Hi=RHi（key）         i=1，2，…，k\n<\/b>\n当哈希地址Hi=RH1（key）发生冲突时，再计算Hi=RH2（key）……，直到冲突不再产生。这种方法<b>不易产生聚集<\/b>，但<b>增加了计算时间<\/b>。<\/span>", "expanded": true, "children": [{"id": "mBFbeGH4iAM", "topic": "<br><img class=\"mm-img\" src=\"mm-a249ae99830b70.jpg\" style=\"width:260px;height:67px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mHihm2xFRwO", "topic": "（空节点）", "expanded": true}]}, {"id": "mjfgOrFZKro", "topic": "<b>5、查找效率：<\/b>", "expanded": true, "children": [{"id": "mhFbojXZIyf", "topic": "<b>1、散列表的查找效率取决于：<\/b><span style=\"color:#1d4ed8\"><b><span>散列函数、处理冲突的方法、装填因子<\/span><\/b>", "expanded": true}, {"id": "mNtBD4i9Ns9", "topic": "<b>2、<\/b><b><mark>平均查找长度与装填因子直接相关<\/mark><\/b><b>。<\/b><span class=\"mm-note\">散列表的<b>查找效率不直接依赖<\/b>于表中已有<b>表项个数(n)<\/b>或<b>表长(m)<\/b><\/span>", "expanded": true}]}, {"id": "m5bkws4cQvI", "topic": "<b>6、散列表中的删除<\/b>", "expanded": true, "children": [{"id": "mMu1mGk4Xiw", "topic": "<b>1、删除时，两点考虑：<\/b>", "expanded": true, "children": [{"id": "mFsWY6UHNil", "topic": "① 删除记录一定不能影响后边的检索", "expanded": true}, {"id": "mKCFgC1RNc8", "topic": "② 不希望让散列表中的位置由于记录删除而不再可用，释放的槽应该能为后来的插入操作所使用。", "expanded": true}]}, {"id": "mlwUN4VOUrR", "topic": "<b>2、删除策略：<\/b><b><mark>逻辑删除（懒惰策略）<\/mark><\/b><span class=\"mm-note\">就是：在<b>删除记录的位置上加一个特殊标记<\/b>，这个标记称为 <b>懒惰删除标记/墓碑<\/b><\/span>", "expanded": true}, {"id": "mVWC8CMUMEy", "topic": "<b>3、逻辑删除的<\/b><span style=\"color:#1d4ed8\"><b><span>缺点<\/span><\/b><b>：<\/b>", "expanded": true, "children": [{"id": "mSalDbp6Hw2", "topic": "1. <b>空间浪费<\/b>：由于删除的元素仍然占据着散列表的空间，可能导致空间的浪费。", "expanded": true}, {"id": "mj2HaEE3J8p", "topic": "2. <b>查找效率<\/b>： 查找操作需要考虑被标记的元素，这可能导致查找效率的降低。", "expanded": true}, {"id": "mVIR7FnP4QN", "topic": "3.<b>装载因子的计算<\/b>： 计算装载因子时，需要考虑被标记的元素，这可能影响重新散列的判定。", "expanded": true}, {"id": "mvaES6t472b", "topic": "<b>4.查找元素时，可能会陷入<\/b><span style=\"color:#1d4ed8\"><b><span>死循环<\/span><\/b>", "expanded": true}]}, {"id": "mhrNiq7NHlz", "topic": "<b>4、<\/b><span style=\"color:#1d4ed8\"><b><span>解决缺点<\/span><\/b><b>的思路：<\/b>", "expanded": true, "children": [{"id": "mozcs4TryKx", "topic": "1. <b>定期清理<\/b>：定期清理已被标记删除的元素，将它们从散列表中物理删除。这样可以避免空间的过度浪费。", "expanded": true}, {"id": "mtGyYtFa6Up", "topic": "2. <b>优化查找<\/b>： 在查找操作中，考虑优化以排除已被标记删除的元素。例如，<span style=\"color:#1d4ed8\"><b><span>当查找元素时，可以跳过标记删除的槽位，直接寻找下一个有效的槽位<\/span><\/b>。", "expanded": true}, {"id": "mA6ohcm0X3Y", "topic": "3. <b>合理设置装载因子<\/b>： 装载因子是散列表中存储元素的密度，设置合理的装载因子有助于平衡性能和空间利用率。根据具体情况，你可以<b><mark>调整装载因子的阈值<\/mark><\/b>，<b><mark>触发重新散列的时机<\/mark><\/b>。<span class=\"mm-note\">比如：在<b>计算装载因子时，同时计入带有懒惰删除标记的桶。<\/b><\/span>", "expanded": true}, {"id": "mwqCwEgRgFi", "topic": "4. 考虑使用<b>开放寻址法<\/b>：如果你的散列表使用了开放寻址法来解决冲突，那么在某些情况下，开放寻址法可能更容易适应懒惰删除，因为元素的删除并不会影响到其他元素的位置。", "expanded": true}]}]}, {"id": "mPiXwMTF4B8", "topic": "<span style=\"color:#d92d20\"><b><span>❤ <\/span><\/b><b>注意事项：<\/b>", "expanded": true, "children": [{"id": "mXkfmv7go9M", "topic": "<b>①分清楚<\/b><span style=\"color:#1d4ed8\"><b><span>H(key)<\/span><\/b> <b>与 <\/b><span style=\"color:#1d4ed8\"><b><span>Hi<\/span><\/b><b> 的区别<\/b>", "expanded": true, "children": [{"id": "mJ9VCWs1dqV", "topic": "<b>H(key)：<\/b><span style=\"color:#1d4ed8\"><b><span>散列函数<\/span><\/b><span class=\"mm-note\"><b>H(key) = key % p\np：小于等于表长m的最大素数。<\/b><\/span>", "expanded": true}, {"id": "mGrDS9qLBUC", "topic": "<b>Hi：<\/b><span style=\"color:#1d4ed8\"><b><span>冲突处理函数<\/span><\/b><span class=\"mm-note\"><b>Hi=(H(key) + di) % m \nm：表长    ；di：增量   <\/b><\/span>", "expanded": true}]}, {"id": "mg3QGkBQUx5", "topic": "<b>②<\/b> <span style=\"color:#1d4ed8\"><b><span>散列时<\/span><\/b><b>，是<\/b><span style=\"color:#d92d20\"><b><span>选择一个小于或等于表长的最大素数取余<\/span><\/b><b>；而在<\/b><span style=\"color:#1d4ed8\"><b><span>冲突处理线性探测再散列时<\/span><\/b><b>，是<\/b><span style=\"color:#d92d20\"><b><span>对表长取余！！！！！<\/span><\/b>", "expanded": true}, {"id": "m5qSSsaP8Nd", "topic": "<b>③<\/b> <span style=\"color:#1d4ed8\"><b><span>计算查找成功的ASL<\/span><\/b><b>，是根据<\/b><span style=\"color:#d92d20\"><b><span>表中的元素个数来计算<\/span><\/b><b>的。<\/b>", "expanded": true}, {"id": "mSg6Ehv2UMT", "topic": "<b>④ 但是在<\/b><span style=\"color:#1d4ed8\"><b><span>计算查找失败的ASL<\/span><\/b><b>时，既不是根据元素个数，也不是根据散列表长度，而是<\/b><span style=\"color:#d92d20\"><b><span>根据散列函数(mod之后的数字作为查找失败地址的个数)<\/span><\/b><b>的。<\/b><span class=\"mm-note\">也就是说，<b>该散列函数最多可以散列的长度<\/b>。<\/span>", "expanded": true}]}, {"id": "me3ovGQeVuV", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-2e644ca4fead36.jpg\" style=\"width:260px;height:149px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

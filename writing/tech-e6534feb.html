@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>日志 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">30</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-为何需要undo-log">1.为何需要undo log？</a><a class="tl l2" href="#2-为何需要Buffer-Pool-缓冲池">2.为何需要Buffer Pool(缓冲池)</a><a class="tl l2" href="#3-为何需要redo-log">3.为何需要redo log？</a><a class="tl l3" href="#1-redo-log-要写到磁盘-数据也要写磁盘-为什么要多此一举">1.redo log 要写到磁盘，数据也要写磁盘，为什么要多此一举？</a><a class="tl l3" href="#2-Redo-log什么时候刷盘">2.Redo log什么时候刷盘？</a><a class="tl l2" href="#4-为何需要binlog">4.为何需要binlog？</a><a class="tl l3" href="#1-为什么有了-binlog-还要有-redo-log">1.为什么有了 binlog， 还要有 redo log？</a><a class="tl l3" href="#2-Redo-log和binlog的区别">2.Redo log和binlog的区别</a><a class="tl l3" href="#3-如果不小心整个数据库的数据被删除了-能使用-redo-log-文件恢复数据吗">3.如果不小心整个数据库的数据被删除了，能使用 redo log 文件恢复数据吗？</a><a class="tl l2" href="#5-主从复制如何实现">5.主从复制如何实现？</a><a class="tl l3" href="#MYSQL主从复制还有什么模型">MYSQL主从复制还有什么模型？</a><a class="tl l2" href="#6-binlog什么时候刷盘">6.binlog什么时候刷盘？</a><a class="tl l2" href="#7-为什么需要两阶段提交">7.为什么需要两阶段提交？</a><a class="tl l3" href="#两阶段提交的过程是怎样的">两阶段提交的过程是怎样的？</a><a class="tl l3" href="#两阶段提交有什么问题">两阶段提交有什么问题？</a><a class="tl l2" href="#8-MySQL-磁盘-I-O-很高-有什么优化的方法">8.MySQL 磁盘 I/O 很高，有什么优化的方法？</a><a class="tl l2" href="#9-具体更新一条记录的流程如下">9.具体更新一条记录的流程如下：</a><a class="tl l2" href="#10-慢查询日志-slow-query-log">10.慢查询日志(slow query log)</a><a class="tl l3" href="#1-慢查询日志的作用">1.慢查询日志的作用：</a><a class="tl l3" href="#2-如何查询当前慢查询语句的个数">2.如何查询当前慢查询语句的个数？</a><a class="tl l3" href="#3-如何优化慢SQL">3.如何优化慢SQL？</a><a class="tl l3" href="#4-常见的MYSQL优化方法">4.常见的MYSQL优化方法</a><a class="tl l4" href="#1-避免使用Select">1.避免使用Select</a><a class="tl l4" href="#2-深度分页优化">2.深度分页优化</a><a class="tl l4" href="#3-尽量避免多表做Join">3.尽量避免多表做Join</a><a class="tl l4" href="#4-选择合适的字段">4.选择合适的字段</a><a class="tl l4" href="#5-尽量使用批量操作">5.尽量使用批量操作</a><a class="tl l4" href="#6-正确使用索引">6.正确使用索引</a><a class="tl l3" href="#5-MYSQL表数据太多如何优化">5.MYSQL表数据太多如何优化？</a><a class="tl l3" href="#6-如何分区分表">6.如何分区分表</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>日志</h1><div class="meta">2024-05-08 · <a class="src-link" href="https://flowus.cn/e6534feb-4df0-4761-b59d-4513fc79a86f" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><p>MYSQL日志有：<strong>undo log（回滚日志）、redo log（重做日志） 、binlog （归档日志）</strong></p>
+<ul><li><strong>undo log（回滚日志）</strong>：是 Innodb 存储引擎层生成的日志，实现了事务中的<strong>原子性</strong>，主要<strong>用于事务回滚和 MVCC</strong>。</li></ul>
+<ul><li><strong>redo log（重做日志）</strong>：是 Innodb 存储引擎层生成的日志，实现了事务中的<strong>持久性</strong>，主要<strong>用于掉电等故障恢复</strong>；</li></ul>
+<ul><li><strong>binlog （归档日志）</strong>：是 Server 层生成的日志，主要<strong>用于数据备份和主从复制</strong>；</li></ul>
+<h2 id="1-为何需要undo-log">1.为何需要undo log？</h2>
+<p>undo log <strong>两大作用</strong>：</p>
+<ul><li><strong>实现事务回滚，保障事务的原子性</strong>。事务处理过程中，如果出现了错误或者用户执 行了 ROLLBACK 语句，MySQL 可以利用 undo log 中的历史数据将数据恢复到事务开始之前的状态。</li></ul>
+<p>每当 InnoDB 引擎对一条记录进行操作（修改、删除、新增）时，<strong>要把回滚时需要的信息都记录到 undo</strong> <strong>log</strong> 里，比如：</p>
+<ul><li>在<strong>插入</strong>一条记录时，要把这条记录的主键值记下来，这样之后回滚时只需要把这个主键值对应的记录<strong>删掉</strong>就好了；</li></ul>
+<ul><li>在<strong>删除</strong>一条记录时，要把这条记录中的内容都记下来，这样之后回滚时再把由这些内容组成的记录<strong>插入</strong>到表中就好了；</li></ul>
+<ul><li>在<strong>更新</strong>一条记录时，要把被更新的列的旧值记下来，这样之后回滚时再把这些列<strong>更新为旧值</strong>就好了。</li></ul>
+<ul><li><strong>实现 MVCC（多版本并发控制）关键因素之一</strong>。MVCC 是通过 <strong>ReadView + undo log</strong> 实现的。</li></ul>
+<p>undo log 为每条记录保存多份历史数据，MySQL 在执行快照读（普通 select 语句）的时候，会根据事务的 Read View 里的信息，顺着 <strong>undo log 的版本链</strong>找到满足其可见性的记录。</p>
+<p><img alt="image.png" src="/assets/img/flowus-6c4a3836ba6c8706.png"></p>
+<h2 id="2-为何需要Buffer-Pool-缓冲池">2.为何需要Buffer Pool(缓冲池)</h2>
+<ol><li>主要目的：来<strong>提高数据库的读写性能</strong></li></ol>
+<ol><li>分析：</li></ol>
+<p>MySQL 的数据都是存在磁盘中的，那么我们要更新一条记录的时候，得先要从磁盘读取该记录，然后在内存中修改这条记录。那修改完这条记录是选择直接写回到磁盘，还是选择缓存起来呢？</p>
+<p>当然是缓存起来好，这样下次有查询语句命中了这条记录，<strong>直接读取缓存中的记录，就不需要从磁盘获取数据</strong>了。</p>
+<ol><li>有了Buffer Pool的好处：</li></ol>
+<ul><li>当<strong>读取数据</strong>时，如果数据存在于 Buffer Pool 中，客户端就会直接读取 Buffer Pool 中的数据，否则再去磁盘中读取。</li></ul>
+<ul><li>当<strong>修改数据</strong>时，如果数据存在于 Buffer Pool 中，那<strong>直接修改 Buffer Pool 中数据所在的页</strong>，然后<strong>将其页设置为脏页</strong>（该页的内存数据和磁盘上的数据已经不一致），为了减少磁盘I/O，<strong>不会立即将脏页写入磁盘</strong>，后续由<strong>后台线程选择一个合适的时机将脏页写入到磁盘</strong>。</li></ul>
+<ol><li><strong>Buffer Pool缓存什么</strong>？</li></ol>
+<ol><li>Buffer Pool 同样需要<strong>按「页」来划分</strong>。</li></ol>
+<ol><li>在 MySQL 启动的时候，<strong>InnoDB 会为 Buffer Pool 申请一片连续的内存空间，然后按照默认的<code>16KB</code>的大小划分出一个个的页， Buffer Pool 中的页就叫做缓存页</strong>。</li></ol>
+<ol><li>缓存内容：Buffer Pool 除了缓存「<strong>索引页</strong>」和「<strong>数据页</strong>」，还包括了 <strong>Undo 页</strong>，<strong>插入缓存</strong>、<strong>自适应哈希索引</strong>、<strong>锁信息</strong>等等。</li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-3ca9d8f0a3c806e6.png"></p>
+<ol><li><strong>Undo页记录</strong>什么？</li></ol>
+<p>开启事务后，<strong>InnoDB 层更新记录前，首先要记录相应的 undo log</strong>，如果是更新操作，<strong>需要把被更新的列的旧值记下来</strong>，也就是要生成一条 undo log链，undo log 会写入 Buffer Pool 中的 Undo 页面。</p>
+<ol><li><strong>查询一条记录，就只需要缓冲一条记录吗</strong>？</li></ol>
+<p><strong>不是</strong>的。</p>
+<p>当我们查询一条记录时，<strong>InnoDB 是会把整个页的数据加载到 Buffer Pool 中</strong>，将页加载到 Buffer Pool 后，再通过页里的「页目录」去定位到某条具体的记录。</p>
+<h2 id="3-为何需要redo-log">3.为何需要redo log？</h2>
+<p>为什么需要 redo log 这个问题我们有两个答案：</p>
+<ul><li><strong>实现事务的持久性，让 MySQL 有 crash-safe 的能力</strong>，能够保证 MySQL 在任何时间段突然崩溃，重启后之前已提交的记录都不会丢失；</li></ul>
+<ul><li><strong>将写操作从「随机写」变成了「顺序写」</strong>，提升 MySQL 写入磁盘的性能。</li></ul>
+<ol><li><strong>内存总是不可靠</strong>，为了防止断电故障等导致数据丢失，就需要用到redo log。</li></ol>
+<ol><li>当有一条记录需要更新的时候，InnoDB 引擎就会先更新内存（同时标记为脏页），然后将本次对这个页的修改以 redo log 的形式记录下来，<strong>这个时候更新就算完成了</strong>。</li></ol>
+<ol><li>后续，InnoDB 引擎会在适当的时候，由后台线程将缓存在 Buffer Pool 的脏页刷新到磁盘里，这就是 <strong>WAL （Write-Ahead Logging）技术</strong>。</li></ol>
+<p><strong>WAL 技术指的是， MySQL 的写操作并不是立刻写到磁盘上，而是先写日志，然后在合适的时间再写到磁盘上</strong>。</p>
+<p><img alt="image.png" src="/assets/img/flowus-7bfca34ddb0a7b96.png"></p>
+<ol><li><strong>什么是redo log？</strong></li></ol>
+<p>redo log 是<strong>物理日志</strong>，记录了某个数据页做了什么修改，比如<strong>对 XXX 表空间中的 YYY 数据页 ZZZ 偏移量的地方做了AAA 更新</strong>，每当执行一个事务就会产生这样的一条或者多条物理日志。</p>
+<p>在事务提交时，<strong>只要先将 redo log 持久化到磁盘</strong>即可，可以<strong>不需要等到将缓存在 Buffer Pool 里的脏页数据持久化到磁盘</strong>。</p>
+<p>当系统崩溃时，虽然脏页数据没有持久化，但是 redo log 已经持久化，接着 MySQL 重启后，可以根据 redo log 的内容，将所有数据恢复到最新的状态。</p>
+<ol><li><strong>被修改 Undo 页面，需要记录对应 redo log 吗</strong>？</li></ol>
+<p><strong>需要</strong>的。</p>
+<p>开启事务后，InnoDB 层更新记录前，首先要记录相应的 undo log，如果是更新操作，需要把被更新的列的旧值记下来，也就是要生成一条 undo log，undo log 会写入 Buffer Pool 中的 Undo 页面。</p>
+<p>不过，<strong>在内存修改该 Undo 页面后，需要记录对应的 redo log</strong>。</p>
+<ol><li><strong>redo log 和 undo log 区别在哪？</strong></li></ol>
+<p>这两种日志是属于 InnoDB 存储引擎的日志，它们的区别在于：</p>
+<ul><li>redo log 记录了此次事务「<strong>完成后</strong>」的数据状态，记录的是更新<strong>之后</strong>的值；</li></ul>
+<ul><li>undo log 记录了此次事务「<strong>开始前</strong>」的数据状态，记录的是更新<strong>之前</strong>的值；</li></ul>
+<p>事务提交之前发生了崩溃，重启后会通过 <strong>undo log 回滚事务，保证原子性；</strong>事务提交之后发生了崩溃，重启后会通过 <strong>redo log 恢复事务，保证持久性。</strong></p>
+<h3 id="1-redo-log-要写到磁盘-数据也要写磁盘-为什么要多此一举">1.redo log 要写到磁盘，数据也要写磁盘，为什么要多此一举？</h3>
+<p><strong>写入 redo log 的方式使用了追加操作</strong>， 所以磁盘操作是<strong>顺序写</strong>，而写入数据需要先找到写入位置，然后才写到磁盘，所以磁盘操作是<strong>随机写</strong>。</p>
+<p>磁盘的<strong>「顺序写 」比「随机写」 高效的多</strong>，因此 redo log 写入磁盘的开销更小。</p>
+<h3 id="2-Redo-log什么时候刷盘">2.Redo log什么时候刷盘？</h3>
+<p>缓存在 redo log buffer 里的 redo log 还是在内存中，它什么时候刷新到磁盘？</p>
+<p>主要有下面几个时机：</p>
+<ul><li><strong>MySQL 正常关闭时</strong>；</li></ul>
+<ul><li>当 <strong>redo log buffer 中记录的写入量大于 redo log buffer 内存空间的一半</strong>时，会触发落盘；</li></ul>
+<ul><li>InnoDB 的<strong>后台线程每隔 1 秒</strong>，将 redo log buffer 持久化到磁盘。</li></ul>
+<ul><li><strong>每次事务提交时都将缓存在 redo log buffer 里的 redo log 直接持久化到磁盘</strong>（这个策略可由 <strong>innodb_flush_log_at_trx_commit 参数控制</strong>，下面会说）。</li></ul>
+<p>除此之外，InnoDB 还提供了另外两种策略，由参数 <code>innodb_flush_log_at_trx_commit</code> 参数控制，可取的值有：0、1、2，默认值为 1，这三个值分别代表的策略如下：</p>
+<ul><li>当设置该<strong>参数为 0 时</strong>，表示每次事务提交时 ，还是<strong>将 redo log 留在 redo log buffer 中</strong> ，该模式下<strong>在事务提交时不会主动触发</strong>写入磁盘的操作。</li></ul>
+<ul><li>当设置该<strong>参数为 1 时</strong>，表示<strong>每次事务提交时，都将缓存在 redo log buffer 里的 redo log 直接持久化到磁盘</strong>，这样可以保证 MySQL 异常重启之后数据不会丢失。</li></ul>
+<ul><li>当设置该<strong>参数为 2 时</strong>，表示每次事务提交时，都只是缓存在 redo log buffer 里的 redo log <strong>写到 redo log 文件，注意写入到「 redo log 文件」并不意味着写入到了磁盘</strong>，因为操作系统的文件系统中有个 Page Cache，Page Cache 是专门用来缓存文件数据的，所以写入「 redo log文件」意味着写入到了操作系统的文件缓存。</li></ul>
+<h2 id="4-为何需要binlog">4.为何需要binlog？</h2>
+<p>undo log 和 redo log 这两个日志都是 Innodb 存储引擎生成的</p>
+<p>MySQL 在完成一条更新操作后，<strong>Server 层还会生成一条 binlog</strong>，等之后事务提交的时候，会将该事物执行过程中产生的所有 binlog 统一写 入 binlog 文件。</p>
+<blockquote><p>💡 从整个架构的角度去看待，MySQL会分为<strong>Server层</strong>和<strong>引擎层</strong>。</p></blockquote>
+<p>Server层主要包含连接器、分析器、优化器、执行器，还有各种函数之类的东西等等。</p>
+<p>而引擎层就是用来真正处理数据，比如保存数据，提供读写接口供Server使用。</p>
+<p><strong>引擎层是可插拔的</strong>，就是说我们可以使用各种类型的引擎，比如最常见的InnoDB引擎</p>
+<p>binlog 文件是<strong>记录了所有数据库表结构变更和表数据修改的日志</strong>，<strong>不会记录查询类的操作</strong>，比如 SELECT 和 SHOW 操作。</p>
+<p>以<strong>二进制的形式保存在磁盘中.</strong>是mysql的<strong>逻辑日志。</strong></p>
+<blockquote><p>💡</p></blockquote>
+<ul><li>逻辑日志：可以简单理解为记录的就是<strong>sql语句</strong>。</li></ul>
+<ul><li>物理日志：因为mysql数据最终是保存在数据页中的，<strong>物理日志记录的就是数据页变更。</strong></li></ul>
+<h3 id="1-为什么有了-binlog-还要有-redo-log">1.为什么有了 binlog， 还要有 redo log？</h3>
+<p>这个问题跟 MySQL 的时间线有关系。</p>
+<p>最开始 MySQL 里并没有 InnoDB 引擎，MySQL 自带的引擎是 MyISAM，但是 MyISAM 没有 crash-safe 的能力，<strong>binlog 日志只能用于归档</strong>。</p>
+<p>而 InnoDB 是另一个公司以插件形式引入 MySQL 的，既然只依靠 binlog 是没有 crash-safe 能力的，所以 InnoDB 使用 redo log 来实现 crash-safe 能力。</p>
+<p>尽管 Binlog 和 Redo log 在功能上都可以用来实现数据库的持久性和恢复功能，但它们的设计目的和实现方式有所不同，各自有着不同的优势和适用场景。</p>
+<h3 id="2-Redo-log和binlog的区别">2.Redo log和binlog的区别</h3>
+<p>这两个日志有<strong>四个区别</strong>。</p>
+<ol><li><em>适<strong>用对象不同</strong>：</em></li></ol>
+<ul><li>binlog 是 MySQL 的 Server 层实现的日志，<strong>所有存储引擎都可以使用</strong>；</li></ul>
+<ul><li>redo log 是 Innodb 存储引擎实现的日志；</li></ul>
+<ol><li><strong><em>文件格式不同</strong>：</em></li></ol>
+<ul><li><strong>binlog 是逻辑日志，有 3 种格式类型</strong>，分别是 Statement（默认格式）、ROW、 MIXED，区别如下：</li></ul>
+<p><img alt="image.png" src="/assets/img/flowus-e0b9242230bf057c.png"></p>
+<ul><li>r<strong>edo log 是物理日志</strong>，记录的是在某个数据页做了什么修改，比如对 XXX 表空间中的 YYY 数据页 ZZZ 偏移量的地方做了AAA 更新；</li></ul>
+<ol><li><strong><em>写入方式不同：</em></strong></li></ol>
+<ul><li>binlog 是<strong>追加写</strong>，写满一个文件，就创建一个新的文件继续写，不会覆盖以前的日志，<strong>保存的是全量的日志</strong>。</li></ul>
+<ul><li>redo log 是<strong>循环写</strong>，日志空间大小是固定，全部写满就从头开始，<strong>保存未被刷入磁盘的脏页日志</strong>。</li></ul>
+<ol><li><strong><em>用途不同：</em></strong></li></ol>
+<ul><li>binlog 用于<strong>备份恢复、主从复制</strong>；</li></ul>
+<ul><li>redo log 用于<strong>掉电等故障恢复</strong>。</li></ul>
+<h3 id="3-如果不小心整个数据库的数据被删除了-能使用-redo-log-文件恢复数据吗">3.如果不小心整个数据库的数据被删除了，能使用 redo log 文件恢复数据吗？</h3>
+<p><strong>不可以</strong>使用 redo log 文件恢复，<strong>只能使用 binlog 文件恢复</strong>。</p>
+<p>因为 redo log 文件是循环写，是会边写边擦除日志的，只记录未被刷入磁盘的数据的物理日志，已经刷入磁盘的数据都会从 redo log 文件里擦除。</p>
+<p><strong>binlog 文件保存的是全量的日志</strong>，也就是<strong>保存了所有数据变更的情况</strong>，理论上只要记录在 binlog 上的数据，都可以恢复，所以如果不小心整个数据库的数据被删除了，得用 binlog 文件恢复数据.</p>
+<h2 id="5-主从复制如何实现">5.主从复制如何实现？</h2>
+<p>MySQL 的<strong>主从复制依赖于 binlog</strong> ，也就是记录 MySQL 上的所有变化并以二进制形式保存在磁盘上。</p>
+<p>复制的过程就是<strong>将 binlog 中的数据从主库传输到从库上</strong>。</p>
+<p>这个过程一般是<strong>异步</strong>的，也就是主库上执行事务操作的线程不会等待复制 binlog 的线程同步完成。</p>
+<p>MySQL 集群的主从复制过程梳理成 3 个阶段：</p>
+<ul><li><strong>写入 Binlog</strong>：主库写 binlog 日志，提交事务，并更新本地存储数据。</li></ul>
+<ul><li><strong>同步 Binlog</strong>：把 binlog 复制到所有从库上，每个从库把 binlog 写到暂存日志中。</li></ul>
+<ul><li><strong>回放 Binlog</strong>：回放 binlog，并更新存储引擎中的数据。</li></ul>
+<p>具体详细过程如下：</p>
+<ul><li>MySQL 主库在收到客户端提交事务的请求之后，会先写入 binlog，再提交事务，更新存储引擎中的数据，事务提交完成后，返回给客户端“操作成功”的响应。</li></ul>
+<ul><li>从库会创建一个专门的 I/O 线程，连接主库的 log dump 线程，来接收主库的 binlog 日志，再把 binlog 信息写入 relay log 的中继日志里，再返回给主库“复制成功”的响应。</li></ul>
+<ul><li>从库会创建一个用于回放 binlog 的线程，去读 relay log 中继日志，然后回放 binlog 更新存储引擎中的数据，最终实现主从的数据一致性。</li></ul>
+<h3 id="MYSQL主从复制还有什么模型">MYSQL主从复制还有什么模型？</h3>
+<p>主要有三种：</p>
+<ul><li><strong>同步复制</strong>：MySQL 主库提交事务的线程要等待所有从库的复制成功响应，才返回客户端结果。这种方式在实际项目中，基本上没法用，原因有两个：一是性能很差，因为要复制到所有节点才返回响应；二是可用性也很差，主库和所有从库任何一个数据库出问题，都会影响业务。</li></ul>
+<ul><li><strong>异步复制</strong>（默认模型）：MySQL 主库提交事务的线程并不会等待 binlog 同步到各从库，就返回客户端结果。这种模式一旦主库宕机，数据就会发生丢失。</li></ul>
+<ul><li><strong>半同步复制</strong>：MySQL 5.7 版本之后增加的一种复制方式，介于两者之间，事务线程不用等待所有的从库复制成功响应，只要一部分复制成功响应回来就行，比如一主二从的集群，只要数据成功复制到任意一个从库上，主库的事务线程就可以返回给客户端。这种<strong>半同步复制的方式，兼顾了异步复制和同步复制的优点，即使出现主库宕机，至少还有一个从库有最新的数据，不存在数据丢失的风险</strong>。</li></ul>
+<h2 id="6-binlog什么时候刷盘">6.binlog什么时候刷盘？</h2>
+<p>事务执行过程中，<strong>先把日志写到 binlog cache</strong>（Server 层的 cache），事务提交的时候，<strong>再把 binlog cache 写到 binlog 文件中</strong>。</p>
+<ul><li><strong>一个事务的 binlog 是不能被拆开的</strong>，因此无论这个事务有多大，也要保证一次性写入。</li></ul>
+<p>这是因为有一个线程只能同时有一个事务在执行的设定，所以每当执行一个 begin/start transaction 的时候，就会默认提交上一个事务，这样如果一个事务的 binlog 被拆开的时候，在备库执行就会被当做多个事务分段自行，这样破坏了原子性，是有问题的。</p>
+<p>MySQL 给<strong>每个线程分配了一片内存</strong>用于缓冲 binlog ，该内存叫 <strong>binlog cache。</strong></p>
+<p>在<strong>事务提交的时候</strong>，执行器<strong>把 binlog cache 里的完整事务写入到 binlog 文件中</strong>，并清空 binlog cache。</p>
+<p>虽然每个线程有自己 binlog cache，但是<strong>最终都写到同一个 binlog 文件。</strong></p>
+<p><img alt="image.png" src="/assets/img/flowus-88166b8a08e699f2.png"></p>
+<ul><li>图中的 <strong>write</strong>，指的就是指<strong>把日志写入到 binlog 文件</strong>，但是<strong>并没有把数据持久化到磁盘</strong>，因为数据还缓存在文件系统的 <strong>page cache</strong> 里，write 的写入速度还是比较快的，因为不涉及磁盘 I/O。</li></ul>
+<ul><li>图中的 <strong>fsync</strong>，才是<strong>将数据持久化到磁盘</strong>的操作，这里就会涉及磁盘 I/O，所以频繁的 fsync 会导致磁盘的 I/O 升高。</li></ul>
+<p>MySQL提供一个 <strong>sync_binlog 参数</strong>来<strong>控制数据库的 binlog 刷到磁盘上的频率</strong>：</p>
+<ul><li>sync_binlog = <strong>0</strong> 的时候，表示每次提交事务都<strong>只 write，不 fsync</strong>，后续交由操作系统决定何时将数据持久化到磁盘；=》默认设置</li></ul>
+<ul><li>sync_binlog = <strong>1</strong> 的时候，表示<strong>每次提交事务都会 write，然后马上执行 fsync</strong>；</li></ul>
+<ul><li>sync_binlog =<strong>N(N&gt;1)</strong> 的时候，表示<strong>每次提交事务都 write，但累积 N 个事务后才 fsync</strong>。</li></ul>
+<p>在MySQL中系统默认的设置是 sync_binlog = 0，也就是不做任何强制性的磁盘刷新指令，这时候的性能是最好的，但是风险也是最大的。因为一旦主机发生异常重启，还没持久化到磁盘的数*-据就会丢失。</p>
+<p>而当 sync_binlog 设置为 1 的时候，是最安全但是性能损耗最大的设置。因为当设置为 1 的时候，即使主机发生异常重启，最多丢失一个事务的 binlog，而已经持久化到磁盘的数据就不会有影响，不过就是<strong>对写入性能影响太大</strong>。</p>
+<p>如果能容少量事务的 binlog 日志丢失的风险，为了提高写入的性能，一般会 sync_binlog 设置为 100~1000 中的某个数值。</p>
+<h2 id="7-为什么需要两阶段提交">7.为什么需要两阶段提交？</h2>
+<p>总结：<strong>为了避免出现两份日志之间的逻辑不一致的问题。</strong></p>
+<p>事务提交后，<strong>redo log 和 binlog 都要持久化到磁盘</strong>，但是这两个是独立的逻辑，可能出现半成功的状态，这样就造成两份日志之间的逻辑不一致。</p>
+<p>即以下两种情况：</p>
+<ul><li><strong>在将 redo log 刷入到磁盘之后， MySQL 突然宕机了，而 binlog 还没有来得及写入</strong>。</li></ul>
+<ul><li><strong>在将 binlog 刷入到磁盘之后， MySQL 突然宕机了，而 redo log 还没有来得及写入。</strong></li></ul>
+<p>在持久化 redo log 和 binlog 这两份日志的时候，如果出现半成功的状态，就会<strong>造成主从环境的数据不一致性</strong>。这是因为 <strong>redo log 影响主库的数据，binlog 影响从库的数据</strong>，所以 redo log 和 binlog 必须保持一致才能保证主从数据一致。</p>
+<p><strong>MySQL 为了避免出现两份日志之间的逻辑不一致的问题，使用了「两阶段提交」来解决</strong>，两阶段提交其实是分布式事务一致性协议，它可以保证多个逻辑操作要不全部成功，要不全部失败，不会出现半成功的状态。</p>
+<p><strong>两阶段提交把单个事务的提交拆分成了 2 个阶段，分别是「准备（Prepare）阶段」和「提交（Commit）阶段」</strong>，每个阶段都由<strong>协调者（Coordinator）和参与者（Participant）</strong>共同完成。注意，不要把提交（Commit）阶段和 commit 语句混淆了，commit 语句执行的时候，会包含提交（Commit）阶段。</p>
+<p>举个拳击比赛的例子，两位拳击手（参与者）开始比赛之前，裁判（协调者）会在中间确认两位拳击手的状态，类似于问你准备好了吗？</p>
+<ul><li><strong>准备阶段</strong>：裁判（协调者）会依次询问两位拳击手（参与者）是否准备好了，然后拳击手听到后做出应答，如果觉得自己准备好了，就会跟裁判说准备好了；如果没有自己还没有准备好（比如拳套还没有带好），就会跟裁判说还没准备好。</li></ul>
+<ul><li><strong>提交阶段</strong>：如果两位拳击手（参与者）都回答准备好了，裁判（协调者）宣布比赛正式开始，两位拳击手就可以直接开打；如果任何一位拳击手（参与者）回答没有准备好，裁判（协调者）会宣布比赛暂停，对应事务中的回滚操作</li></ul>
+<h3 id="两阶段提交的过程是怎样的">两阶段提交的过程是怎样的？</h3>
+<p>在 MySQL 的 InnoDB 存储引擎中，开启 binlog 的情况下，MySQL 会同时维护 binlog 日志与 InnoDB 的 redo log，为了保证这两个日志的一致性，MySQL 使用了<strong>内部 XA 事务。</strong></p>
+<p>内部 XA 事务由： <strong>binlog 作为协调者</strong>，<strong>存储引擎是参与者</strong>。</p>
+<p>当客户端执行 commit 语句或者在自动提交的情况下，MySQL 内部开启一个 XA 事务，<strong>分两阶段来完成 XA 事务的提交</strong>，如下图：</p>
+<p><img alt="image.png" src="/assets/img/flowus-cfa5f14d6e9cd4b8.png"></p>
+<p>从图中可看出，事务的提交过程有两个阶段，就是<strong>将 redo log 的写入拆成了两个步骤：prepare 和 commit，中间再穿插写入binlog</strong>，具体如下：</p>
+<ul><li><strong>prepare 阶段</strong>：将 XID（内部 XA 事务的 ID） 写入到 redo log，同时将 redo log 对应的事务状态设置为 prepare，然后将 redo log 持久化到磁盘（innodb_flush_log_at_trx_commit = 1 的作用）；</li></ul>
+<ul><li><strong>commit 阶段</strong>：把 XID 写入到 binlog，然后将 binlog 持久化到磁盘（sync_binlog = 1 的作用），接着调用引擎的提交事务接口，将 redo log 状态设置为 commit，此时该状态并不需要持久化到磁盘，只需要 write 到文件系统的 page cache 中就够了，因为只要 binlog 写磁盘成功，就算 redo log 的状态还是 prepare 也没有关系，一样会被认为事务已经执行成功；</li></ul>
+<h3 id="两阶段提交有什么问题">两阶段提交有什么问题？</h3>
+<p>两阶段提交虽然保证了两个日志文件的数据一致性，但是<strong>性能很差</strong>，主要有两个方面的影响：</p>
+<ul><li><strong>磁盘 I/O 次数高</strong>：对于“双1”配置，每个事务提交都会进行两次 fsync（刷盘），一次是 redo log 刷盘，另一次是 binlog 刷盘。</li></ul>
+<p>Q1：<strong>为什么两阶段提交的磁盘 I/O 次数会很高</strong>？</p>
+<p>binlog 和 redo log 在内存中都对应的缓存空间，binlog 会缓存在 binlog cache，redo log 会缓存在 redo log buffer，它们持久化到磁盘的时机分别由下面这两个参数控制。一般我们为了避免日志丢失的风险，会将这两个参数设置为 1：</p>
+<ul><li>当 sync_binlog = 1 的时候，表示每次提交事务都会将 binlog cache 里的 binlog 直接持久到磁盘；</li></ul>
+<ul><li>当 innodb_flush_log_at_trx_commit = 1 时，表示每次事务提交时，都将缓存在 redo log buffer 里的 redo log 直接持久化到磁盘；</li></ul>
+<p>可以看到，如果 sync_binlog 和 当 innodb_flush_log_at_trx_commit 都设置为 1，那么在每个事务提交过程中， 都会<strong>至少调用 2 次刷盘操作</strong>，一次是 redo log 刷盘，一次是 binlog 落盘，所以这会成为性能瓶颈。</p>
+<ul><li><strong>锁竞争激烈</strong>：两阶段提交虽然能够保证「单事务」两个日志的内容一致，但在「多事务」的情况下，却不能保证两者的提交顺序一致，因此，在两阶段提交的流程基础上，还需要加一个锁来保证提交的原子性，从而保证多事务的情况下，两个日志的提交顺序一致。</li></ul>
+<p>Q1：<strong>为什么锁竞争激烈？</strong></p>
+<p>在早期的 MySQL 版本中，通过使用 prepare_commit_mutex 锁来保证事务提交的顺序，在一个事务获取到锁时才能进入 prepare 阶段，一直到 commit 阶段结束才能释放锁，下个事务才可以继续进行 prepare 操作。</p>
+<p>通过加锁虽然完美地解决了顺序一致性的问题，但在并发量较大的时候，就会导致对锁的争用，性能不佳。</p>
+<h2 id="8-MySQL-磁盘-I-O-很高-有什么优化的方法">8.MySQL 磁盘 I/O 很高，有什么优化的方法？</h2>
+<p>现在我们知道事务在提交的时候，需要将 binlog 和 redo log 持久化到磁盘，那么如果出现 MySQL 磁盘 I/O 很高的现象，我们可以通过<strong>控制以下参数</strong>，来 <strong>“延迟” binlog 和 redo log 刷盘的时机，从而降低磁盘 I/O 的频率</strong>：</p>
+<ul><li>设置组提交的两个参数： binlog_group_commit_sync_delay 和 binlog_group_commit_sync_no_delay_count 参数，延迟 binlog 刷盘的时机，从而减少 binlog 的刷盘次数。这个方法是基于“额外的故意等待”来实现的，因此可能会增加语句的响应时间，但即使 MySQL 进程中途挂了，也没有丢失数据的风险，因为 binlog 早被写入到 page cache 了，只要系统没有宕机，缓存在 page cache 里的 binlog 就会被持久化到磁盘。</li></ul>
+<ul><li><strong>将 sync_binlog 设置为大于 1 的值</strong>（比较常见是 100~1000），表示每次提交事务都 write，但累积 N 个事务后才 fsync，相当于延迟了 binlog 刷盘的时机。但是这样做的风险是，主机掉电时会丢 N 个事务的 binlog 日志。</li></ul>
+<ul><li><strong>将 innodb_flush_log_at_trx_commit 设置为 2</strong>。表示每次事务提交时，都只是缓存在 redo log buffer 里的 redo log 写到 redo log 文件，注意写入到「 redo log 文件」并不意味着写入到了磁盘，因为操作系统的文件系统中有个 Page Cache，专门用来缓存文件数据的，所以写入「 redo log文件」意味着写入到了操作系统的文件缓存，然后交由操作系统控制持久化到磁盘的时机。但是这样做的风险是，主机掉电的时候会丢数据。</li></ul>
+<h2 id="9-具体更新一条记录的流程如下">9.具体更新一条记录的流程如下：</h2>
+<p><code>UPDATE t_user SET name = &#x27;xiaolin&#x27; WHERE id = 1;</code></p>
+<ol><li>执行器负责具体执行，会调用存储引擎的接口，<strong>通过主键索引树搜索获取 id = 1</strong> 这一行记录：</li></ol>
+<ul><li>如果 id=1 这一行所在的数据页本来就在 buffer pool 中，就直接返回给执行器更新；</li></ul>
+<ul><li>如果记录不在 buffer pool，将数据页从磁盘读入到 buffer pool，返回记录给执行器。</li></ul>
+<ol><li>执行器得到聚簇索引记录后，<strong>会看一下更新前的记录和更新后的记录是否一样</strong>：</li></ol>
+<ul><li>如果一样的话就不进行后续更新流程；</li></ul>
+<ul><li>如果不一样的话就把更新前的记录和更新后的记录都当作参数传给 InnoDB 层，让 InnoDB 真正的执行更新记录的操作；</li></ul>
+<ol><li><strong>开启事务， InnoDB 层更新记录前，首先要记录相应的 undo log</strong>，因为这是更新操作，需要把被更新的列的旧值记下来，也就是要生成一条 undo log，undo log 会写入 Buffer Pool 中的 Undo 页面，不过在内存修改该 Undo 页面后，需要记录对应的 redo log。</li></ol>
+<ol><li>InnoDB 层<strong>开始更新记录，会先更新内存（同时标记为脏页），然后将记录写到 redo log 里面</strong>，这个时候更新就算完成了。为了减少磁盘I/O，不会立即将脏页写入磁盘，后续由后台线程选择一个合适的时机将脏页写入到磁盘。这就是 <strong>WAL 技术</strong>，MySQL 的写操作并不是立刻写到磁盘上，而是先写 redo 日志，然后在合适的时间再将修改的行数据写到磁盘上。</li></ol>
+<ol><li>至此，一条记录更新完了。</li></ol>
+<ol><li>在一条更新语句执行完成后，然后<strong>开始记录该语句对应的 binlog，此时记录的 binlog 会被保存到 binlog cache，</strong>并没有刷新到硬盘上的 binlog 文件，在事务提交时才会统一将该事务运行过程中的所有 binlog 刷新到硬盘。</li></ol>
+<ol><li>事务提交（为了方便说明，这里不说组提交的过程，只说两阶段提交）：</li></ol>
+<ul><li><strong>prepare 阶段</strong>：将 redo log 对应的事务状态设置为 prepare，然后将 redo log 刷新到硬盘；</li></ul>
+<ul><li><strong>commit 阶段</strong>：将 binlog 刷新到磁盘，接着调用引擎的提交事务接口，将 redo log 状态设置为 commit（将事务设置为 commit 状态后，刷入到磁盘 redo log 文件）；</li></ul>
+<ol><li>至此，一条更新语句执行完成。</li></ol>
+<h2 id="10-慢查询日志-slow-query-log">10.慢查询日志(slow query log)</h2>
+<h3 id="1-慢查询日志的作用">1.慢查询日志的作用：</h3>
+<p><img alt="image.png" src="/assets/img/flowus-8aed8636e2789b18.png"></p>
+<ul><li><strong>查看慢查询日志是否开启</strong>：</li></ul>
+<p><img alt="image.png" src="/assets/img/flowus-d26816f0290ecc60.png"></p>
+<ul><li><strong>开启慢查询日志</strong>：</li></ul>
+<p>```SQL SET GLOBAL slow_query_log = ON ```</p>
+<ul><li><strong>查看并更改long_query_time:</strong></li></ul>
+<p><img alt="image.png" src="/assets/img/flowus-b211e39aba18c7f4.png"></p>
+<p><img alt="image.png" src="/assets/img/flowus-ac84dba3445747a3.png"></p>
+<h3 id="2-如何查询当前慢查询语句的个数">2.如何查询当前慢查询语句的个数？</h3>
+<p>MYSQL中专门有一个变量记录当前慢查询语句的个数：<strong>Slow_queries</strong></p>
+<pre><code>show global status like &#x27;%Slow_queries%&#x27;</code></pre>
+<p><img alt="image.png" src="/assets/img/flowus-7454f93717b6319b.png"></p>
+<h3 id="3-如何优化慢SQL">3.如何优化慢SQL？</h3>
+<p><strong>EXPLAIN命令+慢查询日志、</strong></p>
+<p><img alt="image.png" src="/assets/img/flowus-29270e1a2f751c0a.png"></p>
+<p>具体优化看如下文章：密码cnk4</p>
+<p><a href="https://www.yuque.com/snailclimb/mf2z3k/abc2sv">https://www.yuque.com/snailclimb/mf2z3k/abc2sv</a></p>
+<h3 id="4-常见的MYSQL优化方法">4.常见的MYSQL优化方法</h3>
+<h4 id="1-避免使用Select">1.避免使用Select *</h4>
+<p>原因：</p>
+<ol><li><strong>无法使用</strong>MYSQL优化器<strong>覆盖索引</strong>的优化</li></ol>
+<ol><li><strong>无用字段</strong>增加网络带宽资源消耗，<strong>增加数据IO传输时间</strong></li></ol>
+<ol><li><strong>select&lt;字段列表&gt;</strong>的方式，可以<strong>减少表结构变更带来的影响</strong>。</li></ol>
+<h4 id="2-深度分页优化">2.深度分页优化</h4>
+<p>普通分页在数据量小时耗费的时间比较短。</p>
+<p>但数据量变大时，普通的分页耗费的时间就比较长了。</p>
+<p>这种查询<strong>偏移量过大的场景</strong>我们称为：<strong>深度分页</strong></p>
+<h5 id="1-为何深度分页很慢">1.为何深度分页很慢？</h5>
+<p><strong>深度分页SQL变慢原因有两个</strong>：</p>
+<ol><li>limit语句会先扫描offset+n行，然后再丢弃掉前offset行，返回后n行数据。也就是说<code>limit 100000,10</code>，就会扫描100010行，而<code>limit 0,10</code>，只扫描10行。</li></ol>
+<ol><li><code>limit 100000,10</code> <strong>扫描更多的行数</strong>，也意味着<strong>回表</strong>更多的次数。</li></ol>
+<p>如下这条SQL语句，它不仅会读第1000000-1000010条数据，也是<strong>会扫描前1000000条数据的</strong>，那么<strong>这么多条数据进行回表扫描</strong>，时间耗费是很高的。</p>
+<pre><code>-- 从第1000000行开始，获取10条数据
+Select score From cur_order  Limit 1000000,10;</code></pre>
+<h5 id="2-优化思路与具体操作">2.优化思路与具体操作</h5>
+<p>那么<strong>如何优化</strong>呢？</p>
+<ul><li><strong>核心思路</strong>就是：<strong>把查询条件转移到主键索引树</strong>，<strong>减少回表次数</strong>。</li></ul>
+<ul><li>那<strong>具体该怎么做</strong>呢？转移到主键索引树查询的话，<strong>查询条件得改为<code>主键id</code></strong></li></ul>
+<ul><li><strong>实操方法：</strong></li></ul>
+<ol><li><strong>子查询优化</strong>：将<strong>上述的SQL语句修改为子查询</strong>。</li></ol>
+<p>```SQL Select score From cur_order Where id &gt;= (Select id From cur_order Limit 1000000,1) -- 子查询查出当前分页的首行id Limit 10; ```</p>
+<p>分析：<strong>先查出limit第一个参数对应的主键值</strong>，再<strong>根据这个主键值去过滤并limit取出数据</strong>。首先在索引上拿到了聚集索引的主键ID,省去了回表操作，然后第二查询直接根据第一个查询的 ID往后再去查10个就可以了!</p>
+<p><strong>缺点：</strong></p>
+<ul><li>但是，<strong>子查询结果会产生一张新的临时表</strong>，会影响性能，应尽量避免大量使用子查询。</li></ul>
+<ul><li>并且这种方法<strong>只适合id为正序</strong>。</li></ul>
+<ol><li><strong>INNER JOIN 延迟关联</strong>：</li></ol>
+<p>跟子查询的<strong>优化思路其实是一样</strong>的：都是把条件转移到主键索引树，然后减少回表。不同点是，<strong>延迟关联使用了inner join代替子查询</strong>。</p>
+<p>```SQL Select score From cur_order a INNER JOIN(Select id From cur_order Limit 1000000,10) b ON a.id = b.id Limit 10; ```</p>
+<p>查询思路：<strong>先通过二级索引树查询到满足条件的主键ID</strong>，再<strong>与原表通过主键ID内连接</strong>，这样<strong>后面直接走了主键索引</strong>了，同时也减少了回表。</p>
+<h4 id="3-尽量避免多表做Join">3.尽量避免多表做Join</h4>
+<p>其实最主要的原因就是<strong>join的效率比较低</strong>。</p>
+<p>MySQL是使用了<strong>嵌套循环</strong>（Nested-Loop Join）的方式来<strong>实现关联查询</strong>的，简单点说就是要通过两层循环，用第一张表做外循环，第二张表做内循环，外循环的每一条记录跟内循环中的记录作比较，符合条件的就输出。</p>
+<h4 id="4-选择合适的字段">4.选择合适的字段</h4>
+<ol><li><strong>非负型数据(自增id,IP地址、年龄)</strong>，优先使用<strong>无符号整型存储</strong></li></ol>
+<p>无符号相对于有符号，多出一倍的存储空间。</p>
+<ol><li><strong>小数值类型(</strong>年龄、boolean),优先<strong>tinyint</strong></li></ol>
+<ol><li><strong>日期类型</strong>，<strong>一定不要用字符串</strong>，用：DateTime、TimeStamp</li></ol>
+<ol><li><strong>金额</strong>用decimal</li></ol>
+<ol><li><strong>不用NULL作为列默认值</strong></li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-b8080ebe4a9360d2.png"></p>
+<h4 id="5-尽量使用批量操作">5.尽量使用批量操作</h4>
+<p>尽量批量插入等，而不是一条条插入。</p>
+<p>好处：<strong>减少请求数据库的次数</strong>，提高性能。</p>
+<p><img alt="image.png" src="/assets/img/flowus-2e18236f5a751eb8.png"></p>
+<h4 id="6-正确使用索引">6.正确使用索引</h4>
+<p>见索引篇</p>
+<h3 id="5-MYSQL表数据太多如何优化">5.MYSQL表数据太多如何优化？</h3>
+<h3 id="6-如何分区分表">6.如何分区分表</h3>
+<p>分区分表是一种数据库水平拆分的策略，用于解决单表数据量过大、性能下降的问题。</p>
+<p>在分区分表的方案中，数据会被分散存储到多个表或多个分区中，从而降低了单个表的数据量，提高了数据库的性能和可扩展性。</p>
+<p>通常，分区分表可以通过以下几种方式实现：</p>
+<ol><li><strong>按时间分区</strong>：</li></ol>
+<ul><li>将数据按时间范围进行分区，例如按月份、按年份等。这种方式适合于需要定期归档历史数据的场景，可以在查询时只查询特定时间范围内的数据表，减少了需要扫描的数据量。</li></ul>
+<ol><li><strong>按地理位置分区</strong>：</li></ol>
+<ul><li>将数据按地理位置进行分区，例如按国家、按省份、按城市等。这种方式适合于具有地理属性的数据，可以根据用户的地理位置快速定位到对应的数据表，提高了查询效率。</li></ul>
+<ol><li><strong>按业务分区</strong>：</li></ol>
+<ul><li>将数据按业务特性进行分区，例如按产品类型、按用户类型等。这种方式适合于具有明显业务分类的场景，可以根据业务特性将数据存储到不同的数据表中，提高了查询效率。</li></ul>
+<ol><li><strong>按哈希值分区</strong>：</li></ol>
+<ul><li>将数据按哈希算法进行分区，例如取数据的某个字段的哈希值作为分区依据。这种方式可以将数据均匀地分散到多个数据表中，避免了单一数据表的数据热点问题。</li></ul>
+<ol><li><strong>按数据量分区</strong>：</li></ol>
+<ul><li>将数据按数据量大小进行分区，例如按数据的前缀或者后缀进行分区。这种方式可以将数据平均地分布到多个数据表中，避免了单表数据量过大的问题。</li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

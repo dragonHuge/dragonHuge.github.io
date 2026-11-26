@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>91.7k 星之后，RAGFlow 把后端整个换成了 Go · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">20</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">468</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav>
+<nav class="context-nav" aria-label="当前栏目目录">
+<div class="context-title">外部沉淀分类</div>
+<a class="context-cat" href="../ext/index.html#c0"><span>AI与大模型</span><span class="nav-count">32</span></a>
+<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">305</span></a>
+<a class="context-cat active" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">65</span></a>
+<a class="context-cat" href="../ext/index.html#c3"><span>认知与思维</span><span class="nav-count">12</span></a>
+<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">44</span></a>
+<div class="context-group current">工具与技术文章</div>
+<a class="art" href="../ext/e338.html">Google Cloud Model Armor API与Gemini 4企业安全治理</a>
+<a class="art" href="../ext/e339.html">火山引擎大模型应用防火墙文档指南</a>
+<a class="art" href="../ext/e340.html">小爱×阿里云内容审核交流共创：AI安全护栏与调优实践</a>
+<a class="art" href="../ext/e341.html">EasySync、OpenPlug、Resojot三件套</a>
+<span class="art-row"><a class="art" href="../ext/e342.html">刚刚，DeepSeek又掀桌了！开源推理引擎</a><a class="art-x" href="https://mp.weixin.qq.com/s/_92qxY50yrITYDkhnKVv5w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e343.html">分享一个最近很惊艳的开源Skill，一句话让AI搓出任何原理的科普视频。</a><a class="art-x" href="https://mp.weixin.qq.com/s/VuJsVTvyNIK8GRTL95n-Qw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e344.html">比Jev更爆火！逆向灭霸 REA 一天登顶GitHub</a><a class="art-x" href="https://mp.weixin.qq.com/s/opomqvcruvmcQr4fzTT5Sg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art active" href="../ext/e345.html">91.7k 星之后，RAGFlow 把后端整个换成了 Go</a><a class="art-x" href="https://mp.weixin.qq.com/s/xyLlUlHJG7zbs32B3ibarw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e346.html">把 AI 装进了 SSH 终端，这款强大的远程终端工具开源了！</a><a class="art-x" href="https://mp.weixin.qq.com/s/sddXH_qxY0LlPvftJy4rTA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e347.html">把Jev整合进 Harness，开源项目拿下黑客松总冠军！</a><a class="art-x" href="https://mp.weixin.qq.com/s/EGCfOEP4-j0dZ1gV-QBF9Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e348.html">FID：公司设备不变的硬件标识</a>
+<a class="art" href="../ext/e349.html">防重放攻击Nonce机制</a>
+<span class="art-row"><a class="art" href="../ext/e350.html">Claude Code Thariq：如何设置不同模型的 effort？</a><a class="art-x" href="https://mp.weixin.qq.com/s/OtdHHVKZOY28qCNfy99o0A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e351.html">手推Transformer（3）架构图解</a><a class="art-x" href="https://v.douyin.com/QfsCWkmq6Jk/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e352.html">开源仅3天狂揽7.1K Star！Browser-Use 把 Jev 模型装进浏览器 Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/RfCE5yqOrR_b2AWeI530GQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e353.html">为什么越来越多人放弃 Claude Code 转而用 Pi？</a><a class="art-x" href="https://mp.weixin.qq.com/s/8KB9H19wTmV9Ttsls2ZQOQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e354.html">RAG、Agent、Wiki 三合一：腾讯开源的知识库 WeKnora 暴涨star</a><a class="art-x" href="https://mp.weixin.qq.com/s/C06VC_u8ThxoX65GZXD98A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e355.html">达芬奇（DaVinci Resolve）是干嘛的：专业剪辑软件与「自动剪辑」能力辨析</a>
+<span class="art-row"><a class="art" href="../ext/e356.html">阿里开源的代码评审项目：为什么能让 LLM 少干活，而准确率反涨 4.7 倍？</a><a class="art-x" href="https://mp.weixin.qq.com/s/9k__ghMXA4xAP94aHFh-Gg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e357.html">换一套 Harness，比换两代模型还管用（腾讯云开发者 Agent Harness 综述）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jgwZE6nflPIRkJkrwfz40w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e358.html">让 Agent 可评、可控、可迭代：业务效果导向的评测体系与场景实践</a><a class="art-x" href="https://mp.weixin.qq.com/s/gOCMe2lrO8PFGfZoKhUmfA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e359.html">从 ReAct 到 Agent Team：医疗系统研发任务里的信息流与责任边界</a><a class="art-x" href="https://mp.weixin.qq.com/s/JpDAPxDxt8HWdxwuVpOCGg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e360.html">微信开源 WeKnora v0.8.0：RAG + Agent 一体的企业知识库平台</a><a class="art-x" href="https://mp.weixin.qq.com/s/6MmevXDynsrlcOoDr3NMEA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e361.html">来自 Google 的 Agentic Skill 综述：Skill 六元组与九阶段生命周期</a><a class="art-x" href="https://mp.weixin.qq.com/s/IG1lcRRtIhRePZfLrLZl_g" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e362.html">腾讯云开源 Octop：自托管多用户多 Agent AI 助手（WorkBuddy 底层）</a><a class="art-x" href="https://mp.weixin.qq.com/s/a35eQqCyxdybODuJlFwBTg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e363.html">Manning 新书《Build an AI Agent (From Scratch)》从零手搓 AI Agent</a><a class="art-x" href="https://mp.weixin.qq.com/s/z2t4cSkZo3JvXdmnq58MxA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e364.html">GEPA：提示词自进化的优化方案（反思式变异+帕累托择优）</a><a class="art-x" href="https://mp.weixin.qq.com/s/jf5OKEhBDWkP0228tC5o1w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e365.html">腾讯开源 WeKnora：把资料变成 Agentic 数据库（RAG+Agent+自动 Wiki）</a><a class="art-x" href="https://mp.weixin.qq.com/s/_r6om75XRHj2NsgqN6l45A" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e366.html">EVADE-Bench：电商规避性内容检测多模态基准（大模型风控规则与Prompt）</a><a class="art-x" href="https://mp.weixin.qq.com/s/pS3UX6_XWcqjNCYxtNzNjA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e367.html">2026年量化投资类Skills排行榜</a><a class="art-x" href="https://xhslink.cn/o/36OmI68hnmy" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e368.html">DeepSeek V4.1 Flash 技术解读：KV 缓存压缩如何让 Flash 逼退 Pro</a><a class="art-x" href="https://mp.weixin.qq.com/s/INr-j63NxC1JKiBeasTreA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e369.html">全网膜拜的重置卡之神Tibo亲自拆解：Codex如何在OpenAI长出来</a><a class="art-x" href="https://mp.weixin.qq.com/s/Zb7TCRf0ULhR6m4gv0T8cg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e370.html">面试官得瑟：你懂Codex的Harness架构吗？，我笑了</a><a class="art-x" href="https://mp.weixin.qq.com/s/ZxhhQlgzm7j7bfesSect4w" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e371.html">6个Vibe Coding必备宝藏网站</a>
+<span class="art-row"><a class="art" href="../ext/e372.html">Archify：AI代码仓库架构可视化开源Skill</a><a class="art-x" href="https://github.com/tt-a1i/archify" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e373.html">ETL、ELT、ETLT到底有什么区别？一文讲透数据加工流程</a><a class="art-x" href="https://mp.weixin.qq.com/s/6l9eoyAyADd4l4CgdbKFwQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e374.html">anything2explainer：一键制作科普视频的开源Skill</a><a class="art-x" href="https://www.douyin.com/video/7683581072979226340" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e375.html">book-to-skill：把任何技术书籍PDF转化为Agent Skill</a><a class="art-x" href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e376.html">1.6K Star！阿里开源zg：一条命令解决Agent时代的本地检索难题</a><a class="art-x" href="https://mp.weixin.qq.com/s/4Wm668hdNhRCSorNEY--Wg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e377.html">内容审核控制台嵌入式 MCP Server 落地方案</a><a class="art-x" href="#" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e378.html">MCP 开发指北(Java) — 组内</a><a class="art-x" href="#" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e379.html">风控平台 MCP 写接口落地复盘 —— 生产级 MCP 开发踩坑清单</a><a class="art-x" href="#" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e380.html">html-anything — Agent 时代的 HTML 编辑器</a><a class="art-x" href="https://mp.weixin.qq.com/s/PdnzdlANDDDrMrTMYhahvw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e381.html">Maigret：开源 OSINT 用户名搜索工具，3000+ 站点递归挖数字画像</a><a class="art-x" href="https://mp.weixin.qq.com/s/Ux91m8vFib3GFWY6GqHssA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e382.html">claude-mem：Claude Code 跨会话记忆持久化——Hook 管道 + SQLite 本地库 + Worker 后台压缩</a><a class="art-x" href="https://mp.weixin.qq.com/s/8rXk9rn3qoT-_-s8bIEicw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e383.html">CLI vs MCP：分界线是治理需求，先 CLI 跑通闭环再 MCP 产品化</a><a class="art-x" href="https://mp.weixin.qq.com/s/z1ZreI_TYEsHj2pGIKrmcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e384.html">pi-mono：OpenClaw 的底层，4 万 star 的极简 Agent 运行时 + 7 包模块化架构</a><a class="art-x" href="https://mp.weixin.qq.com/s/8kLJvAEgN_qtcGWQAfORvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e385.html">浏览器自动化技术栈全景：Chromium→CDP→Playwright→browser-use→Midscene/browsermcp 分层拆解</a><a class="art-x" href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e386.html">Claude Code Prompt Cache 配置实战</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/（视频" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e387.html">Claude Code 提效指南：布鲁歇一歇视频复盘（新角度提取）</a><a class="art-x" href="https://v.douyin.com/xlxjMjm4nBU/" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e388.html">待考证 Claude Code Skill / MCP 清单</a>
+<span class="art-row"><a class="art" href="../ext/e389.html">Hermes 生产 Agent 模型横评：价格倒序约等于质量榜，GLM-5.1 执行欲最强但有限频硬伤</a><a class="art-x" href="https://mp.weixin.qq.com/s/NAqk-Hwpb0kf0ZggDs4TLQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e390.html">MCP vs CLI 路线之争：Anthropic 官方给出 Tool Search + 程序化调用两个解法，两者并存不对立</a><a class="art-x" href="https://mp.weixin.qq.com/s/Sz2hzXiNCyf1YNzPbeUo5Q" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e391.html">.claude/ 文件夹配置分层体系：规则/权限/动作/流程四层各归各位</a><a class="art-x" href="https://mp.weixin.qq.com/s/v6iBuqep2ZCZ9wAwhnHLDA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e392.html">Claude Code 9 个必装 Skill：从技能框架到自动化工作流的完整装备清单</a><a class="art-x" href="https://mp.weixin.qq.com/s/3pYESr-ZDD-qM3uktiSIYQ" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e393.html">Hermes vs OpenClaw：可写运行时 vs 生态帝国，差异化共存而非你死我活</a><a class="art-x" href="https://mp.weixin.qq.com/s/BCstLeMYEPTk5A4sJp66jA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e394.html">Superpowers：将工程纪律编码进 AI 工作流的元框架</a><a class="art-x" href="https://mp.weixin.qq.com/s/-Vb_8UdgglaYj0HnSYPZcA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e395.html">Claude Code 封号机制深度探查：Device ID + 40维指纹 + 640+事件遥测的完整用户画像</a><a class="art-x" href="https://bytedance.sg.larkoffice.com/docx/QNsIdi8VFoKm00xY8SRlkXxygve" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e396.html">AnyToCopy：小红书/抖音视频文案提取 + 无水印下载工具</a><a class="art-x" href="https://www.anytocopy.com/xiaohongshu" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e397.html">Claude Code 六个必装 Skill：从通用能力到自造 Skill</a><a class="art-x" href="https://mp.weixin.qq.com/s/udSpp7eMqwiRo5yVShRzLw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e398.html">OpenAI 官方出了 Claude Code 插件，在对手地盘上抢活</a><a class="art-x" href="https://mp.weixin.qq.com/s/PcZVz9Xf2-SFE_9_e41uVw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<a class="art" href="../ext/e399.html">dev-browser vs web-access：两个浏览器 Skill 的定位差异与选择原则</a>
+<span class="art-row"><a class="art" href="../ext/e400.html">Obsidian 必装的 9 个 AI Agent Skill</a><a class="art-x" href="http://xhslink.com/o/4tA9NrR4eXd" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e401.html">大博主常用的 5 个录屏 + 3 个白板工具</a><a class="art-x" href="http://xhslink.com/o/68mgswUWCNA" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+<span class="art-row"><a class="art" href="../ext/e402.html">飞书文档一键转微信公众号草稿，图片自动上传、格式完整保留</a><a class="art-x" href="https://mp.weixin.qq.com/s/OqpljVUwvONVohnk7Sf5hw" target="_blank" rel="noopener" title="打开原文">↗</a></span>
+</nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">5</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#摘要速览">摘要速览</a><a class="tl l2" href="#核心内容">核心内容</a><a class="tl l2" href="#可执行启发">可执行启发</a><a class="tl l2" href="#我的想法">我的想法</a><a class="tl l2" href="#原文沉淀">原文沉淀</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / 工具与技术</div><article><h1>91.7k 星之后，RAGFlow 把后端整个换成了 Go</h1><div class="meta">2026-10-07 · <span class="badge">微信公众号</span> · <a class="src-link" href="https://mp.weixin.qq.com/s/xyLlUlHJG7zbs32B3ibarw" target="_blank" rel="noopener">原文来源 ↗</a> · <span class="m-src">工具与技术/20261007-91.7k-星之后RAGFlow-把后端整个换成了-Go.md</span></div><div class="md"><blockquote><p>来源：微信公众号 归档日期：2026-10-07 抓取状态：成功 原文字符：5477｜配图：5 张</p></blockquote>
+<h2 id="摘要速览">摘要速览</h2>
+<ul><li>摘要 RAGFlow 发布了 1.0-rc1，最大的变化不是新功能，而是把跑了两年的 Python 后端整个重写成了 Go。这篇文章讲清三件事：它为什么要冒这个风险、除了换语言还改了什么、以及升级到 1.0 你需要付什么代价。 2026 年 9 月 29 日，RAGFlow 在 GitHub 上打了一个新标签：v1.0.0-rc1。</li></ul>
+<h2 id="核心内容">核心内容</h2>
+<p>（待补充）</p>
+<h2 id="可执行启发">可执行启发</h2>
+<p>（待补充）</p>
+<h2 id="我的想法">我的想法</h2>
+<p>（待补充）</p>
+<hr>
+<h2 id="原文沉淀">原文沉淀</h2>
+<blockquote><p>来源：https://mp.weixin.qq.com/s/xyLlUlHJG7zbs32B3ibarw 平台：weixin｜作者：每日学AI 抓取方式：cdp｜字符数：6259｜图片：5</p></blockquote>
+<hr>
+<p>摘要 RAGFlow 发布了 1.0-rc1，最大的变化不是新功能，而是把跑了两年的 Python 后端整个重写成了 Go。这篇文章讲清三件事：它为什么要冒这个风险、除了换语言还改了什么、以及升级到 1.0 你需要付什么代价。</p>
+<p>2026 年 9 月 29 日，RAGFlow 在 GitHub 上打了一个新标签：v1.0.0-rc1。</p>
+<p>大多数项目发 1.0，都在忙着加功能。RAGFlow 这次发 1.0，先做的是换语言。</p>
+<p>它的 Release 说明写得很直白：这是一次用 <strong>Go</strong> 完成的重写，用轻量架构替换掉原来那套重型的部署方案。</p>
+<p>翻译一下就是：一个在 GitHub 上已经拿到 <strong>91.7k star</strong>、有一万多 fork 的开源项目，决定把自己跑了两年的主干代码，重新写一遍。</p>
+<p>这种事在开源世界里并不常见。重写要付代价：历史包袱全部作废、社区贡献的代码可能白费、用户的升级路径得重新设计。</p>
+<p>RAGFlow 愿意付这个代价，是因为它发现了一件更要紧的事——</p>
+<p><strong>它的用户，正在从人变成 Agent。</strong></p>
+<p>（Agent，就是能自己拆解任务、自己调工具去干的 AI 程序。你说"帮我查一下"，它会自己决定查哪里、查几次。）</p>
+<p><img alt="RAGFlow GitHub 仓库首页，star 数 91.7k" src="../assets/img/img-001-bcfb5c13-5b309e4f23ad.jpg"></p>
+<p>图 1 · RAGFlow GitHub 仓库首页，star 数 91.7k，仓库标签里已有 agent-harness、knowledge-compilation</p>
+<p>先说清楚 RAGFlow 是什么</p>
+<p>一句话：它是个给 AI 用的"资料室管理员"。</p>
+<p>你可以把它想成公司里那个什么都找得到的老员工：你把合同、报表、说明书一股脑交给他，他分门别类归好档；下次你问"去年那份供应商协议里的违约金是多少"，他把原件抽出来放你面前，还能指出是哪一页。</p>
+<p>RAGFlow 干的是同一件事，只是它的"员工"是 AI。它把 Word、PDF、扫描件、网页这些格式乱七八糟的资料吃进去，解析、切分、建索引；你提问时，它把最相关的原文片段找出来交给大模型，让模型"照着材料回答"，而不是凭空发挥。</p>
+<p>技术上说，这类系统叫 <strong>RAG</strong>（Retrieval-Augmented Generation，检索增强生成），是目前让大模型少胡说的主流办法之一：模型不负责记，只负责说；记忆交给检索系统。</p>
+<p>RAGFlow 由 InfiniFlow 团队开发，2024 年 4 月 1 日开源，Apache-2.0 许可，可商用。到 2024 年底它已有 2.6 万 star；2026 年 10 月，这个数字是 <strong>91.7k</strong>。</p>
+<p><img alt="RAGFlow 官网首页" src="../assets/img/img-002-20193894-8e84ee2805e9.jpg"></p>
+<p>图 2 · RAGFlow 官网首页，官方把自己定位为"面向 AI 智能体的上下文层"</p>
+<p>还有个细节。早期 RAGFlow 的自我定位是"RAG 引擎"，官网现在第一句话却是"给 AI 智能体构建更好的上下文层"（Build a superior context layer for AI agents）。</p>
+<p>定位的变化，就是后面所有架构改动的起点。</p>
+<p>Agent 变成了新用户，这才是重写的真正原因</p>
+<p>RAGFlow 官方博客里有一篇文章，标题叫《Data foundation in the era of agent harness》。它把逻辑讲得很清楚。</p>
+<p>过去用检索系统的是人，而人查资料有个特点——不太会搜。你说"帮我找找报销的事儿"，系统得去猜你到底想问报销标准、流程还是时限。所以传统检索优化的重点，是理解模糊的意图。</p>
+<p>现在用检索系统的，越来越多是 Agent，而 Agent 太会搜了。它不会客气，一个问题拆成十几个子问题轮着问，查不到就换个说法再查一遍，直到凑齐它认为足够的证据。</p>
+<p>官方的判断是：Agent 发起的搜索请求量，可能比人类用户高出 <strong>两个数量级</strong>。</p>
+<p>两个数量级就是一百倍。这不是优化空间的问题，是量级的问题。</p>
+<p><img alt="RAGFlow 官方博客解释 Go 重写的原因" src="../assets/img/img-003-765642c2-475df2bc7770.jpg"></p>
+<p>图 3 · 官方博客解释为什么要把服务层用 Go 重写：Python 的性能瓶颈随着调用规模扩大越来越突出</p>
+<p>而 RAGFlow 的后端是用 <strong>Python</strong> 写的。</p>
+<p>官方对 Python 的评价很有意思，没有贬低，反而先肯定：</p>
+<p>"RAGFlow 早期用 Python 做快速验证和迭代，对项目的成功起到了<strong>不可替代的作用</strong>。"紧接着是一个转折——"但随着调用规模的扩大，它的<strong>性能瓶颈</strong>变得越来越突出。"</p>
+<p>于是就有了那句关键的话：用 Go 重写的核心服务，可以从容应对 agentic 检索带来的两个数量级的访问增长。</p>
+<p>这话里藏着两层意思：官方承认 Python 版的瓶颈真实存在，而且他们不打算靠加机器硬扛，选择把语言换掉。</p>
+<p>这件事其实早有伏笔。翻版本记录能看到，Go 化不是 1.0 才开始的：<strong>0.26.1</strong> 就把消息队列从 Redis 换成了 NATS，还把画布引擎和二十多个 Agent 组件移植成了 Go；<strong>0.26.4</strong> 又把三个后端服务合并成一个二进制。</p>
+<p>1.0-rc1 只是把这条路走到尽头——官方博客明确写着，0.27 版本（2026 年 8 月发布）是<strong>最后一个基于 Python 的版本</strong>。</p>
+<p>Go 版到底改了什么</p>
+<p>对使用者来说，最直观的是两处变化。</p>
+<p><strong>第一，服务合并了。</strong>以前 API、Admin、Ingestor、Syncer 是几个分散的服务，现在由一个统一的 Go 服务提供。文档解析的核心模块 DeepDoc 也被收进同一个进程，负责版面分析、OCR（把图片和扫描件里的字认出来）和表格识别。</p>
+<p><strong>第二，底层组件换血。</strong>消息队列从 Redis 换成 NATS，缓存和断点记录改用 Kvrocks。官方的总结是：把原来那套"重"的部署模型换成轻量架构，系统资源消耗有明显下降。</p>
+<p>⚠️ 注意这里要说句实话：官方并没有公布 Go 版和 Python 版的具体资源占用对比数字。"大幅下降"是官方口径，没给测试环境、对比基准和百分比，所以只能当方向看，不能当结论用。</p>
+<p><img alt="v1.0.0-rc1 的 Release 说明" src="../assets/img/img-004-573d1383-89ea9e4787d1.jpg"></p>
+<p>图 4 · v1.0.0-rc1 的 Release 说明：Go 全量重写、架构变更与升级注意事项</p>
+<p>比换语言更大的改动：把文档"编译"成知识</p>
+<p>如果说换语言是"换发动机"，那 0.27 版本引入的<strong>知识编译（Knowledge Compilation）</strong>，相当于换了整套工作方式。</p>
+<p>先看老办法。传统做法是把文档切成一块一块（业界叫 chunk），每块算成一串数字（业界叫向量）存起来；你提问时，系统比一比哪几块跟问题最像，捞出来交给模型。</p>
+<p>这个方法有个朴素的问题：<strong>切分的位置，决定了系统能看见什么。</strong></p>
+<p>举个例子。一篇五千字的项目报告，按五百字一块切，第一块在讲背景，第二块跳到实验数据，第三块切在表格中间。你问"实验用了什么数据集"，而这句话恰好横跨第二块和第三块的分界——系统可能只捞到半句话，自然答不上来。</p>
+<p>知识编译想解决的就是这个问题。它不再满足于"切成块"，而是先把文档里的实体、关系、概念、时间、层级结构识别出来，再按不同形态重新组织。官方给出的产物有七种：</p>
+<p>•<strong>Wiki</strong>：把零散材料编成互相链接的知识页面，可编辑、可版本对比、可导出</p>
+<p>•<strong>Graph</strong>：抽取实体和关系，生成可交互的知识图谱</p>
+<p>•<strong>Tree</strong>：按语义层级组织，从高层主题逐级下探</p>
+<p>•<strong>Page Index</strong>：按标题、章节、关键事实生成层级索引，适合长篇报告</p>
+<p>•<strong>Mind Map</strong>：围绕中心主题铺开的思维导图</p>
+<p>•<strong>Timeline</strong>：把文档里的时间和事件按顺序排列</p>
+<p>•<strong>Skills</strong>：把知识组织成一组可复用的技能文件</p>
+<p>官方说这个概念的灵感来自 Karpathy 提过的"LLM Wiki"，但在 RAGFlow 里范围更宽。它要达到的效果是：把"处理一次就完了"的解析结果，变成长期可搜索、可复用的知识资产。</p>
+<p>跟它配套的是 <strong>Agentic 检索</strong>。传统 RAG 是一条固定的线：提问 → 检索一次 → 拿到片段 → 生成答案。Agentic 检索换成了会思考的流程：分析问题 → 制定检索策略 → 执行检索 → 判断证据够不够 → 不够就换个问法再来一轮 → 最后综合信息作答。</p>
+<p>官方 README 里列了四档思考模式：Low、Medium、High、Ultra，档位越高，拆解和验证越深。有意思的是，官方博客里还有第五档 Naive——就是原来的传统流程。两处口径对档位数的说法不完全一致，但方向是清楚的：<strong>让检索深度可以调，简单问题别浪费算力，复杂问题多花几轮。</strong></p>
+<p><img alt="RAGFlow 官方博客介绍知识编译" src="../assets/img/img-005-b804d2a8-34d541fd389c.jpg"></p>
+<p>图 5 · 官方博客介绍 0.27 的知识编译与 Agentic 检索，文中写明这是最后一个 Python 后端版本</p>
+<p>顺带说一个信号。0.27 把早前引入的 <strong>GraphRAG</strong> 和 <strong>RAPTOR</strong> 从界面上移除了，标注为"已弃用"。这两个是 RAGFlow 2024 年就集成进去、并且对外宣传过的技术。</p>
+<p>移除它们、换上知识编译，说明团队认为"图"和"递归摘要"这类单点技术，应该被收进一个更统一的框架，而不是各自摆在功能列表上。</p>
+<p>这次升级的代价，比想象中重</p>
+<p>这一节是全文最该认真看的。</p>
+<p><strong>第一，升级不可逆。</strong>容器启动时会自动把数据从 v0.27.2 迁移到 v1.0.0-rc1。官方在 Release 说明里特意加粗提醒：这次升级一旦完成，数据无法回滚到 v0.27.2。而且升级有个硬性前提——你的部署必须先处在 v0.27.2。也就是说，用更老版本的话，得先升到 0.27.2，才能往 1.0 走。</p>
+<p><strong>第二，有破坏性变更。</strong>Go 实现不再支持已标记为废弃的 API；命令行管理工具 RAGFlow CLI 也被 Go 重写，替换掉原来的 Python 版本。好消息是 Python SDK 不受影响。</p>
+<p><strong>第三，1.0-rc1 还是预览版。</strong>官方自己列了几条已知问题：DeepDoc 目前只支持 CPU、不再支持本地 sandbox、Team/Me 权限模型还没做。rc 即 release candidate，功能基本定了，但这些坑得心里有数。</p>
+<p><strong>第四，门槛不低。</strong>官方给的起步配置是 4 核 CPU、16 GB 内存、50 GB 磁盘。实际还要看文档引擎、数据规模和并发量——想在老笔记本上随便玩玩，会有压力。</p>
+<p>⚠️ 注意最后提醒一句：生产环境别在 rc 版本上跑，这是常识。</p>
+<p>1.0 不是终点</p>
+<p>把这几件事串起来看，RAGFlow 的 1.0 其实在回答一个问题：<strong>当 AI 开始自己查资料，检索系统该长什么样？</strong></p>
+<p>答案落在三件事上：服务层要能扛量，所以换成 Go；知识的组织方式要从"切块"升级成"编译"，因为 Agent 需要的是结构化证据，不是一堆文本碎片；检索过程要从"查一次"变成"会规划"，因为 Agent 提交的问题，往往一句话里就藏着好几个子问题。</p>
+<p>RAGFlow 不是唯一往这个方向走的项目，但它是做得最彻底的开源项目之一——彻底到愿意把自己跑了两年的代码重写一遍。</p>
+<p>顺带一提，GitHub 的 Octoverse 2025 报告把 RAGFlow 列进了"按贡献者增长最快"的开源项目名单，官方博客披露的贡献者参与度同比增长是 <strong>2596%</strong>。这个数字解释了它为什么敢重写：<strong>背后有人在持续填坑。</strong></p>
+<p>官方博客里还有一句话，我觉得比整个 1.0 的更新日志都值得记住：</p>
+<p>"当检索的用户从人变成智能体，一个<strong>全新的问题域</strong>才刚刚浮出水面。"</p>
+<p>这句话后面跟着一串他们自己也还没答案的问题：怎么从 Agent 的视角定义"相关"？怎么评估一个检索系统在连续几百次调用后的累积效果？</p>
+<p>传统信息检索的论文里找不到现成答案。这也是为什么 1.0 不会是终点——它更像一条新赛道的起跑线。</p>
+<p>项目地址</p>
+<p>•<strong>GitHub</strong>：https://github.com/infiniflow/ragflow</p>
+<p>•<strong>官网</strong>：https://ragflow.io</p>
+<p>文中数据截至 2026 年 10 月 6 日。项目迭代较快，请以仓库最新状态为准。</p>
+<p>END</p>
+<p>— 谢 · 谢 · 观 · 看 —</p>
+<p>如果本文对你有帮助，<strong>点个赞 + 在看</strong>，是对我最大的鼓励 ❤️</p>
+<p>关注我，每日学AI，每天进步一点点</p>
+<p>这里有 <strong>AI 前沿 · 开源一线 · 实战教程</strong></p>
+<p>归属：[[02-输入/按主题/工具与技术/_index|工具与技术]]</p></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+
+</body>
+</html>

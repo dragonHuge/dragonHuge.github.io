@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>用了半年 web-access，这篇微信文补了我三层盲区 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">25</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">12</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#sec-1">一、先说两篇文章的底牌</a><a class="tl l2" href="#sec-2">二、盲区 1：CDP 不是终极兜底，shadow dom 会让它死</a><a class="tl l2" href="#sec-3">三、盲区 2：登录态承接的两条路线，我走的是&quot;接管&quot;</a><a class="tl l3" href="#sec-4">3.1 接管路线 — 我的 web-access 走的这条</a><a class="tl l3" href="#sec-5">3.2 克隆路线 — browser-use 走的这条</a><a class="tl l3" href="#sec-6">3.3 两条路线放一起看</a><a class="tl l2" href="#sec-7">四、盲区 3：browsermcp 是官方路线，web-access 反而更完整</a><a class="tl l2" href="#sec-8">五、两条视角叠在一起才是完整地图</a><a class="tl l2" href="#sec-9">六、一个观察，一个元领悟</a><a class="tl l3" href="#sec-10">6.1 一个观察</a><a class="tl l3" href="#sec-11">6.2 一个元领悟</a><a class="tl l2" href="#sec-12">七、两篇原文链接</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="ai/index.html">AI</a></div><article><h1>用了半年 web-access，这篇微信文补了我三层盲区</h1><div class="meta">2026-04-27 · <a class="src-link" href="https://mi.feishu.cn/wiki/MTbRwsBWQivCmskmTF7cDBgEnph" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.fs-img img{max-width:100%;border-radius:8px}
+.fs-board img{background:#fff;border:1px solid var(--line,#e2e2da)}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>如果你想搞清楚浏览器自动化的完整技术链，强烈推荐：逆向OneByOne 的<a href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener">《一文彻底了解浏览器自动化》</a>。</p><p>怎么把这篇和我之前那篇<a href="https://mi.feishu.cn/docx/H5t8dfNzlo7vZTxtSmwcDRjUnUb" target="_blank" rel="noopener">《OpenCode、Claw🦞 联网指南》</a>对上？一字心决：叠。</p></div></div><p>两周前我写了那篇联网指南，把 WebSearch / web_fetch / Defuddle / Browser CDP 四件套的场景选型讲了一遍。自以为透了。</p><p>昨天刷到逆向OneByOne 这篇，愣了一下——不是我讲错了，是我漏了<strong>另一层视角</strong>。</p><p>核心要补的三件事：</p><ul><li>盲区 1 — CDP 不是终极兜底，shadow dom 面前 CDP 也会死</li></ul><ul><li>盲区 2 — 登录态承接有两条路，接管窗口 vs 克隆 profile，我走的是前者</li></ul><ul><li>盲区 3 — browsermcp 是官方路线，但 web-access 在一个意想不到的地方反而更完整</li></ul><h2 id="sec-1">一、先说两篇文章的底牌</h2><p>说白了，我那篇是横切，他那篇是纵深。两条轴正好垂直。</p><table><tr><th><p>维度</p></th><th><p>我的《联网指南》</p></th><th><p>逆向OneByOne 的《浏览器自动化》</p></th></tr><tr><td><p><strong>视角</strong></p></td><td><p>使用者横切</p></td><td><p>造者纵深</p></td></tr><tr><td><p><strong>任务类型</strong></p></td><td><p>信息获取，读取为主</p></td><td><p>业务执行，交互为主</p></td></tr><tr><td><p><strong>工具清单</strong></p></td><td><p>4 件套：WebSearch / web_fetch / Defuddle / Browser CDP</p></td><td><p>8 层链：Chromium → CDP → cdp-use → Puppeteer/Playwright → browser-use → Midscene/browsermcp</p></td></tr><tr><td><p><strong>核心矛盾</strong></p></td><td><p>微信公众号轻量工具失效，CDP 兜底</p></td><td><p>视频号 shadow dom，CDP 也不够，上视觉路线</p></td></tr><tr><td><p><strong>颗粒度</strong></p></td><td><p>应用层工具对比</p></td><td><p>底层协议 → 工程框架 → Agent 封装 → 专用分支</p></td></tr></table><p>一句话概括：我讲的是"什么场景用什么工具"，他讲的是 <strong>"这个工具里面到底是什么"</strong>。</p><p>我那张"能力对比表"里 Browser CDP 是一个格子。他把这个格子展开成了一整条技术链。</p><div class="fs-callout" style="background:#d0ebff;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>其实这两个视角是正交的。
+我的起点是"我有信息需求，怎么搞定"——所以工具横着排，按场景选。他的起点是"我要做业务流程，技术栈怎么组"——所以工具竖着排，按封装层分。
+说白了，第一种解决"选谁"，第二种解决"为什么是这几个在这条链上"。</p></div></div><h2 id="sec-2">二、盲区 1：CDP 不是终极兜底，shadow dom 会让它死</h2><p>先说我之前的认知。</p><p>那篇联网指南的核心主张之一就是——搞不定的场景上 Browser CDP 兜底。微信公众号抓不到？上 CDP。小红书需要登录态？上 CDP。Cloudflare 拦截？上 CDP。</p><p>CDP 在我心里就是那个"真实浏览器、所见即所得"的终极方案。</p><p>逆向OneByOne 直接给我上了一课——他原话是：「视频号后台里有一部分页面用了 wujie 的 shadow dom 结构，你从视觉上看，那个发表视频按钮明明就在页面上，但很多基于 DOM 的自动化工具就是拿不到。」</p><p><strong>问题的核心不是 CDP 够不够强，是 DOM 这条路本身有极限。</strong></p><p>wujie 是一个微前端框架，它用 shadow dom 做了组件隔离。嵌套式 shadow dom 会把子组件的 DOM 树装进一个封闭的 shadowRoot——外部选择器不管是 Puppeteer、Playwright 还是 CDP 原生 eval，全都拿不到。你得一层一层 <code>shadowRoot</code> 穿透，遇到某些框架的深度嵌套，穿透链路会断。</p><p>这时候才有字节的 Midscene 方案——<strong>视觉驱动路线</strong>。</p><table><tr><th><p>路线</p></th><th><p>DOM 驱动</p></th><th><p>视觉驱动 Midscene</p></th></tr><tr><td><p><strong>决策依据</strong></p></td><td><p>先理解 DOM，再决定怎么点</p></td><td><p>先看懂截图里有什么，再决定下一步</p></td></tr><tr><td><p><strong>对页面结构敏感度</strong></p></td><td><p>高，选择器失效就死</p></td><td><p>低，屏幕上能看到就能点</p></td></tr><tr><td><p><strong>速度</strong></p></td><td><p>快</p></td><td><p>慢，多一层视觉理解</p></td></tr><tr><td><p><strong>成本</strong></p></td><td><p>近乎零</p></td><td><p>有模型成本</p></td></tr><tr><td><p><strong>稳定性来源</strong></p></td><td><p>精确 DOM 选择器</p></td><td><p>视觉理解</p></td></tr></table><p>Midscene 的定位很清楚——<strong>不是替代 DOM，是 DOM 不够用时的补位</strong>。跨结构理解强，精确定义弱。复杂页面的兜底层，不是主力。</p><p>对我 web-access skill 的启示也很直接：</p><p>现在 skill 里 <code>/eval</code> 递归遍历支持穿透 Shadow DOM 和 iframe，一般 shadow dom 够用。但我没实测过 wujie 这种嵌套式。真要接视频号这类场景，必须做 POC 验证——必要时引入视觉兜底层，不能死磕 DOM。</p><p>换句话说，我之前"CDP 是兜底"那个说法，要加一条脚注——shadow dom 重灾区例外。</p><h2 id="sec-3">三、盲区 2：登录态承接的两条路线，我走的是"接管"</h2><p>我那篇里提 Browser CDP 的登录态优势，就一句话带过——<strong>直连用户 Chrome，天然登录态</strong>。</p><p>看了逆向OneByOne 这篇才发现，"连上用户 Chrome"其实分两条路，而且差异不小。</p><h3 id="sec-4">3.1 接管路线 — 我的 web-access 走的这条</h3><p>通过 CDP Proxy 连上用户日常 Chrome 的 remote-debugging 端口，在同一个 Chrome 进程里开后台 tab 做自动化操作。用户在前台用浏览器，AI 在后台另起 tab 干活。</p><p>这条路线：</p><ul><li>轻，无需复制 user-data-dir</li></ul><ul><li>登录态完全实时，跟用户手动操作共享同一个 cookie jar</li></ul><ul><li>共享用户环境，风控识别到可疑行为可能拖累用户主账号</li></ul><ul><li>用户和 AI 同时操作时可能互相干扰</li></ul><h3 id="sec-5">3.2 克隆路线 — browser-use 走的这条</h3><p>逆向OneByOne 原文描述很清楚——「带着 profile 去启动，它会去找系统里安装的 Chrome，读取你本机的用户数据目录和 profile 信息，把对应 profile 复制到一个临时目录里，再拉起一个新的 Chrome 进程来跑自动化。它不是接管你现在桌面上已经打开着的那个 Chrome 窗口，而是拿你的身份数据，克隆出一个自动化专用的 Chrome。」</p><p>这条路线：</p><ul><li>独立进程，与用户主 Chrome 隔离，风控风险低</li></ul><ul><li>自动化专用实例，不干扰用户正常使用</li></ul><ul><li>重，要复制 profile 到临时目录</li></ul><ul><li>cookie 不是实时的，快照级别，强设备指纹站点可能要求重新登录</li></ul><h3 id="sec-6">3.3 两条路线放一起看</h3><table><tr><th><p>维度</p></th><th><p>接管路线 web-access</p></th><th><p>克隆路线 browser-use</p></th></tr><tr><td><p><strong>进程模型</strong></p></td><td><p>同进程，开新 tab</p></td><td><p>独立进程</p></td></tr><tr><td><p><strong>登录态实时性</strong></p></td><td><p>实时</p></td><td><p>快照</p></td></tr><tr><td><p><strong>风控隔离</strong></p></td><td><p>弱，共享用户环境</p></td><td><p>强，独立环境</p></td></tr><tr><td><p><strong>用户并发干扰</strong></p></td><td><p>有，同窗口</p></td><td><p>无</p></td></tr><tr><td><p><strong>启动成本</strong></p></td><td><p>极低</p></td><td><p>中等，复制 profile</p></td></tr><tr><td><p><strong>适合场景</strong></p></td><td><p>单次操作、用户不在场的调研</p></td><td><p>高频批量、矩阵发布</p></td></tr></table><p>对 web-access 的启示：</p><p>接管路线对"临时抓内容、调研性任务"足够好。但要做<strong>矩阵账号发布、高频批量操作</strong>这种场景——接管路线会成为风险集中点，所有账号共享一个浏览器环境。这时候 skill 可能需要演化出"克隆模式"作为第二形态。</p><p>其实这不是单纯的技术选择，是"AI 和我共用一个身体"和"AI 拿我身份的克隆去办事"两种使用哲学的分野。我之前没想清楚这一层。</p><h2 id="sec-7">四、盲区 3：browsermcp 是官方路线，web-access 反而更完整</h2><p>逆向OneByOne 提到一个我之前完全没听过的东西——<strong>browsermcp</strong>。原话是：「官方出的 browsermcp。它可以基于你当前正在使用的浏览器，把页面内容、DOM 结构和可操作能力，更自然地暴露给 AI。」</p><p>读到这我心里一惊。</p><p>这跟 web-access skill 干的事几乎一模一样——接管当前浏览器，把 DOM 和操作能力暴露给 AI。更戳心的是，这是<strong>官方出的</strong>。</p><p>正常逻辑是：官方路线一出来，自建 skill 的价值就贬值。</p><p>但翻完原文我发现微信文这句话救了我——「browsermcp 现在也不是完美的。它的能力还没有强到覆盖所有场景，比如像文件选择这类动作，现在还不行。」</p><p>这正好是 web-access 解决的问题。</p><p>web-access 有一个 <code>/setFiles</code> 端点：</p><pre><code>curl -s -X POST "http://localhost:3456/setFiles?target=ID" \
+  -d '{"selector":"input[type=file]","files":["/path/to/file.png"]}'</code></pre><p>底层走 CDP 的 <code>Input.setFileInputFiles</code>，直接把本地文件路径写进 <code>&lt;input type=file&gt;</code>，绕过文件对话框。</p><p>这是我当初踩过坑才补上的能力——没这个，小红书、抖音后台的图片视频上传全走不通。</p><p>结果没想到，<strong>在这个点上 web-access 反而比官方 browsermcp 完整</strong>。</p><table><tr><th><p>能力</p></th><th><p>browsermcp</p></th><th><p>web-access</p></th></tr><tr><td><p><strong>接管当前浏览器</strong></p></td><td><p>有</p></td><td><p>有</p></td></tr><tr><td><p><strong>DOM 读写</strong></p></td><td><p>有</p></td><td><p>有</p></td></tr><tr><td><p><strong>点击 / 输入</strong></p></td><td><p>有</p></td><td><p>有</p></td></tr><tr><td><p><strong>截图</strong></p></td><td><p>有</p></td><td><p>有</p></td></tr><tr><td><p><strong>文件上传 非对话框路径</strong></p></td><td><p>当前不支持</p></td><td><p><code>/setFiles</code> 直通 <code>Input.setFileInputFiles</code></p></td></tr><tr><td><p><strong>Shadow DOM 穿透</strong></p></td><td><p>未知</p></td><td><p>递归遍历穿透 iframe + shadowRoot</p></td></tr><tr><td><p><strong>真实鼠标点击 触发文件对话框</strong></p></td><td><p>未知</p></td><td><p><code>/clickAt</code> 走 <code>Input.dispatchMouseEvent</code></p></td></tr></table><p>我想基本是因为以下这两点：</p><p>一是自建 skill 的路线选对了——同样是"接管当前浏览器"的思路，web-access 在关键的上传场景上更完整。二是不能躺平——browsermcp 一旦补齐文件上传，自建优势就被追上了；必须盯着官方的迭代节奏。</p><p>差异化不能靠工程深度堆出来。官方迟早会追上工程细节。真正的差异点要往使用场景深挖——针对特定平台的封装、针对工作流的 skill 级组合。</p><h2 id="sec-8">五、两条视角叠在一起才是完整地图</h2><p>先画一张合成图。</p><figure class="fs-img fs-board"><img src="/assets/img/fs-WmDHw0VuMh1QfMbdr5IckGKLnlc.jpg" alt="白板图" loading="lazy"></figure><p>我的"Browser CDP"盒子，实际对应他纵深链路的 <strong>CDP + cdp-use + 接管路线</strong> 这个片段。</p><p>两张图叠起来才看得清：</p><ul><li>CDP 是协议层能力，不是一个产品——具体怎么用 CDP，分化出了 Playwright、browser-use、Midscene、browsermcp 等多条路线</li></ul><ul><li>接管 vs 克隆 vs 独立是三种身份承接方式——web-access 和 browsermcp 走接管，browser-use 走克隆，纯 Playwright + Chromium 走独立</li></ul><ul><li>DOM vs 视觉是两种感知方式——绝大多数路线走 DOM，Midscene 是视觉兜底</li></ul><h2 id="sec-9">六、一个观察，一个元领悟</h2><h3 id="sec-10">6.1 一个观察</h3><p>逆向OneByOne 原文最后那句话戳到我了——「以前很多浏览器能力，是给人点的，是给开发者调试的。现在越来越多的能力，开始直接为 AI 准备。」</p><p>其实说白了，CDP 本来是调试协议，现在被 browser-use、browsermcp、web-access 拆出来当 AI 操作接口用。Chrome 扩展本来是给浏览器扩功能，现在在被重新封装成 MCP。</p><p>整个浏览器的"接口开放面"正在从"给人"转向 <strong>"给 AI"</strong>。这是一个比单个工具选型更大的信号。</p><h3 id="sec-11">6.2 一个元领悟</h3><p>做自建 skill 半年，反思几个问题，最大的感受是——<strong>技术栈每一层的定位不清楚，选型就永远在拍脑袋</strong>。</p><p>我那篇横切视角的《联网指南》不是错的。但横切视角本身是有盲区的——它假设"Browser CDP"是一个原子能力，不去追问它内部分层。直到遇到另一个人站在纵深视角写文章，我才发现自己的"Browser CDP"盒子里至少有 5 层封装、3 条分支。</p><p>干中学，学中干。</p><p>看别人领域外的文章，本质是<strong>借用他人的"纵深视角"补自己的"横切盲区"</strong>。</p><p>你的工具选对没选对，很多时候不是自己检查一遍就能发现的——得有人站在另一个方向，才能照出你视角的边界在哪里。</p><h2 id="sec-12">七、两篇原文链接</h2><ul><li>我之前那篇：<a href="https://mi.feishu.cn/docx/H5t8dfNzlo7vZTxtSmwcDRjUnUb" target="_blank" rel="noopener">《OpenCode、Claw🦞 联网指南：搜索、抓取、浏览器，什么场景用什么方法？》</a></li></ul><ul><li>逆向OneByOne：<a href="https://mp.weixin.qq.com/s/19we_YtX2IPBA10kzt3mvg" target="_blank" rel="noopener">《一文彻底了解浏览器自动化，cdp、playwright、browser-user、midscene、browsermcp》</a></li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795481147"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+
+</body>
+</html>

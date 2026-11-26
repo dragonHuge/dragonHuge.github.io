@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>RAG 实战讲解 · 要点整理 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">20</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#一-RAG-的五段链路">一、RAG 的五段链路</a><a class="tl l2" href="#二-逐页要点">二、逐页要点</a><a class="tl l3" href="#P1-RAG实战讲解">P1 · RAG实战讲解</a><a class="tl l3" href="#P2-目录">P2 · 目录</a><a class="tl l3" href="#P3-流程讲解">P3 · 流程讲解</a><a class="tl l3" href="#P4-流程讲解">P4 · 流程讲解</a><a class="tl l3" href="#P5-调优建议">P5 · 调优建议</a><a class="tl l3" href="#P6-文档解析-数据切片">P6 · 文档解析&amp;数据切片</a><a class="tl l3" href="#P7-文档解析-数据切片">P7 · 文档解析&amp;数据切片</a><a class="tl l3" href="#P8-向量模型">P8 · 向量模型</a><a class="tl l3" href="#P9-重排模型">P9 · 重排模型</a><a class="tl l3" href="#P10-向量模型-重排模型">P10 · 向量模型&amp;重排模型</a><a class="tl l3" href="#P11-生成模型">P11 · 生成模型</a><a class="tl l3" href="#P12-生成模型">P12 · 生成模型</a><a class="tl l3" href="#P13-后处理">P13 · 后处理</a><a class="tl l3" href="#P14-实操演示">P14 · 实操演示</a><a class="tl l3" href="#P15-Q-A环节">P15 · Q&amp;A环节</a><a class="tl l3" href="#P16-开箱即用-公司自研-RAG-框架正式开源">P16 · 开箱即用：公司自研 RAG 框架正式开源</a><a class="tl l3" href="#P17-欢迎加入AI大赛-秋季赛答疑群-答疑支持">P17 · 欢迎加入AI大赛-秋季赛答疑群，答疑支持</a><a class="tl l2" href="#三-落地顺序建议">三、落地顺序建议</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="ai/index.html">AI</a></div><article><h1>RAG 实战讲解 · 要点整理</h1><div class="meta">2026-11-26<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累 · PPT 整理&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><blockquote><p>来源：内部技术分享《RAG 实战讲解》（共 17 页）。本文是逐页要点整理，原 PPT 的示意图/演示录屏不在本文中。</p></blockquote>
+<h2 id="一-RAG-的五段链路">一、RAG 的五段链路</h2>
+<p>一条完整的 RAG 链路可以拆成五段，每一段都有独立的优化手段：</p>
+<ol><li><strong>文档解析 &amp; 数据切片</strong> —— 把原始文档变成语义块（召回单位）</li><li><strong>向量模型</strong> —— 把问题与片段投到同一语义空间，先保召回</li><li><strong>重排模型</strong> —— 在召回候选里挑出“能直接回答问题”的，保精度</li><li><strong>生成模型</strong> —— 基于检索片段作答，必要时拒答</li><li><strong>后处理</strong> —— 规范输出格式 + 一致性校验 + 重试</li></ol>
+<blockquote><p>一句话：<strong>向量保召回，重排保精度，生成保正确，后处理保可用</strong>。</p></blockquote>
+<h2 id="二-逐页要点">二、逐页要点</h2>
+<h3 id="P1-RAG实战讲解">P1 · RAG实战讲解</h3>
+<ul><li>大模型 PLUS 团队 · RAG 分享</li></ul>
+<h3 id="P2-目录">P2 · 目录</h3>
+<ul><li>CONTENTS</li><li>1</li><li>流程讲解</li><li>2</li><li>调优建议</li><li>3</li><li>实操演示</li><li>4</li><li>Q&amp;A环节</li></ul>
+<h3 id="P3-流程讲解">P3 · 流程讲解</h3>
+<h3 id="P4-流程讲解">P4 · 流程讲解</h3>
+<ul><li>所有能力都已包含在开源框架中，只需根据开源文档手册走通流程绿色：拥有基础代码能力同学成</li><li>紫色：建议有一定代码能力或者模型微调能力的同学</li><li>蓝色：建议对RAG有一定经验或者擅长模型微调的同学</li><li>注：难度构成并不绝对，希望同学于尝试</li></ul>
+<h3 id="P5-调优建议">P5 · 调优建议</h3>
+<h3 id="P6-文档解析-数据切片">P6 · 文档解析&amp;数据切片</h3>
+<ul><li>作用：把原始文档整理成用于检索的语义块（召回片段）：语义边界清晰、字段含义明确，使后续向量召回/重排更容易命中可直接回答问题的片段。</li><li>优化方向：</li><li>文档内容聚合：将相似语义的片段聚合在一起为入库切片</li><li>按语义边界切分：</li><li>过短易丢关键信息，召回片段看似相关却无法作答</li><li>过长主题混杂，向量相似度降低、重排选择困难</li><li>标题与段落内容组合在一起</li><li>结构化保留：识别标题/段落/列表/表格等内容，并进行保留</li></ul>
+<h3 id="P7-文档解析-数据切片">P7 · 文档解析&amp;数据切片</h3>
+<ul><li>案例：query：“SU7 Max 的电池容量是哪一项？ A.66 B.73 C.82 D.90 E.100（kWh）”</li><li>不佳切分：把“电池容量（kWh）”“最大充电功率（kW）”“标准版参数”混在同一大块。结果召回片段里数值混杂，模型理解难度增大。</li><li>优化切分：按“电池容量（kWh）所在行”单独生成一个召回片段，元数据标明“Max版”；把“充电功率（kW）”“标准版容量”分别形成独立片段。这样召回时更容易直接命中“容量82kWh（Max）”对应的片段。</li><li>query：“城市领航是否支持自动变道？（A 是/B 否）”</li><li>召回片段应包含“城市领航”“支持自动变道”等关键词，并与“高速 NOA”等相邻概念分片，避免混淆。</li></ul>
+<h3 id="P8-向量模型">P8 · 向量模型</h3>
+<ul><li>作用：把“问题与文档片段”投到同一语义空间，先把对的片段召回来</li><li>优化方向：语料范围: 例如构造汽车垂域的知识进行微调</li><li>结合领域近义词、同义词：型号、别名、口语问法与中英混写（SU7 Max/Pro,城市领航/NOA）</li><li>样本构造：通过大模型对于语料中的每一句通过提示词引导，生成看似很相近但是意思完全相反的句子作为难负样本，还有和原句差异很大但是意思是一样的正样本</li><li>案例：query“SU7 Max 续航？”</li><li>正样本：片段含“Max 版 续航 … km”。</li><li>负样本：片段含“标准版 续航 … km”或“充电10分钟，可支撑续航xxkm”</li></ul>
+<h3 id="P9-重排模型">P9 · 重排模型</h3>
+<ul><li>作用：在已召回的候选里，把“最能直接回答问题”的片段排到前面，显著提升TopK命中质量。</li><li>优化方向：</li><li>训练样本来源：用向量召回TopK候选，人工标注正负；重点加入“高相似但答非所问”的难例</li><li>专有名词匹配：补充所选赛题专有名词数据进行微调</li><li>案例：query“SU7的快充峰值功率是哪一个选项？”</li><li>正样本：表格中“直流快充峰值功率：xxkW”。</li><li>负样本：同页“电池容量xxkWh”或“交流慢充功率xxkW”</li><li>重排需判定前者优先，后者降权。</li></ul>
+<h3 id="P10-向量模型-重排模型">P10 · 向量模型&amp;重排模型</h3>
+<ul><li>query：“SU7 Max的电池容量是多少？” 片段1：Max版电池容量82kWh 片段2：最大充电功率90kW 片段3：Pro版电池容量73kWh</li><li>向量检索：</li><li>可能把1/2/3都召回（“容量/功率”“Max/Pro”在语义空间接近）。</li><li>重排模型：</li><li>学会“容量≠功率、Max≠Pro、单位要匹配”，把片段1排第1，2/3 降权。</li><li>分工搭配</li><li>向量召回Top10 → 重排返回Top5 → 生成</li><li>只用向量，召回高但TopK不精准，增大生成模型理解难度</li><li>向量保召回，重排保精度</li></ul>
+<h3 id="P11-生成模型">P11 · 生成模型</h3>
+<ul><li>作用：对检索内容进行理解并进行答案输出。</li><li>优化方向：</li><li>Prompt调优：</li><li>1.强调仅根据输入的检索内容进行回答，并输出对应选项</li><li>模型微调：</li><li>1.数据形态：问题 + 选项列表 + 检索片段 → 正确选项字母</li><li>2.抗噪训练：在检索片段中混入少量无关句，标签仍为正确字母，提升抗噪能力</li><li>3.拒答样本：构造检索结果里无任何选项内容的样本，教会模型进行拒答</li><li>强化学习：基于规则对多候选回答打分，选出“高分/低分”对，固定回复风格拒答策略：结果不包含query选项时，进行拒答，交由后处理触发重试</li></ul>
+<h3 id="P12-生成模型">P12 · 生成模型</h3>
+<ul><li>案例：query:</li><li>“SU7 Max的电池容量是多少？ A.66kWh B.73kWh C.82kWh D.90kWh”检索片段：</li><li>… 规格参数：电池容量82kWh（Max版） …</li><li>期望行为：</li><li>生成模型读到“82kWh（Max版）”，仅输出 C</li><li>抗干扰：</li><li>同页还有“交流充电功率 11 kW”“标准版容量 73 kWh”等句子，避免造成误选</li><li>拒答：</li><li>若检索只出现“功率 kW”而无“容量 kWh”，模型进行拒答，后处理触发重试策略</li></ul>
+<h3 id="P13-后处理">P13 · 后处理</h3>
+<ul><li>作用：把模型输出规范成选项，并校验其与检索结果内容一致，不一致则重试</li><li>优化方向：</li><li>格式清洗：“选C/答案C/C.” 等映射为C，多余文本全部删除</li><li>一致性检验：所选答案内容必须与当前检索内容一致（例如场景、版本等一致），不一致考虑重新检索或者重新生成</li><li>重试策略：扩大检索召回数量，再次检索；调整生成接口请求参数，再次生成</li><li>案例：模型原始输出“C，峰值功率为xxxkW”，后处理保留C；同时确认检索结果的确出现该功率值并与C所指选项一致；若未命中，则重试检索或重排。</li></ul>
+<h3 id="P14-实操演示">P14 · 实操演示</h3>
+<h3 id="P15-Q-A环节">P15 · Q&amp;A环节</h3>
+<h3 id="P16-开箱即用-公司自研-RAG-框架正式开源">P16 · 开箱即用：公司自研 RAG 框架正式开源</h3>
+<ul><li>Web端链接：</li><li>[内部链接]</li><li>开源框架链接：</li></ul>
+<h3 id="P17-欢迎加入AI大赛-秋季赛答疑群-答疑支持">P17 · 欢迎加入AI大赛-秋季赛答疑群，答疑支持~</h3>
+<ul><li>欢迎加入大模型plus需求和体验反馈群，交流分享~</li></ul>
+<h2 id="三-落地顺序建议">三、落地顺序建议</h2>
+<ul><li><strong>先跑通，再调优</strong>：开源框架 + 官方手册能走完最小闭环，别一上来就微调模型；</li><li><strong>优先修切片</strong>：绝大多数“召回不准”其实是切分把答案切碎了，成本最低、收益最大；</li><li><strong>样本比模型重要</strong>：难负样本（相似但答非所问）决定重排上限；</li><li><strong>拒答是能力不是缺陷</strong>：检索里没有答案时必须拒答，交后处理重试，而不是让模型硬编。</li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

@@ -1,0 +1,3646 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>AI-Coding提效 风控后台实践(OpenCode+OpenSpec) · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">51</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">提效目标</a><a class="tl l1" href="#sec-2">项目知识库构建 &amp; 全局约束规则 &amp; 开发约束规范</a><a class="tl l2" href="#sec-3">初次探索</a><a class="tl l2" href="#sec-4">进一步：⭐️知识库&amp;项目规范 搭建方法论</a><a class="tl l1" href="#sec-5">开发约束规范-探索：Rules  or  Skills？</a><a class="tl l2" href="#sec-6">Rules实现 - 拉完了</a><a class="tl l2" href="#sec-7">Skills实现 - 人上人</a><a class="tl l2" href="#sec-8">最终方案1：Rules 引导遵循 Skills- 夯</a><a class="tl l2" href="#sec-9">最终方案2：Skills + OpenSpec指令魔改 - 夯爆了</a><a class="tl l1" href="#sec-10">AI-coding 开发-&gt;测试闭环探索</a><a class="tl l2" href="#sec-11">现状问题：</a><a class="tl l2" href="#sec-12">核心诉求：</a><a class="tl l2" href="#sec-13">问题的本质：怎么保证 100% 执行？</a><a class="tl l2" href="#sec-14">最终方案：三层强制保障闭环</a><a class="tl l3" href="#sec-15">tasks.md 示例如下：</a><a class="tl l3" href="#sec-16">dev-tdd Skill：</a><a class="tl l3" href="#sec-17">Mock 边界策略</a><a class="tl l2" href="#sec-18">最终方案迭代 V1：</a><a class="tl l3" href="#sec-19">背景与目标</a><a class="tl l3" href="#sec-20">初版方案回顾</a><a class="tl l3" href="#sec-21">初版方案存在的问题</a><a class="tl l3" href="#sec-22">最新方案改动细节</a><a class="tl l3" href="#sec-23">改动带来的收益</a><a class="tl l3" href="#sec-24">后续注意事项</a><a class="tl l1" href="#sec-25">需求出发的Skills抽象</a><a class="tl l2" href="#sec-26">project-konwledge-base：前端项目 知识库构建Skill</a><a class="tl l2" href="#sec-27">springboot-multi-module-kb：后端Java多模块项目 知识库构建Skill</a><a class="tl l2" href="#sec-28">project-rules-scaffold：全局约束规则 &amp; 开发约束规范构建Skill</a><a class="tl l1" href="#sec-29">真实需求实践</a><a class="tl l2" href="#sec-30">X1- 纯前端：新增/编辑 从「新开页面形式」 改 「弹窗形式」</a><a class="tl l3" href="#sec-31">结果总结</a><a class="tl l3" href="#sec-32">需求详解 &amp; 提示词：</a><a class="tl l3" href="#sec-33">反思与改进点</a><a class="tl l3" href="#sec-34">过程记录</a><a class="tl l2" href="#sec-35">X2-「后端开发-单元测试」AI闭环开发：欧洲数据脱敏Case</a><a class="tl l1" href="#sec-36">风控后端纳入AI-Coding体系</a><a class="tl l1" href="#sec-37">前后端联动 AI-coding</a><a class="tl l2" href="#sec-38"></a><a class="tl l1" href="#sec-39">优质开源Skills推荐</a><a class="tl l1" href="#sec-40">SubAgent  &amp;  Category</a><a class="tl l2" href="#sec-41">Category</a><a class="tl l2" href="#sec-42">SubAgent、Category模型配置</a><a class="tl l1" href="#sec-43">OpenCode 模型配置</a><a class="tl l1" href="#sec-44">Oh-my-opencode</a><a class="tl l1" href="#sec-45">踩坑日记 ⭐️</a><a class="tl l2" href="#sec-46">Q1：ide terminal 鼠标滚轮无法翻动聊天记录</a><a class="tl l2" href="#sec-47">Q2：OpenCode聊天无法复制粘贴(Git Bash终端)</a><a class="tl l2" href="#sec-48">Q3：Unable to connect，无法连通mify模型url。</a><a class="tl l2" href="#sec-49">Q4：OpenCode终端弹出乱码，但模型任务还在执行</a><a class="tl l2" href="#sec-50">Q5：WSL DNS解析崩溃，ping不通任何域名</a><a class="tl l2" href="#sec-51">Q6：opencode无法多开，只能开一个窗口：</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="ai/index.html">AI</a></div><article><h1>AI-Coding提效 风控后台实践(OpenCode+OpenSpec)</h1><div class="meta">2026-04-29 · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>写在前边：</strong></mark></p><p><span style="color:#d83931"><strong>这个文档比较旧了，最新进度看：</strong></span><span class="fs-mention">@聊聊AI-Coding、AI提效、AI底层认知 - 研发效能与工程化探索</span></p><p>实时风控后台属于 <strong>传统前后端分离项目(Vue2 + SpringBoot)，已投入使用</strong>，属<strong>「老项目」</strong>。</p><p>本次提效实践技术栈："<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>OpenCode + </strong></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>oh-my-opencode </strong></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>+ Skills</strong></mark>" + "<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>OpenSpec</strong></mark>"</p><blockquote><p>opencode手机端：https://github.com/chriswritescode-dev/opencode-manager</p></blockquote></div></div><h1 id="sec-1">提效目标</h1><p class="fs-todo"><span class="fs-cb">☐</span> 前端知识库搭建、全局规范约束。</p><p class="fs-todo"><span class="fs-cb">☐</span> 纯前端的增量需求，纯vibe coding开发，不需人为参与。</p><p class="fs-todo"><span class="fs-cb">☐</span> 后端知识库搭建、全局规范约束。</p><p class="fs-todo"><span class="fs-cb">☐</span> 前后端联动需求，需人为参与，协调前后端联动开发（<u><strong>前后端如何联动vibe-coding，仍需探索</strong></u>）。</p><p class="fs-todo"><span class="fs-cb">☐</span> 开发-&gt;单元测试 AI自动化全流程执行能力。</p><p class="fs-todo"><span class="fs-cb">☐</span> 保证知识库的迭代更新、版本管理、全局规范约束迭代更新、版本管理。</p><h1 id="sec-2">项目知识库构建 &amp; 全局约束规则 &amp; 开发约束规范</h1><blockquote><p>目标：</p><ol><li><strong>构建项目知识库，</strong>包括 技术栈、版本管理、现有能力、工具类等<strong>。</strong></li></ol><ol><li>前端：UI风格统一、版本统一、http接口调用复用现有工具。</li><li>后端：HTTP调用、密钥配置、Json转换工具等。</li></ol><p>这个“项目知识库”，面向Agent，供其调用。</p></blockquote><h2 id="sec-3">初次探索</h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>初次测试结论</strong>：<strong>10轮交互</strong>，纯粹的vibe-coding，就生成了符合预期的 「项目知识库 + 开发约束规范Skills + 全局约束规则」。</p><blockquote><p>很惊喜。</p></blockquote></div></div><pre><code>Q1: 我想搭建项目知识库：记录技术栈、依赖版本、数据结构、通用工具等，存放在文件夹中，作为后续迭代开发的标准。
+
+Q2: 有3个方案可选
+&gt; A（选择渐进式轻量方案）
+
+Q3: 还有什么需求？
+&gt; 新需求开发时，优先搜索知识库找复用代码，遵守规范，保持前端代码风格一致。
+
+Q4: 这个需求能归纳为一个skill吗？
+&gt; 可以。
+
+Q5: 开始执行/opsx:ff  // 这一个命令，会开始执行OpenSpec的全部流程。
+&gt; 执行/opsx:ff
+
+Q6: specs文件全是英文，没遵循"所有产出均为中文"的约束
+&gt; 调整并解释原因。
+
+Q7: 归档这个change
+&gt; 好的，归档吧。
+
+Q8: 需要全局Rules约束吗？
+&gt; 需要。
+
+Q9: Rules要包含哪些内容？
+&gt; 开发流程、技术栈、前端风格一致性（不含Git规范）。
+
+Q10: Rules文件名和语言？
+&gt; 全中文，所有输出强制中文。</code></pre><ul><li><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div></li></ul><ul><li><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div></li></ul><ul></ul><h2 id="sec-4">进一步：⭐️知识库&amp;项目规范 搭建方法论</h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>随着进一步探索体验</strong>，我对于项目知识库、全局规则、开发约束的构建和使用，有了一点心得，形成了一套 <strong>“Skill init项目规范，</strong><strong>Rules</strong><strong>+Skill约束开发范式”</strong> 的方法论（见下图）。</p><blockquote><p>插句题外话，在进行如题的探索中，也逐步感受到了<strong>「 规范、</strong><span style="color:#d83931"><strong>分层</strong></span><strong>、上下文控制」</strong> <strong>在用好AI上的重要性</strong>，分享一篇好文章，里边系统描述了“Agent如何分层”：<a href="https://mp.weixin.qq.com/s/0HWPSbTWReYzzhDmjdqrTQ" target="_blank" rel="noopener">2026 做 Agent 的正确姿势：单 Agent 起步，Skills 沉淀方法论，MCP 负责连接</a>。</p></blockquote></div></div><figure class="fs-board" data-doc="[内部链接]" data-board="MiaFwkpCOhe6pbbmyg0cQHZJnIg"><div class="board-ph">正在加载画板…</div></figure><h1 id="sec-5">开发约束规范-探索：Rules  or  Skills？</h1><blockquote><p>开发约束规范：是指在每一次需求开发时，模型必须默认遵守的规则，不得跳过。</p></blockquote><p>在构建前端项目的开发约束规范时，就遇到了这个比较重要的卡点问题：<strong>OpenSpec的开发范式下</strong>，<strong>开发约束规范应该放在哪里：Rules or Skills？</strong></p><h2 id="sec-6">Rules实现 - <mark style="background:#dee2e6;color:inherit;padding:0 2px;border-radius:3px">拉完了</mark></h2><p><mark style="background:#b2f2bb;color:inherit;padding:0 2px;border-radius:3px"><strong>优点</strong></mark><strong>显而易见：</strong></p><p>Rules作为全局规则(或在Spec-kit中称为“宪法”)，当用户提问，Agent会自动读取Rules内容，将其注入到 System Prompt，作为前置上下文，再结合用户提问给出回复。</p><p>因此<u><strong>在Rules中保存开发约束规范，可以100%保证遵守现有规范。</strong></u></p><p><mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><strong>缺点</strong></mark><strong>也随之而来：</strong></p><p>当开发约束规范越来越长，Rules的内容越来越多，带来的是：</p><ol><li> <u><strong>Token消耗量的上升</strong></u> （钱哗哗向外流。。。）</li></ol><ol><li> <u><strong>被轻松撑满的Context</strong></u>（想象一下每次对话Rules都要在你开头插入一些有的没的。。。）</li></ol><ol><li><u><strong>“注意力稀释”（Attention Dilution）</strong></u>：当 System Prompt 过长且包含大量细碎规则时，LLM 对每一条规则的遵循度会下降，产生“幻觉”或忽略部分指令（尤其是“中间”的指令，即 Lost-in-the-Middle 现象）。</li></ol><h2 id="sec-7">Skills实现 - <mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">人上人 </mark></h2><p><mark style="background:#b2f2bb;color:inherit;padding:0 2px;border-radius:3px"><strong>优点：解决Rules Token消耗、Context消耗的痛点</strong></mark></p><p>Skills由于其“渐进式披露”的加载机制，似乎能解决Rules Token消耗、Context消耗的痛点。日常场景当然可以，毕竟这是Skill的使命之一。</p><p><mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><strong>缺点：用户使用成本上升、规范遵守确定性模糊</strong></mark></p><p><strong>但别忘了我们当前使用的是OpenSpec开发范式</strong>。这是什么意思呢？见下示例。</p><p>假设我们已有1个开发约束规范<code>dev-checklist Skill</code>，此时若：</p><ul><li>若纯粹的<strong>vibe-coding开发</strong>：直接 /dev-checklist 起手显式调用此Skill，进行需求开发。</li></ul><ul><li><p>并且<u><strong>提高了用户的输入成本，体验大打折扣</strong></u>。</p></li><li><blockquote><p>实际从Skill原理来讲，即便明示指定使用此Skill，AI也不一定100%遵守成功。</p><p>Skill命令触发是最稳妥的方案。</p></blockquote></li></ul><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div><h2 id="sec-8">最终方案1：Rules 引导遵循 Skills- <mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px">夯</mark></h2><p>既然 Rules 太重，Skills 太弱，我们需要结合两者的优势：<strong>“Rules 定义红线，Skills 提供详情”</strong> ：</p><ol><li><strong>Skill</strong>：记录详尽的开发约束规范，可迭代。</li></ol><ol><li><strong>Rules</strong>：记录项目核心全局约束规则，且 <u>强制要求「进行OpenSpec开发时，读取并严格遵循开发约束规范Skill。」</u></li></ol><h2 id="sec-9">最终方案2：Skills + OpenSpec指令魔改 - <mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px">夯爆了</mark></h2><p>这是一种更加强劲的约束限制，「最终方案1」是Rules文字约束，不是技术强制，<u>依赖于 AI 自律</u>，而<u>AI 可能选择性忽略，直接开始编码</u> ❌</p><p>真正能保证执行的技术方案需要修改代码：</p><ul><li><pre><code>Step 0: 强制加载开发规范
+执行任何任务前，必须先执行：
+/dev-standard
+如果不执行，后续步骤无法开始。</code></pre></li></ul><h1 id="sec-10">AI-coding 开发-&gt;测试闭环探索</h1><blockquote><p>上边「项目知识库、全局约束规则、开发约束规范」后，距离开发流程闭环还有 “测试一关”， 探索记录写在此处。</p><p><strong>tips</strong>：闭环方案、下边的总结，都是AI帮我生成的。</p></blockquote><h2 id="sec-11"><strong>现状问题：</strong></h2><ol><li>测试完全靠自觉，AGENTS.md 检查清单里虽有"核心逻辑是否有单元测试"，但只是提示性质，AI 可以选择性忽略。</li></ol><ol><li>项目里的测试零散、风格不统一，有的用 @SpringBootTest 集成测试，有的是纯 Mockito 单元测试</li></ol><ol><li>部分测试文件甚至是空的（如 IpReputationControllerTest.java）</li></ol><h2 id="sec-12"><strong>核心诉求：</strong></h2><p>每个接口新增/修改后，必须有对应单元测试，必须执行通过，才算开发完成。并且这个流程要内建到 OpenSpec 工作流里，不需要人工提醒。</p><h2 id="sec-13"><strong>问题的本质</strong>：<strong>怎么保证 100% 执行？</strong></h2><p>这其实不是一个技术设计问题，而是一个 <strong>强制执行 </strong>问题。规范写得再好，不执行等于零。</p><p>先梳理一下现有机制的强制力：</p><table><tr><td><p>机制</p></td><td><p>强制力</p></td><td><p>问题</p></td></tr><tr><td><p>AGENTS.md（根目录）</p></td><td><p>★★★★☆ 每次对话系统级注入</p></td><td><p>是"指令"不是"流程锁"</p></td></tr><tr><td><p>openspec/config.yaml context</p></td><td><p>★★★☆☆ 注入到 artifact 生成</p></td><td><p>仅在 OpenSpec 路径生效</p></td></tr><tr><td><p>SKILL.md（需 /命令 触发）</p></td><td><p>★★☆☆☆ 手动调用才生效</p></td><td><p>无自动触发机制</p></td></tr></table><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>单靠任何一层都不够，必须叠加。</strong></mark></p><h2 id="sec-14"><strong>最终方案</strong>：<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px">三层强制保障闭环</mark></h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>本方案本质上沿用了之前<u>「Rules 定义红线，Skills 提供详情」</u>的思路，再加了一层 config.yaml 的任务生成约束，形成了三层闭环。</p><ul><li>走 OpenSpec 开发：三层全部生效（意识 + 生成 + 执行）</li></ul><ul><li>非 OpenSpec 直接开发：至少第一层 AGENTS.md 生效（兜底）</li></ul><p><span style="color:#d83931"><strong>测试是开发完成的最后一道门，通过才算完成。</strong></span></p></div></div><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>三层各司其职：</strong></span></mark></p><ol><li><pre><code># PROJECT KNOWLEDGE BASE
+
+**Generated:** 2026-02-25
+**Commit:** be75e40e
+**Branch:** (current)
+
+---
+
+## 全局强制约束
+
+&gt; **所有回复、解释、代码注释和文档输出必须全部使用简体中文。违反此规则的代码将被直接删除。**
+
+---
+
+## 红线规则（零容忍）
+
+### 开发前必须加载规范
+
+**进行任何开发工作前（包括OpenSpec开发），必须执行以下命令加载开发规范：**
+
+```
+/dev-standard
+```
+
+**违规处理**：不加载规范就开发，视为严重违规。
+
+### 接口改动必须有测试
+
+**每个接口（Service/Controller）新增或修改，必须有对应测试类和测试方法，且测试必须通过。**
+
+执行流程：
+1. 接口实现完成后，按 `/dev-tdd` 规范生成对应测试
+2. 执行 `mvn test -pl &lt;module&gt; -Dtest=&lt;TestClassName&gt;` 验证通过
+3. 测试不通过则修复后重新执行，最多 3 次循环
+4. 基础设施（DB/Redis）连接失败时通知用户选择 Mock 策略
+
+**违规处理**：接口改动无测试或测试未通过，视为开发未完成。
+
+### 搜索与复用
+
+在实现新功能前，必须：
+
+- [ ] 搜索知识库 `docs/knowledge-base/`
+- [ ] 搜索已有工具/组件/API
+- [ ] 强制复用已有代码，禁止造轮子
+
+---
+
+## OVERVIEW
+
+公司风控平台 风控平台 - Java SpringBoot Maven 多模块实时风控系统。
+
+## STRUCTURE
+
+```
+风控平台/
+├── 风控平台-app/          # 应用层：MQ消费、检测服务
+├── 风控平台-infra/       # 基础设施：插件、RPC、服务实现
+├── 风控平台-rule-engine/ # 规则引擎：operators、functions
+├── 风控平台-data-assemble/ # 数据组装：字段提取、补给
+├── 风控平台-common/      # 公共：模型、工具类、枚举
+├── 风控平台-web/         # Web层：Controller、Service
+└── 风控平台-service-thrift/ # Thrift服务定义
+```
+
+## BUILD &amp; TEST COMMANDS
+
+```bash
+# 构建全量（跳过测试）
+mvn clean install -DskipTests
+
+# 构建单个模块（包含依赖）
+mvn clean install -pl 风控平台-web -am
+
+# 运行所有测试
+mvn test
+
+# 运行单个测试类
+mvn test -Dtest=RiskDictTableServiceImplTest
+
+# 运行单个测试方法
+mvn test -Dtest=RiskDictTableServiceImplTest#testAddDictTable
+
+# 运行指定模块的测试
+mvn test -pl 风控平台-web
+
+# 跳过测试
+mvn clean install -DskipTests
+
+# 只编译不测试
+mvn clean compile -DskipTests
+```
+
+## WHERE TO LOOK
+
+| Task | Location | Notes |
+|------|----------|-------|
+| 新增检测逻辑 | 风控平台-app/ | MQ消费 worker |
+| 编写规则算子 | 风控平台-rule-engine/ | operator/function |
+| 数据字段处理 | 风控平台-data-assemble/ | extract/supply |
+| 基础设施服务 | 风控平台-infra/ | plugin/rpc |
+| Web接口开发 | 风控平台-web/ | controller/service |
+| 公共模型定义 | 风控平台-common/ | model/constant |
+
+---
+
+## CODE STYLE GUIDELINES
+
+### 命名规范
+
+| 类型 | 规则 | 示例 |
+|------|------|------|
+| 包名 | `com.xiaomi.infosec.risk.风控平台.{模块名}` | `com.xiaomi.infosec.risk.风控平台.web` |
+| Controller | `*Controller.java` | `RuleController.java` |
+| Service接口 | `I*Service.java` | `IRuleService.java` |
+| Service实现 | `*ServiceImpl.java` | `RuleServiceImpl.java` |
+| Entity | `*.java` | `Rule.java` |
+| VO | `*VO.java` | `RuleVO.java` |
+| DTO | `*DTO.java` | `RuleDTO.java` |
+| Util | `*Util.java` | `DateUtil.java` |
+| 枚举 | `*Enum.java` / `*StatusEnum.java` | `RuleStatusEnum.java` |
+
+### 分层架构
+
+```
+controller/ → 处理HTTP请求，参数校验 (@Valid)
+     ↓
+service/    → 业务逻辑处理，事务管理 (@Transactional)
+     ↓
+repository/ → 数据访问
+     ↓
+entity/    → 数据库实体映射
+```
+
+### Import 规范
+
+```java
+// 1. java/javax 包
+import java.util.List;
+import java.util.Date;
+
+// 2. org.springframework 包
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+// 3. 第三方库
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
+// 4. 项目内部包（按模块顺序）
+import com.xiaomi.infosec.risk.风控平台.common.model.*;
+import com.xiaomi.infosec.risk.风控平台.web.service.*;
+```
+
+### 代码规范
+
+- **中文注释**: 所有代码注释必须简体中文
+- **事务**: Service层必须加 `@Transactional`
+- **参数校验**: Controller方法参数必须使用 `@Valid`
+- **日志**: 使用 `@Slf4j`，`log.info()`/`log.error()` 记录业务日志，`log.debug()` 记录调试信息
+- **异常**: 禁止吞掉异常，必须记录日志或抛出
+- **硬编码**: 禁止硬编码，配置必须外置
+
+### 日志规范
+
+```java
+// 正确
+log.info("查询参数: name={}, id={}", name, id);
+log.error("保存失败: {}", e.getMessage(), e);
+
+// 禁止
+log.info("查询参数: " + name);  // 字符串拼接
+log.error("错误");             // 无变量
+```
+
+---
+
+## ANTI-PATTERNS (零容忍)
+
+- ❌ Controller直接操作数据库 → 必须通过Service层
+- ❌ 重复造轮子 → 工具类必须复用已有代码
+- ❌ 硬编码 → 配置必须外置到配置中心
+- ❌ 吞掉异常 → 必须记录日志或抛出
+- ❌ 循环依赖 → 模块间禁止循环引用
+- ❌ 跨层调用 → 必须遵循调用链 controller→service→repository→entity
+- ❌ 数据库连接信息硬编码 → 必须通过配置中心
+
+---
+
+## 开发流程
+
+1. **开发前**: 加载 `/dev-standard` 规范
+2. **实现前**: 搜索 `docs/knowledge-base/` 复用已有代码
+3. **开发时**: 遵循分层架构 + 命名规范
+4. **完成后**: 自检清单检查
+5. **测试验证**: 接口改动后按 `/dev-tdd` 规范生成测试，执行 `mvn test` 通过后才算开发完成
+
+## 快速检查清单
+
+开发完成后，请逐项检查：
+
+### 代码层面
+
+- [ ] 是否遵循分层架构？
+- [ ] 是否有硬编码？
+- [ ] 异常是否被正确处理？
+- [ ] 是否有不必要的日志泄露敏感信息？
+
+### 规范层面
+
+- [ ] 是否加载了 `/dev-standard` 规范？
+- [ ] 是否搜索了知识库复用已有代码？
+- [ ] 命名是否符合规范？
+- [ ] 注释是否为中文？
+
+### 测试层面
+
+- [ ] 核心逻辑是否有单元测试？
+- [ ] 接口是否有文档注释？
+- [ ] 单元测试是否执行通过（`mvn test`）？
+- [ ] 是否遵循 Mock 边界规则（核心逻辑不 Mock，无关依赖可 Mock）？
+- [ ] 测试文件路径是否镜像 main 目录？
+
+## 相关链接
+
+- 开发规范：`/dev-standard`
+- 知识库：`docs/knowledge-base/`
+- OpenSpec规范：`openspec/specs/`</code></pre></li></ol><ol><li><pre><code>schema: spec-driven
+
+context: |
+  技术栈: Java 8+, SpringBoot 2.x, Maven 多模块, MyBatis-Plus, Redis, Thrift
+  项目: 公司风控平台 风控平台，实时风控系统
+  测试框架: JUnit 5 + SpringBootTest + Mockito
+  语言约束: 所有注释、文档必须使用简体中文
+  
+  测试规范:
+  - 每个接口（Service/Controller）新增或修改后，必须有对应测试类和测试方法
+  - 测试文件路径镜像 main 目录: src/main/ → src/test/，类名追加 Test 后缀
+  - 有 Spring 容器依赖（DB/Redis）的类使用 @SpringBootTest，纯逻辑类使用 Mockito
+  - 本次需求改动的核心逻辑禁止 Mock，无关外部依赖允许 Mock
+  - 执行 [测试] 类型 task 时，必须加载 /dev-tdd 规范并严格按其流程执行
+
+rules:
+  tasks:
+    - 含接口（Service/Controller）新增或修改的任务组，必须包含 [测试] 前缀的子任务，格式为「[测试] 生成 XxxTest 覆盖 method 正常/异常分支」和「[测试] 执行 mvn test -Dtest=XxxTest 确认通过」
+    - 纯配置变更、文档修改、实体类新增等无接口改动的任务组可不包含测试子任务
+    - 测试 task 必须排在对应功能实现 task 之后</code></pre></li></ol><ol><li><pre><code>---
+name: dev-tdd
+description: 风控平台 项目 Test-After 单元测试执行规范。定义测试文件路径推导、测试策略选择、Mock 边界、测试生成规范、mvn test 执行、失败修复循环、基础设施异常通知等完整流程。在 OpenSpec apply 执行 [测试] 类型 task 时自动加载，非 OpenSpec 路径开发时也适用。
+license: MIT
+compatible_with:
+  - Java
+  - SpringBoot
+  - Maven Multi-Module
+  - JUnit 5
+metadata:
+  author: 风控平台 Team
+  version: "1.0"
+  tags: ["test", "tdd", "junit", "unit-test", "springboot", "mockito"]
+---
+
+# 风控平台 项目 Test-After 单元测试执行规范
+
+本规范定义了 风控平台 项目的 Test-After 单元测试全流程。**所有接口（Service/Controller）新增或修改后，必须按照本规范生成并通过单元测试。**
+
+---
+
+## 1. 适用场景
+
+本规范在以下场景中自动触发：
+
+| 场景 | 触发方式 |
+|------|----------|
+| OpenSpec apply 执行 `[测试]` 类型 task | config.yaml context 指示加载本规范 |
+| 非 OpenSpec 路径直接开发接口 | AGENTS.md 红线规则要求执行测试 |
+
+**触发条件**：任何接口（Service 方法 / Controller 端点）的新增或修改。
+
+---
+
+## 2. 测试文件路径推导
+
+### 2.1 路径镜像规则
+
+源文件 `src/main/` → 测试文件 `src/test/`，类名追加 `Test` 后缀。
+
+```
+源文件:
+  风控平台-web/src/main/java/com/xiaomi/infosec/risk/风控平台/web/service/dict/impl/RiskDictItemServiceImpl.java
+
+测试文件:
+  风控平台-web/src/test/java/com/xiaomi/infosec/risk/风控平台/web/service/dict/impl/RiskDictItemServiceImplTest.java
+```
+
+### 2.2 模块映射
+
+| 源码模块 | 测试目录 |
+|----------|----------|
+| `风控平台-web/src/main/java/...` | `风控平台-web/src/test/java/...` |
+| `风控平台-app/src/main/java/...` | `风控平台-app/src/test/java/...` |
+| `风控平台-rule-engine/src/main/java/...` | `风控平台-rule-engine/src/test/java/...` |
+| `风控平台-infra/src/main/java/...` | `风控平台-infra/src/test/java/...` |
+| `风控平台-data-assemble/src/main/java/...` | `风控平台-data-assemble/src/test/java/...` |
+| `风控平台-common/src/main/java/...` | `风控平台-common/src/test/java/...` |
+
+---
+
+## 3. 测试策略选择
+
+### 3.1 判断规则
+
+```
+被测类是否有 @Autowired / @Resource 注入？
+  │
+  ├── YES → 依赖 Spring 容器（DB/Redis/RPC）
+  │         → 使用 @SpringBootTest
+  │
+  └── NO  → 纯逻辑类
+            → 使用 @ExtendWith(MockitoExtension.class) 或直接 new
+```
+
+### 3.2 @SpringBootTest 模板
+
+```java
+package com.xiaomi.infosec.risk.风控平台.web.service.xxx.impl;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * XxxServiceImpl 单元测试
+ */
+@SpringBootTest
+class XxxServiceImplTest {
+
+    @Autowired
+    private XxxServiceImpl xxxService;
+
+    /**
+     * 测试新增 xxx - 正常路径
+     */
+    @Test
+    void testAddXxx_Success() {
+        // 准备测试数据
+        // 执行被测方法
+        // 断言结果
+    }
+
+    /**
+     * 测试新增 xxx - 异常路径（参数为空）
+     */
+    @Test
+    void testAddXxx_NullParam_ThrowsException() {
+        assertThrows(BusinessException.class, () -&gt; {
+            xxxService.addXxx(null);
+        });
+    }
+}
+```
+
+### 3.3 Mockito 模板（纯逻辑类）
+
+```java
+package com.xiaomi.infosec.risk.风控平台.rule.engine.engine.service.operator;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * Xxx 算子单元测试
+ */
+class XxxTest {
+
+    private Xxx xxx;
+
+    @BeforeEach
+    void setUp() {
+        xxx = new Xxx();
+    }
+
+    @Test
+    void testRun_NormalInput_ReturnsExpected() {
+        // 测试逻辑
+    }
+}
+```
+
+---
+
+## 4. Mock 边界规则
+
+### 4.1 核心原则
+
+| 类别 | Mock 策略 | 原因 |
+|------|-----------|------|
+| **本次需求改动的逻辑** | **禁止 Mock** | 必须验证真实业务逻辑 |
+| 无关但必须的外部依赖 | 允许 Mock | 保证测试可运行 |
+| 用户提供的测试数据 | 优先使用 | 最贴近真实场景 |
+
+### 4.2 Mock 示例
+
+```java
+// 本次需求：新增 addDictItem 方法
+// addDictItem 内部调用了一个无关的 RPC 获取用户信息
+
+@SpringBootTest
+class RiskDictItemServiceImplTest {
+
+    @Autowired
+    private RiskDictItemServiceImpl dictItemService;
+
+    @MockBean  // Mock 无关外部依赖
+    private UserInfoRpcService userInfoRpcService;
+
+    @Test
+    void testAddDictItem_Success() {
+        // Mock 无关依赖的返回值
+        when(userInfoRpcService.getUserInfo(anyLong()))
+            .thenReturn(new UserInfo("testUser"));
+
+        // 直接调用本次需求的核心方法（不 Mock）
+        Long id = dictItemService.addDictItem(request);
+
+        assertNotNull(id);
+    }
+}
+```
+
+### 4.3 测试数据构造
+
+优先级：
+1. **用户提供的测试数据** → 直接使用
+2. **基于方法签名自动构造** → 根据参数类型、字段名、约束条件构造合理数据
+3. **最小化数据** → 仅构造满足测试所需的最少字段
+
+---
+
+## 5. 执行流程
+
+### 5.1 完整流程图
+
+```
+接口实现完成
+     │
+     ▼
+[步骤 1] 推导测试文件路径
+     │
+     ▼
+[步骤 2] 判断测试策略（@SpringBootTest / Mockito）
+     │
+     ▼
+[步骤 3] 生成/更新测试文件
+     │  - 文件不存在 → 创建新文件
+     │  - 文件已存在 → 追加测试方法（不覆盖已有）
+     │  - 已有同名方法 → 更新该方法内容
+     │
+     ▼
+[步骤 4] 执行测试
+     │  mvn test -pl &lt;module&gt; -Dtest=&lt;TestClassName&gt;
+     │
+     ├── 通过 ──→ 标记 task 完成，继续下一个 task
+     │
+     ├── 失败（逻辑错误）
+     │   │
+     │   ▼
+     │  [步骤 5] 分析失败原因
+     │   │  - 读取测试输出的错误信息
+     │   │  - 判断是实现代码 bug 还是测试代码 bug
+     │   │
+     │   ▼
+     │  [步骤 6] 修复代码
+     │   │  - 修复实现代码或测试代码
+     │   │  - 回到步骤 4 重新执行
+     │   │  - 最多循环 3 次
+     │   │
+     │   └── 3 次仍失败 ──→ [步骤 7] 暂停并报告
+     │                      输出：失败详情、分析报告、修复尝试记录
+     │                      等待用户决策
+     │
+     └── 失败（基础设施连接错误）
+         │  DB/Redis/RPC 连接超时或拒绝
+         │
+         ▼
+        [步骤 8] 通知用户
+         │  "DB/Redis 连接失败，是否切换为 Mockito Mock 策略？"
+         │
+         ├── 用户选择 Mock ──→ 重新生成测试（Mockito），回到步骤 4
+         └── 用户选择跳过 ──→ 标记为"需人工验证"，继续下一个 task
+```
+
+### 5.2 测试执行命令
+
+```bash
+# 执行单个测试类（推荐，快速反馈）
+mvn test -pl &lt;module&gt; -Dtest=&lt;TestClassName&gt;
+
+# 示例
+mvn test -pl 风控平台-web -Dtest=RiskDictItemServiceImplTest
+
+# 执行单个测试方法
+mvn test -pl &lt;module&gt; -Dtest=&lt;TestClassName&gt;#&lt;methodName&gt;
+
+# 示例
+mvn test -pl 风控平台-web -Dtest=RiskDictItemServiceImplTest#testAddDictItem_Success
+```
+
+### 5.3 失败分析要点
+
+| 错误类型 | 特征 | 处理方式 |
+|----------|------|----------|
+| 断言失败 | `AssertionError`, `expected:&lt;X&gt; but was:&lt;Y&gt;` | 检查实现逻辑或测试预期值 |
+| 空指针 | `NullPointerException` | 检查依赖注入或测试数据构造 |
+| 编译错误 | `cannot find symbol`, `incompatible types` | 检查 import 和方法签名 |
+| 连接失败 | `ConnectionRefused`, `Timeout`, `Cannot get Jedis` | 基础设施问题，通知用户 |
+| Bean 加载失败 | `NoSuchBeanDefinition`, `UnsatisfiedDependency` | 检查 @MockBean 或 Spring 配置 |
+
+---
+
+## 6. 测试命名规范
+
+### 6.1 测试类命名
+
+```
+被测类名 + Test
+例：RiskDictItemServiceImpl → RiskDictItemServiceImplTest
+```
+
+### 6.2 测试方法命名
+
+```
+test + 被测方法名 + _ + 场景描述
+例：testAddDictItem_Success
+    testAddDictItem_NullParam_ThrowsException
+    testAddDictItem_DuplicateKey_ReturnsFalse
+```
+
+### 6.3 注释要求
+
+- 测试类必须有中文类注释
+- 每个测试方法必须有中文方法注释，说明测试场景
+
+---
+
+## 7. 与 OpenSpec 流程的集成
+
+### 7.1 tasks.md 中的测试 task 格式
+
+```markdown
+- [ ] X.N [测试] 生成 XxxServiceImplTest，覆盖 methodName 正常/异常分支
+- [ ] X.N+1 [测试] 执行 mvn test -Dtest=XxxServiceImplTest，确认通过
+```
+
+### 7.2 apply 执行时的行为
+
+当 apply 流程遇到 `[测试]` 前缀的 task 时：
+1. 加载本规范（`/dev-tdd`）
+2. 按照第 5 节的完整流程执行
+3. 测试通过后勾掉 task，继续
+
+---
+
+**测试是开发完成的最后一道门，通过才算完成。**</code></pre></li><li></li></ol><pre><code>┌──────────────────────────────────────────────────────────────┐
+│  Layer 1: AGENTS.md（全局意识注入）                           │
+│  → 红线规则："每个接口新增/修改，必须有测试，且测试必须通过"     │
+│  → 不管走不走 OpenSpec，AI 每次对话都读到这条规则              │
+├──────────────────────────────────────────────────────────────┤
+│  Layer 2: openspec/config.yaml（任务生成约束）                │
+│  → rules.tasks：含接口改动的任务组，自动包含 [测试] 子任务     │
+│  → 结果：tasks.md 里测试变成显式 checkbox，apply 执行时跳不掉  │
+├──────────────────────────────────────────────────────────────┤
+│  Layer 3: dev-tdd SKILL.md（执行行为定义）                    │
+│  → 定义"怎么做"：路径推导、策略选择、Mock 边界、执行循环        │
+│  → apply 执行到 [测试] task 时，按此规范执行                  │
+└──────────────────────────────────────────────────────────────┘</code></pre><h3 id="sec-15"><strong>tasks.md 示例如下</strong>：</h3><p>方案生效后，OpenSpec 生成的 tasks.md 会自动带上测试任务。</p><p class="fs-todo"><span class="fs-cb">☐</span> 1.1 IRiskDictItemService 新增 addDictItem 方法定义</p><p class="fs-todo"><span class="fs-cb">☐</span> 1.2 RiskDictItemServiceImpl 实现 addDictItem 方法</p><p class="fs-todo"><span class="fs-cb">☐</span> 1.3 RiskDictItemController 新增 POST /api/dict/item 接口</p><p class="fs-todo"><span class="fs-cb">☐</span> 1.4<strong> [测试]</strong> 生成 RiskDictItemServiceImplTest，覆盖 addDictItem 正常/异常分支</p><p class="fs-todo"><span class="fs-cb">☐</span> 1.5<strong> [测试] </strong>执行 mvn test -Dtest=RiskDictItemServiceImplTest，确认通过</p><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>测试不再是"可选的提醒"，而是 apply 循环里不可缺失的显式 task。</strong></mark></p><h3 id="sec-16"><strong>dev-tdd Skill</strong>：</h3><pre><code>接口实现完成
+     │
+     ▼
+推导测试文件路径（src/main/ → src/test/，类名 + Test）
+     │
+     ▼
+判断测试策略（有 @Autowired → @SpringBootTest / 纯逻辑 → Mockito）
+     │
+     ▼
+生成测试文件（增量追加，不覆盖已有方法）
+     │
+     ▼
+执行 mvn test -pl &lt;module&gt; -Dtest=&lt;TestClass&gt;
+     │
+     ├── 通过 → 标记 task 完成，继续
+     │
+     ├── 失败（逻辑错误）→ 分析 → 修复 → 重新执行（最多 3 次）
+     │
+     └── 失败（DB/Redis 连接）→ 通知用户，选择是否切 Mock 策略</code></pre><h3 id="sec-17"><strong>Mock 边界策略</strong></h3><p>这是个关键设计决策：</p><table><tr><td><p>类别</p></td><td><p>Mock 策略</p></td><td><p>理由</p></td></tr><tr><td><p>本次需求改动的核心逻辑</p></td><td><p>禁止 Mock</p></td><td><p>不验证等于白测</p></td></tr><tr><td><p>无关但必须的外部依赖</p></td><td><p>允许 Mock</p></td><td><p>保证测试可运行</p></td></tr><tr><td><p>基础设施连接失败时</p></td><td><p>通知用户决策</p></td><td><p>用户选择切 Mock 或跳过</p></td></tr></table><h2 id="sec-18">最终方案迭代 V1：</h2><blockquote><p>在真实需求的方案测试中遇到多次失败与反复修正，因此需要对初版方案做细化迭代，形成三层强制保障闭环。</p></blockquote><h3 id="sec-19">背景与目标</h3><ul><li><strong>目标</strong>：让“开发→测试→记录”形成强制闭环，保证所有接口改动都被测试且留痕可追溯。</li></ul><ul><li><strong>核心原则</strong>：以规范驱动 + 模板执行 + 记录归档三层保障，减少人为漏执行与漏记录。</li></ul><h3 id="sec-20">初版方案回顾</h3><ol><li>命令写死在 AGENTS / config / tasks 中，执行者手动替换类名。</li></ol><ol><li>测试记录依赖人工写入 <code>test-records.md</code>。</li></ol><ol><li>未定义模块识别机制，执行命令不具备可扩展性。</li></ol><h3 id="sec-21">初版方案存在的问题</h3><ul><li><strong>命令分散</strong>：多处硬编码导致信息不一致，容易用错命令或遗漏更新。</li></ul><ul><li><strong>流程可执行性弱</strong>：测试执行完全依赖记忆，环境参数（JDK8/REGION）容易遗漏。</li></ul><ul><li><strong>记录不稳定</strong>：test-records 由人工维护，测试过程与结果存在缺失风险。</li></ul><h3 id="sec-22">最新方案改动细节</h3><ol><li><strong>模板化命令</strong>：将命令模板拆分为模块文件，存放在 <code>/.opencode/skills/dev-tdd/templates/</code>，如 <code>风控平台-web-test-template.md</code>。</li></ol><ol><li><strong>规范引用模板</strong>：AGENTS.md 与 openspec/config.yaml 统一改为引用模板，禁止再写死命令。</li></ol><ol><li><strong>模块识别规则</strong>：无法判定模块必须先询问用户，保证执行命令准确。</li></ol><ol><li><strong>环境强约束</strong>：执行测试必须使用 JDK8 + <code>-Pdev</code> + <code>REGION=dev</code>。</li></ol><ol><li><strong>记录闭环</strong>：每次执行必须同步到 <code>test-records.md</code>，保证所有测试类与方法的过程和结果可追溯。</li></ol><h3 id="sec-23">改动带来的收益</h3><ul><li><strong>一致性</strong>：单一模板源，避免多处文档重复维护。</li></ul><ul><li><strong>可执行性</strong>：固定环境参数，降低执行失败率。</li></ul><ul><li><strong>可追溯性</strong>：完整记录所有测试过程和结果，便于审计与复查。</li></ul><ul><li><strong>可扩展性</strong>：新增模块只需添加模板文件并登记即可。</li></ul><h3 id="sec-24">后续注意事项</h3><ul><li>若新增模块测试需求，需新增 <code>&lt;module&gt;-test-template.md</code> 并同步登记。</li></ul><ul><li>若无法识别测试类所属模块，必须先询问用户后再执行。</li></ul><ul><li>任何测试执行都必须同步记录到 <code>test-records.md</code>。</li></ul><h1 id="sec-25">需求出发的Skills抽象</h1><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>Skill构建仍需遵守 “<strong>单一职责</strong>” 原则。</p></div></div><p>原本是只想用一个「通用知识库SKILL」来覆盖所有项目的知识库构建SKILL，但在实际使用中发现，不得行。因为不同技术栈的项目，有不同的架构方式与标准。</p><h2 id="sec-26"><strong><code>project-konwledge-base</code></strong><strong>：前端项目 知识库构建Skill</strong></h2><pre><code>---
+name: project-knowledge-base
+description: 通用项目知识库构建脚手架（安全领域专用版）。为安全团队项目（Java/SpringBoot, Vue/React, Python, Go等）自动生成标准化的知识库目录结构，并提供代码扫描自动生成功能。
+license: MIT
+compatibility: 适用于安全领域项目（Java/SpringBoot, Vue/React, Python, Go等）
+metadata:
+  author: opencode
+  version: "1.1"
+  tags: ["knowledge-base", "scaffold", "documentation", "indexing", "security"]
+---
+
+# 项目知识库构建脚手架（安全领域专用版）
+
+本 Skill 用于快速为安全领域项目初始化标准化的知识库结构。
+
+**适用场景**：安全团队项目，包括但不限于：
+- 安全检测工具
+- 漏洞扫描系统
+- 安全监控平台
+- 威胁情报系统
+- 安全运维系统
+
+**支持语言**：Java/SpringBoot、Vue、Python、Go
+
+## 单一职责
+
+**只负责安全领域项目知识库构建**：
+- ✅ 创建知识库目录结构
+- ✅ 扫描代码生成索引文档
+- ✅ 技术栈文档生成
+
+**不负责**（由其他Skill负责）：
+- ❌ 全局规则（由 `/project-rules-scaffold` 负责）
+- ❌ 开发约束规范（由 `/dev-standard` 负责）
+
+---
+
+## 全局强制约束
+
+**你的所有输出必须为简体中文，包括：**
+- 文档内容（.md文件）
+- 代码注释
+- API文档
+- 命名说明
+- 使用示例
+- 工具类说明
+
+**禁止输出任何英文内容（代码标识符除外）。**
+
+---
+
+## 1. 执行命令
+
+### 自动模式（推荐）
+
+```
+/project-knowledge-base init
+```
+
+### 手动模式
+
+```
+/project-knowledge-base init --type=java
+/project-knowledge-base init --type=vue
+/project-knowledge-base init --type=python
+/project-knowledge-base init --type=go
+/project-knowledge-base init --type=java-vue
+/project-knowledge-base init --type=go-vue
+```
+
+---
+
+## 2. 知识库标准结构
+
+```
+docs/knowledge-base/
+├── 1-tech-stack/          # 技术栈与依赖
+│   ├── core-frameworks.md # 核心框架版本
+│   ├── build-tools.md     # 构建与部署工具
+│   └── dependencies.md    # 依赖清单
+├── 2-architecture/        # 架构与设计
+│   ├── project-structure.md  # 目录结构说明
+│   ├── folder-structure.md   # 文件夹结构说明（本Skill新增核心文档）
+│   └── modules.md        # 模块划分
+├── 3-conventions/         # 开发规范
+│   ├── coding-standards.md # 代码风格
+│   ├── naming.md         # 命名约定
+│   └── git-commit.md     # 提交规范
+├── 4-utils/              # 通用能力
+│   ├── utils-index.md    # 工具类索引
+│   └── common-patterns.md # 通用模式
+├── 5-api/                # 接口定义
+│   ├── api-standards.md  # API设计规范
+│   └── api-modules.md    # API模块索引
+└── README.md             # 知识库导航
+```
+
+---
+
+## 3. 完整执行流程（新增文件夹探索步骤）
+
+### Step 1: 项目检测
+
+```bash
+# 检测项目类型
+[ -f pom.xml ] &amp;&amp; TYPE="java"
+[ -f package.json ] &amp;&amp; TYPE="vue"
+[ -f pom.xml &amp;&amp; -f package.json ] &amp;&amp; TYPE="java-vue"
+[ -f requirements.txt ] &amp;&amp; TYPE="python"
+[ -f go.mod ] &amp;&amp; TYPE="go"
+
+# 扫描依赖版本
+java -version
+mvn dependency:list (Java)
+npm list --depth=0 (Vue)
+```
+
+### Step 2: 目录创建
+
+```bash
+mkdir -p docs/knowledge-base/{1-tech-stack,2-architecture,3-conventions,4-utils,5-api}
+```
+
+### Step 3: 技术栈文档生成
+
+生成技术栈文档（依赖版本从 pom.xml/package.json 提取）
+
+### Step 4: 项目文件夹结构探索（新增强制步骤）
+
+**⚠️ 本步骤为强制步骤，必须在代码扫描之前完成。**
+
+1. 扫描项目文件夹结构
+2. 识别每个文件夹的预期用途
+3. 对照框架惯例判断是否能100%确认
+4. 对无法确认的文件夹向用户提问
+5. 将确认结果写入 `2-architecture/folder-structure.md`
+6. 根据确认结果调整后续扫描路径
+
+**详细操作指南**：参见 [## 2.5 项目文件夹结构探索](#25-项目文件夹结构探索新增核心步骤)
+
+### Step 5: 代码扫描与索引生成
+
+根据Step 4确认后的实际目录结构调整扫描路径，生成对应的索引文档：
+- **Java**：扫描 Controller, Service, Entity, Repository, Utils
+- **Vue**：扫描 api, components, utils, router, store
+- **Go**：扫描 handler, service, model, internal, pkg
+- **混合项目**：分别扫描，合并文档
+
+### Go 语言扫描规则
+
+| 扫描目标 | 生成文档 | 扫描文件 |
+|----------|----------|----------|
+| Handler | `5-api/api-modules.md` | `**/handler/*.go` |
+| Service | `4-utils/service-index.md` | `**/service/*.go` |
+| Model | `4-utils/entity-index.md` | `**/model/*.go`, `**/entity/*.go` |
+| 内部包 | `4-utils/utils-index.md` | `**/internal/**/*.go` |
+| 公共包 | `4-utils/pkg-index.md` | `**/pkg/**/*.go` |
+
+### Step 6: 架构文档生成
+
+生成 `2-architecture/project-structure.md`（目录结构快照 + 模块说明）
+
+---
+
+## 4. 快速搜索命令
+
+```bash
+# 搜索文档
+grep -r "关键词" docs/knowledge-base/ --include="*.md" -l
+
+# 搜索工具类
+grep -r "关键词" src/utils/ --include="*.js" -l
+grep -r "关键词" src/main/java/**/utils/ --include="*.java" -l
+grep -r "关键词" internal/pkg/ --include="*.go" -l
+
+# 搜索API
+grep -r "关键词" src/api/ --include="*.js" -l
+grep -r "关键词" src/main/java/**/controller/ --include="*.java" -l
+grep -r "关键词" internal/handler/ --include="*.go" -l
+```
+
+---
+
+## 5. 相关Skill
+
+| Skill | 功能 | 命令 |
+|-------|------|------|
+| **project-rules-scaffold** | 规则脚手架，一键生成 `.cursorrules` | `/project-rules-scaffold init` |
+| **dev-standard** | 开发约束规范 | `/dev-standard` |
+
+---
+
+## 6. 文档模板
+
+### 6.1 实体类索引模板 (`4-utils/entity-index.md`)
+
+```markdown
+# 实体类索引
+
+&gt; 本文档由代码扫描自动生成，描述项目核心数据模型。
+
+---
+
+## 通用字段
+
+所有实体类继承或包含以下公共字段：
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| `id` | Long | 主键ID |
+| `created_by` | String | 创建人 |
+| `created_at` | LocalDateTime | 创建时间 |
+| `updated_by` | String | 更新人 |
+| `updated_at` | LocalDateTime | 更新时间 |
+| `deleted` | Integer | 删除标识(0-正常,1-删除) |
+
+---
+
+## 实体类列表
+
+### [User] 用户
+
+**包路径**: `com.xx.xx.entity.User`
+
+**继承**: `BaseEntity` (如有)
+
+**字段列表**：
+
+| 字段名 | 类型 | 必填 | 说明 |
+|--------|------|------|------|
+| `id` | Long | 是 | 主键 |
+| `username` | String | 是 | 用户名 |
+| `password` | String | 是 | 密码(加密存储) |
+| `email` | String | 否 | 邮箱 |
+| `phone` | String | 否 | 手机号 |
+| `status` | Integer | 否 | 状态(0-禁用,1-启用) |
+| `created_at` | LocalDateTime | - | 创建时间 |
+| `updated_at` | LocalDateTime | - | 更新时间 |
+
+**关联关系**：
+- `List&lt;Order&gt; orders` - 用户订单（一对多）
+
+**使用示例**：
+```java
+// 查询
+User user = userRepository.findById(1L).orElse(null);
+
+// 新增
+User user = new User();
+user.setUsername("test");
+user.setEmail("[邮箱]");
+userRepository.save(user);
+```
+
+---
+
+## Go Model索引模板 (`4-utils/entity-index.md`)
+
+```markdown
+# Model索引
+
+&gt; 本文档由代码扫描自动生成，描述项目的Go数据结构模型。
+
+---
+
+## 通用字段
+
+所有Model包含以下公共字段：
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| `ID` | uint | 主键ID |
+| `CreatedAt` | time.Time | 创建时间 |
+| `UpdatedAt` | time.Time | 更新时间 |
+| `DeletedAt` | gorm.DeletedAt | 删除时间 |
+
+---
+
+## Model列表
+
+### User 用户
+
+**包路径**: `internal/user/model`
+
+**结构体定义**：
+
+```go
+type User struct {
+    gorm.Model
+    Username string `json:"username" gorm:"uniqueIndex;size:50"`
+    Password string `json:"-" gorm:"size:100"`
+    Email    string `json:"email" gorm:"size:100"`
+    Phone    string `json:"phone" gorm:"size:20"`
+    Status   int    `json:"status" gorm:"default:1"`
+}
+```
+
+**关联关系**：
+- `[]Task` - 用户任务（一对多）
+
+**使用示例**:
+```go
+import "internal/user/model"
+
+var user model.User
+db.First(&amp;user, 1)
+
+newUser := model.User{
+    Username: "test",
+    Email: "[邮箱]",
+}
+db.Create(&amp;newUser)
+```
+
+---
+
+### 6.2 工具类索引模板 (`4-utils/utils-index.md`)
+
+```markdown
+# 工具类索引
+
+&gt; 本文档由代码扫描自动生成，描述项目中可复用的工具类。
+
+---
+
+## [DateUtil] 日期工具
+
+**包路径**: `com.xx.xx.utils.DateUtil`
+
+**功能说明**: 提供日期格式化、解析、计算的常用操作。
+
+**方法列表**：
+
+| 方法名 | 参数 | 返回值 | 说明 |
+|--------|------|--------|------|
+| `format(LocalDateTime date)` | date: LocalDateTime | String | 格式化为"yyyy-MM-dd HH:mm:ss" |
+| `parse(String dateStr)` | dateStr: String | LocalDateTime | 解析日期字符串 |
+| `addDays(LocalDateTime date, int days)` | date: LocalDateTime, days: int | LocalDateTime | 加减天数 |
+| `betweenDays(LocalDateTime start, LocalDateTime end)` | start: LocalDateTime, end: LocalDateTime | long | 计算天数差 |
+
+**使用示例**:
+```java
+import com.xx.xx.utils.DateUtil;
+
+// 格式化
+String now = DateUtil.format(LocalDateTime.now());
+
+// 解析
+LocalDateTime date = DateUtil.parse("2024-01-01 12:00:00");
+
+// 计算
+LocalDateTime after = DateUtil.addDays(LocalDateTime.now(), 7);
+```
+```
+
+---
+
+## [AssertUtil] 断言工具
+
+**包路径**: `com.xx.xx.utils.AssertUtil`
+
+**功能说明**: 提供业务断言校验，统一异常处理。
+
+**方法列表**：
+
+| 方法名 | 参数 | 抛出异常 | 说明 |
+|--------|------|----------|------|
+| `notNull(Object obj, String msg)` | obj: Object, msg: String | `BusinessException` | 非空校验 |
+| `notEmpty(String str, String msg)` | str: String, msg: String | `BusinessException` | 非空字符串校验 |
+| `isTrue(boolean expression, String msg)` | expression: boolean, msg: String | `BusinessException` | 条件校验 |
+| `isPositive(BigDecimal num, String msg)` | num: BigDecimal, msg: String | `BusinessException` | 正数校验 |
+
+**使用示例**:
+```java
+AssertUtil.notNull(user, "用户不存在");
+AssertUtil.notEmpty(username, "用户名不能为空");
+AssertUtil.isTrue(amount.compareTo(BigDecimal.ZERO) &gt; 0, "金额必须大于0");
+```
+
+---
+
+## 工具类查找索引
+
+| 功能需求 | 推荐工具类 | 包路径 |
+|----------|-----------|--------|
+| 日期格式化 | `DateUtil` | `com.xx.xx.utils.DateUtil` |
+| 参数校验 | `AssertUtil` | `com.xx.xx.utils.AssertUtil` |
+| JSON转换 | `JsonUtil` | `com.xx.xx.utils.JsonUtil` |
+| MD5/SHA加密 | `DigestUtil` | `com.xx.xx.utils.DigestUtil` |
+| 字符串处理 | `StrUtil` | `com.xx.xx.utils.StrUtil` |
+| 集合操作 | `CollUtil` | `com.xx.xx.utils.CollUtil` |
+| 对象拷贝 | `BeanUtil` | `com.xx.xx.utils.BeanUtil` |
+| 分页处理 | `PageUtil` | `com.xx.xx.utils.PageUtil` |
+| 随机数/ID生成 | `RandomUtil` | `com.xx.xx.utils.RandomUtil` |
+| 正则校验 | `ReUtil` | `com.xx.xx.utils.ReUtil` |
+```
+
+### 6.3 API模块索引模板 (`5-api/api-modules.md`)
+
+```markdown
+# API模块索引
+
+&gt; 本文档由代码扫描自动生成，描述项目的API接口。
+
+---
+
+## 用户模块
+
+### 用户API
+
+**文件路径**: `src/api/user.js`
+
+**接口列表**：
+
+| 接口名 | 方法 | 路径 | 说明 |
+|--------|------|------|------|
+| `getList(params)` | GET | `/api/user/list` | 获取用户列表 |
+| `getById(id)` | GET | `/api/user/{id}` | 获取用户详情 |
+| `create(data)` | POST | `/api/user` | 创建用户 |
+| `update(id, data)` | PUT | `/api/user/{id}` | 更新用户 |
+| `remove(id)` | DELETE | `/api/user/{id}` | 删除用户 |
+
+**使用示例**:
+```javascript
+import { getList, getById, create } from '@/api/user'
+
+// 获取列表
+const { data } = await getList({ page: 1, size: 10 })
+
+// 获取详情
+const user = await getById(1)
+
+// 创建用户
+await create({ username: 'test', email: '[邮箱]' })
+```
+
+---
+
+## 7. 补充模板：Vue组件索引
+
+### 组件索引模板 (`4-utils/component-index.md`)
+
+```markdown
+# 组件索引
+
+&gt; 本文档由代码扫描自动生成，描述项目的Vue组件。
+
+---
+
+## 通用组件
+
+### UserCard 用户卡片
+
+**文件路径**: `src/components/UserCard.vue`
+
+**Props**:
+
+| 属性 | 类型 | 必填 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `userId` | String | 是 | - | 用户ID |
+| `isVisible` | Boolean | 否 | false | 是否显示 |
+| `size` | String | 否 | 'default' | 尺寸 |
+
+**Events**:
+
+| 事件名 | 参数 | 说明 |
+|--------|------|------|
+| `close` | - | 关闭事件 |
+| `confirm` | data | 确认事件 |
+
+**使用示例**:
+```vue
+&lt;user-card :user-id="123" @confirm="handleConfirm" /&gt;
+```
+
+---
+
+## 列表组件
+
+### TablePro 高级表格
+
+**文件路径**: `src/components/TablePro.vue`
+
+**Props**:
+
+| 属性 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `columns` | Array | 是 | 表格列配置 |
+| `dataSource` | Array | 是 | 数据源 |
+| `pagination` | Object | 否 | 分页配置 |
+
+**使用示例**:
+```vue
+&lt;template&gt;
+  &lt;table-pro :columns="columns" :data-source="data" /&gt;
+&lt;/template&gt;
+```
+
+---
+
+## 8. 扫描示例：Java Service索引
+
+### Service层索引模板 (`4-utils/service-index.md`)
+
+```markdown
+# Service层索引
+
+&gt; 本文档由代码扫描自动生成，描述项目的Service层实现。
+
+---
+
+## 用户服务
+
+### IUserService
+
+**包路径**: `com.xx.xx.service.IUserService`
+
+**方法列表**：
+
+| 方法名 | 参数 | 返回值 | 说明 |
+|--------|------|--------|------|
+| `getById(Long id)` | id: Long | Optional&lt;UserDTO&gt; | 根据ID查询 |
+| `getByUsername(String username)` | username: String | Optional&lt;UserDTO&gt; | 根据用户名查询 |
+| `save(UserDTO dto)` | dto: UserDTO | UserDTO | 保存用户 |
+| `update(Long id, UserDTO dto)` | id: Long, dto: UserDTO | UserDTO | 更新用户 |
+| `remove(Long id)` | id: Long | void | 删除用户 |
+| `listByStatus(Integer status)` | status: Integer | List&lt;UserDTO&gt; | 根据状态查询列表 |
+
+**调用示例**:
+```java
+@Autowired
+private IUserService userService;
+
+// 使用
+UserDTO user = userService.getById(1L).orElse(null);
+userService.save(userDTO);
+```
+
+---
+
+## 扫描示例：Go语言模块索引
+
+### Go Handler索引模板 (`5-api/api-modules.md`)
+
+```markdown
+# Handler层索引
+
+&gt; 本文档由代码扫描自动生成，描述项目的Go Handler层实现。
+
+---
+
+## 用户Handler
+
+### UserHandler
+
+**包路径**: `internal/user/handler`
+
+**方法列表**：
+
+| 方法名 | 参数 | 返回值 | 说明 |
+|--------|------|--------|------|
+| `GetUser(c *gin.Context)` | c: *gin.Context | Response | 根据ID获取用户 |
+| `ListUser(c *gin.Context)` | c: *gin.Context | Response | 获取用户列表 |
+| `CreateUser(c *gin.Context)` | c: *gin.Context | Response | 创建用户 |
+| `UpdateUser(c *gin.Context)` | c: *gin.Context | Response | 更新用户 |
+| `DeleteUser(c *gin.Context)` | c: *gin.Context | Response | 删除用户 |
+
+**使用示例**:
+```go
+import "internal/user/handler"
+
+h := handler.NewUserHandler(userService)
+router := h.SetupRoutes(router)
+```
+
+---
+
+## 扫描示例：Java Service索引
+
+### Service层索引模板 (`4-utils/service-index.md`)
+
+```bash
+# 检测项目类型
+[ -f pom.xml ] &amp;&amp; TYPE="java"
+[ -f package.json ] &amp;&amp; TYPE="vue"
+[ -f pom.xml &amp;&amp; -f package.json ] &amp;&amp; TYPE="java-vue"
+[ -f requirements.txt ] &amp;&amp; TYPE="python"
+[ -f go.mod ] &amp;&amp; TYPE="go"
+
+# 扫描依赖版本
+java -version
+mvn dependency:list (Java)
+npm list --depth=0 (Vue)
+go list -m all (Go)
+```
+
+### Step 2: 目录创建
+
+```bash
+mkdir -p docs/knowledge-base/{1-tech-stack,2-architecture,3-conventions,4-utils,5-api}
+```
+
+### Step 3: 代码扫描
+
+- **Java**：扫描 Controller, Service, Entity, Repository, Utils
+- **Vue**：扫描 api, components, utils, router, store
+- **Go**：扫描 handler, service, model, internal, pkg
+- **混合项目**：分别扫描，合并文档
+
+### Step 4: 文档生成
+
+1. 生成技术栈文档（依赖版本从 pom.xml/package.json/go.mod 提取）
+2. 生成代码索引（从扫描结果提取）
+3. 生成架构文档（目录结构 + 模块说明）
+
+---
+
+## 8. 输出示例
+
+```
+✅ 检测到项目类型：Go + Vue
+
+📁 创建目录：
+docs/knowledge-base/
+├── 1-tech-stack/
+├── 2-architecture/
+├── 3-conventions/
+├── 4-utils/
+└── 5-api/
+
+📋 扫描代码：
+- Go: 扫描 23 个文件
+- Vue: 扫描 15 个文件
+
+📄 生成文档：
+- 4-utils/entity-index.md
+- 4-utils/utils-index.md
+- 5-api/api-modules.md
+- 1-tech-stack/dependencies.md
+
+💡 下一步：
+1. 执行 /project-rules-scaffold 初始化规则
+2. 执行 /dev-standard 查看开发规范
+3. 开始开发
+```</code></pre><p>为了在其他类似项目中做知识库搭建，将整个前端知识库搭建过程抽象成了1个Skill。</p><p><strong>使用方法：</strong><strong><code>/project-knowledge-base init</code></strong></p><h2 id="sec-27"><code>springboot-multi-module-kb</code>：后端Java多模块项目 知识库构建Skill</h2><pre><code>---
+name: springboot-multi-module-kb
+description: SpringBoot Maven 多模块项目知识库构建专家。专为Java多模块项目设计，深度分析模块依赖、实体数据结构、RESTful接口，自动生成完整的项目知识库文档。
+license: MIT
+compatible_with:
+  - Java
+  - SpringBoot
+  - Maven Multi-Module
+metadata:
+  author: opencode
+  version: "2.0"
+  tags: ["knowledge-base", "springboot", "maven", "multi-module", "java", "entity", "api"]
+---
+
+# SpringBoot Maven 多模块项目知识库构建专家
+
+本 Skill 专为 SpringBoot Maven 多模块项目设计，深度分析项目结构、模块依赖、实体类、RESTful 接口、技术栈信息，生成完整、标准化的项目知识库文档。
+
+## 适用场景
+
+- ✅ SpringBoot Maven 多模块项目
+- ✅ 前后端分离的后端项目
+- ✅ 包含管理后台（Admin）的系统
+- ✅ 微服务模块化项目
+- ✅ 需要完整技术文档的老项目梳理
+
+## 核心能力
+
+| 能力 | 说明 |
+|------|------|
+| **技术栈分析** | 解析 pom.xml，提取 Java 版本、SpringBoot 版本、核心依赖 |
+| **目录结构解析** | 完整扫描项目目录，解释每个文件夹的作用 |
+| **模块依赖分析** | 解析 pom.xml，生成模块依赖关系图 |
+| **实体类梳理** | 深度扫描 Entity/Model/DTO/VO，生成数据结构文档 |
+| **API 接口梳理** | 扫描 Controller，生成 JSON 格式的完整接口文档 |
+| **交互式确认** | 对不明确的文件夹主动咨询用户，确保 99% 准确 |
+
+## 单一职责
+
+**负责**：
+- ✅ 技术栈文档生成（Java 版本、依赖清单、构建工具）
+- ✅ 项目目录结构分析与文档化
+- ✅ Maven 多模块依赖关系分析
+- ✅ 实体类数据结构梳理（Entity, Model, DTO, VO）
+- ✅ RESTful API 接口文档生成（JSON 格式）
+- ✅ 与用户交互确认不明确的结构
+
+**不负责**：
+- ❌ 代码规范文档（由 project-rules-scaffold 负责）
+- ❌ 代码修改与重构
+
+---
+
+## 全局强制约束
+
+**你的所有输出必须为简体中文，包括：**
+- 文档内容（.md 文件）
+- 代码注释
+- API 文档
+- 技术栈说明
+- 命名说明
+
+**禁止输出任何英文内容（代码标识符除外）。**
+
+---
+
+## 1. 执行命令
+
+### 自动检测模式（推荐）
+
+```
+/springboot-multi-module-kb init
+```
+
+### 手动指定模块
+
+```
+/springboot-multi-module-kb init --modules=module1,module2,module3
+```
+
+---
+
+## 2. 完整执行流程
+
+### Step 0: 技术栈分析
+
+**⚠️ 首先执行此步骤，获取项目基础信息**
+
+1. 扫描根 pom.xml，提取：
+   - `&lt;parent&gt;` - SpringBoot 版本
+   - `&lt;properties&gt;` - Java 版本、编码等
+   - `&lt;dependencies&gt;` - 核心依赖
+   - `&lt;dependencyManagement&gt;` - 依赖版本管理
+
+2. 扫描各子模块 pom.xml，提取模块级依赖
+
+3. 生成技术栈文档
+
+**技术栈文档模板** (`1-tech-stack/dependencies.md`)：
+
+```markdown
+# 项目依赖清单
+
+&gt; 本文档由代码扫描自动生成，描述项目的技术栈与依赖版本。
+
+---
+
+## 基础信息
+
+| 项目 | 版本 |
+|------|------|
+| **项目名称** | 风控平台 |
+| **构建工具** | Maven |
+| **Java 版本** | 8 |
+| **SpringBoot 版本** | 2.6.13 |
+| **编码** | UTF-8 |
+
+---
+
+## 核心依赖
+
+| 依赖 | 版本 | 说明 |
+|------|------|------|
+| spring-boot-starter-web | 2.6.13 | Web 应用基础 |
+| spring-boot-starter-data-redis | 2.6.13 | Redis 客户端 |
+| mybatis-plus-boot-starter | 3.5.3 | MyBatis Plus |
+| druid-spring-boot-starter | 1.2.16 | 数据库连接池 |
+| fastjson | 1.2.83 | JSON 处理 |
+| okhttp | 4.10.0 | HTTP 客户端 |
+| thrift | 0.16.0 | Thrift RPC |
+
+---
+
+## 各模块依赖
+
+### 风控平台-common
+
+| 依赖 | 版本 | 类型 |
+|------|------|------|
+| spring-boot-starter | 2.6.13 | compile |
+| lombok | 1.18.24 | compile |
+
+### 风控平台-web
+
+| 依赖 | 版本 | 类型 |
+|------|------|------|
+| spring-boot-starter-web | 2.6.13 | compile |
+| 风控平台-common | 1.0-SNAPSHOT | compile |
+| 风控平台-app | 1.0-SNAPSHOT | compile |
+
+### 风控平台-app
+
+| 依赖 | 版本 | 类型 |
+|------|------|------|
+| spring-boot-starter | 2.6.13 | compile |
+| 风控平台-common | 1.0-SNAPSHOT | compile |
+| 风控平台-data-assemble | 1.0-SNAPSHOT | compile |
+```
+
+---
+
+### Step 1: 项目结构检测
+
+```bash
+# 检测是否为 Maven 多模块项目
+[ -f pom.xml ] &amp;&amp; grep -q "&lt;modules&gt;" pom.xml &amp;&amp; echo "MULTI_MODULE" || echo "SINGLE_MODULE"
+
+# 列出所有模块
+mvn -pl . -N ru.technonic:flatten-maven-plugin:0.0.1:resolve-gav || \
+grep -oP '(?&lt;=&lt;module&gt;).*?(?=&lt;/module&gt;)' pom.xml
+
+# 获取 Java 版本
+grep -oP '(?&lt;=&lt;java.version&gt;).*?(?=&lt;/java.version&gt;)' pom.xml
+
+# 获取 SpringBoot 版本
+grep -oP '(?&lt;=&lt;spring-boot.version&gt;).*?(?=&lt;/spring-boot.version&gt;)' pom.xml
+```
+
+### Step 2: 目录结构扫描与分析
+
+**⚠️ 这是最核心的步骤，必须仔细执行**
+
+1. 递归扫描项目根目录及所有子模块目录
+2. 列出完整的目录树结构
+3. 对每个文件夹进行初步用途判断
+4. 对无法确定的文件夹进行标记，准备咨询用户
+
+**标准 Maven 多模块目录结构参考**：
+
+```
+项目根目录/
+├── pom.xml                          # 父 POM，定义模块和依赖版本
+├── src/                             # 根目录源码（通常为空，仅作聚合）
+│   └── main/
+│       ├── java/
+│       └── resources/
+├── [模块1]/                         # 子模块 1
+│   ├── pom.xml
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/                # Java 源码
+│   │       │   └── com/xx/xx/       # 包路径
+│   │       │       ├── controller/  # 控制层（API 入口）
+│   │       │       ├── service/     # 业务逻辑层
+│   │       │       ├── dao/         # 数据访问层（可选）
+│   │       │       ├── mapper/      # MyBatis Mapper（可选）
+│   │       │       ├── entity/      # 实体类（数据库映射）
+│   │       │       ├── model/       # 数据模型（DTO/VO）
+│   │       │       ├── domain/      # 领域模型（DDD）
+│   │       │       ├── repository/  # JPA Repository
+│   │       │       ├── config/      # 配置类
+│   │       │       ├── common/      # 公共组件
+│   │       │       ├── util/        # 工具类
+│   │       │       ├── constant/    # 常量定义
+│   │       │       ├── enums/       # 枚举类
+│   │       │       ├── exception/   # 异常定义
+│   │       │       ├── aop/         # AOP 切面
+│   │       │       ├── filter/      # 过滤器
+│   │       │       ├── interceptor/ # 拦截器
+│   │       │       └── validator/    # 参数校验
+│   │       └── resources/           # 配置资源
+│   │           ├── mapper/          # MyBatis XML 映射
+│   │           ├── application.yml  # 应用配置
+│   │           └── logback.xml      # 日志配置
+│   └── test/                        # 测试代码
+│       └── java/
+├── [模块2]/                         # 子模块 2
+├── [模块N]/                         # 子模块 N
+└── docs/                           # 项目文档
+```
+
+### Step 3: 模块依赖分析
+
+1. 解析根 pom.xml，获取所有 `&lt;module&gt;` 定义
+2. 解析每个子模块的 pom.xml，提取：
+   - `&lt;parent&gt;` 继承关系
+   - `&lt;dependencies&gt;` 依赖列表
+   - `&lt;dependencyManagement&gt;` 依赖管理
+   - 重点识别对**兄弟模块**的依赖（inter-module dependencies）
+3. 生成 Mermaid 依赖关系图
+
+**Mermaid 依赖图模板**：
+
+```mermaid
+graph TD
+    %% 节点定义
+    A[父模块&lt;br/&gt;风控平台] --&gt; B[风控平台-common]
+    A --&gt; C[风控平台-web]
+    A --&gt; D[风控平台-app]
+    A --&gt; E[风控平台-data-assemble]
+    A --&gt; F[风控平台-infra]
+    A --&gt; G[风控平台-rule-engine]
+    A --&gt; H[风控平台-service-thrift]
+    
+    %% 依赖关系
+    C --&gt; B
+    D --&gt; B
+    D --&gt; C
+    E --&gt; B
+    E --&gt; D
+    F --&gt; B
+    G --&gt; B
+    H --&gt; B
+    
+    %% 样式
+    classDef module fill:#f9f,stroke:#333,stroke-width:2px;
+    class A,B,C,D,E,F,G,H module;
+```
+
+### Step 4: 实体类数据结构梳理
+
+**⚠️ 重点关注管理后台（后台/Admin）模块**
+
+扫描以下路径的实体类：
+- `**/entity/*.java`
+- `**/domain/*.java`
+- `**/model/*.java`
+- `**/po/*.java`
+
+**对于每个实体类，提取**：
+
+| 提取项 | 说明 |
+|--------|------|
+| 类名 | 实体类名称 |
+| 包路径 | 完整包路径 |
+| 继承关系 | 继承的父类（如 BaseEntity） |
+| 字段列表 | 所有字段及其类型、注解 |
+| 数据库表名 | @TableName 注解值 |
+| 关联关系 | 一对多、多对多等关系 |
+
+**实体类文档模板**：
+
+```markdown
+### [{模块名}] {类名}
+
+**包路径**: `com.xiaomi.infosec.risk.风控平台.common.model.{类名}`
+
+**数据库表**: `{table_name}`
+
+**继承**: `{父类名称}` (如有)
+
+**字段列表**：
+
+| 字段名 | 类型 | 注解 | 说明 |
+|--------|------|------|------|
+| `id` | Long | @Id, @GeneratedValue | 主键ID |
+| `username` | String | @Column, @NotNull | 用户名 |
+| `email` | String | @Column | 邮箱地址 |
+| `status` | Integer | @Column | 状态: 0-禁用 1-启用 |
+| `createdAt` | LocalDateTime | @CreatedDate | 创建时间 |
+| `updatedAt` | LocalDateTime | @LastModifiedDate | 更新时间 |
+
+**关联关系**：
+- `List&lt;{RelatedEntity}&gt; {fieldName}` - {关系描述}（一对多）
+
+**JSON 示例**：
+```json
+{
+  "id": 1,
+  "username": "admin",
+  "email": "[邮箱]",
+  "status": 1,
+  "createdAt": "2024-01-01T00:00:00",
+  "updatedAt": "2024-01-01T00:00:00"
+}
+```
+```
+
+### Step 5: RESTful API 接口梳理
+
+**⚠️ 前后端分离项目必做**
+
+扫描以下路径的 Controller：
+- `**/controller/*.java`
+- `**/web/*.java`
+- `**/api/*.java`
+
+**对于每个接口，提取**：
+
+| 提取项 | 说明 |
+|--------|------|
+| 控制器类名 | Controller 名称 |
+| 包路径 | 完整包路径 |
+| 请求方法 | GET/POST/PUT/DELETE/PATCH |
+| 请求路径 | @RequestMapping / @GetMapping 等注解值 |
+| 请求参数 | @RequestParam / @RequestBody / @PathVariable |
+| 响应类型 | @ResponseBody 返回类型 |
+| 接口说明 | 方法上的 Javadoc 或注释 |
+
+**API 接口 JSON 文档模板**：
+
+```json
+{
+  "模块名称": {
+    "模块说明": "该模块负责的业务功能描述",
+    "接口列表": [
+      {
+        "接口编号": "API_001",
+        "接口名称": "获取用户列表",
+        "请求方法": "GET",
+        "请求路径": "/api/user/list",
+        "请求参数": {
+          "page": {
+            "类型": "Integer",
+            "必填": false,
+            "默认值": 1,
+            "说明": "页码"
+          },
+          "pageSize": {
+            "类型": "Integer",
+            "必填": false,
+            "默认值": 10,
+            "说明": "每页条数"
+          },
+          "keyword": {
+            "类型": "String",
+            "必填": false,
+            "说明": "搜索关键词"
+          }
+        },
+        "响应参数": {
+          "code": {
+            "类型": "Integer",
+            "说明": "响应码: 200-成功"
+          },
+          "data": {
+            "类型": "Object",
+            "说明": "响应数据",
+            "children": {
+              "list": {
+                "类型": "Array",
+                "说明": "数据列表"
+              },
+              "total": {
+                "类型": "Long",
+                "说明": "总条数"
+              }
+            }
+          },
+          "message": {
+            "类型": "String",
+            "说明": "响应消息"
+          }
+        },
+        "接口说明": "分页查询用户列表，支持关键词搜索",
+        "所属Controller": "UserController",
+        "文件路径": "xxx/src/main/java/com/xx/xx/controller/UserController.java"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## 3. 文件夹作用速查表
+
+### Java 项目常见文件夹及作用
+
+| 文件夹 | 作用 | 常见框架/库 |
+|--------|------|-------------|
+| `controller` | 处理 HTTP 请求，路由分发 | Spring MVC |
+| `service` | 业务逻辑实现层 | Spring |
+| `dao` / `repository` | 数据访问层 | MyBatis / JPA |
+| `mapper` | MyBatis 接口映射 | MyBatis |
+| `entity` / `model` | 数据库实体映射 | JPA / MyBatis |
+| `domain` | 领域模型（DDD） | DDD 架构 |
+| `dto` | 数据传输对象 | 前后端交互 |
+| `vo` | 视图对象 | 返回给前端 |
+| `po` | 持久化对象 | Hibernate |
+| `config` | 配置类 | Spring @Configuration |
+| `common` | 公共组件 | 通用封装 |
+| `util` | 工具类 | 静态方法封装 |
+| `constant` | 常量定义 | 枚举/常量类 |
+| `enums` | 枚举类 | Java Enum |
+| `exception` | 自定义异常 | 业务异常 |
+| `aop` | 切面编程 | Spring AOP |
+| `filter` | 过滤器 | Servlet Filter |
+| `interceptor` | 拦截器 | Spring Interceptor |
+| `validator` | 参数校验 | Hibernate Validator |
+| `aspect` | 切面实现 | Spring AOP |
+| `security` | 安全认证 | Spring Security |
+| `annotation` | 自定义注解 | 元注解 |
+| `handler` | 处理器 | 自定义处理逻辑 |
+| `worker` | 后台任务/消费者 | 消息队列消费 |
+| `task` | 定时任务 | Scheduled |
+| `event` | 事件驱动 | Spring Event |
+| `listener` | 事件监听 | Spring Event |
+| `cache` | 缓存管理 | Redis / Caffeine |
+| `mq` | 消息队列 | RocketMQ / Kafka |
+| `client` | 外部服务调用 | Feign / OkHttp |
+| `vo` / `request` | 请求参数对象 | API 参数 |
+| `response` | 响应对象 | API 返回值 |
+
+---
+
+## 4. 交互确认流程
+
+### ⚠️ Folder-Confirmation-Required
+
+在分析过程中，如果遇到以下情况，**必须**咨询用户：
+
+1. **无法识别的文件夹**：文件夹名称不在常见模式中
+2. **命名模糊的文件夹**：如 `core`、`base`、`framework` 等
+3. **业务相关文件夹**：如 `game`、`risk`、`audit` 等业务特定目录
+4. **自定义结构**：非标准 Maven/Gradle 结构
+
+### 确认话术模板
+
+```
+⚠️ 需要确认文件夹作用
+
+在模块 **[模块名]** 中发现文件夹 `[文件夹名]`
+
+**初步判断**: [可能的用途]
+
+**需要您确认**：
+1. 这个文件夹的真正作用是什么？
+2. 里面主要存放什么类型的文件？
+3. 是否与其他模块共享？
+
+**请回复**，我会根据您的回答更新文档。
+```
+
+### 确认后才继续
+
+**规则**：必须等到用户确认（或 99% 确定）后才能：
+- 将该文件夹写入最终文档
+- 继续后续的代码扫描
+
+---
+
+## 5. 输出文档结构
+
+### 目标目录结构
+
+```
+docs/knowledge-base/
+├── 1-tech-stack/
+│   └── dependencies.md           # 技术栈与依赖清单
+├── 2-architecture/
+│   ├── project-structure.md     # 完整目录树结构
+│   ├── folder-structure.md     # 文件夹作用说明
+│   └── modules.md              # 模块依赖关系图
+├── 4-utils/
+│   ├── entity-index.md         # 实体类数据结构
+│   ├── service-index.md        # Service 层索引
+│   └── utils-index.md          # 工具类索引
+└── 5-api/
+    └── api-modules.json        # RESTful 接口文档（JSON格式）
+```
+
+### 文档输出顺序
+
+1. **dependencies.md** - 技术栈与依赖
+2. **project-structure.md** - 完整目录树
+3. **folder-structure.md** - 文件夹作用（含交互确认过程）
+4. **modules.md** - 模块依赖关系
+5. **entity-index.md** - 实体类详情
+6. **utils-index.md** - 工具类索引
+7. **api-modules.json** - API 接口文档
+
+---
+
+## 6. 执行示例
+
+### 输入
+
+```
+/springboot-multi-module-kb init
+```
+
+### 检测结果
+
+```
+✅ 检测到 SpringBoot Maven 多模块项目
+
+📦 模块列表：
+- 风控平台 (父模块)
+- 风控平台-common (公共基础)
+- 风控平台-web (Web层/API)
+- 风控平台-app (应用层/业务逻辑)
+- 风控平台-data-assemble (数据组装)
+- 风控平台-infra (基础设施)
+- 风控平台-rule-engine (规则引擎)
+- 风控平台-service-thrift (Thrift服务)
+
+🛠️ 技术栈：
+- Java: 8
+- SpringBoot: 2.6.13
+- 构建工具: Maven
+
+📋 正在分析目录结构...
+⚠️ 需要确认以下文件夹作用：
+- 风控平台-app/worker/ 用途？
+- 风控平台-data-assemble/metadata/ 用途？
+```
+
+### 输出文档
+
+生成以下文档：
+- `docs/knowledge-base/1-tech-stack/dependencies.md`
+- `docs/knowledge-base/2-architecture/project-structure.md`
+- `docs/knowledge-base/2-architecture/folder-structure.md`
+- `docs/knowledge-base/2-architecture/modules.md`
+- `docs/knowledge-base/4-utils/entity-index.md`
+- `docs/knowledge-base/4-utils/utils-index.md`
+- `docs/knowledge-base/5-api/api-modules.json`
+
+---
+
+## 7. 常见问题
+
+### Q1: 如何判断模块职责？
+
+**A**: 根据模块名和源码内容综合判断：
+- 包含 `controller`/`web` → Web/API 层
+- 包含 `service`/`app` → 业务逻辑层
+- 包含 `dao`/`repository`/`mapper` → 数据访问层
+- 包含 `common`/`util` → 公共基础层
+- 包含 `infra`/`infrastructure` → 基础设施层
+- 包含 `api`/`thrift`/`grpc` → 接口服务层
+
+### Q2: 实体类太多怎么办？
+
+**A**:
+1. 优先扫描**管理后台**相关模块的实体类
+2. 核心业务实体优先于边缘实体
+3. 可以分批扫描，每次扫描一个模块
+
+### Q3: API 接口如何分类？
+
+**A**:
+1. 按业务模块分类（如用户、订单、规则）
+2. 按 Controller 类名归类
+3. 使用 Swagger/OpenAPI 注解辅助判断
+
+---
+
+## 8. 相关 Skill
+
+| Skill | 功能 | 命令 |
+|-------|------|------|
+| **project-rules-scaffold** | 规则脚手架，一键生成 `.cursorrules` | `/project-rules-scaffold init` |
+| **dev-standard** | 开发约束规范 | `/dev-standard` |
+
+---
+
+## 9. 技术栈要求
+
+| 要求 | 说明 |
+|------|------|
+| Java 版本 | 8 / 11 / 17 / 21 |
+| 构建工具 | Maven |
+| 框架 | SpringBoot 1.x / 2.x / 3.x |
+| 数据库访问 | JPA / MyBatis / MyBatis-Plus |
+| API 风格 | RESTful | </code></pre><h2 id="sec-28"><code>project-rules-scaffold</code>：全局约束规则 &amp; 开发约束规范构建Skill</h2><pre><code>---
+name: project-rules-scaffold
+description: 项目规则脚手架。为任意新项目一键生成全局约束规则（.cursorrules）和开发约束规范（dev-standard SKILL.md）。支持Java、Python、Go、Vue等技术栈，保证项目规范一致性。
+license: MIT
+compatibility: 适用于任何代码项目（Java/SpringBoot, Python/Django/FastAPI, Go, Vue/React等）
+metadata:
+  author: opencode
+  version: "1.0"
+  tags: ["scaffold", "rules", "constraints", "initialization"]
+---
+
+# 项目规则脚手架
+
+本 Skill 用于在任意新项目中**一键生成**标准化的：
+- **全局约束规则**：`.cursorrules`（红线规则 + 强制引用）
+- **开发约束规范**：`.opencode/skills/dev-standard/SKILL.md`（引用已存在的 dev-standard 项目开发规范总集）
+
+## 核心功能
+
+1. **自动探测项目类型**：识别 Java / Python / Go / Vue 项目
+2. **一键生成规则文件**：生成 `.cursorrules` + 引用 dev-standard
+3. **标准化目录结构**：创建 `.opencode/skills/` 目录
+4. **保持规范一致性**：所有项目使用统一的红线规则
+
+## 核心功能
+
+1. **自动探测项目类型**：识别 Java / Python / Go / Vue 项目
+2. **一键生成规则文件**：根据项目类型生成适配的规则
+3. **标准化目录结构**：创建 `.opencode/skills/` 目录
+4. **保持规范一致性**：所有项目使用统一的规范模板
+
+## 使用场景
+
+- 新项目初始化
+- 遗留项目规范补全
+- 多项目规范统一
+- 团队开发标准建立
+
+---
+
+## 1. 执行命令
+
+### 自动模式（推荐）
+
+```
+/project-rules-scaffold init
+```
+
+执行后会自动：
+1. 检测项目类型（Java/Python/Go/Vue/混合）
+2. 生成 `.cursorrules`
+3. 生成 `.opencode/skills/dev-standard/SKILL.md`
+4. 输出操作报告
+
+### 手动模式
+
+```
+/project-rules-scaffold init --type=java
+/project-rules-scaffold init --type=python
+/project-rules-scaffold init --type=go
+/project-rules-scaffold init --type=vue
+/project-rules-scaffold init --type=java-vue
+/project-rules-scaffold init --type=go-vue
+/project-rules-scaffold init --cursorrules-only
+/project-rules-scaffold init --skill-only
+```
+
+---
+
+## 2. 生成文件清单
+
+### 2.1 `.cursorrules`（全局约束规则）
+
+**文件位置**：项目根目录 `.cursorrules`
+
+**核心内容**：
+- ⚠️ 红线规则（零容忍）
+- 🔗 强制引用开发规范Skill
+- 📋 快速检查清单
+- 🚨 违规处理流程
+
+**模板内容**：
+
+```markdown
+# 角色设定
+你是一位高级全栈工程师，熟练掌握 Java/SpringBoot、Python/Django/FastAPI、Vue/React 等技术栈。
+
+**全局强制约束：所有回复、解释、代码注释和文档输出必须全部使用简体中文。**
+
+---
+
+# 红线规则（零容忍）
+
+## 1. 开发前必须加载规范
+
+**进行任何开发工作前（包括OpenSpec开发），必须执行：**
+```
+/dev-standard
+```
+
+**违规处理**：不加载规范就开发，视为严重违规。
+
+---
+
+## 2. 搜索与复用
+
+- [ ] 搜索知识库 `docs/knowledge-base/`
+- [ ] 搜索已有工具/组件/API
+- [ ] 强制复用，禁止造轮子
+
+---
+
+## 3. 代码红线
+
+### 通用红线
+- 直接调用底层API ❌
+- 重复造轮子 ❌
+- 硬编码 ❌
+- 吞掉异常 ❌
+
+### Java红线
+- Controller直接操作数据库 ❌
+- Service层缺少事务 ❌
+
+### Python红线
+- 裸写SQL ❌
+- 缺少类型提示 ❌
+
+### Go红线
+- 在 handler 中直接操作数据库 ❌
+- 缺少 context 传递 ❌
+- 忽略错误处理（err != nil 必须处理）❌
+- 循环引用（import cycle）❌
+
+### Vue红线
+- 组件中直接调用axios ❌
+- 使用Vue3语法（Composition API）❌
+
+---
+
+## 4. 文档红线
+
+**所有过程文档必须使用中文** ✅
+
+---
+
+## 记住
+
+**红线零容忍**：
+1. 必须先加载 `/dev-standard`
+2. 必须搜索知识库
+3. 必须复用，禁止造轮子
+4. 所有输出必须为中文
+```
+
+### 2.2 `dev-standard/SKILL.md`（开发约束规范）
+
+**文件位置**：`.opencode/skills/dev-standard/SKILL.md`
+
+**核心内容**：引用已存在的项目开发规范总集
+
+**会根据项目类型生成对应模板**：
+- Java：Service/Repository/Entity/Controller分层
+- Python：Django/FastAPI分层
+- Go：handler/service/repository分层
+- Vue：components/api/store分层
+
+---
+
+## 3. 执行流程
+
+### Step 1: 项目检测
+
+```bash
+# 检测项目类型
+[ -f pom.xml ] &amp;&amp; TYPE="java"
+[ -f package.json ] &amp;&amp; TYPE="vue"
+[ -f pom.xml &amp;&amp; -f package.json ] &amp;&amp; TYPE="java-vue"
+[ -f requirements.txt ] &amp;&amp; TYPE="python"
+[ -f go.mod ] &amp;&amp; TYPE="go"
+```
+
+### Step 2: 创建目录
+
+```bash
+# 创建Skill目录
+mkdir -p .opencode/skills/dev-standard
+```
+
+### Step 3: 生成文件
+
+根据检测到的项目类型，选择对应模板生成：
+
+| 项目类型 | 生成文件 |
+|----------|----------|
+| Java | `.cursorrules` + `dev-standard/SKILL.md` (Java版) |
+| Python | `.cursorrules` + `dev-standard/SKILL.md` (Python版) |
+| Go | `.cursorrules` + `dev-standard/SKILL.md` (Go版) |
+| Vue | `.cursorrules` + `dev-standard/SKILL.md` (Vue版) |
+| 混合(Java+Vue) | `.cursorrules` + `dev-standard/SKILL.md` (混合版) |
+| 混合(Go+Vue) | `.cursorrules` + `dev-standard/SKILL.md` (混合版) |
+| 通用 | `.cursorrules` + `dev-standard/SKILL.md` (通用版) |
+
+### Step 4: 输出报告
+
+```bash
+# 输出示例
+✅ 已生成 .cursorrules
+✅ 已生成 .opencode/skills/dev-standard/SKILL.md
+
+📋 下一步：
+1. 执行 /dev-standard 查看详细规范
+2. 执行 /project-knowledge-base 初始化知识库（可选）
+3. 开始开发
+```
+
+---
+
+## 4. 技术栈模板
+
+### 4.1 Java + SpringBoot 模板
+
+```markdown
+# 开发约束规范（Java版）
+
+## 命名约定
+
+| 类型 | 规则 | 示例 |
+|------|------|------|
+| Service接口 | I{Module}Service | IUserService |
+| Service实现 | {Module}ServiceImpl | UserServiceImpl |
+| Entity | {Module}Entity | UserEntity |
+| Repository | {Module}Repository | UserRepository |
+| Controller | {Module}Controller | UserController |
+
+## 分层架构
+
+```
+controller/ → service/ → repository/ → entity/
+```
+
+## 禁止事项
+
+- ❌ Controller直接操作数据库
+- ❌ Service层缺少@Transactional
+- ❌ 缺少参数校验
+
+## 代码示例
+
+```java
+@RestController
+@RequestMapping("/api/user")
+public class UserController {
+    @Autowired
+    private IUserService userService;
+
+    @GetMapping("/{id}")
+    public UserDTO getById(@PathVariable Long id) {
+        return userService.getById(id);
+    }
+}
+```
+```
+
+### 4.2 Python 模板
+
+```markdown
+# 开发约束规范（Python版）
+
+## 命名约定
+
+| 类型 | 规则 | 示例 |
+|------|------|------|
+| 类 | PascalCase | UserService |
+| 函数 | snake_case | get_user_info |
+| 常量 | UPPER_SNAKE_CASE | MAX_RETRY |
+| 模块 | snake_case | user_service |
+
+## 分层架构（Django）
+
+```
+app/controllers/ → app/services/ → app/models/ → app/repositories/
+```
+
+## 禁止事项
+
+- ❌ 裸写SQL
+- ❌ 缺少类型提示
+- ❌ except捕获泛型异常
+
+## 代码示例
+
+```python
+def get_user(user_id: int) -&gt; Optional[UserDTO]:
+    """根据ID获取用户"""
+    return user_service.find_by_id(user_id)
+```
+```
+
+### 4.3 Vue 模板
+
+```markdown
+# 开发约束规范（Vue版）
+
+## 命名约定
+
+| 类型 | 规则 | 示例 |
+|------|------|------|
+| 组件文件 | PascalCase.vue | UserProfile.vue |
+| API文件 | camelCase.js | userApi.js |
+| 工具文件 | camelCase.js | handleSearch.js |
+
+## 目录结构
+
+```
+src/api/ → src/components/ → src/views/ → src/store/
+```
+
+## 禁止事项
+
+- ❌ 组件中直接调用axios
+- ❌ 未使用API封装
+- ❌ Vue3 Composition API
+
+## 代码示例
+
+```vue
+&lt;template&gt;
+  &lt;a-card :loading="loading"&gt;{{ userInfo.name }}&lt;/a-card&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+import { mapState } from 'vuex'
+import { getUser } from '@/api/user'
+
+export default {
+  name: 'UserCard',
+  props: { userId: { type: String, required: true } }
+}
+&lt;/script&gt;
+```
+```
+
+### 4.4 Go 模板
+
+```markdown
+# 开发约束规范（Go版）
+
+## 命名约定
+
+| 类型 | 规则 | 示例 |
+|------|------|------|
+| 接口 | {Module}Service | UserService |
+| 实现 | {Module}ServiceImpl | UserServiceImpl |
+| 结构体 | {Module} | User |
+| 包名 | 全小写、简洁 | user, order |
+| 文件名 | snake_case | user_service.go |
+| 私有函数 | camelCase | validateInput |
+| 公有函数 | PascalCase | GetUserByID |
+
+## 分层架构
+
+```
+handler/ → service/ → repository/ → model/
+```
+
+## 项目结构
+
+```
+project/
+├── cmd/                    # 入口文件
+│   └── server/
+│       └── main.go
+├── internal/               # 私有代码
+│   ├── handler/           # HTTP处理层
+│   ├── service/           # 业务逻辑层
+│   ├── repository/        # 数据访问层
+│   ├── model/             # 实体定义
+│   └── config/            # 配置管理
+├── pkg/                    # 公共库（可被外部使用）
+│   ├── utils/             # 工具函数
+│   └── middleware/        # 中间件
+├── go.mod
+└── go.sum
+```
+
+## 禁止事项
+
+- ❌ 在 handler 中直接操作数据库
+- ❌ 缺少 context.Context 传递
+- ❌ 忽略错误（_ = fn()）
+- ❌ 裸 return err
+- ❌ 循环引用（import cycle）
+- ❌ 使用 init() 函数做复杂初始化
+- ❌ 全局变量（除配置外）
+
+## 代码示例
+
+### Handler
+
+```go
+package handler
+
+import (
+    "context"
+    "net/http"
+    
+    "github.com/gin-gonic/gin"
+    "project/internal/service"
+)
+
+type UserHandler struct {
+    userService service.UserService
+}
+
+func NewUserHandler(us service.UserService) *UserHandler {
+    return &amp;UserHandler{userService: us}
+}
+
+func (h *UserHandler) GetUser(c *gin.Context) {
+    id := c.Param("id")
+    ctx := c.Request.Context()
+    
+    user, err := h.userService.GetByID(ctx, id)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+        return
+    }
+    
+    c.JSON(http.StatusOK, user)
+}
+```
+
+### Service
+
+```go
+package service
+
+import (
+    "context"
+    "fmt"
+    
+    "project/internal/model"
+    "project/internal/repository"
+)
+
+type userService struct {
+    userRepo repository.UserRepository
+}
+
+func NewUserService(ur repository.UserRepository) UserService {
+    return &amp;userService{userRepo: ur}
+}
+
+func (s *userService) GetByID(ctx context.Context, id string) (*model.User, error) {
+    if id == "" {
+        return nil, fmt.Errorf("user id cannot be empty")
+    }
+    
+    user, err := s.userRepo.FindByID(ctx, id)
+    if err != nil {
+        return nil, fmt.Errorf("failed to get user: %w", err)
+    }
+    
+    return user, nil
+}
+```
+
+### Repository
+
+```go
+package repository
+
+import (
+    "context"
+    "database/sql"
+    "fmt"
+    
+    "project/internal/model"
+)
+
+type userRepository struct {
+    db *sql.DB
+}
+
+func NewUserRepository(db *sql.DB) UserRepository {
+    return &amp;userRepository{db: db}
+}
+
+func (r *userRepository) FindByID(ctx context.Context, id string) (*model.User, error) {
+    query := "SELECT id, name, email FROM users WHERE id = ?"
+    
+    user := &amp;model.User{}
+    err := r.db.QueryRowContext(ctx, query, id).Scan(&amp;user.ID, &amp;user.Name, &amp;user.Email)
+    if err != nil {
+        return nil, fmt.Errorf("query failed: %w", err)
+    }
+    
+    return user, nil
+}
+```
+
+### Model
+
+```go
+package model
+
+import "time"
+
+type User struct {
+    ID        string    `json:"id" db:"id"`
+    Name      string    `json:"name" db:"name"`
+    Email     string    `json:"email" db:"email"`
+    CreatedAt time.Time `json:"created_at" db:"created_at"`
+}
+```
+
+## 错误处理规范
+
+```go
+// 错误包装
+er := fmt.Errorf("failed to process: %w", err)
+
+// 错误比较
+if errors.Is(err, sql.ErrNoRows) {
+    // 处理记录不存在
+}
+
+// 错误断言
+var notFoundErr *NotFoundError
+if errors.As(err, &amp;notFoundErr) {
+    // 处理特定错误类型
+}
+```
+
+## 接口定义
+
+```go
+// service/user.go
+type UserService interface {
+    GetByID(ctx context.Context, id string) (*model.User, error)
+    Create(ctx context.Context, user *model.User) error
+    Update(ctx context.Context, id string, user *model.User) error
+    Delete(ctx context.Context, id string) error
+}
+
+// repository/user.go
+type UserRepository interface {
+    FindByID(ctx context.Context, id string) (*model.User, error)
+    Create(ctx context.Context, user *model.User) error
+    Update(ctx context.Context, user *model.User) error
+    Delete(ctx context.Context, id string) error
+}
+```
+```
+
+---
+
+## 5. 模板定制
+
+### 自定义模板
+
+如需修改默认模板，可创建本地模板：
+
+```bash
+# 创建模板目录
+mkdir -p templates/
+
+# 覆盖默认模板
+templates/
+├── cursorrules.template
+├── java/
+│   └── dev-standard.template
+├── python/
+│   └── dev-standard.template
+├── go/
+│   └── dev-standard.template
+├── vue/
+│   └── dev-standard.template
+└── default/
+    └── dev-standard.template
+```
+
+### 模板变量
+
+```
+{{PROJECT_NAME}}    # 项目名称
+{{PROJECT_TYPE}}    # 项目类型
+{{AUTHOR}}          # 作者
+{{DATE}}            # 创建日期
+{{JAVA_VERSION}}   # Java版本
+{{GO_VERSION}}     # Go版本
+{{VUE_VERSION}}    # Vue版本
+```
+
+---
+
+## 6. 批量初始化
+
+### 多个项目
+
+```bash
+# 批量处理目录下的所有项目
+/project-rules-scaffold init --batch ./projects/
+```
+
+### CI/CD集成
+
+```yaml
+# .github/workflows/rules-init.yml
+name: Initialize Project Rules
+on:
+  push:
+    branches: [main]
+
+jobs:
+  rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Initialize Rules
+        run: |
+          # 执行脚手架
+          /project-rules-scaffold init --cursorrules-only
+```
+
+---
+
+## 7. 常见问题
+
+### Q1: 已有规则文件怎么办？
+
+**处理方式**：覆盖或保留
+```
+/project-rules-scaffold init --force  # 强制覆盖
+/project-rules-scaffold init --merge # 合并规则
+```
+
+### Q2: 如何跳过某些检查？
+
+**处理方式**：修改 `.cursorrules`，注释掉不需要的规则
+
+### Q3: 模板不匹配怎么办？
+
+**处理方式**：创建自定义模板，或提交Issue反馈
+
+---
+
+## 8. 输出示例
+
+### 执行命令
+
+```
+/project-rules-scaffold init --type=java-vue
+```
+
+### 输出结果
+
+```
+✅ 检测到项目类型：Java + Vue
+
+📁 生成文件：
+
+1. .cursorrules
+   └─ 红线规则 + 强制引用Skill
+
+2. .opencode/skills/dev-standard/SKILL.md
+   ├─ Java开发规范（分层、命名、禁止项）
+   └─ Vue开发规范（组件、API、状态管理）
+
+📋 下一步操作：
+
+1. /dev-standard  → 查看详细规范
+2. /project-knowledge-base  → 初始化知识库（可选）
+3. 开始开发
+
+💡 提示：
+- 后续新成员加入，只需运行此命令即可快速初始化规范
+- 规范可迭代更新，修改后同步到其他项目
+```
+
+---
+
+## 9. 项目模板
+
+如需创建包含规则脚手架的新项目模板：
+
+```bash
+# 模板项目结构
+project-template/
+├── .cursorrules           ← 预置规则
+├── .opencode/
+│   └── skills/
+│       └── dev-standard/
+│           └── SKILL.md   ← 预置规范
+├── docs/
+│   └── knowledge-base/   ← 知识库（可选）
+└── README.md             ← 项目说明
+```
+
+使用此模板创建新项目后，运行 `/project-rules-scaffold init` 即可完成规范初始化。</code></pre><p><strong>使用方法：</strong><strong><code>/project-rules-scaffold init</code></strong></p><blockquote><p>可以强制指定项目类型：</p><ul><li><code>/project-knowledge-base init --type=java</code></li></ul><ul><li><code>/project-knowledge-base init --type=vue</code></li></ul><ul><li><code>/project-knowledge-base init --type=python</code></li></ul><ul><li><code>/project-knowledge-base init --type=java-vue</code></li></ul></blockquote><h1 id="sec-29">真实需求实践</h1><h2 id="sec-30">X1- 纯前端：新增/编辑 从「新开页面形式」 改 「弹窗形式」</h2><h3 id="sec-31">结果总结</h3><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>共计改动：<u><strong>6个页面</strong></u>、<u><strong>928行代码</strong></u>，<u><strong>人工四轮交互</strong></u>，<strong>人工耗时 &lt; 15m，模型耗时 &lt; 1h。</strong></p><p><strong>全过程速览：</strong></p><p>需求输入 -&gt; AI跑出一版结果 </p><p>-&gt; <span style="color:#d83931">前端爆红，ESLint error</span> </p><p>-&gt; <span style="color:#f5a623">人工交互</span><span style="color:#f5a623"><strong>两轮</strong></span>（<u>ESLint error日志</u>甩给AI）-&gt; <span style="color:#2ea121">AI修复，完成度</span><span style="color:#2ea121"><strong>67%</strong></span> </p><p>-&gt; <span style="color:#d83931">console error，部分组件的函数被删掉了</span> </p><p>-&gt; <span style="color:#f5a623">人工交互</span><span style="color:#f5a623"><strong>一轮</strong></span>（<u>控制台error日志</u>甩给AI）-&gt; <span style="color:#2ea121">AI修复，完成度</span><span style="color:#2ea121"><strong>100%</strong></span>。</p><p>-&gt; 人工复核，完美符合预期。</p></div></div><h3 id="sec-32"><strong>需求详解 &amp; 提示词</strong>：</h3><p>/opsx-ff ultrawork，将一些页面的新增、编辑、查看， 从「新开页面形式」 改为 「弹窗形式」，降低人的使用成本。如：「租户、事件组、事件、风险码、业务码、标签管理」。参考示例：字典表的新增、编辑、查看。</p><h3 id="sec-33">反思与改进点</h3><p>从这个需求来看，当前前端开发流程，<mark style="background:#ffc9c9;color:inherit;padding:0 2px;border-radius:3px"><strong>存在以下两个问题</strong></mark>：</p><ol><li>多次引入了同一模块，导致<code>imported multiple times</code>。</li><li>写法变更后，旧引入的模块未被使用，而AI没有删除这些无用模块，导致<code>is defined but never used</code></li></ol><ol><li>TypeError: this.getAppData is not a function: 方法被删除但调用点未更新</li><li>nvalid handler for event "click": got undefined：方法绑定问题</li></ol><p><mark style="background:#b2f2bb;color:inherit;padding:0 2px;border-radius:3px"><strong>改进思路：</strong></mark></p><p><strong>将存在的当前问题，纳入开发约束规范中(.cursorrules)。保证下次需求开发，不再出现这个问题。</strong></p><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div><h3 id="sec-34">过程记录</h3><ol><li>首先 /new一个新的session。</li></ol><ol></ol><ol><li>多次引入了同一模块，导致<code>imported multiple times</code></li><li>写法变更后，旧引入的模块未被使用，而AI没有删除这些无用模块，导致<code>is defined but never used</code></li></ol><ol><li><strong>Step1：人工调教，</strong><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>两轮交互</strong></mark>过程：<u>ESLint error日志</u>甩给AI -&gt; AI修复 -&gt; 人工检验。<p><strong>结果：</strong>完成度 <strong>67%</strong>。</p><table><tr><td><p>模块</p></td><td><p>文件路径</p></td><td><p>状态</p></td></tr><tr><td><p>租户管理</p></td><td><p>src/views/app/appList.vue</p></td><td><p><strong>✅ 符合预期</strong></p></td></tr><tr><td><p>事件组管理</p></td><td><p>src/views/event/eventGroup/EventGroupList.vue</p></td><td><p><strong>✅ 符合预期</strong></p></td></tr><tr><td><p>事件管理</p></td><td><p>src/views/event/eventMeta/EventMetaList.vue</p></td><td><p><strong>✅ 符合预期</strong></p></td></tr><tr><td><p>风险码管理</p></td><td><p>src/views/riskCode/RiskCodeList.vue</p></td><td><p><strong>❌ 控制台error</strong></p></td></tr><tr><td><p>业务码管理</p></td><td><p>src/views/businessCode/BusinessCodeList.vue</p></td><td><p><strong>❌ 控制台error</strong></p></td></tr><tr><td><p>标签元数据管理</p></td><td><p>src/views/tag/tagMetaList.vue</p></td><td><p><strong>✅ 符合预期</strong></p></td></tr></table></li><li><strong>Step2</strong>：人工调教，<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>一轮交互</strong></mark>过程：<u>控制台error日志</u>甩给AI -&gt; AI修复 -&gt; 人工检验。<p><strong>结果</strong>：完成度<strong>100%</strong>，完美符合预期。</p></li><li></li></ol><ol><li><p>需求完成确认后，执行命令，OpenSpec会将本次需求归档，放到/archive文档下。</p></li><li></li></ol><h2 id="sec-35">X2-「后端开发-单元测试」AI闭环开发：欧洲数据脱敏Case</h2><h1 id="sec-36">风控后端纳入AI-Coding体系</h1><blockquote><p>首先进入风控后端代码文件夹下。。。</p></blockquote><ol><li><strong><code>openspec init</code></strong> -&gt; 选择opencode cli -&gt; 自动初始化<code>.opencode</code>文件夹 和 <code>openspec</code> 文件夹。</li></ol><ol><li><pre><code>我需要创建一个SKill，用于SpringBoot Maven 已有多模块项目的知识库搭建。有以下需求：1.面向Java语言 2.需要记录完整的文件夹目录结构，并且解释清楚每个文件夹的作用 3.梳理清楚多模块项目下，各个子模块的依赖关系 4.梳理清楚每个子模块的关键实体类数据结构（尤其是管理后台项目）5.若不清楚某个文件夹的作用，及时咨询用户，在99%确认无误后，再继续构建。6.若是前后端分离的 RestFul接口，以JSON格式梳理清楚所有后端接口</code></pre></li><li><pre><code>---
+name: springboot-multi-module-kb
+description: SpringBoot Maven 多模块项目知识库构建专家。专为Java多模块项目设计，深度分析模块依赖、实体数据结构、RESTful接口，自动生成完整的项目知识库文档。
+license: MIT
+compatible_with:
+  - Java
+  - SpringBoot
+  - Maven Multi-Module
+metadata:
+  author: opencode
+  version: "2.0"
+  tags: ["knowledge-base", "springboot", "maven", "multi-module", "java", "entity", "api"]
+---
+
+# SpringBoot Maven 多模块项目知识库构建专家
+
+本 Skill 专为 SpringBoot Maven 多模块项目设计，深度分析项目结构、模块依赖、实体类、RESTful 接口、技术栈信息，生成完整、标准化的项目知识库文档。
+
+## 适用场景
+
+- ✅ SpringBoot Maven 多模块项目
+- ✅ 前后端分离的后端项目
+- ✅ 包含管理后台（Admin）的系统
+- ✅ 微服务模块化项目
+- ✅ 需要完整技术文档的老项目梳理
+
+## 核心能力
+
+| 能力 | 说明                                        |
+|------|-------------------------------------------|
+| **技术栈分析** | 解析 pom.xml，提取 Java 版本、SpringBoot 版本、核心依赖  |
+| **目录结构解析** | 完整扫描项目目录，解释每个文件夹的作用                       |
+| **模块依赖分析** | 解析 pom.xml，生成模块依赖关系图                      |
+| **实体类梳理** | 深度扫描 Entity/Model/DTO/VO，生成数据结构文档         |
+| **API 接口梳理** | 扫描 Controller，生成 JSON 格式的完整接口文档           |
+| **交互式确认** | 对不明确的文件夹主动咨询用户，确保你 99% 理解文件夹的作用后，才继续下一步动作 |
+
+## 单一职责
+
+**负责**：
+- ✅ 技术栈文档生成（Java 版本、依赖清单、构建工具）
+- ✅ 项目目录结构分析与文档化
+- ✅ Maven 多模块依赖关系分析
+- ✅ 实体类数据结构梳理（Entity, Model, DTO, VO）
+- ✅ RESTful API 接口文档生成（JSON 格式）
+- ✅ 与用户交互确认不明确的结构
+
+**不负责**：
+- ❌ 代码规范文档（由 project-rules-scaffold 负责）
+- ❌ 代码修改与重构
+
+---
+
+## 全局强制约束
+
+**你的所有输出必须为简体中文，包括：**
+- 文档内容（.md 文件）
+- 代码注释
+- API 文档
+- 技术栈说明
+- 命名说明
+
+**禁止输出任何英文内容（代码标识符除外）。**
+
+---
+
+## 1. 执行命令
+
+### 自动检测模式（推荐）
+
+```
+/springboot-multi-module-kb init
+```
+
+### 手动指定模块
+
+```
+/springboot-multi-module-kb init --modules=module1,module2,module3
+```
+
+---
+
+## 2. 完整执行流程
+
+### Step 0: 技术栈分析
+
+**⚠️ 首先执行此步骤，获取项目基础信息**
+
+1. 扫描根 pom.xml，提取：
+   - `&lt;parent&gt;` - SpringBoot 版本
+   - `&lt;properties&gt;` - Java 版本、编码等
+   - `&lt;dependencies&gt;` - 核心依赖
+   - `&lt;dependencyManagement&gt;` - 依赖版本管理
+
+2. 扫描各子模块 pom.xml，提取模块级依赖
+
+3. 生成技术栈文档
+
+**技术栈文档模板** (`1-tech-stack/dependencies.md`)：
+
+```markdown
+# 项目依赖清单
+
+&gt; 本文档由代码扫描自动生成，描述项目的技术栈与依赖版本。
+
+---
+
+## 基础信息
+
+| 项目 | 版本 |
+|------|------|
+| **项目名称** | 风控平台 |
+| **构建工具** | Maven |
+| **Java 版本** | 8 |
+| **SpringBoot 版本** | 2.6.13 |
+| **编码** | UTF-8 |
+
+---
+
+## 核心依赖
+
+| 依赖 | 版本 | 说明 |
+|------|------|------|
+| spring-boot-starter-web | 2.6.13 | Web 应用基础 |
+| spring-boot-starter-data-redis | 2.6.13 | Redis 客户端 |
+| mybatis-plus-boot-starter | 3.5.3 | MyBatis Plus |
+| druid-spring-boot-starter | 1.2.16 | 数据库连接池 |
+| fastjson | 1.2.83 | JSON 处理 |
+| okhttp | 4.10.0 | HTTP 客户端 |
+| thrift | 0.16.0 | Thrift RPC |
+
+---
+
+## 各模块依赖
+
+### 风控平台-common
+
+| 依赖 | 版本 | 类型 |
+|------|------|------|
+| spring-boot-starter | 2.6.13 | compile |
+| lombok | 1.18.24 | compile |
+
+### 风控平台-web
+
+| 依赖 | 版本 | 类型 |
+|------|------|------|
+| spring-boot-starter-web | 2.6.13 | compile |
+| 风控平台-common | 1.0-SNAPSHOT | compile |
+| 风控平台-app | 1.0-SNAPSHOT | compile |
+
+### 风控平台-app
+
+| 依赖 | 版本 | 类型 |
+|------|------|------|
+| spring-boot-starter | 2.6.13 | compile |
+| 风控平台-common | 1.0-SNAPSHOT | compile |
+| 风控平台-data-assemble | 1.0-SNAPSHOT | compile |
+```
+
+---
+
+### Step 1: 项目结构检测
+
+```bash
+# 检测是否为 Maven 多模块项目
+[ -f pom.xml ] &amp;&amp; grep -q "&lt;modules&gt;" pom.xml &amp;&amp; echo "MULTI_MODULE" || echo "SINGLE_MODULE"
+
+# 列出所有模块
+mvn -pl . -N ru.technonic:flatten-maven-plugin:0.0.1:resolve-gav || \
+grep -oP '(?&lt;=&lt;module&gt;).*?(?=&lt;/module&gt;)' pom.xml
+
+# 获取 Java 版本
+grep -oP '(?&lt;=&lt;java.version&gt;).*?(?=&lt;/java.version&gt;)' pom.xml
+
+# 获取 SpringBoot 版本
+grep -oP '(?&lt;=&lt;spring-boot.version&gt;).*?(?=&lt;/spring-boot.version&gt;)' pom.xml
+```
+
+### Step 2: 目录结构扫描与分析
+
+**⚠️ 这是最核心的步骤，必须仔细执行**
+
+1. 递归扫描项目根目录及所有子模块目录
+2. 列出完整的目录树结构
+3. 对每个文件夹进行初步用途判断
+4. 对无法确定的文件夹进行标记，准备咨询用户
+
+**标准 Maven 多模块目录结构参考**：
+
+```
+项目根目录/
+├── pom.xml                          # 父 POM，定义模块和依赖版本
+├── src/                             # 根目录源码（通常为空，仅作聚合）
+│   └── main/
+│       ├── java/
+│       └── resources/
+├── [模块1]/                         # 子模块 1
+│   ├── pom.xml
+│   ├── src/
+│   │   └── main/
+│   │       ├── java/                # Java 源码
+│   │       │   └── com/xx/xx/       # 包路径
+│   │       │       ├── controller/  # 控制层（API 入口）
+│   │       │       ├── service/     # 业务逻辑层
+│   │       │       ├── dao/         # 数据访问层（可选）
+│   │       │       ├── mapper/      # MyBatis Mapper（可选）
+│   │       │       ├── entity/      # 实体类（数据库映射）
+│   │       │       ├── model/       # 数据模型（DTO/VO）
+│   │       │       ├── domain/      # 领域模型（DDD）
+│   │       │       ├── repository/  # JPA Repository
+│   │       │       ├── config/      # 配置类
+│   │       │       ├── common/      # 公共组件
+│   │       │       ├── util/        # 工具类
+│   │       │       ├── constant/    # 常量定义
+│   │       │       ├── enums/       # 枚举类
+│   │       │       ├── exception/   # 异常定义
+│   │       │       ├── aop/         # AOP 切面
+│   │       │       ├── filter/      # 过滤器
+│   │       │       ├── interceptor/ # 拦截器
+│   │       │       └── validator/    # 参数校验
+│   │       └── resources/           # 配置资源
+│   │           ├── mapper/          # MyBatis XML 映射
+│   │           ├── application.yml  # 应用配置
+│   │           └── logback.xml      # 日志配置
+│   └── test/                        # 测试代码
+│       └── java/
+├── [模块2]/                         # 子模块 2
+├── [模块N]/                         # 子模块 N
+└── docs/                           # 项目文档
+```
+
+### Step 3: 模块依赖分析
+
+1. 解析根 pom.xml，获取所有 `&lt;module&gt;` 定义
+2. 解析每个子模块的 pom.xml，提取：
+   - `&lt;parent&gt;` 继承关系
+   - `&lt;dependencies&gt;` 依赖列表
+   - `&lt;dependencyManagement&gt;` 依赖管理
+   - 重点识别对**兄弟模块**的依赖（inter-module dependencies）
+3. 生成 Mermaid 依赖关系图
+
+**Mermaid 依赖图模板**：
+
+```mermaid
+graph TD
+    %% 节点定义
+    A[父模块&lt;br/&gt;风控平台] --&gt; B[风控平台-common]
+    A --&gt; C[风控平台-web]
+    A --&gt; D[风控平台-app]
+    A --&gt; E[风控平台-data-assemble]
+    A --&gt; F[风控平台-infra]
+    A --&gt; G[风控平台-rule-engine]
+    A --&gt; H[风控平台-service-thrift]
+    
+    %% 依赖关系
+    C --&gt; B
+    D --&gt; B
+    D --&gt; C
+    E --&gt; B
+    E --&gt; D
+    F --&gt; B
+    G --&gt; B
+    H --&gt; B
+    
+    %% 样式
+    classDef module fill:#f9f,stroke:#333,stroke-width:2px;
+    class A,B,C,D,E,F,G,H module;
+```
+
+### Step 4: 实体类数据结构梳理
+
+**⚠️ 重点关注管理后台（后台/Admin）模块**
+
+扫描以下路径的实体类：
+- `**/entity/*.java`
+- `**/domain/*.java`
+- `**/model/*.java`
+- `**/po/*.java`
+
+**对于每个实体类，提取**：
+
+| 提取项 | 说明 |
+|--------|------|
+| 类名 | 实体类名称 |
+| 包路径 | 完整包路径 |
+| 继承关系 | 继承的父类（如 BaseEntity） |
+| 字段列表 | 所有字段及其类型、注解 |
+| 数据库表名 | @TableName 注解值 |
+| 关联关系 | 一对多、多对多等关系 |
+
+**实体类文档模板**：
+
+```markdown
+### [{模块名}] {类名}
+
+**包路径**: `com.xiaomi.infosec.risk.风控平台.common.model.{类名}`
+
+**数据库表**: `{table_name}`
+
+**继承**: `{父类名称}` (如有)
+
+**字段列表**：
+
+| 字段名 | 类型 | 注解 | 说明 |
+|--------|------|------|------|
+| `id` | Long | @Id, @GeneratedValue | 主键ID |
+| `username` | String | @Column, @NotNull | 用户名 |
+| `email` | String | @Column | 邮箱地址 |
+| `status` | Integer | @Column | 状态: 0-禁用 1-启用 |
+| `createdAt` | LocalDateTime | @CreatedDate | 创建时间 |
+| `updatedAt` | LocalDateTime | @LastModifiedDate | 更新时间 |
+
+**关联关系**：
+- `List&lt;{RelatedEntity}&gt; {fieldName}` - {关系描述}（一对多）
+
+**JSON 示例**：
+```json
+{
+  "id": 1,
+  "username": "admin",
+  "email": "[邮箱]",
+  "status": 1,
+  "createdAt": "2024-01-01T00:00:00",
+  "updatedAt": "2024-01-01T00:00:00"
+}
+```
+
+### Step 5: RESTful API 接口梳理
+
+**⚠️ 前后端分离项目必做**
+
+**🔴 重要警示：禁止基于 RESTful 规范假设接口**
+
+&gt; **问题背景**：曾有一次，API 文档基于 RESTful 规范假设生成了 `deleteRule`, `updateRule`, `createRule` 等接口，但实际代码中这些接口并不存在。这导致文档与实际代码严重不符。
+
+&gt; **核心原则**：**必须 100% 基于实际代码生成 API 文档**，禁止基于 RESTful 约定俗成进行推测。
+
+#### 5.1 扫描 Controller 文件
+
+1. **查找所有 Controller**
+
+```bash
+# 查找所有 @RestController 注解的类
+grep -r "@RestController" --include="*.java" src/
+
+# 或使用 glob 模式
+glob("**/controller/*.java")
+```
+
+2. **读取每个 Controller 文件**，提取：
+
+| 提取项 | 来源 | 示例 |
+|--------|------|------|
+| 基础路径 | `@RequestMapping("api/v1/xxx")` | `api/v1/rule` |
+| 请求方法 | `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping` | `@PostMapping("/save")` |
+| 完整路径 | 基础路径 + 方法路径 | `api/v1/rule/saveRule` |
+| 请求参数 | `@RequestParam`, `@RequestBody`, `@PathVariable` | `@RequestParam("id") Long id` |
+| 方法注释 | Javadoc 或方法上注释 | `更新某规则的状态` |
+
+3. **⚠️ 必须验证**
+   - 读取实际 Controller 源码
+   - 核对每个接口的 HTTP 方法和路径
+   - 确认请求参数名称和类型
+
+#### 5.2 禁止的操作
+
+| ❌ 禁止 | ✅ 正确 |
+|---------|---------|
+| 假设 `POST /api/rule` = createRule | 必须读取 Controller 源码确认 |
+| 假设 `PUT /api/rule/{id}` = updateRule | 必须读取 Controller 源码确认 |
+| 假设 `DELETE /api/rule/{id}` = deleteRule | 必须读取 Controller 源码确认 |
+| 假设 RESTful 标准路径格式 | 必须以实际代码为准 |
+
+#### 5.3 常见错误对照表
+
+| 错误假设（文档） | 实际情况（代码） |
+|-----------------|-----------------|
+| `POST /api/user` | `POST /api/v1/user/add` |
+| `GET /api/rule/{id}` | `GET /api/v1/rule/getRuleById?id=xxx` |
+| `DELETE /api/rule/{id}` | **不存在此接口** |
+| `PUT /api/rule/{id}` | `PUT /api/v1/rule/updateRuleStatus` |
+
+**文件路径**: `风控平台-web/src/main/java/com/xiaomi/infosec/risk/风控平台/web/controller/RuleController.java`
+
+```java
+@Slf4j
+@RestController
+@RequestMapping("api/v1/rule")
+public class RuleController {
+
+    @PutMapping("/updateRuleStatus")
+    public Result&lt;String&gt; updateRuleStatus(@RequestParam("id") Long id, @RequestParam("status") Integer status) {
+        return ruleService.updateRuleStatus(id, status);
+    }
+
+    @PostMapping("/saveRule")
+    public Result&lt;String&gt; save(@RequestBody Rule rule) {
+        return ruleService.saveRule(rule);
+    }
+
+    @GetMapping("/list")
+    public Result&lt;List&lt;Rule&gt;&gt; list(...) { ... }
+
+    @GetMapping("/getRuleById")
+    public Result&lt;Rule&gt; getInfo(@RequestParam("id") String id) {
+        return ruleService.getRuleById(id);
+    }
+
+    @GetMapping("/isLogicValid")
+    public Result&lt;String&gt; isLogicValid(@RequestParam("logic") String logic) { ... }
+
+    // ❌ 注意：没有 deleteRule, updateRule, createRule 等接口！
+}
+```
+
+#### 5.4 完整示例： 风控平台 项目 API 梳理
+
+**扫描步骤**：
+
+```
+1. glob("**/controller/*.java") → 获取所有 Controller 文件
+2. 读取每个 Controller 源码
+3. 提取 @RequestMapping 基础路径
+4. 提取每个方法的 @GetMapping/@PostMapping/@PutMapping/@DeleteMapping 路径
+5. 提取参数注解 @RequestParam/@PathVariable/@RequestBody
+6. 整理成 API 文档表格
+```
+
+**结果**：26 个 Controller，74 个接口，**100% 来自实际代码**。
+
+---
+
+**API 接口 JSON 文档模板**：
+
+```json
+{
+  "模块名称": {
+    "模块说明": "该模块负责的业务功能描述",
+    "接口列表": [
+      {
+        "接口编号": "API_001",
+        "接口名称": "获取用户列表",
+        "请求方法": "GET",
+        "请求路径": "/api/user/list",
+        "请求参数": {
+          "page": {
+            "类型": "Integer",
+            "必填": false,
+            "默认值": 1,
+            "说明": "页码"
+          },
+          "pageSize": {
+            "类型": "Integer",
+            "必填": false,
+            "默认值": 10,
+            "说明": "每页条数"
+          },
+          "keyword": {
+            "类型": "String",
+            "必填": false,
+            "说明": "搜索关键词"
+          }
+        },
+        "响应参数": {
+          "code": {
+            "类型": "Integer",
+            "说明": "响应码: 200-成功"
+          },
+          "data": {
+            "类型": "Object",
+            "说明": "响应数据",
+            "children": {
+              "list": {
+                "类型": "Array",
+                "说明": "数据列表"
+              },
+              "total": {
+                "类型": "Long",
+                "说明": "总条数"
+              }
+            }
+          },
+          "message": {
+            "类型": "String",
+            "说明": "响应消息"
+          }
+        },
+        "接口说明": "分页查询用户列表，支持关键词搜索",
+        "所属Controller": "UserController",
+        "文件路径": "xxx/src/main/java/com/xx/xx/controller/UserController.java"
+      }
+    ]
+  }
+}
+```
+
+---
+
+## 3. 文件夹作用速查表
+
+### Java 项目常见文件夹及作用
+
+| 文件夹 | 作用 | 常见框架/库 |
+|--------|------|-------------|
+| `controller` | 处理 HTTP 请求，路由分发 | Spring MVC |
+| `service` | 业务逻辑实现层 | Spring |
+| `dao` / `repository` | 数据访问层 | MyBatis / JPA |
+| `mapper` | MyBatis 接口映射 | MyBatis |
+| `entity` / `model` | 数据库实体映射 | JPA / MyBatis |
+| `domain` | 领域模型（DDD） | DDD 架构 |
+| `dto` | 数据传输对象 | 前后端交互 |
+| `vo` | 视图对象 | 返回给前端 |
+| `po` | 持久化对象 | Hibernate |
+| `config` | 配置类 | Spring @Configuration |
+| `common` | 公共组件 | 通用封装 |
+| `util` | 工具类 | 静态方法封装 |
+| `constant` | 常量定义 | 枚举/常量类 |
+| `enums` | 枚举类 | Java Enum |
+| `exception` | 自定义异常 | 业务异常 |
+| `aop` | 切面编程 | Spring AOP |
+| `filter` | 过滤器 | Servlet Filter |
+| `interceptor` | 拦截器 | Spring Interceptor |
+| `validator` | 参数校验 | Hibernate Validator |
+| `aspect` | 切面实现 | Spring AOP |
+| `security` | 安全认证 | Spring Security |
+| `annotation` | 自定义注解 | 元注解 |
+| `handler` | 处理器 | 自定义处理逻辑 |
+| `worker` | 后台任务/消费者 | 消息队列消费 |
+| `task` | 定时任务 | Scheduled |
+| `event` | 事件驱动 | Spring Event |
+| `listener` | 事件监听 | Spring Event |
+| `cache` | 缓存管理 | Redis / Caffeine |
+| `mq` | 消息队列 | RocketMQ / Kafka |
+| `client` | 外部服务调用 | Feign / OkHttp |
+| `vo` / `request` | 请求参数对象 | API 参数 |
+| `response` | 响应对象 | API 返回值 |
+
+---
+
+## 4. 交互确认流程
+
+### ⚠️ Folder-Confirmation-Required
+
+在分析过程中，如果遇到以下情况，**必须**咨询用户：
+
+1. **无法识别的文件夹**：文件夹名称不在常见模式中
+2. **命名模糊的文件夹**：如 `core`、`base`、`framework` 等
+3. **业务相关文件夹**：如 `game`、`risk`、`audit` 等业务特定目录
+4. **自定义结构**：非标准 Maven/Gradle 结构
+
+### 确认话术模板
+
+```
+⚠️ 需要确认文件夹作用
+
+在模块 **[模块名]** 中发现文件夹 `[文件夹名]`
+
+**初步判断**: [可能的用途]
+
+**需要您确认**：
+1. 这个文件夹的真正作用是什么？
+2. 里面主要存放什么类型的文件？
+3. 是否与其他模块共享？
+
+**请回复**，我会根据您的回答更新文档。
+```
+
+### 确认后才继续
+
+**规则**：必须等到用户确认（或 99% 确定）后才能：
+- 将该文件夹写入最终文档
+- 继续后续的代码扫描
+
+---
+
+## 5. 输出文档结构
+
+### 目标目录结构
+
+```
+docs/knowledge-base/
+├── 1-tech-stack/
+│   └── dependencies.md           # 技术栈与依赖清单
+├── 2-architecture/
+│   ├── project-structure.md     # 完整目录树结构
+│   ├── folder-structure.md     # 文件夹作用说明
+│   └── modules.md              # 模块依赖关系图
+├── 4-utils/
+│   ├── entity-index.md         # 实体类数据结构
+│   ├── service-index.md        # Service 层索引
+│   └── utils-index.md          # 工具类索引
+└── 5-api/
+    └── api-modules.md          # RESTful 接口文档（推荐 Markdown 格式）
+```
+
+### 文档输出顺序
+
+1. **dependencies.md** - 技术栈与依赖
+2. **project-structure.md** - 完整目录树
+3. **folder-structure.md** - 文件夹作用（含交互确认过程）
+4. **modules.md** - 模块依赖关系
+5. **entity-index.md** - 实体类详情
+6. **utils-index.md** - 工具类索引
+7. **api-modules.md** - API 接口文档（Markdown 表格格式，更易读）
+
+---
+
+## 6. 执行示例
+
+### 输入
+
+```
+/springboot-multi-module-kb init
+```
+
+### 检测结果
+
+```
+✅ 检测到 SpringBoot Maven 多模块项目
+
+📦 模块列表：
+- 风控平台 (父模块)
+- 风控平台-common (公共基础)
+- 风控平台-web (Web层/API)
+- 风控平台-app (应用层/业务逻辑)
+- 风控平台-data-assemble (数据组装)
+- 风控平台-infra (基础设施)
+- 风控平台-rule-engine (规则引擎)
+- 风控平台-service-thrift (Thrift服务)
+
+🛠️ 技术栈：
+- Java: 8
+- SpringBoot: 2.6.13
+- 构建工具: Maven
+
+📋 正在分析目录结构...
+⚠️ 需要确认以下文件夹作用：
+- 风控平台-app/worker/ 用途？
+- 风控平台-data-assemble/metadata/ 用途？
+```
+
+### 输出文档
+
+生成以下文档：
+- `docs/knowledge-base/1-tech-stack/dependencies.md`
+- `docs/knowledge-base/2-architecture/project-structure.md`
+- `docs/knowledge-base/2-architecture/folder-structure.md`
+- `docs/knowledge-base/2-architecture/modules.md`
+- `docs/knowledge-base/4-utils/entity-index.md`
+- `docs/knowledge-base/4-utils/utils-index.md`
+- `docs/knowledge-base/5-api/api-modules.md`
+
+---
+
+## 7. 常见问题
+
+### Q1: 如何判断模块职责？
+
+**A**: 根据模块名和源码内容综合判断：
+- 包含 `controller`/`web` → Web/API 层
+- 包含 `service`/`app` → 业务逻辑层
+- 包含 `dao`/`repository`/`mapper` → 数据访问层
+- 包含 `common`/`util` → 公共基础层
+- 包含 `infra`/`infrastructure` → 基础设施层
+- 包含 `api`/`thrift`/`grpc` → 接口服务层
+
+### Q2: 实体类太多怎么办？
+
+**A**:
+1. 优先扫描**管理后台**相关模块的实体类
+2. 核心业务实体优先于边缘实体
+3. 可以分批扫描，每次扫描一个模块
+
+### Q3: API 接口如何分类？
+
+**A**:
+1. 按业务模块分类（如用户、订单、规则）
+2. 按 Controller 类名归类
+3. 使用 Swagger/OpenAPI 注解辅助判断
+
+### Q4: API 文档与实际代码不符怎么办？
+
+**🔴 这个问题非常严重，必须重视**
+
+**问题表现**：
+- 文档中的接口在代码中不存在
+- 路径、方法、参数与实际代码不一致
+- 基于 RESTful 规范假设接口，但实际代码未实现
+
+**根本原因**：
+- 使用了 Swagger/OpenAPI 扫描但未验证
+- 基于 RESTful 约定俗成进行推测
+- 未直接读取 Controller 源码
+
+**✅ 正确做法**（必须遵守）：
+
+1. **直接扫描源码**：使用 `glob("**/controller/*.java")` 找到所有 Controller
+2. **读取每个 Controller 文件**：提取 `@RequestMapping`, `@GetMapping`, `@PostMapping` 等注解
+3. **提取完整路径**：基础路径 + 方法路径，如 `api/v1/rule` + `/saveRule` = `api/v1/rule/saveRule`
+4. **提取参数信息**：`@RequestParam("id") Long id` → 参数名 `id`，类型 `Long`
+5. **禁止假设**：绝对不能因为 RESTful 规范就假设某个接口存在
+
+**验证示例**：
+
+```java
+// ❌ 错误：假设存在 deleteRule 接口
+// GET /api/rule → 文档写 "获取规则列表"
+// POST /api/rule → 文档写 "创建规则"  
+// DELETE /api/rule/{id} → 文档写 "删除规则"
+
+// ✅ 正确：读取实际代码
+// @RestController
+// @RequestMapping("api/v1/rule")
+// public class RuleController {
+//     @PutMapping("/updateRuleStatus")  // 实际是 PUT，不是 DELETE
+//     @PostMapping("/saveRule")        // 实际路径是 /saveRule
+//     @GetMapping("/list")             // 实际是 /list
+//     @GetMapping("/getRuleById")      // 实际是 getRuleById，不是 /{id}
+//     // ❌ 没有 deleteRule 接口！
+// }
+```
+
+**教训**：宁可少写接口，也不能写错接口。
+
+---
+
+## 8. 相关 Skill
+
+| Skill | 功能 | 命令 |
+|-------|------|------|
+| **project-rules-scaffold** | 规则脚手架，一键生成 `.cursorrules` | `/project-rules-scaffold init` |
+| **dev-standard** | 开发约束规范 | `/dev-standard` |
+
+---
+
+## 9. 技术栈要求
+
+| 要求 | 说明 |
+|------|------|
+| Java 版本 | 8 / 11 / 17 / 21 |
+| 构建工具 | Maven |
+| 框架 | SpringBoot 1.x / 2.x / 3.x |
+| 数据库访问 | JPA / MyBatis / MyBatis-Plus |
+| API 风格 | RESTful |</code></pre></li></ol><p>项目越大，生成的知识库幻觉问题就越严重，在风控平台后端项目的知识库构建中，就出现如下的这种问题，那么这时就需要<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>人为介入，去微调知识库</strong></mark><strong>。</strong></p><h1 id="sec-37">前后端联动 AI-coding</h1><p>上边的探索中，覆盖了「纯前端」、「纯后端」需求。<strong>但「</strong><strong>前后端联动需求</strong><strong>」一站式开发</strong>，仍需要探索，因为<strong>这涉及到两个项目之间的信息交互、进度同步</strong>。</p><p>在VKF中，是将整个项目的知识库作为一个独立的Git项目，每次在进行前后端需求开发时，都会实时读取这个项目，再做联动开发。在需求开发完成项目结构变更后，都会去更新这个知识库项目。</p><p><mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><strong>但对于我们来说，有点重。。。。。。</strong></mark></p><p>思路：有没有一种轻量化的方式，能达到这种前后端联动AI-coding的效果。</p><p>如：在本地将前后端项目放在一个根目录下，保证属于同级，在前后端项目的Rules中分别写明前后端项目的知识库路径，引导AI联动Coding。。。。。。。（比较粗暴，但好像也是一种解决方法）。</p><h2 id="sec-38"></h2><h1 id="sec-39">优质开源Skills推荐  </h1><blockquote><p>Skill大全：https://skills.sh/。</p></blockquote><ul><li><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>find-skills（元skill）</strong></mark>：https://skills.sh/vercel-labs/skills/find-skills。可以帮你找到最符合你需求的开源Skills。</li></ul><h1 id="sec-40">SubAgent  &amp;  Category</h1><blockquote><p>首先阅读：https://github.com/code-yeongyu/oh-my-opencode/blob/dev/docs/guide/overview.md。</p><p>/agent(tab切换) 和 @XXX 均能切换subAgent，底层含义一致，只是提供了不同的使用方式，简单说：</p><ul><li>/agent(tab切换) ：换个专家来聊（持久、会话级）</li></ul><ul><li>@ XXX ： 叫专家来帮忙（临时、任务级）</li></ul></blockquote><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"><p><code>/agents</code> <strong>4个核心 Agent，是系统的“大脑”/“骨架”</strong>，负责整个任务流的调度与深度执行。</p><ol><li><strong>Sisyphus (Ultraworker)</strong>：<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>主要统筹者</strong></mark>。负责任务规划、子 Agent 调度和并行执行，并以高效的并行执行力推动任务完成。他从不半途而废，也从不分心，他一定会完成任务。</li></ol><ol><li><strong>Hephaestus (Deep Agent)</strong>：<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>复杂架构推理者</strong></mark>，使用GPT-5.3 Codex 的推理风格来进行深入的架构工作或复杂的调试，</li></ol><ol><li><p>按Tab 键进入 Prometheus 模式，或<code>@plan "your task"</code>从 Sisyphus 模式输入。</p></li></ol><ol><li><p>立即<strong><code>/start-work</code></strong> Atlas就会开始在你最近一次plan中执行。</p></li></ol></div><div class="fs-col"><p><code>@</code><strong>专业子 Agent</strong>，通常被核心Agent调用，也可 <code>@</code> 手动触发，用于执行特定领域的任务。</p><ol><li><strong>@general / @explore(快速代码库搜索器)</strong>：探索和理解代码库，进行信息收集。</li></ol><ol><li><strong>@Prometheus / @Sisyphus-Junior</strong>：规划和轻量编排。</li></ol><ol><li><strong>@oracle(架构/调试器)</strong>：一位高智商的只读顾问，擅长架构决策和复杂调试。遇到不熟悉的模式、安全问题或多系统权衡时，请咨询 Oracle。</li></ol><ol><li><strong>@librarian(图书管理员)</strong>：文档管理、知识库检索。</li></ol><ol><li><strong>@multimodal-looker</strong>：多模态（图片 / 视频）分析。</li></ol><ol><li><strong>@Metis (Plan Consultant)</strong>：<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>查漏补缺</strong></mark>，在计划最终定稿之前，找出遗漏之处，优化 Prometheus 的计划。</li></ol><ol><li>100% 文件引用已验证</li><li>≥80% 的任务有明确的参考资料来源</li><li>≥90% 的任务有明确的验收标准</li><li>零任务需要对业务逻辑做出假设</li><li>零重大危险信号</li></ol><p><strong>如果被拒绝，Prometheus 会修复问题并重新提交。</strong><span style="color:#d83931"><strong>没有重试次数上限</strong></span><strong>。</strong></p></div></div><h2 id="sec-41">Category</h2><p>当Sisyphus将任务委托给subAgent时，<strong>它不会直接选择模型，而是选择一个Category</strong>。<strong>该类别会自动映射到正确的模型，如：</strong></p><div class="fs-embed">📊 表格：请在飞书原文中查看</div><h2 id="sec-42">SubAgent、Category模型配置</h2><blockquote><p>不同的智能体最适合不同的模型。Oh My OpenCode 会自动分配最优模型，但您也可以自定义所有设置。</p><p><span style="color:#d83931"><strong>优先推荐官网搭配</strong></span>：https://github.com/code-yeongyu/oh-my-opencode/blob/dev/docs/reference/features.md</p><p>Claude/Kimi/GLM 用于流程编排。GPT 用于推理。Minimax 用于速度。Gemini 用于创新。</p></blockquote><p>注意一点，<strong>subAgent这里填model时，</strong><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>需要跟opencode.json里边的model name一致</strong></mark>。</p><pre><code>{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+  "agents": {
+    "sisyphus": {
+      "model": "ppio/pa/claude-opus-4-6"
+    },
+    "hephaestus": {
+      "model": "azure_openai/gpt-5.2-codex-9"
+    },
+    "oracle": {
+      "model": "ppio/grok-4"
+    },
+    "librarian": {
+      "model": "zhipuai/glm-4.7"
+    },
+    "explore": {
+      "model": "volcengine_maas/kimi-k2-250711"
+    },
+    "multimodal-looker": {
+      "model": "gemini-3-pro-preview-pt"
+    },
+    "prometheus": {
+      "model": "ppio/pa/claude-opus-4-6"
+    },
+    "metis": {
+      "model": "ppio/pa/claude-sonnet-4-5-20250929"
+    },
+    "momus": {
+      "model": "ppio/grok-4"
+    },
+    "atlas": {
+      "model": "volcengine_maas/kimi-k2-250711"
+    }
+  },
+  "categories": {
+    "visual-engineering": {
+      "model": "gemini-3-pro-preview-pt"
+    },
+    "ultrabrain": {
+      "model": "ppio/grok-4"
+    },
+    "deep": {
+      "model": "azure_openai/gpt-5.2-codex-9"
+    },
+    "artistry": {
+      "model": "gemini-3-pro-preview-pt"
+    },
+    "quick": {
+      "model": "volcengine_maas/kimi-k2-250711"
+    },
+    "unspecified-low": {
+      "model": "volcengine_maas/kimi-k2-250711"
+    },
+    "unspecified-high": {
+      "model": "ppio/pa/claude-sonnet-4-5-20250929"
+    },
+    "writing": {
+      "model": "ppio/pa/claude-sonnet-4-5-20250929"
+    }
+  }
+}</code></pre><p>这张提示的核心原因是：<strong>Hephaestus 这个 Agent 是专门为 GPT 系列模型深度定制的，和 Claude/Kimi/GLM 等模型的工作方式不兼容</strong>，所以会<strong>被官方明确禁止混用</strong>。</p><p><strong>为什么推荐用 Sisyphus？</strong></p><ul><li><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>Sisyphus 是为非 GPT 模型设计的</strong></mark>：它的提示词、任务编排和工具链，是专门针对 Claude/Kimi/GLM 等模型优化的，能充分发挥这些模型的长文本、并行思考和代码能力。</li></ul><ul><li><strong>默认编排器</strong>：Sisyphus 是 Oh My OpenCode 的默认主 Agent，负责任务规划、子 Agent 调度和并行执行，是处理复杂工程任务的首选。</li></ul><h1 id="sec-43">OpenCode 模型配置</h1><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>找不到配置文件在哪儿？-&gt; <mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong><code>cd ~/.config/</code></strong></mark></p></div></div><p>opencode中有免费模型，也可以<strong>引入mify的模型使用</strong>：<span class="fs-mention">@OpenCode CLI 使用指南（打通 Mify 模型）</span></p><pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "oh-my-opencode@latest"
+  ],
+  "provider": {
+    "Mify-Zhipu": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Mify-Zhipu",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "XXXX"
+      },
+      "models": {
+        "zhipuai/glm-4.7": {
+          "name": "zhipuai/glm-4.7"
+        },
+        "zhipuai/glm-5":{
+          "name": "zhipuai/glm-5"
+        }
+      }
+    },
+     "Mify-Claude": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Mify-Claude",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "XXX"
+      },
+      "models": {
+        "pa/claude-haiku-4-5-20251001": {
+          "name": "pa/claude-haiku-4-5-20251001",
+          "headers": {
+            "X-Model-Provider-Id": "ppio"
+          },
+        },
+        "pa/claude-opus-4-6":{
+          "name": "pa/claude-opus-4-6",
+          "headers": {
+            "X-Model-Provider-Id": "ppio"
+          },
+        },
+        "pa/claude-sonnet-4-5-20250929":{
+          "name": "pa/claude-sonnet-4-5-20250929",
+          "headers": {
+            "X-Model-Provider-Id": "ppio"
+          },
+        },
+        "pa/claude-sonnet-4-6":{
+          "name": "pa/claude-sonnet-4-6",
+          "headers": {
+            "X-Model-Provider-Id": "ppio"
+          }
+        }
+      }
+    },
+    "Mify-OpenAI": {
+      "npm": "@ai-sdk/openai",
+      "name": "Mify-OpenAI",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "XXXX"
+      },
+      "models": {
+        "azure_openai/gpt-5.1-codex": {
+          "name": "azure_openai/gpt-5.1-codex"
+        },
+        "azure_openai/gpt-4o-mini": {
+          "name": "azure_openai/gpt-4o-mini"
+        },
+        "azure_openai/gpt-5.2-codex-5": {
+          "name": "azure_openai/gpt-5.2-codex-5"
+        }
+      }
+    },
+    "Mify-Xiaomi": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Mify-Xiaomi",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "XXXX"
+      },
+      "models": {
+        "xiaomi/mimo-v2-flash": {
+          "name": "xiaomi/mimo-v2-flash"
+        }
+      }
+    },
+    "Mify-Kimi": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Mify-Kimi",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "XXXX"
+      },
+      "models": {
+        "volcengine_maas/kimi-k2-250711": {
+          "name": "volcengine_maas/kimi-k2-250711"
+        },
+        "Pro/moonshotai/Kimi-K2.5": {
+          "name": "Kimi-K2.5",
+          "headers": {
+            "X-Model-Provider-Id": "siliconflow"
+          },
+          "limit": {
+            "context": 260000,
+            "output": 128000
+          },
+          "variants": {
+            "thinking": {
+              "enable_thinking": false
+            }
+          }
+        }
+      }
+    },
+    "Mify-Google": {
+      "npm": "@ai-sdk/google",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "XXXX"
+      },
+      "models": {
+        "gemini-3-pro-preview-pt": {
+          "name": "gemini-3-pro",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gemini-3-flash-preview": {
+          "name": "gemini-3-flash",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        },
+        "gemini-2.5-pro": {
+          "name": "gemini-2.5-pro",
+          "limit": {
+            "context": 1000000,
+            "output": 128000
+          }
+        }
+      }
+    },
+    "minimax": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "minimax",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "XXXX"
+      },
+      "models": {
+        "MiniMax-M2.1": {
+          "name": "MiniMax-M2.1"
+        },
+        "MiniMax-M2.5":{
+          "name": "MiniMax-M2.5"
+        }
+      }
+    }
+  }
+}</code></pre><h1 id="sec-44">Oh-my-opencode</h1><p>安装 <code>oh-my-opencode</code> 后，默认可能会替换原生的 <code>plan</code> 和 <code>builder</code> Agent</p><p>如果你希望保留这两个原生 Agent（例如用于执行轻量级任务以节省 Token），可以通过修改配置文件来实现。</p><p>在 <code>~/.config/opencode/oh-my-opencode.json</code> 文件的第一层级中添加以下配置：</p><pre><code>{
+  "sisyphus_agent": {
+    "default_builder_enabled": true,
+    "replace_plan": false
+  }
+}</code></pre><p>参考：<a href="https://www.opencodecn.com/docs/best-practices/oh-my-opencode-keep-native-agents" target="_blank" rel="noopener">https://www.opencodecn.com/docs/best-practices/oh-my-opencode-keep-native-agents</a>。</p><h1 id="sec-45">踩坑日记 ⭐️</h1><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>这部分抽成了一个新文档</strong></span></mark>：<span class="fs-mention">@OpenCode WSL踩坑实践总结</span>。</p><blockquote><p>有问题优先看此文档，此处不再做更新。</p></blockquote></div></div><p>首先推荐官方文档，可飞阅查找：<span class="fs-mention">@AI-Coding学习笔记</span></p><blockquote><p><code>WSL -&gt; ubuntu-22.04 -&gt; OpenCode -&gt; oh-my-opencode -&gt; OpenSpec</code></p><ul><li><strong>一般安装过程不做记录</strong>，推荐和豆包结伴安装，<strong>这里仅记录一些豆包解决不了的问题</strong>。</li></ul></blockquote><h2 id="sec-46">Q1：ide terminal 鼠标滚轮无法翻动聊天记录</h2><blockquote><p>同Q2解决方法。</p></blockquote><h2 id="sec-47">Q2：OpenCode聊天无法复制粘贴(Git Bash终端)</h2><p><strong>问题表现</strong>：鼠标选中文本后，弹窗显示复制成功，但实际并未成功。此外，在opencode中纯粹的粘贴也并不成功。</p><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div><p><strong>解决方法：</strong><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>直接使用 win自带的powershell</strong></span></mark></p><blockquote><p>奇奇怪怪的bug，一修就是一下午，最后还没弄好。没招只能返璞归真了</p><p>（<strong>ide terminal -&gt; git bash -&gt; win powershell</strong>）。<strong>有条件的直接上Mac。</strong></p></blockquote><h2 id="sec-48">Q3：Unable to connect，无法连通mify模型url。</h2><blockquote><p>自测：测试wsl网络是否连通内网，ping一下试试：<code>ping model.mify.ai.srv</code></p></blockquote><p><strong>解决方法</strong>：</p><ol><li><pre><code>nano /etc/resolv.conf
+
+粘贴下边的配置：
+nameserver [内网IP]
+search [内部链接]
+nameserver 8.8.8.8
+nameserver 1.1.1.1</code></pre></li><li><pre><code>sudo chattr -i /etc/resolv.conf  -- 解除文件的「不可修改」锁定
+sudo chmod 644 /etc/resolv.conf
+sudo nano /etc/resolv.conf </code></pre></li></ol><ol><li><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div></li></ol><h2 id="sec-49">Q4：OpenCode终端弹出乱码，但模型任务还在执行</h2><p><strong>问题如图</strong>：</p><p><strong>解决方法</strong>：</p><ol><li>具体原因未知，应该是终端问题，<u><strong>把终端放大缩小一下</strong></u>就好了。</li></ol><ol><li>先通过powershell更新bun，指令为powershell -c 'irm bun.sh/install.ps1|iex'。</li><li>再清除缓存node_modules和bun.lock文件，重新运行OpenCode 更新OMO到最新的3.9.0版本即可。</li></ol><h2 id="sec-50">Q5：WSL DNS解析崩溃，ping不通任何域名</h2><p><strong>问题如下</strong>：</p><p>opencode启动时报错：</p><p><code>ERROR 2026-02-28T02:18:41 +207ms service=models.dev error=Unable to connect. Is the computer able to access the url? Failed to fetch models.dev ERROR 2026-02-28T02:18:42 +123ms service=models.dev error=Was there a typo in the url or port? Failed to fetch models.dev </code></p><p><strong>解决方法</strong>： <strong>把阿里 + 腾讯的公共 DNS 地址，写入新的 /etc/resolv.conf 文件里</strong>。</p><pre><code>sudo rm /etc/resolv.conf echo -e "nameserver 223.5.5.5\nnameserver 119.29.29.29" | sudo tee /etc/resolv.conf</code></pre><h2 id="sec-51">Q6：opencode无法多开，只能开一个窗口：</h2><p><strong>原因以及解决方案：</strong></p></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

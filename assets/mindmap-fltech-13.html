@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>SpringBoot、Spring常见面试题 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>SpringBoot、Spring常见面试题</b><small>幕布导图 · 89 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "SpringBoot、Spring常见面试题", "data": {"id": "root", "topic": "<b>SpringBoot、Spring常见面试题<\/b><span class=\"mm-note\">Spring 是一款开源的轻量级 Java 开发框架，旨在提高开发人员的开发效率以及系统的可维护性。 Spring 框架指的都是 Spring Framework，它是<b>很多模块的集合<\/b><\/span>", "children": [{"id": "n1", "topic": "<b>2.Spring MVC、SpringBoot、Spring的区别<\/b>", "children": []}, {"id": "n2", "topic": "<b>1.Spring<\/b>", "children": [{"id": "n3", "topic": "<b>1.什么是Spring<\/b><span class=\"mm-note\">Spring 包含了多个功能模块（上面刚刚提到过），其中<b>最重要的是 Spring-Core（主要提供 IoC 依赖注入功能的支持） 模块<\/b>， Spring 中的其他模块（比如 Spring MVC）的功能实现基本都需要依赖于该模块。 <b>Spring MVC<\/b> 是 Spring 中的一个很重要的模块，主要赋予 Spring <b>快速构建 MVC 架构的 Web 程序的能力<\/b>。 MVC 是<b>模型(Model)、视图(View)、控制器(Controller)<\/b>的简写，其核心思想是通过将 业务逻辑、数据、显示 分离来组织代码。 <img class=\"mm-img\" src=\"fl-9b4c0e5c75cd6d.jpg\" style=\"width:320px;height:162px\" loading=\"lazy\" decoding=\"async\"> 使用 Spring 进行开发各种配置<\/span>", "children": []}, {"id": "n4", "topic": "<b>2.Spring IOC<\/b>", "children": [{"id": "n5", "topic": "<b>1.谈谈对IOC的理解？<\/b><span class=\"mm-note\"><b>IoC（Inversion of Control:控制反转）<\/b> 是一种<b>设计思想<\/b>，而不是一个具体的技术实现。 IoC 的思想就是<b>将原本在程序中手动创建对象的控制权<\/b>，<b>交由 Spring 框架来管理<\/b>。不过， IoC 并非 Spring 特有，在其他语言中也有应用。 <b>为什么叫控制反转？<\/b><\/span>", "children": [{"id": "n6", "topic": "<b>控制<\/b>：指的是对象创建（实例化、管理）的权力", "children": []}, {"id": "n7", "topic": "<b>反转<\/b>：控制权交给外部环境（Spring 框架、<b>IoC 容器<\/b>）<span class=\"mm-note\">将对象之间的相互依赖关系交给 IoC 容器来管理，并由 IoC 容器完成对象的注入。这样可以很大程度上简化应用的开发，把应用从复杂的依赖关系中解放出来。 IoC 容器就像是一个工厂一样，当我们需要创建一个对象的时候，只需要配置好配置文件/注解即可，完全不用考虑对象是如何被创建出来的。 在实际项目中一个 Service 类可能依赖了很多其他的类，假如我们需要实例化这个 Service，你可能要每次都要搞清这个 Service 所有底层类的构造函数，这可能会把人逼疯。如果利用 IoC 的话，你只需要配置好，然后在需要的地方引用就行了，这大大增加了项目的可维护性且降低了开发难度。 在 Spring 中， IoC 容器是 Spring 用来<\/span>", "children": []}]}, {"id": "n8", "topic": "<b>2.什么是SpringBean？<\/b><span class=\"mm-note\">Bean 代指的就是那些<b>被 IoC 容器所管理的对象<\/b>。 我们需要告诉 IoC 容器帮助我们管理哪些对象，这个是<b>通过配置元数据来定义的<\/b>。配置元数据可以是 <b>XML 文件<\/b>、<b>注解<\/b>或者 <b>Java 配置类<\/b>。<\/span>", "children": []}, {"id": "n9", "topic": "<b>3.将一个类注入为Bean的注解有哪些？<\/b><span class=\"mm-note\"><code>@Component<\/code>：通用的注解，可<b>标注任意类为 <code>Spring<\/code> 组件<\/b>。如果一个 Bean 不知道属于哪个层，可以使用<code>@Component<\/code> 注解标注。 <code>@Repository<\/code> : 对应<b>持久层即 Dao 层<\/b>，主要用于数据库相关操作。 <code>@Service<\/code> : 对应<b>服务层<\/b>，主要涉及一些复杂的逻辑，需要用到 Dao 层。 <b><code>@Controller<\/code><\/b> : 对应 Spring MVC <b>控制层<\/b>，主要用于接受用户请求并调用service层返回数据给前端页面。<\/span>", "children": []}, {"id": "n10", "topic": "<b>4.@Compoent和@Bean的区别<\/b><span class=\"mm-note\"><code>@Bean<\/code>注解的作用：告诉Spring容器，需要<b>将被注解的方法返回的对象注册为一个Bean<\/b>，Spring容器将负责实例化、配置和管理这个Bean。<\/span>", "children": [{"id": "n11", "topic": "<code>@Component<\/code> 注解作用于类，而<b><code>@Bean<\/code>注解作用于方法<\/b>。", "children": []}, {"id": "n12", "topic": "<code>@Component<\/code>通常是通过类路径扫描来自动侦测以及自动装配到 Spring 容器中（我们可以使用 <code>@ComponentScan<\/code> 注解定义要扫描的路径从中找出标识了需要装配的类自动装配到 Spring 的 bean 容器中）。<span class=\"mm-note\"><code>@Bean<\/code> 注解通常是<b>我们在标有该注解的方法中定义产生这个 bean<\/b>,<b><code>@Bean<\/code>告诉了 Spring 这是某个类的实例，当我需要用它的时候还给我。<\/b><\/span>", "children": []}, {"id": "n13", "topic": "<b><code>@Bean<\/code> 注解比 <code>@Component<\/code> 注解的自定义性更强<\/b>，而且很多地方我们只能通过 <code>@Bean<\/code> 注解来注册 bean。比如当我们<b>引用第三方库中的类需要装配到 <code>Spring<\/code>容器时，则只能通过 <code>@Bean<\/code>来实现。<\/b>", "children": []}]}, {"id": "n14", "topic": "<b>5.注入Bean的注解有哪些？<\/b><span class=\"mm-note\"><b>@AutoWired、@Resource、@Inject<\/b> <img class=\"mm-img\" src=\"fl-4f25123783657c.jpg\" style=\"width:320px;height:93px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": [{"id": "n15", "topic": "<b>@Autowired：先byType、再byName<\/b><span class=\"mm-note\">默认的注入方式为<code>byType<\/code>（根据类型进行匹配），也就是说会优先根据接口类型去匹配并注入 Bean （接口的实现类）。 <b>这会有什么问题呢？<\/b> 当<b>一个接口存在多个实现类<\/b>的话，<code>byType<\/code>这种方式就无法正确注入对象了，因为这个时候 Spring 会同时找到多个满足条件的选择，默认情况下它自己不知道选择哪一个。 这种情况下，注入方式会变为 <code>byName<\/code>（根据名称进行匹配），这个<b>名称通常就是类名<\/b>（首字母小写）。就比如说下面代码中的 <code>smsService<\/code> 就是我这里所说的名称，这样应该比较好理解了吧。 在byName时，需要<b>@Qualifier<\/b>注解<b>指明注入的具体类<\/b>。<\/span>", "children": []}, {"id": "n16", "topic": "<b>@Resource：先byName、再byType<\/b><span class=\"mm-note\">如果仅指定 <code>name<\/code> 属性则注入方式为<code>byName<\/code>，如果仅指定<code>type<\/code>属性则注入方式为<code>byType<\/code>，如果同时指定<code>name<\/code> 和<code>type<\/code>属性（不建议这么做）则注入方式为<code>byType<\/code>+<code>byName<\/code>。<\/span>", "children": []}, {"id": "n17", "topic": "<b>两者的对比<\/b>：", "children": [{"id": "n18", "topic": "<code>@Autowired<\/code> 是 Spring 提供的注解，<code>@Resource<\/code> 是 JDK 提供的注解。", "children": []}, {"id": "n19", "topic": "<code>Autowired<\/code> 默认的注入方式为<code>byType<\/code>（根据类型进行匹配），<code>@Resource<\/code>默认注入方式为 <code>byName<\/code>（根据名称进行匹配）。", "children": []}, {"id": "n20", "topic": "当<b>一个接口存在多个实现类的情况<\/b>下，<code>@Autowired<\/code> 和<code>@Resource<\/code><b>都需要通过名称才能正确匹配到对应的 Bean<\/b>。<span class=\"mm-note\"><code>Autowired<\/code> 可以通过 <code>@Qualifier<\/code> 注解来显式指定名称，<code>@Resource<\/code>可以通过 <code>name<\/code> 属性来显式指定名称。<\/span>", "children": []}, {"id": "n21", "topic": "<code>@Autowired<\/code> 支持在构造函数、方法、字段和参数上使用。<code>@Resource<\/code> 主要用于字段和方法上的注入，不支持在构造函数或参数上使用", "children": []}]}]}, {"id": "n22", "topic": "<b>6.Bean的作用域<\/b>", "children": [{"id": "n23", "topic": "<b>singleton<\/b> : IoC 容器中<b>只有唯一的 bean 实例<\/b>。<span class=\"mm-note\">Spring 中的 bean 默认都是单例的，是<b>对单例设计模式的应用<\/b>。 几乎所有场景的 Bean 作用域都是使用默认的 singleton<\/span>", "children": []}, {"id": "n24", "topic": "<b>prototype<\/b> : <b>每次获取都会创建一个新的 bean<\/b> 实例。<span class=\"mm-note\">也就是说，连续 <code>getBean()<\/code> 两次，得到的是不同的 Bean 实例。<\/span>", "children": []}, {"id": "n25", "topic": "<b>request<\/b> （仅 Web 应用可用）: <b>每一次 HTTP 请求都会产生一个新的 bean<\/b>（请求 bean）。<span class=\"mm-note\">该 bean 仅在当前 HTTP request 内有效。<\/span>", "children": []}, {"id": "n26", "topic": "<b>session<\/b> （仅 Web 应用可用） : <b>每一次来自新 session 的 HTTP 请求都会产生一个新的 bean<\/b>（会话 bean）。<span class=\"mm-note\">该 bean 仅在当前 HTTP session 内有效。<\/span>", "children": []}, {"id": "n27", "topic": "<b>application/global-session<\/b> （仅 Web 应用可用）：<b>每个 Web 应用在启动时创建一个 Bean<\/b>（应用 Bean），该 bean 仅在当前应用启动时间内有效。", "children": []}, {"id": "n28", "topic": "<b>websocket<\/b> （仅 Web 应用可用）：<b>每一次 WebSocket 会话产生一个新的 bean<\/b>。<span class=\"mm-note\">💡 <b>Q1：如何配置Bean的作用域？<\/b><\/span>", "children": [{"id": "n29", "topic": "<b>xml 方式<\/b>：<b>scope参数<\/b>", "children": []}, {"id": "n30", "topic": "<b>注解方式：@Scope<\/b>", "children": []}]}]}, {"id": "n31", "topic": "<b>7.@Bean线程安全吗？<\/b><span class=\"mm-note\">Spring 框架中的 Bean 是否线程安全，<b>取决于其作用域和状态<\/b>。<\/span>", "children": [{"id": "n32", "topic": "<b>prototype<\/b> 作用域：<b>安全<\/b>。<span class=\"mm-note\"><b>每次获取都会创建一个新的 bean 实例<\/b>，不存在资源竞争问题，所以不存在线程安全问题。<\/span>", "children": []}, {"id": "n33", "topic": "<b>singleton<\/b> 作用域下：<b>有状态不安全、无状态安全<\/b><span class=\"mm-note\">IoC 容器中只有唯一的 bean 实例，可能会存在资源竞争问题（取决于 Bean 是否有状态）。 如果这个 bean 是有状态的话，那就存在线程安全问题（<b>有状态的 Bean 是指包含可变的成员变量 的对象<\/b>）。 不过，大部分 Bean 实际都是无状态（没有定义可变的成员变量）的（比如 Dao、Service），这种情况下， Bean 是线程安全的。 💡 Q1：<b>对于有状态单例 Bean 的线程安全问题，常见的有两种解决办法<\/b>：<\/span>", "children": [{"id": "n34", "topic": "在 <b>Bean 中尽量避免定义可变的成员变量<\/b>。", "children": []}, {"id": "n35", "topic": "在类中定义一个 <b><code>ThreadLocal<\/code> 成员变量<\/b>，将需要的可变成员变量保存在 <code>ThreadLocal<\/code> 中（推荐的一种方式）", "children": []}]}]}, {"id": "n36", "topic": "<b>8.Bean的生命周期<\/b><span class=\"mm-note\">简单分为四步：<b>实例化 —&gt; 属性赋值 —&gt; 初始化 —&gt; 销毁<\/b>。<\/span>", "children": [{"id": "n37", "topic": "<b>创建Bean实例<\/b><span class=\"mm-note\">Bean 容器首先会找到<b>配置文件中的 Bean 定义<\/b>，然后使用 J<b>ava 反射 API<\/b> 来创建 Bean 的实例。<\/span>", "children": []}, {"id": "n38", "topic": "<b>Bean属性赋值<\/b><span class=\"mm-note\">为 Bean <b>设置相关属性和依赖<\/b>，例如<code>@Autowired<\/code> 等注解注入的对象、<code>@Value<\/code> 注入的值、<code>setter<\/code>方法或构造函数注入依赖和值、<code>@Resource<\/code>注入的各种资源。<\/span>", "children": []}, {"id": "n39", "topic": "<b>Bean初始化<\/b>", "children": []}, {"id": "n40", "topic": "<b>销毁Bean<\/b>", "children": []}]}, {"id": "n41", "topic": "<b>9.IOC的好处<\/b>", "children": [{"id": "n42", "topic": "<b>对象之间的耦合度<\/b>或者说依赖程度<b>降低<\/b>；", "children": []}, {"id": "n43", "topic": "<b>资源变的容易管理<\/b>；比如你用 Spring 容器提供的话很容易就可以实现一个单例。", "children": []}]}, {"id": "n44", "topic": "<b>10.Sprinf IOC如何解决循环依赖？<\/b><span class=\"mm-note\">💡 <b>Q1：什么是循环依赖？<\/b> 循环依赖通常指的是<b>两个或多个对象之间相互依赖<\/b>，形成了一个闭环，<b>导致无法完成初始化或者初始化导致错误的情况。<\/b> Spring IOC（Inversion of Control，控制反转）容器在<b>解决循环依赖问题时<\/b>采取了一种特殊的策略，称为&quot;<b>提前暴露<\/b>&quot;。这种策略使得容器在处理循环依赖时能够破坏循环依赖的环，确保 Bean 的依赖关系能够正确建立，从而<b>避免了死锁或无限递归<\/b>的问题。 具体步骤如下：<\/span>", "children": [{"id": "n45", "topic": "<b>首先，容器会创建第一个 Bean 的实例，但是不会完全初始化。<\/b>", "children": []}, {"id": "n46", "topic": "<b>接着，容器会将这个尚未完全初始化的 Bean 实例提前暴露给其他 Bean。<\/b>", "children": []}, {"id": "n47", "topic": "<b>然后，容器继续创建其他 Bean 的实例，并注入已经提前暴露的 Bean。<\/b><span class=\"mm-note\">也就是将引用注入。<\/span>", "children": []}, {"id": "n48", "topic": "<b>最后，容器回头来完成第一个 Bean 的初始化。<\/b><span class=\"mm-note\">通过这种方式，Spring IOC 容器<b>能够在循环依赖时保证所有 Bean 的依赖关系能够正确地建立和注入<\/b>，而不会因为循环依赖而陷入死锁或无限递归的情况。 💡 需要注意的是：Spring IOC 容器能够解决的循环依赖是指构造器注入或 setter 注入的循环依赖，即 <b>Bean A 依赖 Bean B，同时 Bean B 也依赖 Bean A<\/b>。 但是，如果是<b>方法之间的循环依赖（如 A 中的方法调用了 B，而 B 中的方法又调用了 A）<\/b>，<b>Spring IOC 容器是无法解决的<\/b>，这种情况会导致程序运行时的死锁或递归调用。 因此，在设计 Bean 之间的依赖关系时，需要特别注意避免方法之间的循环依赖。<\/span>", "children": []}]}]}, {"id": "n49", "topic": "<b>3.Spring AOP<\/b>", "children": [{"id": "n50", "topic": "<b>1.谈谈对AOP的理解<\/b><span class=\"mm-note\"><b>AOP(Aspect-Oriented Programming:面向切面编程<\/b>)。 <b>作用<\/b>：能够<b>将那些与业务无关<\/b>，<b>却为业务模块所共同调用的逻辑或责任<\/b>（例如事务处理、日志管理、权限控制等）<b>封装起来<\/b>，便于减少系统的重复代码，<b>降低模块间的耦合度<\/b>，并有利于未来的可拓展性和可维护性。 Spring AOP 就是<b>基于动态代理<\/b>的，如果要代理的对象，实现了某个接口，那么 Spring AOP 会使用 <b>JDK Proxy<\/b>，去创建代理对象<\/span>", "children": []}, {"id": "n51", "topic": "<b>2.为什么叫面向切面编程？<\/b><span class=\"mm-note\">AOP 之所以叫面向切面编程，是因为它的<b>核心思想<\/b>就是<b>将横切关注点从核心业务逻辑中分离出来<\/b>，形成一个个的<b>切面（Aspect）<\/b>。 AOP的关键术语：<\/span>", "children": [{"id": "n52", "topic": "<b>横切关注点（cross-cutting concerns）<\/b> ：<b>多个类或对象中的公共行为<\/b>（如日志记录、事务管理、权限控制、接口限流、接口幂等等）。", "children": []}, {"id": "n53", "topic": "<b>切面（Aspect）<\/b>：<b>对横切关注点进行封装的类<\/b>，<b>一个切面是一个类<\/b>。切面可以定义多个通知，用来实现具体的功能。", "children": []}, {"id": "n54", "topic": "<b>连接点（JoinPoint）<\/b>：连接点是方法调用或者<b>方法执行时的某个特定时刻<\/b>（如方法调用、异常抛出等）。", "children": []}, {"id": "n55", "topic": "<b>通知（Advice）<\/b>：通知就是<b>切面在某个连接点要执行的操作<\/b>。<span class=\"mm-note\">通知有五种类型，分别是前置通知（Before）、后置通知（After）、返回通知（AfterReturning）、异常通知（AfterThrowing）和环绕通知（Around）。前四种通知都是在目标方法的前后执行，而环绕通知可以控制目标方法的执行过程。<\/span>", "children": []}, {"id": "n56", "topic": "<b>切点（Pointcut）<\/b>：<b>一个切点是一个表达式。<\/b><span class=\"mm-note\">它用来<b>匹配哪些连接点需要被切面所增强<\/b>。 切点可以通过注解、正则表达式、逻辑运算等方式来定义。比如 <code>execution(* com.xyz.service..*(..))<\/code>匹配 <code>com.xyz.service<\/code> 包及其子包下的类或接口。<\/span>", "children": []}, {"id": "n57", "topic": "<b>织入（Weaving）<\/b>：织入是<b>将切面和目标对象连接起来的过程<\/b>，也就是将通知应用到切点匹配的连接点上。<span class=\"mm-note\">常见的织入时机有两种，分别是编译期织入（AspectJ）和运行期织入（AspectJ）<\/span>", "children": []}]}, {"id": "n58", "topic": "<b>3.AOP应用场景<\/b><span class=\"mm-note\"><b>日志记录<\/b>：自定义日志记录注解，利用 AOP，一行代码即可实现日志记录。 <b>性能统计<\/b>：利用 AOP 在目标方法的执行前后统计方法的执行时间，方便优化和分析。 <b>事务管理<\/b>：<code>@Transactional<\/code> 注解可以让 Spring 为我们进行事务管理比如回滚异常操作，免去了重复的事务管理逻辑。<code>@Transactional<\/code>注解就是基于 AOP 实现的。 <b>权限控制<\/b>：利用 AOP 在目标方法执行前判断用户是否具备所需要的权限，如果具备，就执行目标方法，否则就不执行。例如，SpringSecurity 利用<code>@PreAuthorize<\/code> 注解一行代码即可自定义权限校验。 <b>接口限流<\/b>：利用 AOP 在目标方法<\/span>", "children": []}, {"id": "n59", "topic": "<b>4.Spring AOP的实现方式<\/b><span class=\"mm-note\">AOP 的常见实现方式有<b>动态代理、字节码操作<\/b>两种方式。 <b>Spring AOP 就是基于动态代理的<\/b>。并且<b>动态代理有两种方式<\/b>：<b>JDK动态代理<\/b> 和 <b>Cflib动态代理。<\/b><\/span>", "children": [{"id": "n60", "topic": "<b>JDK动态代理<\/b>：<b>JDK内置的代理模式<\/b>，所以我们<b>不需要引入<\/b>任何依赖，可以直接使用。<span class=\"mm-note\">DK动态代理是JDK内置的一种动态代理模式，<b>使用反射来接受被代理的类<\/b>，但是<b>被代理的类必须实现一个接口。<\/b><\/span>", "children": []}, {"id": "n61", "topic": "<b>Cglib动态代理：<\/b>需要<b>引入外部依赖。<\/b><span class=\"mm-note\">Cglib是一个代码生成的类库，可以<b>在运行时动态生成某个类的子类<\/b>，所以如果需要被Cglib动态代理，那么就需要<b>被代理类不能被final修饰<\/b>。 💡 <b>Q1：AOP的一个实现逻辑：<\/b><\/span>", "children": [{"id": "n62", "topic": "在Spring AOP中，<b>如果一个类实现了接口，那么就使用JDK动态代理<\/b>的方式进行AOP实现。", "children": []}, {"id": "n63", "topic": "而如果<b>这个类没有实现接口<\/b>，且<b>不被final修饰<\/b>，则<b>使用Cglib动态代理<\/b>的方式进行AOP实现。", "children": []}, {"id": "n64", "topic": "如果一个类<b>既没有接口，同时又被final修饰<\/b>，那么这个类<b>不能进行AOP动态代理<\/b>。<span class=\"mm-note\">题外话： 💡 当然你也可以使用 <b>AspectJ<\/b> ！Spring AOP 已经集成了 AspectJ ，AspectJ 应该算的上是 Java 生态系统中最完整的 AOP 框架了。 <b>Spring AOP 属于运行时增强，而 AspectJ 是编译时增强。<\/b> Spring AOP 基于代理(Proxying)，而 AspectJ 基于字节码操作(Bytecode Manipulation)。 Spring AOP 已经集成了 AspectJ ，AspectJ 应该算的上是 Java 生态系统中最完整的 AOP 框架了。AspectJ 相比于 Spring AOP 功能更加强大，但是 Spring AOP 相对来说更简单，<\/span>", "children": []}]}]}]}]}, {"id": "n65", "topic": "<b>2.SpringBoot<\/b>", "children": [{"id": "n66", "topic": "<b>1.SpringBoot的主要优点<\/b>", "children": [{"id": "n67", "topic": "<b>不需编写大量样板代码、XML配置和注释。<\/b>", "children": []}, {"id": "n68", "topic": "<b>“约定大于配置”<\/b><span class=\"mm-note\">Spring Boot中大量配置都是默认的，这样能够快速构建一个项目，同时如果有额外的需求，也可以修改默认配置。<\/span>", "children": []}, {"id": "n69", "topic": "SpringBoot的应用程序<b>提供嵌入式HTTP服务器：Tomcat、Jetty<\/b><span class=\"mm-note\">Spring Boot的起步依赖中就有Tomcat服务器的jar包，不需要我们手动与Tomcat打交道。只要像运行普通Java程序一样就能运行Spring Boot Web项目。<\/span>", "children": []}, {"id": "n70", "topic": "<b>集成了多种插件<\/b>：JUnit测试单元等<span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-6b650b0296d26f.jpg\" style=\"width:320px;height:137px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}]}, {"id": "n71", "topic": "<b>2.@SpringBootApplication注解<\/b><span class=\"mm-note\">是<b>@Configuration、@EnableAutoConfiguration、@ComponentScan<\/b>这三个注解的集合。<\/span>", "children": [{"id": "n72", "topic": "<b>@EnableAutoConfiguration：启动Spring的自动配置机制。<\/b>", "children": []}, {"id": "n73", "topic": "<b>@ComponentScan<\/b>：<b>扫描被@Component注入的Bean<\/b>，且默认<b>扫描该类所在包下的所有类<\/b>。", "children": []}, {"id": "n74", "topic": "<b>@Configuration<\/b>：允许<b>在上下文中注册额外的bean<\/b>或<b>导入其他配置类<\/b>。<span class=\"mm-note\">@Configuration就是用来直接或间接注册Bean到IOC容器中的 <img class=\"mm-img\" src=\"fl-2b55d96d2860e1.jpg\" style=\"width:320px;height:84px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}]}, {"id": "n75", "topic": "<b>3.SpringBoot如何实现自动配置？<\/b><span class=\"mm-note\"><b>因为@SpringBootApplication注解，见上文。<\/b> <img class=\"mm-img\" src=\"fl-3eea3cba3f70f5.jpg\" style=\"width:320px;height:96px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n76", "topic": "<b>4.SpringBoot配置文件的优先级<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-060f553fc7545b.jpg\" style=\"width:320px;height:271px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n77", "topic": "<b>5.如何实现全局异常处理？<\/b><span class=\"mm-note\">两个注解：<b>@ExceptionHandler(RuntimeException.class) + @ControllerAdvice<\/b><\/span>", "children": [{"id": "n78", "topic": "<b>用法：<\/b><span class=\"mm-note\">假设定义了很多运行时异常的子类。 <b>新建一个类，假设命名为ExceptionHandler，并用@ControllerAdvice标注<\/b>。在其内部创建exceptionHandler方法，参数是上面定义的异常，返回值可以是自定义的响应类，例如Response&lt;String&gt;。不要忘记使用@ExceptionHandler（XxxException.class)标注。<\/span>", "children": []}, {"id": "n79", "topic": "<b>实例<\/b>：", "children": []}]}, {"id": "n80", "topic": "<b>6.SpringBoot的启动流程<\/b><span class=\"mm-note\">Spring Boot的启动流程可以简要概括如下：<\/span>", "children": [{"id": "n81", "topic": "<b>加载应用主类：<\/b> Spring Boot应用程序的入口是一个包含<code>main()<\/code>方法的主类。在启动时，JVM会加载这个主类。", "children": []}, {"id": "n82", "topic": "<b>启动Spring应用上下文：<\/b> Spring Boot会创建并启动一个Spring应用上下文（<b>ApplicationContext<\/b>），这是整个Spring应用程序的核心。<span class=\"mm-note\">应用上下文会<b>负责加载所有的配置、Bean以及组件<\/b>。<\/span>", "children": []}, {"id": "n83", "topic": "<b>扫描并加载Bean：<\/b> Spring Boot会自动扫描并加载应用程序中标记了特定注解（如<code>@Component<\/code>、<code>@Service<\/code>、<code>@Repository<\/code>等）的类，将它们注册为Spring的Bean。", "children": []}, {"id": "n84", "topic": "<b>执行自动配置：<\/b> Spring Boot会根据应用程序的classpath、依赖关系以及已有的配置来自动配置应用程序。自动配置会根据一系列的条件来确定应该启用或禁用特定的功能，以简化应用程序的配置。", "children": []}, {"id": "n85", "topic": "<b>加载外部配置：<\/b> Spring Boot会加载应用程序中的<b>外部配置文件<\/b>，例如<b><code>application.properties<\/code>或<code>application.yml<\/code><\/b>。这些配置文件中的属性会被加载到Spring的Environment中，供应用程序使用。", "children": []}, {"id": "n86", "topic": "<b>启动嵌入式Web服务器：<\/b> 如果应用程序是一个Web应用程序，Spring Boot会启动一个嵌入式的Web服务器（如Tomcat、Jetty或Undertow）。这个嵌入式的Web服务器会监听指定的端口，并处理HTTP请求。", "children": []}, {"id": "n87", "topic": "<b>执行各种回调：<\/b> Spring Boot会在启动过程中执行各种回调方法，如<code>ApplicationRunner<\/code>和<code>CommandLineRunner<\/code>接口中定义的<code>run()<\/code>方法，这些方法可以在Spring Boot应用程序启动后立即执行一些特定的任务。", "children": []}, {"id": "n88", "topic": "<b>应用程序启动完成：<\/b> 当所有必要的组件都已加载和配置完成后，Spring Boot会触发一个应用程序启动完成的事件，这时应用程序可以开始处理请求或执行其他任务了。", "children": []}]}]}], "expanded": true}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

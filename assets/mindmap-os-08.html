@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>第一章-操作系统概述 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>第一章-操作系统概述</b><small>幕布导图 · 106 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "第一章-操作系统概述", "data": {"id": "mvirtual-root", "topic": "<b>第一章-操作系统概述<\/b>", "expanded": true, "children": [{"id": "mX7BXIW3vpB", "topic": "<b>一、定义：<\/b><br><img class=\"mm-img\" src=\"mm-e483bc59078a75.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">计算机系统自上而下大致分为四部分：\n          <b>用户 、应用程序(软件) 、 OS 、 硬件<\/b><\/span>", "expanded": true, "children": [{"id": "mJ2mdTneSGL", "topic": "<b>① 系统资源的管理者<\/b><br><img class=\"mm-img\" src=\"mm-4ef7238ed2ccf8.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mIC9dphZMJv", "topic": "<b>② 底层功能封装<\/b><br><img class=\"mm-img\" src=\"mm-50da7a75bcfb19.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mUhocZrfFX1", "topic": "<b>③ 四种接口： 用户通过<\/b><span style=\"color:#b45309\"><b><span>命令接口<\/span><\/b><b>和<\/b><span style=\"color:#b45309\"><b><span>系统调用<\/span><\/b><b>来使用计算机<\/b><br><img class=\"mm-img\" src=\"mm-952f81cff3133a.jpg\" style=\"width:260px;height:128px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mFKkNbWXUZo", "topic": "<b>1.GUI - 图形化界面<\/b><br><img class=\"mm-img\" src=\"mm-94f13d8cfe5eea.jpg\" style=\"width:260px;height:89px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mPMt5MhlWkI", "topic": "<b><mark>2.联机<\/mark><\/b><b>命令接口(交互式) -<\/b><span style=\"color:#0e7a52\"><span> <\/span><span style=\"color:#0e7a52\"><b><span>CMD<\/span><\/b><br><img class=\"mm-img\" src=\"mm-944095243a5f42.jpg\" style=\"width:260px;height:89px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mZbS0C2lLw9", "topic": "<b><mark>3.脱机<\/mark><\/b><b>命令接口(批处理) - <\/b><span style=\"color:#0e7a52\"><b><span>.bat<\/span><\/b><br><img class=\"mm-img\" src=\"mm-5eb3259320bb61.jpg\" style=\"width:260px;height:122px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mIP1mJzFCGL", "topic": "<b>4.程序接口 -<\/b> 即：<b><mark>系统调用(广义指令)<\/mark><\/b><b>：<\/b><span style=\"color:#d92d20\"><b><span>普通用户不能直接使用程序接口<\/span><\/b><b>，只能<\/b><span style=\"color:#d92d20\"><b><span>通过程序代码间接使用<\/span><\/b><br><img class=\"mm-img\" src=\"mm-f1c6421fb8a547.jpg\" style=\"width:260px;height:116px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">其实就是调用函数。<\/span>", "expanded": true}, {"id": "mZLK7691jIv", "topic": "<b>注意：狭义的<\/b><span style=\"color:#d92d20\"><b><span>用户接口不包括GUI<\/span><\/b>", "expanded": true}]}, {"id": "miYUCvDpefS", "topic": "<b>④ 对硬件的拓展<\/b><br><img class=\"mm-img\" src=\"mm-31d125d94dbb31.jpg\" style=\"width:260px;height:113px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mLougOkLmBP", "topic": "<b>计算机开机后，操作系统最终被加载到<\/b><b><mark>RAM(内存中的系统区)<\/mark><\/b>", "expanded": true}, {"id": "mcUwWxoagNd", "topic": "说明 <b>库函数<\/b> 和 <b>系统调用<\/b>的区别与联系：<br><img class=\"mm-img\" src=\"mm-d365b83be719c5.jpg\" style=\"width:260px;height:39px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mFAdr7F1CeX", "topic": "总结：<br><img class=\"mm-img\" src=\"mm-93c0f5960fbea1.jpg\" style=\"width:260px;height:123px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mWeUXkmrjKV", "topic": "<b>二、OS的四个特征<\/b><br><img class=\"mm-img\" src=\"mm-f0cdc0f885f868.jpg\" style=\"width:260px;height:71px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mNCUA28Rdd4", "topic": "<b>1、<\/b><span style=\"color:#d92d20\"><b><span>❤<\/span><\/b><b> 并发 VS 并行<\/b><br><img class=\"mm-img\" src=\"mm-8f5aaf97be162e.jpg\" style=\"width:260px;height:112px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mWWvTKGgOKh", "topic": "<b>并发<\/b>：<span style=\"color:#b45309\"><b><span>宏观上同时发生，微观上交替发生<\/span><\/b>。<span class=\"mm-note\">并发就是指<b>若干事件在同一时间间隔内发生。<\/b><\/span>", "expanded": true}, {"id": "mvVht02soQR", "topic": "<b>并行<\/b>：<span style=\"color:#b45309\"><b><span>多个进程同一时刻同时发生<\/span><\/b>。", "expanded": true}, {"id": "mzHaihTXe9t", "topic": "<b>操作系统与程序并发 一起诞生<\/b><br><img class=\"mm-img\" src=\"mm-9d0b813a1c7fde.jpg\" style=\"width:260px;height:37px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mrI7FOXIXkL", "topic": "<b><mark>单核 VS 多核<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-7c92b766745635.jpg\" style=\"width:260px;height:76px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>单核CPU：同一时刻只能运行1个程序<\/b>，各个程序只能并发地执行。\n<b>多核CPU：同一时刻可以执行多个程序<\/b>，多个程序可以并行执行。<\/span>", "expanded": true}]}, {"id": "m2uw2zuNA77", "topic": "<b>2、共享：<\/b><span style=\"color:#0e7a52\"><b><span>系统中的资源可供CPU中并发执行的进程共同使用<\/span><\/b><br><img class=\"mm-img\" src=\"mm-f42f7146c98395.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mB25gvHfhMH", "topic": "<b>3、虚拟：<\/b><b><mark>将物理上的实体变为若干个逻辑上的对应物<\/mark><\/b><b>。<\/b><span class=\"mm-note\"><b>时分复用<\/b>：将一个大的时间段分为微小的时间片，为各个进程服务。\n<b>空分复用<\/b>：虚拟存储器技术。<\/span>", "expanded": true, "children": [{"id": "mjEchySTyU4", "topic": "<br><img class=\"mm-img\" src=\"mm-fe82860587d08a.jpg\" style=\"width:260px;height:88px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-c9e21f9418cdf5.jpg\" style=\"width:260px;height:82px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-8e24ccfc6a9e10.jpg\" style=\"width:260px;height:92px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mIxdtXPyi2l", "topic": "<b>4、异步：只有系统具有并发性，才有可能导致异步性<\/b><br><img class=\"mm-img\" src=\"mm-011ec962d4d22b.jpg\" style=\"width:260px;height:124px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">究其原因，就是：\n        <b>多进程在并发执行时，由于资源有限，当某个进程占用一个资源后，其它想要这个资源的进程只能阻塞等待资源的释放，以此就导致异步<\/b>。\n（即：进程的执行并不是一贯到底，而是走走停停、断断续续的）<\/span>", "expanded": true}, {"id": "m2kQIHcBkVf", "topic": "<span style=\"color:#b45309\"><b><span>并发 <\/span><\/b><b>与<\/b><span style=\"color:#b45309\"><b><span> 共享<\/span><\/b> <b>的关系：<\/b><b><mark>互为存在条件<\/mark><\/b>   <b>——是OS的<\/b><span style=\"color:#d92d20\"><b><span>两个最基本的特征<\/span><\/b><br><img class=\"mm-img\" src=\"mm-eab8ce0e1668fc.jpg\" style=\"width:260px;height:144px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>失去并发，共享没有意义；失去共享，也就无法并发。<\/b><\/span>", "expanded": true}, {"id": "moa46JTJ1PI", "topic": "<b>背景知识：<\/b><span style=\"color:#b45309\"><b><span>一个程序需要放入内存并给它分配CPU才可以执行。<\/span><\/b>", "expanded": true}, {"id": "mhmu7YnMts1", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-ffd522ce2089b3.jpg\" style=\"width:260px;height:156px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mZju2rycXKj", "topic": "<b>三、操作系统的发展与分类<\/b>", "expanded": true, "children": [{"id": "mO7LMG42Va7", "topic": "<b>1、手工操作阶段：纸带读写<\/b><br><img class=\"mm-img\" src=\"mm-bcc665c71d30c9.jpg\" style=\"width:260px;height:131px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">纸带读写。\n缺点：人机速度矛盾。<\/span>", "expanded": true}, {"id": "mRwtuyQJed1", "topic": "<b>2、批处理操作系统 <\/b><span class=\"mm-note\">批处理的<b>主要缺点：缺少交互<\/b>。因此就产生了下边的<b>分时操作系统<\/b>。<\/span>", "expanded": true, "children": [{"id": "myePaRl61OR", "topic": "<b>1.单道批处理系统：<\/b><span style=\"color:#b45309\"><b><span>缓解人及速度矛盾，资源利用率依旧很低<\/span><\/b><b>。<\/b><br><img class=\"mm-img\" src=\"mm-660c7ed0c69f88.jpg\" style=\"width:260px;height:139px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">磁带读写+监督程序。<\/span>", "expanded": true}, {"id": "mLrYUprwqQ6", "topic": "<b>2.多道批处理系统：<\/b><span style=\"color:#b45309\"><b><span>多程序并发执行，<\/span><\/b><span style=\"color:#d92d20\"><b><span>没有人机交互<\/span><\/b><br><img class=\"mm-img\" src=\"mm-7086d09eddec48.jpg\" style=\"width:260px;height:141px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m01eZE7gY5D", "topic": "<b>3、分时操作系统：<\/b><span style=\"color:#d92d20\"><b><span>解决人机交互<\/span><\/b><span style=\"color:#b45309\"><b><span>问题，各个用户平等使用<\/span><\/b><br><img class=\"mm-img\" src=\"mm-f3af70b0a34cc6.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">以<b>时间片为单位<\/b>，把<b>处理机的运行时间分成很短的时间片<\/b>，<b>平等<\/b>地给每个用户分配操作时间。<\/span>", "expanded": true, "children": [{"id": "mI3AU8uWFsb", "topic": "<b>缺点<\/b>：不能处理紧急事件。", "expanded": true}, {"id": "mfiijibkDdF", "topic": "<b>分时系统追求的目标<\/b>：<span style=\"color:#d92d20\"><b><span>快速响应用户<\/span><\/b>", "expanded": true}]}, {"id": "mzaz3jXhaOj", "topic": "<b>4、实时操作系统：<\/b><span style=\"color:#b45309\"><b><span>可以处理紧急事件—<\/span><\/b> <b><mark>及时性、可靠性<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-30181060c62258.jpg\" style=\"width:260px;height:136px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mn5WPSJ0fPn", "topic": "知识总览：<br><img class=\"mm-img\" src=\"mm-d488a542ed722a.jpg\" style=\"width:260px;height:142px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mrZVBdDVlSi", "topic": "操作系统的发展历程：<br><img class=\"mm-img\" src=\"mm-5962bab183e220.jpg\" style=\"width:260px;height:87px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mYHMeAsDnDe", "topic": "知识回顾与考点：<br><img class=\"mm-img\" src=\"mm-ed4770b9755886.jpg\" style=\"width:260px;height:158px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mKjuFnYBWAC", "topic": "<b>四、操作系统的运行机制<\/b>", "expanded": true, "children": [{"id": "mtuNvZI2Vcf", "topic": "<b><mark>内核(Kernel)<\/mark><\/b><b>：OS最重要最核心的部分<\/b>", "expanded": true}, {"id": "mD4QHdsiL8J", "topic": "<span style=\"color:#d92d20\"><b><span>用户态下不能执行特权指令<\/span><\/b><b>；<\/b><span style=\"color:#d92d20\"><b><span>核心态<\/span><\/b><b>下，<\/b><span style=\"color:#d92d20\"><b><span>CPU可以执行除“访管”指令外的所有指令<\/span><\/b>", "expanded": true}, {"id": "mV9fFtRFQzX", "topic": "<b>1、内核程序 VS 应用程序<\/b><br><img class=\"mm-img\" src=\"mm-cefac74ca52067.jpg\" style=\"width:260px;height:146px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-0d089d5b5dc202.jpg\" style=\"width:260px;height:80px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mlv8LVWRPxb", "topic": "<b>2、内核态 VS 用户态<\/b><br><img class=\"mm-img\" src=\"mm-2e3dcfdbeab892.jpg\" style=\"width:260px;height:33px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\"><b>内核态：内核程序+特权指令\n用户态：应用程序+非特权指令<\/b><\/span>", "expanded": true}, {"id": "mzRGNqM5vU8", "topic": "<span style=\"color:#d92d20\"><b><span>❤<\/span><\/b> <span style=\"color:#b45309\"><b><span>CPU如何区分 <\/span><\/b><b>内核态 与 用户态 ：<\/b><b><mark>程序状态寄存器(PSW)中的某位二进制(1:内核态；0:用户态)<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-3944604e320020.jpg\" style=\"width:260px;height:28px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mRwbiijP2x1", "topic": "<span style=\"color:#d92d20\"><b><span>❤ <\/span><\/b><b>3、内核态/用户态的切换<\/b><br><img class=\"mm-img\" src=\"mm-7a166ae47e01b4.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "m7XN5UGYNcn", "topic": "<b>①内核态 -&gt; 用户态：执行一条<\/b><b><mark>特权指令<\/mark><\/b><b>(<\/b><span style=\"color:#b45309\"><b><span>修改PSW的标志位<\/span><\/b><b>)，OS<\/b><span style=\"color:#d92d20\"><b><span>主动<\/span><\/b><span style=\"color:#b45309\"><b><span>让出CPU的使用权给用户态<\/span><\/b>", "expanded": true}, {"id": "mtxmWdp8L9o", "topic": "<b>② 用户态-&gt; 内核态：由<\/b><b><mark>\"中断\"<\/mark><\/b><b>引发，<\/b><b><mark>硬件自动完成<\/mark><\/b> <span style=\"color:#b45309\"><b><span>变态的过程<\/span><\/b><b>，OS<\/b><span style=\"color:#b45309\"><b><span>内核态<\/span><\/b><span style=\"color:#d92d20\"><b><span>强行<\/span><\/b><span style=\"color:#b45309\"><b><span>从用户态手中夺回CPU的使用权<\/span><\/b><span class=\"mm-note\"><b>中断后，立即变为核心态，用户态的程序停止运行，待内核态中断事件运行完后，才会重新转回用户态<\/b>。<\/span>", "expanded": true}]}, {"id": "mqMGNnQ8CfE", "topic": "知识回顾：<br><img class=\"mm-img\" src=\"mm-38edccbf3118b9.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mgK0OEktjl4", "topic": "<b>五、中断和异常<\/b><br><img class=\"mm-img\" src=\"mm-ef33c96a891505.jpg\" style=\"width:260px;height:83px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mWOEy3swPGj", "topic": "<b>1、中断的作用：<\/b><span style=\"color:#b45309\"><b><span>使CPU由用户态转为内核态，OS夺回对CPU的控制权<\/span><\/b><br><img class=\"mm-img\" src=\"mm-bc5fba3e8c93a4.jpg\" style=\"width:260px;height:153px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mcfVxJ5hh8e", "topic": "<b>2、中断的类型：<\/b><br><img class=\"mm-img\" src=\"mm-a8c53161fc93f0.jpg\" style=\"width:260px;height:102px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mzu334jIhiS", "topic": "<b>1、内中断：中断信号<\/b><span style=\"color:#b45309\"><b><span>来源于CPU内部<\/span><\/b><br><img class=\"mm-img\" src=\"mm-fbbcce61bdd42a.jpg\" style=\"width:260px;height:131px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-098188f8e8be1f.jpg\" style=\"width:260px;height:40px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mZfGT79rHYq", "topic": "<b>① 用户态下<\/b><span style=\"color:#b45309\"><b><span>执行特权指令<\/span><\/b>", "expanded": true}, {"id": "m6mwOFwuMaG", "topic": "<b>② 当前<\/b><span style=\"color:#b45309\"><b><span>执行指令非法<\/span><\/b><b>，就会直接中断<\/b><span class=\"mm-note\">例：除数为0<\/span>", "expanded": true}, {"id": "myaohGX2vAq", "topic": "<b>③ 执行<\/b> <b><mark>\"陷入指令\"，<\/mark><\/b><b>是<\/b><span style=\"color:#b45309\"><b><span>系统调用的实现原理<\/span><\/b><span class=\"mm-note\">当<b>用户态应用程序想请求操作系统内核的服务<\/b>，就会使用陷入指令<b>主动进行中断<\/b>，切换到内核态。<\/span>", "expanded": true, "children": [{"id": "mqXm27wNAUZ", "topic": "<span style=\"color:#d92d20\"><b><span>❤ <\/span><\/b><b>注意：<\/b><span style=\"color:#d92d20\"><b><span>陷入指令并不是特权指令<\/span><\/b><span class=\"mm-note\">因为：它<b>是在用户态下执行的<\/b><\/span>", "expanded": true}]}]}, {"id": "mYAzPK6dfKK", "topic": "<b>2、外中断<\/b><br><img class=\"mm-img\" src=\"mm-23dada71944fb3.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mty9JiyTqx0", "topic": "<b>① 时钟中断<\/b>", "expanded": true}, {"id": "mcj1Pvfy3GJ", "topic": "<b>② IO中断<\/b>", "expanded": true}]}]}, {"id": "mGOtxpF5gK5", "topic": "<b>3、中断的分类：<\/b><br><img class=\"mm-img\" src=\"mm-d004309441485d.jpg\" style=\"width:260px;height:138px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "m1lpunClvKm", "topic": "<b>异常(内中断)<\/b>", "expanded": true, "children": [{"id": "mULMtuK02df", "topic": "<b>① trap-陷入<\/b>", "expanded": true}, {"id": "mDww7sl4jMf", "topic": "<b>② fault-故障<\/b>", "expanded": true}, {"id": "mf45C2cLoxg", "topic": "<b>③ abort-终止<\/b>", "expanded": true}]}, {"id": "miLCywR7gcM", "topic": "<b>中断(外中断)<\/b>", "expanded": true, "children": [{"id": "mlsIXoex4jV", "topic": "<b>①<\/b> <b><mark>时钟中断：<\/mark><\/b><span style=\"color:#b45309\"><b><span>实现计算机计时功能，并发离不开它<\/span><\/b>", "expanded": true}, {"id": "m5Bc30GD9tx", "topic": "<b>② I/O中断<\/b>", "expanded": true}]}]}, {"id": "m46O2D5W2QZ", "topic": "<b>4、中断机制的基本原理：<\/b><b><mark>中断向量表<\/mark><\/b><br><img class=\"mm-img\" src=\"mm-da41417ba2d094.jpg\" style=\"width:260px;height:120px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "m4izAN6ZL34", "topic": "<b>1、检查中断信号：内中断 or 外中断<\/b>", "expanded": true}, {"id": "mHKF2DsucKS", "topic": "<b>2、找到对应的中断处理程序：查找中断向量表<\/b>", "expanded": true}]}, {"id": "mqO63Xuahvq", "topic": "<b><mark>用户态到核心态的转换<\/mark><\/b>，是由<span style=\"color:#d92d20\"><b><span>硬件中断机制<\/span><\/b>完成的。", "expanded": true}, {"id": "mjUqBjttGKf", "topic": "<b><mark>访管中断<\/mark><\/b>：<b>用户程序在<\/b><span style=\"color:#d92d20\"><b><span>用户态下要使用特权指令<\/span><\/b><b>而引起的强制中断<\/b>。<span class=\"mm-note\">因为<b>操作系统不允许用户直接执行\"危险性很高”的指令<\/b>，因此<b>当用户想要使用特权指令时<\/b>，操作系统就会<b>强制中断<\/b>，让核心态去运行。<\/span>", "expanded": true, "children": [{"id": "mXIQGlhMAAL", "topic": "<b>“访管”指令仅在用户态下完成<\/b>，执行访管将用户态转变为核心态；", "expanded": true}]}, {"id": "mH26f84Q4qZ", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-c32cdb40b27d0c.jpg\" style=\"width:260px;height:145px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "mh7UKGyF5SP", "topic": "<b>六、系统调用<\/b><br><img class=\"mm-img\" src=\"mm-37c44400ca1bb1.jpg\" style=\"width:260px;height:24px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mv2rtw8WzWH", "topic": "<b>1、系统调用与库函数的区别：<\/b><span style=\"color:#b45309\"><b><span>系统调用比库函数更为底层<\/span><\/b><br><img class=\"mm-img\" src=\"mm-2f707dc1ce7769.jpg\" style=\"width:260px;height:101px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-d365b83be719c5.jpg\" style=\"width:260px;height:39px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mkTtT2NecqJ", "topic": "<b>2、为何系统调用是必须的？<\/b><br><img class=\"mm-img\" src=\"mm-504c8429cc1058.jpg\" style=\"width:260px;height:102px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">只有通过系统调用，<b>内核才能对各个请求协调处理<\/b>，避免上述的混乱情况。<\/span>", "expanded": true}, {"id": "mpolDGgDOS6", "topic": "<b>3、什么功能需要系统调用？——<\/b> <span style=\"color:#b45309\"><b><span>凡是<\/span><\/b><b><mark>与共享资源有关的操作<\/mark><\/b><span style=\"color:#b45309\"><b><span>，都需要内核的协调处理<\/span><\/b><b>，都需要系统调用<\/b><br><img class=\"mm-img\" src=\"mm-7f0b725d85ff80.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">防止用户非法操作。<\/span>", "expanded": true}, {"id": "mfmZPOdniim", "topic": "<b>4、系统调用的过程—<\/b> <span style=\"color:#d92d20\"><span>系统调用的<\/span><span style=\"color:#d92d20\"><b><span>请求<\/span><\/b><span style=\"color:#d92d20\"><span>是在<\/span><span style=\"color:#d92d20\"><b><span>用户态<\/span><\/b>，而对<span style=\"color:#d92d20\"><span>系统调用的<\/span><span style=\"color:#d92d20\"><b><span>相应处理<\/span><\/b><span style=\"color:#d92d20\"><span>在<\/span><span style=\"color:#d92d20\"><b><span>核心态<\/span><\/b><span style=\"color:#d92d20\"><span>下进行<\/span><br><img class=\"mm-img\" src=\"mm-a2ef66afb2f97b.jpg\" style=\"width:260px;height:129px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mHoYVzNUhij", "topic": "<b>输入/输出指令<\/b><span style=\"color:#b45309\"><b><span>必须在核心态下<\/span><\/b><b><mark>执行—<\/mark><\/b> <b>注意<\/b><span style=\"color:#b45309\"><b><span>执行<\/span><\/b><b>和<\/b><span style=\"color:#b45309\"><b><span>请求<\/span><\/b><b>的区别<\/b><span class=\"mm-note\">因为：输入/输出指令需要中断，<b>中断必须在核心态下执行<\/b>。<\/span>", "expanded": true}, {"id": "m0fe0vBg4xP", "topic": "知识回顾：<br><img class=\"mm-img\" src=\"mm-32c7949df50e5b.jpg\" style=\"width:260px;height:163px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m1q2jJIsMNN", "topic": "<b>七、操作系统体系结构<\/b>", "expanded": true, "children": [{"id": "mhuzNyOdTdL", "topic": "1、内核：OS最重要最核心的部分<br><img class=\"mm-img\" src=\"mm-0fcb878367dca2.jpg\" style=\"width:260px;height:100px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\"><br><img class=\"mm-img\" src=\"mm-25561c9a07c219.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mgoYXqpDDpR", "topic": "<b>2、大内核 VS 微内核<\/b><br><img class=\"mm-img\" src=\"mm-3ebc3d7d2b8a1f.jpg\" style=\"width:260px;height:127px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mgN3dy8jhsT", "topic": "<b>大内核：将<\/b><span style=\"color:#b45309\"><b><span>操作系统的主要功能模块全部作为系统内核，运行在核心态<\/span><\/b>", "expanded": true, "children": [{"id": "mwrpr4GSVAe", "topic": "优点：<span style=\"color:#d92d20\"><b><span>高性能<\/span><\/b>", "expanded": true}, {"id": "mGCy3heeBQx", "topic": "缺点：内核代码庞大，结构混乱，难以维护、可靠性较低", "expanded": true}]}, {"id": "mhhRLYdGKfl", "topic": "<b>微内核：<\/b><span style=\"color:#b45309\"><b><span>只将最基本的功能(<\/span><\/b><b><mark>时钟管理、中断处理、原语<\/mark><\/b><span style=\"color:#b45309\"><b><span>)保留在内核。<\/span><\/b><b>基于<\/b><span style=\"color:#b45309\"><b><span>C/S模式<\/span><\/b>", "expanded": true, "children": [{"id": "mz6hpIhsxvG", "topic": "优点：内核功能少，<b>结构清晰，方便维护、可靠<\/b>", "expanded": true}, {"id": "msiPgqtaKCW", "topic": "缺点：需要<b>频繁地进行“变态”，<\/b><span style=\"color:#d92d20\"><b><span>成本高<\/span><\/b>", "expanded": true}]}]}, {"id": "m11PZUkP9EH", "topic": "知识点回顾：<br><img class=\"mm-img\" src=\"mm-53abd943efe6b4.jpg\" style=\"width:260px;height:136px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m1WeDmx7Og3", "topic": "<b>八、操作系统引导<\/b><span class=\"mm-note\">即：开机的时候，如何让操作系统运行起来？<\/span>", "expanded": true, "children": [{"id": "mXrMtpZujlE", "topic": "<b>1、开机过程<\/b><br><img class=\"mm-img\" src=\"mm-8de51a85f0ed14.jpg\" style=\"width:260px;height:151px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mUVFMJxZ9Ow", "topic": "<b>(1)主存(内存)<\/b><span class=\"mm-note\"><b>内存又称主存<\/b>，是<b>CPU能直接寻址访问的存储空间<\/b>。在计算机工作的时候，所有的数据都要先经过内存，然后才能交由处理器去处理，内存也被称为，CPU与外存通信的桥梁。它的特点是读写速度快。<\/span>", "expanded": true, "children": [{"id": "mwNMVORqy4G", "topic": "内存一般是由半导体器件组成，可分为<span style=\"color:#b45309\"><b><span>RAM（随机存储器）、ROM（只读存储器）、Cache（高速缓存）<\/span><\/b>。<span class=\"mm-note\">RAM（Random Access Memory），随机访问存储器。\nROM（Read Only Memory），只读存储器。\nCache，高速缓冲存储器。<\/span>", "expanded": true}, {"id": "msFGAqWBswa", "topic": "<b><mark>ROM(BIOS)<\/mark><\/b><b>：自举程序。<\/b>", "expanded": true}]}]}, {"id": "m9guEBhi1Vn", "topic": "例子：<br><img class=\"mm-img\" src=\"mm-22a9997ab8a226.jpg\" style=\"width:260px;height:184px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}, {"id": "m0CjLJIaaPZ", "topic": "<b>九、虚拟机(<\/b><b><mark>VMM<\/mark><\/b><b>)— 逻辑计算机，利用特殊的虚拟化技术，隐藏特定计算平台的实际物理特性，为用户提供抽象、统一、模拟的计算环境。<\/b>", "expanded": true, "children": [{"id": "mbegt0VovVk", "topic": "1、<b>传统计算机<\/b>：一个机器上只能安装一个操作系统，有很多应用上的限制。<br><img class=\"mm-img\" src=\"mm-6f36edf32622b1.jpg\" style=\"width:260px;height:165px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mRLAos7r8Iu", "topic": "<b>2、虚拟机：<\/b><span style=\"color:#b45309\"><b><span>一台物理机器 = 多台虚拟机器<\/span><\/b><b>，每个虚拟机器可以运行一个操作系统<\/b><br><img class=\"mm-img\" src=\"mm-bfc30b82e0e2eb.jpg\" style=\"width:260px;height:118px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true, "children": [{"id": "mh3ykj2sJrE", "topic": "<b>①第一类：直接运行在硬件上 — <\/b><span style=\"color:#b45309\"><b><span>直接运行在硬件上，没有中介<\/span><\/b>", "expanded": true}, {"id": "myDob2aT6Td", "topic": "<b>②第二类：运行在宿主操作系统(HostOS)上 — <\/b><span style=\"color:#b45309\"><b><span>以HostOS为中介<\/span><\/b><span class=\"mm-note\">例如：<b>virtualBox、VMWare<\/b><\/span>", "expanded": true}, {"id": "mlt4VOvIZ0A", "topic": "<span style=\"color:#d92d20\"><b><span>❤<\/span><\/b><b> 两类虚拟机对比：<\/b><br><img class=\"mm-img\" src=\"mm-0f2221815e7014.jpg\" style=\"width:260px;height:156px\" loading=\"lazy\" decoding=\"async\" referrerpolicy=\"no-referrer\">", "expanded": true}]}]}, {"id": "mZEdwHogp5X", "topic": "<b><mark>虚拟化CPU<\/mark><\/b>：将单个CPU转换为看似无限数量的CPU，从而让许多程序看似同时运行。", "expanded": true}, {"id": "mQq4oQBx7IC", "topic": "<b><mark>虚拟化内存<\/mark><\/b>：每个程序都有自己的私有内存，而不是与其他正在运行的程序共享相同的物理内存，也不会影响其他进程的地址空间。", "expanded": true}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

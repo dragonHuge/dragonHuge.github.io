@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>多Agent项目实战：多Agent协同系统 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">20</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">468</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav>
+<nav class="context-nav" aria-label="当前栏目目录">
+<div class="context-title">外部沉淀分类</div>
+<a class="context-cat active" href="../ext/index.html#c0"><span>AI与大模型</span><span class="nav-count">32</span></a>
+<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">305</span></a>
+<a class="context-cat" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">65</span></a>
+<a class="context-cat" href="../ext/index.html#c3"><span>认知与思维</span><span class="nav-count">12</span></a>
+<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">44</span></a>
+<div class="context-group current">AI与大模型文章</div>
+<a class="art" href="../ext/e001.html">大模型学习资料包（小红书购买 · 18份）</a>
+<a class="art" href="../ext/e002.html">大模型AI Agent知识从0-1笔记-万字详解版本！</a>
+<a class="art" href="../ext/e003.html">大模型Agent实战从0-1笔记：万字详解【迭代版V2】</a>
+<a class="art" href="../ext/e004.html">大模型Transformer架构从0-1架构深度解析</a>
+<a class="art" href="../ext/e005.html">AI开发基础：Langchain框架从入门到实战开发-附代码</a>
+<a class="art" href="../ext/e006.html">AI开发基础：Langgraph框架从入门到实战开发智能体-附带完整可运行代码</a>
+<a class="art" href="../ext/e007.html">万字详解！AI Harness 入门与实践！一篇博文给你讲透！</a>
+<a class="art" href="../ext/e008.html">RAG知识库助手实战-附带前后端和完整可运行服务</a>
+<a class="art" href="../ext/e009.html">实战智能出行Agent助手-附代码和前后端可视化界面</a>
+<a class="art" href="../ext/e010.html">Vibe Coding指南-AI编辑器全栈开发-附实战和视频</a>
+<a class="art" href="../ext/e011.html">AI大模型面试题-基础篇</a>
+<a class="art" href="../ext/e012.html">AI应用开发+后端面试题</a>
+<a class="art" href="../ext/e013.html">Codex 从小白到实战高手：大厂工程化实战手册</a>
+<a class="art" href="../ext/e014.html">Claude Code 入门到实战全流程详细版</a>
+<a class="art" href="../ext/e015.html">第一章：快速上手</a>
+<a class="art" href="../ext/e016.html">第二章 Claude Code 入门基础操作</a>
+<a class="art" href="../ext/e017.html">第三章： Claude Code 20个常用斜杠指令速查表</a>
+<a class="art" href="../ext/e018.html">第四章：文本处理与创作</a>
+<a class="art" href="../ext/e019.html">第五章：文档管理与处理</a>
+<a class="art" href="../ext/e020.html">第六章：数据处理与分析</a>
+<a class="art" href="../ext/e021.html">第七章 创建常用模板</a>
+<a class="art" href="../ext/e022.html">第八章：提示词优化技巧</a>
+<a class="art" href="../ext/e023.html">第九章：复用文档解决同类问题</a>
+<a class="art" href="../ext/e024.html">第十章：用编程的思维解决问题</a>
+<a class="art" href="../ext/e025.html">第十一章：Claude 高级功能使用</a>
+<a class="art" href="../ext/e026.html">第十二章：让Claude自动解决问题</a>
+<a class="art" href="../ext/e027.html">Claude Code 实战指南</a>
+<a class="art" href="../ext/e028.html">滴云智能办公丨多Agent协同系统</a>
+<a class="art active" href="../ext/e029.html">多Agent项目实战：多Agent协同系统</a>
+<a class="art" href="../ext/e030.html">AI应用开发项目实战知识库-详解版</a>
+<a class="art" href="../ext/e031.html">11-Java全套八股文</a>
+<a class="art" href="../ext/e032.html">AI应用开发：RAG技术从小白到深入理解-详细版</a>
+</nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">33</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#智能问诊客服系统---技术文档">智能问诊客服系统 - 技术文档</a><a class="tl l2" href="#目录">目录</a><a class="tl l2" href="#项目背景">项目背景</a><a class="tl l3" href="#多Agent项目-智能问诊AI客服系统">多Agent项目：智能问诊AI客服系统</a><a class="tl l3" href="#项目简介">项目简介</a><a class="tl l3" href="#核心功能">核心功能</a><a class="tl l2" href="#整体架构">整体架构</a><a class="tl l3" href="#系统分层架构">系统分层架构</a><a class="tl l3" href="#数据库布局">数据库布局</a><a class="tl l2" href="#关键技术栈">关键技术栈</a><a class="tl l3" href="#后端技术栈">后端技术栈</a><a class="tl l2" href="#多智能体工作流程">多智能体工作流程</a><a class="tl l3" href="#智能体角色分工">智能体角色分工</a><a class="tl l3" href="#工作流路由规则">工作流路由规则</a><a class="tl l2" href="#关键代码解析">关键代码解析</a><a class="tl l3" href="#1-状态定义-agents-state-py">1. 状态定义 ([agents/state.py]</a><a class="tl l3" href="#2-主工作流图构建-agents-multiagent-py">2. 主工作流图构建 ([agents/multiagent.py]</a><a class="tl l3" href="#3-Supervisor-路由节点-agents-supervisor-py">3. Supervisor 路由节点 ([agents/supervisor.py]</a><a class="tl l3" href="#4-记忆系统核心-agents-memory-py">4. 记忆系统核心 ([agents/memory.py]</a><a class="tl l3" href="#5-聊天-API-api-chat-py">5. 聊天 API ([api/chat.py]</a><a class="tl l2" href="#记忆系统设计">记忆系统设计</a><a class="tl l3" href="#双层记忆架构">双层记忆架构</a><a class="tl l3" href="#连接池配置">连接池配置</a><a class="tl l2" href="#数据库设计">数据库设计</a><a class="tl l3" href="#MySQL-medicalassistant">MySQL (medicalassistant)</a><a class="tl l4" href="#表-users">表：users</a><a class="tl l3" href="#PostgreSQL-smartsession">PostgreSQL (smartsession)</a><a class="tl l4" href="#表-conversations">表：conversations</a><a class="tl l4" href="#表-medicaldocuments">表：medicaldocuments</a><a class="tl l2" href="#会话隔离机制">会话隔离机制</a><a class="tl l3" href="#三层隔离设计">三层隔离设计</a><a class="tl l3" href="#LangGraph-Checkpoint-工作原理">LangGraph Checkpoint 工作原理</a><a class="tl l2" href="#总结">总结</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与大模型</div><article><h1>多Agent项目实战：多Agent协同系统</h1><div class="meta">2026-11-09 · <span class="m-src">AI与大模型/大模型实战宝典/raw/17-AI办公助手.md</span></div><div class="md"><h1 id="智能问诊客服系统---技术文档"><strong>智能问诊客服系统 - 技术文档</strong></h1>
+<p><img alt="@同事" src="#"></p>
+<h2 id="目录"><strong>目录</strong></h2>
+<ol><li>[项目背景]</li><li>[整体架构]</li><li>[关键技术栈]</li><li>[多智能体工作流程]</li><li>[关键代码解析]</li><li>[记忆系统设计]</li><li>[数据库设计]</li><li>[会话隔离机制]</li><li>[部署与运行]</li></ol>
+<hr>
+<h2 id="项目背景"><strong>项目背景</strong></h2>
+<h3 id="多Agent项目-智能问诊AI客服系统"><strong>多Agent项目：智能问诊AI客服系统</strong></h3>
+<h3 id="项目简介"><strong>项目简介</strong></h3>
+<p>智能问诊客服系统是一个基于 LangChain 1.0.3 + LangGraph 1.0.2 构建的多智能体问诊助手系统，通过自然语言交互实现导诊、咨询、诊断建议等功能。</p>
+<h3 id="核心功能"><strong>核心功能</strong></h3>
+<p>- ✅ <strong>多智能体协作</strong>：私人问诊顾问（supervisor）、体检员、药师四个智能体协同工作</p>
+<p>- ✅ <strong>长短期记忆</strong>：基于 PostgreSQL 的双层记忆系统</p>
+<p>- ✅ <strong>文档管理</strong>：PDF上传、智能提取信息</p>
+<p>- ✅ <strong>用户认证</strong>：JWT Token 认证</p>
+<p>- ✅ <strong>会话管理</strong>：多会话支持、历史记录查询</p>
+<p>- ✅ <strong>联网搜索</strong>：集成 Tavily 搜索工具</p>
+<p>- ✅ <strong>LangSmith 追踪</strong>：完整的可观测性支持</p>
+<hr>
+<h2 id="整体架构"><strong>整体架构</strong></h2>
+<h3 id="系统分层架构"><strong>系统分层架构</strong></h3>
+<pre><code>┌─────────────────────────────────────────────────────────┐
+│                    前端 (Vue 3)                         │
+│              (聊天窗口、登录、文档上传)                   │
+└─────────────────────────────┬───────────────────────────┘
+                              │ HTTP + SSE
+┌─────────────────────────────▼───────────────────────────┐
+│                 FastAPI 后端层                          │
+│  ┌─────────┐  ┌────────┐  ┌───────────┐  ┌──────────┐  │
+│  │ Auth    │  │ Chat   │  │ Conv Mgmt │  │ Docs    │  │
+│  │ Router  │  │ Router │  │ Router    │  │ Router   │  │
+│  └─────────┘  └────────┘  └───────────┘  └──────────┘  │
+└─────────────────────────────┬───────────────────────────┘
+                              │
+┌─────────────────────────────▼───────────────────────────┐
+│              LangGraph 多智能体层                        │
+│  ┌──────────────────────────────────────────────────┐  │
+│  │        中心工作流                           │  │
+│  │                  ┌─────┐                        │  │
+│  │           ┌──────┤Super│───────┐               │  │
+│  │           │      └─┬───┘       │               │  │
+│  │           ▼        ▼          ▼               │  │
+│  │       ┌────────┐ ┌──────┐ ┌────────┐          │  │
+│  │       │Examiner│ │Doctor│ │Pharmacist│        │  │
+│  │       └────────┘ └──────┘ └────────┘          │  │
+│  └──────────────────────────────────────────────────┘  │
+└─────────────────────────────┬───────────────────────────┘
+                              │
+┌─────────────────────────────▼───────────────────────────┐
+│                    存储层                                │
+│  ┌────────────┐ ┌───────────────────┐ ┌─────────────┐  │
+│  │   MySQL    │ │     PostgreSQL    │ │   Uploads   │  │
+│  │  (用户)    │ │ (3个独立数据库)   │ │   (PDF)     │  │
+│  └────────────┘ └───────────────────┘ └─────────────┘  │
+└─────────────────────────────────────────────────────────┘</code></pre>
+<p><strong>项目为练习Agent项目文档</strong></p>
+<p><strong> 需要更适合 更详细 的适合写到简历的完整Agent项目 ，带完整简历写法，代码，流程讲解，面试问答，点击这个链接</strong></p>
+<h3 id="数据库布局"><strong>数据库布局</strong></h3>
+<table><thead><tr><th>数据库</th><th>用途</th><th>核心表</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr></tbody></table>
+<table><thead><tr><th><strong>MySQL (medical_assistant)</strong></th><th>用户认证</th><th>users</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th><strong>PostgreSQL (smart_short)</strong></th><th>短期记忆（LangGraph Checkpoint）</th><th>checkpoints（系统表）</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th><strong>PostgreSQL (smart_long)</strong></th><th>长期记忆（用户数据）</th><th>stores（系统表）</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th><strong>PostgreSQL (smart_session)</strong></th><th>会话管理</th><th>conversations, medical_documents</th></tr></thead><tbody></tbody></table>
+<hr>
+<h2 id="关键技术栈"><strong>关键技术栈</strong></h2>
+<h3 id="后端技术栈"><strong>后端技术栈</strong></h3>
+<table><thead><tr><th>技术</th><th>版本</th><th>用途</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>FastAPI</td><td>0.135.3</td><td>Web 框架</td></tr><tr><td>Uvicorn</td><td>0.34.0</td><td>ASGI 服务器</td></tr><tr><td>LangChain</td><td>1.0.3</td><td>LLM 应用框架</td></tr><tr><td>LangChain Core</td><td>1.2.26</td><td>核心组件</td></tr><tr><td>LangChain OpenAI</td><td>1.1.12</td><td>OpenAI 兼容接口</td></tr><tr><td>LangGraph</td><td>1.0.2</td><td>Agent 工作流编排</td></tr><tr><td>LangGraph Checkpoint</td><td>3.0.1</td><td>检查点基础组件</td></tr><tr><td>LangGraph Checkpoint PostgreSQL</td><td>3.0.5</td><td>PostgreSQL 检查点实现</td></tr><tr><td>SQLAlchemy</td><td>2.0.36</td><td>ORM</td></tr><tr><td>PyMySQL</td><td>1.1.1</td><td>MySQL 驱动</td></tr><tr><td>Psycopg (Binary)</td><td>3.2.3</td><td>PostgreSQL 驱动</td></tr><tr><td>Psycopg Pool</td><td>3.2.4</td><td>PostgreSQL 连接池</td></tr><tr><td>PyPDF</td><td>5.1.0</td><td>PDF 文档处理</td></tr><tr><td>python-jose</td><td>3.3.0</td><td>JWT 认证</td></tr><tr><td>bcrypt</td><td>4.2.1</td><td>密码加密</td></tr><tr><td>python-dotenv</td><td>1.0.1</td><td>环境变量管理</td></tr><tr><td>Tavily Python</td><td>0.5.0</td><td>联网搜索 API</td></tr><tr><td>DashScope</td><td>1.22.0</td><td>阿里云百炼 LLM</td></tr></tbody></table>
+<hr>
+<h2 id="多智能体工作流程"><strong>多智能体工作流程</strong></h2>
+<h3 id="智能体角色分工"><strong>智能体角色分工</strong></h3>
+<table><thead><tr><th>角色</th><th>职责</th><th>工具</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr></tbody></table>
+<table><thead><tr><th><strong>私人顾问 (Supervisor)</strong></th><th>导诊、路由决策、闲聊、引导</th><th>search_web</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th><strong>体检员 (Examiner)</strong></th><th>收集基本信息、症状、病史、引导上传文档</th><th>search_web, save_user_info, save_medical_info</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th><strong>主治医生 (Doctor)</strong></th><th>诊断、制定治疗方案、开药建议</th><th>search_web, save_medical_info</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th><strong>药师 (Pharmacist)</strong></th><th>用药指导、药品咨询、副作用、替代方案</th><th>search_web, save_medical_info</th></tr></thead><tbody></tbody></table>
+<h3 id="工作流路由规则"><strong>工作流路由规则</strong></h3>
+<pre><code>用户消息
+    ↓
+【Supervisor】←────────┐
+    ↓                  │
+【路由决策】            │
+    ↓                  │
+┌─────────────────────────────────────────┐
+│ 决策分支                               │
+├─────────────────────────────────────────┤
+│ 1. 新用户/基本信息不全 → 体检员        │
+│ 2. 有症状但信息不足 → 体检员            │
+│ 3. 信息已收集完整 → 主治医生            │
+│ 4. 药品相关问题 → 药师                  │
+│ 5. 简单问候/不确定 → 顾问自己处理      │
+│ 6. 子智能体处理完 → 顾问总结收尾        │
+└─────────────────────────────────────────┘
+    ↓
+【子智能体执行】
+    ↓
+【结束】</code></pre>
+<hr>
+<h2 id="关键代码解析"><strong>关键代码解析</strong></h2>
+<h3 id="1-状态定义-agents-state-py"><strong>1. 状态定义 ([agents/state.py]</strong></h3>
+<pre><code>from typing import TypedDict, List, Optional, Annotated
+from langgraph.graph.message import add_messages
+
+
+class MedicalAgentState(TypedDict):
+    &quot;&quot;&quot;医疗智能体系统的共享状态&quot;&quot;&quot;
+    
+    # 消息列表（自动累积！核心设计）
+    messages: Annotated[list, add_messages]
+    
+    # 用户 ID
+    user_id: str
+    
+    # 会话线程 ID
+    thread_id: str
+    
+    # 医疗文档列表
+    medical_documents: List
+    
+    # 诊断结果（来自主治医生）
+    diagnosis: Optional[str]
+    
+    # 处方信息（来自药师）
+    prescription: Optional[str]
+    
+    # 下一步要执行的节点
+    next: Optional[str]</code></pre>
+<p><strong>核心设计：</strong></p>
+<ul><li><code>Annotated[list, add_messages]</code>：这是 LangGraph 的核心机制，表示多个节点返回消息时，会自动追加而不是覆盖历史</li></ul>
+<h3 id="2-主工作流图构建-agents-multiagent-py"><strong>2. 主工作流图构建 ([agents/multi_agent.py]</strong></h3>
+<pre><code>from langgraph.graph import StateGraph, END
+from app.agents.state import MedicalAgentState
+from app.agents.memory import (
+    init_memory_system,
+    get_short_term_memory,
+    get_long_term_memory
+)
+from app.agents.supervisor import supervisor_node
+from app.agents.medical_examiner import medical_examiner_node
+from app.agents.attending_doctor import attending_doctor_node
+from app.agents.pharmacist import pharmacist_node
+
+
+def create_medical_agent_system():
+    &quot;&quot;&quot;创建医疗智能体系统（中心辐射式架构）&quot;&quot;&quot;
+    
+    # 初始化记忆系统
+    init_memory_system()
+    checkpointer = get_short_term_memory()  # PostgresSaver
+    store = get_long_term_memory()          # PostgresStore
+    
+    # 构建图
+    builder = StateGraph(MedicalAgentState)
+    
+    # 添加所有节点
+    builder.add_node(&quot;supervisor&quot;, supervisor_node)
+    builder.add_node(&quot;attending_doctor&quot;, attending_doctor_node)
+    builder.add_node(&quot;medical_examiner&quot;, medical_examiner_node)
+    builder.add_node(&quot;pharmacist&quot;, pharmacist_node)
+    
+    # 设置入口
+    builder.set_entry_point(&quot;supervisor&quot;)
+    
+    # 添加条件路由（Supervisor 决策下一步）
+    builder.add_conditional_edges(
+        &quot;supervisor&quot;,
+        lambda state: state.get(&quot;next&quot;, &quot;__end__&quot;),
+        {
+            &quot;attending_doctor&quot;: &quot;attending_doctor&quot;,
+            &quot;medical_examiner&quot;: &quot;medical_examiner&quot;,
+            &quot;pharmacist&quot;: &quot;pharmacist&quot;,
+            &quot;__end__&quot;: END
+        }
+    )
+    
+    # 所有子节点处理完直接结束（一问一答模式）
+    builder.add_edge(&quot;attending_doctor&quot;, END)
+    builder.add_edge(&quot;medical_examiner&quot;, END)
+    builder.add_edge(&quot;pharmacist&quot;, END)
+    
+    # 编译图（传入检查点和存储）
+    graph = builder.compile(checkpointer=checkpointer, store=store)
+    
+    return graph</code></pre>
+<h3 id="3-Supervisor-路由节点-agents-supervisor-py"><strong>3. Supervisor 路由节点 ([agents/supervisor.py]</strong></h3>
+<pre><code>def supervisor_node(state: MedicalAgentState):
+    &quot;&quot;&quot;私人医疗顾问 = 监督者 + 导诊&quot;&quot;&quot;
+    
+    # 1. 获取 LLM 和记忆
+    model = get_model()
+    messages = state[&quot;messages&quot;]
+    user_id = state[&quot;user_id&quot;]
+    store = get_long_term_memory()
+    
+    # 2. 获取用户长期记忆（个人信息、医疗历史）
+    user_context = get_user_long_memory(user_id, store)
+    
+    # 3. 构建路由提示词
+    memory_section = &quot;&quot;
+    if user_context:
+        memory_section = f&quot;\n=== 用户历史信息 ===\n{user_context}\n=== 历史信息结束 ===&quot;
+    
+    route_prompt = ROUTE_PROMPT.format(memory_section=memory_section)
+    route_messages = [SystemMessage(content=route_prompt)] + messages
+    
+    # 4. LLM 路由决策
+    route_response = model.invoke(route_messages)
+    route_text = route_response.content.strip().lower()
+    
+    # 5. 解析路由结果
+    valid_routes = [&quot;medical_examiner&quot;, &quot;attending_doctor&quot;, &quot;pharmacist&quot;, &quot;supervisor&quot;]
+    next_node = &quot;supervisor&quot;
+    for r in valid_routes:
+        if r in route_text:
+            next_node = r
+            break
+    
+    print(f&quot;[路由决策] LLM决策结果: {route_text} -&gt; {next_node}&quot;)
+    
+    # 6. 路由到其他智能体，或者自己处理
+    if next_node != &quot;supervisor&quot;:
+        return {&quot;next&quot;: next_node}
+    
+    # 7. 自己处理（问候、闲聊、导诊）
+    agent = create_agent(
+        model=model,
+        tools=[search_web],
+        system_prompt=SUPERVISOR_PROMPT.format(memory_section=memory_section)
+    )
+    
+    config = {&quot;configurable&quot;: {&quot;user_id&quot;: user_id, &quot;thread_id&quot;: state[&quot;thread_id&quot;]}}
+    response = agent.invoke({&quot;messages&quot;: messages}, config=config)
+    
+    # 8. 添加角色前缀
+    if response[&quot;messages&quot;] and isinstance(response[&quot;messages&quot;][-1], AIMessage):
+        last_msg = response[&quot;messages&quot;][-1]
+        if not last_msg.content.startswith(&quot;【私人医疗顾问】&quot;):
+            last_msg.content = &quot;【私人医疗顾问】\n&quot; + last_msg.content
+    
+    return {
+        &quot;messages&quot;: response[&quot;messages&quot;],
+        &quot;next&quot;: &quot;__end__&quot;
+    }</code></pre>
+<h3 id="4-记忆系统核心-agents-memory-py"><strong>4. 记忆系统核心 ([agents/memory.py]</strong></h3>
+<pre><code>from psycopg_pool import ConnectionPool
+from langgraph.checkpoint.postgres import PostgresSaver
+from langgraph.store.postgres import PostgresStore
+from app.config.settings import settings
+
+
+# 全局变量 - 延迟初始化
+short_term_pool = None
+long_term_pool = None
+short_term_memory = None  # PostgresSaver
+long_term_memory = None   # PostgresStore
+
+
+def init_memory_system():
+    &quot;&quot;&quot;初始化记忆系统（连接池模式）&quot;&quot;&quot;
+    global short_term_pool, long_term_pool, short_term_memory, long_term_memory
+    
+    if short_term_memory is None:
+        # 短记忆连接池（对话历史）
+        short_term_pool = ConnectionPool(
+            conninfo=settings.POSTGRES_SHORT_TERM_URL,
+            min_size=2,
+            max_size=10,
+            kwargs={
+                &quot;autocommit&quot;: True,
+                &quot;prepare_threshold&quot;: 0,
+                &quot;keepalives&quot;: 1,
+                &quot;keepalives_idle&quot;: 30,
+                &quot;keepalives_interval&quot;: 10,
+                &quot;keepalives_count&quot;: 3
+            }
+        )
+        short_term_memory = PostgresSaver(short_term_pool)
+        short_term_memory.setup()
+        
+        # 长记忆连接池（用户信息）
+        long_term_pool = ConnectionPool(
+            conninfo=settings.POSTGRES_LONG_TERM_URL,
+            min_size=2,
+            max_size=10,
+            kwargs={...}
+        )
+        long_term_memory = PostgresStore(long_term_pool)
+        long_term_memory.setup()
+
+
+def get_user_long_memory(user_id: str, store=None) -&gt; str:
+    &quot;&quot;&quot;获取用户的长期记忆（个人信息、医疗历史等）&quot;&quot;&quot;
+    if store is None:
+        store = get_long_term_memory()
+    
+    user_info = []
+    
+    # 获取用户基本信息（按字段去重）
+    preferences = store.search((&quot;user_preferences&quot;, user_id))
+    if preferences:
+        pref_dict = {}
+        for item in preferences:
+            key_parts = item.key.split(&#x27;|&#x27;) if &#x27;|&#x27; in item.key else [item.key]
+            item_id = key_parts[-1]
+            pref_dict[item_id] = item.value
+        
+        pref_text = &quot;\n&quot;.join([
+            f&quot;{value.get(&#x27;key&#x27;)}: {value.get(&#x27;value&#x27;)}&quot;
+            for value in pref_dict.values()
+        ])
+        user_info.append(&quot;【用户基本信息】\n&quot; + pref_text)
+    
+    # 获取用户医疗历史（按类别分组）
+    medical_history = store.search((&quot;user_medical_history&quot;, user_id))
+    if medical_history:
+        medical_by_category = {}
+        for item in medical_history:
+            category = item.value.get(&quot;category&quot;, &quot;unknown&quot;)
+            content = item.value.get(&quot;content&quot;, &quot;&quot;)
+            if category not in medical_by_category:
+                medical_by_category[category] = []
+            medical_by_category[category].append(content)
+        
+        history_lines = []
+        for category, contents in medical_by_category.items():
+            if len(contents) == 1:
+                history_lines.append(f&quot;{category}: {contents[0]}&quot;)
+            else:
+                items_text = &quot;\n&quot;.join([f&quot;  {i+1}. {c}&quot; for i, c in enumerate(contents)])
+                history_lines.append(f&quot;{category}:\n{items_text}&quot;)
+        
+        medical_text = &quot;\n&quot;.join(history_lines)
+        user_info.append(&quot;【医疗历史】\n&quot; + medical_text)
+    
+    return &quot;\n\n&quot;.join(user_info) if user_info else &quot;&quot;</code></pre>
+<p><strong>记忆命名空间设计：</strong></p>
+<ul><li><code>(&quot;user_preferences&quot;, user_id)</code>：用户基本信息（姓名、年龄、性别等）</li><li><code>(&quot;user_medical_history&quot;, user_id)</code>：医疗历史（过敏史、手术史、症状等）</li><li><code>(&quot;user_medical_records&quot;, user_id, type)</code>：医疗文档（诊断、处方等）</li></ul>
+<h3 id="5-聊天-API-api-chat-py"><strong>5. 聊天 API ([api/chat.py]</strong></h3>
+<pre><code>from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.database.postgres import get_postgres_db
+from app.api.auth import get_current_user
+from app.agents.multi_agent import create_medical_agent_system
+
+
+@router.post(&quot;/send&quot;)
+async def send_message(
+    request: ChatRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_postgres_db)
+):
+    # 1. 更新会话信息
+    conversation = db.query(Conversation).filter(
+        Conversation.id == request.thread_id
+    ).first()
+    if conversation:
+        conversation.last_message = request.message[:50] + (&quot;...&quot; if len(request.message) &gt; 50 else &quot;&quot;)
+        conversation.last_active = datetime.now()
+        db.commit()
+    
+    # 2. 创建智能体系统
+    graph = create_medical_agent_system()
+    
+    # 3. 构建初始状态
+    initial_state = {
+        &quot;messages&quot;: [HumanMessage(content=request.message)],
+        &quot;user_id&quot;: request.user_id,
+        &quot;thread_id&quot;: request.thread_id,
+        &quot;medical_documents&quot;: [],
+        &quot;next&quot;: None
+    }
+    
+    # 4. 配置参数（Checkpoint 和 Store 配置）
+    config = {
+        &quot;configurable&quot;: {
+            &quot;user_id&quot;: request.user_id,
+            &quot;thread_id&quot;: request.thread_id
+        }
+    }
+    
+    # 5. 调用智能体系统（短记忆自动保存到 PostgresSaver）
+    result = graph.invoke(initial_state, config=config)
+    
+    # 6. 返回响应
+    assistant_content = &quot;&quot;
+    if result.get(&quot;messages&quot;):
+        assistant_content = result[&quot;messages&quot;][-1].content
+    
+    return JSONResponse(
+        content={
+            &quot;success&quot;: True,
+            &quot;message&quot;: assistant_content
+        },
+        status_code=200
+    )</code></pre>
+<hr>
+<h2 id="记忆系统设计"><strong>记忆系统设计</strong></h2>
+<h3 id="双层记忆架构"><strong>双层记忆架构</strong></h3>
+<table><thead><tr><th>层级</th><th>存储</th><th>技术实现</th><th>内容</th><th>生命周期</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr></tbody></table>
+<table><thead><tr><th><strong>短期记忆</strong></th><th>PostgreSQL (smart_short)</th><th>PostgresSaver</th><th>对话历史、图状态</th><th>会话级（thread_id）</th></tr></thead><tbody></tbody></table>
+<table><thead><tr><th><strong>长期记忆</strong></th><th>PostgreSQL (smart_long)</th><th>PostgresStore</th><th>用户信息、医疗历史、偏好</th><th>用户级（永久）</th></tr></thead><tbody></tbody></table>
+<h3 id="连接池配置"><strong>连接池配置</strong></h3>
+<pre><code>ConnectionPool(
+    conninfo=settings.POSTGRES_SHORT_TERM_URL,
+    min_size=2,            # 最小连接数
+    max_size=10,           # 最大连接数
+    kwargs={
+        &quot;autocommit&quot;: True,  # 自动提交
+        &quot;prepare_threshold&quot;: 0,  # 禁用预编译（避免连接池缓存冲突）
+        &quot;keepalives&quot;: 1,      # 启用连接保活
+        &quot;keepalives_idle&quot;: 30,  # 空闲 30 秒后开始探测
+        &quot;keepalives_interval&quot;: 10,  # 每 10 秒探测一次
+        &quot;keepalives_count&quot;: 3    # 最多探测 3 次
+    }
+)</code></pre>
+<hr>
+<h2 id="数据库设计"><strong>数据库设计</strong></h2>
+<h3 id="MySQL-medicalassistant"><strong>MySQL (medical_assistant)</strong></h3>
+<h4 id="表-users"><strong>表：users</strong></h4>
+<table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>id</td><td>INT</td><td>主键</td></tr><tr><td>username</td><td>VARCHAR(64)</td><td>用户名（唯一）</td></tr><tr><td>password</td><td>VARCHAR(256)</td><td>密码（bcrypt 加密）</td></tr><tr><td>email</td><td>VARCHAR(256)</td><td>邮箱</td></tr><tr><td>created_at</td><td>TIMESTAMP</td><td>创建时间</td></tr></tbody></table>
+<h3 id="PostgreSQL-smartsession"><strong>PostgreSQL (smart_session)</strong></h3>
+<h4 id="表-conversations"><strong>表：conversations</strong></h4>
+<table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>id</td><td>VARCHAR(64)</td><td>会话 ID（主键）</td></tr><tr><td>user_id</td><td>VARCHAR(64)</td><td>用户 ID</td></tr><tr><td>title</td><td>VARCHAR(256)</td><td>会话标题</td></tr><tr><td>last_message</td><td>VARCHAR(512)</td><td>最后消息摘要</td></tr><tr><td>last_active</td><td>TIMESTAMP</td><td>最后活跃时间</td></tr><tr><td>created_at</td><td>TIMESTAMP</td><td>创建时间</td></tr></tbody></table>
+<h4 id="表-medicaldocuments"><strong>表：medical_documents</strong></h4>
+<table><thead><tr><th>字段</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td></tr><tr><td>id</td><td>VARCHAR(64)</td><td>文档 ID（主键）</td></tr><tr><td>user_id</td><td>VARCHAR(64)</td><td>用户 ID</td></tr><tr><td>filename</td><td>VARCHAR(256)</td><td>文件名</td></tr><tr><td>document_type</td><td>VARCHAR(64)</td><td>文档类型（病历本/体检报告等）</td></tr><tr><td>file_path</td><td>VARCHAR(512)</td><td>文件路径</td></tr><tr><td>upload_time</td><td>TIMESTAMP</td><td>上传时间</td></tr><tr><td>extracted_data</td><td>JSON</td><td>提取的结构化数据</td></tr></tbody></table>
+<hr>
+<h2 id="会话隔离机制"><strong>会话隔离机制</strong></h2>
+<h3 id="三层隔离设计"><strong>三层隔离设计</strong></h3>
+<table><thead><tr><th>层级</th><th>字段</th><th>存储位置</th><th>用途</th></tr></thead><tbody><tr><td>-</td><td>-</td><td>-</td><td>-</td></tr><tr><td>1</td><td>user_id</td><td>所有表</td><td>用户级隔离</td></tr><tr><td>2</td><td>thread_id</td><td>PostgresSaver Checkpoint</td><td>会话级隔离（对话历史）</td></tr><tr><td>3</td><td>namespace</td><td>PostgresStore</td><td>数据分类隔离</td></tr></tbody></table>
+<h3 id="LangGraph-Checkpoint-工作原理"><strong>LangGraph Checkpoint 工作原理</strong></h3>
+<pre><code>用户发送消息
+    ↓
+graph.invoke(initial_state, config={&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;xxx&quot;}})
+    ↓
+[1] 从 PostgresSaver 读取 thread_id 对应的 checkpoint（对话历史）
+    ↓
+[2] 执行工作流（修改状态）
+    ↓
+[3] 自动保存 checkpoint 回 PostgresSaver
+    ↓
+返回结果</code></pre>
+<hr>
+<p><strong> 更适合 更详细 的适合写到简历的完整Agent项目 ，带完整简历写法，代码，流程讲解，面试问答</strong></p>
+<h2 id="总结"><strong>总结</strong></h2>
+<p>智能医疗客服系统是一个完整的生产级 LangGraph 应用，展示了：</p>
+<ol><li>✅ <strong>多智能体协作</strong>：中心辐射式架构，职责清晰</li></ol>
+<ol><li>✅ <strong>双层记忆系统</strong>：PostgresSaver + PostgresStore</li></ol>
+<ol><li>✅ <strong>会话管理</strong>：多会话支持、历史记录、Checkpoint</li></ol>
+<ol><li>✅ <strong>工具调用</strong>：联网搜索、信息保存</li></ol>
+<ol><li>✅ <strong>文档处理</strong>：PDF上传、智能提取</li></ol>
+<ol><li>✅ <strong>生产级连接池</strong>：PostgreSQL 连接池配置</li></ol></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+
+</body>
+</html>

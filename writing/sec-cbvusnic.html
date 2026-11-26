@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>名单库 · 源码阅读分析 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">6</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">Redis中的key设计</a><a class="tl l1" href="#sec-2">1.CacheLoader缓存加载 &amp; 数据处理</a><a class="tl l1" href="#sec-3">2.核心接口分析</a><a class="tl l2" href="#sec-4">1.queryTags -返回命中的未过期标签或其子标签</a><a class="tl l2" href="#sec-5">2.queryTagsWithParent -返回命中标签及命中标签的父标签</a><a class="tl l2" href="#sec-6">3.addTags - 新增名单</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="security/index.html">业务安全风控</a></div><article><h1>名单库 · 源码阅读分析</h1><div class="meta">2025-09-28<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累 · 我主导的设计&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<p>方案：<span class="fs-mention">@名单库-方案</span></p><h1 id="sec-1">Redis中的key设计</h1><ul><li>redis key: risk:t:{obj_type}:{obj_value}</li><li>field: {tag_id}</li><li>value: '{expired}|{updated}' (<strong>增加字段则按顺序通过竖线分割- 为了降低Redis存储压力</strong>)<p>其中<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">expired是</mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>秒级绝对时间戳</strong></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">，updated是</mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>毫秒级绝对时间戳</strong></mark>。</p></li></ul><p>示例：</p><pre><code>key = risk:t:uid:123
+1) "1001"
+2) "1730271374|1730271300"</code></pre><p>并且为了进一步降低Redis存储压力，<strong>在进行Redis写入时，做了一层</strong><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>objType的转换</strong></mark>，如下：</p><pre><code>private static final ImmutableMap&lt;String, String&gt; TAG_TYPE_CONVERSION_MAP = ImmutableMap.of(
+        "userId", "uid", // 将userId 压缩为 uid
+        "userIp", "uip" // 将userIp 压缩为 uip
+);
+// 组装Redis Key
+private String assembleRedisTagKey(String objType, String objValue) {
+    //进行一次主体 type 转换,降低 redis 存储(只有对 redis 的读写需要转换)
+    String storeType = TAG_TYPE_CONVERSION_MAP.get(objType);
+    if (StringUtils.isEmpty(storeType)) {
+        storeType = objType;
+    }
+    return String.format("risk:t:%s:%s", storeType, objValue);
+}</code></pre><h1 id="sec-2">1.CacheLoader缓存加载 &amp; 数据处理</h1><p>项目启动时，将标签元数据(TagMeta)从Redis读出到缓存，组装成所需的数据结构,支撑后续功能。</p><p>共组装成两个核心数据结构：</p><ul><li><strong>parentTagMetaMap</strong>：Map&lt;tag_id,List&lt;TagMeta&gt;(包含<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>其本身及其所有父标签</strong></mark>的列表)&gt;</li></ul><ul><li><strong>childTagMetaMap</strong>： Map&lt;tag_id,List&lt;TagMeta&gt;(包含<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>其本身及其所有子标签</strong></mark>的列表-)&gt;</li></ul><blockquote><p>举例：</p><p>若此时存在以下五个标签，以&lt;parent_tag_id,tag_id&gt;的形式精简标识，有：①&lt;0,1&gt; ②&lt;1,9&gt; ③&lt;1,87&gt; ④&lt;9,901&gt; ⑤&lt;901,9001&gt;</p><p>则在经过处理后，有如下数据结构：</p><p><strong>parentTagMetaMap：</strong>&lt;1，[①]&gt;、&lt;9，[②,①]&gt;、&lt;87，[③,①]&gt;、&lt;901，[④,②,①]&gt;、&lt;9001，[⑤,④,②,①]&gt;</p><p><strong>childTagMetaMap：</strong>&lt;1，[①,②,③,④,⑤]&gt;、&lt;9，[②,④,⑤]&gt;、&lt;87，[③]&gt;、&lt;901，[④,⑤]&gt;、&lt;9001,[⑤]&gt;</p></blockquote><pre><code>public class TagMetaCacheImpl implements TagMetaCache, CacheLoader {
+
+    private Map&lt;Integer, TagMetaModel&gt; tagMetaMap; // Map&lt;tag_id,TagMeta&gt;
+    private Map&lt;Integer, List&lt;TagMetaModel&gt;&gt; parentTagMetaMap; //  Map&lt;tag_id,List&lt;TagMeta&gt;(包含其本身及其所有父标签的列表)&gt;
+    private Map&lt;Integer, List&lt;TagMetaModel&gt;&gt; childTagMetaMap; // Map&lt;tag_id,List&lt;TagMeta&gt;(包含其本身及其所有子标签的列表-)&gt;
+
+    @Autowired
+    private TagListRedisService tagListRedisService;
+    
+    @Override
+    public TagMetaModel getTagMetaById(Integer tagId) {
+        return tagMetaMap.get(tagId);
+    }
+
+    @Override
+    public List&lt;TagMetaModel&gt; getParentTagsById(Integer tagId) {
+        return parentTagMetaMap.get(tagId);
+    }
+
+    @Override
+    public List&lt;TagMetaModel&gt; getChildTagsById(Integer tagId) {
+        return childTagMetaMap.get(tagId);
+    }
+
+    @Override
+    public String getCacheName() {
+        return "tag_meta";
+    }
+
+    @Override
+    public int getDelayTime() {
+        return 10;
+    }
+
+    @Override
+    public Boolean reload() {
+        try {
+            String originValue = tagListRedisService.get(APPMeta.RISK_TAG_META_CACHE_KEY);
+            if (StringUtils.isEmpty(originValue)) {
+                log.error("event field meta load fail, empty meta");
+                tagMetaMap = new HashMap&lt;&gt;();
+                return true;
+            }
+            String value = GzipUtils.unGzip(originValue); // 解压
+            if (StringUtils.isEmpty(value)) {
+                log.error("event field load fail, gzip error");
+                return false;
+            }
+            List&lt;TagMetaModel&gt; tagMetaModels = Jacksons.BASE.parseList(value, TagMetaModel.class);
+            Map&lt;Integer, TagMetaModel&gt; tempTagMetaMap = new HashMap&lt;&gt;(); // Map&lt;tag_id,TagMeta&gt;
+            Map&lt;Integer, List&lt;TagMetaModel&gt;&gt; parentTagMap = new HashMap&lt;&gt;(); // Map&lt;parent_tag_id,List&lt;TagMeta&gt;&gt;
+            for (TagMetaModel tagMetaModel : tagMetaModels) {
+                tempTagMetaMap.put(tagMetaModel.getTagId(), tagMetaModel);
+                parentTagMap.computeIfAbsent(tagMetaModel.getParentTagId(), k -&gt; new ArrayList&lt;&gt;()).add(tagMetaModel);
+            }
+            childTagMetaMap = createChildTagMap(parentTagMap, tempTagMetaMap);
+            parentTagMetaMap = createParentTagMap(tempTagMetaMap);
+            tagMetaMap = tempTagMetaMap;
+            return true;
+        } catch (Exception e) {
+            log.error("reload tagMeta error: {}", e.toString());
+            return false;
+        }
+    }
+
+    private Map&lt;Integer, List&lt;TagMetaModel&gt;&gt; createParentTagMap(Map&lt;Integer, TagMetaModel&gt; allTags) {
+        Map&lt;Integer, List&lt;TagMetaModel&gt;&gt; tempParentTagMap = new HashMap&lt;&gt;();
+        for (TagMetaModel tag : allTags.values()) {
+            List&lt;TagMetaModel&gt; result = new ArrayList&lt;&gt;();
+            int currentTagId = tag.getTagId();
+            while (true) {
+                TagMetaModel currentTag = allTags.get(currentTagId);
+                if (currentTag == null) {
+                    break;
+                }
+                result.add(currentTag);
+                if (currentTag.getParentTagId() == 0) { // 根节点就终止
+                    break;
+                }
+                currentTagId = currentTag.getParentTagId(); // 向上找父标签
+            }
+            tempParentTagMap.put(tag.getTagId(), result);
+        }
+        return tempParentTagMap; // Map&lt;tag_id,List&lt;TagMeta&gt;(包含其本身及其所有父标签的列表)&gt;
+    }
+
+    private Map&lt;Integer, List&lt;TagMetaModel&gt;&gt; createChildTagMap(Map&lt;Integer, List&lt;TagMetaModel&gt;&gt; parentTagMap, Map&lt;Integer, TagMetaModel&gt; tempTagMetaMap) {
+        Map&lt;Integer, List&lt;TagMetaModel&gt;&gt; tempChildTagMap = new HashMap&lt;&gt;();
+        for (TagMetaModel tagMetaModel : tempTagMetaMap.values()) {
+            List&lt;TagMetaModel&gt; childTagList = new ArrayList&lt;&gt;();
+            childTagList.add(tagMetaModel); // 先添加其自身
+            List&lt;Integer&gt; tagIds = new ArrayList&lt;&gt;();
+            tagIds.add(tagMetaModel.getTagId());
+            int deep = 0;
+            while (deep &lt; tagIds.size()) {
+                Integer tagId = tagIds.get(deep);
+                List&lt;TagMetaModel&gt; childTags = parentTagMap.get(tagId); // 添加其名下所有子标签
+                if (childTags != null) {
+                    for (TagMetaModel childTag : childTags) {
+                        tagIds.add(childTag.getTagId());
+                        childTagList.add(childTag);
+                    }
+                }
+                deep++;
+            }
+            tempChildTagMap.put(tagMetaModel.getTagId(), childTagList);
+        }
+        return tempChildTagMap; // Map&lt;tag_id,List&lt;TagMeta&gt;(包含其本身及其所有子标签的列表)&gt;
+    }
+}</code></pre><h1 id="sec-3">2.核心接口分析</h1><p>若当前有以下的<strong>标签层级关系</strong>：</p><figure class="fs-board" data-doc="[内部链接]" data-board="I3bDw2sS6hCydBbXlr1cfvLGnwd"><div class="board-ph">正在加载画板…</div></figure><h2 id="sec-4">1.queryTags -返回命中的未过期标签或其子标签</h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">📌</div><div class="fs-callout-b"><p>此接口会将过期的标签过滤掉，<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>只返回未过期(生效)的标签</strong></mark>。</p><p>此接口一般在“<strong>业务侧</strong>”使用，业务方一般仅关注是否命中传入的标签。</p></div></div><ul><li>接口含义：<strong>判定名单objType:objValue是否命中标签tags或其子标签；若是，返回命中的标签。</strong></li></ul><ul><li>首先从Redis查出当前risk:t:objType:objValue的所有标签作为<code>taskMap</code></li><li>再补全传入的tags的所有子标签作为<code>childTags</code></li><li>最后取<code>taskMap</code>与<code>childTags</code>的<strong>交集</strong>，作为返回结果</li></ul><ul><li>返回<strong>空列表 </strong>-&gt; 未命中tags中的任何标签。</li><li>返回<strong>非空列表</strong> -&gt; 返回的是命中的tags标签或其子标签。</li></ul><ul><li>例1：若此时的tags={6,7} Redis中此名单的标签tagMap={2,3}。则根据tags补全后的childTags={6,7},将其与tags求交集后，返回结果为{}(空列表)。</li><li>例2：若此时的tags={2,3} Redis中此名单的标签tagMap={6,7}。则根据tags补全后的childTags={2,3,4,5,6,7},将其与tags求交集后，返回结果为{6,7}。</li></ul><pre><code>private static final String HASH_VALUE_SPLIT_CHAR = "|";
+public ListItem queryTags(String objType, String objValue, List&lt;Integer&gt; tags, long expired) {
+    String key = assembleRedisTagKey(objType, objValue); // 组装Redis key
+    Map&lt;String, String&gt; tagMap = tagListRedisService.hgetall(key); // 1.从Redis读出此名单的标签Map
+    ListItem items = new ListItem();
+    items.setObjType(objType);
+    items.setObjValue(objValue);
+    items.setTags(new ArrayList&lt;&gt;());
+    if (tagMap.isEmpty()) {
+        return items;
+    }
+    for (Integer tagId : tags) {
+        List&lt;TagMetaModel&gt; childTags = tagMetaCache.getChildTagsById(tagId); // 2.取出每一个标签的所有子标签及其本身
+        if (null == childTags) {
+            continue;
+        }
+        for (TagMetaModel childTag : childTags) {
+            String tagInfo = tagMap.get(childTag.getTagId().toString());
+            if (StringUtils.isNotEmpty(tagInfo)) {
+                String[] values = StringUtils.split(tagInfo, HASH_VALUE_SPLIT_CHAR); // 3.“|”分隔，得到expired|updated_at
+                if (values.length &lt; 2) {
+                    continue;
+                }
+                long tagExpired = Long.parseLong(values[0]);
+                if (tagExpired &lt; expired) { // 4.过滤掉不生效标签（已过期）
+                    continue;
+                }
+                TagItem tagItem = new TagItem();
+                tagItem.setTagId(childTag.getTagId());
+                tagItem.setExpired(tagExpired);
+                tagItem.setUpdated(Long.parseLong(values[1]));
+                items.addToTags(tagItem); // 收集结果
+            }
+        }
+    }
+    return items;
+}</code></pre><h2 id="sec-5">2.queryTagsWithParent -返回命中标签及命中标签的父标签</h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>此接口一般在“<strong>服务侧</strong>”使用，如：实时风控的规则引擎中，需要该标签所关联的全量父子标签。</p><p>且<strong>父标签的过期时间由所有子标签决定</strong>，从逻辑上来讲，<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>父标签的过期时间 = MAX{son1.expired,son2.expired......}</strong></mark></p></div></div><ul><li><p>即：先queryTags，再”由子索父“。</p></li></ul><ul><li>返回<strong>空列表 </strong>-&gt; 未命中。</li><li>返回<strong>非空列表</strong> -&gt; 非空列表中的标签就是 "命中的标签+命中标签的父标签"。</li></ul><ul><li>若此时的tags={2,3} Redis中此名单的标签tagMap={6,7}。首先此时queryTags之后的tagItems={6,7}，再递归向上寻找父标签，最终结果为tagItems={1,3,6,7}</li></ul><pre><code>@Override
+public ListItem queryTagsWithParent(String objType, String objValue, List&lt;Integer&gt; tags, long expired) {
+    ListItem tagItems = queryTags(objType, objValue, tags, expired); // 1.查出此名单当前生效的所有子标签及其本身
+    Map&lt;Integer, TagItem&gt; tagWithParentMap = new HashMap&lt;&gt;();
+    for (TagItem tagItem : tagItems.getTags()) {
+        List&lt;TagMetaModel&gt; parentTags = tagMetaCache.getParentTagsById(tagItem.getTagId()); // 2.为每个标签项查找其父标签（不考虑标签过期）
+        if (null == parentTags) {
+            continue;
+        }
+        for (TagMetaModel parentTag : parentTags) {
+            if (tagWithParentMap.containsKey(parentTag.getTagId())) {
+                continue;
+            }
+            tagWithParentMap.put(parentTag.getTagId(), new TagItem().setTagId(parentTag.getTagId())); // 3.
+        }
+    }
+    tagItems.setTags(new ArrayList&lt;&gt;(tagWithParentMap.values()));
+    return tagItems;
+}</code></pre><h2 id="sec-6">3.addTags - 新增名单</h2><ol><li>写入<strong>Redis</strong>，以hash的数据结构存储。</li></ol><ol><li><strong>Holo</strong>：名单库数据的持久化，实现”追加写“操作，并在同步时做了一步特殊处理：‘source="风控平台"的数据不需要更新到 holo，风控平台 后台写标签会主动写holo’</li><li><strong>Iceberg</strong>：持久化日志，实时同步操作日志，将数据<strong>分区存储</strong>。</li></ol><pre><code>@Override
+public boolean addTags(
+        String objType, String objValue, List&lt;TagItem&gt; tags, String reason, String operator, String source
+) {
+    String tagKey = assembleRedisTagKey(objType, objValue);
+    Map&lt;String, String&gt; tagMap = new HashMap&lt;&gt;();
+    for (TagItem tag : tags) { // 1.组装为Map
+        tagMap.put(String.valueOf(tag.getTagId()), tag.getExpired() + HASH_VALUE_SPLIT_CHAR + tag.getUpdated());
+    }
+    boolean success = tagListRedisService.hmset(tagKey, tagMap); // 2.存入Redis
+    if (success) {
+        // 3.写入Talos-优先保障写 redis 成功
+        sendTagListDatas(objType, objValue, tags, reason, operator, source);
+    }
+    return success;
+}</code></pre></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

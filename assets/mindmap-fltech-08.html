@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>HashMap、ConcurrentHashMap · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>HashMap、ConcurrentHashMap</b><small>幕布导图 · 111 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "HashMap、ConcurrentHashMap", "data": {"id": "root", "topic": "<b>HashMap、ConcurrentHashMap<\/b><span class=\"mm-note\">ConcurrentHashMap<\/span>", "children": [{"id": "n1", "topic": "<b>1.HashMap<\/b><span class=\"mm-note\">HashMap 主要用来存放键值对，它基于哈希表的 <b>Map 接口<\/b>实现，是常用的 Java 集合之一，是非线程安全的。<\/span>", "children": [{"id": "n2", "topic": "<code>HashMap<\/code> <b>可以存储 null 的 key 和 value<\/b>，但 <b>null 作为键只能有一个，null 作为值可以有多个。<\/b>", "children": []}, {"id": "n3", "topic": "<code>HashMap<\/code> 默认的<b>初始化大小为 16<\/b>。之后每次扩充，容量变为原来的 2 倍。并且， <b><code>HashMap<\/code> 总是使用 2 的幂<\/b>作为哈希表的大小", "children": []}, {"id": "n4", "topic": "<b>1.HashMap的底层原理<\/b><span class=\"mm-note\">依旧分为JDK1.8之前和JDK1.8之后两个版本。<\/span>", "children": [{"id": "n5", "topic": "JDK1.8之前：<b>数组链表(拉链法)<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-76462002ebfc70.jpg\" style=\"width:320px;height:206px\" loading=\"lazy\" decoding=\"async\"> JDK1.8 之前 <code>HashMap<\/code> 底层是 <b>数组和链表<\/b> 结合在一起使用也就是 <b>链表散列<\/b>。 HashMap 通过 key 的 <code>hashcode<\/code> 经过扰动函数处理过后得到 hash 值，然后通过 <b><code>(n - 1) &amp; hash<\/code><\/b> <b>判断当前元素存放的位置<\/b>（这里的 <b>n 指的是数组的长度<\/b>），如果当前位置存在元素的话，就判断该元素与要存入的元素的 hash 值以及 key 是否相同，如果相同的话，直接覆盖，不相同就通过拉链法解决冲突。 所谓扰动函数指的就是 HashMap 的 <code>hash<\/code> 方法。使用 <code>hash<\/code> 方法也就是扰动函数是为<\/span>", "children": []}, {"id": "n6", "topic": "JDK1.8之后：<b>数组+链表+红黑树<\/b><span class=\"mm-note\">JDK1.8 之后在解决哈希冲突时有了较大的变化： <b>当链表长度大于阈值<\/b>（默认为 8）（<b>将链表转换成红黑树<\/b>前会判断，<b>如果当前数组的长度小于 64<\/b>，那么会选择<b>先进行数组扩容<\/b>，而不是转换为红黑树）时，将链表转化为红黑树，以减少搜索时间。 <img class=\"mm-img\" src=\"fl-cbbfe309218bdd.jpg\" style=\"width:320px;height:288px\" loading=\"lazy\" decoding=\"async\"> <b>红黑树<\/b>就是为了<b>解决二叉查找树的缺陷<\/b>，因为二叉查找树在某些情况下会退化成一个线性结构。<\/span>", "children": []}]}, {"id": "n7", "topic": "<b>2.HashMap的扩容机制：<\/b><span class=\"mm-note\">HashMap 的扩容机制是指当 HashMap 中的元素个数达到容量的一定比例（<b>负载因子<\/b>），就会触发扩容操作，以保持其性能。 HashMap 在进行扩容时，会<b>重新计算每个元素在新数组中的位置，并将其重新分布到新的更大的数组中。<\/b> <b>具体扩容的过程<\/b>如下：<\/span>", "children": [{"id": "n8", "topic": "当 HashMap 中的元素个数达到容量的一定比例（<b>默认为负载因子 0.75<\/b>），HashMap 就会触发扩容操作。", "children": []}, {"id": "n9", "topic": "扩容时，会<b>创建一个新的数组，其大小是原数组的2倍<\/b>。", "children": []}, {"id": "n10", "topic": "然后，HashMap 会将原数组中的<b>每个元素重新计算其在新数组中的位置<\/b>，并将其存放到新的数组中。", "children": []}, {"id": "n11", "topic": "如果原数组中存在多个元素映射到新数组的同一位置上（即发生了哈希冲突），则在新数组中会使用链表或红黑树（Java 8 后引入）等数据结构来解决冲突。", "children": []}, {"id": "n12", "topic": "扩容完成后，HashMap 的容量和负载因子会更新为新的值。<span class=\"mm-note\">通过扩容机制，HashMap 在保持较低的冲突率的同时，能够保证较好的性能表现，使得在插入、查找、删除等操作的时间复杂度近似于 O(1)。<\/span>", "children": []}]}, {"id": "n13", "topic": "<b>3.HashMap为何线程不安全？<\/b><span class=\"mm-note\">出现两个问题：<\/span>", "children": [{"id": "n14", "topic": "<b>死循环<\/b>", "children": [{"id": "n15", "topic": "JDK1.7 及之前版本，由于使用<b>头插法<\/b>，导致在多线程环境下，<code>HashMap<\/code> <b>扩容时会造成死循环<\/b>和数据丢失的问题。", "children": []}, {"id": "n16", "topic": "JDK1.8之后，由于改用<b>尾插法<\/b>，<b>避免了死循环<\/b>问题。", "children": []}]}, {"id": "n17", "topic": "<b>数据丢失<\/b><span class=\"mm-note\">数据丢失这个在 JDK1.7 和 JDK 1.8 中都存在，这里以 JDK 1.8 为例进行介绍。 JDK 1.8 后，在 <code>HashMap<\/code> 中，<b>多个键值对可能会被分配到同一个桶<\/b>，并以链表或红黑树的形式存储。 <b>多个线程对 <code>HashMap<\/code> 的 <code>put<\/code> 操作会导致线程不安全<\/b>，具体来说会有<b>数据覆盖<\/b>的风险。 数据丢失举例：<\/span>", "children": [{"id": "n18", "topic": "<b>两个线程 1,2 同时进行 put 操作，并且发生了哈希冲突<\/b>（hash 函数计算出的插入下标是相同的）。", "children": []}, {"id": "n19", "topic": "不同的线程可能在不同的时间片获得 CPU 执行的机会，当前线程 1 执行完哈希冲突判断后，由于时间片耗尽挂起。线程 2 先完成了插入操作。", "children": []}, {"id": "n20", "topic": "随后，线程 1 获得时间片，由于之前已经进行过 hash 碰撞的判断，所有此时会直接进行插入，这就导致线程 2 插入的数据被线程 1 覆盖了。", "children": []}]}]}, {"id": "n21", "topic": "<b>4.HashMap头插法/尾插法出现的问题<\/b><span class=\"mm-note\">书接上文，JDK1.8之前，使用<b>头插法<\/b>，会出现<b>“链表成环<\/b>”的问题，导致<b>死循环<\/b>。而在JDK1.8之后，使用了尾插法。 因此这里分析一下头插法和尾插法。<\/span>", "children": [{"id": "n22", "topic": "<b>1.头插法<\/b>", "children": [{"id": "n23", "topic": "<b>优点：<\/b>", "children": [{"id": "n24", "topic": "<b>效率高<\/b>", "children": [{"id": "n25", "topic": "扩容的时候，插入在头部，效率高一些，时间复杂度为O(1)", "children": []}, {"id": "n26", "topic": "但如果插入尾部，都要遍历到最后一个节点，时间复杂度为O(N)", "children": []}]}, {"id": "n27", "topic": "<b>满足时间局部性原理=》<\/b>最近插入的最有可能被使用", "children": []}]}, {"id": "n28", "topic": "<b>缺点<\/b>：", "children": [{"id": "n29", "topic": "<b>死循环<\/b>：就是因为 <b>倒序+ 正序 这种乱序的插入<\/b>，<b>导致了 尾部的丢失<\/b>，从而<b>形成了环形链表<\/b>。<span class=\"mm-note\">这就像 负负得正 一样的。 第一次头插是倒序， 第二次 头插是 正序， 第三次头插是倒序， 第四次 头插是 正序。 而只要 倒序+ 正序 一组合，就会丢掉尾部的 空指针。<\/span>", "children": []}]}]}, {"id": "n30", "topic": "<b>2.尾插法<\/b>", "children": [{"id": "n31", "topic": "<b>优点：<\/b>", "children": [{"id": "n32", "topic": "<b>不会死循环<\/b>", "children": []}]}, {"id": "n33", "topic": "<b>缺点：<\/b>", "children": [{"id": "n34", "topic": "<b>扩容的效率低些  O(N)<\/b><span class=\"mm-note\">扩容的时候，插入在尾部，效率高一些，时间复杂度为<b>O(N)<\/b><\/span>", "children": []}, {"id": "n35", "topic": "<b>不满足时间局部性原理<\/b><span class=\"mm-note\">根据时间局部性原理，最近插入的最有可能被使用，这时候已经插入到尾部去了，要找到尾部才能找得到。<\/span>", "children": []}]}]}, {"id": "n36", "topic": "<b>3.头插法出现死循环的问题详解：<\/b><span class=\"mm-note\">💡 <b>Q1<\/b>：产生<b>循环链表后带来的问题<\/b>是什么? 环形链表已经产生了, 当我们调用get(3)或者get(1)不会产生问题, 但是如果get(5), 并且5在数组中的下标和1,3的一致的话, 由于<b>链表中没有5, 所以就会一直在链表中寻找<\/b>, 但是链表没有尽头, 就导致程序卡在get(5)处了 <b>后果<\/b>：调用get()方法时可能陷入死循环. 为什么会出现循环链表呢? <b>产生循环链表的过程:主要发生在扩容操作中。<\/b><\/span>", "children": [{"id": "n37", "topic": "如下所示的hashmap, 有两个元素, 它们的<b>key分别是1和3<\/b>, <b>假设再增加一个元素时会触发扩容操作<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-11971f7e47b65a.jpg\" style=\"width:209px;height:242px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n38", "topic": "此时<b>线程1和线程2都执行put()操作,<\/b> 便都会<b>触发hashmap的扩容操作<\/b>,<span class=\"mm-note\">假设线程1扩容时, 执行完<b>transfer()中的<code>Entry&lt;K,V&gt; next = e.next;<\/code>被挂起<\/b>, 此时<b>e指向1<\/b>, <b>next指向3<\/b>, 如下图所示 <img class=\"mm-img\" src=\"fl-27d8b4cbecc562.jpg\" style=\"width:320px;height:277px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n39", "topic": "假设<b>1和3在新的数组中仍然发生哈希碰撞<\/b>, 假设<b>线程2完成了扩容<\/b>, 那么此时哈希表的样子如下图所示<span class=\"mm-note\">可以发现, 由于使用了头插法, 所以<b>3变成了头结点<\/b>。 <img class=\"mm-img\" src=\"fl-617e98f7ab359b.jpg\" style=\"width:320px;height:250px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n40", "topic": "<b>回到线程1<\/b>, <b>e指向的是1, next指向的是3<\/b>, 继续向下执行<span class=\"mm-note\">当执行完<b><code>e.next = newTable[i];<\/code><\/b>便出现了循环链表, 其中,<code>newTable[i]<\/code>是3。 <img class=\"mm-img\" src=\"fl-69c5afff1476dd.jpg\" style=\"width:320px;height:199px\" loading=\"lazy\" decoding=\"async\"> 💡 <b>Q3：tranfer()方法源码<\/b><\/span>", "children": []}]}]}, {"id": "n41", "topic": "<b>5.HashMap的7种遍历方式<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-757fdcc2948219.jpg\" style=\"width:320px;height:190px\" loading=\"lazy\" decoding=\"async\"> HashMap <b>遍历从大的方向来说，可分为以下 4 类<\/b>：<\/span>", "children": [{"id": "n42", "topic": "<b>迭代器（Iterator）<\/b>方式遍历；", "children": []}, {"id": "n43", "topic": "<b>For Each<\/b> 方式遍历；", "children": []}, {"id": "n44", "topic": "<b>Lambda<\/b> 表达式遍历（JDK 1.8+）;", "children": []}, {"id": "n45", "topic": "<b>Streams API<\/b> 遍历（JDK 1.8+）。<span class=\"mm-note\">但每种类型下又有不同的实现方式，因此具体的遍历方式又可以分为以下 7 种：<\/span>", "children": []}, {"id": "n46", "topic": "使用迭代器（Iterator）<b>EntrySet<\/b> 的方式进行遍历；", "children": []}, {"id": "n47", "topic": "使用迭代器（Iterator）<b>KeySe<\/b>t 的方式进行遍历；", "children": []}, {"id": "n48", "topic": "使用 For Each EntrySet 的方式进行遍历；", "children": []}, {"id": "n49", "topic": "使用 For Each KeySet 的方式进行遍历；", "children": []}, {"id": "n50", "topic": "使用 Lambda 表达式的方式进行遍历；", "children": []}, {"id": "n51", "topic": "使用 Streams API 单线程的方式进行遍历；", "children": []}, {"id": "n52", "topic": "使用 Streams API 多线程的方式进行遍历。", "children": []}]}, {"id": "n53", "topic": "<b>6.HashMap与HashTable的区别<\/b>", "children": [{"id": "n54", "topic": "<b>线程是否安全：<\/b> <code>HashMap<\/code> 不安全，<b><code>Hashtable<\/code> 是线程安全<\/b><span class=\"mm-note\">因为 <code>Hashtable<\/code> 内部的方法基本都经过<b><code>synchronized<\/code> 修饰<\/b>；<\/span>", "children": []}, {"id": "n55", "topic": "<b>效率：<\/b> HashMap较高<span class=\"mm-note\">因为线程安全的问题，<code>HashMap<\/code> 要比 <code>Hashtable<\/code> 效率高一点。另外，<code>Hashtable<\/code> 基本被淘汰，不要在代码中使用它；<\/span>", "children": []}, {"id": "n56", "topic": "<b>对 Null key 和 Null value 的支持：<\/b><span class=\"mm-note\"><code>HashMap<\/code> 可以存储 null 的 key 和 value，但 null 作为键只能有一个，null 作为值可以有多个；<b>Hashtable 不允许有 null 键和 null 值<\/b>，否则会抛出 <code>NullPointerException<\/code>。<\/span>", "children": []}, {"id": "n57", "topic": "<b>底层数据结构：<\/b><span class=\"mm-note\">JDK1.8 以后的 <code>HashMap<\/code> 在解决哈希冲突时有了较大的变化，当链表长度大于阈值（默认为 8）时，将链表转化为红黑树（将链表转换成红黑树前会判断，如果当前数组的长度小于 64，那么会选择先进行数组扩容，而不是转换为红黑树），以减少搜索时间（后文中我会结合源码对这一过程进行分析）。 <b><code>Hashtable<\/code> 没有这样的机制。<\/b><\/span>", "children": []}, {"id": "n58", "topic": "<b>初始容量大小和每次扩充容量大小的不同：<\/b>", "children": []}]}, {"id": "n59", "topic": "<b>7.简单写一个HashMap？<\/b><span class=\"mm-note\">思路：<b>定义数据结构散列表(数组)、实现put()、get()操作，并且实现冲突处理、扩容<\/b>等。 这个简单的HashMap实现主要包含了以下几个部分：<\/span>", "children": [{"id": "n60", "topic": "<b>初始化：<\/b> 构造函数用于初始化HashMap，包括指定初始容量和加载因子。加载因子是一个影响HashMap扩容的因素，当元素个数达到容量乘以加载因子时，HashMap会进行扩容。", "children": []}, {"id": "n61", "topic": "<b>哈希函数：<\/b> <code>hash()<\/code> 方法用于计算键的哈希值，它通过对键的哈希码进行位运算来得到最终的哈希值。", "children": []}, {"id": "n62", "topic": "<b>索引计算：<\/b> <code>indexFor()<\/code> 方法根据哈希值和数组长度计算出存储位置的索引。HashMap内部使用一个数组来存储元素，索引计算的目的是将哈希值映射到数组的一个位置上。", "children": []}, {"id": "n63", "topic": "<b>添加元素：<\/b> <code>put()<\/code> 方法用于向HashMap中添加键值对。首先计算键的哈希值，然后根据哈希值计算出存储位置的索引。如果该位置已经存在元素，就使用链表的形式解决哈希冲突，将新元素添加到链表的末尾。当链表长度超过一定阈值时，会将链表转化为红黑树以提高性能。", "children": []}, {"id": "n64", "topic": "<b>获取元素：<\/b> <code>get()<\/code> 方法根据给定的键查找对应的值。首先计算键的哈希值，然后根据哈希值计算出存储位置的索引。如果该位置有元素，则遍历链表或者红黑树查找对应的键值对。", "children": []}, {"id": "n65", "topic": "<b>扩容：<\/b> 当HashMap中的元素个数超过了容量乘以加载因子时，会触发扩容操作。扩容会创建一个新的数组，并重新计算每个元素在新数组中的位置。这个过程涉及到元素的重新哈希和重新分配，以确保新数组中的元素分布更加均匀。", "children": []}, {"id": "n66", "topic": "<b>链表转化为红黑树：<\/b> 当链表长度超过一定阈值时，为了提高查找效率，会将链表转化为红黑树。红黑树是一种平衡二叉搜索树，它的查找、插入和删除操作的时间复杂度都是O(logN)，比链表的O(N)要快。", "children": []}, {"id": "n67", "topic": "<b>Entry类：<\/b> Entry类表示HashMap中的每个键值对，包括键、值、哈希值以及指向下一个Entry的引用。在发生哈希冲突时，使用链表或者红黑树来解决冲突，需要将键值对封装成Entry对象。", "children": []}]}]}, {"id": "n68", "topic": "<b>2.ArrayList、LinkedList<\/b>", "children": [{"id": "n69", "topic": "<b>1.ArrayList与LinkedList<\/b><span class=\"mm-note\">注意：一个底层是<b>Objext[]数组<\/b>，一个底层是<b>双向链表<\/b>。从数组 VS 链表入手即可。<\/span>", "children": [{"id": "n70", "topic": "<b>是否保证线程安全：<\/b> <code>ArrayList<\/code> 和 <code>LinkedList<\/code> 都是不同步的，也就是不保证线程安全；", "children": []}, {"id": "n71", "topic": "<b>底层数据结构：<\/b> <code>ArrayList<\/code> 底层使用的是 <b><code>Object<\/code> 数组<\/b>；<code>LinkedList<\/code> 底层使用的是 <b>双向链表<\/b> 数据结构", "children": []}, {"id": "n72", "topic": "<b>是否支持快速随机访问：<\/b> <code>LinkedList<\/code> 不支持高效的随机元素访问，而 <code>ArrayList<\/code>（实现了 <code>RandomAccess<\/code> 接口） 支持。快速随机访问就是通过元素的序号快速获取元素对象(对应于<code>get(int index)<\/code>方法)。", "children": []}, {"id": "n73", "topic": "<b>内存空间占用：<\/b> <code>ArrayList<\/code> 的空间浪费主要体现在在 list 列表的结尾会预留一定的容量空间，而 LinkedList 的空间花费则体现在它的每一个元素都需要消耗比 ArrayList 更多的空间（因为要存放直接后继和直接前驱以及数据）。", "children": []}]}, {"id": "n74", "topic": "<b>2.ArrayList的扩容机制：<\/b>", "children": [{"id": "n75", "topic": "<b>以无参数构造方法创建 <code>ArrayList<\/code> 时，实际上初始化赋值的是一个空数组。<\/b>", "children": []}, {"id": "n76", "topic": "<b>当真正对数组进行添加元素操作时，才真正分配容量。即向数组中添加第一个元素时，数组容量扩为 10。<\/b>", "children": []}, {"id": "n77", "topic": "<b><code>int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1)<\/code>,所以 ArrayList 每次扩容之后容量都会变为原来的 1.5 倍左右（oldCapacity 为偶数就是 1.5 倍，否则是 1.5 倍左右）！<\/b> 奇偶不同，比如：10+10/2 = 15, 33+33/2=49。如果是奇数的话会丢掉小数.", "children": []}]}]}, {"id": "n78", "topic": "<b>3、ConcurrentHashMap<\/b><span class=\"mm-note\">线程安全的HashMap。<\/span>", "children": [{"id": "n79", "topic": "<b>1.ConcurrentHashMap与HashTable的区别<\/b>", "children": [{"id": "n80", "topic": "<b>底层数据结构：<\/b><span class=\"mm-note\">JDK1.7 的 <code>ConcurrentHashMap<\/code> 底层采用 <b>分段的数组+链表<\/b> 实现，JDK1.8 采用的数据结构跟 <code>HashMap1.8<\/code> 的结构一样，<b>数组+链表/红黑二叉树<\/b>。<code>Hashtable<\/code> 和 JDK1.8 之前的 <code>HashMap<\/code> 的底层数据结构类似都是采用 <b>数组+链表<\/b> 的形式，数组是 HashMap 的主体，链表则是主要为了解决哈希冲突而存在的； 💡 即：<b>HashTable底层并不使用红黑树，只用链表。<\/b><\/span>", "children": []}, {"id": "n81", "topic": "<b>实现线程安全的方式（重要）：<\/b>", "children": [{"id": "n82", "topic": "<b><code>Hashtable<\/code>(同一把锁)<\/b> :使用 <b><code>synchronized<\/code> 来保证线程安全<\/b>，效率非常低下", "children": []}, {"id": "n83", "topic": "ConcurrentHashMap：用了线程安全的数据结构，见下节解析。", "children": []}]}]}, {"id": "n84", "topic": "<b>2.ConcurrentHashMap线程安全的底层实现<\/b>", "children": [{"id": "n85", "topic": "<b>JDK1.8之前<\/b><span class=\"mm-note\">存储结构：<b>Segment 数组(分段锁) + HashEntry 数组 + 链表。<\/b> 对<b>同一 <code>Segment<\/code> 的并发写入会被阻塞<\/b>，<b>不同 <code>Segment<\/code> 的写入是可以并发执行的。<\/b> 在 JDK1.7 的时候，<code>ConcurrentHashMap<\/code> 对整个桶数组进行了分割分段(<b><code>Segment<\/code>，分段锁<\/b>)，<b>每一把锁只锁容器其中一部分数据<\/b>，多线程访问容器里不同数据段的数据，就不会存在锁竞争，提高并发访问率。 <img class=\"mm-img\" src=\"fl-137e3f0e8f8e1c.jpg\" style=\"width:320px;height:198px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": [{"id": "n86", "topic": "首先将数据分为一段一段（这个“段”就是 <code>Segment<\/code>）的存储，然后给<b>每一段数据配一把锁<\/b>，<b>当一个线程占用锁访问其中一个段数据时，其他段的数据也能被其他线程访问<\/b>。<span class=\"mm-note\"><code>Segment<\/code> 继承了 <code>ReentrantLock<\/code>,所以 <b><code>Segment<\/code> 是一种可重入锁，扮演锁的角色<\/b>。<code>HashEntry<\/code> 用于存储键值对数据。<\/span>", "children": []}, {"id": "n87", "topic": "<b>一个 <code>ConcurrentHashMap<\/code> 里包含一个 <code>Segment<\/code> 数组<\/b>，<code>Segment<\/code> 的个数一旦<b>初始化就不能改变<\/b>。<span class=\"mm-note\"><code>Segment<\/code> 数组的大小<b>默认是 16<\/b>，也就是说默认可以同时支持 16 个线程并发写。 <b><code>Segment<\/code> 的结构和 <code>HashMap<\/code> 类似<\/b>，是一种<b>数组和链表结构<\/b>，一个 <code>Segment<\/code> 包含一个 <code>HashEntry<\/code> 数组，每个 <code>HashEntry<\/code> 是一个链表结构的元素，每个 <code>Segment<\/code> 守护着一个 <code>HashEntry<\/code> 数组里的元素，当对 <code>HashEntry<\/code> 数组的数据进行修改时，必须首先获得对应的 <code>Segment<\/code> 的锁。<\/span>", "children": []}]}, {"id": "n88", "topic": "<b>JDK1.8之后<\/b>", "children": [{"id": "n89", "topic": "存储结构：<b>Node 数组 + 链表 / 红黑树<\/b><span class=\"mm-note\">当冲突链表达到一定长度时，链表会转换成红黑树<\/span>", "children": []}, {"id": "n90", "topic": "并发控制：使用 <b><code>synchronized<\/code> 和 CAS<\/b> 来操作<span class=\"mm-note\">(JDK1.6 以后 <code>synchronized<\/code> 锁做了很多优化） <b>整个看起来就像是优化过且线程安全的 <code>HashMap<\/code><\/b>，虽然在 JDK1.8 中还能看到 <code>Segment<\/code> 的数据结构，但是已经简化了属性，只是为了兼容旧版本； <b><code>ConcurrentHashMap<\/code> 的初始化<\/b>是通过<b>自旋和 CAS<\/b> 操作完成的 ConcurrentHashMap 中 synchronized <b>只锁定当前链表或红黑二叉树的首节点<\/b>，<b>只要节点 <a href=\"https://so.csdn.net/so/search?q=hash&amp;spm=1001.2101.3001.7020\" target=\"_blank\" rel=\"noopener\">hash<\/a> 不冲突，就不会产生并发<\/b>。 ![im<\/span>", "children": []}]}, {"id": "n91", "topic": "<b>1.JDK1.8为何弃用分段锁(segment)<\/b><span class=\"mm-note\">jdk8 放弃了分段锁而是<b>用了Node锁<\/b>，<b>减低锁的粒度<\/b>，提高性能，并使用<b>CAS操作来确保Node的一些操作的原子性<\/b>，<b>取代了锁<\/b>。 原因由以下几点：<\/span>", "children": [{"id": "n92", "topic": "加入<b>多个分段锁浪费内存空间<\/b>。", "children": []}, {"id": "n93", "topic": "生产环境中， <b>map 在放入时竞争同一个锁的概率非常小<\/b>，分段锁反而会造成更新等操作的长时间等待。<span class=\"mm-note\"><b>只锁定当前链表或红黑二叉树的首节点<\/b>，<b>只要节点 <a href=\"https://so.csdn.net/so/search?q=hash&amp;spm=1001.2101.3001.7020\" target=\"_blank\" rel=\"noopener\">hash<\/a> 不冲突，就不会产生并发<\/b>。<\/span>", "children": []}, {"id": "n94", "topic": "为了<b>提高 GC 的效率<\/b>。", "children": []}]}, {"id": "n95", "topic": "<b>2.为什么是synchronized，而不是ReentranLock<\/b>", "children": [{"id": "n96", "topic": "<b>减少内存开销<\/b><span class=\"mm-note\">假设使用可重入锁来获得同步支持，那么<b>每个节点都需要通过继承AQS来获得同步支持<\/b>。但并不是每个节点都需要获得同步支持的，<b>只有链表的头节点<\/b>（红黑树的根节点）需要同步，这无疑带来了巨大内存浪费。<\/span>", "children": []}, {"id": "n97", "topic": "<b>获得JVM的支持<\/b><span class=\"mm-note\"><b>Reentrant是是API这个级别的<\/b>，后续的性能优化空间很小。 <b>synchronized则是JVM直接支持的<\/b>，JVM能够在运行时做出相应的优化措施：锁粗化、锁消除、锁自旋等等。这就使得synchronized能够随着JDK版本的升级而不改动代码的前提下获得性能上的提升。<\/span>", "children": []}]}, {"id": "n98", "topic": "<b>3.JDK1.8之后<b>为什么改成了 CAS + synchronized<\/b><\/b>", "children": [{"id": "n99", "topic": "<b>综合利用CAS和锁的优势<\/b>：<span class=\"mm-note\">CAS 操作具有轻量级的特点，适用于对单个变量进行并发控制，可以减少锁竞争带来的性能开销。 但是，CAS 也有一些局限性，比如 <b>ABA 问题<\/b>。 为了克服 CAS 的局限性，并且在需要时提供更强的同步语义，ConcurrentHashMap 在 JDK 1.8 中采用了 CAS 和 synchronized 结合的方式。这样就能综合利用 CAS 的轻量级和锁的强一致性。<\/span>", "children": []}, {"id": "n100", "topic": "<b>提高并发度<\/b>：CAS 和 synchronized 结合的方式可以提高并发度。<span class=\"mm-note\">CAS 操作不会阻塞线程，而是基于乐观锁的方式进行更新。这样可以允许更多的线程同时访问 ConcurrentHashMap，减少线程的等待时间，提高并发度。<\/span>", "children": []}, {"id": "n101", "topic": "<b>简化实现<\/b>：CAS 和 synchronized 结合的方式相对于传统的锁机制来说，实现起来更简单。<span class=\"mm-note\">使用 CAS 可以避免对整个哈希表进行锁定，减少锁粒度，降低实现的复杂度。<\/span>", "children": []}]}, {"id": "n102", "topic": "<b>4.CAS+sychronized是怎么保证其线程安全的？<\/b><span class=\"mm-note\">JDK8中的实现也是<b>锁分离<\/b>的思想，它把锁分的比segment（JDK1.5）更细一些，只要hash不冲突，就不会出现并发获得锁的情况。<\/span>", "children": [{"id": "n103", "topic": "首先使用<b>无锁操作CAS插入头结点<\/b>，如果<b>插入失败，说明已经有别的线程插入头结点了<\/b>，再次循环进行操作。", "children": []}, {"id": "n104", "topic": "如果<b>头结点已经存在<\/b>，则<b>通过synchronized获得头结点锁，进行后续的操作<\/b>。", "children": []}, {"id": "n105", "topic": "<b>5.JDK1,8之后ConcurrentHashMap的源码分析<\/b>", "children": [{"id": "n106", "topic": "判断Node[]数组是否初始化，没有则进行初始化操作", "children": []}, {"id": "n107", "topic": "通过hash定位Node[]数组的索引坐标，是否有Node节点，如果没有则使用CAS进行添加（链表的头结点），添加失败则进入下次循环。", "children": []}, {"id": "n108", "topic": "<b>检查到内部正在扩容，如果正在扩容，就帮助它一块扩容<\/b>。", "children": []}, {"id": "n109", "topic": "如果f!=null，则使用synchronized锁住f元素（链表/红黑二叉树的头元素）<span class=\"mm-note\">4.1 如果是Node(链表结构)则执行链表的添加操作。 4.2 如果是TreeNode(树型结果)则执行树添加操作。<\/span>", "children": []}, {"id": "n110", "topic": "判断链表长度已经达到临界值8 就需要把链表转换为树结构。", "children": []}]}]}]}]}], "expanded": true}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

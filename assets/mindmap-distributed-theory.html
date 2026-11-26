@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>理论、算法、协议 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;inset:0;padding-top:var(--hd)}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>理论、算法、协议</b><small>幕布导图 · 68 个节点</small></div>
+  <div class="acts">
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"></div>
+<div class="tip">单指拖动 · 双指缩放 · 点节点圆点收起/展开</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "理论、算法、协议", "data": {"id": "mvirtual-root", "topic": "<b>理论、算法、协议<\/b>", "expanded": true, "children": [{"id": "mGsuQEvyiTr", "topic": "<b>一、分布式概述<\/b><span class=\"mm-note\"><a href=\"https://blog.csdn.net/qq_34272760/article/details/120714630\" target=\"_blank\" rel=\"noopener\">分布式 - 谈谈你对分布式的理解，为什么引入分布式？_Q.E.D.的博客-CSDN博客<\/a><\/span>", "expanded": true, "children": [{"id": "mhJPOvqMPOa", "topic": "<br><img class=\"mm-img\" src=\"mm-581d8f6743a619.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m4wBJS76T77", "topic": "1、谈谈对分布式系统的理解<span class=\"mm-note\">分布式系统，通俗点讲就<b>把整个业务系统拆分成很多的服务<\/b>，每个服务责任到人，服务之间代码都没有冲突，服务可以自治，每个服务到技术也可以自己选型，只要遵循统一的服务调用协议就可以了。每次发布如果就改动一个服务那就上线一个服务，不用所有人一起联调，这样每次发布牵扯到的改动影响也是可控的。不像传统单体架构服务，动辄几百万行代码融在一起。\n\n简单来说：\n为了<b>解决传统单体服务架构带来的各种问题<\/b>：代码数量庞大，迭代测试维护困难，可能因为一处改动测试不到位造成整个服务瘫痪等问题。\n分布式系统就是将一个大的服务拆分成几十个甚至上百个微小的服务。如果把单体架构服务器比做篮子，那代码就是鸡蛋，不要让所有鸡蛋别装在一个篮子里，也方便大家分工开发，代码不在一个项目里，也不会冲突，最主要的是项目自己维护。\n​\n比如阿里的 Dubbo，还有 Spring 全家桶里的 Spring Cloud，都是解决分布式微服务架构的优秀框架。<\/span>", "expanded": true}, {"id": "mfWRGUWhHIP", "topic": "<b>2、优点：<\/b><span class=\"mm-note\">优点很多呀，使用分布式不就是为了解决传统架构各种问题嘛，多人在一个下开发维护难，也不好控制容错能力。拆分成微服务问题就好办多了。<\/span>", "expanded": true, "children": [{"id": "mof6qw7vIdK", "topic": "1、系统<b>可用性提升<\/b><span class=\"mm-note\">传统的集中式存储在遇到单点故障时，很容易造成整个服务不可用。而分布式下的服务体系，在单台机器有故障时，不至于造成整个服务不可用。<\/span>", "expanded": true}, {"id": "mtY2WzHuruU", "topic": "2、系统<b>并发能力提升<\/b><span class=\"mm-note\">请求会通过<b>Nginx负载均衡<\/b>被分发到不同的服务器上，运行同样代码的服务器可以有 1 台或 N 台，通常情况下会根据实际用户访问量随时增加机器，无论是数据库或者服务，都可以做到随时<b>水平扩展。\n<\/b>比如双 11 活动，平时订单少 50 台机器就够了，到了 11 订单量剧增，服务器增加到 100 台，每台机器之间相互独立，互不影响。<\/span>", "expanded": true}, {"id": "mVbtkmHiuly", "topic": "3、系统<b>容错能力提升<\/b><br><img class=\"mm-img\" src=\"mm-dea42a7c5fcd10.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\"><span class=\"mm-note\">同一组服务分别部署在北京上海杭州，杭州的机房突发断电或者火灾，杭州机房的流量会被自动分发到北京和上海的机房，不影响用户使用。<\/span>", "expanded": true}, {"id": "mAvZPOh9lvP", "topic": "4、<b>低延迟<\/b><span class=\"mm-note\">参考上一个图，北京的用户请求自动分发到北京，上海的用户请求被分发到上海，<b>服务器会根据用户的 IP 选择距离自己最近的机房<\/b>，<b>降低网络延迟<\/b>。<\/span>", "expanded": true}]}, {"id": "m3TP5gPj3kx", "topic": "<b>3、缺点：<\/b>", "expanded": true, "children": [{"id": "mMUh2Ijt3S9", "topic": "<b>1、分布式服务依赖网络<\/b><span class=\"mm-note\">服务器间通讯依赖网络，不可靠网络包括<b>网络延时，丢包、中断、异步<\/b>，一个完整的服务请求依赖一连串服务调用，任意一个服务节点网络出现问题，都可能造成本次请求失败。<\/span>", "expanded": true}, {"id": "m99gs13ChrE", "topic": "<b>2、维护成本上升<\/b><span class=\"mm-note\">传统单体式服务只需要维护一个站点就可以。\n分布式服务系统被拆分成若干个小服务，服务从 1 变为几十个上百个服务后，<b>增加运维成本<\/b>。<\/span>", "expanded": true}, {"id": "mh1cQZFbZXI", "topic": "<b>3、<\/b><span style=\"color:#1d4ed8\"><b><span>一致性、可用性、分区容错性<\/span><\/b> <b><mark>无法同时满足<\/mark><\/b><span class=\"mm-note\">这个是最主要的，这三种特性就是平时说的 <b>CAP 定理<\/b>，在分布式系统中，这三种特性<b>分区容错性必须满足，剩下二选一<\/b>，需要根据实际情况去调整牺牲掉其中哪个。<\/span>", "expanded": true}]}, {"id": "mQwQ5s6NgOT", "topic": "<b>4、<\/b><span style=\"color:#1d4ed8\"><b><span>分布式系统 <\/span><\/b><b>和<\/b><span style=\"color:#1d4ed8\"><b><span> 微服务<\/span><\/b><b>什么关系<\/b><span class=\"mm-note\"><b>微服务是分布式系统的一种具体落地方案<\/b>。\n分布式系统和微服务，两者都只是一种概念。如果你采用微服务，就意味着系统一定是分布式的，分布式系统具有的优缺点在微服务理都会体现。<\/span>", "expanded": true}]}, {"id": "mjOjzfDWAs9", "topic": "<b>二、CAP —  一致性、可用性、分区容错性<\/b><span class=\"mm-note\"><a href=\"https://javaguide.cn/distributed-system/protocol/cap-and-base-theorem.html#%E4%B8%8D%E6%98%AF%E6%89%80%E8%B0%93%E7%9A%84-3-%E9%80%89-2\" target=\"_blank\" rel=\"noopener\">CAP &amp; BASE理论详解 | JavaGuide(Java面试 + 学习指南)<\/a>\n<b>CAP<\/b> 也就是 <b>Consistency（一致性）、Availability（可用性）<\/b>、<b>Partition Tolerance（分区容错性）<\/b> 这三个单词首字母组合。<\/span>", "expanded": true, "children": [{"id": "mvGATQD2wtt", "topic": "<br><img class=\"mm-img\" src=\"mm-be539a2635c4ac.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "m59uS50ZKCl", "topic": "1、三者概念解释", "expanded": true, "children": [{"id": "m56e885YxpQ", "topic": "<b>一致性（Consistency）<\/b> : 所有节点<span style=\"color:#1d4ed8\"><b><span>访问同一份最新的数据副本<\/span><\/b>", "expanded": true}, {"id": "mB7Ay9CfyY4", "topic": "<b>可用性（Availability）<\/b>: 非故障的节点在合理的时间内返回合理的响应（不是错误或者超时的响应）。<span class=\"mm-note\">用户看到的是正常响应。<\/span>", "expanded": true}, {"id": "mtp6apKZVE5", "topic": "<b>分区容错性（Partition Tolerance）<\/b> : 分布式系统<span style=\"color:#1d4ed8\"><b><span>出现网络分区<\/span><\/b><b>的时候<\/b>，<span style=\"color:#1d4ed8\"><b><span>仍然能够对外提供服务<\/span><\/b>。", "expanded": true}]}, {"id": "m4ZJ7srRuts", "topic": "2、何为<b>网络分区<\/b>？<span class=\"mm-note\">网络分区只在分布式集群中，<b>节点之间由于网络不通<\/b>，导致集群中<b>节点形成不同的子集<\/b>，子集中节点之间网络互通，而<b>子集与子集之间网络不通<\/b>，<b>整个网络就分成了几块区域<\/b>，这就叫 <b>网络分区<\/b>。<\/span>", "expanded": true}, {"id": "mdF90Y4LPZK", "topic": "3、<b><mark>三者只能实现两者<\/mark><\/b>：<span class=\"mm-note\"><b>并不是三选二。分情况讨论：<\/b>\n       (1) 当系统会<b>发生分区<\/b>时<b>：分区容错性(P)必须保证<\/b>，在保证P的基础上，<b>再在一致性(C)和可用性(A)中二选一<\/b>。\n       (2) 当系统<b>不会发生分区<\/b>时：节点间的网络连接通信正常的话，<b>也就不存在 P 了<\/b>。这个时候，我们就<b>可以同时保证 C 和 A <\/b>了。<\/span>", "expanded": true, "children": [{"id": "meu3297X5ym", "topic": "1、因此：分布式系统理论上<b>不可能选择 CA 架构，只能选择 CP 或者 AP 架构。<\/b><span class=\"mm-note\">比如 ZooKeeper、HBase 就是 CP 架构，Cassandra、Eureka 就是 AP 架构，Nacos 不仅支持 CP 架构也支持 AP 架构。<\/span>", "expanded": true}, {"id": "mH2ClHbtN7B", "topic": "<b>2、为何不能选择CA架构？<\/b><span class=\"mm-note\">举个例子：\n若系统出现“分区”，系统中的某个节点在进行写操作。\n<b>为了保证 C<\/b>， 必须要<b>禁止其他节点的读写操作<\/b>，这就<b>和 A 发生冲突<\/b>了。\n如果<b>为了保证 A<\/b>，其他节点的读写操作正常的话，那就<b>和 C 发生冲突<\/b>了。<\/span>", "expanded": true}, {"id": "mtFiyZhMbD3", "topic": "补充说明：<span class=\"mm-note\"><b>选择 CP 还是 AP 的关键在于当前的业务场景，没有定论<\/b>，比如对于需要确保强一致性的场景如银行一般会选择保证 CP 。<b>\n如果网络分区正常的话（系统在绝大部分时候所处的状态），也就说不需要保证 P 的时候，C 和 A 能够同时保证。\n<\/b>\n​<\/span>", "expanded": true}, {"id": "mB0Bw3H0GA2", "topic": "<span style=\"color:#1d4ed8\"><b><span>总结<\/span><\/b>：如果系统发生“分区”，我们要考虑选择 CP 还是 AP。如果系统没有发生“分区”的话，我们要思考如何保证 CA 。", "expanded": true}]}]}, {"id": "mOVh7MHTIvY", "topic": "<b>三、BASE理论 — <\/b><span style=\"color:#0e7a52\"><b><span>CAP 理论中 AP 方案的延伸<\/span><\/b>", "expanded": false, "children": [{"id": "m3WFweLA29S", "topic": "1、简介：<span class=\"mm-note\"><b>BASE<\/b> 是 <b>Basically Available（基本可用）<\/b>、<b>Soft-state（软状态）<\/b> 和 <b>Eventually Consistent（最终一致性）<\/b> 三个短语的缩写。\nBASE 理论是<b>对 CAP 中一致性 C 和可用性 A 权衡的结果<\/b>，其来源于对大规模互联网系统分布式实践的总结，是<b>基于 CAP 定理逐步演化而来<\/b>的，它<b>大大降低了我们对系统的要求<\/b>。<\/span>", "expanded": true}, {"id": "mbTWwc4opUx", "topic": "<b>2、本质：对 CAP 的延伸和补充，更具体地说，是<\/b><b><mark>对 CAP 中 AP 方案的一个补充<\/mark><\/b><span class=\"mm-note\"><b>为什么这样说呢？<\/b>\nCAP 理论这节我们也说过了：\n如果系统没有发生“分区”的话，节点间的网络连接通信正常的话，也就不存在 P 了。这个时候，我们就可以同时保证 C 和 A 了。\n因此，如果系统发生“分区”，我们要考虑选择 CP 还是 AP。如果系统没有发生“分区”的话，我们要思考如何保证 CA <b>。\n<\/b>\n因此，<b>AP 方案只是在系统发生分区的时候放弃一致性，而不是永远放弃一致性<\/b>。\n<b>在分区故障恢复后，系统应该达到最终一致性<\/b>。这一点其实就是 BASE 理论延伸的地方。<\/span>", "expanded": true}, {"id": "mZiYL0r3hj2", "topic": "<b>3、核心思想：<\/b><span style=\"color:#1d4ed8\"><b><span>牺牲一致性满足系统高可用<\/span><\/b><b>。<\/b><span class=\"mm-note\">即使无法做到强一致性，但<b>每个应用都可以根据自身业务特点，采用适当的方式来使系统达到最终一致性<\/b>。\n也就是<b>牺牲数据的一致性来满足系统的高可用性<\/b>，系统中一部分数据不可用或者不一致时，仍需要<b>保持系统整体“主要可用”<\/b>。<\/span>", "expanded": true}, {"id": "mzETA8NzpRO", "topic": "4、<span style=\"color:#d92d20\"><b><span>三要素<\/span><\/b>：<br><img class=\"mm-img\" src=\"mm-ec30d5ffda1641.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": false, "children": [{"id": "mD4PKWukE94", "topic": "<b>1、基本可用<\/b>：分布式系统在出现不可预知故障的时候，<span style=\"color:#1d4ed8\"><b><span>允许损失部分可用性<\/span><\/b><span class=\"mm-note\">这绝不等价于系统不可用。\n<b>允许损失部分可用性：<\/b>\n<b>  (1)响应时间上的损失<\/b>: 正常情况下，处理用户请求需要 0.5s 返回结果，但是由于系统出现故障，处理用户请求的时间变为 3 s。\n<b>  (2)系统功能上的损失<\/b>：正常情况下，用户可以使用系统的全部功能，但是由于系统访问量突然剧增，系统的部分非核心功能无法使用。\n\n​\n​<\/span>", "expanded": true}, {"id": "mmSjGoxp4uJ", "topic": "<b>2、软状态：<\/b>允许<b>系统中的数据<\/b><span style=\"color:#1d4ed8\"><b><span>存在中间状态<\/span><\/b>（CAP 理论中的数据不一致）<span class=\"mm-note\">并认为该中间状态的存在<b>不会影响系统的整体可用性<\/b>，即允许系统在不同节点的数据副本之间进行数据同步的过程存在延时。<\/span>", "expanded": true}, {"id": "mDHs7dnJlk1", "topic": "<b>3、最终一致性：<\/b>系统中<b>所有的数据副本<\/b>，在经过一段时间的同步后，<span style=\"color:#1d4ed8\"><b><span>最终能够达到一个一致的状态<\/span><\/b><span class=\"mm-note\">本质是需要系统保证最终数据能够达到一致，而<b>不需要实时保证系统数据的强一致性<\/b>。<\/span>", "expanded": true}]}, {"id": "mPpdWx1ppTK", "topic": "5、分布式<b>一致性的 3 种级别<\/b>：", "expanded": false, "children": [{"id": "mKOvtw32jYw", "topic": "<b>强一致性<\/b>：系统写入了什么，读出来的就是什么。", "expanded": true}, {"id": "mbAMHIFfdaV", "topic": "<b>弱一致性<\/b>：不一定可以读取到最新写入的值，也不保证多少时间之后读取到的数据是最新的，只是会尽量保证某个时刻达到数据一致的状态。", "expanded": true}, {"id": "mrzGr2cxpZS", "topic": "<b>最终一致性<\/b>：弱一致性的升级版，系统会<b>保证在一定时间内达到数据一致的状态<\/b>。", "expanded": true}, {"id": "mu8Dyl4RnUJ", "topic": "业界比较推崇是最终一致性级别，但是某些对数据一致要求十分严格的场景比如银行转账还是要保证强一致性。", "expanded": true}]}, {"id": "mEGRQI52i0Q", "topic": "6、<b>实现最终一致性的具体方式<\/b>：", "expanded": false, "children": [{"id": "m5WeTkpsDxo", "topic": "<b>读时修复<\/b> : 在读取数据时，检测数据的不一致，进行修复。比如 Cassandra 的 Read Repair 实现，具体来说，在向 Cassandra 系统查询数据的时候，如果检测到不同节点的副本数据不一致，系统就自动修复数据。", "expanded": true}, {"id": "mZuWYN6ZPzB", "topic": "<b>写时修复<\/b> : 在写入数据，检测数据的不一致时，进行修复。比如 Cassandra 的 Hinted Handoff 实现。具体来说，Cassandra 集群的节点之间远程写数据的时候，如果写失败 就将数据缓存下来，然后定时重传，修复数据的不一致性。", "expanded": true}, {"id": "mm3RbTsA5RU", "topic": "<b>异步修复<\/b> : 这个是最常用的方式，通过<span style=\"color:#1d4ed8\"><b><span>定时检测<\/span><\/b>副本数据的一致性，并修复。", "expanded": true}]}]}, {"id": "mlwvpGH52g9", "topic": "<b>四、Paxos 算法 — <\/b><span style=\"color:#0e7a52\"><b><span>分布式系统 共识算法<\/span><\/b><span class=\"mm-note\"><a href=\"https://javaguide.cn/distributed-system/protocol/paxos-algorithm.html\" target=\"_blank\" rel=\"noopener\">Paxos 算法详解 | JavaGuide(Java面试 + 学习指南)<\/a><\/span>", "expanded": true, "children": [{"id": "mcorykZ1pD9", "topic": "1、简介：兰伯特在 <b>1990<\/b> 年提出了一种分布式系统共识算法<span class=\"mm-note\"><b>第一个被证明完备<\/b>的<b>分布式系统共识算法<\/b>。\n共识算法的作用：<b>让分布式系统中的多个节点之间对某个提案（Proposal）达成一致的看法<\/b>。\n​提案的含义在分布式系统中十分宽泛，像哪一个节点是 Leader 节点、多个事件发生的顺序等等都可以是一个提案。<\/span>", "expanded": true}, {"id": "mhybQkYYqZW", "topic": "2、兰伯特当时提出的 Paxos 算法<b>主要包含 2 个部分<\/b>:", "expanded": true, "children": [{"id": "mkacK6wpUWo", "topic": "①：<b>Basic Paxos 算法<\/b><span class=\"mm-note\">描述的是<b>多节点之间如何就某个值(提案 Value)达成共识<\/b>。<\/span>", "expanded": true}, {"id": "m7plk676hn2", "topic": "②：<b>Multi-Paxos 思想<\/b><span class=\"mm-note\">描述的是执行多个 Basic Paxos 实例，就一系列值达成共识。\nMulti-Paxos 说白了就是<b>执行多次 Basic Paxos<\/b> ，核心还是 Basic Paxos 。<\/span>", "expanded": true}]}, {"id": "m0bKadECDRM", "topic": "<span style=\"color:#7c3aed\"><b><span>Basic Paxos 算法<\/span><\/b>", "expanded": true, "children": [{"id": "muxMzTZBqnJ", "topic": "<br><img class=\"mm-img\" src=\"mm-d166958535ac59.jpg\" style=\"width:260px\" loading=\"lazy\" referrerpolicy=\"no-referrer\">", "expanded": true}, {"id": "mjeOnDBD2sp", "topic": "三个重要角色：<span class=\"mm-note\">为了减少实现该算法所需的节点数，<b>一个节点可以身兼多个角色<\/b>。\n并且，一个提案被选定需要被半数以上的 Acceptor 接受。\n这样的话，Basic Paxos 算法还<b>具备容错性<\/b>，在少于一半的节点出现故障时，集群仍能正常工作。<\/span>", "expanded": true, "children": [{"id": "ml6U0mCd4T0", "topic": "①：<b>提议者<\/b>（Proposer）:提议者负责<b>接受客户端的请求并发起提案<\/b><span class=\"mm-note\">也可以叫作：协调者(coordinator)\n提案信息通常包括<b>提案编号 (Proposal ID) <\/b>和<b>提议的值 (Value)<\/b><\/span>", "expanded": true}, {"id": "muEdozLR6LV", "topic": "②：<b>接受者<\/b>（Acceptor）:负责对提议者的<b>提案进行投票<\/b>，同时需要记<b>住自己的投票历史<\/b><span class=\"mm-note\">也可以叫做投票员（voter）<\/span>", "expanded": true}, {"id": "m3dC2m5Vfln", "topic": "③：<b>学习者<\/b>（Learner）:如果<b>有超过半数接受者就某个提议达成了共识<\/b>，那么学习者就<b>需要接受这个提议<\/b>，并就该提议<b>作出运算<\/b>，然后<b>将运算结果返回给客户端.<\/b>", "expanded": true}]}]}, {"id": "mVLckRmLDsM", "topic": "<span style=\"color:#7c3aed\"><b><span>Multi Paxos 思想<\/span><\/b><span class=\"mm-note\">Basic Paxos 算法的仅能就单个值达成共识，为了<b>能够对一系列的值达成共识<\/b>，我们需要用到 Multi Paxos 思想。<\/span>", "expanded": true, "children": [{"id": "mZSfYD5QJWq", "topic": "<b>Multi-Paxos 只是一种思想<\/b>，这种思想的核心就是通过多个 Basic Paxos 实例就一系列值达成共识。<span class=\"mm-note\">Basic Paxos 是 Multi-Paxos 思想的核心，<b>Multi-Paxos 就是多执行几次 Basic Paxos<\/b>。<\/span>", "expanded": true}, {"id": "mZ51xzsNh3H", "topic": "<span style=\"color:#7c3aed\"><b><span>Raft 算法<\/span><\/b><b>就是 Multi-Paxos 的一个变种<\/b>，其简化了 Multi-Paxos 的思想，变得更容易被理解以及工程实现，实际项目中可以优先考虑 Raft 算法。", "expanded": true}]}]}, {"id": "meHi3BYKXxI", "topic": "<b>五、Raft算法 — <\/b><span style=\"color:#0e7a52\"><b><span>Multi-Paxos 的一个变种<\/span><\/b><span class=\"mm-note\"><a href=\"https://javaguide.cn/distributed-system/protocol/raft-algorithm.html\" target=\"_blank\" rel=\"noopener\">Raft 算法详解 | JavaGuide(Java面试 + 学习指南)<\/a><\/span>", "expanded": true, "children": [{"id": "m34N000wmTe", "topic": "<b>一、背景<\/b>", "expanded": false, "children": [{"id": "mH1yXWF4ZGD", "topic": "<b>1、拜占庭将军问题 — <\/b>辅助理解共识算法<span class=\"mm-note\">问题：假设多位拜占庭将军中没有叛军，信使的信息可靠但有可能被暗杀的情况下，将军们如何达成是否要进攻的一致性决定？<\/span>", "expanded": false, "children": [{"id": "mQni2cn6fhd", "topic": "<b>解决方案<\/b>：先在所有的将军中选出一个大将军，用来做出所有的决定。", "expanded": true}, {"id": "mhIH3p2tkMM", "topic": "<b>举例说明：<\/b><span class=\"mm-note\">假如现在一共有 3 个将军 A，B 和 C，每个将军都有一个<b>随机时间的倒计时器<\/b>，倒计时一结束，这个将军就把自己当成大将军候选人，然后派信使传递选举投票的信息给将军 B 和 C，如果将军 B 和 C 还没有把自己当作候选人（自己的倒计时还没有结束），并且没有把选举票投给其他人，它们就会把票投给将军 A，信使回到将军 A 时，将军 A 知道自己收到了足够的票数，成为大将军。在有了大将军之后，是否需要进攻就由大将军 A 决定，然后再去派信使通知另外两个将军，自己已经成为了大将军。如果一段时间还没收到将军 B 和 C 的回复（信使可能会被暗杀），那就再重派一个信使，直到收到回复。<\/span>", "expanded": true}]}, {"id": "mpg5DFC6SQN", "topic": "<b>2、共识算法<\/b>", "expanded": true, "children": [{"id": "mcsEV3p5NQ5", "topic": "共识是可容错系统中的一个基本问题：<b>即使面对故障，服务器也可以在共享状态上达成一致<\/b>。<span class=\"mm-note\">允许<b>一组节点像一个整体一样一起工作<\/b>，即使其中的一些节点出现故障也能够继续工作下去。\n其正确性主要是源于<b>复制状态机<\/b>的性质：一组Server的状态机计算相同状态的副本，即使有一部分的Server宕机了它们仍然能够继续运行。<\/span>", "expanded": true}, {"id": "mHhYczzwof4", "topic": "共识算法的工作：<b>保持复制日志的一致性<\/b>", "expanded": true}]}]}]}, {"id": "mxdtQMpUlcR", "topic": "<b>六、Gossip协议<\/b><span class=\"mm-note\"><a href=\"https://javaguide.cn/distributed-system/protocol/gossip-protocl.html\" target=\"_blank\" rel=\"noopener\">Gossip 协议详解 | JavaGuide(Java面试 + 学习指南)<\/a><\/span>", "expanded": true, "children": [{"id": "mFAKFFBY7Ts", "topic": "<b>1、介绍<\/b>", "expanded": true, "children": [{"id": "mp077kf5rCz", "topic": "这是一种随机且带有传染性的方式将信息传播到整个网络中，并在一定时间内，使得系统内的所有节点数据一致。", "expanded": true}]}]}]}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#map',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  var fitTimer = setTimeout(function(){ try{ mind.scaleFit(); }catch(e){} }, 80);
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ mind.scaleFit(); }, 60);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 双指缩放（mind-elixir 桌面端仅处理滚轮）
+  var pinch = null, mapEl = document.getElementById('map');
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    if (e.touches.length === 2) {
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var v = pinch.s * (dist(e.touches) / pinch.d);
+      v = Math.max(0.2, Math.min(2.4, v));
+      mind.scale(v, { x: pinch.x, y: pinch.y });
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+
+  window.__mind = mind;
+})();
+</script>
+</body></html>

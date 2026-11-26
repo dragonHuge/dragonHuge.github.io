@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>常见面试题 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>常见面试题</b><small>幕布导图 · 251 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "常见面试题", "data": {"id": "root", "topic": "<b>常见面试题<\/b>", "children": [{"id": "n1", "topic": "<b>1.Redis基础<\/b>", "children": [{"id": "n2", "topic": "<b>1.什么是Redis？<\/b><span class=\"mm-note\">是一个<b>基于 C 语言开发<\/b>的开源 <b>NoSQL 数据库<\/b>（BSD 许可）。 与传统数据库不同的是，<b>Redis 的数据是保存在内存中的<\/b>（内存数据库，<b>支持持久化<\/b>），因此读写速度非常快，常用于<b>缓存，消息队列、分布式锁等场景<\/b>。 Redis 提供了多种数据类型来支持不同的业务场景，比如 String(字符串)、Hash(哈希)、 List (列表)、Set(集合)、Zset(有序集合)、Bitmaps（位图）、HyperLog（基数统计）、GEO（地理信息）、Stream（流）。 并且对数据类型的操作都是<b>原子性<\/b>的，因为<b>执行命令由单线程负责的，不存在并发竞争<\/b>的问题。 除此之外，Redis 还支持<\/span>", "children": []}, {"id": "n3", "topic": "<b>2.Redis为什么这么快？<\/b><span class=\"mm-note\">Redis 内部做了非常多的性能优化，比较重要的有下面 3 点：<\/span>", "children": [{"id": "n4", "topic": "Redis 基于内存，<b>内存的访问速度是磁盘的上千倍<\/b>；", "children": []}, {"id": "n5", "topic": "Redis 基于 Reactor 模式设计开发了一套<b>高效的事件处理模型<\/b>，主要是<b>单线程事件循环<\/b>和 <b>IO 多路复用<\/b>（Redis 线程模式后面会详细介绍到）；", "children": []}, {"id": "n6", "topic": "Redis <b>内置了多种优化过后的数据类型/结构实现<\/b>，性能非常高。", "children": []}]}, {"id": "n7", "topic": "<b>3.为什么要用Redis作为MYSQL缓存？<\/b>", "children": [{"id": "n8", "topic": "<b>高性能<\/b><span class=\"mm-note\">假如用户第一次访问数据库中的某些数据的话，这个过程是比较慢，毕竟是从硬盘中读取的。 但是，如果说，用户访问的数据属于高频数据并且不会经常改变的话，那么我们就可以很放心地将该用户访问的数据存在缓存中。 <b>这样有什么好处呢？<\/b> 那就是保证用户下一次再访问这些数据的时候就可以直接从缓存中获取了。 操作缓存就是直接操作内存，所以速度相当快。<\/span>", "children": []}, {"id": "n9", "topic": "<b>高并发<\/b><span class=\"mm-note\">一般像 MySQL 这类的数据库的 QPS 大概都在 1w 左右（4 核 8g） ，但是使用 Redis 缓存之后很容易达到 10w+，甚至最高能达到 30w+（就单机 Redis 的情况，Redis 集群的话会更高）。 &gt; 💡 QPS：(Queries Per Second)意思是“<b>每秒查询率<\/b>”，是<b>一台服务器每秒能够响应的查询次数<\/b>，是对一个特定的查询服务器在规定时间内所处理流量多少的衡量标准. 由此可见，<b>直接操作缓存能够承受的数据库请求数量是远远大于直接访问数据库的<\/b>，所以我们可以考虑把数据库中的部分数据转移到缓存中去，这样用户的一部分请求会直接到缓存这里而不用经过数据库。进而，我们也就提高了系统整体的并发.<\/span>", "children": []}]}, {"id": "n10", "topic": "<b>4.本地缓存和分布式缓存有啥区别？如何选择？<\/b>", "children": [{"id": "n11", "topic": "<b>分布式缓存<\/b>", "children": [{"id": "n12", "topic": "与应用分离的缓存组件或服务，与本地应用隔离一个独立的应用，多个应用可直接的共享缓存", "children": []}, {"id": "n13", "topic": "常⻅的分布式缓存 Redis、Memcached等。", "children": []}]}, {"id": "n14", "topic": "<b>本地缓存<\/b>", "children": [{"id": "n15", "topic": "和业务程序一起的缓存，例如myabtis的一级或者二级 缓存，本地缓存自然是最快的，但是不能在多个节点共享。<span class=\"mm-note\">如何选择：<\/span>", "children": []}]}, {"id": "n16", "topic": "如果您的应用程序是<b>小型的、单体<\/b>的，且对性能和延迟要求较高，那么本地缓存可能是一个更简单和合适的选择。", "children": []}, {"id": "n17", "topic": "如果您的应用程序需要<b>处理大量的数据或具有高并发访问需求<\/b>，并且对扩展性、容错性和一致性要求较高，则应该考虑使用分布式缓存。", "children": []}]}, {"id": "n18", "topic": "<b>5.Redis和Memcached的异同点？分布式缓存的技术选择方案？<\/b><span class=\"mm-note\">分布式缓存的话，比较老牌同时也是使用的比较多的还是 <b>Memcached<\/b> 和 <b>Redis<\/b>。 很多人都说用 Redis 作为缓存，但是 Memcached 也是基于内存的数据库，为什么不选择它作为缓存呢？要解答这个问题，我们就要弄清楚 Redis 和 Memcached 的区别。 Redis 与 Memcached <b>共同点<\/b>：<\/span>", "children": [{"id": "n19", "topic": "都是<b>基于内存的数据库<\/b>，一般都用来当做缓存使用。", "children": []}, {"id": "n20", "topic": "都有<b>过期策略<\/b>。", "children": []}, {"id": "n21", "topic": "两者的<b>性能都非常高。<\/b><span class=\"mm-note\">Redis 与 Memcached <b>区别<\/b>：<\/span>", "children": []}, {"id": "n22", "topic": "<b>Redis 支持的数据类型更丰富<\/b>（String、Hash、List、Set、ZSet），而 <b>Memcached 只支持最简单的 key-value 数据类型<\/b>；", "children": []}, {"id": "n23", "topic": "<b>Redis 支持数据的持久化<\/b>，可以将内存中的数据保持在磁盘中，重启的时候可以再次加载进行使用，而 Memcached 没有持久化功能，数据全部存在内存之中，Memcached 重启或者挂掉后，数据就没了；", "children": []}, {"id": "n24", "topic": "<b>Redis 原生支持集群模式<\/b>，Memcached 没有原生的集群模式，需要依靠客户端来实现往集群中分片写入数据；", "children": []}, {"id": "n25", "topic": "<b>Redis 支持发布订阅模型、Lua 脚本、事务<\/b>等功能，而 <b>Memcached 不支持<\/b>", "children": []}]}, {"id": "n26", "topic": "<b>6.什么是Redis Module？有啥用？<\/b><span class=\"mm-note\">Redis 从 4.0 版本开始，支持<b>通过 Module 来扩展其功能以满足特殊的需求<\/b>。这些 Module 以动态链接库（so 文件）的形式被加载到 Redis 中，这是一种非常灵活的动态扩展功能的实现方式，值得借鉴学习！ 我们每个人都可以基于 Redis 去定制化开发自己的 Module，比如实现<b>搜索引擎功能、自定义分布式锁和分布式限流。<\/b> 目前，被 Redis 官方推荐的 Module 有：<\/span>", "children": [{"id": "n27", "topic": "<a href=\"https://github.com/RediSearch/RediSearch\" target=\"_blank\" rel=\"noopener\">RediSearchopen in new window<\/a>：用于实现搜索引擎的模块。", "children": []}, {"id": "n28", "topic": "<a href=\"https://github.com/RedisJSON/RedisJSON\" target=\"_blank\" rel=\"noopener\">RedisJSONopen in new window<\/a>：用于处理 JSON 数据的模块。", "children": []}, {"id": "n29", "topic": "<a href=\"https://github.com/RedisGraph/RedisGraph\" target=\"_blank\" rel=\"noopener\">RedisGraphopen in new window<\/a>：用于实现图形数据库的模块。", "children": []}, {"id": "n30", "topic": "<a href=\"https://github.com/RedisTimeSeries/RedisTimeSeries\" target=\"_blank\" rel=\"noopener\">RedisTimeSeriesopen in new window<\/a>：用于处理时间序列数据的模块。", "children": []}, {"id": "n31", "topic": "<a href=\"https://github.com/RedisBloom/RedisBloom\" target=\"_blank\" rel=\"noopener\">RedisBloomopen in new window<\/a>：用于实现布隆过滤器的模块。", "children": []}, {"id": "n32", "topic": "<a href=\"https://github.com/RedisAI/RedisAI\" target=\"_blank\" rel=\"noopener\">RedisAIopen in new window<\/a>：用于执行深度学习/机器学习模型并管理其数据的模块。", "children": []}, {"id": "n33", "topic": "<a href=\"https://github.com/brandur/redis-cell\" target=\"_blank\" rel=\"noopener\">RedisCellopen in new window<\/a>：用于实现分布式限流的模块。", "children": []}]}]}, {"id": "n34", "topic": "<b>2.Redis应用<\/b><span class=\"mm-note\"><b>分布式锁<\/b>：通过 Redis 来做分布式锁是一种比较常见的方式。通常情况下，我们都是基于 Redisson 来实现分布式锁。关于 Redis 实现分布式锁的详细介绍，可以看我写的这篇文章：<a href=\"https://javaguide.cn/distributed-system/distributed-lock.html\" target=\"_blank\" rel=\"noopener\">分布式锁详解open in new window<\/a> 。 <b>限流<\/b>：一般是通过 <b>Redis + Lua 脚本<\/b>的方式来实现限流。相关阅读：[《我司用了 6 年的 Redis 分布式限流器，可以说是非常厉害了！》open in new window](https://mp.weixin.qq.com/s/kyF<\/span>", "children": []}, {"id": "n35", "topic": "<b>3.Redis数据类型<\/b>", "children": [{"id": "n36", "topic": "<b>1.Redis常用数据类型<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-85c405856aab8a.jpg\" style=\"width:320px;height:172px\" loading=\"lazy\" decoding=\"async\"> <img class=\"mm-img\" src=\"fl-acf6893edf6be4.jpg\" style=\"width:320px;height:132px\" loading=\"lazy\" decoding=\"async\"> <b>5 种基础数据类型<\/b>：String（字符串）、List（列表）、Set（集合）、Hash（散列）、Zset（<b>有序集合<\/b>）。 <b>3 种特殊数据类型<\/b>：HyperLog（基数统计）、Bitmap （位图）、Geospatial (地理位置)。<\/span>", "children": []}, {"id": "n37", "topic": "<b>2.各数据类型的应用场景<\/b><span class=\"mm-note\">Redis 五种数据类型的应用场景：<\/span>", "children": [{"id": "n38", "topic": "<b>String<\/b> 类型的应用场景：缓存对象、常规计数、<b>分布式锁<\/b>、<b>共享 session 信息<\/b>等。", "children": []}, {"id": "n39", "topic": "<b>List<\/b> 类型的应用场景：<b>消息队列<\/b>（但是有两个问题：1. 生产者需要自行实现全局唯一 ID；2. 不能以消费组形式消费数据）等。", "children": []}, {"id": "n40", "topic": "<b>Hash<\/b> 类型：缓存对象、<b>购物车<\/b>等。", "children": []}, {"id": "n41", "topic": "<b>Set<\/b> 类型：聚合计算（<b>并集、交集、差集<\/b>）场景，比如<b>点赞、共同关注、抽奖活动<\/b>等。", "children": []}, {"id": "n42", "topic": "<b>Zset<\/b> 类型：排序场景，比如<b>排行榜、电话和姓名排序<\/b>等。", "children": []}]}, {"id": "n43", "topic": "<b>3.各类型的的底层实现是什么？<\/b>", "children": [{"id": "n44", "topic": "<b>1.String<\/b><span class=\"mm-note\">String 类型的底层的数据结构实现主要是 <b>SDS（简单动态字符串）<\/b><\/span>", "children": [{"id": "n45", "topic": "<b><b>C 语言的字符串不足之处<\/b>以及可以改进的地方：<\/b>", "children": [{"id": "n46", "topic": "获取字符串<b>长度的时间复杂度为 O（N）<\/b>；", "children": []}, {"id": "n47", "topic": "字符串的结尾是以 “\\0” 字符标识，字符串里面不能包含有 “\\0” 字符，因此<b>不能保存二进制数据<\/b>；", "children": []}, {"id": "n48", "topic": "字符串操作函数不高效且不安全，比如有<b>缓冲区溢出<\/b>的风险，有可能会造成程序运行终止；", "children": []}]}, {"id": "n49", "topic": "<b>SDS结构设计<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-c4f62b6b149cdf.jpg\" style=\"width:320px;height:268px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": [{"id": "n50", "topic": "<b>len，记录了字符串长度<\/b>。这样获取字符串长度的时候，只需要返回这个成员变量值就行，时间复杂度只需要 O（1）。", "children": []}, {"id": "n51", "topic": "<b>alloc，分配给字符数组的空间长度<\/b>。这样在修改字符串的时候，可以通过 <code>alloc - len<\/code> 计算出剩余的空间大小，可以用来判断空间是否满足修改需求，如果不满足的话，就会自动将 SDS 的空间扩展至执行修改所需的大小，然后才执行实际的修改操作，所以使用 SDS 既不需要手动修改 SDS 的空间大小，也不会出现前面所说的缓冲区溢出的问题。", "children": []}, {"id": "n52", "topic": "<b>flags，用来表示不同类型的 SDS<\/b>。一共设计了 5 种类型，分别是 sdshdr5、sdshdr8、sdshdr16、sdshdr32 和 sdshdr64，后面在说明区别之处。", "children": []}, {"id": "n53", "topic": "<b>buf[]，字符数组，用来保存实际数据<\/b>。不仅可以保存字符串，也可以保存二进制数据。<span class=\"mm-note\">总的来说，Redis 的 SDS 结构在原本字符数组之上，增加了三个元数据：len、alloc、flags，用来解决 C 语言字符串的缺陷。 这样设计的好处是：<\/span>", "children": []}, {"id": "n54", "topic": "<b>O（1）复杂度获取字符串长度<\/b>", "children": []}, {"id": "n55", "topic": "<b>二进制安全<\/b>，使得 Redis 不仅可以保存文本数据，也可以保存任意格式的二进制数据(音频、视频等)", "children": []}, {"id": "n56", "topic": "<b>不会发生缓冲区溢出<\/b><span class=\"mm-note\"><b>当判断出缓冲区大小不够用时，Redis 会自动扩大 SDS 的空间大小<\/b>，以满足修改所需的大小。<\/span>", "children": []}]}]}, {"id": "n57", "topic": "<b>2.List：由<b>双向链表或压缩列表<\/b>实现<\/b><span class=\"mm-note\">List 类型的底层数据结构是由<b>双向链表或压缩列表<\/b>实现的：<\/span>", "children": [{"id": "n58", "topic": "如果列表的元素个数小于 512 个（默认值，可由 list-max-ziplist-entries 配置），列表每个元素的值都小于 64 字节（默认值，可由 list-max-ziplist-value 配置），Redis 会使用<b>压缩列表<\/b>作为 List 类型的底层数据结构；", "children": []}, {"id": "n59", "topic": "如果列表的元素不满足上面的条件，Redis 会使用<b>双向链表<\/b>作为 List 类型的底层数据结构；<span class=\"mm-note\">但是<b>在 Redis 3.2 版本之后，List 数据类型底层数据结构就只由 quicklist 实现了，替代了双向链表和压缩列表<\/b>。<\/span>", "children": []}]}, {"id": "n60", "topic": "<b>3.Hash：<b>压缩列表或哈希表<\/b><\/b><span class=\"mm-note\">Hash 类型的底层数据结构是由<b>压缩列表或哈希表<\/b>实现的：<\/span>", "children": [{"id": "n61", "topic": "如果哈希类型元素<b>个数小于 512 个<\/b>（默认值，可由 hash-max-ziplist-entries 配置），所有值小于 <b>64 字节<\/b>（默认值，可由 hash-max-ziplist-value 配置）的话，Redis 会使用<b>压缩列表<\/b>作为 Hash 类型的底层数据结构；", "children": []}, {"id": "n62", "topic": "如果哈希类型元素不满足上面条件，Redis 会使用<b>哈希表<\/b>作为 Hash 类型的底层数据结构。<span class=\"mm-note\"><b>在 Redis 7.0 中，压缩列表数据结构已经废弃了，交由 listpack 数据结构来实现了<\/b>。<\/span>", "children": []}]}, {"id": "n63", "topic": "<b>4.Set：<b>哈希表或整数集合<\/b><\/b><span class=\"mm-note\">Set 类型的底层数据结构是由<b>哈希表或整数集合<\/b>实现的：<\/span>", "children": [{"id": "n64", "topic": "如果集合中的元素都是<b>整数且元素个数小于 512<\/b> （默认值，set-maxintset-entries配置）个，Redis 会使用<b>整数集合<\/b>作为 Set 类型的底层数据结构；", "children": []}, {"id": "n65", "topic": "如果集合中的元素不满足上面条件，则 Redis 使用<b>哈希表<\/b>作为 Set 类型的底层数据结构。", "children": []}]}, {"id": "n66", "topic": "<b>5.ZSet：<b>压缩列表或跳表<\/b><\/b><span class=\"mm-note\">Zset 类型的底层数据结构是由<b>压缩列表或跳表<\/b>实现的：<\/span>", "children": [{"id": "n67", "topic": "如果<b>有序集合的元素个数小于 128 个<\/b>，并且<b>每个元素的值小于 64 字节<\/b>时，Redis 会使用<b>压缩列表<\/b>作为 Zset 类型的底层数据结构；", "children": []}, {"id": "n68", "topic": "如果有序集合的元素不满足上面的条件，Redis 会使用<b>跳表<\/b>作为 Zset 类型的底层数据结构；<span class=\"mm-note\"><b>在 Redis 7.0 中，压缩列表数据结构已经废弃了，交由 listpack 数据结构来实现了。<\/b><\/span>", "children": []}]}]}, {"id": "n69", "topic": "<b>4.跳表 、压缩列表<\/b>", "children": [{"id": "n70", "topic": "<b>1.跳表<\/b>", "children": [{"id": "n71", "topic": "简介：<span class=\"mm-note\">跳表是一个<b>带有层级关系的链表<\/b>，而且<b>每一层级可以包含多个节点<\/b>，每一个节点通过指针连接起来。 Redis 只有 Zset 对象的底层实现用到了跳表，跳表的优势是<b>能支持平均 O(logN) 复杂度的节点查找<\/b>。 链表在查找元素的时候，因为需要逐一查找，所以查询效率非常低，时间复杂度是O(N)，于是就出现了跳表。<b>跳表是在链表基础上改进过来的，实现了一种「多层」的有序链表<\/b>，这样的好处是<b>能快速定位数据<\/b>。 <img class=\"mm-img\" src=\"fl-8212be05429f5d.jpg\" style=\"width:320px;height:78px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n72", "topic": "<b>跳表结点如何实现多层级：跳表结点的数据结构<\/b><span class=\"mm-note\">Zset 对象要同时保存<b>「元素」<\/b>和<b>「元素的权重」<\/b>，对应到跳表节点结构里就是 sds 类型的 ele 变量和 double 类型的 score 变量。每个跳表节点都有一个<b>后向指针<\/b>（struct zskiplistNode *backward），指向前一个节点，目的是为了方便从跳表的尾节点开始访问节点，这样倒序查找时很方便。 跳表是一个带有层级关系的链表，而且每一层级可以包含多个节点，每一个节点通过指针连接起来，实现这一特性就是靠跳表节点结构体中的<b>zskiplistLevel 结构体类型的 level 数组<\/b>。 <b>level 数组中的每一个元素代表跳表的一层<\/b>，也就是由 zskiplistLevel 结<\/span>", "children": []}, {"id": "n73", "topic": "<b>跳表结点的查询过程：<\/b><span class=\"mm-note\">跳表会从头节点的<b>最高层开始<\/b>，逐一遍历每一层。 在遍历某一层的跳表节点时，会用跳表节点中的 SDS 类型的<b>元素和元素的权重来进行判断<\/b>，共有两个判断条件：<\/span>", "children": [{"id": "n74", "topic": "如果当前节点的<b>权重「小于」要查找的权重时<\/b>，跳表就会访问<b>该层上的下一个节点<\/b>。", "children": []}, {"id": "n75", "topic": "如果当前节点的<b>权重「等于」要查找的权重时<\/b>，并且当前节点的 SDS 类型数据「小于」要查找的数据时，跳表就会<b>访问该层上的下一个节点<\/b>。<span class=\"mm-note\">如果上面两个条件都不满足，或者下一个节点为空时，跳表就会使用目前遍历到的节点的 level 数组里的下一层指针，然后沿着下一层指针继续查找，这就相当于跳到了下一层接着查找。<\/span>", "children": []}]}, {"id": "n76", "topic": "<b>为啥用跳表不用平衡树？<\/b>", "children": [{"id": "n77", "topic": "<b>从内存占用上来比较，跳表比平衡树更灵活一些<\/b>。平衡树每个节点包含 2 个指针（分别指向左右子树），而跳表每个节点包含的指针数目平均为 1/(1-p)，具体取决于参数 p 的大小。如果像 Redis里的实现一样，取 p=1/4，那么平均每个节点包含 1.33 个指针，比平衡树更有优势。", "children": []}, {"id": "n78", "topic": "<b>在做范围查找的时候，跳表比平衡树操作要简单<\/b>。在平衡树上，我们找到指定范围的小值之后，还需要以中序遍历的顺序继续寻找其它不超过大值的节点。如果不对平衡树进行一定的改造，这里的中序遍历并不容易实现。而在跳表上进行范围查找就非常简单，只需要在找到小值之后，对第 1 层链表进行若干步的遍历就可以实现。", "children": []}, {"id": "n79", "topic": "<b>从算法实现难度上来比较，跳表比平衡树要简单得多<\/b>。平衡树的插入和删除操作可能引发子树的调整，逻辑复杂，而跳表的插入和删除只需要修改相邻节点的指针，操作简单又快速", "children": []}]}]}, {"id": "n80", "topic": "<b>2.压缩列表<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-2f5a2cfab3f879.jpg\" style=\"width:320px;height:116px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": [{"id": "n81", "topic": "简介：<span class=\"mm-note\">压缩列表是 Redis <b>为了节约内存<\/b>而开发的，它是<b>由连续内存块组成的顺序型数据结构<\/b>，有点类似于数组。用于<b>存储较小列表（List）<\/b>数据的，可以<b>同时存储多个列表元素<\/b>，并且通过灵活的编码方式来节省内存空间。 它被设计成一种<b>内存紧凑型的数据结构<\/b>，占用<b>一块连续的内存空间<\/b>，不仅可以利用 CPU 缓存，而且会针对不同长度的数据，进行相应编码，这种方法可以<b>有效地节省内存开销<\/b>。<\/span>", "children": []}, {"id": "n82", "topic": "<b>缺点：<\/b>", "children": [{"id": "n83", "topic": "<b>不能保存过多的元素<\/b>，否则查询效率就会降低；", "children": []}, {"id": "n84", "topic": "新增或修改某个元素时，<b>压缩列表占用的内存空间需要重新分配<\/b>，甚至可能引发连锁更新的问题。", "children": []}]}, {"id": "n85", "topic": "压缩列表的<b>三个表头字段<\/b>：", "children": [{"id": "n86", "topic": "<b>*zlbytes<\/b>*，记录<b>整个压缩列表占用对内存字节数<\/b>；", "children": []}, {"id": "n87", "topic": "<b>*zltail<\/b>*，记录压缩列表<b>「尾部」节点距离起始地址由多少字节，也就是列表尾的偏移量<\/b>；", "children": []}, {"id": "n88", "topic": "<b>*zllen<\/b>*，记录<b>压缩列表包含的节点数量<\/b>；", "children": []}, {"id": "n89", "topic": "<b>*zlend<\/b>*，标记<b>压缩列表的结束点，<\/b>固定值 0xFF（十进制255）。", "children": []}]}, {"id": "n90", "topic": "压缩列表结点包含三部分内容：<span class=\"mm-note\">压缩列表节点包含三部分内容：<\/span>", "children": [{"id": "n91", "topic": "<b>*prevlen<\/b>*，记录了「<b>前一个节点」的长度<\/b>，目的是为了实现从后向前遍历；", "children": []}, {"id": "n92", "topic": "<b>*encoding<\/b>*，记录了<b>当前节点实际数据的「类型和长度」<\/b>，类型主要有两种：字符串和整数。", "children": []}, {"id": "n93", "topic": "<b>*data<\/b>*，记录了<b>当前节点的实际数据<\/b>，类型和长度都由 <code>encoding<\/code> 决定；", "children": []}]}]}]}]}, {"id": "n94", "topic": "<b>4.Redis缓存设计<\/b>", "children": [{"id": "n95", "topic": "<b>1.缓存雪崩、缓存击穿、缓存穿透<\/b><span class=\"mm-note\">通常我们为了保证缓存中的数据与数据库中的数据一致性，会给 <b>Redis 里的数据设置过期时间<\/b>，当<b>缓存数据过期后<\/b>，用户访问的数据如果不在缓存里，业务系统需要重新生成缓存，因此就会访问数据库，并将数据更新到 Redis 里，这样后续请求都可以直接命中缓存。<\/span>", "children": [{"id": "n96", "topic": "<b>1.缓存雪崩<\/b>", "children": [{"id": "n97", "topic": "<b>什么是缓存雪崩：<\/b><span class=\"mm-note\">当<b>大量缓存数据在同一时间过期（失效）时，如果此时有大量的用户请求，都无法在 Redis 中处理，于是全部请求都直接访问数据库，从而导致数据库的压力骤增，严重的会造成数据库宕机，从而形成一系列连锁反应，造成整个系统崩溃。<\/b><\/span>", "children": []}, {"id": "n98", "topic": "<b>解决方法：两种方案<\/b>", "children": [{"id": "n99", "topic": "<b>将缓存失效时间随机打散：<\/b> 我们可以在原有的失效时间基础上增加一个随机值（比如 1 到 10 分钟）这样每个缓存的过期时间都不重复了，也就降低了缓存集体失效的概率。", "children": []}, {"id": "n100", "topic": "<b>设置缓存不过期：<\/b> 我们可以通过后台服务来更新缓存数据，从而避免因为缓存失效造成的缓存雪崩，也可以在一定程度上避免缓存并发问题。", "children": []}]}]}, {"id": "n101", "topic": "<b>2.缓存击穿<\/b>", "children": [{"id": "n102", "topic": "<b>什么是缓存击穿？<\/b><span class=\"mm-note\">我们的业务通常会有几个数据会被频繁地访问，比如<b>秒杀活动<\/b>，这类被频地访问的数据被称为<b>热点数据。<\/b> 如果缓存中的<b>某个热点数据过期<\/b>了，此时<b>大量的请求访问了该热点数据<\/b>，就无法从缓存中读取，直接访问数据库，数据库很容易就被高并发的请求冲垮，这就是<b>缓存击穿<\/b>的问题。<\/span>", "children": []}, {"id": "n103", "topic": "解决方案：缓存击穿可以采取前面说到两种方案：", "children": [{"id": "n104", "topic": "<b>互斥锁方案<\/b>（Redis 中使用 <b>setNX 方法设置一个状态位<\/b>，表示这是一种锁定状态），保证<b>同一时间只有一个业务线程请求缓存<\/b>，未能获取互斥锁的请求，要么等待锁释放后重新读取缓存，要么就返回空值或者默认值。", "children": []}, {"id": "n105", "topic": "<b>不给热点数据设置过期时间，由后台异步更新缓存<\/b>，或者在热点数据准备要过期前，提前通知后台线程更新缓存以及重新设置过期时间；<span class=\"mm-note\">可以引入监控线程来<b>进行缓存的预加载<\/b>或者<b>在缓存失效时通过某种方式避免大量请求同时访问数据<\/b>库。 下面是一种可能的实现方式：<\/span>", "children": []}]}, {"id": "n106", "topic": "<b>监控线程<\/b>：可以使用<b>定时任务或者后台线程来定期检查缓存中的数据情况<\/b>。当监控线程发现某些数据即将过期或者已经过期时，可以主动从数据库中加载这些数据到缓存中，以保证缓存中的热点数据不会失效。", "children": []}, {"id": "n107", "topic": "<b>预加载<\/b>：在<b>系统启动时，可以开启一个监控线程，负责预加载缓存中的一些热点数据<\/b>。这样可以避免系统启动后，大量请求同时访问数据库导致的性能问题。", "children": []}, {"id": "n108", "topic": "降级处理：当缓存失效时，可以使用一些降级策略来处理请求，例如返回一个默认值、从其他可靠的缓存中获取数据等，以避免大量请求直接访问数据库。<span class=\"mm-note\">通过引入监控线程来进行缓存的预加载或者避免大量请求同时访问数据库，可以有效地解决缓存击穿问题，提高系统的性能和稳定性。<\/span>", "children": []}]}, {"id": "n109", "topic": "<b>3.缓存穿透<\/b>", "children": [{"id": "n110", "topic": "<b>什么是缓存穿透？<\/b><span class=\"mm-note\">当发生缓存雪崩或击穿时，数据库中还是保存了应用要访问的数据，一旦缓存恢复相对应的数据，就可以减轻数据库的压力，而缓存穿透就不一样了。 当用户访问的数据，<b>既不在缓存中，也不在数据库中<\/b>，导致请求在访问缓存时，发现<b>缓存缺失<\/b>，再去访问数据库时，发现数据库中也没有要访问的数据，<b>没办法构建缓存数据<\/b>，来服务后续的请求。那么当有大量这样的请求到来时，数据库的压力骤增，这就是<b>缓存穿透<\/b>的问题。<\/span>", "children": []}, {"id": "n111", "topic": "<b>发生缓存穿透的两种情况：<\/b>", "children": [{"id": "n112", "topic": "业务误操作，缓存中的数据和数据库中的数据都被<b>误删除<\/b>了，所以导致缓存和数据库中都没有数据；", "children": []}, {"id": "n113", "topic": "<b>黑客恶意攻击<\/b>，故意<b>大量访问某些读取不存在数据的业务<\/b>；", "children": []}]}, {"id": "n114", "topic": "<b>三种解决缓存穿透的常见方案：<\/b>", "children": [{"id": "n115", "topic": "<b>非法请求的限制<\/b>：当有大量恶意请求访问不存在的数据的时候，也会发生缓存穿透，因此在 API 入口处我们要判断请求参数是否合理，请求参数是否含有非法值、请求字段是否存在，如果判断出是恶意请求就直接返回错误，避免进一步访问缓存和数据库。", "children": []}, {"id": "n116", "topic": "<b>设置空值或者默认值<\/b>：当我们线上业务发现缓存穿透的现象时，可以针对查询的数据，<b>在缓存中设置一个空值或者默认值<\/b>，这样后续请求就可以从缓存中读取到空值或者默认值，返回给应用，而不会继续查询数据库。", "children": []}, {"id": "n117", "topic": "<b>使用布隆过滤器快速判断数据是否存在，避免通过查询数据库来判断数据是否存在<\/b>：我们可以在写入数据库数据时，使用布隆过滤器做个标记，然后在用户请求到来时，业务线程确认缓存失效后，可以通过查询布隆过滤器快速判断数据是否存在，如果不存在，就不用通过查询数据库来判断数据是否存在，即使发生了缓存穿透，大量请求只会查询 Redis 和布隆过滤器，而不会查询数据库，保证了数据库能正常运行，Redis 自身也是支持布隆过滤器的。<span class=\"mm-note\">&gt; 😍 本质上<b>布隆过滤器<\/b>是一种数据结构，比较巧妙的概率型数据结构（probabilistic data structure），特点是高效地插入和查询，可以用来告诉你 <b>“某样东西一定不存在或者可能存在”<\/b>。 布隆过滤器是一个 bit 向量或者说 <b>bit 数组<\/b>，如果我们要映射一个值到布隆过滤器中，我们需要使用<b>多个不同的哈希函数<\/b>生成<b>多个哈希值，<\/b>并对每个生成的哈希值指向的 bit 位置 1.<\/span>", "children": []}]}]}]}, {"id": "n118", "topic": "<b>2.如何设计一个缓存策略，可以动态缓存热点数据呢？<\/b><span class=\"mm-note\">热点数据动态缓存的策略总体思路：<b>通过数据最新访问时间来做排名，并过滤掉不常访问的数据，只留下经常访问的数据<\/b>。 😍 以电商平台场景中的例子，现在要求只缓存用户经常访问的 Top 1000 的商品。具体细节如下：<\/span>", "children": [{"id": "n119", "topic": "先通过缓存系统做一个<b>排序队列<\/b>（比如存放 1000 个商品），系统会根据商品的访问时间，更新队列信息，越是最近访问的商品排名越靠前；", "children": []}, {"id": "n120", "topic": "同时系统会定期过滤掉队列中排名最后的 200 个商品，然后再从数据库中随机读取出 200 个商品加入队列中；", "children": []}, {"id": "n121", "topic": "这样当请求每次到达的时候，会先从队列中获取商品 ID，如果命中，就根据 ID 再从另一个缓存数据结构中读取实际的商品信息，并返回。<span class=\"mm-note\">在 Redis 中可以用 <b>zadd 方法<\/b>和 <b>zrange 方法<\/b>来完成排序队列和获取 200 个商品的操作<\/span>", "children": []}]}, {"id": "n122", "topic": "<b>3.常见的缓存更新策略<\/b><span class=\"mm-note\">常见的缓存更新策略共有3种：<\/span>", "children": [{"id": "n123", "topic": "<b>Cache Aside（旁路缓存）策略<\/b>；", "children": []}, {"id": "n124", "topic": "Read/Write Through（读穿 / 写穿）策略；", "children": []}, {"id": "n125", "topic": "Write Back（写回）策略；<span class=\"mm-note\">😇 实际开发中，<b>Redis 和 MySQL 的更新策略用的是 Cache Aside<\/b>，另外两种策略应用不了。<\/span>", "children": []}, {"id": "n126", "topic": "<b>1.旁路缓存(Cache Aside)<\/b><span class=\"mm-note\">Cache Aside（旁路缓存）策略是最常用的，应用程序<b>直接与「数据库、缓存」交互<\/b>，并负责对缓存的维护，该策略又可以细分为「<b>读策略<\/b>」和「<b>写策略<\/b>」。 <b>写策略的步骤：步骤不可颠倒<\/b><\/span>", "children": [{"id": "n127", "topic": "<b>先更新数据库中的数据<\/b>，<b>再删除缓存中的数据<\/b>。<span class=\"mm-note\"><b>读策略的步骤：<\/b><\/span>", "children": []}, {"id": "n128", "topic": "如果读取的数据<b>命中了缓存，则直接返回数据<\/b>；", "children": []}, {"id": "n129", "topic": "如果读取的数据<b>没有命中缓存，则从数据库中读取数据，然后将数据写入到缓存，并且返回给用户<\/b>。<span class=\"mm-note\">😇 注意，写策略的步骤的顺序不能倒过来，即<b>不能先删除缓存再更新数据库<\/b>，原因是在「读+写」并发的时候，会出现缓存和数据库的数据不一致性的问题。 举个例子，假设某个用户的年龄是 20，请求 A 要更新用户年龄为 21，所以它会删除缓存中的内容。这时，另一个请求 B 要读取这个用户的年龄，它查询缓存发现未命中后，会从数据库中读取到年龄为 20，并且写入到缓存中，然后请求 A 继续更改数据库，将用户的年龄更新为 21。 最终，该用户年龄在缓存中是 20（旧值），在数据库中是 21（新值），<b>缓存和数据库的数据不一致。<\/b> 分析一下<b>先更新数据库，再删除缓存<\/b>： 假如某个用户数据在缓存中不存在，请求 A 读取数据时从数据库中查询<\/span>", "children": []}, {"id": "n130", "topic": "在<b>更新数据时也更新缓存<\/b>，只是<b>在更新缓存前先加一个分布式锁<\/b>，因为这样在同一时间只允许一个线程更新缓存，就不会产生并发问题了。当然这么做对于写入的性能会有一些影响；", "children": []}, {"id": "n131", "topic": "另一种做法同样也是在更新数据时更新缓存，只是<b>给缓存加一个较短的过期时间<\/b>，这样即使出现缓存不一致的情况，缓存的数据也会很快过期，对业务的影响也是可以接受。", "children": []}]}, {"id": "n132", "topic": "<b>2.Read/Write Through（读穿 / 写穿）策略<\/b><span class=\"mm-note\">Read/Write Through（读穿 / 写穿）策略原则是<b>应用程序只和缓存交互，不再和数据库交互<\/b>，而是<b>由缓存和数据库交互<\/b>，相当于<b>更新数据库的操作由缓存自己代理<\/b>了。<\/span>", "children": []}, {"id": "n133", "topic": "<b>3.Write Back（写回）策略<\/b><span class=\"mm-note\">Write Back（写回）策略在更新数据的时候，<b>只更新缓存<\/b>，同时<b>将缓存数据设置为脏的<\/b>，然后立马返回，并不会更新数据库。对于数据库的更新，会通过批量异步更新的方式进行。 实际上，Write Back（写回）策略也不能应用到我们常用的数据库和缓存的场景中，因为 <b>Redis 并没有异步更新数据库<\/b>的功能。 😇 Write Back 是计算机体系结构中的设计，比如 <b>CPU 的缓存、操作系统中文件系统的缓存<\/b>都采用了 Write Back（写回）策略。<\/span>", "children": []}]}, {"id": "n134", "topic": "<b>4.数据库和缓存如何保证一致性？<\/b>", "children": [{"id": "n135", "topic": "<b>1.先更新数据库，还是先更新缓存？<\/b>", "children": [{"id": "n136", "topic": "<b>先更新数据库，还是先更新缓存？<\/b><span class=\"mm-note\">A 请求先将数据库的数据更新为 1，然后在更新缓存前，请求 B 将数据库的数据更新为 2，紧接着也把缓存更新为 2，然后 A 请求更新缓存为 1。 此时，数据库中的数据是 2，而缓存中的数据却是 1，<b>出现了缓存和数据库中的数据不一致的现象<\/b>。<\/span>", "children": []}, {"id": "n137", "topic": "先更新缓存，再更新数据库？<span class=\"mm-note\">A 请求先将缓存的数据更新为 1，然后在更新数据库前，B 请求来了， 将缓存的数据更新为 2，紧接着把数据库更新为 2，然后 A 请求将数据库的数据更新为 1。 此时，数据库中的数据是 1，而缓存中的数据却是 2，<b>出现了缓存和数据库中的数据不一致的现象<\/b>。 所以，<b>无论是「先更新数据库，再更新缓存」，还是「先更新缓存，再更新数据库」，这两个方案都存在并发问题，当两个请求并发更新同一条数据的时候，可能会出现缓存和数据库中的数据不一致的现象<\/b>。 <b>两者都会引起数据不一致的问题。<\/b><\/span>", "children": []}]}, {"id": "n138", "topic": "<b>2.先更新数据库，还是先删除缓存？<\/b><span class=\"mm-note\">在更新数据时，<b>不更新缓存，而是删除缓存中的数据。然后，到读取数据时，发现缓存中没了数据之后，再从数据库中读取数据，更新到缓存中。也叫：旁路缓存策略<\/b> 因此正解是：<b>先更新数据库，再删除缓存<\/b>。<\/span>", "children": []}]}]}, {"id": "n139", "topic": "<b>5.Redis 过期删除与内存淘汰<\/b>", "children": [{"id": "n140", "topic": "<b>1.Redis使用的过期删除策略<\/b><span class=\"mm-note\">每当我们对一个 key 设置了过期时间时，Redis 会把该 key 带上过期时间存储到一个<b>过期字典（expires dict）<\/b>中，也就是说<b>「过期字典」保存了数据库中所有 key 的过期时间<\/b>。 当我们查询一个 key 时，Redis 首先检查该 key 是否存在于过期字典中：<\/span>", "children": [{"id": "n141", "topic": "如果不在，则正常读取键值；", "children": []}, {"id": "n142", "topic": "如果存在，则会<b>获取该 key 的过期时间<\/b>，然后与当前系统时间进行比对，如果比系统时间大，那就没有过期，否则判定该 key 已过期。<span class=\"mm-note\">Redis 使用的过期删除策略是「<b>惰性删除+定期删除<\/b>」这两种策略配合使用。<\/span>", "children": []}, {"id": "n143", "topic": "<b>1.惰性删除<\/b><span class=\"mm-note\">惰性删除策略的做法是，<b>不主动删除过期键，每次从数据库访问 key 时，都检测 key 是否过期，如果过期则删除该 key。<\/b> <b>优点<\/b>：<\/span>", "children": [{"id": "n144", "topic": "因为每次访问时，才会检查 key 是否过期，所以此策略只会<b>使用很少的系统资源<\/b>，因此，惰性删除策略<b>对 CPU 时间最友好<\/b>。<span class=\"mm-note\"><b>缺点<\/b>：<\/span>", "children": []}, {"id": "n145", "topic": "如果一个 key 已经过期，而这个 key 又仍然保留在数据库中，那么只要这个过期 key 一直没有被访问，它所占用的内存就不会释放，造成了<b>一定的内存空间浪费<\/b>。所以，惰性删除策略<b>对内存不友好<\/b>。", "children": []}]}, {"id": "n146", "topic": "<b>2.定期删除<\/b><span class=\"mm-note\">定期删除策略的做法是，<b>每隔一段时间「随机」从数据库中取出一定数量的 key 进行检查，并删除其中的过期key。<\/b><\/span>", "children": [{"id": "n147", "topic": "Redis 的定期删除的流程：", "children": [{"id": "n148", "topic": "从过期字典中<b>随机抽取 20 个 key<\/b>；", "children": []}, {"id": "n149", "topic": "检查这 20 个 key 是否过期，并删除已过期的 key；", "children": []}, {"id": "n150", "topic": "如果本轮检查的已过期 key 的数量，超过 5 个（20/4），也就是「已过期 key 的数量」占比「随机抽取 key 的数量」大于 25%，则继续重复步骤 1；如果已过期的 key 比例小于 25%，则停止继续删除过期 key，然后等待下一轮再检查。<span class=\"mm-note\">可以看到，定期删除是一个<b>循环的流程<\/b>。那 Redis 为了保证定期删除<b>不会出现循环过度<\/b>，导致线程卡死现象，为此增加了定期删除循环流程的时间上限，默认不会超过 25ms。<\/span>", "children": []}]}, {"id": "n151", "topic": "<b>优点<\/b>：", "children": [{"id": "n152", "topic": "通过限制删除操作执行的时长和频率，来<b>减少删除操作对 CPU 的影响<\/b>，同时也能删除一部分过期的数据减少了过期键对空间的无效占用。", "children": []}]}, {"id": "n153", "topic": "<b>缺点<\/b>：", "children": [{"id": "n154", "topic": "难以确定删除操作执行的时长和频率。如果执行的<b>太频繁<\/b>，就会对 CPU 不友好；如果执行的太少，那又和惰性删除一样了，过期 key 占用的内存不会及时得到释放。", "children": []}]}]}]}, {"id": "n155", "topic": "<b>2.Redis内存满了，会发生什么？<\/b><span class=\"mm-note\">Redis 的运行内存达到了某个阀值，就会触发<b>内存淘汰机制。<\/b><\/span>", "children": []}, {"id": "n156", "topic": "<b>3.Redis的内存淘汰策略？<\/b><span class=\"mm-note\">共有八种，这八种策略大体分为「不进行数据淘汰」和「进行数据淘汰」两类策略。<\/span>", "children": [{"id": "n157", "topic": "<b>不进行数据淘汰<\/b>：而是直接返回错误，停止服务。", "children": []}, {"id": "n158", "topic": "<b>进行数据淘汰<\/b>：", "children": [{"id": "n159", "topic": "<b>在设置了过期时间的数据中<\/b>淘汰", "children": [{"id": "n160", "topic": "<b>volatile-random<\/b>：随机淘汰设置了过期时间的任意键值；", "children": []}, {"id": "n161", "topic": "<b>volatile-ttl<\/b>：优先<b>淘汰更早过期的键值<\/b>。", "children": []}, {"id": "n162", "topic": "<b>volatile-lru<\/b>（Redis3.0 之前，默认的内存淘汰策略）：淘汰所有设置了过期时间的键值中，最久未使用的键值；", "children": []}, {"id": "n163", "topic": "<b>volatile-lfu<\/b>（Redis 4.0 后新增的内存淘汰策略）：淘汰所有设置了过期时间的键值中，最少使用的键值；", "children": []}]}, {"id": "n164", "topic": "<b>在所有数据范围内<\/b>淘汰", "children": [{"id": "n165", "topic": "<b>allkeys-random<\/b>：随机淘汰任意键值;", "children": []}, {"id": "n166", "topic": "<b>allkeys-lru<\/b>：淘汰整个键值中<b>最久未使用的键值<\/b>；", "children": []}, {"id": "n167", "topic": "<b>allkeys-lfu<\/b>（Redis 4.0 后新增的内存淘汰策略）：淘汰<b>整个键值中最少使用的键值<\/b>", "children": []}]}]}]}, {"id": "n168", "topic": "<b>4.LRU与LFU算法的区别？<\/b>", "children": []}, {"id": "n169", "topic": "<b>1.什么是LRU？<\/b><span class=\"mm-note\"><b>LRU<\/b> 全称是 Least Recently Used 翻译为<b>最近最少使用<\/b>，会选择<b>淘汰最近最少使用的数据<\/b>。 <b>传统 LRU 算法的实现是基于「链表」结构<\/b>，链表中的元素按照操作顺序从前往后排列，最新操作的键会被移动到表头，当需要内存淘汰时，只需要删除链表尾部的元素即可，因为链表尾部的元素就代表最久未被使用的元素。 Redis 并没有使用这样的方式实现 LRU 算法，因为传统的 LRU 算法存在两个问题：<\/span>", "children": [{"id": "n170", "topic": "<b>需要用链表管理所有的缓存数据，这会带来额外的空间开销<\/b>；", "children": []}, {"id": "n171", "topic": "<b>当有数据被访问时，需要在链表上把该数据移动到头端<\/b>，如果有大量数据被访问，就会带来很多链表移动操作，会很耗时，进而会降低 Redis 缓存性能。<span class=\"mm-note\">💡 <b>Q1：Redis 是如何实现 LRU 算法的？<\/b> Redis 实现的是一种<b>近似 LRU 算法<\/b>，目的是为了更好的节约内存，它的<b>实现方式是在 Redis 的对象结构体中添加一个额外的字段，用于记录此数据的最后一次访问时间<\/b>。 当 Redis 进行内存淘汰时，会使用<b>随机采样的方式来淘汰数据<\/b>，它是随机取 5 个值（此值可配置），然后<b>淘汰最久没有使用的那个<\/b>。 Redis 实现的 LRU 算法的优点：<\/span>", "children": [{"id": "n172", "topic": "不用为所有的数据维护一个大链表，节省了空间占用；", "children": []}, {"id": "n173", "topic": "不用在每次数据访问时都移动链表项，提升了缓存的性能；<span class=\"mm-note\">但是 LRU 算法有一个问题，<b>无法解决缓存污染问题<\/b>，比如应用一次读取了大量的数据，而这些数据只会被读取这一次，那么这些数据会留存在 Redis 缓存中很长一段时间，造成缓存污染。<\/span>", "children": []}]}]}, {"id": "n174", "topic": "<b>2.什么是LFU<\/b><span class=\"mm-note\">什么是 LFU 算法？ LFU 全称是 Least Frequently Used 翻译为<b>最近最不常用<\/b>，LFU 算法是<b>根据数据访问次数来淘汰数据<\/b>的，它的核心思想是“<b>如果数据过去被访问多次，那么将来被访问的频率也更高<\/b>”。 所以， LFU 算法会<b>记录每个数据的访问次数<\/b>。 当一个数据被再次访问时，就会增加该数据的访问次数。这样就解决了偶尔被访问一次之后，数据留存在缓存中很长一段时间的问题，相比于 LRU 算法也更合理一些。 Redis 是如何实现 LFU 算法的？ LFU 算法相比于 LRU 算法的实现，<b>多记录了「数据的访问频次」的信息<\/b>。 Redis 对象头中的 lru 字段，在 LRU 算法下和<\/span>", "children": []}]}, {"id": "n175", "topic": "<b>6.Redis实战<\/b>", "children": [{"id": "n176", "topic": "<b>1.如何使用Redis实现分布式锁<\/b><span class=\"mm-note\">💡 Redis 中带有 <b>NX（Not Exists）选项的 SET 命令是原子操作<\/b>。当使用 NX 选项时，只有在键不存在时才会设置键值对，否则不执行任何操作，并返回空值。 这种操作的<b>原子性是通过 Redis 单线程的特性来保证的<\/b>。Redis 是单线程模型的内存数据库，<b>所有的命令都是顺序执行的<\/b>，并且 Redis 使用了基于事件驱动的 I/O 多路复用机制，能够高效地处理并发请求。因此，即使在高并发的情况下，带有 NX 选项的 SET 命令也能够保证原子性，确保只有一个客户端可以成功地设置键值对。 就通过使用 <b>SET 命令+<\/b> <b>Lua 脚本<\/b>在 Redis 单节点上完成了分布式锁的<b>加锁和解锁<\/b>。<\/span>", "children": [{"id": "n177", "topic": "<b>加锁：SET命令的NX参数<\/b><span class=\"mm-note\">Redis 的 <b>SET 命令有个 NX 参数<\/b>可以实现「<b>key不存在才插入<\/b>」，所以可以用<b>它来实现分布式加锁<\/b>：<\/span>", "children": [{"id": "n178", "topic": "如果 key 不存在，则显示插入成功，可以用来表示加锁成功；", "children": []}, {"id": "n179", "topic": "如果 key 存在，则会显示插入失败，可以用来表示加锁失败。<span class=\"mm-note\">基于 Redis 节点实现分布式锁时，对于加锁操作，我们<b>需要满足三个条件。<\/b><\/span>", "children": []}, {"id": "n180", "topic": "加锁包括了<b>读取锁变量、检查锁变量值和设置锁变量值<\/b>三个操作，但需要以<b>原子操作<\/b>的方式完成，所以，我们使用 SET 命令带上 <b>NX<\/b> 选项来实现加锁；", "children": []}, {"id": "n181", "topic": "锁变量需要<b>设置过期时间<\/b>，以免客户端拿到锁后发生异常，导致锁一直无法释放，所以，我们在 SET 命令执行时加上 <b>EX/PX 选项<\/b>，设置其过期时间；", "children": []}, {"id": "n182", "topic": "锁变量的值需要能<b>区分来自不同客户端的加锁操作<\/b>，以免在释放锁时，出现误释放操作，所以，我们使用 SET 命令设置锁变量值时，<b>每个客户端设置的值是一个唯一值<\/b>，用于标识客户端；<span class=\"mm-note\">满足这三个条件的分布式命令如下：<\/span>", "children": []}, {"id": "n183", "topic": "lock_key 就是 <b>key 键<\/b>；", "children": []}, {"id": "n184", "topic": "unique_value 是<b>客户端生成的唯一的标识<\/b>，区分来自不同客户端的锁操作；", "children": []}, {"id": "n185", "topic": "NX 代表只在 lock_key 不存在时，才对 lock_key 进行设置操作；", "children": []}, {"id": "n186", "topic": "PX 10000 表示设置 lock_key 的过期时间为 10s，这是为了避免客户端发生异常而无法释放锁。", "children": []}]}, {"id": "n187", "topic": "<b>解锁<\/b>：<b>Lua脚本保证解锁的原子性— 因为解锁有两个操作(判断是否为加锁客户端+解锁)<\/b><span class=\"mm-note\">而解锁的过程就是<b>将 lock_key 键删除<\/b>（del lock_key），但不能乱删，要保证执行操作的客户端就是加锁的客户端。所以，解锁的时候，我们要先判断锁的 unique_value 是否为加锁客户端，是的话，才将 lock_key 键删除。 解锁是有<b>两个操作(判断是否为加锁客户端+解锁)<\/b>，这时就需要 Lua 脚本来保证解锁的原子性，因为 Redis 在执行 Lua 脚本时，可以以原子性的方式执行，保证了锁释放操作的原子性。<\/span>", "children": []}, {"id": "n188", "topic": "优点：", "children": [{"id": "n189", "topic": "<b>性能高效<\/b>（这是选择缓存实现分布式锁最核心的出发点）。", "children": []}, {"id": "n190", "topic": "<b>实现方便<\/b>。很多研发工程师选择使用 Redis 来实现分布式锁，很大成分上是因为 Redis 提供了 setnx 方法，实现分布式锁很方便。", "children": []}, {"id": "n191", "topic": "<b>避免单点故障<\/b>（因为 Redis 是跨集群部署的，自然就避免了单点故障）。", "children": []}]}, {"id": "n192", "topic": "缺点：", "children": [{"id": "n193", "topic": "<b>超时时间不好设置<\/b>。如果锁的超时时间设置过长，会影响性能，如果设置的超时时间过短会保护不到共享资源。比如在有些场景中，一个线程 A 获取到了锁之后，由于业务代码执行时间可能比较长，导致超过了锁的超时时间，自动失效，注意 A 线程没执行完，后续线程 B 又意外的持有了锁，意味着可以操作共享资源，那么两个线程之间的共享资源就没办法进行保护了。", "children": [{"id": "n194", "topic": "<b>那么如何合理设置超时时间呢？<\/b> 我们可以基于续约的方式设置超时时间：先给锁设置一个超时时间，然后启动一个守护线程，让守护线程在一段时间后，重新设置这个锁的超时时间。实现方式就是：写一个守护线程，然后去判断锁的情况，当锁快失效的时候，再次进行续约加锁，当主线程执行完成后，销毁续约锁即可，不过这种方式实现起来相对复杂。", "children": []}]}, {"id": "n195", "topic": "<b>Redis 主从复制模式中的数据是异步复制的，这样导致分布式锁的不可靠性<\/b>。如果在 Redis 主节点获取到锁后，在没有同步到其他节点时，Redis 主节点宕机了，此时新的 Redis 主节点依然可以获取锁，所以多个应用服务就可以同时获取到锁。", "children": []}]}, {"id": "n196", "topic": "Redis <b>如何解决集群情况下分布式锁的可靠性？<\/b><span class=\"mm-note\">Redis 官方已经设计了一个分布式锁算法 <b>Redlock（红锁）。<\/b> 它是基于<b>多个 Redis 节点<\/b>的分布式锁，即使有节点发生了故障，锁变量仍然是存在的，客户端还是可以完成锁操作。官方推荐是至少部署 5 个 Redis 节点，而且都是主节点，它们之间没有任何关系，都是一个个孤立的节点。 Redlock 算法的基本思路，<b>是让客户端和多个独立的 Redis 节点依次请求申请加锁，如果客户端能够和半数以上的节点成功地完成加锁操作，那么我们就认为，客户端成功地获得分布式锁，否则加锁失败<\/b>。 这样一来，即使有某个 Redis 节点发生故障，因为锁的数据在其他节点上也有保存，所以客户端仍然可以正常地进行锁操作，锁的数据也不<\/span>", "children": []}]}, {"id": "n197", "topic": "<b>2.Redis事务支持回滚吗？<\/b><span class=\"mm-note\"><b>不支持<\/b> <b>Redis 中并没有提供回滚机制<\/b>，虽然 Redis 提供了 DISCARD 命令，但是这个命令只能用来主动放弃事务执行，把暂存的命令队列清空，起不到回滚的效果。 Q1：<b>为啥不支持事务回滚？<\/b> 答：<\/span>", "children": [{"id": "n198", "topic": "他认为 Redis 事务的执行时，错误通常都是编程错误造成的，这种错误通常只会出现在开发环境中，而很少会在实际的生产环境中出现，所以他认为<b>没有必要为 Redis 开发事务回滚功能<\/b>；", "children": []}, {"id": "n199", "topic": "不支持事务回滚是因为<b>这种复杂的功能和 Redis 追求的简单高效的设计主旨不符合<\/b>。", "children": []}]}]}, {"id": "n200", "topic": "<b>7.Redis线程模型<\/b>", "children": [{"id": "n201", "topic": "<b>1.Redis是单线程的吗？<\/b><span class=\"mm-note\">不是的，<b>Redis在启动的时候，既有主线程，又有后台线程<\/b>。 <b>Redis 单线程指的是「接收客户端请求-&gt;解析请求 -&gt;进行数据读写等操作-&gt;发送数据给客户端」这个过程是由一个线程（主线程）来完成的<\/b>，这也是我们常说 Redis 是单线程的原因。<\/span>", "children": [{"id": "n202", "topic": "<b>Redis 在 2.6 版本<\/b>，会启动 <b>2 个后台线程<\/b>，分别处理<b>关闭文件、AOF 刷盘<\/b>这两个任务；", "children": []}, {"id": "n203", "topic": "<b>Redis 在 4.0 版本之后<\/b>，新增了一个新的后台线程，用来<b>异步释放 Redis 内存<\/b>，也就是 lazyfree 线程。<span class=\"mm-note\">之所以 Redis 为「关闭文件、AOF 刷盘、释放内存」这些任务创建单独的线程来处理，是因为这些任务的操作都是很耗时的，如果把这些任务都放在主线程来处理，那么 Redis 主线程就很容易发生阻塞，这样就无法处理后续的请求了。 <b>后台线程相当于一个消费者<\/b>，<b>生产者把耗时任务丢到任务队列中<\/b>，消费者（BIO）不停轮询这个队列，拿出任务就去执行对应的方法即可。<\/span>", "children": []}]}, {"id": "n204", "topic": "<b>2.Redis的单线程模型是怎样的？<\/b><span class=\"mm-note\">IO多路复用模型(epoll) <img class=\"mm-img\" src=\"fl-c35d4f154c182d.jpg\" style=\"width:320px;height:305px\" loading=\"lazy\" decoding=\"async\"> 图中的蓝色部分是一个事件循环，是由主线程负责的，可以看到网络 I/O 和命令处理都是单线程。<\/span>", "children": [{"id": "n205", "topic": "<b>Redis 初始化<\/b>的时候，会做下面这几件事情：", "children": [{"id": "n206", "topic": "首先，调用 <b>epoll_create()<\/b> 创建一个 <b>epoll 对象<\/b>和调用 <b>socket()<\/b> 创建一个服务端 socket", "children": []}, {"id": "n207", "topic": "然后，调用 <b>bind()<\/b> 绑定端口和调用 <b>listen()<\/b> 监听该 socket；", "children": []}, {"id": "n208", "topic": "然后，将调用 <b>epoll_ctl()<\/b> 将 listen socket 加入到 epoll，同时<b>注册「连接事件」处理函数<\/b>。", "children": []}]}, {"id": "n209", "topic": "初始化完后，主线程就进入到一个<b>事件循环函数<\/b>，主要会做以下事情：", "children": [{"id": "n210", "topic": "首先，先调用<b>处理发送队列函数<\/b>，看是发送队列里是否有任务，如果有发送任务，则通过 write 函数将客户端发送缓存区里的数据发送出去，如果这一轮数据没有发送完，就会注册写事件处理函数，等待 epoll_wait 发现可写后再处理 。", "children": []}, {"id": "n211", "topic": "接着，调用 <b>epoll_wait 函数等待事件的到来<\/b>：", "children": [{"id": "n212", "topic": "如果是<b>连接事件<\/b>到来，则会调用<b>连接事件处理函数<\/b>，该函数会做这些事情：调用 accpet 获取已连接的 socket -&gt; 调用 epoll_ctl 将已连接的 socket 加入到 epoll -&gt; 注册「读事件」处理函数；", "children": []}, {"id": "n213", "topic": "如果是<b>读事件<\/b>到来，则会调用<b>读事件处理函数<\/b>，该函数会做这些事情：调用 read 获取客户端发送的数据 -&gt; 解析命令 -&gt; 处理命令 -&gt; 将客户端对象添加到发送队列 -&gt; 将执行结果写到发送缓存区等待发送；", "children": []}, {"id": "n214", "topic": "如果是<b>写事件<\/b>到来，则会调用<b>写事件处理函数<\/b>，该函数会做这些事情：通过 write 函数将客户端发送缓存区里的数据发送出去，如果这一轮数据没有发送完，就会继续注册写事件处理函数，等待 epoll_wait 发现可写后再处理 。", "children": []}]}]}]}, {"id": "n215", "topic": "<b>3.Redis采用单线程为什么还这么快？<\/b><span class=\"mm-note\">之所以 Redis 采用单线程（网络 I/O 和执行命令）那么快，有如下几个原因：<\/span>", "children": [{"id": "n216", "topic": "Redis 的大部分操作<b>都在内存中完成<\/b>，并且采用了高效的数据结构，因此 Redis 瓶颈可能是机器的内存或者网络带宽，而并非 CPU，既然 CPU 不是瓶颈，那么自然就采用单线程的解决方案了；", "children": []}, {"id": "n217", "topic": "Redis 采用单线程模型可以<b>避免了多线程之间的竞争<\/b>，省去了多线程切换带来的时间和性能上的开销，而且也不会导致死锁问题。", "children": []}, {"id": "n218", "topic": "Redis 采用了 <b>I/O 多路复用机制<\/b>处理大量的客户端 Socket 请求，IO 多路复用机制是指<b>一个线程处理多个 IO 流<\/b>，就是我们经常听到的 <b>select/epoll 机制<\/b>。简单来说，在 Redis 只运行单线程的情况下，该机制允许内核中，同时存在多个监听 Socket 和已连接 Socket。内核会一直监听这些 Socket 上的连接请求或数据请求。一旦有请求到达，就会交给 Redis 线程处理，这就实现了一个 Redis 线程处理多个 IO 流的效果。", "children": []}]}, {"id": "n219", "topic": "<b>4.Redis6.0之前为何使用单线程？<\/b><span class=\"mm-note\">核心意思是：<b>CPU 并不是制约 Redis 性能表现的瓶颈所在<\/b>，更多情况下是受到内存大小和网络I/O的限制，所以 Redis 核心网络模型使用单线程并没有什么问题，如果你想要使用服务的多核CPU，可以在一台服务器上启动多个节点或者采用分片集群的方式。 并且， 使用了<b>单线程后，可维护性高<\/b>，多线程模型虽然在某些方面表现优异，但是它却引入了程序执行顺序的不确定性，带来了并发读写的一系列问题，<b>多线程模型增加了系统复杂度、同时可能存在线程切换、甚至加锁解锁、死锁造成的性能损耗<\/b><\/span>", "children": []}, {"id": "n220", "topic": "<b>5.Redis 6.0 之后为什么引入了多线程？<\/b><span class=\"mm-note\">虽然 Redis 的主要工作（网络 I/O 和执行命令）一直是单线程模型，但是<b>在Redis 6.0 版本之后，也采用了多个 I/O 线程来处理网络请求<\/b>，<b>这是因为随着网络硬件的性能提升，Redis 的性能瓶颈有时会出现在网络 I/O 的处理上<\/b>。 所以<b>为了提高网络 I/O 的并行度<\/b>，<b>Redis 6.0 对于网络 I/O 采用多线程<\/b>来处理。 <b>但是对于命令的执行，Redis 仍然使用单线程来处理，所以大家不要误解<\/b> Redis 有多线程同时执行命令。 💡 Redis 官方表示，<b>Redis 6.0 版本引入的多线程 I/O 特性对性能提升至少是一倍以上<\/b>。 要想开启多线程处理客户端读请求，就需要把<\/span>", "children": [{"id": "n221", "topic": "<b>Redis-server<\/b> ： <b>一个主线程<\/b>，主要负责执行命令；", "children": []}, {"id": "n222", "topic": "bio_close_file、bio_aof_fsync、bio_lazy_free：<b>三个后台线程<\/b>，分别<b>异步处理关闭文件任务、AOF刷盘任务、释放内存任务<\/b>；", "children": []}, {"id": "n223", "topic": "io_thd_1、io_thd_2、io_thd_3：<b>三个 I/O 线程<\/b>，io-threads 默认是 4 ，所以会启动 3（4-1）个 I/O 多线程，用来分担 Redis 网络 I/O 的压力。", "children": []}]}]}, {"id": "n224", "topic": "<b>8.Redis持久化<\/b>", "children": [{"id": "n225", "topic": "<b>1.Redis如何实现数据不丢失？<\/b><span class=\"mm-note\">Redis 的读写操作都是在内存中，所以 Redis 性能才会高，但是当 Redis 重启后，内存中的数据就会丢失，那为了保证内存中的数据不会丢失，Redis 实现了数据持久化的机制，这个机制会把数据存储到磁盘，这样在 Redis 重启就能够从磁盘中恢复原有的数据。 Redis 共有三种数据持久化的方式：<\/span>", "children": [{"id": "n226", "topic": "<b>AOF 日志<\/b>：每执行一条写操作命令，就把该命令<b>以追加的方式<\/b>写入到一个文件里；", "children": []}, {"id": "n227", "topic": "<b>RDB 快照<\/b>：将某一时刻的内存数据，以<b>二进制的方式写入磁盘<\/b>；", "children": []}, {"id": "n228", "topic": "<b>混合持久化方式<\/b>：Redis 4.0 新增的方式，集成了 AOF 和 RBD 的优点；", "children": []}]}, {"id": "n229", "topic": "<b>2.AOF日志如何实现？<\/b><span class=\"mm-note\">Redis 在<b>执行完一条写操作命令后<\/b>，就会<b>把该命令以追加的方式写入到一个文件里。(先执行语句，再写入日志)<\/b> 然后 <b>Redis 重启时<\/b>，会读取该文件记录的命令，然后<b>逐一执行命令的方式来进行数据恢复<\/b>。<\/span>", "children": [{"id": "n230", "topic": "Q1：为什么先执行命令，再把数据写入日志呢？", "children": [{"id": "n231", "topic": "<b>避免额外的检查开销<\/b>：因为如果先将写操作命令记录到 AOF 日志里，再执行该命令的话，如果当前的命令语法有问题，那么如果不进行命令语法检查，该错误的命令记录到 AOF 日志里后，Redis 在使用日志恢复数据时，就可能会出错。", "children": []}, {"id": "n232", "topic": "<b>不会阻塞当前写操作命令的执行<\/b>：因为当写操作命令执行成功后，才会将命令记录到 AOF 日志。<span class=\"mm-note\">当然，这样做也会带来风险：<\/span>", "children": []}, {"id": "n233", "topic": "<b>数据可能会丢失：<\/b> 执行写操作命令和记录日志是两个过程，那当 Redis 在还没来得及将命令写入到硬盘时，服务器发生宕机了，这个数据就会有丢失的风险。", "children": []}, {"id": "n234", "topic": "<b>可能阻塞其他操作：<\/b> 由于写操作命令执行成功后才记录到 AOF 日志，所以不会阻塞当前命令的执行，但因为 <b>AOF 日志也是在主线程中执行<\/b>，所以当 Redis 把日志文件写入磁盘的时候，还是会阻塞后续的操作无法执行。", "children": []}]}]}, {"id": "n235", "topic": "<b>3.RDB 快照是如何实现的呢？<\/b><span class=\"mm-note\">AOF 日志记录的是操作命令，不是实际的数据，所以用 AOF 方法做故障恢复时，需要全量把日志都执行一遍，一旦 AOF 日志非常多，势必会造成 Redis 的恢复操作缓慢。 为了解决这个问题，Redis 增加了 RDB 快照。所谓的快照，就是记录某一个瞬间东西，比如当我们给风景拍照时，那一个瞬间的画面和信息就记录到了一张照片。 所以，<b>RDB 快照就是记录某一个瞬间的内存数据<\/b>，<b>记录的是实际数据<\/b>，而 <b>AOF 文件<\/b>记录的是<b>命令操作的日志，而不是实际的数据<\/b>。 因此在 Redis 恢复数据时， RDB 恢复数据的效率会比 AOF 高些，因为直接将 RDB 文件读入内存就可以，不需要像 AOF 那样还需要额外执行<\/span>", "children": []}, {"id": "n236", "topic": "<b>3.为什么会有混合持久化？<\/b><span class=\"mm-note\">RDB 优点是数据恢复速度快，但是快照的频率不好把握。<b>频率太低，丢失的数据就会比较多<\/b>，频率太高，就会影响性能。 AOF 优点是<b>丢失数据少，但是数据恢复不快<\/b>。 <b>为了集成了两者的优点<\/b>， Redis 4.0 提出了<b>混合使用 AOF 日志和内存快照<\/b>，也叫混合持久化。 <b>既保证了 Redis 重启速度，又降低数据丢失风险。<\/b> 混合持久化工作在 <b>AOF 日志重写过程。<\/b> 使用了混合持久化，AOF 文件的<b>前半部分是 RDB 格式的全量数据，后半部分是 AOF 格式的增量数据<\/b>。 <img class=\"mm-img\" src=\"fl-4fd8eb9dbce246.jpg\" style=\"width:320px;height:369px\" loading=\"lazy\" decoding=\"async\"> 这样的好处在于，重启 Redis 加载数据的时候，由于前半部分<\/span>", "children": [{"id": "n237", "topic": "混合持久化结合了 RDB 和 AOF 持久化的优点，开头为 RDB 的格式，使得 Redis 可以更快的启动，同时结合 AOF 的优点，有减低了大量数据丢失的风险。<span class=\"mm-note\"><b>混合持久化缺点：<\/b><\/span>", "children": []}, {"id": "n238", "topic": "AOF 文件中添加了 RDB 格式的内容，使得 <b>AOF 文件的可读性变得很差<\/b>；", "children": []}, {"id": "n239", "topic": "<b>兼容性差<\/b>，如果开启混合持久化，那么此混合持久化 AOF 文件，就不能用在 Redis 4.0 之前版本了", "children": []}]}]}, {"id": "n240", "topic": "<b>9.Redis经典问题<\/b>", "children": [{"id": "n241", "topic": "<b>1.超卖问题<\/b><span class=\"mm-note\">我们假设现在商品只剩下一件了，此时数据库中 <b>num = 1；<\/b> 但有100个线程同时读取到了这个 <b>num = 1<\/b>，所以100个线程都开始减库存了。<\/span>", "children": [{"id": "n242", "topic": "<b>排他锁：<\/b>排他锁又称为写锁，简称X锁，顾名思义，排他锁就是不能与其他所并存，<b>如一个事务获取了一个数据行的排他锁，其他事务就不能再获取该行的其他锁<\/b>，包括共享锁和排他锁，但是获取排他锁的事务是可以对数据就行读取和修改。", "children": []}, {"id": "n243", "topic": "<b>版本号(version)：<\/b>其实就是<b>CAS<\/b>原理<b>。<\/b>", "children": []}, {"id": "n244", "topic": "<code>redis<\/code>的<b>单线程预减库存：<\/b><span class=\"mm-note\">比如商品有100件。那么我在redis存储一个<b>k,v<\/b>。例如 &lt;gs1001, 100&gt; 每一个用户线程进来，key值就减1，等减到0的时候，全部拒绝剩下的请求。 那么也就是只有100个线程会进入到后续操作。所以一定不会出现超卖的现象。<\/span>", "children": []}]}, {"id": "n245", "topic": "<b>2.秒杀问题<\/b><span class=\"mm-note\">在众多抢购活动中，在有限的商品数量的限制下如何保证抢购到商品的用户数不能大于商品数量，也就是不能出现超卖的问题；还有就是抢购时会出现大量用户的访问，如何提高用户体验效果也是一个问题，也就是要解决秒杀系统的性能问题。 本文主要介绍基于redis 实现商品秒杀功能。先来跟大家讲下大概思路。 总体思路就是要<b>减少对数据库的访问，尽可能将数据缓存到Redis缓存中，从缓存中获取数据。<\/b><\/span>", "children": [{"id": "n246", "topic": "<b>在系统初始化时，将商品的库存数量加载到Redis缓存中，并不是需要先请求一次才能缓存<\/b>", "children": []}, {"id": "n247", "topic": "<b>接收到秒杀请求时，在Redis中进行预减库存，当Redis中的库存不足时，直接返回秒杀失败，减少对数据库的访问。否则继续进行第3步；<\/b>", "children": []}, {"id": "n248", "topic": "将请求放入<b>异步队列（RabbitMQ）<\/b>中，立即给前端返回一个值，<b>表示正在排队中<\/b>。", "children": []}, {"id": "n249", "topic": "服务端异步队列将请求出队，出队成功的请求可以然后<b>进行秒杀逻辑，减库存–&gt;下订单–&gt;写入秒杀订单<\/b>，成功了就返回成功。", "children": []}, {"id": "n250", "topic": "当后台订单创建成功之后可以通过<code>websocket<\/code>向用户发送一个秒杀成功通知。前端以此来判断是否秒杀成功，秒杀成功则进入秒杀订单详情，否则秒杀失败。", "children": []}]}]}], "expanded": true}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

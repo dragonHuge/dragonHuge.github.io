@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>Kafka · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">14</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-基础">1.基础</a><a class="tl l3" href="#1-简介-应用场景">1.简介 &amp; 应用场景</a><a class="tl l3" href="#2-相比于其他消息队列-Kafka的优势">2.相比于其他消息队列，Kafka的优势</a><a class="tl l3" href="#3-队列模型了解吗-Kafka的消息模型知道吗">3.队列模型了解吗？Kafka的消息模型知道吗？</a><a class="tl l4" href="#1-队列模型-早期的消息模型">1.队列模型：早期的消息模型</a><a class="tl l4" href="#2-发布-订阅模型-Kafka消息模型">2.发布/订阅模型：Kafka消息模型</a><a class="tl l2" href="#2-Kafka核心概念">2.Kafka核心概念</a><a class="tl l3" href="#1-producer-consumer-broker-Topic-Partition">1.producer/consumer/broker(Topic、Partition)</a><a class="tl l3" href="#2-多副本机制-与-好处">2.多副本机制 与 好处</a><a class="tl l2" href="#3-ZooKeeper-和-Kafka">3.ZooKeeper 和 Kafka</a><a class="tl l2" href="#4-Kafka消费顺序-消息丢失和重复消费">4.Kafka消费顺序、消息丢失和重复消费</a><a class="tl l3" href="#1-Kafka如何保证消费顺序">1.Kafka如何保证消费顺序？</a><a class="tl l3" href="#2-Kafka如何保证数据不丢失">2.Kafka如何保证数据不丢失？</a><a class="tl l3" href="#3-Kafka如何保证消息不重复消费">3.Kafka如何保证消息不重复消费？</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>Kafka</h1><div class="meta">2024-12-20 · <a class="src-link" href="https://flowus.cn/2eae52e2-2467-4ba7-b84b-56121def2fe7" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><p>整体架构图：</p>
+<p><img alt="image.png" src="/assets/img/flowus-6e6444123804a4ed.png"></p>
+<h2 id="1-基础">1.基础</h2>
+<h3 id="1-简介-应用场景">1.简介 &amp; 应用场景</h3>
+<p>Kafka 是一个<strong>分布式流式处理平台</strong>。这到底是什么意思呢？</p>
+<p>流平台具有<strong>三个关键功能</strong>：</p>
+<ol><li><strong>消息队列</strong>：发布和订阅消息流，这个功能类似于消息队列，这也是 Kafka 也被归类为消息队列的原因。</li></ol>
+<ol><li><strong>容错的持久方式存储记录消息流</strong>：Kafka 会<strong>把消息持久化到磁盘</strong>，有效避免了消息丢失的风险。</li></ol>
+<ol><li><strong>流式处理平台：</strong> 在消息发布的时候进行处理，Kafka 提<strong>供了一个完整的流式处理类库</strong>。</li></ol>
+<p>Kafka 主要有<strong>两大应用场景</strong>：</p>
+<ol><li><strong>消息队列</strong>：建立<strong>实时流数据管道</strong>，以可靠地在系统或应用程序之间获取数据。</li></ol>
+<ol><li><strong>数据处理：</strong> 构建<strong>实时的流数据处理程</strong>序来转换或处理数据流。</li></ol>
+<h3 id="2-相比于其他消息队列-Kafka的优势">2.相比于其他消息队列，Kafka的优势</h3>
+<p>我们现在经常提到 Kafka 的时候就已经默认它是一个非常优秀的消息队列了，我们也会经常拿它跟 RocketMQ、RabbitMQ 对比。我觉得 Kafka 相比其他消息队列主要的优势如下：</p>
+<ol><li><strong>极致的性能</strong>：<strong>基于 Scala 和 Java 语言开发</strong>，设计中<strong>大量使用了批量处理和异步的思想</strong>，最高可以每秒处理千万级别的消息。</li></ol>
+<ol><li><strong>生态系统兼容性无可匹敌</strong>：Kafka 与周边生态系统的兼容性是最好的没有之一，尤其在大数据和流计算领域。</li></ol>
+<p>实际上在早期的时候 Kafka 并不是一个合格的消息队列，早期的 Kafka 在消息队列领域就像是一个衣衫褴褛的孩子一样，功能不完备并且有一些小问题比如丢失消息、不保证消息可靠性等等。当然，这也和 LinkedIn 最早开发 Kafka 用于处理海量的日志有很大关系，哈哈哈，人家本来最开始就不是为了作为消息队列滴，谁知道后面误打误撞在消息队列领域占据了一席之地。</p>
+<p>随着后续的发展，这些短板都被 Kafka 逐步修复完善。所以，<strong>Kafka 作为消息队列不可靠这个说法已经过时！</strong></p>
+<h3 id="3-队列模型了解吗-Kafka的消息模型知道吗">3.队列模型了解吗？Kafka的消息模型知道吗？</h3>
+<h4 id="1-队列模型-早期的消息模型">1.队列模型：早期的消息模型</h4>
+<p><img alt="image.png" src="/assets/img/flowus-81482607661de480.png"></p>
+<p><strong>使用队列（Queue）作为消息通信载体，满足生产者与消费者模式，一条消息只能被一个消费者使用，未被消费的消息在队列中保留直到被消费或超时。</strong></p>
+<blockquote><p>😘 比如：我们生产者发送 100 条消息的话，两个消费者来消费一般情况下两个消费者会按照消息发送的顺序各自消费一半（也就是你一个我一个的消费。）</p></blockquote>
+<blockquote><p>😘 Q1：<strong>队列模型存在的问题：</strong></p></blockquote>
+<p>假如我们存在这样一种情况：我们需要<strong>将生产者产生的消息分发给多个消费者</strong>，并且<strong>每个消费者都能接收到完整的消息内容</strong>。</p>
+<p>这种情况，队列模型就不好解决了。</p>
+<p>很多比较杠精的人就说：我们可以为每个消费者创建一个单独的队列，让生产者发送多份。这是一种非常愚蠢的做法，浪费资源不说，还违背了使用消息队列的目的。</p>
+<h4 id="2-发布-订阅模型-Kafka消息模型">2.发布/订阅模型：Kafka消息模型</h4>
+<p>发布-订阅模型主要是<strong>为了解决队列模型存在的问题</strong>。</p>
+<p><img alt="image.png" src="/assets/img/flowus-e7ab13371311041d.png"></p>
+<p>发布订阅模型（Pub-Sub） 使用<strong>主题（Topic） 作为消息通信载体</strong>，类似于<strong>广播模式</strong>；</p>
+<blockquote><p>😘 解析：<strong>发布者发布一条消息</strong>，该<strong>消息通过主题传递给所有的订阅者</strong>，<strong>在一条消息广播之后才订阅的用户则是收不到该条消息的</strong>。（因此需要：<strong>提前订阅</strong>）</p></blockquote>
+<p>消息生产者将消息发布到主题，所有订阅该主题的消费者都能接收到这条消息。<strong>每条消息可以被多个消费者同时接收和处理</strong>。</p>
+<p>在发布 - 订阅模型中，如果只有一个订阅者，那它和队列模型就基本是一样的了。所以说，<strong>发布 - 订阅模型在功能层面上是可以兼容队列模型</strong>的。</p>
+<p><strong>Kafka 采用的就是发布 - 订阅模型。</strong></p>
+<blockquote><p>RocketMQ 的消息模型和 Kafka 基本是完全一样的。唯一的区别是 <strong>Kafka 中没有队列这个概念，与之对应的是 Partition（分区）</strong></p></blockquote>
+<h2 id="2-Kafka核心概念">2.Kafka核心概念</h2>
+<h3 id="1-producer-consumer-broker-Topic-Partition">1.producer/consumer/broker(Topic、Partition)</h3>
+<p><img alt="image.png" src="/assets/img/flowus-5d34e35d958ddac7.png"></p>
+<p>上面这张图也为我们引出了，Kafka 比较重要的几个概念：</p>
+<ol><li><strong>Producer（生产者）</strong> : 产生消息的一方。</li></ol>
+<ol><li><strong>Consumer（消费者）</strong> : 消费消息的一方。</li></ol>
+<ol><li><strong>Broker（代理）</strong> : 可以看作是<strong>一个独立的 Kafka 实例</strong>。多个 Kafka Broker 组成一个 Kafka Cluster。</li></ol>
+<p>同时，你一定也注意到<strong>每个 Broker 中又包含了 Topic 以及 Partition</strong> 这两个重要的概念：</p>
+<ul><li><strong>Topic（主题）</strong> : Producer 将消息发送到特定的主题，Consumer 通过订阅特定的 Topic(主题) 来消费消息。</li></ul>
+<ul><li><strong>Partition（分区）</strong> : Partition 属于 Topic 的一部分。<strong>一个 Topic 可以有多个 Partition</strong> ，并且<strong>同一 Topic 下的 Partition 可以分布在不同的 Broker 上</strong>，这也就表明一个 Topic 可以横跨多个 Broker 。这正如我上面所画的图一样。</li></ul>
+<blockquote><p>😘 划重点：<strong>Kafka 中的 Partition（分区） 实际上可以对应成为消息队列中的队列。这样是不是更好理解一点？</strong></p></blockquote>
+<h3 id="2-多副本机制-与-好处">2.多副本机制 与 好处</h3>
+<p>还有一点我觉得比较重要的是 Kafka 为分区（Partition）引入了多副本（Replica）机制。</p>
+<p><strong>分区（Partition）中的多个副本之间会有一个叫做 leader 的家伙，其他副本称为 follower</strong>。</p>
+<blockquote><p>😘 <strong>Q1</strong>：我们<strong>发送的消息会被发送到 leader 副本</strong>，然后 <strong>follower 副本才能从 leader 副本中拉取消息进行同步</strong>。</p></blockquote>
+<blockquote><p>😘 <strong>Q2</strong>：<strong>生产者和消费者只与 leader 副本交互</strong>。</p></blockquote>
+<p>你可以理解为其他副本只是 leader 副本的拷贝，<strong>它们的存在只是为了保证消息存储的安全性</strong>。</p>
+<p>当 leader 副本发生故障时会从 follower 中选举出一个 leader,但是 follower 中如果有和 leader 同步程度达不到要求的参加不了 leader 的竞选。:</p>
+<blockquote><p>😘 <strong>Q3：Kafka 的多分区（Partition）以及多副本（Replica）机制有什么好处呢？</strong></p></blockquote>
+<ol><li>Kafka 通过给特定 Topic 指定多个 Partition, 而各个 Partition 可以分布在不同的 Broker 上, 这样便能<strong>提供比较好的并发能力（负载均衡）</strong>。</li></ol>
+<ol><li>Partition 可以指定对应的 Replica 数, 这也极大地<strong>提高了消息存储的安全性, 提高了容灾能力</strong>，不过也相应的增加了所需要的存储空间。</li></ol>
+<h2 id="3-ZooKeeper-和-Kafka">3.ZooKeeper 和 Kafka</h2>
+<p>ZooKeeper 主要<strong>为 Kafka 提供元数据的管理的功能</strong>。</p>
+<p>Zookeeper 主要为 Kafka 做了下面这些事情：</p>
+<ol><li><strong>Broker 注册</strong>：在 Zookeeper 上会有一个专门<strong>用来进行 Broker 服务器列表记录</strong>的节点。每个 Broker 在启动时，都会到 Zookeeper 上进行注册，即到 <code>/brokers/ids</code> 下创建属于自己的节点。每个 Broker 就会将自己的 IP 地址和端口等信息记录到该节点中去</li></ol>
+<ol><li><strong>Topic 注册</strong>：在 Kafka 中，同一个<strong>Topic 的消息会被分成多个分区</strong>并将其分布在多个 Broker 上，<strong>这些分区信息及与 Broker 的对应关系</strong>也都是由 Zookeeper 在维护。比如我创建了一个名字为 my-topic 的主题并且它有两个分区，对应到 zookeeper 中会创建这些文件夹：<code>/brokers/topics/my-topic/Partitions/0</code>、<code>/brokers/topics/my-topic/Partitions/1</code></li></ol>
+<ol><li><strong>负载均衡</strong>：上面也说过了 Kafka 通过给特定 Topic 指定多个 Partition, 而各个 Partition 可以分布在不同的 Broker 上, 这样便能提供比较好的并发能力。 对于同一个 Topic 的不同 Partition，Kafka 会尽力将这些 Partition 分布到不同的 Broker 服务器上。当生产者产生消息后也会尽量投递到不同 Broker 的 Partition 里面。当 Consumer 消费的时候，Zookeeper 可以根据当前的 Partition 数量以及 Consumer 数量来实现动态负载均衡。</li></ol>
+<blockquote><p>😘 <strong>Q1：使用Kafka能否不引入Zookeeper？</strong></p></blockquote>
+<p><strong>可以</strong></p>
+<ul><li>在 Kafka 2.8 之前，Kafka 最被大家诟病的就是其重度依赖于 Zookeeper。</li></ul>
+<ul><li>在 Kafka 2.8 之后，<strong>引入了基于 Raft 协议的 KRaft 模式</strong>，<strong>不再依赖 Zookeeper</strong>，大大简化了 Kafka 的架构，让你可以以一种轻量级的方式来使用 Kafka。</li></ul>
+<p>不过，要提示一下：<strong>如果要使用 KRaft 模式的话，建议选择较高版本的 Kafka，因为这个功能还在持续完善优化中。Kafka 3.3.1 版本是第一个将 KRaft（Kafka Raft）共识协议标记为生产就绪的版本。</strong></p>
+<h2 id="4-Kafka消费顺序-消息丢失和重复消费">4.Kafka消费顺序、消息丢失和重复消费</h2>
+<h3 id="1-Kafka如何保证消费顺序">1.Kafka如何保证消费顺序？</h3>
+<p>我们知道 <strong>Kafka 中 Partition(分区)是真正保存消息的地方</strong>，我们发送的消息都被放在了这里。而我们的 Partition(分区) 又存在于 Topic(主题) 这个概念中，并且我们可以给特定 Topic 指定多个 Partition。</p>
+<p><img alt="image.png" src="/assets/img/flowus-9f55ae00d499fb01.png"></p>
+<p>每次添加消息到 Partition(分区) 的时候都会采用尾加法，如上图所示。 <strong>Kafka 只能为我们保证 Partition(分区) 中的消息有序。</strong></p>
+<blockquote><p>😘 消息在被追加到 Partition(分区)的时候都会分配一个<strong>特定的偏移量（offset</strong>）。Kafka 通过<strong>偏移量（offset）来保证消息在分区内的顺序性</strong>。</p></blockquote>
+<p>总结一下，对于如何保证 Kafka 中消息消费的顺序，有了<strong>下面两种方法</strong>：</p>
+<ol><li><strong>1 个 Topic 只对应一个 Partition。</strong></li></ol>
+<p>所以，我们就有一种很简单的保证消息消费顺序的方法：<strong>1 个 Topic 只对应一个 Partition</strong>。这样当然可以解决问题，但是破坏了 Kafka 的设计初衷。</p>
+<ol><li><strong>发送消息的时候指定 key/Partition</strong>。</li></ol>
+<p>Kafka 中发送 1 条消息的时候，可以<strong>指定 topic, partition, key,data（数据） 4 个参数</strong>。</p>
+<p>如果你发送消息的时候<strong>指定特定Partition</strong> 的话，所有消息都会被发送到指定的 Partition。</p>
+<p>并且，同一个 key 的消息可以保证只发送到同一个 partition，这个我们可以采用表/对象的 id 来作为 key 。</p>
+<h3 id="2-Kafka如何保证数据不丢失">2.Kafka如何保证数据不丢失？</h3>
+<h3 id="3-Kafka如何保证消息不重复消费">3.Kafka如何保证消息不重复消费？</h3>
+<ol><li><strong>kafka 出现消息重复消费的原因：</strong></li></ol>
+<ul><li><strong>服务端侧已经消费的数据没有成功提交 offset（根本原因</strong>）。</li></ul>
+<ul><li>Kafka 侧 由于服务端处理业务时间长或者网络链接等等原因让 Kafka 认为服务假死，触发了分区 rebalance。</li></ul>
+<ol><li><strong>解决方案：</strong></li></ol>
+<ol><li>消费消息服务做幂等校验，比如 Redis 的 set、MySQL 的主键等天然的幂等功能。这种方法最有效。</li></ol>
+<ol><li>将 <strong><code>enable.auto.commit</code></strong> 参数设置为 false，关闭自动提交，开发者在代码中手动提交 offset。那么这里会有个问题：<strong>什么时候提交 offset 合适？</strong></li></ol>
+<ul><li>处理完消息再提交：依旧有消息重复消费的风险，和自动提交一样</li></ul>
+<ul><li>拉取到消息即提交：会有消息丢失的风险。允许消息延时的场景，一般会采用这种方式。然后，通过定时任务在业务不繁忙（比如凌晨）的时候做数据兜底</li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

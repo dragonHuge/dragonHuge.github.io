@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>AI开发基础：Langgraph框架从入门到实战开发智能体-附带完整可运行代码 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">20</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">468</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav>
+<nav class="context-nav" aria-label="当前栏目目录">
+<div class="context-title">外部沉淀分类</div>
+<a class="context-cat active" href="../ext/index.html#c0"><span>AI与大模型</span><span class="nav-count">32</span></a>
+<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">305</span></a>
+<a class="context-cat" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">65</span></a>
+<a class="context-cat" href="../ext/index.html#c3"><span>认知与思维</span><span class="nav-count">12</span></a>
+<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">44</span></a>
+<div class="context-group current">AI与大模型文章</div>
+<a class="art" href="../ext/e001.html">大模型学习资料包（小红书购买 · 18份）</a>
+<a class="art" href="../ext/e002.html">大模型AI Agent知识从0-1笔记-万字详解版本！</a>
+<a class="art" href="../ext/e003.html">大模型Agent实战从0-1笔记：万字详解【迭代版V2】</a>
+<a class="art" href="../ext/e004.html">大模型Transformer架构从0-1架构深度解析</a>
+<a class="art" href="../ext/e005.html">AI开发基础：Langchain框架从入门到实战开发-附代码</a>
+<a class="art active" href="../ext/e006.html">AI开发基础：Langgraph框架从入门到实战开发智能体-附带完整可运行代码</a>
+<a class="art" href="../ext/e007.html">万字详解！AI Harness 入门与实践！一篇博文给你讲透！</a>
+<a class="art" href="../ext/e008.html">RAG知识库助手实战-附带前后端和完整可运行服务</a>
+<a class="art" href="../ext/e009.html">实战智能出行Agent助手-附代码和前后端可视化界面</a>
+<a class="art" href="../ext/e010.html">Vibe Coding指南-AI编辑器全栈开发-附实战和视频</a>
+<a class="art" href="../ext/e011.html">AI大模型面试题-基础篇</a>
+<a class="art" href="../ext/e012.html">AI应用开发+后端面试题</a>
+<a class="art" href="../ext/e013.html">Codex 从小白到实战高手：大厂工程化实战手册</a>
+<a class="art" href="../ext/e014.html">Claude Code 入门到实战全流程详细版</a>
+<a class="art" href="../ext/e015.html">第一章：快速上手</a>
+<a class="art" href="../ext/e016.html">第二章 Claude Code 入门基础操作</a>
+<a class="art" href="../ext/e017.html">第三章： Claude Code 20个常用斜杠指令速查表</a>
+<a class="art" href="../ext/e018.html">第四章：文本处理与创作</a>
+<a class="art" href="../ext/e019.html">第五章：文档管理与处理</a>
+<a class="art" href="../ext/e020.html">第六章：数据处理与分析</a>
+<a class="art" href="../ext/e021.html">第七章 创建常用模板</a>
+<a class="art" href="../ext/e022.html">第八章：提示词优化技巧</a>
+<a class="art" href="../ext/e023.html">第九章：复用文档解决同类问题</a>
+<a class="art" href="../ext/e024.html">第十章：用编程的思维解决问题</a>
+<a class="art" href="../ext/e025.html">第十一章：Claude 高级功能使用</a>
+<a class="art" href="../ext/e026.html">第十二章：让Claude自动解决问题</a>
+<a class="art" href="../ext/e027.html">Claude Code 实战指南</a>
+<a class="art" href="../ext/e028.html">滴云智能办公丨多Agent协同系统</a>
+<a class="art" href="../ext/e029.html">多Agent项目实战：多Agent协同系统</a>
+<a class="art" href="../ext/e030.html">AI应用开发项目实战知识库-详解版</a>
+<a class="art" href="../ext/e031.html">11-Java全套八股文</a>
+<a class="art" href="../ext/e032.html">AI应用开发：RAG技术从小白到深入理解-详细版</a>
+</nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">49</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#LangGraph-实战教程-从小白到高手">LangGraph 实战教程：从小白到高手</a><a class="tl l2" href="#写在前面">写在前面</a><a class="tl l2" href="#第一章-LangGraph-是什么">第一章 LangGraph 是什么</a><a class="tl l3" href="#一句话解释">一句话解释</a><a class="tl l3" href="#为什么需要它">为什么需要它？</a><a class="tl l3" href="#LangGraph-vs-LangChain">LangGraph vs LangChain</a><a class="tl l2" href="#第二章-环境准备">第二章 环境准备</a><a class="tl l3" href="#安装依赖">安装依赖</a><a class="tl l3" href="#设置-API-Key">设置 API Key</a><a class="tl l2" href="#第三章-核心概念">第三章 核心概念</a><a class="tl l3" href="#State-状态">State（状态）</a><a class="tl l3" href="#Node-节点">Node（节点）</a><a class="tl l3" href="#Edge-边">Edge（边）</a><a class="tl l2" href="#第四章-第一个程序">第四章 第一个程序</a><a class="tl l3" href="#完整代码">完整代码</a><a class="tl l3" href="#运行结果">运行结果</a><a class="tl l3" href="#关键点">关键点</a><a class="tl l2" href="#第五章-Reducer-机制">第五章 Reducer 机制</a><a class="tl l3" href="#问题-状态被覆盖">问题：状态被覆盖</a><a class="tl l3" href="#解决方案-使用-Reducer">解决方案：使用 Reducer</a><a class="tl l3" href="#实际例子-游戏得分">实际例子：游戏得分</a><a class="tl l3" href="#常用-Reducer">常用 Reducer</a><a class="tl l2" href="#第六章-条件分支">第六章 条件分支</a><a class="tl l3" href="#关键函数-addconditionaledges">关键函数：addconditionaledges</a><a class="tl l3" href="#实际例子-智能客服路由">实际例子：智能客服路由</a><a class="tl l2" href="#第七章-循环流程">第七章 循环流程</a><a class="tl l3" href="#关键点-1">关键点</a><a class="tl l3" href="#实际例子-答案优化器">实际例子：答案优化器</a><a class="tl l2" href="#第八章-聊天机器人">第八章 聊天机器人</a><a class="tl l3" href="#核心-MessagesState-和-addmessages">核心：MessagesState 和 addmessages</a><a class="tl l3" href="#完整聊天机器人">完整聊天机器人</a><a class="tl l2" href="#第九章-Agent-工具调用">第九章 Agent 工具调用</a><a class="tl l3" href="#定义工具">定义工具</a><a class="tl l3" href="#工具定义要点">工具定义要点</a><a class="tl l2" href="#第十章-ReAct-Agent">第十章 ReAct Agent</a><a class="tl l3" href="#工作流程">工作流程</a><a class="tl l3" href="#使用预置组件">使用预置组件</a><a class="tl l3" href="#手动实现-ReAct-Agent">手动实现 ReAct Agent</a><a class="tl l2" href="#第十一章-多Agent协作">第十一章 多Agent协作</a><a class="tl l3" href="#Supervisor-模式">Supervisor 模式</a><a class="tl l3" href="#完整实现">完整实现</a><a class="tl l2" href="#第十二章-实战项目">第十二章 实战项目</a><a class="tl l3" href="#智能客服系统架构">智能客服系统架构</a><a class="tl l2" href="#第十三章-进阶话题">第十三章 进阶话题</a><a class="tl l3" href="#持久化和记忆">持久化和记忆</a><a class="tl l3" href="#流式输出">流式输出</a><a class="tl l3" href="#子图-Subgraph">子图（Subgraph）</a><a class="tl l3" href="#Human-in-the-Loop">Human-in-the-Loop</a><a class="tl l3" href="#调试技巧">调试技巧</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与大模型</div><article><h1>AI开发基础：Langgraph框架从入门到实战开发智能体-附带完整可运行代码</h1><div class="meta">2026-11-09 · <span class="m-src">AI与大模型/大模型实战宝典/raw/06-Langgraph手册.md</span></div><div class="md"><p><img alt="@同事" src="#"></p>
+<h1 id="LangGraph-实战教程-从小白到高手">LangGraph 实战教程：从小白到高手</h1>
+<blockquote><p>一份让你真正学会用 LangGraph 构建 AI Agent 的实战指南</p></blockquote>
+<hr>
+<h2 id="写在前面">写在前面</h2>
+<p>如果你想用大语言模型（LLM）做点有意思的事情，比如做一个能自己查资料、能记住上下文、能调用各种工具的智能助手，那 LangGraph 绝对是你需要了解的东西。 这份教程不会堆砌一堆概念把你绕晕，而是用<strong>真实可运行的代码</strong>带你一步步搞懂这玩意儿到底怎么用。 直接可以运行的代码已经整理好了，需要的话找老师拿</p>
+<hr>
+<h2 id="第一章-LangGraph-是什么">第一章 LangGraph 是什么</h2>
+<p><img alt="@同事" src="#"></p>
+<h3 id="一句话解释">一句话解释</h3>
+<p><strong>LangGraph 就是用来编排 AI 工作流的框架</strong>，让你可以把复杂的 AI 任务拆成一个个小步骤，然后像搭积木一样把它们连起来。</p>
+<h3 id="为什么需要它">为什么需要它？</h3>
+<p>假设你要做一个客服机器人：</p>
+<ol><li>先要判断用户问的是技术问题还是销售问题</li><li>技术问题交给技术 Agent 处理</li><li>销售问题交给销售 Agent 处理</li><li>如果答案质量不够好，还得循环改进</li></ol>
+<p>这种<strong>有分支、有循环、有状态</strong>的复杂流程，用普通代码写起来会很乱。LangGraph 就是专门解决这个问题的。</p>
+<h3 id="LangGraph-vs-LangChain">LangGraph vs LangChain</h3>
+<p>很多人搞不清这俩的关系：</p>
+<p>简单说：<strong>LangChain 是做零件的，LangGraph 是用这些零件搭建复杂系统的</strong>。</p>
+<hr>
+<h2 id="第二章-环境准备">第二章 环境准备</h2>
+<h3 id="安装依赖">安装依赖</h3>
+<pre><code># 核心依赖
+pip install langgraph langchain-core langchain-community
+
+# 如果要用通义千问
+pip install dashscope
+
+# 如果要用 OpenAI
+pip install langchain-openai</code></pre>
+<h3 id="设置-API-Key">设置 API Key</h3>
+<pre><code>import os
+
+# 通义千问
+os.environ[&quot;DASHSCOPE_API_KEY&quot;] = &quot;你的key&quot;
+
+# 或者 OpenAI
+os.environ[&quot;OPENAI_API_KEY&quot;] = &quot;你的key&quot;</code></pre>
+<hr>
+<h2 id="第三章-核心概念">第三章 核心概念</h2>
+<p>LangGraph 就三个核心概念，搞懂了这三个，其他都是组合拳。</p>
+<p><img alt="@同事" src="#"></p>
+<h3 id="State-状态">State（状态）</h3>
+<p>State 就是一个<strong>在所有节点间共享的数据结构</strong>。你可以把它想象成一个"快递包裹"，每经过一个节点，就往里面加点东西或者修改点东西。</p>
+<pre><code>from typing_extensions import TypedDict
+
+class MyState(TypedDict):
+    count: int           # 计数器
+    history: list[str]   # 历史记录</code></pre>
+<h3 id="Node-节点">Node（节点）</h3>
+<p>Node 就是<strong>干活的</strong>。每个节点是一个 Python 函数，接收当前状态，返回需要更新的字段。</p>
+<pre><code>def my_node(state: MyState):
+    # 读取当前状态
+    current_count = state[&quot;count&quot;]
+    
+    # 返回要更新的字段（不用返回所有字段！）
+    return {
+        &quot;count&quot;: current_count + 1,
+        &quot;history&quot;: state[&quot;history&quot;] + [&quot;执行了一次&quot;]
+    }</code></pre>
+<h3 id="Edge-边">Edge（边）</h3>
+<p>Edge 定义<strong>节点之间怎么连接</strong>，决定执行顺序。</p>
+<pre><code># 普通边：A 执行完必定执行 B
+workflow.add_edge(&quot;A&quot;, &quot;B&quot;)
+
+# 条件边：根据条件决定下一步
+workflow.add_conditional_edges(
+    &quot;A&quot;,
+    决策函数,
+    {&quot;条件1&quot;: &quot;B&quot;, &quot;条件2&quot;: &quot;C&quot;}
+)</code></pre>
+<hr>
+<h2 id="第四章-第一个程序">第四章 第一个程序</h2>
+<p>让我们写一个最简单的计数器程序，理解状态是怎么流转的。</p>
+<p><img alt="@同事" src="#"></p>
+<h3 id="完整代码">完整代码</h3>
+<pre><code>from langgraph.graph import StateGraph, START, END
+from typing_extensions import TypedDict
+
+# 1. 定义状态结构
+class CounterState(TypedDict):
+    count: int
+    history: list[str]
+
+# 2. 定义节点函数
+def increment_node(state: CounterState):
+    &quot;&quot;&quot;计数器 +1&quot;&quot;&quot;
+    new_count = state[&quot;count&quot;] + 1
+    message = f&quot;count: {state[&#x27;count&#x27;]} → {new_count}&quot;
+    
+    return {
+        &quot;count&quot;: new_count,
+        &quot;history&quot;: state[&quot;history&quot;] + [message]
+    }
+
+def double_node(state: CounterState):
+    &quot;&quot;&quot;计数器翻倍&quot;&quot;&quot;
+    new_count = state[&quot;count&quot;] * 2
+    message = f&quot;count: {state[&#x27;count&#x27;]} → {new_count}&quot;
+    
+    return {
+        &quot;count&quot;: new_count,
+        &quot;history&quot;: state[&quot;history&quot;] + [message]
+    }
+
+def report_node(state: CounterState):
+    &quot;&quot;&quot;报告结果&quot;&quot;&quot;
+    return {&quot;history&quot;: state[&quot;history&quot;] + [f&quot;最终结果: {state[&#x27;count&#x27;]}&quot;]}
+
+# 3. 创建图
+workflow = StateGraph(CounterState)
+
+# 4. 添加节点
+workflow.add_node(&quot;increment&quot;, increment_node)
+workflow.add_node(&quot;double&quot;, double_node)
+workflow.add_node(&quot;report&quot;, report_node)
+
+# 5. 连接节点
+workflow.add_edge(START, &quot;increment&quot;)
+workflow.add_edge(&quot;increment&quot;, &quot;double&quot;)
+workflow.add_edge(&quot;double&quot;, &quot;report&quot;)
+workflow.add_edge(&quot;report&quot;, END)
+
+# 6. 编译
+app = workflow.compile()
+
+# 7. 运行
+result = app.invoke({
+    &quot;count&quot;: 5,
+    &quot;history&quot;: [&quot;开始执行&quot;]
+})
+
+print(&quot;执行历史:&quot;)
+for step in result[&quot;history&quot;]:
+    print(f&quot;  - {step}&quot;)
+print(f&quot;\n最终计数: {result[&#x27;count&#x27;]}&quot;)</code></pre>
+<h3 id="运行结果">运行结果</h3>
+<pre><code>执行历史:
+  - 开始执行
+  - count: 5 → 6
+  - count: 6 → 12
+  - 最终结果: 12
+
+最终计数: 12</code></pre>
+<h3 id="关键点">关键点</h3>
+<ol><li><strong>只返回需要更新的字段</strong>：节点不用返回完整的 state，只返回变化的部分</li><li><strong>状态自动传递</strong>：每个节点执行完，更新后的状态自动传给下一个节点</li><li><strong>必须编译</strong>：调用 <code>compile()</code> 后才能运行</li></ol>
+<hr>
+<h2 id="第五章-Reducer-机制">第五章 Reducer 机制</h2>
+<p>这是很多人一开始搞不明白的点：<strong>为什么有时候状态会被覆盖，有时候会累加？</strong></p>
+<p>答案就是 <strong>Reducer</strong>。</p>
+<p><img alt="@同事" src="#"></p>
+<h3 id="问题-状态被覆盖">问题：状态被覆盖</h3>
+<p>默认情况下，每个节点返回的值会<strong>覆盖</strong>之前的值：</p>
+<pre><code>class State(TypedDict):
+    score: int  # 普通定义
+
+# Node1 返回 {&quot;score&quot;: 10}  → state[&quot;score&quot;] = 10
+# Node2 返回 {&quot;score&quot;: 20}  → state[&quot;score&quot;] = 20 (覆盖了!)
+# 最终 score = 20</code></pre>
+<h3 id="解决方案-使用-Reducer">解决方案：使用 Reducer</h3>
+<pre><code>from typing import Annotated
+import operator
+
+class State(TypedDict):
+    score: Annotated[int, operator.add]  # 使用 operator.add 作为 reducer
+
+# Node1 返回 {&quot;score&quot;: 10}  → state[&quot;score&quot;] = 0 + 10 = 10
+# Node2 返回 {&quot;score&quot;: 20}  → state[&quot;score&quot;] = 10 + 20 = 30
+# 最终 score = 30 (累加!)</code></pre>
+<h3 id="实际例子-游戏得分">实际例子：游戏得分</h3>
+<pre><code>from langgraph.graph import StateGraph, START, END
+from typing_extensions import TypedDict
+from typing import Annotated
+import operator
+
+class ScoreState(TypedDict):
+    player_name: str  # 普通字段，会被覆盖
+    score: Annotated[int, operator.add]  # 累加
+    actions: Annotated[list[str], operator.add]  # 列表也能累加
+
+def level1_node(state):
+    return {&quot;score&quot;: 10, &quot;actions&quot;: [&quot;通关第一关&quot;]}
+
+def level2_node(state):
+    return {&quot;score&quot;: 20, &quot;actions&quot;: [&quot;通关第二关&quot;]}
+
+def level3_node(state):
+    return {&quot;score&quot;: 30, &quot;actions&quot;: [&quot;通关第三关&quot;]}
+
+# 构建图...
+workflow = StateGraph(ScoreState)
+workflow.add_node(&quot;level1&quot;, level1_node)
+workflow.add_node(&quot;level2&quot;, level2_node)
+workflow.add_node(&quot;level3&quot;, level3_node)
+workflow.add_edge(START, &quot;level1&quot;)
+workflow.add_edge(&quot;level1&quot;, &quot;level2&quot;)
+workflow.add_edge(&quot;level2&quot;, &quot;level3&quot;)
+workflow.add_edge(&quot;level3&quot;, END)
+
+app = workflow.compile()
+result = app.invoke({&quot;player_name&quot;: &quot;小明&quot;, &quot;score&quot;: 0, &quot;actions&quot;: []})
+
+print(f&quot;玩家: {result[&#x27;player_name&#x27;]}&quot;)
+print(f&quot;总分: {result[&#x27;score&#x27;]}&quot;)  # 10+20+30=60
+print(f&quot;完成动作: {result[&#x27;actions&#x27;]}&quot;)</code></pre>
+<h3 id="常用-Reducer">常用 Reducer</h3>
+<hr>
+<h2 id="第六章-条件分支">第六章 条件分支</h2>
+<p>真实的应用不可能一条路走到黑，肯定需要根据情况走不同的路。</p>
+<p><img alt="@同事" src="#"></p>
+<h3 id="关键函数-addconditionaledges">关键函数：add_conditional_edges</h3>
+<pre><code>workflow.add_conditional_edges(
+    &quot;source_node&quot;,    # 从哪个节点出发
+    routing_function, # 用什么函数决定路由
+    {                 # 路由映射表
+        &quot;result1&quot;: &quot;target_node1&quot;,
+        &quot;result2&quot;: &quot;target_node2&quot;,
+    }
+)</code></pre>
+<h3 id="实际例子-智能客服路由">实际例子：智能客服路由</h3>
+<pre><code>from langgraph.graph import StateGraph, START, END
+from typing_extensions import TypedDict
+
+class CustomerState(TypedDict):
+    question: str
+    category: str
+    answer: str
+
+# 分类节点
+def classify_question(state: CustomerState):
+    question = state[&quot;question&quot;].lower()
+    
+    if &quot;退款&quot; in question or &quot;退货&quot; in question:
+        category = &quot;refund&quot;
+    elif &quot;物流&quot; in question or &quot;配送&quot; in question:
+        category = &quot;shipping&quot;
+    elif &quot;产品&quot; in question or &quot;使用&quot; in question:
+        category = &quot;product&quot;
+    else:
+        category = &quot;general&quot;
+    
+    return {&quot;category&quot;: category}
+
+# 处理节点
+def handle_refund(state):
+    return {&quot;answer&quot;: &quot;退款专员：请提供订单号，3个工作日内处理。&quot;}
+
+def handle_shipping(state):
+    return {&quot;answer&quot;: &quot;物流客服：您的包裹正在配送中。&quot;}
+
+def handle_product(state):
+    return {&quot;answer&quot;: &quot;产品顾问：请查看说明书第3页。&quot;}
+
+def handle_general(state):
+    return {&quot;answer&quot;: &quot;客服：感谢咨询，还有其他问题吗？&quot;}
+
+# 路由函数
+def route_question(state: CustomerState) -&gt; str:
+    return state[&quot;category&quot;]
+
+# 构建图
+workflow = StateGraph(CustomerState)
+
+workflow.add_node(&quot;classify&quot;, classify_question)
+workflow.add_node(&quot;refund&quot;, handle_refund)
+workflow.add_node(&quot;shipping&quot;, handle_shipping)
+workflow.add_node(&quot;product&quot;, handle_product)
+workflow.add_node(&quot;general&quot;, handle_general)
+
+workflow.add_edge(START, &quot;classify&quot;)
+
+# 关键：条件路由
+workflow.add_conditional_edges(
+    &quot;classify&quot;,
+    route_question,
+    {
+        &quot;refund&quot;: &quot;refund&quot;,
+        &quot;shipping&quot;: &quot;shipping&quot;,
+        &quot;product&quot;: &quot;product&quot;,
+        &quot;general&quot;: &quot;general&quot;
+    }
+)
+
+# 所有分支都到 END
+workflow.add_edge(&quot;refund&quot;, END)
+workflow.add_edge(&quot;shipping&quot;, END)
+workflow.add_edge(&quot;product&quot;, END)
+workflow.add_edge(&quot;general&quot;, END)
+
+app = workflow.compile()
+
+# 测试
+test_questions = [
+    &quot;我想申请退款&quot;,
+    &quot;我的快递到哪了？&quot;,
+    &quot;这个产品怎么使用？&quot;,
+]
+
+for q in test_questions:
+    result = app.invoke({&quot;question&quot;: q, &quot;category&quot;: &quot;&quot;, &quot;answer&quot;: &quot;&quot;})
+    print(f&quot;问题: {q}&quot;)
+    print(f&quot;回答: {result[&#x27;answer&#x27;]}\n&quot;)</code></pre>
+<hr>
+<h2 id="第七章-循环流程">第七章 循环流程</h2>
+<p>有时候一次处理不够好，需要反复迭代优化。LangGraph 天然支持循环。</p>
+<p><img alt="@同事" src="#"></p>
+<h3 id="关键点-1">关键点</h3>
+<ol><li><strong>条件边可以指回前面的节点</strong>：形成循环</li><li><strong>必须有退出条件</strong>：否则会无限循环</li><li><strong>建议设置最大迭代次数</strong>：兜底保护</li></ol>
+<h3 id="实际例子-答案优化器">实际例子：答案优化器</h3>
+<pre><code>from langgraph.graph import StateGraph, START, END
+from typing_extensions import TypedDict
+from typing import Annotated
+import operator
+
+class ImprovementState(TypedDict):
+    question: str
+    answer: str
+    quality_score: float
+    iteration: Annotated[int, operator.add]
+    max_iterations: int
+
+def generate_answer(state: ImprovementState):
+    &quot;&quot;&quot;生成或改进答案&quot;&quot;&quot;
+    iteration = state.get(&quot;iteration&quot;, 0)
+    
+    # 模拟答案逐步改进
+    if iteration == 0:
+        answer = &quot;简单回答：这是一个基础答案。&quot;
+        score = 0.5
+    elif iteration == 1:
+        answer = &quot;改进回答：这是一个更详细的答案，包含更多信息。&quot;
+        score = 0.7
+    else:
+        answer = &quot;完善回答：经过仔细思考的完整答案，包含背景和建议。&quot;
+        score = 0.9
+    
+    print(f&quot;第{iteration + 1}次生成 (质量: {score})&quot;)
+    
+    return {
+        &quot;answer&quot;: answer,
+        &quot;quality_score&quot;: score,
+        &quot;iteration&quot;: 1  # 每次+1（因为有 reducer）
+    }
+
+def check_quality(state):
+    &quot;&quot;&quot;检查质量，不更新状态&quot;&quot;&quot;
+    return state
+
+def should_continue(state: ImprovementState) -&gt; str:
+    &quot;&quot;&quot;决定是继续还是结束&quot;&quot;&quot;
+    if state[&quot;quality_score&quot;] &gt;= 0.8:
+        return &quot;done&quot;
+    elif state[&quot;iteration&quot;] &gt;= state[&quot;max_iterations&quot;]:
+        return &quot;done&quot;
+    else:
+        return &quot;improve&quot;
+
+# 构建带循环的图
+workflow = StateGraph(ImprovementState)
+
+workflow.add_node(&quot;generate&quot;, generate_answer)
+workflow.add_node(&quot;check&quot;, check_quality)
+
+workflow.add_edge(START, &quot;generate&quot;)
+workflow.add_edge(&quot;generate&quot;, &quot;check&quot;)
+
+# 关键：条件边可以循环回去
+workflow.add_conditional_edges(
+    &quot;check&quot;,
+    should_continue,
+    {
+        &quot;improve&quot;: &quot;generate&quot;,  # 循环
+        &quot;done&quot;: END             # 结束
+    }
+)
+
+app = workflow.compile()
+
+result = app.invoke({
+    &quot;question&quot;: &quot;什么是人工智能？&quot;,
+    &quot;answer&quot;: &quot;&quot;,
+    &quot;quality_score&quot;: 0.0,
+    &quot;iteration&quot;: 0,
+    &quot;max_iterations&quot;: 5
+})
+
+print(f&quot;\n最终答案: {result[&#x27;answer&#x27;]}&quot;)
+print(f&quot;最终质量: {result[&#x27;quality_score&#x27;]}&quot;)
+print(f&quot;迭代次数: {result[&#x27;iteration&#x27;]}&quot;)</code></pre>
+<hr>
+<h2 id="第八章-聊天机器人">第八章 聊天机器人</h2>
+<p>做聊天机器人最头疼的是<strong>消息历史管理</strong>。LangGraph 提供了专门的工具来解决这个问题。</p>
+<h3 id="核心-MessagesState-和-addmessages">核心：MessagesState 和 add_messages</h3>
+<pre><code>from langgraph.graph import MessagesState
+from langgraph.graph.message import add_messages
+from langchain_core.messages import HumanMessage, AIMessage
+
+# 方式1：继承 MessagesState
+class ChatState(MessagesState):
+    user_name: str
+    conversation_count: int
+
+# 方式2：手动定义
+class ChatState(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
+    user_name: str</code></pre>
+<p><code>add_messages</code> 是一个智能 Reducer，它会：</p>
+<ul><li>自动追加新消息</li><li>处理消息 ID 去重</li><li>保持消息顺序</li></ul>
+<h3 id="完整聊天机器人">完整聊天机器人</h3>
+<pre><code>import os
+from langgraph.graph import StateGraph, START, END, MessagesState
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from langchain_community.llms import Tongyi
+
+os.environ[&quot;DASHSCOPE_API_KEY&quot;] = &quot;your-key&quot;
+
+llm = Tongyi(model=&quot;qwen-plus&quot;, temperature=0.7)
+
+class ChatState(MessagesState):
+    user_name: str
+    conversation_count: int
+
+def chatbot_node(state: ChatState):
+    &quot;&quot;&quot;聊天节点&quot;&quot;&quot;
+    # 构建系统提示
+    system_prompt = f&quot;&quot;&quot;你是一个友好的AI助手。
+用户名: {state.get(&#x27;user_name&#x27;, &#x27;用户&#x27;)}
+当前是第 {state.get(&#x27;conversation_count&#x27;, 0)} 轮对话。&quot;&quot;&quot;
+    
+    messages = [SystemMessage(content=system_prompt)] + state[&quot;messages&quot;]
+    response = llm.invoke(messages)
+    
+    return {
+        &quot;messages&quot;: [AIMessage(content=response)],
+        &quot;conversation_count&quot;: state.get(&quot;conversation_count&quot;, 0) + 1
+    }
+
+# 构建图
+workflow = StateGraph(ChatState)
+workflow.add_node(&quot;chatbot&quot;, chatbot_node)
+workflow.add_edge(START, &quot;chatbot&quot;)
+workflow.add_edge(&quot;chatbot&quot;, END)
+app = workflow.compile()
+
+# 多轮对话
+state = {&quot;messages&quot;: [], &quot;user_name&quot;: &quot;小明&quot;, &quot;conversation_count&quot;: 0}
+
+conversations = [
+    &quot;你好，我是小明&quot;,
+    &quot;我刚才说我叫什么？&quot;,
+    &quot;帮我推荐一本Python书&quot;
+]
+
+for user_input in conversations:
+    print(f&quot;用户: {user_input}&quot;)
+    state[&quot;messages&quot;].append(HumanMessage(content=user_input))
+    result = app.invoke(state)
+    state = result
+    print(f&quot;助手: {result[&#x27;messages&#x27;][-1].content}\n&quot;)</code></pre>
+<hr>
+<h2 id="第九章-Agent-工具调用">第九章 Agent 工具调用</h2>
+<p>Agent 和普通聊天机器人的区别是：<strong>Agent 能使用工具</strong>。</p>
+<h3 id="定义工具">定义工具</h3>
+<p>使用 <code>@tool</code> 装饰器：</p>
+<pre><code>from langchain_core.tools import tool
+
+@tool
+def search_web(query: str) -&gt; str:
+    &quot;&quot;&quot;搜索网络信息
+    
+    Args:
+        query: 搜索关键词
+    &quot;&quot;&quot;
+    # 实际实现
+    return f&quot;搜索 &#x27;{query}&#x27; 的结果：...&quot;
+
+@tool
+def calculator(expression: str) -&gt; str:
+    &quot;&quot;&quot;计算数学表达式
+    
+    Args:
+        expression: 数学表达式，如 &quot;2+2&quot;
+    &quot;&quot;&quot;
+    try:
+        result = eval(expression)
+        return f&quot;计算结果: {expression} = {result}&quot;
+    except:
+        return &quot;计算错误&quot;
+
+@tool
+def get_weather(city: str) -&gt; str:
+    &quot;&quot;&quot;查询城市天气
+    
+    Args:
+        city: 城市名称
+    &quot;&quot;&quot;
+    weather_data = {
+        &quot;北京&quot;: &quot;晴天，15-25度&quot;,
+        &quot;上海&quot;: &quot;多云，18-28度&quot;,
+    }
+    return weather_data.get(city, f&quot;{city}天气信息不可用&quot;)</code></pre>
+<h3 id="工具定义要点">工具定义要点</h3>
+<ol><li><strong>必须有 docstring</strong>：描述工具用途，AI 靠这个判断什么时候用</li><li><strong>参数要有类型注解</strong>：让 AI 知道怎么传参</li><li><strong>Args 部分详细说明</strong>：每个参数是干什么的</li></ol>
+<hr>
+<h2 id="第十章-ReAct-Agent">第十章 ReAct Agent</h2>
+<p>ReAct = Reasoning + Acting，是目前最流行的 Agent 架构。</p>
+<p><img alt="@同事" src="#"></p>
+<h3 id="工作流程">工作流程</h3>
+<ol><li><strong>Thought</strong>：AI 思考需要做什么</li><li><strong>Action</strong>：选择并调用工具</li><li><strong>Observation</strong>：观察工具返回结果</li><li><strong>重复</strong>：直到任务完成</li></ol>
+<h3 id="使用预置组件">使用预置组件</h3>
+<p>LangGraph 提供了现成的组件：</p>
+<pre><code>from langgraph.prebuilt import create_react_agent, ToolNode
+from langchain_community.chat_models import ChatTongyi
+from langchain_core.tools import tool
+from langchain_core.messages import SystemMessage
+
+@tool
+def add(a: float, b: float) -&gt; float:
+    &quot;&quot;&quot;两数相加&quot;&quot;&quot;
+    return a + b
+
+@tool
+def multiply(a: float, b: float) -&gt; float:
+    &quot;&quot;&quot;两数相乘&quot;&quot;&quot;
+    return a * b
+
+# 创建模型
+llm = ChatTongyi(model=&quot;qwen-plus&quot;, temperature=0.7)
+
+# 创建 ReAct Agent
+agent = create_react_agent(
+    model=llm,
+    tools=[add, multiply],
+    messages_modifier=SystemMessage(content=&quot;你是一个数学计算助手。&quot;)
+)
+
+# 使用
+result = agent.invoke({
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;计算 (10 + 5) × 3&quot;}]
+})
+print(result[&quot;messages&quot;][-1].content)</code></pre>
+<h3 id="手动实现-ReAct-Agent">手动实现 ReAct Agent</h3>
+<p>如果需要完全控制，可以手动实现：</p>
+<pre><code>from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode
+from typing import Annotated, Literal
+from typing_extensions import TypedDict
+
+class AgentState(TypedDict):
+    messages: Annotated[list, add_messages]
+    iterations: Annotated[int, operator.add]
+
+# 工具定义...
+tools = [python_executor, text_analyzer]
+tool_node = ToolNode(tools)
+
+# 模型绑定工具
+llm_with_tools = llm.bind_tools(tools)
+
+def call_model(state: AgentState):
+    &quot;&quot;&quot;调用模型决策&quot;&quot;&quot;
+    messages = state[&quot;messages&quot;]
+    response = llm_with_tools.invoke(messages)
+    return {&quot;messages&quot;: [response], &quot;iterations&quot;: 1}
+
+def should_continue(state) -&gt; Literal[&quot;tools&quot;, &quot;__end__&quot;]:
+    &quot;&quot;&quot;判断是否需要调用工具&quot;&quot;&quot;
+    last_message = state[&quot;messages&quot;][-1]
+    if hasattr(last_message, &quot;tool_calls&quot;) and last_message.tool_calls:
+        return &quot;tools&quot;
+    return &quot;__end__&quot;
+
+# 构建图
+workflow = StateGraph(AgentState)
+workflow.add_node(&quot;agent&quot;, call_model)
+workflow.add_node(&quot;tools&quot;, tool_node)
+
+workflow.add_edge(START, &quot;agent&quot;)
+workflow.add_conditional_edges(&quot;agent&quot;, should_continue, {
+    &quot;tools&quot;: &quot;tools&quot;,
+    &quot;__end__&quot;: END
+})
+workflow.add_edge(&quot;tools&quot;, &quot;agent&quot;)
+
+app = workflow.compile()</code></pre>
+<hr>
+<h2 id="第十一章-多Agent协作">第十一章 多Agent协作</h2>
+<p>当任务复杂时，一个 Agent 搞不定，需要多个专业 Agent 配合。</p>
+<h3 id="Supervisor-模式">Supervisor 模式</h3>
+<p><img alt="@同事" src="#"></p>
+<p>核心思想：<strong>一个 Supervisor 负责调度，多个专业 Agent 负责执行</strong>。</p>
+<h3 id="完整实现">完整实现</h3>
+<pre><code>from langgraph.graph import StateGraph, START, END
+from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
+from langchain_core.tools import tool
+from typing import Annotated, Literal, Sequence
+from typing_extensions import TypedDict
+from langgraph.graph.message import add_messages
+
+# 1. 定义状态
+class SupervisorState(TypedDict):
+    messages: Annotated[Sequence[BaseMessage], add_messages]
+    next: str  # 下一个执行的 Agent
+
+# 2. 定义各种工具
+@tool
+def check_system_status(component: str) -&gt; str:
+    &quot;&quot;&quot;检查系统组件状态&quot;&quot;&quot;
+    status = {&quot;database&quot;: &quot;正常&quot;, &quot;server&quot;: &quot;负载高&quot;, &quot;api&quot;: &quot;正常&quot;}
+    return status.get(component, &quot;未知&quot;)
+
+@tool
+def get_product_info(product_name: str) -&gt; str:
+    &quot;&quot;&quot;获取产品信息&quot;&quot;&quot;
+    products = {
+        &quot;基础版&quot;: &quot;99元/月，基础功能&quot;,
+        &quot;专业版&quot;: &quot;299元/月，高级功能&quot;,
+    }
+    return products.get(product_name, &quot;产品不存在&quot;)
+
+@tool
+def query_invoice(order_id: str) -&gt; str:
+    &quot;&quot;&quot;查询发票&quot;&quot;&quot;
+    invoices = {&quot;ORD001&quot;: &quot;已开具&quot;, &quot;ORD002&quot;: &quot;处理中&quot;}
+    return invoices.get(order_id, &quot;订单不存在&quot;)
+
+# 3. 定义专业 Agent 节点
+def tech_agent_node(state):
+    &quot;&quot;&quot;技术支持 Agent&quot;&quot;&quot;
+    last_message = state[&quot;messages&quot;][-1].content
+    
+    if &quot;系统&quot; in last_message or &quot;服务器&quot; in last_message:
+        result = check_system_status.invoke({&quot;component&quot;: &quot;server&quot;})
+        response = f&quot;【技术支持】系统状态: {result}&quot;
+    else:
+        response = &quot;【技术支持】请描述您遇到的技术问题。&quot;
+    
+    return {&quot;messages&quot;: [AIMessage(content=response)]}
+
+def sales_agent_node(state):
+    &quot;&quot;&quot;销售 Agent&quot;&quot;&quot;
+    last_message = state[&quot;messages&quot;][-1].content
+    
+    for product in [&quot;基础版&quot;, &quot;专业版&quot;]:
+        if product in last_message:
+            info = get_product_info.invoke({&quot;product_name&quot;: product})
+            return {&quot;messages&quot;: [AIMessage(content=f&quot;【销售顾问】{info}&quot;)]}
+    
+    return {&quot;messages&quot;: [AIMessage(content=&quot;【销售顾问】我们有基础版和专业版，需要了解哪个？&quot;)]}
+
+def billing_agent_node(state):
+    &quot;&quot;&quot;账单 Agent&quot;&quot;&quot;
+    return {&quot;messages&quot;: [AIMessage(content=&quot;【账单专员】请提供订单号，我来查询。&quot;)]}
+
+# 4. Supervisor 节点
+def supervisor_node(state):
+    &quot;&quot;&quot;Supervisor：决定下一步&quot;&quot;&quot;
+    last_message = state[&quot;messages&quot;][-1].content
+    
+    tech_keywords = [&quot;错误&quot;, &quot;bug&quot;, &quot;崩溃&quot;, &quot;系统&quot;, &quot;服务器&quot;]
+    sales_keywords = [&quot;价格&quot;, &quot;购买&quot;, &quot;产品&quot;, &quot;套餐&quot;]
+    billing_keywords = [&quot;发票&quot;, &quot;支付&quot;, &quot;退款&quot;, &quot;账单&quot;]
+    
+    if any(kw in last_message for kw in tech_keywords):
+        next_agent = &quot;tech_support&quot;
+    elif any(kw in last_message for kw in sales_keywords):
+        next_agent = &quot;sales&quot;
+    elif any(kw in last_message for kw in billing_keywords):
+        next_agent = &quot;billing&quot;
+    else:
+        next_agent = &quot;sales&quot;  # 默认销售
+    
+    return {&quot;next&quot;: next_agent}
+
+# 5. 路由函数
+def route_after_supervisor(state) -&gt; Literal[&quot;tech_support&quot;, &quot;sales&quot;, &quot;billing&quot;]:
+    return state[&quot;next&quot;]
+
+# 6. 构建图
+workflow = StateGraph(SupervisorState)
+
+workflow.add_node(&quot;supervisor&quot;, supervisor_node)
+workflow.add_node(&quot;tech_support&quot;, tech_agent_node)
+workflow.add_node(&quot;sales&quot;, sales_agent_node)
+workflow.add_node(&quot;billing&quot;, billing_agent_node)
+
+workflow.add_edge(START, &quot;supervisor&quot;)
+workflow.add_conditional_edges(
+    &quot;supervisor&quot;,
+    route_after_supervisor,
+    {
+        &quot;tech_support&quot;: &quot;tech_support&quot;,
+        &quot;sales&quot;: &quot;sales&quot;,
+        &quot;billing&quot;: &quot;billing&quot;,
+    }
+)
+workflow.add_edge(&quot;tech_support&quot;, END)
+workflow.add_edge(&quot;sales&quot;, END)
+workflow.add_edge(&quot;billing&quot;, END)
+
+app = workflow.compile()
+
+# 7. 测试
+test_cases = [
+    &quot;我遇到500错误，系统无法访问&quot;,
+    &quot;专业版多少钱？&quot;,
+    &quot;我需要查发票&quot;,
+]
+
+for query in test_cases:
+    print(f&quot;用户: {query}&quot;)
+    result = app.invoke({&quot;messages&quot;: [HumanMessage(content=query)], &quot;next&quot;: &quot;&quot;})
+    for msg in result[&quot;messages&quot;]:
+        if isinstance(msg, AIMessage):
+            print(msg.content)
+    print()</code></pre>
+<hr>
+<h2 id="第十二章-实战项目">第十二章 实战项目</h2>
+<h3 id="智能客服系统架构">智能客服系统架构</h3>
+<p>把前面学的所有东西整合起来，做一个完整的智能客服系统：</p>
+<ol><li><strong>Supervisor</strong> 分析问题类型</li><li><strong>技术支持 Agent</strong> 处理技术问题</li><li><strong>销售顾问 Agent</strong> 处理产品咨询</li><li><strong>账单专员 Agent</strong> 处理财务问题</li><li>每个 Agent 都有自己的<strong>专业工具</strong></li><li>支持<strong>多轮对话</strong>和<strong>历史记忆</strong></li></ol>
+<p>完整代码见附带的 <code>langgraph_supervisor_1.py</code> 文件。</p>
+<hr>
+<h2 id="第十三章-进阶话题">第十三章 进阶话题</h2>
+<h3 id="持久化和记忆">持久化和记忆</h3>
+<p>使用 <code>checkpointer</code> 保存对话状态：</p>
+<pre><code>from langgraph.checkpoint.memory import MemorySaver
+
+memory = MemorySaver()
+app = workflow.compile(checkpointer=memory)
+
+# 使用 thread_id 管理不同会话
+config = {&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;user_123&quot;}}
+result = app.invoke(state, config=config)</code></pre>
+<h3 id="流式输出">流式输出</h3>
+<p>实现打字机效果：</p>
+<pre><code># 方式1：使用 streaming=True 的模型
+llm = Tongyi(model=&quot;qwen-plus&quot;, streaming=True)
+
+for chunk in llm.stream(messages):
+    print(chunk, end=&quot;&quot;, flush=True)
+
+# 方式2：使用 app.stream()
+for event in app.stream(initial_state):
+    print(event)</code></pre>
+<h3 id="子图-Subgraph">子图（Subgraph）</h3>
+<p>复杂系统可以拆成多个子图：</p>
+<pre><code># 定义子图
+sub_workflow = StateGraph(SubState)
+# ... 添加节点和边
+sub_graph = sub_workflow.compile()
+
+# 在主图中使用子图作为节点
+main_workflow.add_node(&quot;sub_process&quot;, sub_graph)</code></pre>
+<h3 id="Human-in-the-Loop">Human-in-the-Loop</h3>
+<p>让人类参与决策：</p>
+<pre><code># 设置断点
+app = workflow.compile(
+    checkpointer=memory,
+    interrupt_before=[&quot;sensitive_action&quot;]
+)
+
+# 运行到断点会暂停
+result = app.invoke(state, config)
+
+# 人工审核后继续
+app.invoke(None, config)  # 继续执行</code></pre>
+<h3 id="调试技巧">调试技巧</h3>
+<pre><code># 可视化图结构
+print(app.get_graph().draw_mermaid())
+
+# 打印执行过程
+for event in app.stream(state, stream_mode=&quot;debug&quot;):
+    print(event)</code></pre>
+<hr></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+
+</body>
+</html>

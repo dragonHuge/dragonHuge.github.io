@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>RAG知识库助手实战-附带前后端和完整可运行服务 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">20</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link active" href="../ext/index.html" aria-current="page"><span>外部沉淀</span><span class="nav-count">468</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav>
+<nav class="context-nav" aria-label="当前栏目目录">
+<div class="context-title">外部沉淀分类</div>
+<a class="context-cat active" href="../ext/index.html#c0"><span>AI与大模型</span><span class="nav-count">32</span></a>
+<a class="context-cat" href="../ext/index.html#c1"><span>AI与效率</span><span class="nav-count">305</span></a>
+<a class="context-cat" href="../ext/index.html#c2"><span>工具与技术</span><span class="nav-count">65</span></a>
+<a class="context-cat" href="../ext/index.html#c3"><span>认知与思维</span><span class="nav-count">12</span></a>
+<a class="context-cat" href="../ext/index.html#c4"><span>写作与创作</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c5"><span>商业与变现</span><span class="nav-count">5</span></a>
+<a class="context-cat" href="../ext/index.html#c6"><span>待分拣</span><span class="nav-count">44</span></a>
+<div class="context-group current">AI与大模型文章</div>
+<a class="art" href="../ext/e001.html">大模型学习资料包（小红书购买 · 18份）</a>
+<a class="art" href="../ext/e002.html">大模型AI Agent知识从0-1笔记-万字详解版本！</a>
+<a class="art" href="../ext/e003.html">大模型Agent实战从0-1笔记：万字详解【迭代版V2】</a>
+<a class="art" href="../ext/e004.html">大模型Transformer架构从0-1架构深度解析</a>
+<a class="art" href="../ext/e005.html">AI开发基础：Langchain框架从入门到实战开发-附代码</a>
+<a class="art" href="../ext/e006.html">AI开发基础：Langgraph框架从入门到实战开发智能体-附带完整可运行代码</a>
+<a class="art" href="../ext/e007.html">万字详解！AI Harness 入门与实践！一篇博文给你讲透！</a>
+<a class="art active" href="../ext/e008.html">RAG知识库助手实战-附带前后端和完整可运行服务</a>
+<a class="art" href="../ext/e009.html">实战智能出行Agent助手-附代码和前后端可视化界面</a>
+<a class="art" href="../ext/e010.html">Vibe Coding指南-AI编辑器全栈开发-附实战和视频</a>
+<a class="art" href="../ext/e011.html">AI大模型面试题-基础篇</a>
+<a class="art" href="../ext/e012.html">AI应用开发+后端面试题</a>
+<a class="art" href="../ext/e013.html">Codex 从小白到实战高手：大厂工程化实战手册</a>
+<a class="art" href="../ext/e014.html">Claude Code 入门到实战全流程详细版</a>
+<a class="art" href="../ext/e015.html">第一章：快速上手</a>
+<a class="art" href="../ext/e016.html">第二章 Claude Code 入门基础操作</a>
+<a class="art" href="../ext/e017.html">第三章： Claude Code 20个常用斜杠指令速查表</a>
+<a class="art" href="../ext/e018.html">第四章：文本处理与创作</a>
+<a class="art" href="../ext/e019.html">第五章：文档管理与处理</a>
+<a class="art" href="../ext/e020.html">第六章：数据处理与分析</a>
+<a class="art" href="../ext/e021.html">第七章 创建常用模板</a>
+<a class="art" href="../ext/e022.html">第八章：提示词优化技巧</a>
+<a class="art" href="../ext/e023.html">第九章：复用文档解决同类问题</a>
+<a class="art" href="../ext/e024.html">第十章：用编程的思维解决问题</a>
+<a class="art" href="../ext/e025.html">第十一章：Claude 高级功能使用</a>
+<a class="art" href="../ext/e026.html">第十二章：让Claude自动解决问题</a>
+<a class="art" href="../ext/e027.html">Claude Code 实战指南</a>
+<a class="art" href="../ext/e028.html">滴云智能办公丨多Agent协同系统</a>
+<a class="art" href="../ext/e029.html">多Agent项目实战：多Agent协同系统</a>
+<a class="art" href="../ext/e030.html">AI应用开发项目实战知识库-详解版</a>
+<a class="art" href="../ext/e031.html">11-Java全套八股文</a>
+<a class="art" href="../ext/e032.html">AI应用开发：RAG技术从小白到深入理解-详细版</a>
+</nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">36</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#RAG-知识库问答系统---从零开始的完整指南">RAG 知识库问答系统 - 从零开始的完整指南</a><a class="tl l2" href="#什么是-RAG">什么是 RAG？</a><a class="tl l3" href="#1-1-RAG-的定义">1.1 RAG 的定义</a><a class="tl l3" href="#1-2-为什么需要-RAG">1.2 为什么需要 RAG？</a><a class="tl l3" href="#1-3-RAG-的工作流程">1.3 RAG 的工作流程</a><a class="tl l2" href="#什么是-Milvus">什么是 Milvus？</a><a class="tl l3" href="#2-1-向量数据库简介">2.1 向量数据库简介</a><a class="tl l3" href="#2-2-Milvus-是什么">2.2 Milvus 是什么？</a><a class="tl l3" href="#2-3-Milvus-的核心概念">2.3 Milvus 的核心概念</a><a class="tl l3" href="#2-4-本项目中的-Milvus-配置">2.4 本项目中的 Milvus 配置</a><a class="tl l2" href="#项目架构概览">项目架构概览</a><a class="tl l3" href="#3-1-整体架构图">3.1 整体架构图</a><a class="tl l3" href="#3-2-技术栈">3.2 技术栈</a><a class="tl l2" href="#核心概念详解">核心概念详解</a><a class="tl l3" href="#4-1-文本切分-Text-Splitting">4.1 文本切分（Text Splitting）</a><a class="tl l3" href="#4-2-向量嵌入-Embedding">4.2 向量嵌入（Embedding）</a><a class="tl l3" href="#4-3-相似度搜索-Similarity-Search">4.3 相似度搜索（Similarity Search）</a><a class="tl l2" href="#项目文件结构">项目文件结构</a><a class="tl l3" href="#文件职责说明">文件职责说明</a><a class="tl l2" href="#关键代码讲解">关键代码讲解</a><a class="tl l3" href="#6-1-向量数据库管理器-vectordbmanager-py">6.1 向量数据库管理器 (vectordbmanager.py)</a><a class="tl l4" href="#初始化连接">初始化连接</a><a class="tl l4" href="#文档处理流水线">文档处理流水线</a><a class="tl l4" href="#向量存储逻辑">向量存储逻辑</a><a class="tl l3" href="#6-2-向量检索器-vectorretriever-py">6.2 向量检索器 (vectorretriever.py)</a><a class="tl l4" href="#相似度搜索">相似度搜索</a><a class="tl l4" href="#问答生成">问答生成</a><a class="tl l4" href="#LLM-调用">LLM 调用</a><a class="tl l3" href="#6-3-API-接口-apiintegration-py">6.3 API 接口 (apiintegration.py)</a><a class="tl l4" href="#上传文档端点">上传文档端点</a><a class="tl l4" href="#查询端点">查询端点</a><a class="tl l2" href="#快速上手指南">快速上手指南</a><a class="tl l3" href="#7-1-环境准备">7.1 环境准备</a><a class="tl l3" href="#7-2-命令行使用">7.2 命令行使用</a><a class="tl l3" href="#7-3-API-使用">7.3 API 使用</a><a class="tl l2" href="#API-接口说明">API 接口说明</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">外部沉淀</a> / AI与大模型</div><article><h1>RAG知识库助手实战-附带前后端和完整可运行服务</h1><div class="meta">2026-11-09 · <span class="m-src">AI与大模型/大模型实战宝典/raw/08-langchain知识库助手项目.md</span></div><div class="md"><p><img alt="@同事" src="#"></p>
+<h1 id="RAG-知识库问答系统---从零开始的完整指南">RAG 知识库问答系统 - 从零开始的完整指南</h1>
+<blockquote><p>基于 Milvus 向量数据库 + LangChain + DashScope 的本地知识库问答解决方案</p></blockquote>
+<p>直接可以运行的代码已经整理好了，需要的话找老师拿</p>
+<hr>
+<h2 id="什么是-RAG">什么是 RAG？</h2>
+<h3 id="1-1-RAG-的定义">1.1 RAG 的定义</h3>
+<p><strong>RAG（Retrieval-Augmented Generation，检索增强生成）</strong> 是一种将<strong>信息检索</strong>与<strong>大语言模型（LLM）生成</strong>相结合的技术。</p>
+<p>用一个简单的比喻来理解：</p>
+<blockquote><p>想象你在参加一场开卷考试。RAG 就像是：  - 📚 <strong>你的参考书</strong>（知识库） - 🔍 <strong>快速翻书找答案的能力</strong>（检索系统） - 🧠 <strong>理解并组织答案的大脑</strong>（大语言模型）</p></blockquote>
+<h3 id="1-2-为什么需要-RAG">1.2 为什么需要 RAG？</h3>
+<p><img alt="@同事" src="#"></p>
+<p>传统大语言模型存在几个问题：</p>
+<h3 id="1-3-RAG-的工作流程">1.3 RAG 的工作流程</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                    RAG 完整工作流程                          │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  【索引阶段 - 离线处理】                                      │
+│                                                             │
+│  文档 → 加载 → 切分 → 向量化 → 存入向量数据库                  │
+│                                                             │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  【检索阶段 - 在线查询】                                      │
+│                                                             │
+│  问题 → 向量化 → 相似度搜索 → 获取相关文档 → LLM生成答案       │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+<hr>
+<h2 id="什么是-Milvus">什么是 Milvus？</h2>
+<h3 id="2-1-向量数据库简介">2.1 向量数据库简介</h3>
+<p>在理解 Milvus 之前，我们需要先了解什么是<strong>向量</strong>：</p>
+<p><strong>向量（Vector）</strong> 是一组数字，用来表示文本、图片等数据的"语义特征"。</p>
+<p>例如：</p>
+<pre><code>&quot;猫&quot;  → [0.23, -0.45, 0.78, ..., 0.12]  (1536维向量)
+&quot;狗&quot;  → [0.21, -0.42, 0.75, ..., 0.15]  (相似度高！)
+&quot;汽车&quot; → [0.89, 0.23, -0.56, ..., 0.67]  (相似度低)</code></pre>
+<p><strong>向量数据库</strong> 就是专门用来存储和快速搜索这些向量的数据库。</p>
+<h3 id="2-2-Milvus-是什么">2.2 Milvus 是什么？</h3>
+<p><strong>Milvus</strong> 是一个开源的向量数据库，专门为 AI 应用设计：</p>
+<ul><li>🚀 <strong>高性能</strong>：支持亿级向量的毫秒级搜索</li><li>📊 <strong>可扩展</strong>：支持分布式部署</li><li>🔧 <strong>易集成</strong>：提供 Python、Java、Go 等多种 SDK</li><li>💾 <strong>持久化</strong>：数据可靠存储，支持备份恢复</li></ul>
+<h3 id="2-3-Milvus-的核心概念">2.3 Milvus 的核心概念</h3>
+<h3 id="2-4-本项目中的-Milvus-配置">2.4 本项目中的 Milvus 配置</h3>
+<pre><code># 连接配置
+MILVUS_HOST = &quot;localhost&quot;
+MILVUS_PORT = &quot;19530&quot;
+
+# 集合 Schema
+fields = [
+    FieldSchema(name=&quot;id&quot;, dtype=DataType.INT64, is_primary=True, auto_id=True),
+    FieldSchema(name=&quot;name&quot;, dtype=DataType.VARCHAR, max_length=255),
+    FieldSchema(name=&quot;text&quot;, dtype=DataType.VARCHAR, max_length=5000),
+    FieldSchema(name=&quot;embedding&quot;, dtype=DataType.FLOAT_VECTOR, dim=1536)
+]</code></pre>
+<hr>
+<h2 id="项目架构概览">项目架构概览</h2>
+<h3 id="3-1-整体架构图">3.1 整体架构图</h3>
+<p>本项目的架构可以分为两大流程：</p>
+<p><strong>📥 文档索引流程（Indexing Pipeline）</strong></p>
+<pre><code>本地文档 → DocumentLoader → TextSplitter → Embedding Model → Milvus
+   ①            ②              ③              ④             ⑤</code></pre>
+<p><strong>🔍 检索问答流程（Retrieval Pipeline）</strong></p>
+<pre><code>用户提问 → Query Embedding → Vector Search → Top-K Results → LLM → 答案
+   ⑥            ⑦              ⑧             ⑨           ⑩    ⑪</code></pre>
+<h3 id="3-2-技术栈">3.2 技术栈</h3>
+<hr>
+<h2 id="核心概念详解">核心概念详解</h2>
+<h3 id="4-1-文本切分-Text-Splitting">4.1 文本切分（Text Splitting）</h3>
+<p>为什么需要切分文本？</p>
+<ol><li><strong>嵌入模型有长度限制</strong>：大多数模型最多处理 512-8192 个 token</li><li><strong>检索精度</strong>：较短的文本块更容易精确匹配</li><li><strong>上下文控制</strong>：LLM 的上下文窗口有限</li></ol>
+<p>本项目使用 <code>RecursiveCharacterTextSplitter</code>：</p>
+<pre><code>self.text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=500,           # 每块最大 500 字符
+    chunk_overlap=50,         # 相邻块重叠 50 字符
+    separators=[&quot;\n\n&quot;, &quot;\n&quot;, &quot;。&quot;, &quot;！&quot;, &quot;？&quot;, &quot;；&quot;, &quot;，&quot;, &quot; &quot;, &quot;&quot;]
+)</code></pre>
+<h3 id="4-2-向量嵌入-Embedding">4.2 向量嵌入（Embedding）</h3>
+<p>嵌入是将文本转换为数值向量的过程：</p>
+<pre><code>&quot;Milvus是一个向量数据库&quot; 
+        ↓
+    Embedding Model
+        ↓
+[0.023, -0.156, 0.892, ..., 0.445]  # 1536维向量</code></pre>
+<p>本项目使用阿里云 DashScope 的 <code>text-embedding-v1</code> 模型，输出 1536 维向量。</p>
+<h3 id="4-3-相似度搜索-Similarity-Search">4.3 相似度搜索（Similarity Search）</h3>
+<p>向量相似度通常使用以下方法计算：</p>
+<p>本项目使用 <strong>L2 距离</strong>（欧氏距离）。</p>
+<hr>
+<h2 id="项目文件结构">项目文件结构</h2>
+<p><img alt="@同事" src="#"></p>
+<pre><code>project/
+├── vector_db_manager.py    # 核心：向量数据库管理器
+├── document_loader.py      # 文档加载器（支持多格式）
+├── vector_retriever.py     # 向量检索器 + 问答
+├── query_system.py         # 独立查询系统（命令行）
+├── upload_document.py      # 独立上传脚本（命令行）
+├── api_integration.py      # Flask API 蓝图
+├── server.py              # Flask 服务器入口
+└── .env                   # 环境变量配置</code></pre>
+<h3 id="文件职责说明">文件职责说明</h3>
+<hr>
+<h2 id="关键代码讲解">关键代码讲解</h2>
+<h3 id="6-1-向量数据库管理器-vectordbmanager-py">6.1 向量数据库管理器 (vector_db_manager.py)</h3>
+<p>这是项目的核心模块，负责整个 RAG 的"写入"流程。</p>
+<h4 id="初始化连接">初始化连接</h4>
+<pre><code>class VectorDatabaseManager:
+    def __init__(self, milvus_host, milvus_port, ...):
+        # 1. 配置参数
+        self.milvus_host = milvus_host or os.getenv(&quot;MILVUS_HOST&quot;, &quot;127.0.0.1&quot;)
+        self.milvus_port = str(milvus_port or os.getenv(&quot;MILVUS_PORT&quot;, &quot;19530&quot;))
+        
+        # 2. 初始化嵌入模型
+        self._init_embeddings()
+        
+        # 3. 初始化文本切分器
+        self.text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=500,
+            chunk_overlap=50,
+            separators=[&quot;\n\n&quot;, &quot;\n&quot;, &quot;。&quot;, &quot;！&quot;, &quot;？&quot;, &quot;；&quot;, &quot;，&quot;, &quot; &quot;, &quot;&quot;]
+        )
+        
+        # 4. 连接到 Milvus
+        self._connect_to_milvus()</code></pre>
+<h4 id="文档处理流水线">文档处理流水线</h4>
+<pre><code>def process_file(self, file_path: str, collection_name: str = None) -&gt; bool:
+    &quot;&quot;&quot;处理单个文件：加载 → 切分 → 存储&quot;&quot;&quot;
+    
+    # 步骤1: 加载文档
+    documents = self.load_document(file_path)
+    # 例如: PDF 文件会被解析为多个 Document 对象
+    
+    # 步骤2: 切分文档
+    split_docs = self.split_documents(documents)
+    # 将长文档切分为多个小块
+    
+    # 步骤3: 存入向量数据库
+    self.add_documents_to_db(split_docs, collection_name)
+    # 自动调用嵌入模型，生成向量并存储
+    
+    return True</code></pre>
+<h4 id="向量存储逻辑">向量存储逻辑</h4>
+<pre><code>def add_documents_to_db(self, documents: List[Document], collection_name: str = None):
+    &quot;&quot;&quot;将文档添加到 Milvus&quot;&quot;&quot;
+    
+    target_collection = collection_name or self.collection_name
+    collection_exists = utility.has_collection(target_collection)
+    
+    if collection_exists:
+        # 集合已存在：加载并追加数据
+        self.vectorstore = Milvus(
+            embedding_function=self.embeddings,
+            collection_name=target_collection,
+            connection_args={&quot;host&quot;: self.milvus_host, &quot;port&quot;: self.milvus_port}
+        )
+        self.vectorstore.add_documents(documents)  # 追加
+    else:
+        # 集合不存在：创建新集合并插入
+        self.vectorstore = Milvus.from_documents(
+            documents=documents,
+            embedding=self.embeddings,
+            collection_name=target_collection,
+            connection_args={&quot;host&quot;: self.milvus_host, &quot;port&quot;: self.milvus_port}
+        )</code></pre>
+<h3 id="6-2-向量检索器-vectorretriever-py">6.2 向量检索器 (vector_retriever.py)</h3>
+<p>这个模块负责 RAG 的"读取"流程。</p>
+<h4 id="相似度搜索">相似度搜索</h4>
+<pre><code>def search_similar_content(self, query: str, collection_name: str, k: int = None):
+    &quot;&quot;&quot;搜索相似内容&quot;&quot;&quot;
+    
+    # 执行向量搜索（内部会自动将 query 转为向量）
+    search_results = self.db_manager.search(
+        query=query, 
+        k=k, 
+        collection_name=collection_name
+    )
+    
+    # 过滤低相似度结果
+    results = []
+    for doc, score in search_results:
+        if score &gt;= self.similarity_threshold:  # 默认 0.5
+            results.append((doc, score))
+    
+    return results</code></pre>
+<h4 id="问答生成">问答生成</h4>
+<pre><code>def answer_question(self, question: str, collection_name: str, k: int = 5):
+    &quot;&quot;&quot;回答问题 - RAG 的核心逻辑&quot;&quot;&quot;
+    
+    # 步骤1: 检索相关文档
+    relevant_docs = self.search_similar_content(
+        query=question,
+        collection_name=collection_name,
+        k=k
+    )
+    
+    # 步骤2: 构建上下文
+    context_parts = []
+    for i, (doc, score) in enumerate(relevant_docs):
+        context_parts.append(f&quot;参考资料{i+1}: {doc.page_content}&quot;)
+    context = &quot;\n\n&quot;.join(context_parts)
+    
+    # 步骤3: 调用 LLM 生成回答
+    answer = self._generate_answer_with_llm(question, context)
+    
+    return AnswerResult(
+        answer=answer,
+        source_documents=source_documents,
+        scores=scores
+    )</code></pre>
+<h4 id="LLM-调用">LLM 调用</h4>
+<pre><code>def _generate_answer_with_llm(self, question: str, context: str) -&gt; str:
+    &quot;&quot;&quot;使用 LLM 生成回答&quot;&quot;&quot;
+    
+    client = OpenAI(
+        api_key=os.environ.get(&quot;DASHSCOPE_API_KEY&quot;),
+        base_url=&quot;https://dashscope.aliyuncs.com/compatible-mode/v1&quot;
+    )
+    
+    system_prompt = &quot;&quot;&quot;你是一个智能助手。请基于提供的【参考资料】回答用户的问题。
+    如果参考资料为空或与问题无关，请利用你的通用知识进行回答...&quot;&quot;&quot;
+    
+    response = client.chat.completions.create(
+        model=&quot;qwen-plus&quot;,
+        messages=[
+            {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: system_prompt},
+            {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: f&quot;问题：{question}\n\n【参考资料】：\n{context}&quot;}
+        ]
+    )
+    
+    return response.choices[0].message.content</code></pre>
+<h3 id="6-3-API-接口-apiintegration-py">6.3 API 接口 (api_integration.py)</h3>
+<p>提供 REST API 供外部调用。</p>
+<h4 id="上传文档端点">上传文档端点</h4>
+<pre><code>@vector_bp.route(&#x27;/upload_document&#x27;, methods=[&#x27;POST&#x27;])
+def upload_document():
+    &quot;&quot;&quot;POST /api/vector/upload_document&quot;&quot;&quot;
+    
+    data = request.get_json()
+    file_path = data[&#x27;file_path&#x27;]
+    collection_name = data[&#x27;collection_name&#x27;]
+    
+    # 调用核心处理逻辑
+    success = vector_manager.process_file(file_path, collection_name)
+    
+    if success:
+        return jsonify({
+            &#x27;success&#x27;: True,
+            &#x27;message&#x27;: f&#x27;文档处理成功: {file_path}&#x27;,
+            &#x27;database_info&#x27;: vector_manager.get_database_info(collection_name)
+        })</code></pre>
+<h4 id="查询端点">查询端点</h4>
+<pre><code>@vector_bp.route(&#x27;/query&#x27;, methods=[&#x27;POST&#x27;])
+def query_documents():
+    &quot;&quot;&quot;POST /api/vector/query&quot;&quot;&quot;
+    
+    data = request.get_json()
+    question = data[&#x27;question&#x27;]
+    collection_name = data[&#x27;collection_name&#x27;]
+    k = data.get(&#x27;k&#x27;, 5)
+    
+    # 执行 RAG 问答
+    result = vector_retriever.answer_question(
+        question, 
+        k=k, 
+        collection_name=collection_name
+    )
+    
+    return jsonify({
+        &#x27;success&#x27;: True,
+        &#x27;question&#x27;: question,
+        &#x27;answer&#x27;: result.answer,
+        &#x27;confidence&#x27;: result.confidence,
+        &#x27;sources&#x27;: [...]  # 来源文档信息
+    })</code></pre>
+<hr>
+<h2 id="快速上手指南">快速上手指南</h2>
+<h3 id="7-1-环境准备">7.1 环境准备</h3>
+<ol><li><strong>启动 Milvus（使用 Docker）</strong></li></ol>
+<pre><code># 创建 docker-compose.yml 并启动
+docker-compose up -d</code></pre>
+<ol><li><strong>安装 Python 依赖</strong></li></ol>
+<pre><code>pip install langchain langchain-community langchain-milvus
+pip install pymilvus dashscope openai
+pip install flask flask-cors python-dotenv
+pip install pypdf docx2txt pandas openpyxl</code></pre>
+<ol><li><strong>配置环境变量</strong></li></ol>
+<p>创建 <code>.env</code> 文件：</p>
+<pre><code>MILVUS_HOST=localhost
+MILVUS_PORT=19530
+COLLECTION_NAME=agent_rag
+DASHSCOPE_API_KEY=your_api_key_here
+EMBEDDING_MODEL=text-embedding-v1
+LLM_MODEL=qwen-plus</code></pre>
+<h3 id="7-2-命令行使用">7.2 命令行使用</h3>
+<p><strong>上传文档：</strong></p>
+<pre><code># 修改 upload_document.py 中的 FILE_PATH
+python upload_document.py</code></pre>
+<p><strong>查询问答：</strong></p>
+<pre><code># 修改 query_system.py 中的 QUESTION
+python query_system.py</code></pre>
+<h3 id="7-3-API-使用">7.3 API 使用</h3>
+<p><strong>启动服务：</strong></p>
+<pre><code>python server.py</code></pre>
+<p><strong>上传文档：</strong></p>
+<pre><code>curl -X POST http://localhost:5000/api/vector/upload_document \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;file_path&quot;: &quot;/path/to/doc.pdf&quot;, &quot;collection_name&quot;: &quot;my_docs&quot;}&#x27;</code></pre>
+<p><strong>提问：</strong></p>
+<pre><code>curl -X POST http://localhost:5000/api/vector/query \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#x27;{&quot;question&quot;: &quot;什么是RAG？&quot;, &quot;collection_name&quot;: &quot;my_docs&quot;, &quot;k&quot;: 5}&#x27;</code></pre>
+<hr>
+<h2 id="API-接口说明">API 接口说明</h2></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+
+</body>
+</html>

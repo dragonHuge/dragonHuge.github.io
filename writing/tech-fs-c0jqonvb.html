@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>2025-09-09 高并发场景下HTTP Client配置踩坑 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">9</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">背景</a><a class="tl l1" href="#sec-2">问题分析</a><a class="tl l1" href="#sec-3">后记</a><a class="tl l1" href="#sec-4">2026-10-14：风控平台 脱敏服务 OkHttp「僵尸调用」踩坑——超时预算错配</a><a class="tl l2" href="#sec-5">现象</a><a class="tl l2" href="#sec-6">排除过程：MaxConnPerRoute 坑不适用</a><a class="tl l2" href="#sec-7">真因：20s readTimeout 与业务预算错配</a><a class="tl l2" href="#sec-8">修复：业务专属 HTTP client，callTimeout 兜底</a><a class="tl l2" href="#sec-9">通用检查清单</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>2025-09-09 高并发场景下HTTP Client配置踩坑</h1><div class="meta">2026-10-14<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>写在前边：</strong></mark></p><p>在<strong>高并发场景下</strong>(QPS&gt;1000)，<strong>HTTP CLient连接池配置中</strong>，<strong>切记要调整以下两配置</strong>：</p><ul><li><strong><code>MaxConnTotal</code></strong>(全局最大连接数)：默认20</li></ul><ul><li><strong><code>MaxConnPerRoute</code></strong>(单路由最大连接数)：默认2</li></ul><p>高并发场景下，若未显式调整以上配置，那么<code>MaxConnPerRoute=2</code> 会成为瓶颈，导致大量请求排队等待连接，造成大批超时。</p></div></div><h1 id="sec-1">背景</h1><p>在做TZ真机质量加固中，将HTTP服务所依赖的TZ验签服务，从RPC请求迁移到HTT请求，并将服务部署至Matrix。</p><p><strong>在此部署过程中，就出现这种异常现象：</strong></p><ul><li>灰度3台机器时，QPS约180，且耗时稳定，平均250ms。</li></ul><ul><li>灰度全量10台机器后，QPS约1000，耗时突增，平均耗时达到3s。</li></ul><h1 id="sec-2">问题分析</h1><p>那么出现此问题后，首先怀疑是TZ验签HTTP服务方扛不住流量，导致验签服务异常，于是联系其扩容。</p><p>但扩容后发现问题依旧存在，于是先回滚，又细捋了一下整个接口，<strong>最后将问题定位到HTTP Client连接池的配置上：</strong></p><pre><code>RequestConfig requestConfig = RequestConfig.custom()
+        .setConnectionRequestTimeout(3000) // 连接池等待TTL
+        .setConnectTimeout(800) // TCP握手TTL
+        .setSocketTimeout(1000) // 数据传输TTL
+        .build();
+Header ua = new BasicHeader("User-Agent", USER_AGENT);
+ArrayList&lt;Header&gt; headers = new ArrayList&lt;&gt;();
+headers.add(ua);
+return HttpClientBuilder
+        .create()
+        .setMaxConnTotal(2000) // 全局最大连接数
+        .setDefaultRequestConfig(requestConfig)
+        .setDefaultHeaders(headers)
+        .setMaxConnPerRoute(2000) // 单路由最大连接数，旧代码中没有做此配置。
+        .build();</code></pre><p>可以看到，在<strong>旧代码中，全局最大连接数配置成了2000，但单路由最大数使用的是默认值2</strong>，并且在此TZ验签HTTP请求中，核心使用的就是1个接口，路由也是一致的。</p><p>那么当大批请求同时到达，就出现了问题：<strong>大量请求排队，抢占这2个入口</strong>。导致耗时一直居高不下，且当前连接池等待TTL为3s，大量请求在等待3s后，放弃了此次请求。这也是为什么高并发时，平均耗时在3s左右。</p><h1 id="sec-3">后记</h1><p>这属于历史遗留代码问题，TZ真机HTTP服务中的「BL锁状态检查」，也是一个HTTP请求，因此也存在同样的问题：</p><ul><li>耗时高的部分就是QPS突增的时候(QPS约800+)、耗时低的部分就是QPS低的时候(QPS约150+)</li></ul><p><strong>这也就解释了为什么时不时会有人来咨询真机服务超时的问题。</strong></p><hr><h1 id="sec-4">2026-10-14：风控平台 脱敏服务 OkHttp「僵尸调用」踩坑——超时预算错配</h1><div class="fs-callout" style="background:#fff3bf;border-left-color:#d4b106"><div class="fs-callout-e">⚠️</div><div class="fs-callout-b"><p><strong>核心结论：上层业务超时 ≠ 底层 HTTP 超时。</strong> 每一层都有自己的超时预算，若底层 HTTP client 的超时远大于上层业务预算，上层"超时放弃"后底层调用线程仍会继续阻塞——形成"僵尸调用"，高并发下线程被逐渐占满，服务性能随调用量增长而劣化。</p></div></div><h2 id="sec-5">现象</h2><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"><p>风控侧-接口调用方</p></div><div class="fs-col"><p>接口内部性能监控，P99 始终在 200ms 左右</p></div></div><p>发现：调用量一涨，性能就会随之降低。</p><ul><li>脱敏插件监控耗时 <strong>300~800ms</strong>，但脱敏服务自报接口 P99 <strong>&lt;200ms</strong>，两边差异巨大；</li></ul><ul><li>更关键的是<strong>性能随调用量增长而降低</strong>，且旧版插件（V2，无分片逻辑）同样存在——说明问题不在业务逻辑，在共用的 HTTP client 层。</li></ul><h2 id="sec-6">排除过程：MaxConnPerRoute 坑不适用</h2><p>本文上一节是 Apache HttpClient 的 <code>MaxConnPerRoute=2</code> 坑。我们用的是 OkHttp，逐项对照后排除：</p><ul><li><code>OKHttpUtils.getResponse</code> 走的是<strong>同步</strong> <code>call.execute()</code>，OkHttp Dispatcher 的 <code>maxRequests</code>/<code>maxRequestsPerHost</code> <strong>只约束异步 enqueue</strong>，同步调用不受限（代码里配的 2000/1000 对同步实际无效，但无害）；</li></ul><ul><li>同步调用连接不够时直接新建连接，不存在"排队抢连接"的瓶颈。</li></ul><h2 id="sec-7">真因：20s readTimeout 与业务预算错配</h2><p>调用链每一层的时间预算：</p><table><tr><th><p>层</p></th><th><p>超时预算</p></th><th><p>超时后行为</p></th></tr><tr><td><p>规则引擎插件</p></td><td><p>500~800ms</p></td><td><p>放弃插件结果，继续执行</p></td></tr><tr><td><p>编排器单片</p></td><td><p>650ms</p></td><td><p>cancel(true) + 该片原文兜底</p></td></tr><tr><td><p>OkHttp 底层</p></td><td><p><strong>20s（全局默认配置）</strong></p></td><td><p><strong>继续阻塞在 execute() 上</strong></p></td></tr></table><p>上层放弃后，<code>cancel(true)</code> 只是尽力而为——OkHttp 对已发出的请求 cancel 不保证立即断开，调用线程最长挂满 20s。高峰期超时越多 → 僵尸占用越久 → 分片线程池/引擎执行线程被拖满 → 吞吐下降 → 更多超时，<strong>恶性循环，精确复现"随调用量增长而降低"的曲线</strong>。</p><h2 id="sec-8">修复：业务专属 HTTP client，callTimeout 兜底</h2><p>不动全局工具类（其余 40+ 调用方零影响），给脱敏调用配专属客户端：</p><pre><code>private static final OkHttpClient DESENSITIZE_CLIENT = new OkHttpClient.Builder()
+        .connectTimeout(500, TimeUnit.MILLISECONDS)   // 内网建连冗余,线上抖动容错
+        .writeTimeout(2000, TimeUnit.MILLISECONDS)    // 写间隔超时,非整体传输时长
+        .readTimeout(2000, TimeUnit.MILLISECONDS)     // 读间隔超时,与 callTimeout 同档不卡边
+        .callTimeout(2000, TimeUnit.MILLISECONDS)     // 整体硬预算,超时真正中断并释放线程
+        .connectionPool(new ConnectionPool(64, 5, TimeUnit.MINUTES))
+        .build();</code></pre><p>参数设计依据：</p><table><tr><th><p>参数</p></th><th><p>取值</p></th><th><p>依据</p></th></tr><tr><td><p>connectTimeout</p></td><td><p>500ms</p></td><td><p>内网建连通常毫秒级，留线上抖动冗余；整体仍受 callTimeout 约束</p></td></tr><tr><td><p>writeTimeout</p></td><td><p>2000ms</p></td><td><p>写<strong>间隔</strong>超时（非整体传输时长），2MB body 持续写出即可</p></td></tr><tr><td><p>readTimeout</p></td><td><p>2000ms</p></td><td><p>读<strong>间隔</strong>超时，与 callTimeout 同档不卡边</p></td></tr><tr><td><p>callTimeout</p></td><td><p>2000ms</p></td><td><p><strong>DNS+连接+写+读全程硬预算</strong>，超时真正中断请求、立即释放线程</p></td></tr><tr><td><p>ConnectionPool</p></td><td><p>64 空闲 / 5min</p></td><td><p>空闲连接保留策略（非并发上限）：峰值并发约 120 连接，64 覆盖大部分复用需求，省建连+绕开 TCP 慢启动</p></td></tr></table><p>两个关键取舍：</p><ol><li><strong>等待类超时不卡边业务配置</strong>（2s 而非贴着 650ms）：插件侧超时是 Nacos 热更项，业务可能放宽到 1.2~1.6s，HTTP 层若卡边会在业务调参后反而先断，需再改代码发版——留足冗余让 HTTP 层永不成为主动瓶颈；</li></ol><ol><li><strong>callTimeout 是唯一能"真正中断"的配置</strong>：正常路径仍由上层先取消，它只在 cancel 失效、服务端彻底无响应时兜底自断，僵尸窗口从 20s 压到 2s（10 倍改善）。</li></ol><h2 id="sec-9">通用检查清单</h2><div class="fs-callout" style="background:#d0ebff;border-left-color:#3370ff"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>任何带超时的调用链，自上而下检查一遍每层的超时预算：<strong>上层超时应单调小于下层超时</strong>；下层超时的职责是"异常路径最终自断"，而不是"比业务预算大一个数量级"。连接池只管空闲连接复用，不是并发上限——同步调用不受 Dispatcher 限制，真正限制并发的永远是线程池和 callTimeout。</p></div></div></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

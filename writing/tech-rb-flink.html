@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>Flink 实时任务规则 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">18</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-适用范围">1. 适用范围</a><a class="tl l2" href="#2-版本-依赖">2. 版本 / 依赖</a><a class="tl l2" href="#3-标准骨架">3. 标准骨架</a><a class="tl l3" href="#3-1-Main-方法-流水线骨架">3.1 Main 方法（流水线骨架）</a><a class="tl l3" href="#3-2-Checkpoint-配置">3.2 Checkpoint 配置</a><a class="tl l3" href="#3-3-Pipeline-模式">3.3 Pipeline 模式</a><a class="tl l3" href="#3-4-Window-Function-模式">3.4 Window Function 模式</a><a class="tl l3" href="#3-5-Source-解析与时间戳">3.5 Source 解析与时间戳</a><a class="tl l2" href="#4-配置项">4. 配置项</a><a class="tl l2" href="#5-监控与日志">5. 监控与日志</a><a class="tl l2" href="#6-常见踩坑">6. 常见踩坑</a><a class="tl l3" href="#6-1-setParallelism-写代码里">6.1 🔴 setParallelism() 写代码里</a><a class="tl l3" href="#6-2-窗口内一条命令失败导致整窗-emit">6.2 🔴 窗口内一条命令失败导致整窗 emit</a><a class="tl l3" href="#6-3-JedisPooled-每-subtask-new-一个">6.3 🔴 JedisPooled 每 subtask new 一个</a><a class="tl l3" href="#6-4-事件时间用-processing-time">6.4 🟠 事件时间用 processing time</a><a class="tl l3" href="#6-5-单-batch-重试粒度">6.5 🟠 单 batch 重试粒度</a><a class="tl l3" href="#6-6-没禁用-chain">6.6 🟢 没禁用 chain</a><a class="tl l2" href="#7-边界">7. 边界</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>Flink 实时任务规则</h1><div class="meta">2026-07-09<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;本地沉淀 · 风控工程知识库&quot;</em></div><div class="md"><blockquote><p>本文是工程<strong>规则</strong>（团队约定 + 踩坑结论），不是入门教程： 适合「已经知道要做什么，只想知道怎么做才不出事」的场景。</p></blockquote>
+<h2 id="1-适用范围">1. 适用范围</h2>
+<p>公司编译版 Flink（<code>${flink.version}-mdh</code>）实时流任务：消费 Talos topic → 按 key 开窗 → 写 Redis / 回流 Talos。</p>
+<p><strong>不</strong>覆盖：Flink SQL / Table API / Iceberg sink / Hive 写入。</p>
+<hr>
+<h2 id="2-版本-依赖">2. 版本 / 依赖</h2>
+<table><thead><tr><th>坐标</th><th>scope</th><th>备注</th></tr></thead><tbody><tr><td><code>org.apache.flink:flink-streaming-java_2.11</code></td><td><code>provided</code></td><td>集群提供</td></tr><tr><td><code>org.apache.flink:flink-connector-talos</code></td><td><code>compile</code></td><td>不在集群里，必须打进 jar</td></tr><tr><td><code>com.example.infra:galaxy-thrift-api</code></td><td>compile</td><td>Credential / UserType</td></tr><tr><td>业务事件 thrift（如 <code>${SourceEventType}</code>）</td><td>compile</td><td>通过 cloud streaming 仓库</td></tr></tbody></table>
+<p><strong>Flink 任务打包</strong>：用 <code>maven-assembly-plugin</code> 的 <code>jar-with-dependencies</code>，<strong>不</strong>用 shade（DT 平台 fat-jar 大小限制宽松，不需要 relocate）。</p>
+<hr>
+<h2 id="3-标准骨架">3. 标准骨架</h2>
+<h3 id="3-1-Main-方法-流水线骨架">3.1 Main 方法（流水线骨架）</h3>
+<pre><code>public static void main(String[] args) throws Exception {
+    String env = args.length &gt; 0 ? args[0] : &quot;&quot;;
+    log.info(&quot;Starting ${flinkJobClass} with env={}&quot;, env);
+
+    JobConfig config = JobConfig.load(env);
+
+    StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+    configureCheckpoint(streamEnv);
+    buildPipeline(streamEnv, config);
+
+    streamEnv.execute(config.appName());
+}</code></pre>
+<h3 id="3-2-Checkpoint-配置">3.2 Checkpoint 配置</h3>
+<pre><code>private static void configureCheckpoint(StreamExecutionEnvironment env) {
+    CheckpointConfig ckConfig = env.getCheckpointConfig();
+    env.enableCheckpointing(${checkpointIntervalMs}, CheckpointingMode.AT_LEAST_ONCE);
+    ckConfig.setMinPauseBetweenCheckpoints(${checkpointMinPauseMs});
+    ckConfig.setCheckpointTimeout(${checkpointTimeoutMs});
+    ckConfig.enableExternalizedCheckpoints(
+        CheckpointConfig.ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION);
+}</code></pre>
+<p>实测：</p>
+<ul><li><code>checkpointIntervalMs = 5 * 60 * 1000</code> (5 min)</li><li><code>checkpointMinPauseMs = 5 * 60 * 1000</code></li><li><code>checkpointTimeoutMs  = 10 * 60 * 1000</code></li><li>模式 <code>AT_LEAST_ONCE</code>（业务幂等 + Redis 去重 → 不需要 EXACTLY_ONCE 代价）</li><li><code>RETAIN_ON_CANCELLATION</code> 让人工 cancel 后还能从 ck 恢复</li></ul>
+<h3 id="3-3-Pipeline-模式">3.3 Pipeline 模式</h3>
+<pre><code>streamEnv
+    .addSource(buildTalosConsumer(config))
+    .name(&quot;talos-source&quot;)
+    .filter(x -&gt; x != null)
+    .name(&quot;filter-null&quot;)
+    .map(new ${parserMapper}())          // 把外部事件解析为内部 ParsedEvent
+    .name(&quot;parse&quot;)
+    .filter(x -&gt; x != null)
+    .name(&quot;filter-unparseable&quot;)
+    .keyBy(${ParsedEvent}::${businessKey})
+    .window(TumblingProcessingTimeWindows.of(Time.seconds(config.windowSeconds())))
+    .process(new ${windowFunctionClass}(
+        config.redisHost(), config.redisPort(),
+        config.redisPassword(), config.redisKeyPrefix()))
+    .name(&quot;window-process&quot;)
+    .flatMap(new ${sinkBytesFlatMap}())  // thrift → byte[]
+    .name(&quot;serialize&quot;)
+    .addSink(buildTalosProducer(config))
+    .name(&quot;talos-sink&quot;);</code></pre>
+<p><strong>铁律</strong>：</p>
+<ul><li>每个算子都给 <code>.name(&quot;xxx&quot;)</code>，便于 Flink UI 排查</li><li><strong>不 disableChaining</strong> —— 切链只是诊断用，正常运行恢复链接节省序列化</li><li><strong>不 setParallelism</strong> —— 走 DT 平台 <code>-p</code> 参数控制</li><li><code>keyBy</code> 用业务 key（如 userId / 用户ID），不要按 timestamp（窗口会失衡）</li><li>窗口大小（典型 3s）由 <code>${windowSeconds}</code> 配置，<strong>别</strong>写死</li></ul>
+<h3 id="3-4-Window-Function-模式">3.4 Window Function 模式</h3>
+<pre><code>@Slf4j
+public class ${windowFunctionClass}
+        extends ProcessWindowFunction&lt;${ParsedEvent}, ${SinkEventType}, String, TimeWindow&gt; {
+
+    private static final int MAX_REDIS_RETRIES = 3;
+    private static final long REDIS_RETRY_BACKOFF_MS = 10L;
+
+    private final String redisHost;
+    private final int redisPort;
+    private final String redisPassword;
+    private final String redisKeyPrefix;
+
+    private transient JedisPooled jedis;
+
+    public ${windowFunctionClass}(String host, int port, String pwd, String prefix) {
+        this.redisHost = host; this.redisPort = port;
+        this.redisPassword = pwd; this.redisKeyPrefix = prefix;
+    }
+
+    @Override
+    public void open(Configuration parameters) throws Exception {
+        super.open(parameters);
+        // 进程级单例：同 TaskManager JVM 内多 subtask 共享一个 JedisPooled
+        jedis = ${jedisFactoryClass}.getOrCreate(redisHost, redisPort, redisPassword);
+    }
+
+    @Override
+    public void close() {
+        // 不要关 jedis：单例由 JVM ShutdownHook 统一处理
+        jedis = null;
+    }
+
+    @Override
+    public void process(String key, Context ctx, Iterable&lt;${ParsedEvent}&gt; elements,
+                        Collector&lt;${SinkEventType}&gt; out) {
+        long start = System.currentTimeMillis();
+        try {
+            List&lt;${ParsedEvent}&gt; events = new ArrayList&lt;&gt;();
+            for (${ParsedEvent} e : elements) events.add(e);
+            if (events.isEmpty()) return;
+
+            events.sort(Comparator.comparingLong(${ParsedEvent}::ts));
+
+            // 1) 预读 existing（HMGET 批读）
+            // 2) 单遍扫描产出 WriteOp + 待 emit 事件
+            // 3) 批写 pipeline + retry 3×10ms
+            // 4) 写成功才 collect emit（避免&quot;未生效写入&quot;流到下游）
+        } finally {
+            PerfCounter.setTimerValue(&quot;${metricPrefix}.flink_window.process.all&quot;,
+                System.currentTimeMillis() - start);
+        }
+    }
+}</code></pre>
+<p>详细 retry / partial error / fail-open 模式见 <a href="redis.md">redis.md</a> §3.2-§3.5。</p>
+<h3 id="3-5-Source-解析与时间戳">3.5 Source 解析与时间戳</h3>
+<p>外部事件转内部 ParsedEvent，<strong>事件时间</strong>统一取业务字段 epoch 秒：</p>
+<pre><code>private static class ${parserMapper} implements MapFunction&lt;${SourceEventType}, ${ParsedEvent}&gt; {
+    @Override
+    public ${ParsedEvent} map(${SourceEventType} action) {
+        try {
+            // 业务字段抽取
+            String businessKey = action.get${BusinessKey}();
+            long ts = parseEventTime(action.get${EventTimeField}());  // dt 字段转秒
+            // 上报事件延迟指标
+            PerfCounter.setTimerValue(&quot;${metricPrefix}.flink_source.event_delay_ms&quot;,
+                eventDelayMs(ts, System.currentTimeMillis()));
+            // 业务解析
+            return ${parserClass}.parse(businessKey, ts, action);
+        } catch (Exception e) {
+            PerfCounter.setMeterCount(&quot;${metricPrefix}.flink_source.map.failed&quot;, 1);
+            return null;
+        }
+    }
+}
+
+static long eventDelayMs(long eventTsSec, long processMs) {
+    return Math.max(0L, processMs - eventTsSec * 1000L);
+}</code></pre>
+<hr>
+<h2 id="4-配置项">4. 配置项</h2>
+<p>JobConfig 从 classpath properties 加载：<code>${flinkJobClass}.properties</code> 或 <code>${flinkJobClass}-{env}.properties</code>。</p>
+<table><thead><tr><th>key</th><th>默认</th><th>说明</th></tr></thead><tbody><tr><td><code>talos.source.endpoint</code></td><td>必填</td><td>上游 Talos endpoint</td></tr><tr><td><code>talos.sink.endpoint</code></td><td>必填</td><td>下游 Talos endpoint（可不同）</td></tr><tr><td><code>talos.source.topic</code></td><td>必填</td><td>上游 topic</td></tr><tr><td><code>talos.sink.topic</code></td><td>必填</td><td>下游 topic</td></tr><tr><td><code>talos.key.id</code></td><td>必填（AES 密文）</td><td>SecretKeyId</td></tr><tr><td><code>talos.key.secret</code></td><td>必填（AES 密文）</td><td>SecretKey</td></tr><tr><td><code>redis.host</code></td><td><code>localhost:6379</code></td><td>host:port 明文</td></tr><tr><td><code>redis.password</code></td><td>（AES 密文）</td><td>密码</td></tr><tr><td><code>redis.key.prefix</code></td><td>必填</td><td>业务前缀</td></tr><tr><td><code>window.seconds</code></td><td>3</td><td>窗口大小</td></tr><tr><td><code>app.name</code></td><td>必填</td><td>Flink UI 显示名</td></tr></tbody></table>
+<hr>
+<h2 id="5-监控与日志">5. 监控与日志</h2>
+<table><thead><tr><th>指标</th><th>类型</th><th>说明</th></tr></thead><tbody><tr><td><code>${metricPrefix}.flink_source.event_delay_ms</code></td><td>timer</td><td>事件延迟（process_ts - event_ts）</td></tr><tr><td><code>${metricPrefix}.flink_source.map.failed</code></td><td>meter</td><td>解析失败</td></tr><tr><td><code>${metricPrefix}.flink_window.process.all</code></td><td>timer</td><td>单窗口处理耗时</td></tr><tr><td><code>${metricPrefix}.flink_window.process.events_per_window</code></td><td>timer</td><td>窗口内事件数分布（用 timer 看 p50/p99）</td></tr><tr><td><code>${metricPrefix}.flink_redis.pipeline.retry</code></td><td>meter</td><td>Redis 批写重试</td></tr><tr><td><code>${metricPrefix}.flink_redis.pipeline.exhausted</code></td><td>meter</td><td>重试耗尽</td></tr><tr><td><code>${metricPrefix}.flink_redis.pipeline.partial_error</code></td><td>meter</td><td>单条命令错误</td></tr><tr><td><code>${metricPrefix}.flink_window.write_exhausted_drop</code></td><td>meter</td><td>整窗丢弃（write 耗尽）</td></tr></tbody></table>
+<hr>
+<h2 id="6-常见踩坑">6. 常见踩坑</h2>
+<h3 id="6-1-setParallelism-写代码里">6.1 🔴 <code>setParallelism()</code> 写代码里</h3>
+<p>后果：DT 平台 <code>-p</code> 参数失效，无法运维侧调整并发。 正确：代码不设，全部走平台参数。</p>
+<h3 id="6-2-窗口内一条命令失败导致整窗-emit">6.2 🔴 窗口内一条命令失败导致整窗 emit</h3>
+<p>错误：写一半 Redis 就 <code>out.collect</code>，写后续命令失败时下游已经看到部分事件。 正确：先收集 <code>pendingEmits</code>，整批 Redis flush 成功后才 collect（WindowFunction 注释 <code>#3</code>）。</p>
+<h3 id="6-3-JedisPooled-每-subtask-new-一个">6.3 🔴 JedisPooled 每 subtask new 一个</h3>
+<p>后果：同 TaskManager 内多 subtask 各起一个池，连接抢占。 正确：进程级单例 <code>${jedisFactoryClass}.getOrCreate</code>，配合 JVM ShutdownHook。</p>
+<h3 id="6-4-事件时间用-processing-time">6.4 🟠 事件时间用 processing time</h3>
+<p>后果：事件延迟看不见，回溯历史窗口失真。 正确：解析上游事件的业务时间字段（如 <code>dt</code>），缺失时再 fallback 到 processing time + 打点。</p>
+<h3 id="6-5-单-batch-重试粒度">6.5 🟠 单 batch 重试粒度</h3>
+<p>错误：per-event 重试 → N 个 RTT 退化。 正确：per-batch（整 pipeline 整批重试），网络抖动通常是连接级，批失败率 ≈ 单命令失败率。</p>
+<h3 id="6-6-没禁用-chain">6.6 🟢 没禁用 chain</h3>
+<p>早期为了诊断慢算子用了 <code>disableChaining</code>，定位完瓶颈后已恢复链接。 正确：默认链接，除非确实在诊断单算子耗时。</p>
+<hr>
+<h2 id="7-边界">7. 边界</h2>
+<ul><li><strong>Talos 凭据</strong>：<a href="talos.md">talos.md</a> §3</li><li><strong>Redis 批写 / retry / fail-open</strong>：<a href="redis.md">redis.md</a> §3</li><li><strong>配置加密</strong>：<a href="springboot.md">springboot.md</a> §6.5 AES utils</li></ul>
+<hr>
+<blockquote><p>引用约束见 <a href="../CONSTRAINTS.md">../CONSTRAINTS.md</a>。</p></blockquote></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>MiClaw🦞 多群聊记忆架构实践 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">33</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#sec-1">一、记忆架构全景</a><a class="tl l3" href="#sec-2">设计原则</a><a class="tl l3" href="#sec-3">消息处理流程</a><a class="tl l2" href="#sec-4">二、群分类体系 &amp; 可扩展性</a><a class="tl l3" href="#sec-5">Source of Truth：多维表格作为唯一可信的多群配置源。</a><a class="tl l3" href="#sec-6">分类总览</a><a class="tl l3" href="#sec-7">🔒 私密群</a><a class="tl l3" href="#sec-8">🏢 运营群</a><a class="tl l3" href="#sec-9">🎉 吹水群</a><a class="tl l3" href="#sec-10">👀 观察群</a><a class="tl l3" href="#sec-11">🔍 风控挖掘</a><a class="tl l3" href="#sec-12">分类判断流程</a><a class="tl l2" href="#sec-13">三、钩子触发规则（自定义逻辑Hook）</a><a class="tl l3" href="#sec-14">机制</a><a class="tl l3" href="#sec-15">预设约束文件</a><a class="tl l2" href="#sec-16">四、快捷指令系统</a><a class="tl l3" href="#sec-17">触发词类型</a><a class="tl l3" href="#sec-18">配置方法</a><a class="tl l2" href="#sec-19">五、四大工作流</a><a class="tl l3" href="#sec-20">工作流 1：新增分类</a><a class="tl l3" href="#sec-21">工作流 2：新群接入（含入群通知）</a><a class="tl l3" href="#sec-22">工作流 3：配置快捷指令</a><a class="tl l3" href="#sec-23">工作流 4：Source of Truth 三方校验</a><a class="tl l2" href="#sec-24">六、Hub-Spoke 模式：运营群管理</a><a class="tl l3" href="#sec-25">Hub（中枢群）</a><a class="tl l3" href="#sec-26">Spoke（执行群）</a><a class="tl l3" href="#sec-27">注册表示例</a><a class="tl l2" href="#sec-28">七、踩过的坑：</a><a class="tl l3" href="#sec-29">坑 1：config.patch 的群配置覆盖问题</a><a class="tl l3" href="#sec-30">坑 2：飞书不推送「机器人入群」事件</a><a class="tl l3" href="#sec-31">坑 3：私密群的 requireMention 配置</a><a class="tl l3" href="#sec-32">坑 4：路由表格式升级时漏改列名</a><a class="tl l2" href="#sec-33">八、关联 Skill</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="ai/index.html">AI</a></div><article><h1>MiClaw🦞 多群聊记忆架构实践</h1><div class="meta">2026-06-03 · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">👍</div><div class="fs-callout-b"><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>做这件事，最根本的原因</strong></span></mark><strong>是：</strong></p><p><strong>当前个人虾-MiClaw🦞，</strong><u><strong>不支持多Agent能力(相互隔离的workspace)</strong></u>。</p><p>因此自己就基于当前架构，<strong>调整了一下Memory 架构模式，利用 </strong><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>「飞书群聊间数据通信隔离 与  单Agent的多Session机制」</strong></mark><strong>，</strong>将1个群聊视为1个Session(1只虾)，打造分身虾，<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>满足我 「1 个群，1 只虾」、「N个群，N只虾」的需求</strong></mark><strong>。</strong></p><blockquote><p>对应 Skill 已经上传到公司仓库，<strong>大家一键可以安装到自己的爱虾：</strong><strong>MiClaw 多群聊记忆架构</strong><strong>。</strong></p><p>理论上，你可以有无数只虾。</p></blockquote></div></div><div class="fs-callout" style="background:#d0ebff;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>一只龙虾，当多只龙虾用</strong></mark><strong>。</strong></p><p> 一个 Agent，通过 <strong>群聊分类 + 记忆路由 + 快捷指令</strong>，在不同群里表现为不同的"专家"。</p><p>运营群里它是数据播报员，私密群里它是全能管家，吹水群里它是毒舌嘴替。没有多 Agent 编排，没有微服务拆分——纯靠记忆架构做逻辑隔离。</p></div></div><div class="fs-callout" style="background:#fff3bf;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><span style="color:#d83931"><strong>为什么要做这件事？</strong></span></p><p> MiClaw 是一个单 Agent 架构——只有一只龙虾，但我们可以有无数个群，每个群的职责完全不同：有的群只做定时播报，有的群处理日常任务，有的群纯粹吹水。</p><p>如果所有群共享同一套记忆和规则，要么规则互相打架，要么上下文被无关信息淹没。多 Agent？成本太高，维护噩梦。</p><p>所以只剩一条路：<strong>在单 Agent 内部，用架构手段做群间隔离。</strong></p></div></div><h2 id="sec-1">一、记忆架构全景</h2><pre><code>🧠 记忆架构全景
+MEMORY.md                          ← 总索引 + 路由表（启动必读）
+│
+├── memory/rules/                  ← 规则层（按需钩子加载）
+│   ├── private-group.md           私密群规则
+│   ├── task-execution.md          任务执行铁律
+│   ├── new-group-onboard.md       新群接入流程
+│   ├── group-strategy.md          群聊管理策略
+│   ├── pitfalls.md                踩坑教训集
+│   ├── long-term-task-tracking.md 长期任务追踪
+│   ├── risk-mining-playbook.md    风险挖掘 Playbook
+│   ├── bitable-constraints.md     多维表格约束（钩子）
+│   ├── doc-constraints.md         飞书文档约束（钩子）
+│   └── config-constraints.md      Config 修改约束（钩子）
+│
+├── memory/groups/                 ← 群记忆层（按 chat_id 单加载）
+│   ├── private/                   🔒 私密群 + 🔍 风控挖掘群（共 18 个）
+│   │   ├── efficiency.md          效率先锋🦞
+│   │   ├── article-study.md       文章学习🦞
+│   │   ├── meeting.md             会议管理🦞
+│   │   ├── sql-exec.md            SQL执行🦞
+│   │   ├── ai-competition.md      AI比赛🦞
+│   │   ├── daily-tasks.md         日常任务🦞
+│   │   ├── group-ops.md           群组运营🦞
+│   │   ├── self-check.md          自我体检🦞
+│   │   ├── weekly-report.md       周报管理🦞
+│   │   ├── evolution.md           龙虾进化
+│   │   ├── group-observe.md       群组观察
+│   │   ├── mify-models.md         MiFY模型观察🦞
+│   │   ├── content-creation.md    内容创作🦞
+│   │   ├── tz-device.md           TZ真机答疑🦞
+│   │   ├── risk-ops.md            风控运营🦞 [风控挖掘]
+│   │   ├── mimo-risk.md           MIMO 风控 [风控挖掘]
+│   │   ├── incentive-risk.md      激励专项风控🦞 [风控挖掘]
+│   │   └── finance-risk.md        金融风控 [风控挖掘]
+│   │
+│   ├── ops/                       🏢 运营群（2 个）
+│   │   ├── _registry.md           运营群注册表
+│   │   └── api-key-leak.md        疑似API-KEY泄露处理
+│   │
+│   ├── social/                    🎉 吹水群（1 个）
+│   │   └── fun-chat.md            风控虾虾乐园
+│   │
+│   └── observe/                   👀 观察群（1 个）
+│       └── opencode.md            OpenCode 用户交流群
+│
+├── memory/dreaming/               ← 梦境层（已停用）
+│   ├── light/
+│   ├── deep/
+│   └── rem/
+│
+└── memory/YYYY-MM-DD*.md          ← 日志层（60+ 文件，按日期/事件）
+    ├── 2026-03-31.md ~ 2026-05-07.md
+    ├── architecture-review.md
+    └── efficiency-pioneer-progress.md
+</code></pre><h3 id="sec-2">设计原则</h3><div class="fs-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))"><div class="fs-col"><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>隔离性</strong></p><p>A 群的记忆绝不污染 B 群。每次消息处理只加载一个群的专属文件，上下文干净利落。</p></div></div></div><div class="fs-col"><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>按需加载</strong></p><p>不预加载、不批量读取。收到哪个群的消息，就只读哪个群的记忆。私聊场景只读全局规则。</p></div></div></div><div class="fs-col"><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>自动沉淀</strong></p><p>会话结束时自主判断：这次对话产生了什么值得记住的？新规则、新配置、踩坑记录，自动写入对应文件。</p></div></div></div></div><h3 id="sec-3">消息处理流程</h3><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>铁律：每次最多加载 1 个群文件，绝不跨群。</strong></span></mark></p><pre><code>收到群消息
+  │
+  ├─ 1. 读 MEMORY.md → 全局规则 + 路由表
+  │
+  ├─ 2. 用 chat_id 查路由表
+  │     ├─ 命中 → memory_get 只读该群专属文件（最多 1 个）
+  │     └─ 未命中 → 全局规则响应 + 触发入群通知流程
+  │
+  ├─ 3. 检查群分类特殊行为
+  │     ├─ observe → 直接 NO_REPLY，不处理
+  │     ├─ social → 检查 sender_id 是否在授权名单
+  │     └─ risk-mining → 加载 risk-mining-playbook.md
+  │
+  └─ 4. 群文件中引用规则 → 按需读取
+</code></pre><h2 id="sec-4">二、群分类体系 &amp; 可扩展性</h2><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"><p>不同类型的群，加载不同的规则集和记忆文件。分类是一个<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>可扩展注册表，预设五类，用户随时新增</strong></mark>。</p></div><div class="fs-col"></div></div><h3 id="sec-5"><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px">Source of Truth</mark>：多维表格作为唯一可信的多群配置源。</h3><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>多维表格是唯一的 Source of Truth。</strong> 路由表（MEMORY.md）和 gateway config 都是多维表格的下游消费者。数据冲突时，以多维表格为准。</p><p>目的有两点：</p><ol><li>多群架构下，龙虾记忆不混乱。</li></ol><ol><li>面向用户，可以速览自己名下的全部Claw群聊和分类。</li></ol></div></div><p>三方数据的关系：</p><table><tr><th><p>数据源</p></th><th><p>角色</p></th><th><p>内容</p></th></tr><tr><td><p><strong>多维表格</strong></p></td><td><p>Source of Truth</p></td><td><p>群 ID、群名、分类、快捷指令、负责人</p></td></tr><tr><td><p><strong>MEMORY.md 路由表</strong></p></td><td><p>运行时索引</p></td><td><p>群 ID → 分类 → 记忆文件路径的映射</p></td></tr><tr><td><p><strong>gateway config</strong></p></td><td><p>消息投递配置</p></td><td><p>requireMention、群级别的消息过滤规则</p></td></tr></table><p><strong>修复优先级</strong>：Source of Truth → 修 config → 修 MEMORY.md（禁止反向回写 Source）</p><h3 id="sec-6">分类总览</h3><table><tr><th><p><strong>分类</strong></p></th><th><p><strong>行为模式</strong></p></th><th><p>requireMention</p></th><th><p>快捷指令</p></th><th><p>记忆目录</p></th></tr><tr><td><p><strong>🔒 私密群</strong></p></td><td><p><strong>1v1 全功能，主动响应</strong></p></td><td><p><code>false</code></p></td><td><p>✅</p></td><td><p><code>memory/groups/private/</code></p></td></tr><tr><td><p><strong>🏢 运营群</strong></p></td><td><p><strong>多人协作，@同事</strong></p></td><td><p><code>true</code></p></td><td><p>可选</p></td><td><p><code>memory/groups/ops/</code></p></td></tr><tr><td><p><strong>🎉 吹水群</strong></p></td><td><p><strong>仅回复授权名单上的人</strong></p></td><td><p><code>true</code></p></td><td><p>❌</p></td><td><p><code>memory/groups/social/</code></p></td></tr><tr><td><p><strong>👀 观察群</strong></p></td><td><p><strong>只观察，永不说话</strong></p></td><td><p>—</p></td><td><p>❌</p></td><td><p><code>memory/groups/observe/</code></p></td></tr><tr><td><p><strong>🔍 风控挖掘</strong></p></td><td><p><strong>私密群变体，挖掘风控信息</strong></p></td><td><p><code>false</code></p></td><td><p>❌</p></td><td><p><code>memory/groups/private/</code></p></td></tr></table><h3 id="sec-7">🔒 私密群</h3><ul><li>user_count=1, bot_count=1 的群</li></ul><ul><li>requireMention=false，不用@同事</li></ul><ul><li>支持快捷指令（111/222 等）</li></ul><ul><li>每群关联独立 Skill + 多维表格</li></ul><h3 id="sec-8">🏢 运营群</h3><ul><li>多人业务协作群</li></ul><ul><li>requireMention=true，必须@同事</li></ul><ul><li><code>_registry.md</code> 统一管理所有运营群的注册信息</li></ul><ul><li>运营群生命周期：注册 → 配置 → 运行 → 归档</li></ul><h3 id="sec-9">🎉 吹水群</h3><ul><li>闲聊社交群</li></ul><ul><li><strong>铁律</strong>：只回复 Owner 授权的怼人名单上的人</li></ul><ul><li>收到消息第一步：检查 sender_id → 不在名单 且 不是 Owner → 直接 NO_REPLY</li></ul><ul><li>@同事</li></ul><h3 id="sec-10">👀 观察群</h3><ul><li>Agent 只读不写</li></ul><ul><li>任何消息都不回复</li></ul><ul><li>用于收集外部信息、跟踪社区动态。</li></ul><h3 id="sec-11">🔍 风控挖掘</h3><ul><li>私密群变体，可根据自己需求定制，群名含"风控"</li></ul><ul><li>requireMention=false</li></ul><ul><li>加载 risk-mining-playbook.md 做信息挖掘</li></ul><ul><li>记忆文件存放在 <code>memory/groups/private/</code>（与普通私密群同目录）</li></ul><h3 id="sec-12">分类判断流程</h3><p>收到新群消息时，龙虾怎么判断这个群属于哪个分类？</p><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"><ul><li><strong>私密群：群成员1个人1个bot，就自动判定为私密群。</strong></li></ul><p><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>其他类型需要用户自定义分类规则</strong></mark>，如：</p><ul><li>风控挖掘-私密群：私密群&amp;群名带“风控”。</li></ul><ul><li>风控运营-私密群：私密群&amp;群名带“风险运营”</li></ul></div><div class="fs-col"></div></div><h2 id="sec-13">三、钩子触发规则（自定义逻辑Hook）</h2><p>不是所有规则都需要每次加载。<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>同样，这个规则是按需配置的，按你自己的工作需求定制。</strong></mark></p><p><strong>钩子触发规则</strong>是一种按需加载机制：规则文件平时不占上下文，只在执行特定操作时被"钩住"触发加载。</p><h3 id="sec-14">机制</h3><p>在 MEMORY.md 全局规则表中写一条：</p><pre><code>| N | 操作 X 前必读约束文件 | 📄 memory/rules/xxx-constraints.md |</code></pre><p>Agent 在执行操作 X 时，被这条规则"钩住"，触发读取对应约束文件。</p><h3 id="sec-15">预设约束文件</h3><table><tr><th><p>约束文件</p></th><th><p>触发条件</p></th><th><p>内容</p></th></tr><tr><td><p><code>bitable-constraints.md</code></p></td><td><p>创建/编辑多维表格</p></td><td><p>字段类型、权限、批量操作限制</p></td></tr><tr><td><p><code>doc-constraints.md</code></p></td><td><p>创建/编辑飞书文档</p></td><td><p>样式规范、权限设置、模板</p></td></tr><tr><td><p><code>config-constraints.md</code></p></td><td><p>修改 gateway config</p></td><td><p>深度合并、重启时序、备份要求</p></td></tr><tr><td><p><code>risk-mining-playbook.md</code></p></td><td><p>风控挖掘场景</p></td><td><p>标准化挖掘流程、数据源、输出格式</p></td></tr></table><h2 id="sec-16">四、快捷指令系统</h2><p><strong>每个群可配置多个快捷指令，触发词不限于 </strong><strong><code>111</code></strong><strong>。</strong><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>用户可自定义扩展指令。</strong></mark></p><p>由于每个私密群的职责不同，有周报管理、会议管理、运营管理等，但日常使用时用户的需求是定的，如：想看一下本周剩余日程会议、想看一下运营情况、想看一下上周周报/本Q的OKR等等。</p><p>因此制定了快捷指令系统，你在特定群输入快捷指令后，Claw就会根据 所在群聊+指令内容，触发特定流程输出你想关注的信息。</p><h3 id="sec-17">触发词类型</h3><table><tr><th><p>类型</p></th><th><p>示例</p></th><th><p>说明</p></th></tr><tr><td><p>数字型</p></td><td><p><code>111</code>、<code>222</code>、<code>333</code></p></td><td><p>手机打字方便</p></td></tr><tr><td><p>语义型</p></td><td><p><code>日报</code>、<code>周报</code>、<code>进度</code></p></td><td><p>含义直观</p></td></tr><tr><td><p>自定义</p></td><td><p>任意关键词</p></td><td><p>按需配置</p></td></tr></table><h3 id="sec-18">配置方法</h3><p>快捷指令需要<strong>双写</strong>——路由表和群记忆文件各写一份：</p><p><strong>路由表（MEMORY.md）中的格式：</strong></p><pre><code>| chat_id | 群名 | 记忆文件 | 快捷指令 |
+| oc_xxx | 日常任务🦞 | memory/groups/private/daily-tasks.md | 111:筛选跟进中需求 |
+</code></pre><p><strong>群记忆文件中的格式：</strong></p><pre><code>## 快捷指令
+
+### 111 — 筛选跟进中需求
+1. 读取多维表格，筛选状态="跟进中"
+2. 表格形式推送
+</code></pre><p>路由表负责快速匹配，记忆文件负责提供执行上下文。路由表是索引，记忆文件是详情。</p><h2 id="sec-19">五、四大工作流</h2><h3 id="sec-20">工作流 1：新增分类</h3><p><strong>触发词</strong>：「新增一个群聊分类为 {分类名}」「新建分类 {分类名}」</p><ol><li>创建目录 <code>memory/groups/{分类slug}/</code></li></ol><ol><li>在 MEMORY.md 群聊分类定义表中新增一行</li></ol><ol><li>在 MEMORY.md 路由表中新增该分类的段落</li></ol><ol><li>创建该分类的示例模板文件</li></ol><ol><li>询问用户：requireMention 默认值、是否配快捷指令、行为模式</li></ol><ol><li>根据用户回答更新分类定义表</li></ol><h3 id="sec-21">工作流 2：新群接入（含入群通知）</h3><p><strong>触发条件</strong>：收到未知 chat_id 的群消息 / 用户在私聊中告知新建了群</p><p>内置<code>group-onboard</code> Skill，执行流程。</p><pre><code>1. 查群信息：群名、user_count、bot_count
+2. 自动判断分类：
+   ├─ user_count=1, bot_count=1 → 私密群
+   ├─ 私密群 + 群名含"风控" → risk-mining
+   └─ 其他 → 展示分类列表让用户选择
+3. 私聊通知用户（入群通知）
+   └─ 告知：群名、chat_id、推荐分类
+4. 用户确认后继续
+5. 更新 MEMORY.md 路由表（对应分类段添加一行）
+6. 创建群专属记忆文件
+7. 更新 Gateway config：
+   a. config.get → 获取完整 groups
+   b. 追加新群配置（requireMention 按分类默认值）
+   c. config.patch 完整 groups
+8. 验证：在新群发消息确认响应正常
+</code></pre><p>每一步都是原子操作，漏掉任何一步都会导致后续问题。比如漏了「更新 gateway config」，龙虾在该群里就不会响应消息。</p><p><strong>关键约束</strong>：</p><ul><li>config.patch 必须包含完整 groups（不能只写新群，否则覆盖其他群配置）</li></ul><ul><li>私密群自动配 <code>requireMention: false</code>，无需向用户确认</li></ul><h3 id="sec-22">工作流 3：配置快捷指令</h3><p><strong>触发词</strong>：「给 {群名} 配置指令」「{群名} 加个指令」</p><ol><li>从 MEMORY.md 路由表找到该群的记忆文件路径</li></ol><ol><li>读取群记忆文件，获取当前快捷指令</li></ol><ol><li>展示配置，按用户指示新增/修改/删除</li></ol><ol><li>同步写入：MEMORY.md 路由表 + 群记忆文件</li></ol><ol><li>确认写入成功</li></ol><h3 id="sec-23">工作流 4：Source of Truth 三方校验</h3><ol><li>确定 Source of Truth（多维表格 / MEMORY.md）</li></ol><ol><li>读取三方：Source → MEMORY.md 路由表 → gateway config</li></ol><ol><li>逐条比对差异</li></ol><ol><li>输出报告 + 自动修复建议</li></ol><ol><li>能自动修的直接修，不能的提示用户</li></ol><p><strong>修复优先级</strong>：Source of Truth → 修 config → 修 MEMORY.md（禁止反向回写 Source）</p><hr><h2 id="sec-24">六、Hub-Spoke 模式：运营群管理</h2><p>运营群有个特殊需求：龙哥在一个「管理中枢」群里下达指令，龙虾去多个运营群执行操作。</p><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"><h3 id="sec-25">Hub（中枢群）</h3><ul><li>龙哥的指挥中心</li></ul><ul><li>发指令、看汇总、改配置</li></ul><ul><li>只有龙哥和龙虾两个成员</li></ul><ul><li>例：<code>给所有运营群推一次日报</code></li></ul></div><div class="fs-col"><h3 id="sec-26">Spoke（执行群）</h3><ul><li>各个运营群</li></ul><ul><li>接收龙虾的播报和响应</li></ul><ul><li>有其他同事在</li></ul><ul><li>龙虾在这里只做「本职工作」</li></ul></div></div><h3 id="sec-27">注册表示例</h3><p>Hub 群的记忆文件里维护一张注册表，记录所有 Spoke 群：</p><pre><code>## Spoke 群注册表
+
+| 群名 | chat_id | 播报类型 | cron 表达式 | 状态 |
+|------|---------|---------|-----------|------|
+| VAF 运营群 | oc_aaa | VAF 日报 | 0 10 * * 1-5 | 运行中 |
+| 质效数据群 | oc_bbb | 质效周报 | 0 10 * * 1 | 运行中 |
+| CR 数据群 | oc_ccc | CR 周报 | 0 14 * * 5 | 暂停 |
+</code></pre><p>龙哥在 Hub 群说「给所有运营群推一次日报」，龙虾遍历注册表，逐个推送。说「暂停 CR 数据群」，龙虾更新状态列。</p><hr><h2 id="sec-28">七、踩过的坑：</h2><p>以下都是真实翻车记录。每个坑至少浪费了 30 分钟排查时间。</p><h3 id="sec-29">坑 1：config.patch 的群配置覆盖问题</h3><p><code>gateway config.patch</code> 写 <code>groups</code> 字段时，是<strong>整体覆盖</strong>而不是增量更新。如果你只写了新群的配置，所有已有群的配置会被清空。</p><p><strong>正确做法：</strong> 先读取当前 config，把已有群配置全部带上，再加新群的配置一起写入。</p><h3 id="sec-30">坑 2：飞书不推送「机器人入群」事件</h3><p>龙虾没法知道自己被拉进了新群。飞书的事件机制不覆盖这个场景。</p><p><strong>解决方案：</strong> 两条路径兜底——收到未知 chat_id 的消息时自动触发新群接入，或者龙哥私聊告知。</p><h3 id="sec-31">坑 3：私密群的 requireMention 配置</h3><p>私密群（只有龙哥和龙虾）如果设了 <code>requireMention: true</code>，龙哥每条消息都得 @同事，体验极差。</p><p><strong>解决方案：</strong> 新群接入流程中，检测到 <code>user_count=1 &amp;&amp; bot_count=1</code> 时自动设为 <code>requireMention: false</code>。</p><h3 id="sec-32">坑 4：路由表格式升级时漏改列名</h3><p>路由表格式变更时，如果新增了列但 MEMORY.md 里的表头没同步更新，龙虾解析路由表时列对不上，功能全部失效。</p><p><strong>教训：</strong> 路由表格式变更必须同步更新解析逻辑。最好在变更后立刻跑一次数据一致性校验。</p><h2 id="sec-33">八、关联 Skill</h2><p>本架构的两个通用 Skill：</p><table><tr><th><p>Skill</p></th><th><p>触发场景</p></th><th><p>说明</p></th></tr><tr><td><p><code>multi-group-memory</code></p></td><td><p>多群管理、群路由、记忆架构相关</p></td><td><p>架构主 Skill：五分类体系、钩子系统、工作流定义</p></td></tr><tr><td><p><code>group-onboard</code></p></td><td><p>收到未知 chat_id 的群消息 / 龙哥告知新建了群</p></td><td><p>新群接入自动化：查群信息→通知龙哥→更新多维表格→更新路由表→创建记忆文件→更新 config</p></td></tr></table></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>

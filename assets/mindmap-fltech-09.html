@@ -1,0 +1,847 @@
+<!doctype html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=5">
+<meta name="theme-color" content="#fbfaf6">
+<title>GC垃圾回收 · 知识导图</title>
+<link rel="stylesheet" href="mind-elixir.css">
+<style>
+:root{
+  --paper:#fbfaf6; --ink:#1b1d1c; --mut:#6b6f6d; --line:#e6e4dc; --green:#0e7a52;
+  --hd: calc(56px + env(safe-area-inset-top));
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--paper);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif}
+body{overflow:hidden;overscroll-behavior:none}
+.hd{position:fixed;left:0;right:0;top:0;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;background:rgba(251,250,246,.94);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.ic{width:30px;height:30px;flex:0 0 auto;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:15px;line-height:1;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.ttl{min-width:0;flex:1 1 auto;display:flex;flex-direction:column;gap:1px}
+.ttl b{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ttl small{font-size:10px;color:var(--mut);letter-spacing:.02em}
+.acts{display:flex;gap:6px;flex:0 0 auto}
+.acts button{border:1px solid var(--line);background:#fff;color:#3c403e;border-radius:9px;
+  font-size:11.5px;height:30px;padding:0 9px;cursor:pointer}
+.acts button:active{transform:scale(.97)}
+#qbar{position:fixed;left:0;right:0;top:var(--hd);z-index:55;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:rgba(251,250,246,.97);border-bottom:1px solid var(--line)}
+#qbar[hidden]{display:none}
+#q{flex:1;min-width:0;height:32px;border:1px solid var(--line);border-radius:9px;padding:0 10px;
+  font-size:13px;background:#fff;color:var(--ink);outline:none}
+#q:focus{border-color:#b9d8c9}
+#qres{font-size:11px;color:var(--mut);min-width:44px;text-align:center}
+#qbar button{height:32px;width:32px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  color:var(--mut);font-size:13px;cursor:pointer}
+.tip{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);
+  z-index:50;font-size:10.5px;color:var(--mut);background:rgba(251,250,246,.9);border:1px solid var(--line);
+  border-radius:99px;padding:4px 12px;pointer-events:none;white-space:nowrap}
+#map{position:fixed;top:0;right:0;bottom:0;left:0;padding-top:var(--hd)}
+#mindex{width:100%;height:100%}
+.map-container{background:var(--paper)!important;
+  --bgcolor:var(--paper); --color:#1b1d1c; --main-color:#0e7a52;
+  --main-bgcolor:#eef5f1; --main-border:1px solid #cfe3d9;
+  --root-color:#fff; --root-bgcolor:#0e7a52; --root-border-color:#0e7a52;
+  --root-radius:12px; --main-radius:10px; --topic-padding:5px 9px;
+  --node-gap-x:22px; --node-gap-y:5px; --main-gap-x:54px; --main-gap-y:26px;
+  --map-padding:60px 80px 120px;
+  font-size:14px;
+}
+.map-container me-root me-tpc{font-size:20px;font-weight:700;letter-spacing:.01em;box-shadow:0 6px 18px rgba(14,122,82,.18)}
+.map-container me-parent me-tpc{line-height:1.55;white-space:normal;max-width:30em}
+.map-container me-tpc .text{max-width:30em}
+.map-container b,.map-container strong{font-weight:700}
+.map-container mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+.map-container u{text-decoration:underline;text-underline-offset:2px}
+.map-container .mm-note{display:block;margin-top:5px;padding:3px 0 1px 7px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:11.5px;line-height:1.5;white-space:pre-wrap}
+.map-container .mm-tbl{display:block;margin-top:6px;max-width:360px;overflow-x:auto}
+.map-container table{border-collapse:collapse;font-size:11px;line-height:1.4;background:#fff}
+.map-container th,.map-container td{border:1px solid #e2e2da;padding:3px 6px;text-align:left;vertical-align:top}
+.map-container th{background:#f6f4ec;font-weight:600}
+.map-container .mm-img{border-radius:8px;margin-top:4px;max-width:100%;display:block;
+  pointer-events:auto;cursor:zoom-in}
+.map-container me-epd{transform:scale(1.15)}
+.me-hit{outline:2px solid #f0b429!important;outline-offset:3px;border-radius:6px}
+/* 图片灯箱 */
+.lb{position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(12,14,13,.96);
+  display:flex;flex-direction:column;opacity:0;transition:opacity .18s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb-top{display:flex;align-items:center;gap:6px;padding:calc(8px + env(safe-area-inset-top)) 12px 8px}
+.lb-top span{flex:1;min-width:0;color:#cfd6d1;font-size:11.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.lb-top button{height:30px;min-width:34px;padding:0 8px;border:1px solid rgba(255,255,255,.18);
+  background:transparent;color:#e8eae8;border-radius:8px;font-size:11.5px;cursor:pointer}
+.lb-stage{flex:1;position:relative;overflow:hidden;display:grid;place-items:center;touch-action:none;cursor:grab}
+.lb-stage:active{cursor:grabbing}
+.lb-stage img{position:absolute;left:0;top:0;max-width:none;max-height:none;transform-origin:0 0;
+  will-change:transform;user-select:none;-webkit-user-drag:none}
+.lb-tip{text-align:center;color:rgba(255,255,255,.4);font-size:10.5px;
+  padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+/* 文档视图 */
+#doc{position:fixed;top:var(--hd);left:0;right:0;bottom:0;overflow:auto;background:var(--paper);
+  padding:18px 16px calc(48px + env(safe-area-inset-bottom));display:none;--dstep:16px}
+#doc.on{display:block}
+#doc[hidden]{display:none}
+.doc-inner{max-width:760px;margin:0 auto;font-size:14.5px;line-height:1.75}
+.doc-root{font-family:"Songti SC","Noto Serif SC",serif;font-size:21px;font-weight:700;
+  padding-bottom:10px;margin-bottom:10px;border-bottom:1px solid var(--line)}
+#doc details{margin:0}
+#doc summary{list-style:none;cursor:pointer;border-radius:7px;position:relative;
+  padding:4px 8px 4px calc(10px + var(--d,0) * var(--dstep));line-height:1.65}
+#doc summary:hover{background:#f5f3ec}
+#doc summary::-webkit-details-marker{display:none}
+#doc summary:before{content:"▸";position:absolute;left:calc(var(--d,0) * var(--dstep) - 1px);top:5px;
+  font-size:10px;color:#9aa39d;transition:transform .15s}
+#doc details[open]>summary:before{transform:rotate(90deg)}
+#doc summary:hover{background:#f2f0e8}
+#doc .dleaf{padding:3px 4px 3px calc(14px + var(--d,0) * var(--dstep));position:relative}
+#doc .dleaf:before{content:"";position:absolute;left:calc(4px + var(--d,0) * var(--dstep));top:12px;width:4px;height:4px;
+  border-radius:50%;background:#c9cec9}
+#doc details details summary{font-weight:500}
+#doc .dtext img{display:block;max-width:min(100%,340px);border-radius:8px;margin:6px 0}
+#doc .mm-note{display:block;margin:4px 0 2px;padding:3px 0 1px 8px;border-left:2px solid #d9d6cb;
+  color:#6f736f;font-size:12.5px;line-height:1.65;white-space:pre-wrap}
+#doc mark{background:#fff0b8;color:inherit;padding:0 2px;border-radius:3px}
+#doc u{text-decoration:underline;text-underline-offset:2px}
+#doc code{background:#f1efe6;padding:1px 4px;border-radius:4px;font-size:12.5px}
+#doc table{border-collapse:collapse;font-size:12px;margin:6px 0;background:#fff}
+#doc th,#doc td{border:1px solid #e2e2da;padding:4px 7px;text-align:left;vertical-align:top}
+#doc th{background:#f6f4ec}
+#doc a{color:#1d4ed8}
+#doc .mm-tbl{display:block;max-width:100%;overflow-x:auto}
+@media(max-width:520px){#doc{padding:14px 12px 60px;--dstep:13px}.doc-inner{font-size:14px}}
+#doc summary.lv1{font-size:18px;font-weight:700;margin-top:16px;color:#14181a;
+  border-bottom:1px solid var(--line);padding-bottom:6px}
+#doc summary.lv2{font-size:16px;font-weight:650;margin-top:8px;color:#1b1f1d}
+#doc summary.lv3{font-size:14.5px;font-weight:600;color:#2a2f2c}
+#doc .dleaf.lv3{font-size:14px}
+#doc .dleaf.lv4,#doc .dleaf.lv5{font-size:13.5px;color:#3a3f3c}
+#doc img{cursor:zoom-in}
+.dsearch{position:sticky;top:0;z-index:12;display:flex;gap:6px;align-items:center;
+  padding:8px 0 10px;background:linear-gradient(var(--paper) 80%,transparent);max-width:760px;margin:0 auto}
+.dsearch input{flex:1;min-width:0;height:34px;border:1px solid var(--line);border-radius:9px;
+  padding:0 10px;font-size:13px;background:#fff;outline:none}
+.dsearch input:focus{border-color:#b9d8c9}
+.dsearch span{font-size:10.5px;color:var(--mut);min-width:46px;text-align:center}
+.dsearch button{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  color:var(--mut);font-size:12px;cursor:pointer}
+#doc mark.dhit{background:#ffe58a;color:inherit;border-radius:2px}
+#doc mark.dhit.cur{background:#f5b942}
+.dt-head{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.dt-head h3{margin:0}
+#docTocClose{width:30px;height:30px;border:1px solid var(--line);background:#fff;border-radius:8px;
+  font-size:16px;color:var(--mut);cursor:pointer}
+#docTocBtn{position:fixed;right:14px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:130;
+  width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:#fff;
+  box-shadow:0 6px 18px rgba(20,30,25,.12);color:#3c403e;font-size:11px;cursor:pointer;display:none}
+#docTocBtn.on{display:block}
+#docMask{position:fixed;top:0;right:0;bottom:0;left:0;background:rgba(10,14,12,.35);z-index:140;
+  display:none}
+#docMask.on{display:block}
+#docToc{position:fixed;top:0;right:0;bottom:0;width:78%;max-width:330px;background:#fff;z-index:150;
+  transform:translateX(102%);transition:transform .22s ease;overflow:auto;
+  padding:calc(14px + env(safe-area-inset-top)) 14px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:-12px 0 30px rgba(0,0,0,.12)}
+#docToc.on{transform:none}
+#docToc h3{font-size:13px;margin:0 0 10px;color:var(--mut);font-weight:600;letter-spacing:.04em}
+.toc-i{display:block;padding:7px 6px;border-radius:7px;text-decoration:none;color:#22282a;
+  font-size:13px;line-height:1.45}
+.toc-i:hover{background:#f4f2ea}
+.toc-i.t2{padding-left:20px;font-size:12.5px;color:#3d4441}
+.toc-i.t3{padding-left:34px;font-size:12px;color:#5b625e}
+@media(max-width:520px){#doc{padding:14px 12px 60px}.doc-inner{font-size:14px}}
+@media (max-width:520px){
+  .acts button{padding:0 7px;font-size:11px}
+  .map-container{font-size:13px;--map-padding:40px 46px 96px;--main-gap-x:44px}
+  .map-container me-root me-tpc{font-size:18px}
+  .tip{display:none}
+}
+</style>
+</head>
+<body>
+<div class="hd">
+  <button class="ic" id="back" aria-label="返回">←</button>
+  <div class="ttl"><b>GC垃圾回收</b><small>幕布导图 · 147 个节点</small></div>
+  <div class="acts">
+    <button id="viewToggle">文档</button>
+    <button id="qbtn">搜索</button>
+    <button id="fit">适应</button>
+    <button id="docOpen" hidden>展开</button>
+    <button id="docClose" hidden>收起</button>
+  </div>
+</div>
+<div id="qbar" hidden>
+  <input id="q" placeholder="搜索节点内容…" autocomplete="off" enterkeyhint="search">
+  <span id="qres"></span>
+  <button id="qprev" aria-label="上一个">↑</button>
+  <button id="qnext" aria-label="下一个">↓</button>
+  <button id="qclose" aria-label="关闭搜索">×</button>
+</div>
+<div id="map"><div id="mindex"></div></div>
+<div id="doc">
+  <div id="dbar" hidden><div class="dsearch"><input id="dq" placeholder="在本文档中搜索…" autocomplete="off"><span id="dqc"></span><button id="dqprev" type="button">↑</button><button id="dqnext" type="button">↓</button><button id="dqclose" type="button">×</button></div></div>
+  <div class="doc-inner" id="docInner"></div>
+</div>
+<button id="docTocBtn" type="button">目录</button>
+<div id="docMask"></div>
+<aside id="docToc"><div class="dt-head"><h3>本篇目录</h3><button id="docTocClose" type="button" aria-label="关闭目录">×</button></div><nav id="docTocList"></nav></aside>
+<div class="tip">单指拖动 · 双指缩放 · 双击图片放大 · 点圆点收起/展开</div>
+<div class="lb" id="lb" hidden>
+  <div class="lb-top"><span id="lbname"></span>
+    <button id="lbfit" type="button">适应</button>
+    <button id="lb1x" type="button">1:1</button>
+    <button id="lbclose" type="button" aria-label="关闭">×</button></div>
+  <div class="lb-stage" id="lbstage"><img id="lbimg" alt=""></div>
+  <div class="lb-tip">双指缩放 · 拖动移动 · 双击复位</div>
+</div>
+<script src="mind-elixir.iife.js"></script>
+<script type="application/json" id="data">{"title": "GC垃圾回收", "data": {"id": "root", "topic": "<b>GC垃圾回收<\/b>", "children": [{"id": "n1", "topic": "<b>1.堆空间的基本结构<\/b><span class=\"mm-note\">Java 堆是垃圾收集器管理的主要区域，因此也被称作 <b>GC 堆（Garbage Collected Heap）<\/b>。 从垃圾回收的角度来说，由于现在收集器基本都采用<b>分代垃圾收集算法<\/b>，所以 Java 堆被划分为了几个不同的区域，这样我们就可以根据各个区域的特点选择合适的垃圾收集算法。 在 JDK 7 版本及 JDK 7 版本之前，堆内存被通常分为下面三部分：<\/span>", "children": [{"id": "n2", "topic": "<b>新生代内存<\/b>(Young Generation)：<b>Eden 区、两个 Survivor 区 S0 和 S1<\/b>", "children": []}, {"id": "n3", "topic": "<b>老生代<\/b>(Old Generation)", "children": []}, {"id": "n4", "topic": "<b>永久代<\/b>(Permanent Generation)：<b>JDK 8 版本之后 PermGen(永久) 已被 Metaspace(元空间) 取代<\/b><span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-049cb071178758.jpg\" style=\"width:320px;height:152px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}]}, {"id": "n5", "topic": "<b>2.内存分配和回收原则<\/b>", "children": [{"id": "n6", "topic": "<b>对象优先在Eden区分配<\/b><span class=\"mm-note\">大多数情况下，对象在新生代中 Eden 区分配。<b>当 Eden 区没有足够空间进行分配<\/b>时，虚拟机将发起一次 <b>Minor GC<\/b>。<\/span>", "children": []}, {"id": "n7", "topic": "<b>大对象直接进入老年代<\/b><span class=\"mm-note\"><b>大对象<\/b>就是<b>需要大量连续内存空间的对象<\/b>（比如：<b>字符串、数组<\/b>）。 大对象直接进入老年代的行为是<b>由虚拟机动态决定<\/b>的，它与具体使用的垃圾回收器和相关参数有关。 大对象直接进入老年代是一种<b>优化策略<\/b>，旨在<b>避免将大对象放入新生代<\/b>，从而<b>减少新生代的垃圾回收频率和成本<\/b>。<\/span>", "children": []}, {"id": "n8", "topic": "<b>长期存活的对象进入老年代<\/b><span class=\"mm-note\">既然虚拟机采用了分代收集的思想来管理内存，那么内存回收时就必须能识别哪些对象应放在新生代，哪些对象应放在老年代中。 为了做到这一点，虚拟机给每个对象一个<b>对象年龄（Age）计数器<\/b>。 大部分情况，对象都会首先在 Eden 区域分配。 如果对象在 Eden 出生并<b>经过第一次 Minor GC 后仍然能够存活<\/b>，并且<b>能被 Survivor 容纳的话<\/b>，将被移动到 <b>Survivor 空间（s0 或者 s1）<\/b>中，并<b>将对象年龄设为 1<\/b>(Eden 区-&gt;Survivor 区后对象的初始年龄变为 1)。 <b>对象在 Survivor 中每熬过一次 MinorGC,年龄就增加 1 岁<\/b>，当它的年龄增加到一定程度（默<\/span>", "children": []}, {"id": "n9", "topic": "<b>1.主要进行GC的区域<\/b><span class=\"mm-note\">针对 HotSpot VM 的实现，它里面的 GC 其实<b>准确分类只有两大种<\/b>：<\/span>", "children": [{"id": "n10", "topic": "<b>部分收集 (Partial GC)<\/b>：", "children": [{"id": "n11", "topic": "新生代收集（Minor GC / <b>Young GC<\/b>）：<b>只对新生代<\/b>进行垃圾收集；", "children": []}, {"id": "n12", "topic": "老年代收集（Major GC / <b>Old GC<\/b>）：<b>只对老年代<\/b>进行垃圾收集。需要注意的是 Major GC 在有的语境中也用于指代整堆收集；", "children": []}, {"id": "n13", "topic": "混合收集（<b>Mixed GC<\/b>）：对<b>整个新生代和部分老年代<\/b>进行垃圾收集。", "children": []}]}, {"id": "n14", "topic": "<b>整堆收集 (Full GC)<\/b>：收集<b>整个 Java 堆和方法区<\/b>。", "children": []}]}, {"id": "n15", "topic": "<b>2.空间分配担保<\/b><span class=\"mm-note\">空间分配担保是为了<b>确保在 Minor GC 之前，老年代本身还有容纳新生代所有对象的剩余空间<\/b>。 JDK 6 Update 24 之前，在发生 Minor GC 之前，虚拟机必须先检查老年代最大可用的连续空间是否大于新生代所有对象总空间，如果这个条件成立，<b>那这一次 Minor GC 可以确保是安全的<\/b>。如果不成立，则虚拟机会先查看 <code>-XX:HandlePromotionFailure<\/code> 参数的设置值是否允许担保失败(Handle Promotion Failure);如果允许，那会继续检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试进行一次 Minor GC，尽管这次 Minor G<\/span>", "children": []}]}, {"id": "n16", "topic": "<b>2.死亡对象的判断方法<\/b><span class=\"mm-note\">堆中几乎放着所有的对象实例，对堆垃圾回收前的第一步就是要判断哪些对象已经死亡（即不能再被任何途径使用的对象）。<\/span>", "children": [{"id": "n17", "topic": "<b>1.引用计数法<\/b><span class=\"mm-note\">给对象中添加一个<b>引用计数器<\/b>：<\/span>", "children": [{"id": "n18", "topic": "每当有一个地方引用它，计数器就加 1；", "children": []}, {"id": "n19", "topic": "当引用失效，计数器就减 1；", "children": []}, {"id": "n20", "topic": "任何时候计数器为 0 的对象就是不可能再被使用的。<span class=\"mm-note\"><b>这个方法实现简单，效率高，但是目前主流的虚拟机中并没有选择这个算法来管理内存，其最主要的原因是它很难解决对象之间循环引用的问题。<\/b> <img class=\"mm-img\" src=\"fl-b827a13ecd1e69.jpg\" style=\"width:320px;height:157px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n21", "topic": "<b>对象之间循环引用<\/b><span class=\"mm-note\">所谓对象之间的相互引用问题，指除两个对象相互引用着对方之外，这两个对象之间再无任何引用。 但是他们因为互相引用对方，导致它们的引用计数器都不为 0，于是引用计数算法无法通知 GC 回收器回收他们。<\/span>", "children": []}]}, {"id": "n22", "topic": "<b>2.可达性分析算法<\/b>", "children": [{"id": "n23", "topic": "基本思想：通过一系列的称为 <b>“GC Roots”<\/b> 的<b>对象作为起点<\/b>，从这些节点开始<b>向下搜索<\/b>，<b>节点所走过的路径<\/b>称为<b>引用链。<\/b>", "children": []}, {"id": "n24", "topic": "<b>当一个对象到 GC Roots 没有任何引用链相连<\/b>的话，则证明此对象是不可用的，<b>需要被回收<\/b>。<span class=\"mm-note\">下图中的 <code>Object 6 ~ Object 10<\/code> 之间虽有引用关系，但它们到 GC Roots 不可达，因此为需要被回收的对象。 <img class=\"mm-img\" src=\"fl-663f4d0e9dd55d.jpg\" style=\"width:320px;height:240px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n25", "topic": "<b><b>1.哪些对象可以作为 GC Roots 呢？<\/b><\/b>", "children": [{"id": "n26", "topic": "<b>虚拟机栈<\/b>：<b>栈帧中的局部变量表中引用的对象<\/b>", "children": []}, {"id": "n27", "topic": "<b>本地方法栈<\/b>：Native 方法中引用的对象", "children": []}, {"id": "n28", "topic": "<b>方法区<\/b>中：", "children": [{"id": "n29", "topic": "<b>类静态属性引用的对象<\/b>", "children": []}, {"id": "n30", "topic": "<b>常量引用的对象<\/b>", "children": []}]}, {"id": "n31", "topic": "<b>所有被同步锁持有的对象<\/b>", "children": []}, {"id": "n32", "topic": "<b>JNI（Java Native Interface）引用的对象<\/b>", "children": []}]}, {"id": "n33", "topic": "<b>2.<b>对象可以被回收，就代表一定会被回收吗？<\/b><\/b><span class=\"mm-note\"><b>不一定。<\/b> 即使在可达性分析法中不可达的对象，也并非是“非死不可”的，这时候它们暂时处于“<b>缓刑阶段<\/b>”。 要<b>真正宣告一个对象死亡<\/b>，<b>至少要经历两次标记过程：<\/b><\/span>", "children": [{"id": "n34", "topic": "<b>可达性分析法中不可达的对象<\/b>被<b>第一次标记<\/b>并且进行<b>一次筛选<\/b>。<span class=\"mm-note\">筛选的条件是此对象是否有必要执行 <code>finalize<\/code> 方法。当对象没有覆盖 <code>finalize<\/code> 方法，或 <code>finalize<\/code> 方法已经被虚拟机调用过时，虚拟机将这两种情况视为没有必要执行。<\/span>", "children": []}, {"id": "n35", "topic": "<b>被判定为需要执行的对象<\/b>将会被放在一个队列中<b>进行第二次标记<\/b>，<b>除非这个对象与引用链上的任何一个对象建立关联<\/b>，否则就会被真的回收。", "children": []}]}]}, {"id": "n36", "topic": "<b>3.引用类型总结<\/b><span class=\"mm-note\">无论是通过引用计数法判断对象引用数量，还是通过可达性分析法判断对象的引用链是否可达，判定对象的存活都与“引用”有关。<\/span>", "children": [{"id": "n37", "topic": "<b>JDK1.2 之前<\/b>，Java 中引用的定义很传统：如果 reference 类型的数据存储的数值<b>代表的是另一块内存的起始地址<\/b>，就称<b>这块内存代表一个引用<\/b>。", "children": []}, {"id": "n38", "topic": "<b>JDK1.2 以后<\/b>，Java 对引用的概念进行了扩充，将引用分为<b>强引用、软引用、弱引用、虚引用<\/b>四种（引用强度逐渐减弱）<span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-933ea614a3bdab.jpg\" style=\"width:320px;height:131px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n39", "topic": "<b>强引用（StrongReference）：<\/b>常常 <b>new 出来的对象就是强引用类型，不回收！<\/b><span class=\"mm-note\">以前我们使用的大部分引用实际上都是强引用，这是使用最普遍的引用。 如果一个对象具有强引用，那就类似于<b>必不可少的生活用品<\/b>，<b>垃圾回收器绝不会回收它<\/b>。 <b>当内存空间不足，Java 虚拟机宁愿抛出 OutOfMemoryError 错误<\/b>，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足问题。<\/span>", "children": []}, {"id": "n40", "topic": "<b>软引用（SoftReference）：<\/b>软引用指向的对象<b>在内存要溢出的时候被回收<\/b><span class=\"mm-note\">如果一个对象只具有软引用，那就类似于<b>可有可无的生活用品<\/b>。 如果<b>内存空间足够，垃圾回收器就不会回收<\/b>它，如果<b>内存空间不足了，就会回收<\/b>这些对象的内存。只要垃圾回收器没有回收它，该对象就可以被程序使用。软引用可用来实现内存敏感的高速缓存。 软引用可以和一个引用队列（ReferenceQueue）联合使用，如果软引用所引用的对象被垃圾回收，JAVA 虚拟机就会把这个软引用加入到与之关联的引用队列中。<\/span>", "children": []}, {"id": "n41", "topic": "<b>弱引用（WeakReference）只要发生垃圾回收<\/b>，<b>若这个对象只被弱引用指向<\/b>，那么就<b>会被回收<\/b><span class=\"mm-note\">如果一个对象只具有弱引用，那就类似于<b>可有可无的生活用品<\/b>。 弱引用与软引用的区别在于：<b>只具有弱引用的对象拥有更短暂的生命周期<\/b>。 在垃圾回收器线程扫描它所管辖的内存区域的过程中，一旦发现了<b>只具有弱引用的对象<\/b>，<b>不管当前内存空间足够与否，都会回收它的内存<\/b>。不过，由于垃圾回收器是一个优先级很低的线程， 因此不一定会很快发现那些只具有弱引用的对象。 弱引用可以和一个引用队列（ReferenceQueue）联合使用，如果弱引用所引用的对象被垃圾回收，Java 虚拟机就会把这个弱引用加入到与之关联的引用队列中。<\/span>", "children": []}, {"id": "n42", "topic": "<b>虚引用（PhantomReference）<\/b>虚引用中唯一的作用就是<b>用队列接收对象即将死亡的通知<\/b><span class=\"mm-note\">&quot;虚引用&quot;顾名思义，就是形同虚设，与其他几种引用都不同，<b>虚引用并不会决定对象的生命周期<\/b>。如果一个对象仅持有虚引用，那么它就和没有任何引用一样，在<b>任何时候都可能被垃圾回收<\/b>。 <b>虚引用主要用来跟踪对象被垃圾回收的活动<\/b>。 <b>虚引用与软引用和弱引用的一个区别在于：<\/b> <b>虚引用必须和引用队列（ReferenceQueue）联合使用<\/b>。 当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象的内存之前，把这个虚引用加入到与之关联的引用队列中。程序可以通过判断引用队列中是否已经加入了虚引用，来了解被引用的对象是否将要被垃圾回收。程序如果发现某个虚引用已经被加入到引用队列，那么就可以在所引用的对象的内存被<\/span>", "children": [{"id": "n43", "topic": "<b>软引用可以加速 JVM 对垃圾内存的回收速度，<\/b>", "children": []}, {"id": "n44", "topic": "<b>可以维护系统的运行安全，<\/b>", "children": []}, {"id": "n45", "topic": "<b>防止内存溢出（OutOfMemory）等问题的产生<\/b>。", "children": []}]}]}, {"id": "n46", "topic": "<b>4.如何判断一个常量是废弃常量？<\/b><span class=\"mm-note\"><b>运行时常量池主要回收的是废弃的常量<\/b>。那么，我们如何判断一个常量是废弃常量呢？ <b>方法：<\/b> 假如在字符串常量池中存在字符串 &quot;abc&quot;，如果当前<b>没有任何 String 对象引用该字符串常量<\/b>的话，就说明常量 &quot;abc&quot; 就是废弃常量，如果这时发生内存回收的话而且有必要的话，&quot;abc&quot; 就会被系统清理出常量池了。<\/span>", "children": []}, {"id": "n47", "topic": "<b>5.如何判断一个类是无用类？<\/b><span class=\"mm-note\"><b>方法区<\/b>主要<b>回收的是无用的类<\/b>，那么如何判断一个类是无用的类的呢？ 判定一个常量是否是“废弃常量”比较简单，而要判定一个类是否是“无用的类”的条件则相对苛刻许多。 类需要<b>同时满足下面 3 个条件<\/b>才能算是 <b>“无用的类”<\/b>：<\/span>", "children": [{"id": "n48", "topic": "该<b>类所有的实例都已经被回收<\/b>，也就是 Java 堆中不存在该类的任何实例。", "children": []}, {"id": "n49", "topic": "<b>加载该类的 <code>ClassLoader<\/code> 已经被回收<\/b>。", "children": []}, {"id": "n50", "topic": "该<b>类对应的 <code>java.lang.Class<\/code> 对象没有在任何地方被引用<\/b>，<b>无法在任何地方通过反射访问该类<\/b>的方法。<span class=\"mm-note\">虚拟机可以对满足上述 3 个条件的无用类进行回收，这里说的仅仅是“<b>可以<\/b>”，而并不是和对象一样不使用了就会必然被回收<\/span>", "children": []}]}]}, {"id": "n51", "topic": "<b>3.垃圾收集算法<\/b><span class=\"mm-note\">新生代和老年代采用不同的垃圾回收算法主要是因为它们的特点和优劣势不同。<\/span>", "children": [{"id": "n52", "topic": "<b>新生代采用标记-复制算法<\/b>：<b>新生代中的对象生命周期较短<\/b>，因此采用标记-复制算法能够更好地满足新生代的特点。<span class=\"mm-note\">这个算法将新生代分为两个相等的区域，一部分为<b>From区，一部分为To区<\/b>。 <b>当From区的对象被标记为存活时，将这些对象复制到To区<\/b>，并且<b>对它们进行压缩<\/b>。 这样一来，From区中的垃圾对象就被清除了，而To区中的对象则是存活的。标记-复制算法的优点是简单高效，适用于新生代中存活对象较少的情况。<\/span>", "children": []}, {"id": "n53", "topic": "<b>老年代采用标记-整理算法<\/b>：<b>老年代中的对象生命周期较长<\/b>，<b>可能存在大量的存活对象和垃圾对象混杂在一起<\/b>。<span class=\"mm-note\">采用标记-整理算法可以将存活的对象向一端移动，然后<b>清理掉边界外的垃圾对象<\/b>，从而<b>实现内存的压缩和整理。<\/b>这样可以减少内存碎片的产生，提高内存的利用率。标记-整理算法适用于老年代中存活对象较多、内存碎片较多的情况。<\/span>", "children": []}, {"id": "n54", "topic": "<b>1.标记-清除算法<\/b>", "children": [{"id": "n55", "topic": "<b>两个阶段<\/b>：", "children": [{"id": "n56", "topic": "<b>标记（Mark）：<\/b>首先<b>标记出所有不需要回收的对象<\/b>，", "children": []}, {"id": "n57", "topic": "<b>清除（Sweep）：<\/b>在<b>标记完成后统一回收掉所有没有被标记的对象<\/b>。", "children": []}]}, {"id": "n58", "topic": "<b>两个明显的问题<\/b>：", "children": [{"id": "n59", "topic": "<b>效率问题<\/b>：标记和清除两个过程<b>效率都不高<\/b>。", "children": []}, {"id": "n60", "topic": "<b>空间问题<\/b>：标记清除后会产生<b>大量不连续的内存碎片<\/b>。<span class=\"mm-note\">它是最基础的收集算法，后续的算法都是对其不足进行改进得到。 <img class=\"mm-img\" src=\"fl-6b051df5b55a1b.jpg\" style=\"width:320px;height:222px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}]}]}, {"id": "n61", "topic": "<b>2.复制算法<\/b><span class=\"mm-note\">为了解决标记-清除算法的效率和内存碎片问题，复制（Copying）收集算法出现了。<\/span>", "children": [{"id": "n62", "topic": "<b>算法思想<\/b>：它可以<b>将内存分为大小相同的两块，每次使用其中的一块<\/b>。<span class=\"mm-note\">当这一块的内存使用完后，就将还存活的对象复制到另一块去，然后再把使用的空间一次清理掉。这样就使<b>每次的内存回收都是对内存区间的一半进行回收<\/b>。<\/span>", "children": []}, {"id": "n63", "topic": "<b>问题<\/b>：", "children": [{"id": "n64", "topic": "<b>可用内存变小<\/b>：可用内存<b>缩小为原来的一半<\/b>。", "children": []}, {"id": "n65", "topic": "<b>不适合老年代<\/b>：如果存活对象数量比较大，复制性能会变得很差<span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-f77ff9b3b78d5f.jpg\" style=\"width:320px;height:195px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}]}]}, {"id": "n66", "topic": "<b>3.标记-整理算法<\/b><span class=\"mm-note\">标记-整理（Mark-and-Compact）算法是<b>根据老年代的特点提出的一种标记算法。<\/b><\/span>", "children": [{"id": "n67", "topic": "<b>算法思路<\/b>：<b>标记过程仍然与“标记-清除”算法一样<\/b>，但<b>后续步骤不是直接对可回收对象回收<\/b>，而是<b>让所有存活的对象向一端移动<\/b>，然后<b>直接清理掉端边界以外的内存。<\/b>", "children": []}, {"id": "n68", "topic": "问题：<b>多了整理这一步<\/b>，因此<b>效率也不高<\/b>，<b>适合老年代这种垃圾回收频率不是很高的场景<\/b>。<span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-5a5ddac116a99c.jpg\" style=\"width:320px;height:218px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}]}, {"id": "n69", "topic": "<b>4.分代收集算法<\/b><span class=\"mm-note\">当前虚拟机的垃圾收集都采用分代收集算法，这种算法没有什么新的思想，<b>只是根据对象存活周期的不同将内存分为几块<\/b>。<\/span>", "children": [{"id": "n70", "topic": "<b>核心思想<\/b>：可以<b>根据各个年代的特点选择合适的垃圾收集算法<\/b>。<span class=\"mm-note\">比如：<\/span>", "children": [{"id": "n71", "topic": "在<b>新生代中<\/b>，<b>每次收集都会有大量对象死去<\/b>，所以可以选择”<b>标记-复制<\/b>“算法，只需要付出少量对象的复制成本就可以完成每次垃圾收集。", "children": []}, {"id": "n72", "topic": "而<b>老年代<\/b>的对象<b>存活几率是比较高<\/b>的，而且没有额外的空间对它进行分配担保，所以我们必须选择“<b>标记-清除<\/b>”或“<b>标记-整理<\/b>”算法进行垃圾收集。", "children": []}]}]}]}, {"id": "n73", "topic": "<b>4.垃圾收集器<\/b><span class=\"mm-note\"><b>如果说收集算法是内存回收的方法论，那么垃圾收集器就是内存回收的具体实现。<\/b> 虽然我们对各个收集器进行比较，但并非要挑选出一个最好的收集器。因为直到现在为止还没有最好的垃圾收集器出现，更加没有万能的垃圾收集器，<b>我们能做的就是根据具体应用场景选择适合自己的垃圾收集器<\/b>。试想一下：如果有一种四海之内、任何场景下都适用的完美收集器存在，那么我们的 HotSpot 虚拟机就不会实现那么多不同的垃圾收集器了。 默认收集器：<\/span>", "children": [{"id": "n74", "topic": "<b>JDK 8<\/b>：<b>Parallel Scavenge（新生代）+ Parallel Old（老年代）<\/b>", "children": []}, {"id": "n75", "topic": "JDK 9 ~ JDK20: <b>G1<\/b>", "children": []}, {"id": "n76", "topic": "<b>1.Serial（串行）收集器<\/b><span class=\"mm-note\">Serial（串行）收集器是最基本、历史最悠久的垃圾收集器了。大家看名字就知道这个收集器是一个<b>单线程收集器<\/b>了。<\/span>", "children": [{"id": "n77", "topic": "<b>特点<\/b>：", "children": [{"id": "n78", "topic": "它的 <b>“单线程”<\/b> 的意义不仅仅意味着它只会<b>使用一条垃圾收集线程去完成垃圾收集工作<\/b>", "children": []}, {"id": "n79", "topic": "它<b>在进行垃圾收集工作的时候必须暂停其他所有的工作线程<\/b>（ <b>&quot;Stop The World&quot;<\/b> ），直到它收集结束。", "children": []}]}, {"id": "n80", "topic": "<b>算法：新生代采用标记-复制算法，老年代采用标记-整理算法。<\/b>", "children": []}, {"id": "n81", "topic": "优点：<span class=\"mm-note\"><b>简单而高效（与其他收集器的单线程相比）<\/b><\/span>", "children": []}]}, {"id": "n82", "topic": "<b>2.ParNew收集器<\/b><span class=\"mm-note\">ParNew 收集器其实就是 <b>Serial 收集器的多线程版本<\/b>，除了使用多线程进行垃圾收集外，其余行为（控制参数、收集算法、回收策略等等）和 Serial 收集器完全一样。 <b>新生代采用标记-复制算法，老年代采用标记-整理算法。<\/b> 它是许多运行在 Server 模式下的虚拟机的首要选择，除了 Serial 收集器外，<b>只有它能与 CMS 收集器<\/b>（真正意义上的并发收集器，后面会介绍到）<b>配合工作<\/b>。<\/span>", "children": []}, {"id": "n83", "topic": "<b>3.Parallel Scavenge收集器<\/b><span class=\"mm-note\">Parallel Scavenge 收集器也是<b>使用标记-复制算法<\/b>的<b>多线程收集器。<\/b> Parallel Scavenge 收集器<b>关注点<\/b>是<b>吞吐量（高效率的利用 CPU）<\/b>。CMS 等垃圾收集器的关注点更多的是用户线程的停顿时间（提高用户体验）。所谓吞吐量就是 CPU 中用于运行用户代码的时间与 CPU 总消耗时间的比值。 Parallel Scavenge 收集器提供了很多参数供用户找到最合适的停顿时间或最大吞吐量，如果对于收集器运作不太了解，手工优化存在困难的时候，使用 Parallel Scavenge 收集器配合自适应调节策略，把内存管理优化交给虚拟机去完成也是一个不错的选择。 **新生代采用标记-复制<\/span>", "children": []}, {"id": "n84", "topic": "<b>4.<b>Serial old收集器<\/b><\/b><span class=\"mm-note\"><b>Serial 收集器的老年代版本<\/b>，它同样是一个<b>单线程收集器<\/b>。 它主要有两大用途：<\/span>", "children": [{"id": "n85", "topic": "在 JDK1.5 以及以前的版本中与 Parallel Scavenge 收集器搭配使用", "children": []}, {"id": "n86", "topic": "作为 <b>CMS 收集器的后备方案<\/b>。", "children": []}]}, {"id": "n87", "topic": "<b>5.Parallel old收集器<\/b><span class=\"mm-note\"><b>Parallel Scavenge 收集器的老年代版本<\/b>。 使用多线程和“标记-整理”算法。在注重吞吐量以及 CPU 资源的场合，都可以优先考虑 Parallel Scavenge 收集器和 Parallel Old 收集器。<\/span>", "children": []}, {"id": "n88", "topic": "<b>6.CMS收集器<\/b><span class=\"mm-note\"><b>CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。它非常符合在注重用户体验的应用上使用。<\/b> <b>CMS（Concurrent Mark Sweep）收集器是 HotSpot 虚拟机第一款真正意义上的并发收集器，它第一次实现了让垃圾收集线程与用户线程（基本上）同时工作。<\/b> 从名字中的<b>Mark Sweep<\/b>这两个词可以看出，CMS 收集器是一种 <b>“标记-清除”算法<\/b>实现的，它的运作过程相比于前面几种垃圾收集器来说更加复杂一些。<\/span>", "children": [{"id": "n89", "topic": "整个过程分为<b>四个步骤<\/b>：", "children": [{"id": "n90", "topic": "<b>初始标记：<\/b> 暂停所有的其他线程，并<b>记录下直接与 root 相连的对象<\/b>，速度很快 ；", "children": []}, {"id": "n91", "topic": "<b>并发标记：<\/b> <b>同时开启 GC 和用户线程<\/b>，用一个闭包结构去记录可达对象。但在这个阶段结束，这个闭包结构并不能保证包含当前所有的可达对象。因为用户线程可能会不断的更新引用域，所以 GC 线程无法保证可达性分析的实时性。所以这个算法里会跟踪记录这些发生引用更新的地方。", "children": []}, {"id": "n92", "topic": "<b>重新标记：<\/b> 重新标记阶段就是为了修正并发标记期间因为用户程序继续运行而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般会比初始标记阶段的时间稍长，远远比并发标记阶段时间短", "children": []}, {"id": "n93", "topic": "<b>并发清除：<\/b> 开启用户线程，同时 GC 线程开始对未标记的区域做清扫。", "children": [{"id": "n94", "topic": "<b>主要优点<\/b>：<b>并发收集、低停顿<\/b>。", "children": []}]}]}, {"id": "n95", "topic": "<b>三个缺点<\/b>：", "children": [{"id": "n96", "topic": "<b>对 CPU 资源敏感；<\/b>", "children": []}, {"id": "n97", "topic": "<b>无法处理浮动垃圾；<\/b>", "children": []}, {"id": "n98", "topic": "<b>它使用的回收算法-“标记-清除”算法会导致收集结束时会有大量空间碎片产生。<\/b><span class=\"mm-note\"><b>从 JDK9 开始，CMS 收集器已被弃用<\/b><\/span>", "children": []}]}]}, {"id": "n99", "topic": "<b>7.G1收集器<\/b><span class=\"mm-note\"><b>G1 (Garbage-First) 是一款面向服务器的垃圾收集器,主要针对配备多颗处理器及大容量内存的机器.<\/b> <b>以极高概率满足 GC 停顿时间要求的同时,还具备高吞吐量性能特征.<\/b><\/span>", "children": [{"id": "n100", "topic": "<b>特点<\/b>：", "children": [{"id": "n101", "topic": "<b>并行与并发<\/b>：G1 能充分利用 CPU、多核环境下的硬件优势，使用多个 CPU（CPU 或者 CPU 核心）来缩短 Stop-The-World 停顿时间。部分其他收集器原本需要停顿 Java 线程执行的 GC 动作，G1 收集器仍然可以通过并发的方式让 java 程序继续执行。", "children": []}, {"id": "n102", "topic": "<b>分代收集<\/b>：虽然 G1 可以不需要其他收集器配合就能独立管理整个 GC 堆，但是还是保留了分代的概念。", "children": []}, {"id": "n103", "topic": "<b>空间整合<\/b>：与 CMS 的“标记-清除”算法不同，G1 从整体来看是基于“标记-整理”算法实现的收集器；从局部上来看是基于“标记-复制”算法实现的。", "children": []}, {"id": "n104", "topic": "<b>可预测的停顿<\/b>：这是 G1 相对于 CMS 的另一个大优势，降低停顿时间是 G1 和 CMS 共同的关注点，但 G1 除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度为 M 毫秒的时间片段内，消耗在垃圾收集上的时间不得超过 N 毫秒。", "children": []}]}, {"id": "n105", "topic": "<b>运作步骤<\/b>：", "children": [{"id": "n106", "topic": "<b>初始标记<\/b>", "children": []}, {"id": "n107", "topic": "<b>并发标记<\/b>", "children": []}, {"id": "n108", "topic": "<b>最终标记<\/b>", "children": []}, {"id": "n109", "topic": "<b>筛选回收<\/b><span class=\"mm-note\"><b>G1 收集器在后台维护了一个优先列表，每次根据允许的收集时间，优先选择回收价值最大的 Region(这也就是它的名字 Garbage-First 的由来)<\/b> 。 这种使用 Region 划分内存空间以及有优先级的区域回收方式，保证了 G1 收集器在有限时间内可以尽可能高的收集效率（把内存化整为零）。 <b>从 JDK9 开始，G1 垃圾收集器成为了默认的垃圾收集器。<\/b><\/span>", "children": []}]}]}]}, {"id": "n110", "topic": "<b>5.JVM频繁进行ygc，且每次ygc时间变长，怎么分析、怎么解决？<\/b><span class=\"mm-note\">频繁进行年轻代垃圾回收（YGC），且每次 YGC 时间逐渐变长可能是因为<b>新生代中对象的生命周期变长<\/b>，<b>导致垃圾收集器需要更长的时间来回收这些对象<\/b>。这可能是由于<b>内存泄漏、对象创建速度过快<\/b>等问题引起的。下面是一些分析和解决这个问题的常见方法：<\/span>", "children": [{"id": "n111", "topic": "<b>分析：<\/b>", "children": [{"id": "n112", "topic": "<b>收集GC日志<\/b>：启用 JVM 的 GC 日志，并分析 YGC 的频率和持续时间。GC 日志中会记录 YGC 的发生时间、持续时间、回收对象的数量等信息。", "children": []}, {"id": "n113", "topic": "<b>GC日志分析工具<\/b>：使用 GC 日志分析工具（如 GCViewer、<b>VisualVM<\/b>、<b>GCEasy<\/b> 等）对 GC 日志进行分析，以了解 YGC 时间变长的原因，例如<b>对象分配速度、对象存活时间<\/b>等。", "children": []}, {"id": "n114", "topic": "<b>内存分析工具<\/b>：使用内存分析工具（如 Eclipse Memory Analyzer、MAT）检查内存快照，寻找内存泄漏或者对象持有时间过长的情况。", "children": []}, {"id": "n115", "topic": "<b>代码审查<\/b>：检查代码，查找是否存在对象创建过快、无用对象未及时释放等问题。", "children": []}]}, {"id": "n116", "topic": "<b>解决：<\/b>", "children": [{"id": "n117", "topic": "<b>代码优化<\/b>：优化代码，<b>减少对象的创建和持有时间<\/b>，尽量避免创建大量临时对象或者长期缓存对象。", "children": []}, {"id": "n118", "topic": "<b>调整堆内存大小<\/b>：<b>增加新生代的大小<\/b>，给垃圾收集器更多的空间来存放对象，从而<b>减少 YGC 的频率和时间<\/b>。", "children": []}, {"id": "n119", "topic": "<b>调整垃圾收集器参数<\/b>：根据分析结果，调整垃圾收集器的参数，如<b>增加新生代的晋升阈值<\/b>、调整 Eden 区和 Survivor 区的比例等。", "children": []}, {"id": "n120", "topic": "<b>内存泄漏修复<\/b>：修复内存泄漏问题，<b>释放长期持有的对象引用<\/b>，确保不再需要的对象能够被正确释放。", "children": []}, {"id": "n121", "topic": "<b>性能测试和监控<\/b>：对应用程序进行性能测试，评估优化效果。监控 GC 行为和内存使用情况，及时发现并解决性能问题。<span class=\"mm-note\">💡 <b>内存泄漏<\/b>：程序分配了一块内存，但<b>在不再需要时没有正确释放<\/b>，导致这块内存<b>无法被垃圾回收器回收。<\/b><\/span>", "children": []}]}]}, {"id": "n122", "topic": "<b>6.<b>FullGC什么时候发生<\/b>、<b>发生的时间<\/b><\/b><span class=\"mm-note\">Full GC（Full Garbage Collection）是指<b>对整个堆内存（包括年轻代和老年代）进行垃圾回收的过程<\/b>。相对于年轻代垃圾回收（YGC）只清理年轻代的部分内存，Full GC 则会<b>清理整个堆内存<\/b>，包括年轻代和老年代。<\/span>", "children": [{"id": "n123", "topic": "<b>FullGC何时发生<\/b>：", "children": [{"id": "n124", "topic": "<b>老年代空间不足<\/b>：当老年代的内存空间不足以存放新分配的对象时，会触发 Full GC。这种情况通常是由于大对象分配、长期存活的对象或者老年代空间不足引起的。", "children": []}, {"id": "n125", "topic": "<b>永久代空间不足<\/b>：在 JDK 7 及之前的版本中，永久代（PermGen）用于存放类的元数据、常量池等数据，如果永久代的空间不足，会触发 Full GC。在 JDK 8 及之后的版本中，永久代被元空间（Metaspace）所取代，<b>但仍然可能存在类的元数据过多导致的 Full GC<\/b> 情况。", "children": []}, {"id": "n126", "topic": "<b>手动触发<\/b>：在某些情况下，开发人员可能会手动触发 Full GC，以释放内存或者对内存进行整理。例如，通过调用 <code>System.gc()<\/code> 方法来触发垃圾回收。<span class=\"mm-note\">调用 <code>System.gc()<\/code> 方法<b>并不会立即触发垃圾回收<\/b>。虽然该方法会<b>向虚拟机建议进行垃圾回收<\/b>，但是具体是否进行回收以及何时回收是由虚拟机来决定的，虚拟机可以选择忽略该建议。 虚拟机是否执行垃圾回收取决于多个因素，包括当前堆内存的使用情况、垃圾回收策略、系统资源等。在某些情况下，虚拟机可能会根据自身的算法和策略选择在某个时刻进行垃圾回收，而在另一些情况下，可能会忽略 <code>System.gc()<\/code> 方法的建议，延迟或者不执行垃圾回收。 因此，不应该依赖于 <code>System.gc()<\/code> 方法来精确地控制垃圾回收的时机，而是应该通过优化代码和合理配置虚拟机参数等方式来尽可能地减少垃圾回收的次数和影响。<\/span>", "children": []}]}, {"id": "n127", "topic": "<b>发生时间<\/b>：<span class=\"mm-note\">Full GC 的<b>发生时间不是固定的<\/b>，它<b>取决于垃圾收集器的配置、堆内存的使用情况<\/b>以及<b>应用程序的运行状态<\/b>等因素。 通常情况下，Full GC 的发生时间相对于 YGC 来说会比较长，因为它需要清理整个堆内存，包括老年代的内存空间。一般情况下，Full GC 的发生会导致较长的停顿时间，影响应用程序的性能和响应速度，因此需要尽量避免频繁触发 Full GC。<\/span>", "children": []}]}, {"id": "n128", "topic": "<b>7.MinorGC时具体做了什么事？<\/b><span class=\"mm-note\">具体来说，Minor GC 主要做了以下几件事情：<\/span>", "children": [{"id": "n129", "topic": "<b>标记存活对象<\/b>：首先，从根对象（通常是虚拟机栈、本地方法栈、程序计数器等）出发，对年轻代中的存活对象进行标记。这个标记过程通常采用的是<b>基于可达性分析<\/b>算法。", "children": []}, {"id": "n130", "topic": "<b>清除垃圾对象<\/b>：然后，将没有被标记的对象视为垃圾对象，进行清除。清除过程通常采用的是一种称为“<b>复制<\/b>”的方式，即将存活对象复制到另一个空间，并且按照一定规则进行压缩排列，然后将原来的内存空间全部清空，以便后续的对象分配。", "children": []}, {"id": "n131", "topic": "<b>对象晋升<\/b>：在年轻代的一次垃圾回收过程中，可能会有一些对象经过多次垃圾回收仍然存活，这些对象会被晋升到老年代。<b>晋升的条件通常是对象年龄达到一定阈值<\/b>，或者年轻代的空间不足以容纳存活的对象。", "children": []}, {"id": "n132", "topic": "<b>处理引用<\/b>：在清除垃圾对象之后，可能需要对一些引用进行调整，以保证引用的正确性。", "children": []}, {"id": "n133", "topic": "<b>更新引用<\/b>：更新相关引用的指向，使得存活的对象能够正确地被引用。<span class=\"mm-note\">Minor GC 通常发生在年轻代的 <b>Eden 区和 Survivor 区之间<\/b>，其目标是<b>尽快地清理掉大部分短时间存活的对象<\/b>，从而<b>尽可能地提高年轻代的空间利用率和性能<\/b>。 因为大部分对象的生命周期比较短暂，所以 Minor GC 的频率通常比较高，但是每次回收的空间通常比较小。<\/span>", "children": []}]}, {"id": "n134", "topic": "<b>8.GC调优<\/b>", "children": [{"id": "n135", "topic": "调优的<b>核心思路<\/b>：尽可能<b>降低Full GC的频率。<\/b>", "children": []}, {"id": "n136", "topic": "核心操作就是：<b>根据不同的场景，调JVM的参数<\/b>。<span class=\"mm-note\"><img class=\"mm-img\" src=\"fl-6c84726b4a4b7b.jpg\" style=\"width:320px;height:86px\" loading=\"lazy\" decoding=\"async\"><\/span>", "children": []}, {"id": "n137", "topic": "<b>1.GC调优原则<\/b><span class=\"mm-note\">1、多数的Java应用不需要在服务器上进行GC优化； 2、多数导致GC问题的情况，都不是因为设置参数错误造成的，而是代码问题； 3、在应用上线之前，先考虑将机器的JVM参数设置到最合适（最优）； 4、<b>减少使用全局变量和大对象<\/b>； 如果迫不得已创建了很多大对象，在不使用时，应该手动赋予null（在公司有过实际经历）； 5、GC优化是最后不得已才采用的手段<\/span>", "children": []}, {"id": "n138", "topic": "<b>2.GC的目的<\/b>", "children": [{"id": "n139", "topic": "<b>将转移到老年代的对象数量降低到最小<\/b><span class=\"mm-note\">因为old GC的成本很大（比起Minor GC）<\/span>", "children": []}, {"id": "n140", "topic": "<b>减少GC的执行时间<\/b>", "children": []}]}, {"id": "n141", "topic": "<b>3.GC调优的常见策略<\/b>", "children": [{"id": "n142", "topic": "<b>将新对象预留在新生代：<\/b><code>-Xmn<\/code> 命令来<b>调节新生代大小<\/b>，最大限度降低新对象进入老年代的情况。<span class=\"mm-note\">由于<code>Full GC<\/code>的成本远高于<code>Minor GC<\/code> ，因此<b>尽量将对象分配在新生代<\/b>是明智的做法，实际项目中根据GC日志分析新生代空间是否分配合理，适当通过<code>-Xmn<\/code> 命令来调节新生代大小，最大限度降低新对象进入老年代的情况。<\/span>", "children": []}, {"id": "n143", "topic": "<b>大对象进入老年代<\/b><span class=\"mm-note\">虽然大部分情况下，将对象分配在新生代是合理。但是对于大对象这种做法却是不太好的，大对象如果<b>首次在新生代分配可能会出现空间不足导致很多年龄不够的小对象被分配到老年代<\/b>，破坏了新生代的结构，可能<b>出现频繁的Full GC<\/b>。因此，对于大对象，可以设置直接进入老年代； -XX:PretenureSizeThreshold 可以设置直接进入老年代的对象大小。<\/span>", "children": []}, {"id": "n144", "topic": "<b>合理调整进入老年代的年龄阈值<\/b><span class=\"mm-note\">减少老年代的内存占用，降低发生<code>Full GC<\/code>的频率。<\/span>", "children": []}, {"id": "n145", "topic": "<b>监控和分析 GC 日志<\/b>", "children": []}, {"id": "n146", "topic": "<b>选择合适的垃圾回收器<\/b>", "children": []}]}]}], "expanded": true}}</script>
+<script>
+(function(){
+  var ME = window.MindElixir && (window.MindElixir.default || window.MindElixir);
+  var raw = JSON.parse(document.getElementById('data').textContent);
+  var data = raw.data, title = raw.title;
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+  var mind = new ME({
+    el: '#mindex',
+    direction: 1,
+    editable: false,
+    contextMenu: false,
+    toolBar: false,
+    keypress: false,
+    allowUndo: false,
+    scaleMin: 0.2,
+    scaleMax: 2.4,
+    markdown: function(t){ return t; },
+    theme: {
+      name: 'MubuPaper',
+      palette: ['#0e7a52','#1d4ed8','#c2410c','#7c3aed','#b45309','#0f766e','#be123c','#4d7c0f'],
+      cssVar: {}
+    }
+  });
+  mind.init({ nodeData: data, direction: 1 });
+  // ---- 自由平移：mind-elixir 自带 move() 会把容器中心限制在内容范围内，
+  //      手机上表现为「拖到边界就卡住」。这里改成无边界平移。 ----
+  var canvas = mind.map;
+  var mapEl = document.getElementById('mindex');
+  function xyOf(tr){
+    var m = /translate3d\((-?[\d.]+)px,\s*(-?[\d.]+)px/.exec(tr || '');
+    return { x: m ? parseFloat(m[1]) : 0, y: m ? parseFloat(m[2]) : 0 };
+  }
+  function applyT(x, y, s){
+    canvas.style.transform = 'translate3d(' + x + 'px,' + y + 'px,0) scale(' + s + ')';
+  }
+  // mind-elixir 的 transform-origin 在根节点 X + 画布 50% Y，缩放/居中必须带上它
+  function originPx(){
+    var o = (canvas.style.transformOrigin || '50% 50%').split(' ');
+    function px(v, total){
+      if (!v) return total / 2;
+      if (v.indexOf('%') > 0) return parseFloat(v) / 100 * total;
+      return parseFloat(v) || 0;
+    }
+    return { x: px(o[0], canvas.offsetWidth), y: px(o[1], canvas.offsetHeight) };
+  }
+  function contentOf(vx, vy){
+    var o = originPx(), p = xyOf(canvas.style.transform), s = mind.scaleVal || 1;
+    return { x: o.x + (vx - p.x - o.x) / s, y: o.y + (vy - p.y - o.y) / s };
+  }
+  mind.move = function(dx, dy){
+    var p = xyOf(canvas.style.transform);
+    applyT(p.x + dx, p.y + dy, mind.scaleVal);
+    return true;
+  };
+
+  var userTouched = false;
+  // 首屏：保持可读比例，对准根节点；图片加载会改变高度，多点校正几次
+  function focusRoot(force){
+    var _d = document.getElementById('doc');
+    if (_d && _d.classList.contains('on')) return;
+    if (userTouched && !force) return;
+    var s = window.innerWidth < 520 ? 0.9 : 1;
+    try {
+      var el = mind.findEle(data.id) || document.querySelector('me-root');
+      if (!el) return;
+      var c = mind.container.getBoundingClientRect();
+      var r = el.getBoundingClientRect();
+      var pt = contentOf(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top);
+      var o = originPx();
+      var nx = c.width / 2 - o.x - (pt.x - o.x) * s;
+      var ny = c.height / 2 - o.y - (pt.y - o.y) * s;
+      mind.scaleVal = s;
+      applyT(nx, ny, s);
+    } catch(e){}
+  }
+  setTimeout(focusRoot, 80);
+  setTimeout(focusRoot, 500);
+  setTimeout(focusRoot, 1500);
+  window.addEventListener('resize', function(){ setTimeout(focusRoot, 120); });
+  ['pointerdown','wheel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(){ userTouched = true; }, {passive:true});
+  });
+
+  // ---- 以双指中点为锚缩放（自带 scale() 的偏移算法在 WebView 里会跳） ----
+  function zoomAt(newS, cx, cy){
+    newS = Math.max(0.2, Math.min(2.4, newS));
+    var c = mind.container.getBoundingClientRect();
+    var p = xyOf(canvas.style.transform);
+    var k = newS / mind.scaleVal;
+    var o = originPx();
+    var x = cx - c.left, y = cy - c.top;
+    applyT(x - o.x - (x - p.x - o.x) * k, y - o.y - (y - p.y - o.y) * k, newS);
+    mind.scaleVal = newS;
+  }
+
+  // 返回：优先浏览器返回，直接打开时回 App 知识页
+  document.getElementById('back').onclick = function(){
+    if (history.length > 1 && document.referrer) { history.back(); }
+    else { location.href = '/app/#kb'; }
+  };
+  document.getElementById('fit').onclick = function(){ mind.scaleFit(); };
+
+  // 折叠 / 展开（数据级操作，保留原折叠状态）
+  function setExpand(minDepth, open){
+    var d = clone(data);
+    (function walk(n, depth){
+      if (depth >= minDepth && (n.children||[]).length) n.expanded = open;
+      (n.children||[]).forEach(function(c){ walk(c, depth+1); });
+    })(d, 0);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){ focusRoot(true); }, 80);
+  }
+  var acts = document.querySelector('.acts');
+  var bFold = document.createElement('button'); bFold.textContent = '收起'; bFold.onclick = function(){ setExpand(2, false); };
+  var bOpen = document.createElement('button'); bOpen.textContent = '展开'; bOpen.onclick = function(){ setExpand(0, true); };
+  acts.insertBefore(bFold, document.getElementById('fit'));
+  acts.insertBefore(bOpen, document.getElementById('fit'));
+
+  // 搜索
+  var qbar = document.getElementById('qbar'), q = document.getElementById('q'),
+      qres = document.getElementById('qres'), hits = [], idx = -1, last = '';
+  document.getElementById('qbtn').onclick = function(){
+    if (isDocView) {
+      var db = document.getElementById('dbar');
+      db.hidden = !db.hidden;
+      if (!db.hidden) document.getElementById('dq').focus();
+      return;
+    }
+    qbar.hidden = !qbar.hidden;
+    if (!qbar.hidden) { q.focus(); }
+  };
+  document.getElementById('qclose').onclick = function(){ qbar.hidden = true; clearHit(); };
+
+  function textOf(html){
+    var d = document.createElement('div');
+    d.innerHTML = html || '';
+    return (d.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+  function collect(){
+    var arr = [];
+    (function walk(n, path){
+      arr.push({ id: n.id, text: textOf(n.topic).toLowerCase(), path: path.concat(n.id) });
+      (n.children||[]).forEach(function(c){ walk(c, path.concat(n.id)); });
+    })(data, []);
+    return arr;
+  }
+  var ALL = collect();
+  function clearHit(){
+    document.querySelectorAll('.me-hit').forEach(function(e){ e.classList.remove('me-hit'); });
+  }
+  function jump(i){
+    if (!hits.length) return;
+    idx = (i + hits.length) % hits.length;
+    clearHit();
+    var hit = hits[idx];
+    var d = clone(data);
+    (function walk(n){
+      if (hit.path.indexOf(n.id) >= 0) n.expanded = true;
+      (n.children||[]).forEach(walk);
+    })(d);
+    mind.refresh({ nodeData: d, direction: 1 });
+    setTimeout(function(){
+      try {
+        var el = mind.findEle(hit.id);
+        if (el) {
+          mind.scrollIntoView(el, true);
+          var t = el.querySelector('me-tpc') || el;
+          t.classList.add('me-hit');
+        }
+      } catch(e) {}
+      qres.textContent = (idx + 1) + '/' + hits.length;
+    }, 40);
+  }
+  function search(){
+    var kw = q.value.trim().toLowerCase();
+    if (!kw) { hits = []; idx = -1; qres.textContent = ''; clearHit(); return; }
+    if (kw !== last) { last = kw; hits = ALL.filter(function(n){ return n.text.indexOf(kw) >= 0; }); idx = -1; }
+    qres.textContent = hits.length ? ('0/' + hits.length) : '无结果';
+    if (hits.length) jump(0);
+  }
+  q.addEventListener('input', function(){ last = ''; search(); });
+  q.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); search(); } });
+  document.getElementById('qnext').onclick = function(){ if (hits.length) jump(idx + 1); };
+  document.getElementById('qprev').onclick = function(){ if (hits.length) jump(idx - 1); };
+
+  // 触摸手势：完全用 touch 事件接管（部分 App WebView 不派发 PointerEvent，
+  // 会导致「双指能缩放、单指拖不动」，这里统一走 touch，兼容性最好）
+  var pinch = null, drag = null;
+  function dist(t){ var dx=t[0].clientX-t[1].clientX, dy=t[0].clientY-t[1].clientY; return Math.hypot(dx,dy); }
+  mapEl.addEventListener('touchstart', function(e){
+    userTouched = true;
+    if (e.touches.length === 2) {
+      drag = null;
+      pinch = { d: dist(e.touches), s: mind.scaleVal,
+                x: (e.touches[0].clientX+e.touches[1].clientX)/2,
+                y: (e.touches[0].clientY+e.touches[1].clientY)/2 };
+      // 清掉 mind-elixir 的单指拖拽状态，避免双指时画面被它带着跳
+      try { mind.panHelper && mind.panHelper.clear(); } catch(err){}
+    } else if (e.touches.length === 1) {
+      drag = { x: e.touches[0].clientX, y: e.touches[0].clientY, started: false };
+    }
+  }, {passive:true});
+  mapEl.addEventListener('touchmove', function(e){
+    if (pinch && e.touches.length === 2) {
+      e.preventDefault();
+      var mx = (e.touches[0].clientX+e.touches[1].clientX)/2;
+      var my = (e.touches[0].clientY+e.touches[1].clientY)/2;
+      zoomAt(pinch.s * (dist(e.touches) / pinch.d), mx, my);
+    } else if (drag && e.touches.length === 1) {
+      var t = e.touches[0];
+      var dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.started) {
+        if (Math.sqrt(dx*dx + dy*dy) < 6) return;
+        drag.started = true;
+      }
+      e.preventDefault();
+      mind.move(dx, dy);
+      drag.x = t.clientX;
+      drag.y = t.clientY;
+    }
+  }, {passive:false});
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) drag = null;
+    if (e.touches.length < 2) pinch = null;
+  }, {passive:true});
+  // 屏蔽触摸产生的 pointer 事件，避免新旧两套平移同时生效（会双倍速/打架）
+  ['pointerdown','pointermove','pointerup','pointercancel'].forEach(function(ev){
+    mapEl.addEventListener(ev, function(e){
+      if (e.pointerType === 'touch') e.stopPropagation();
+    }, true);
+  });
+
+  // ---- 图片放大：双击节点图片 → 全屏灯箱（带惯性、动画、手势锚点） ----
+  var lb = document.getElementById('lb'), lbimg = document.getElementById('lbimg'),
+      lbstage = document.getElementById('lbstage'), lbname = document.getElementById('lbname');
+  var lbt = { s: 1, x: 0, y: 0 }, lbFit = 1, lbW = 1, lbH = 1;
+  var lbAnim = 0, lbPending = 0, lbClosing = 0;
+  var lbRect = { left: 0, top: 0, width: 1, height: 1 };
+  function lbMeasure(){
+    var r = lbstage.getBoundingClientRect();
+    lbRect = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  function lbDraw(){
+    lbimg.style.transform = 'translate3d(' + lbt.x + 'px,' + lbt.y + 'px,0) scale(' + lbt.s + ')';
+  }
+  function lbApply(){
+    if (lbPending) return;
+    lbPending = requestAnimationFrame(function(){ lbPending = 0; lbDraw(); });
+  }
+  function lbStopAnim(){
+    if (lbAnim) { cancelAnimationFrame(lbAnim); lbAnim = 0; }
+  }
+  function lbClamp(){
+    var r = lbRect;
+    var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+    lbt.x = Math.min(r.width - pad, Math.max(pad - w, lbt.x));
+    lbt.y = Math.min(r.height - pad, Math.max(pad - h, lbt.y));
+  }
+  function lbAnimateTo(t, dur){
+    lbStopAnim();
+    var f = { s: lbt.s, x: lbt.x, y: lbt.y }, t0 = performance.now();
+    function step(now){
+      var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      lbt.s = f.s + (t.s - f.s) * e;
+      lbt.x = f.x + (t.x - f.x) * e;
+      lbt.y = f.y + (t.y - f.y) * e;
+      lbDraw();
+      if (p < 1) lbAnim = requestAnimationFrame(step); else lbAnim = 0;
+    }
+    lbAnim = requestAnimationFrame(step);
+  }
+  function lbFitTarget(){
+    var r = lbRect;
+    lbW = lbimg.naturalWidth || 1; lbH = lbimg.naturalHeight || 1;
+    lbFit = Math.min(r.width / lbW, r.height / lbH) * 0.96;
+    return { s: lbFit, x: (r.width - lbW * lbFit) / 2, y: (r.height - lbH * lbFit) / 2 };
+  }
+  function lbZoomAt(ns, px, py, animate){
+    ns = Math.max(lbFit * 0.4, Math.min(lbFit * 10, ns));
+    var k = ns / lbt.s;
+    var t = { s: ns, x: px - (px - lbt.x) * k, y: py - (py - lbt.y) * k };
+    if (animate) lbAnimateTo(t, 180);
+    else { lbt = t; lbApply(); }
+  }
+  function lbOpen(src, name, fromRect){
+    lbStopAnim();
+    lbimg.src = src;
+    lbname.textContent = name || '';
+    lb.hidden = false;
+    lbClosing = 0;
+    document.body.style.overflow = 'hidden';
+    lbMeasure();
+    requestAnimationFrame(function(){ lb.classList.add('on'); });
+    function start(){
+      var fit = lbFitTarget(), r = lbstage.getBoundingClientRect();
+      if (fromRect && fromRect.width > 8) {
+        var s0 = fromRect.width / lbW;
+        lbt = { s: s0, x: fromRect.left - r.left, y: fromRect.top - r.top };
+        lbDraw();
+        lbAnimateTo(fit, 260);
+      } else {
+        lbt = fit; lbDraw();
+      }
+    }
+    if (lbimg.complete && lbimg.naturalWidth) start();
+    else lbimg.onload = start;
+  }
+  function lbClose(){
+    if (lbClosing) return;
+    clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+    lbClosing = 1;
+    lbStopAnim();
+    lb.classList.remove('on');
+    setTimeout(function(){
+      lb.hidden = true;
+      lbimg.removeAttribute('src');
+      document.body.style.overflow = '';
+      lbClosing = 0;
+    }, 170);
+  }
+  document.getElementById('lbclose').onclick = lbClose;
+  document.getElementById('lbfit').onclick = function(){ lbAnimateTo(lbFitTarget(), 240); };
+  document.getElementById('lb1x').onclick = function(){
+    lbZoomAt(1, lbRect.width / 2, lbRect.height / 2, true);
+  };
+  /* 单击图片 = 关闭；双击 = 缩放（2026-11-24 用户反馈：单击打开后无法返回） */
+  var lbTapTimer = 0, lbLastTap = 0, lbLastX = 0, lbLastY = 0, lbTouchAt = 0;
+  function lbZoomToggle(x, y){
+    var nearFit = Math.abs(lbt.s - lbFit) < lbFit * 0.08;
+    lbZoomAt(nearFit ? lbFit * 2.5 : lbFit, x - lbRect.left, y - lbRect.top, true);
+  }
+  function lbTap(x, y){
+    var now = Date.now();
+    if (now - lbLastTap < 300 && Math.abs(x - lbLastX) < 32 && Math.abs(y - lbLastY) < 32) {
+      clearTimeout(lbTapTimer); lbTapTimer = 0; lbLastTap = 0;
+      lbZoomToggle(x, y);
+      return;
+    }
+    lbLastTap = now; lbLastX = x; lbLastY = y;
+    clearTimeout(lbTapTimer);
+    lbTapTimer = setTimeout(function(){ lbTapTimer = 0; lbClose(); }, 300);
+  }
+  lbstage.addEventListener('click', function(e){
+    if (Date.now() - lbTouchAt < 700) return;   /* 触摸已处理，忽略合成 click */
+    if (e.target && e.target.closest && e.target.closest('button')) return;
+    lbTap(e.clientX, e.clientY);
+  });
+  lbstage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    lbStopAnim();
+    lbZoomAt(lbt.s * (e.deltaY < 0 ? 1.15 : 0.87), e.clientX - lbRect.left, e.clientY - lbRect.top, false);
+  }, {passive:false});
+
+  var lbDrag = null, lbPinch = null, lbMomentum = 0, lbTapStart = null;
+  function lbStopMomentum(){ if (lbMomentum) { cancelAnimationFrame(lbMomentum); lbMomentum = 0; } }
+  lbstage.addEventListener('touchstart', function(e){
+    lbStopAnim(); lbStopMomentum();
+    lbTouchAt = Date.now();
+    if (e.touches.length === 1) {
+      var t = e.touches[0];
+      lbDrag = { x: t.clientX, y: t.clientY, lx: t.clientX, ly: t.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      lbPinch = null;
+      lbTapStart = { x: t.clientX, y: t.clientY, t: Date.now(), moved: false };
+    } else if (e.touches.length === 2) {
+      lbDrag = null;
+      lbPinch = { d: dist(e.touches), s: lbt.s };
+      clearTimeout(lbTapTimer); lbTapTimer = 0;
+      if (lbTapStart) lbTapStart.moved = true;
+    }
+  }, {passive:true});
+  lbstage.addEventListener('touchmove', function(e){
+    e.preventDefault();
+    if (lbPinch && e.touches.length === 2) {
+      var r = lbRect;
+      var mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left;
+      var my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top;
+      lbZoomAt(lbPinch.s * (dist(e.touches) / lbPinch.d), mx, my, false);
+    } else if (lbDrag && e.touches.length === 1) {
+      var t = e.touches[0], now = performance.now();
+      var dx = t.clientX - lbDrag.x, dy = t.clientY - lbDrag.y;
+      if (lbTapStart && !lbTapStart.moved &&
+          Math.hypot(t.clientX - lbTapStart.x, t.clientY - lbTapStart.y) > 10) {
+        lbTapStart.moved = true;
+      }
+      lbt.x += dx; lbt.y += dy;
+      lbDrag.x = t.clientX; lbDrag.y = t.clientY;
+      var dt = Math.max(1, now - lbDrag.lt);
+      lbDrag.vx = (t.clientX - lbDrag.lx) / dt;
+      lbDrag.vy = (t.clientY - lbDrag.ly) / dt;
+      lbDrag.lx = t.clientX; lbDrag.ly = t.clientY; lbDrag.lt = now;
+      lbApply();
+    }
+  }, {passive:false});
+  lbstage.addEventListener('touchend', function(e){
+    if (e.touches.length === 0) {
+      var tap = lbTapStart;
+      lbTapStart = null;
+      if (lbDrag) {
+        lbClamp();
+        var speed = Math.hypot(lbDrag.vx, lbDrag.vy);
+        if (speed > 0.25) {
+          var vx = lbDrag.vx * 16, vy = lbDrag.vy * 16;
+          (function fling(){
+            vx *= 0.94; vy *= 0.94;
+            lbt.x += vx; lbt.y += vy;
+            var r = lbRect;
+            var w = lbW * lbt.s, h = lbH * lbt.s, pad = 72;
+            if (lbt.x > r.width - pad) { lbt.x = r.width - pad; vx = 0; }
+            if (lbt.x < pad - w) { lbt.x = pad - w; vx = 0; }
+            if (lbt.y > r.height - pad) { lbt.y = r.height - pad; vy = 0; }
+            if (lbt.y < pad - h) { lbt.y = pad - h; vy = 0; }
+            lbApply();
+            if (Math.abs(vx) + Math.abs(vy) > 0.3) lbMomentum = requestAnimationFrame(fling);
+            else lbMomentum = 0;
+          })();
+        }
+      }
+      lbDrag = null; lbPinch = null;
+      if (tap && !tap.moved && Date.now() - tap.t < 500) {
+        var tt = e.changedTouches[0];
+        lbTap(tt.clientX, tt.clientY);
+      }
+    } else if (e.touches.length < 2) lbPinch = null;
+  }, {passive:true});
+  lb.addEventListener('click', function(e){ if (e.target === lb) lbClose(); });
+  window.addEventListener('resize', function(){ if (!lb.hidden) { lbMeasure(); lbAnimateTo(lbFitTarget(), 180); } });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !lb.hidden) lbClose(); });
+
+  // 双击节点图片打开灯箱
+  var lastTap = 0, lastX = 0, lastY = 0, lastSrc = '';
+  function tapImage(el){
+    var img = el && el.closest ? el.closest('.mm-img') : null;
+    if (!img) return null;
+    var host = img.closest('me-tpc');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    return { src: img.getAttribute('src'), name: name, rect: img.getBoundingClientRect() };
+  }
+  mapEl.addEventListener('dblclick', function(e){
+    var hit = tapImage(e.target);
+    if (hit) { e.preventDefault(); e.stopPropagation(); lbOpen(hit.src, hit.name, hit.rect); }
+  }, true);
+  mapEl.addEventListener('touchend', function(e){
+    if (e.touches.length) return;
+    var hit = tapImage(e.target);
+    if (!hit) return;
+    var t = e.changedTouches[0], now = Date.now();
+    if (now - lastTap < 330 && Math.abs(t.clientX - lastX) < 30 &&
+        Math.abs(t.clientY - lastY) < 30 && lastSrc === hit.src) {
+      lastTap = 0;
+      lbOpen(hit.src, hit.name, hit.rect);
+    } else {
+      lastTap = now; lastX = t.clientX; lastY = t.clientY; lastSrc = hit.src;
+    }
+  }, true);
+
+  // ---- 文档视图（与思维导图同源，可一键切换） ----
+  var docEl = document.getElementById('doc'), docInner = document.getElementById('docInner');
+  var viewBtn = document.getElementById('viewToggle');
+  var docOpen = document.getElementById('docOpen'), docClose = document.getElementById('docClose');
+  var mapElWrap = document.getElementById('map'), tipEl = document.querySelector('.tip');
+  var tocBtn = document.getElementById('docTocBtn'), tocBox = document.getElementById('docToc'),
+      tocMask = document.getElementById('docMask'), tocList = document.getElementById('docTocList');
+  var docBuilt = false, isDocView = false, tocData = [], docHTML = '';
+
+  function docNode(n, depth, ctr, toc){
+    var kids = n.children || [];
+    var id = 'dn' + (ctr.v++);
+    var lv = Math.min(depth, 5);
+    var head = '<span class="dt" id="' + id + '">' + (n.topic || '') + '</span>';
+    var plain = '';
+    if (depth <= 3 && kids.length) {
+      var tmp = document.createElement('div'); tmp.innerHTML = n.topic || '';
+      [].forEach.call(tmp.querySelectorAll('.mm-note, img, table'), function(e){ e.remove(); });
+      plain = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 56);
+      if (plain) toc.push({ id: id, text: plain, lv: depth });
+    }
+    var dv = ' style="--d:' + depth + '"';
+    if (!kids.length) return '<div class="dleaf lv' + lv + '"' + dv + '>' + head + '</div>';
+    var inner = kids.map(function(c){ return docNode(c, depth + 1, ctr, toc); }).join('');
+    return '<details open><summary class="lv' + lv + '"' + dv + '>' + head + '</summary>' + inner + '</details>';
+  }
+  function buildDoc(){
+    var ctr = { v: 0 }; tocData = [];
+    var html = '<div class="doc-root">' + (data.topic || title) + '</div>';
+    html += (data.children || []).map(function(c){ return docNode(c, 1, ctr, tocData); }).join('');
+    docHTML = html;
+    docInner.innerHTML = html;
+    tocList.innerHTML = tocData.map(function(t){
+      return '<a class="toc-i t' + t.lv + '" href="#' + t.id + '">' + t.text + '</a>';
+    }).join('') || '<p style="font-size:12px;color:#8a918c">本篇没有分级标题</p>';
+  }
+  function tocJump(id){
+    var el = document.getElementById(id);
+    if (!el) return;
+    var p = el.parentElement;
+    while (p && p !== docInner) {
+      if (p.tagName === 'DETAILS') p.open = true;
+      p = p.parentElement;
+    }
+    setTimeout(function(){ el.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 30);
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+  }
+  tocList.addEventListener('click', function(e){
+    var a = e.target.closest ? e.target.closest('a.toc-i') : null;
+    if (!a) return;
+    e.preventDefault();
+    tocJump(a.getAttribute('href').slice(1));
+  });
+  function openToc(){
+    if (tocBox.classList.contains('on')) return;
+    tocBox.classList.add('on'); tocMask.classList.add('on');
+    if (!(history.state && history.state.toc)) history.pushState({ toc: 1 }, '');
+  }
+  function closeToc(){
+    tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    if (history.state && history.state.toc) history.back();
+  }
+  tocBtn.onclick = openToc;
+  tocMask.onclick = closeToc;
+  var tocX = document.getElementById('docTocClose');
+  if (tocX) tocX.onclick = closeToc;
+  window.addEventListener('popstate', function(){
+    if (tocBox.classList.contains('on')) {
+      tocBox.classList.remove('on'); tocMask.classList.remove('on');
+    }
+  });
+  var tocSx = null;
+  tocBox.addEventListener('touchstart', function(e){ tocSx = e.touches[0].clientX; }, {passive:true});
+  tocBox.addEventListener('touchmove', function(e){
+    if (tocSx !== null && e.touches[0].clientX - tocSx > 55) { tocSx = null; closeToc(); }
+  }, {passive:true});
+  tocBox.addEventListener('touchend', function(){ tocSx = null; }, {passive:true});
+
+  function setView(v){
+    isDocView = v === 'doc';
+    if (isDocView && !docBuilt) { buildDoc(); docBuilt = true; }
+    docEl.classList.toggle('on', isDocView);
+    mapElWrap.style.display = isDocView ? 'none' : '';
+    tipEl.hidden = isDocView;
+    tocBtn.classList.toggle('on', isDocView);
+    if (!isDocView) { tocBox.classList.remove('on'); tocMask.classList.remove('on'); }
+    viewBtn.textContent = isDocView ? '导图' : '文档';
+    document.getElementById('qbtn').hidden = false;
+    document.getElementById('fit').hidden = isDocView;
+    bFold.hidden = isDocView;
+    bOpen.hidden = isDocView;
+    docOpen.hidden = !isDocView;
+    docClose.hidden = !isDocView;
+    if (isDocView) {
+      var qb=document.getElementById('qbar'); if(qb) qb.hidden = true;
+      document.getElementById('dbar').hidden = true;
+    } else {
+      document.getElementById('dbar').hidden = true;
+      document.getElementById('dq').value = '';
+      if (docBuilt) docClear();
+      setTimeout(function(){ try { focusRoot(true); } catch(e){} }, 40);
+    }
+  }
+  viewBtn.onclick = function(){ setView(isDocView ? 'map' : 'doc'); };
+  docOpen.onclick = function(){ docInner.querySelectorAll('details').forEach(function(d){ d.open = true; }); };
+  docClose.onclick = function(){
+    var all = docInner.querySelectorAll('details');
+    all.forEach(function(d, i){ d.open = i < 3; });
+  };
+  // 文档里单击图片 → 放大查看
+  docEl.addEventListener('click', function(e){
+    var img = e.target && e.target.tagName === 'IMG' ? e.target : null;
+    if (!img) return;
+    e.preventDefault(); e.stopPropagation();
+    var host = img.closest('summary, .dleaf, details');
+    var name = host ? (host.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 40) : '';
+    lbOpen(img.getAttribute('src'), name, img.getBoundingClientRect());
+  }, true);
+  // 文档内搜索
+  var dq = document.getElementById('dq'), dqc = document.getElementById('dqc');
+  var dHits = [], dIdx = -1;
+  function docClear(){ docInner.innerHTML = docHTML; dHits = []; dIdx = -1; dqc.textContent = ''; }
+  function docJump(i){
+    if (!dHits.length) return;
+    dIdx = (i + dHits.length) % dHits.length;
+    dHits.forEach(function(m){ m.classList.remove('cur'); });
+    var m = dHits[dIdx];
+    m.classList.add('cur');
+    var p = m.parentElement;
+    while (p && p !== docInner) { if (p.tagName === 'DETAILS') p.open = true; p = p.parentElement; }
+    setTimeout(function(){ m.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 20);
+    dqc.textContent = (dIdx + 1) + '/' + dHits.length;
+  }
+  function docSearch(){
+    var kw = dq.value.trim().toLowerCase();
+    if (!kw) { docClear(); return; }
+    if (!docHTML) return;
+    docInner.innerHTML = docHTML;
+    dHits = []; dIdx = -1;
+    var walker = document.createTreeWalker(docInner, NodeFilter.SHOW_TEXT, null), node;
+    var nodes = [];
+    while ((node = walker.nextNode())) nodes.push(node);
+    nodes.forEach(function(nd){
+      var text = nd.nodeValue || '';
+      var low = text.toLowerCase();
+      var idx = low.indexOf(kw), last = 0;
+      if (idx < 0) return;
+      var frag = document.createDocumentFragment();
+      while (idx >= 0) {
+        if (idx > last) frag.appendChild(document.createTextNode(text.slice(last, idx)));
+        var m = document.createElement('mark');
+        m.className = 'dhit';
+        m.textContent = text.substr(idx, kw.length);
+        frag.appendChild(m);
+        last = idx + kw.length;
+        idx = low.indexOf(kw, last);
+      }
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      nd.parentNode.replaceChild(frag, nd);
+    });
+    dHits = [].slice.call(docInner.querySelectorAll('mark.dhit'));
+    dqc.textContent = dHits.length ? ('0/' + dHits.length) : '无结果';
+    if (dHits.length) docJump(0);
+  }
+  dq.addEventListener('input', docSearch);
+  dq.addEventListener('keydown', function(e){ if (e.key === 'Enter') { e.preventDefault(); docJump(dIdx + 1); } });
+  document.getElementById('dqprev').onclick = function(){ docJump(dIdx - 1); };
+  document.getElementById('dqnext').onclick = function(){ docJump(dIdx + 1); };
+  document.getElementById('dqclose').onclick = function(){ dq.value = ''; docClear(); dq.blur(); };
+
+  // 默认进入文档视图
+  setTimeout(function(){ setView('doc'); }, 80);
+
+  // 超大图初始折叠，避免首屏卡顿
+  var _total = (function c(n){ return 1 + (n.children || []).reduce(function(a, b){ return a + c(b); }, 0); })(data);
+  if (_total > 500) {
+    setTimeout(function(){
+      setExpand(2, false);
+      tipEl.textContent = '节点较多，已折叠到 2 层 · 点「展开」查看全部';
+      tipEl.hidden = false;
+      setTimeout(function(){ tipEl.hidden = true; }, 5200);
+    }, 1400);
+  }
+  window.__mind = mind;
+  window.__mm = { zoomAt: zoomAt, focusRoot: focusRoot, setView: setView };
+})();
+</script>
+</body></html>

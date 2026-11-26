@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>RAG 秋季赛-正式比赛-C赛题-思路 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">12</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">知识库-微调</a><a class="tl l2" href="#sec-2">长知识库拆分</a><a class="tl l2" href="#sec-3">剔除重复英文内容</a><a class="tl l2" href="#sec-4">图片删减</a><a class="tl l2" href="#sec-5">生成模型微调</a><a class="tl l2" href="#sec-6">模型生成测试集-&gt;根据测试集结果微调RAG知识库 -&gt; 回测测试集</a><a class="tl l2" href="#sec-7">RAG在线检索参数怎么配置</a><a class="tl l2" href="#sec-8">RAG测试时发现，知识库分片太长会报错，response=null</a><a class="tl l3" href="#sec-9">feishu文档的分片逻辑拆解</a><a class="tl l2" href="#sec-10">生成模型的参数微调</a><a class="tl l2" href="#sec-11">生成模型源码逻辑解析 &amp; 提示词优化</a><a class="tl l1" href="#sec-12">赛后反思</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="ai/index.html">AI</a></div><article><h1>RAG 秋季赛-正式比赛-C赛题-思路</h1><div class="meta">2026-03-10 · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<p>作品提交入口：<span class="fs-mention">@2025公司AI大赛·秋季赛·RAG技术创新挑战赛作品提交文档</span></p><h1 id="sec-1">知识库-微调</h1><h2 id="sec-2">长知识库拆分</h2><p>由于官方提供的部分知识库文档很长(如：<span class="fs-mention">@【知识库-1】FSSC-T&amp;E-客服知识库-V0 用户版（黑马）</span>)，在调用官方文档解析接口时，会超时导致异常。因此根据语义，将其拆分为多个小文档，再做解析。</p><h2 id="sec-3">剔除重复英文内容</h2><p>用中文问答，肯定是用中文知识库，毕竟检索本质上是用向量索引，并且重复的英文语料会导致召回多条重复片段，导致重排模型效率低下。</p><p>因此对「知识库-8」中的英文内容删减。</p><blockquote><p>测试集正确率 75%-&gt;91.67%。</p></blockquote><h2 id="sec-4">图片删减</h2><p>本次比赛是单项选择题的形式，阅览了知识库文档发现，其实很多图片在此场景下不仅没有用，还会给Embedding模型增负，因此逐个去除掉知识库文档中的无用图片。</p><h2 id="sec-5">生成模型微调</h2><blockquote><p>【特别提醒】为了降低同学，可以在分类配置中直接使用这三个模型。</p><ul><li>向量模型：rag_m3_demo</li></ul><ul><li>重排模型：rag_reranker_demo</li></ul><ul><li>生成模型：rag_qwen_7b_demo</li></ul></blockquote><p><strong>向量模型保召回，重排模型保精度，生成模型负责语义解析和答案生成。</strong></p><p>调研了一下，其实当前赛事默认模型已经很强了，在生成模型里，qwen-7b-chat已经是顶尖模型了。</p><p>用不同的生成模型进行测试集测试：</p><blockquote><p>qwen-7b-demo：93.06%</p><p>sxl-llm(14b)：98.15%</p><p>qwen2.5-vl-7b：91.67%</p></blockquote><h2 id="sec-6">模型生成测试集-&gt;根据测试集结果微调RAG知识库 -&gt; 回测测试集</h2><p>prompt：</p><pre><code>- Role: RAG知识库赛事测试集生成专家
+- Background: 用户正在参加RAG知识库比赛，需要根据提供的PDF文件（RAG知识库文档）生成单项选择题测试集，测试集需包含标准答案，且答案必须准确无误。用户希望站在比赛主办方的角度，筛选出最可能被询问的50条测试集，以测试RAG知识库的可用性。
+- Profile: 你是一位资深的RAG知识库竞赛专家，对知识库的构建、测试以及竞赛规则有着丰富的经验，能够从比赛主办方的角度出发，设计出高质量、具有代表性和挑战性的测试题目。
+- Skills: 你具备强大的文本分析能力、问题设计能力以及对竞赛规则和主办方意图的深刻理解，能够从PDF文件中提取关键信息，并生成符合比赛要求的测试集。
+- Goals: 根据提供的PDF文件内容，从比赛主办方的角度出发，生成并筛选出50条最可能被询问的单项选择题测试集，每道题目包含准确的标准答案，且格式符合要求。
+- Constrains: 生成的测试题目必须基于PDF文件内容，答案必须准确无误，题目和答案的格式必须严格遵循要求，即题目为String类型字段，不包含换行等符号，答案为单个字母选项，题目和答案之间用英文逗号分隔，每道题目之间换行。最终筛选出的测试集数量为50条。
+- OutputFormat: 每道测试题的格式为：题目内容（String类型字段，不包含换行等符号）,答案（单个字母选项），每道题目之间换行。
+- Workflow:
+  1. 读取并解析用户上传的PDF文件，提取关键信息和知识点。
+  2. 根据提取的信息，设计单项选择题，确保题目内容准确且符合知识库文档，同时考虑比赛的难度和多样性。
+  3. 为每道题目设置四个选项，并根据知识库文档内容确定标准答案，确保答案的准确性。
+  4. 对生成的测试题目进行评估和筛选，从比赛主办方的角度出发，选出最可能被询问的100条测试集。
+  5. 将筛选出的测试集按照指定格式输出，确保格式符合要求，并提供一键复制功能。
+- Examples:
+  - 例子1：
+    PDF文件内容：新版发票和旧版发票的主要区别在于监制章样式不同。
+    输出：新版发票和旧版发票的主要区别是什么？A. 新版有财政局监制 B. 新版发票使用日期是2018年之前 C. 旧版发票无法报销 D. 新版发票监制章样式不同,D
+  - 例子2：
+    PDF文件内容：2023年版的会计准则增加了对环保支出的详细规定。
+    输出：2023年版会计准则新增了哪些内容？A. 税收优惠政策 B. 环保支出规定 C. 财务报表格式 D. 审计程序变更,B
+  - 例子3：
+    PDF文件内容：公司新政策规定员工每年可享受15天带薪休假。
+    输出：根据公司新政策，员工每年可享受多少天带薪休假？A. 10天 B. 15天 C. 20天 D. 25天,B
+- Initialization: 在第一次对话中，请直接输出以下：您好！作为RAG知识库赛事测试集生成专家，我将根据您提供的PDF文件内容，从比赛主办方的角度出发，为您生成并筛选出50条最可能被询问的单项选择题测试集。请上传PDF文件，我将开始为您生成测试题目。</code></pre><p>由于测试集的生成依赖于知识库源数据，有保密需求，因此使用公司内部模型MiMO：https://mimo.dt.mi.com/#/chat/1a568ae4e1107dca480289643ef7aec7</p><p>但这个过程比较浪费精力，毕竟模型出的题不一定准确。</p><p>还好官方给了11道测试题，可以用它来做进一步微调啦！</p><h2 id="sec-7">RAG在线检索参数怎么配置</h2><p>涉及以下几个配置：</p><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div><p><strong>大模型推荐：</strong></p><ul><li>向量索引类型：flat</li></ul><ul><li>向量匹配类型：COSINE</li></ul><ul><li>搜索类型：all</li></ul><ul><li>检索结果数量：3-5 条</li></ul><ul><li><pre><code>我正在做一个RAG知识库的建设，这个知识库主要用于回答单选题，如：什么是发票校验码？A. 发票防伪的加密字段 B. 发票号码 C. 税务登记号 D. 金额, A；公司马克杯是多少ml？ A.145ml  B.289ml  C.390ml  D.450ml  E.500ml,C
+
+针对这种RAG知识库，有几个问题帮我分析一下：
+1. 其中的向量索引类型怎么配置？哪种向量索引类型最适合？
+现有的向量索引类型有：flat
+利用蛮力搜索算法进行精确的kNN搜索，支持所有的向量数据类型。
+int8_flat
+利用蛮力搜索算法并自动进行标量量化，仅支持 float 类型。
+int4_flat
+利用蛮力搜索算法并自动进行半字节标量量化，仅支持 float 类型。
+bbq_flat
+利用蛮力搜索算法并自动进行二进制量化，仅支持float类型。
+hnsw 
+利用HNSW算法进行可扩展的近似kNN搜索，支持所有的向量数据类型。
+int8_hnsw 
+浮点向量的默认索引类型。利用HNSW算法，并为float类型的的向量数据自动进行标量量化，以实现可扩展的近似 kNN 搜索。可以将内存占用减少 4 倍，会牺牲一些精度。
+int4_hnsw 
+利用HNSW 算法，并为float类型的向量数据自动进行标量量化，以实现可扩展的近似kNN搜索。可以将内存占用减少 8 倍，会牺牲一些精度。
+bbq_hnsw 
+利用HNSW算法，并为float类型的 element_type 自动进行二进制量化，以实现可扩展的近似 kNN 搜索。这可以将内存占用减少 32 倍，但会牺牲精度。
+
+2. 向量匹配类型怎么选择？哪种向量匹配类型最适合？
+现有的向量匹配类型有：None
+不进行向量相似度计算
+L2
+欧式距离，最直观的度量方式，它关心向量在空间中的绝对距离，适合图像、语音等连续数值特征的检索，但在高维文本向量中常受“距离趋同效应”影响
+IP (Inner Product)
+通过点积衡量两个向量的方向与长度是否一致，如果向量的模长本身带有强度或权重意义（例如推荐系统 embedding 中的“偏好强度”），IP 能很好地体现这种差异。
+COSINE
+关注向量之间的夹角，完全忽略模长差异，非常适合文本语义 embedding，因为在自然语言中我们更在意“方向”（语义相似度），而不是向量的绝对大小，因此在大多数 RAG 文本检索场景下是默认选择
+HAMMING
+用于二进制向量，通过统计不同位的数量来衡量差异，常见于局部敏感哈希（LSH）等场景；它速度快，但只能处理二进制特征，不适合连续 embedding
+JACCARD
+适合集合或稀疏特征数据，它通过交并比来刻画集合相似度，常用于标签集合、关键词集合等离散特征的检索
+
+3. 在进行RAG检索时，搜索类型应该选哪种？
+现有的搜索类型有3种：vector表示向量搜索，keyword表示关键词检索，all表示向量检索和关键词检索同时进行。
+
+4.es检索时候选的结果数量应该为多少？
+
+以提高知识库的提问检索精度为准，分析并回答上述问题。</code></pre></li></ul><ul><li><pre><code>针对用于回答单选题的 RAG 知识库，结合 “提高检索精度” 的核心目标，对四个问题的分析如下：
+1. 向量索引类型的选择：优先flat
+单选题的核心需求是 “精准匹配问题与对应答案”，错误的检索结果可能直接导致选项判断错误，因此精度优先于速度和内存占用。
+flat 索引采用蛮力搜索，能实现精确的 kNN 搜索，确保不会因近似算法（如 hnsw）或量化（int8/int4/bbq）导致相关信息被遗漏。
+hnsw 系列（包括 int8_hnsw、int4_hnsw 等）是近似搜索，虽能提升速度和减少内存，但会牺牲精度，可能漏掉与问题高度相关的知识库条目（例如 “发票校验码” 与 “防伪加密字段” 的精准对应）。
+量化索引（int8/int4/bbq）通过压缩向量降低内存，但会进一步损失精度，对于单选题这种对 “精确匹配” 要求极高的场景不适用。
+因此，flat 是最优选择。
+2. 向量匹配类型的选择：优先COSINE
+单选题的问题与答案本质是 “文本语义匹配”，核心是判断 “问题的语义方向” 与 “知识库中对应条目的语义方向” 是否一致，而非向量的绝对距离或模长。
+COSINE 专注于向量夹角（语义方向），忽略模长差异，最适合文本语义匹配。例如 “公司马克杯容量是多少” 与 “公司马克杯 390ml” 的语义方向高度一致，COSINE 能精准捕捉这种关联。
+L2（欧式距离）在高维文本向量中易受 “距离趋同效应” 影响，可能误判语义相似但距离稍远的向量；IP（点积）受模长影响，而文本 embedding 的模长通常无实际意义（不代表 “重要性”）。
+HAMMING（二进制向量）和 JACCARD（集合特征）不适合连续文本 embedding，排除。
+因此，COSINE 是最优选择。
+3. 搜索类型的选择：优先all（向量 + 关键词）
+单选题的问题往往包含两类关键信息：语义意图（如 “什么是发票校验码” 的核心是 “定义”）和实体 / 术语（如 “发票校验码”“公司马克杯”“ml”）。
+向量搜索（vector）擅长捕捉语义意图，但可能漏掉精确术语（如 “ml” 若在 embedding 中被弱化，可能匹配到 “升” 的相关内容）。
+关键词搜索（keyword）擅长捕捉精确术语（如 “公司马克杯”“校验码”），但无法理解语义变体（如 “公司的马克杯容量” 与 “公司马克杯多少 ml” 的同义性）。
+两者结合（all）可互补：关键词确保精确术语不丢失，向量确保语义变体被覆盖，最大化召回相关条目的概率。
+因此，all 是最优选择。
+4. 检索结果数量：建议3-5 条
+结果数量需平衡 “覆盖相关信息” 和 “减少噪声”：
+太少（如 1-2 条）：可能因检索偏差漏掉唯一正确的知识库条目（例如问题表述稍有变体时，正确条目可能排在第 3 位）。
+太多（如 8-10 条）：易引入无关信息（例如 “公司马克杯” 可能混入 “公司其他产品”“其他品牌马克杯” 的条目），干扰后续 LLM 对选项的判断。
+3-5 条：既能覆盖大概率相关的条目（单选题的答案通常集中在少数几条紧密相关的知识中），又能控制噪声，是兼顾精度和召回的合理选择。</code></pre></li></ul><p>但在<strong>实测之后发现，搜索类型为all时，测试用例会报错；而</strong><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>搜索类型为vector时，会更精准</strong></mark>。</p><h2 id="sec-8">RAG测试时发现，知识库分片太长会报错，response=null</h2><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"></div><div class="fs-col"></div></div><p>这里是因为，生成模型会将从RAG检索出的内容，拼到Prompt上，再提交给生成模型，做回答。</p><p>此时我原生的prompt模板本就很长了，并且检索出的文档又切片不合理，导致源文本数据十分冗长，如右图。</p><p>这就导致生成模型最终无法从这么庞大的数据中，找到符合问题的回答。</p><p>因此定位问题：<strong>这就属于分片逻辑有问题，即「向量模型」有问题，因此又去翻源码(源码仓库：</strong><strong>[内部链接]</strong><strong>)。</strong></p><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>通过对feishu文档的分片逻辑，于是又回归到知识库中，对于知识库文档做了调整：</strong></mark></p><ol><li><strong>梳理目录层级关系，使其清晰、关联度高。</strong></li></ol><ol><li><strong>尽量保证每个目录下的文本长度可控。</strong></li></ol><h3 id="sec-9"><strong>feishu文档的分片逻辑拆解</strong></h3><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>结论</strong>：</p><p>飞书文档的分片逻辑<strong>依赖目录层级</strong>：通过解析文档的层级结构（<code>level</code>），建立父子节点关系，最终将 “上层标题 + 当前段落内容” 拼接为一个分片。这样的分片保留了内容所属的目录上下文，避免了孤立段落的信息丢失，更适合后续 RAG 检索时的上下文匹配。</p></div></div><p>从代码逻辑来看，<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">飞书（feishu）文档的分片确实</mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>基于目录层级</strong></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">进行处理</mark>，核心是通过构建文档的层级关系（父子节点），<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>将 “标题 + 下属内容” 拼接为最终的分片</strong></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">，</mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>保留了目录上下文</strong></mark>。</p><p>具体流程如下：</p><ol><li>解析飞书文档为带层级的节点列表</li></ol><p>首先通过 <code>parseIntoNodeList(data)</code> 将飞书文档解析为 <code>List&lt;ChunkData&gt;</code>（即 <code>nodeList</code>）。这里的 <code>ChunkData</code> 应该包含每个内容块的层级（<code>level</code>）、原始内容（<code>data</code>）、ID 等信息（推测飞书文档的结构化数据中包含目录层级标记，如一级标题、二级标题、正文段落等，对应不同的 <code>level</code>）。</p><ol><li>构建目录层级树（父子关系）</li></ol><ul><li>先创建根节点（<code>root</code>，level=0），并用 <code>tree</code>（<code>Map&lt;Integer, ChunkData&gt;</code>）存储不同层级的节点（key 为 <code>level</code>，value 为该层级的节点）。</li></ul><ul><li>遍历 <code>nodeList</code> 中的每个节点，根据其 <code>level</code> 找父节点：父层级为 <code>level-1</code>，如果该层级不存在，则逐级递减（<code>father_level -=1</code>），直到找到存在的父层级或根节点（level=0）。</li></ul><ul><li>找到父节点后，将当前节点的 ID 加入父节点的 <code>childrenId</code>（子节点 ID 列表），同时设置当前节点的 <code>parentId</code> 为父节点的 ID。这一步的目的是<strong>建立完整的目录层级关系</strong>（如 “一级标题”→“二级标题”→“正文段落” 的父子关联）。</li></ul><ol><li>过滤无效节点并拼接分片内容</li></ol><ul><li>先过滤掉 <code>nodeList</code> 中以 <code>#</code> 开头的节点（推测是标题节点本身，需排除，只保留正文类节点）。</li></ul><ul><li>通过 <code>parentId</code> 找到其父节点（上层标题），调用 <code>getDataByParentId</code> 获取父节点的标题内容（<code>title</code>）。</li><li>将当前节点的内容（<code>item.getData()</code>）与父节点标题（<code>title</code>）拼接，形成 <code>title + chunk</code> 的组合内容（例如 “1. 发票基础概念 \n 什么是发票校验码？...”）。</li><li>最终将拼接后的内容作为分片数据（<code>chunkData.setData(...)</code>），加入 <code>chunkResult</code>。</li></ul><h2 id="sec-10">生成模型的参数微调</h2><p>生成模型共可微调以下几个参数：</p><p>于是尝试微调。</p><p>prompt：</p><pre><code>我正在做一个RAG知识库的建设，这个知识库主要用于回答单选题，如：什么是发票校验码？A. 发票防伪的加密字段 B. 发票号码 C. 税务登记号 D. 金额, A；公司马克杯是多少ml？ A.145ml  B.289ml  C.390ml  D.450ml  E.500ml,C
+
+针对这种RAG知识库，帮我分析一下，生成模型中的参数怎么配置。目前有以下配置：
+字段、字段类型、是否必选、解释、实例依次有：
+1. prompt_text,string,可选,自定义prompt方式拼接query和docList，如果请求不包含该字段，使用开源框架预设prompt，取docList的前5个chunk和query按照模板进行拼接
+2.top_k,int,可选,大模型生成参数，控制候选词范围,20
+3.top_p,float,可选,大模型生成参数，控制候选词概率累积,0.6
+4.temperature,float,可选,大模型生成参数，控制输出随机性,0.6
+5.max_new_tokens,int,可选,大模型生成参数，控制生成长度,1000
+6.repetition_penalty,float,可选,大模型生成参数，控制重复程度,1.1
+
+以提高RAG知识库的准确率为核心，分析这几个参数该如何配置。
+
+以提高知识库的提问检索精度为准，分析并回答上述问题。</code></pre><p>大模型推荐微调：</p><pre><code>1. prompt_text：建议主动配置，而非使用默认值
+    单选题的答案具有强确定性（仅需输出选项字母，如 A、C），且依赖文档与选项的精确匹配。默认的 “拼接前 5 个 chunk 和 query” 的模板可能缺乏针对性，容易导致模型输出冗余内容（如解释性文字）或偏离选项范围。推荐配置示例："请严格根据参考文档内容，从题目给出的选项中选择唯一正确答案，仅输出选项字母（如A、B、C），无需额外解释。参考文档：{docList}，问题：{query}"通过明确任务边界（仅输出选项字母）和约束逻辑（严格依据文档），直接引导模型聚焦核心目标，减少无效输出干扰。
+2. top_k：建议调小至5-10（默认 20）
+top_k控制生成时考虑的候选词数量。单选题的答案是离散的选项（如 A、B、C），无需模型在大量候选词中 “发散思考”，反而需要聚焦高概率的正确选项。
+若top_k过大（如默认 20），可能纳入低概率的错误选项，增加误选风险；
+调小至 5-10，可让模型仅关注概率最高的少数候选，更精准匹配文档支持的正确选项。
+3. top_p：建议设置为0.5-0.7（默认 0.6 可保留）
+top_p通过累积概率筛选候选词（如 0.6 表示纳入概率累积达 60% 的词）。对于单选题，需平衡 “覆盖正确选项” 和 “排除噪音”：
+若top_p过高（如＞0.8），会纳入更多低概率词，增加随机性；
+若过低（如＜0.5），可能因筛选过严排除正确选项；默认 0.6 已处于合理区间，可保留或微调至 0.5（更聚焦高概率候选）。
+4. temperature：建议调低至0.1-0.3（默认 0.6 需下调）
+temperature控制输出随机性（值越低越保守、确定）。单选题的核心是 “复现文档中的正确选项”，而非 “创造性生成”，因此需最大限度降低随机性：
+若temperature过高（如默认 0.6），模型可能因 “随机波动” 偏离文档支持的正确选项；
+调低至 0.1-0.3，可让模型严格依赖输入的文档和问题信息，优先选择概率最高的选项，减少 “猜测” 倾向。
+5. max_new_tokens：建议调小至5-10（默认 1000 需大幅下调）
+max_new_tokens控制生成长度。单选题的答案仅需 1-2 个字符（如 A、C），过长的长度限制会导致模型可能输出无关内容（如解释、重复选项），反而增加错误风险。设置为 5-10 即可满足需求（足够容纳选项字母 + 避免意外冗余），同时提高生成效率。
+6. repetition_penalty：建议保留默认1.1或微调至1.0-1.2
+repetition_penalty用于抑制重复输出。由于单选题输出内容极短（仅选项字母），重复风险较低，无需大幅调整：
+1.1 的默认值可轻微抑制重复（如避免 “AA”“CC” 等无意义输出）；
+若出现少量重复，可微调至 1.2；若输出过于僵硬，可降至 1.0。
+
+
+总结配置核心逻辑
+通过明确 prompt 约束输出格式、降低随机性（temperature）、缩小候选范围（top_k/top_p）、限制生成长度（max_new_tokens），让模型聚焦 “文档 - 选项” 的精确匹配，最大限度减少干扰因素，从而提高单选题的回答准确率。</code></pre><h2 id="sec-11">生成模型源码逻辑解析 &amp; 提示词优化</h2><p>大致解析下Mi-Brag的generate接口。</p><figure class="fs-board" data-doc="[内部链接]" data-board="VVbZwEtYFhbJZnbEEzicbkrInVN"><div class="board-ph">正在加载画板…</div></figure><p>因此提示词构建也是十分重要的一环。</p><p>提示词优化核心：在保留 “系统提示 + 文档 + 问题” 核心结构的基础上，通过<strong>模块化标题分隔、关键规则重申、日志增强</strong>，让模型更易识别各模块功能，同时提升代码可维护性和调试便利性。</p><p>示例：</p><pre><code>def generate_prompt_text(query, docList):
+    """
+    生成优化后的单项选择题答题Prompt
+    :param query: 用户输入的单项选择题（含选项，格式示例："问题：xxx？A.xx B.xx C.xx D.xx"）
+    :param docList: 前置召回的知识库文档列表（需确保内容去重、无冗余，表格内容已按"|"分割）
+    :return: 结构化Prompt文本
+    """
+    # 1. 定义优化后的系统提示（模块化、关键规则加粗，替换原外部SYSTEM_PROMPT，也可设为外部常量）
+    OPTIMIZED_SYSTEM_PROMPT = """
+# 一、角色与核心任务
+角色：企业级单项选择题问答专家
+任务：仅依据【参考文档】内容，输出唯一正确选项（仅A/B/C/D字母），不附加任何解释、思考过程或引用来源；每题独立，不受其他题目影响。
+
+# 二、核心约束（必须严格遵守）
+1. **答案唯一来源**：仅使用后续【参考文档】内容作答，无文档依据时不做任何推断；
+2. **表格解读规则**：文档中表格以"|"为列分隔符，"√"表示"享有/是"，无"√"表示"不享有/否"；
+3. **输出格式强制**：仅输出选项字母（如A），任何额外文字（如"答案：B"）均视为无效。
+
+# 三、示例（理解答题逻辑）
+示例1：
+【参考文档】：企业级问答机器人仅依赖知识文档列表（docList）作答。
+【问题】：机器人作答依赖什么？A.用户历史 B.知识文档列表 C.外部网站 D.数据库
+【答案】：B
+
+示例2：
+【参考文档】：|假期类型|实习生|事假|√|法定节假日|√|
+【问题】：实习生可享受哪些假期？A.法定年休假 B.事假、法定节假日 C.婚假 D.产假
+【答案】：B
+    """
+    
+    # 2. 处理文档列表：添加模块标题、标注文档数量，明确"唯一依据"属性
+    # （若docList为空，需提示模型无法作答，避免无效输出）
+    if not docList:
+        processed_docs = "【参考文档】：无召回知识库内容，无法作答（仅输出A/B/C/D的无效情况）"
+    else:
+        # 给每个文档加序号，方便日志追溯；标注"唯一答题依据"强化约束
+        doc_items = [f"【文档{idx+1}】：{doc.strip()}" for idx, doc in enumerate(docList)]
+        processed_docs = f"# 四、参考文档（唯一答题依据，共{len(docList)}份）\n" + "\n\n".join(doc_items)
+    
+    # 3. 处理问题：添加"作答要求重申"，避免模型遗忘规则
+    processed_query = f"# 五、问题与作答要求\n【问题】：{query.strip()}\n【要求】：1. 仅用【参考文档】内容；2. 仅输出A/B/C/D字母。"
+    
+    # 4. 拼接最终Prompt（按"指令→依据→任务"逻辑排序，符合模型信息处理习惯）
+    prompt = f"{OPTIMIZED_SYSTEM_PROMPT}\n\n{processed_docs}\n\n{processed_query}"
+    
+    # 5. 增强日志：记录文档数量、Prompt长度，方便调试（如文档过多导致Prompt超长）
+    logger.info(f"生成Prompt：召回文档{len(docList)}份，Prompt长度{len(prompt)}字符")
+    print(f"生成Prompt内容：\n{prompt}\n")
+    
+    return prompt</code></pre><p>整体优化后的提示词(<strong>限制长度并添加特殊情况处理</strong>)：</p><pre><code># 一、角色与核心任务
+角色：企业级单项选择题问答专家
+任务：仅依据【参考文档】内容，输出唯一正确选项（仅A/B/C/D字母），不附加任何解释、思考过程或引用来源；每题独立，不受其他题目影响。
+
+# 二、核心约束（必须严格遵守）
+1. **答案唯一来源**：仅使用后续【参考文档】内容作答，无文档依据时不做任何推断；需精确匹配文档中关键限定词（如 “连续”“累计”“含”“以上”“以内” 等），避免混淆不同条件。
+2. **表格解读规则**：文档中表格以"|"为列分隔符，"√"表示"享有/是"，无"√"表示"不享有/否"；
+3. **输出格式强制**：仅输出选项字母（如A），任何额外文字（如"答案：B"）均视为无效。
+
+# 三、示例（理解答题逻辑）
+示例1：
+【参考文档】：企业级问答机器人仅依赖知识文档列表（docList）作答。
+【问题】：机器人作答依赖什么？A.用户历史 B.知识文档列表 C.外部网站 D.数据库
+【答案】：B
+
+示例2：
+【参考文档】：|假期类型|实习生|事假|√|法定节假日|√|
+【问题】：实习生可享受哪些假期？A.法定年休假 B.事假、法定节假日 C.婚假 D.产假
+【答案】：B
+示例 3：【参考文档】：员工连续旷工 5 日（含）以上或 12 个月内累计旷工 10 日（含）以上的，公司可解除合同。【问题】：员工连续旷工多少天公司可解除合同？A.3 日（含）以上 B.5 日（含）以上 C.10 日（含）以上 D.15 日（含）以上【答案】：B</code></pre><p>优化后，<strong>原误判测试集正确率0% -&gt; 60%</strong>。</p><h1 id="sec-12">赛后反思</h1><ul><li>内置提示词太长太繁琐，导致模型幻觉。</li></ul><ul><li>内置提示词应该使用中文。</li></ul><ul><li>给的测试集数据太少了，且不够精。</li></ul></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795659961"></script>
+</body>
+</html>
