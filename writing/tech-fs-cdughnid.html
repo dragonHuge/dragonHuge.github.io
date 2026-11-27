@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>7.UDF开发 SOP总结 &amp; UDF开发记录 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">13</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">需求背景</a><a class="tl l1" href="#sec-2">开发SOP</a><a class="tl l1" href="#sec-3">问题解析 ★</a><a class="tl l2" href="#sec-4">1.添加pom依赖 并 打包</a><a class="tl l2" href="#sec-5">2.Spark Beeline集成测试。</a><a class="tl l2" href="#sec-6">3.数据工厂UDF的使用</a><a class="tl l1" href="#sec-7">UDF记录</a><a class="tl l2" href="#sec-8">riskcontrol_decrypt(str1,str2,str3,str4)</a><a class="tl l2" href="#sec-9">riskcontrol_ip_infos(ip)</a><a class="tl l3" href="#sec-10">riskcontrol_ip_infosV3(ip)</a><a class="tl l2" href="#sec-11">riskcontrol_phone_loc(phone) 用V2即可。</a><a class="tl l2" href="#sec-12">riskcontrol_phone_locV2(phone)用V3即可。</a><a class="tl l2" href="#sec-13">riskcontrol_phone_locV3(phone)</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="exp/index.html">经验沉淀</a></div><article><h1>7.UDF开发 SOP总结 &amp; UDF开发记录</h1><div class="meta">2026-11-19<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<blockquote><p>2025-03-19 发现一篇较好的教程：<a href="https://juejin.cn/post/6929327987321995278" target="_blank" rel="noopener">Hive UDF开发手册</a>。</p></blockquote><h1 id="sec-1">需求背景</h1><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>UDF(<span style="color:#8f959e">User Defined Function</span>)：<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>自定义函数</strong></mark><strong>，执行某些特定任务(如：数据工厂的数据解密）。</strong></p><blockquote><ul><li><p>在数据工厂复杂场景的数据检索中，简单的select语句无法满足需求，这时我们就可以根据自身需求自定义一些函数，在数据查询时就做好数据解析。</p></li></ul><ul><li>若无UDF，做法是：从Hive拉取ip -&gt; 撰写脚本遍历解析ip</li><li>若有UDF IpCity()，做法是：select IpCity(ip) from tmp_table即可。</li></ul></blockquote></div></div><p><strong>本次开发需求：</strong></p><p>数据工厂中的<code>risk_risk.风险事件表</code>表中，有敏感字段做了加密处理。</p><p>但在风险分析时，需要做该字段的聚合分析，因此需要<strong>自定义函数(UDF)将其解密</strong>。此时就需要进行UDF开发，如下图：</p><h1 id="sec-2">开发SOP</h1><blockquote><p>现有文档较全面，就不做重复撰写，重点记录一下遇到的问题吧。</p></blockquote><ol><li><p>风控团队的UDF项目链接：[内部链接]</p></li><li><p>权限需要向<span class="fs-mention">@引用</span>进行申请，安全限制，不能给owner权限。</p></li></ol><ol><li>详细开发流程见此文档即可：<span class="fs-mention">@UDF开发与导入流程规范</span> <span class="fs-mention">@Hive UDF编写方式</span></li></ol><h1 id="sec-3">问题解析 <span style="color:#d83931">★</span></h1><h2 id="sec-4">1.添加pom依赖 并 打包</h2><ol><li><pre><code>&lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+    &lt;version&gt;3.2.1&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;shade&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;configuration&gt;
+                &lt;artifactSet&gt;
+                    &lt;includes&gt;
+                        &lt;include&gt;com.fasterxml.jackson.core:jackson-core&lt;/include&gt;
+                        &lt;include&gt;com.fasterxml.jackson.core:jackson-annotations&lt;/include&gt;
+                        &lt;include&gt;com.fasterxml.jackson.core:jackson-databind&lt;/include&gt;
+                        &lt;include&gt;cn.hutool:hutool-core&lt;/include&gt; &lt;!-- 添加 hutool-core --&gt;
+                    &lt;/includes&gt;
+                &lt;/artifactSet&gt;
+                &lt;filters&gt;
+                    &lt;filter&gt;
+                        &lt;artifact&gt;*:*&lt;/artifact&gt;
+                        &lt;excludes&gt;
+                            &lt;exclude&gt;module-info.class&lt;/exclude&gt;
+                            &lt;exclude&gt;META-INF/*.SF&lt;/exclude&gt;
+                            &lt;exclude&gt;META-INF/*.DSA&lt;/exclude&gt;
+                            &lt;exclude&gt;META-INF/*.RSA&lt;/exclude&gt;
+                        &lt;/excludes&gt;
+                    &lt;/filter&gt;
+                &lt;/filters&gt;
+            &lt;/configuration&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;</code></pre></li></ol><ol><li><pre><code>mvn clean package</code></pre></li></ol><p>打包之后push代码，提交MR后联系<span class="fs-mention">@引用</span>Review即可。</p><h2 id="sec-5">2.Spark Beeline集成测试。</h2><p>此时需注意两点：</p><ol><li><p><span style="color:#8f959e">不会用物理机的同学：</span><span class="fs-mention">@4.经由"跳转机"访问"物理机"-实现prod环境接口测试 SOP总结</span></p></li></ol><ol><li><pre><code>CREATE TEMPORARY FUNCTION risk_control_decrypt AS 'com.example.udf.risk.RiskControlDecrypt';
+SELECT risk_control_decrypt(str1,str2,str3,str4); 
+-- 四个参数：str1:aes_key；str2:aes_algorithm；str3:aes_iv；str4：encryptedStr</code></pre></li></ol><ol><li>终端执行SQL时，<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>用分号做结尾</strong></mark>！方可执行SQL</li></ol><p>测试完成后，截图贴到MR即可。</p><h2 id="sec-6">3.数据工厂UDF的使用</h2><p>按文档教程注册后，即可进行使用，但是报错如下：</p><p>最终发现，<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><strong>Holo不支持UDF，换Iceberg表即可</strong></mark></p><h1 id="sec-7">UDF记录</h1><h2 id="sec-8">riskcontrol_decrypt(str1,str2,str3,str4)</h2><ul><li>返回值：<code>decrypted_data</code>。</li></ul><ul><li>返回值数据类型：<code>String</code>。</li></ul><pre><code>CREATE TEMPORARY FUNCTION riskcontrol_decrypt AS 'com.example.udf.risk.RiskControlDecrypt';
+riskcontrol_decrypt (
+                '①', -- 密钥 注意隐私
+                '②', -- 加解密类型
+                '③', -- iv 注意隐私
+                encryptedData
+)
+
+密钥：</code></pre><ul><li>密钥需求联系：<span class="fs-mention">@引用</span></li></ul><pre><code>①GCAtJhHGRYzkvbTeqZkbi3Zr1gRUBiqKiYg6j7u5H361wBgSum6t18TAQkOXB5vhIjrzwQ4BGBD2CcBecS9B2Ytihz8skv5mGBSdjT96bPtTM0MwFLRy9DPZ+Po++wA=
+②GCDMp8lxn4jXsRBMZy4R8FRXTjNzbfxliNB00ylAs2wVQRgSlWNfwgFASC6g19wGcIFENR0BGBAoNzoCwm5Dc5gn3Qru31fcGBS1dIS4n+JT41/jWYI2lfd8XJtpJAA=
+③GCD8f9HAA2NMJq9BWykqa32yZYgc8PBdovD0ARDU5vJqjRgSIujV4PS8T76IJHcOxhUCvowBGBDbgQR1a3hNP4+YRS7R0HSVGBR+QZ+HeF/Px7L+FOJYUsVETPfFkwA=</code></pre><h2 id="sec-9">riskcontrol_ip_infos(ip)</h2><ul><li>返回值：<code>[country,province,city,district,longitude,latitude,isp]</code></li></ul><ul><li>返回值数据类型：<code>List&lt;String&gt;</code></li></ul><ul><li>详情文档：<span class="fs-mention">@2025-03-18 riskcontrol_ip_infos(ip) UDF开发</span></li></ul><pre><code>CREATE TEMPORARY FUNCTION riskcontrol_ip_infos AS 'com.example.udf.risk.IpInfos';
+select riskcontrol_ip_infos('1.24.36.82')</code></pre><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>注意事项：</strong></p><ul><li><blockquote><p>这边保存一下离线数据源邮件(收件箱-存档)，该链接由于保密需求，不暴露下载路径。该下载路径文件是最新数据(每月更新)。</p></blockquote></li></ul></div></div><h3 id="sec-10"> riskcontrol_ip_infosV3(ip)</h3><p>返回值<code>[country,province,city,district,longitude,latitude,isp,idc]</code></p><p>idc字段若为null,则说明此ip不是idc机房，若为* ，代表数据源中没有这个idc的具体名字，但还是idc</p><p>详情文档:<span class="fs-mention">@20250917riskcontrol_ip_infosV3</span></p><h2 id="sec-11"><s>riskcontrol_phone_loc(phone) </s><span style="color:#d83931">用V2即可</span>。</h2><ul><li><s>返回值类型：</s><s><strong><code>List&lt;String&gt;  </code></strong></s></li></ul><ul><li><s>返回值：国内手机号：</s><s><code>[省,市]</code></s><s>；国外手机号：</s><s><code>[国家]</code></s></li></ul><ul><li><s>详情文档：</s><span class="fs-mention">@2025-04-09 手机号归属地UDF</span></li></ul><pre><code>CREATE TEMPORARY FUNCTION riskcontrol_phone_loc AS 'com.example.udf.risk.PhoneLocInfoV1';
+select riskcontrol_phone_loc('+008613669130993')</code></pre><h2 id="sec-12"><s>riskcontrol_phone_locV2(phone)</s><span style="color:#d83931"><s>用V3即可</s></span><s>。</s></h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>V2版本改进点：</strong></p><blockquote><ol><li>国内手机号返回值新增"中国"，以便区分国内外手机号。</li></ol><ol><li>国内数据源idf文件已更新为最新的<strong>202504版</strong>。</li></ol><ol><li>国内手机号：<ul><li><strong>大陆</strong>：兼容+86、0086、+0086。如：008613669130993、+8613669130993、13669130993、+008613669130993都可以识别。</li></ul><ul><li><strong>港澳台</strong>：兼容“+区号、00区号、+00区号”。如：+85268476749、0085268476749、+0085268476749.</li></ul></li><li>国外手机号：兼容"+国家代码、00国家代码、+00国家代码"的格式。</li></ol><ol><li>国外手机号新增合法性校验。</li></ol></blockquote></div></div><ul><li>返回值类型：<strong><code>List&lt;String&gt;  </code></strong></li></ul><ul><li><strong>国内手机号</strong>：<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><code>[中国,省,市]</code></mark>；</li><li><strong>国外手机号</strong>：<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><code>[国家]</code></mark>，并做手机号合法性校验，非法则返回：<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><code>['error','错误明细']</code></mark>。其中错误明细有如下枚举：</li><li><pre><code>1. FormatError // 一方面：未通过正则校验("^\\+\\d+$")；另一方面：未通过GoogleJar的格式校验
+2. MissingRegionCode // 非法区号（由于数据不全，部分合法区号此Jar包无法解析）
+3. NotActiveNumber // 根据区号，且用该国家的手机号规则校验手机号时，校验失败</code></pre></li><li><strong>补充</strong>：<ul><li>国内手机号：若查不出来归属地，则返回值为：<strong>['中国']</strong>。</li></ul><ul><li>国外手机号：若手机号格式校验正确且查不出来归属地，则返回值为<strong>['']</strong>。</li></ul></li></ul><ul><li>详情文档：<span class="fs-mention">@2025-04-09 手机号归属地UDF</span></li></ul><pre><code>CREATE TEMPORARY FUNCTION riskcontrol_phone_loc AS 'com.example.udf.risk.PhoneLocInfoV2';
+select riskcontrol_phone_loc('+008613669130993')</code></pre><p>与1.0相比，手机号归属地填补率能达到100%。</p><h2 id="sec-13">riskcontrol_phone_locV3(phone)</h2><blockquote><p>V3 效果评测：<span class="fs-mention">@v3版手机归属地udf评估</span></p></blockquote><blockquote><p>改进原因：</p><p>2.0中，没有对输入特殊值做过滤(如：""、"null"、\n、\t等)，导致全量查询时，脏数据导致UDF解析error。</p><p>改进点：</p><ul><li>手机号归属地idf资源更新到20250624版本。</li></ul><ul><li>特殊值过滤，新增错误明细 "InvalidParameter"。</li></ul></blockquote><p>UDF返回值解析：</p><ol><li>返回值类型：<strong><code>List&lt;String&gt;  </code></strong></li><li>返回值：<strong>国内手机号：</strong><strong><code>[中国,省,市]</code></strong><strong>；国外手机号：</strong><strong><code>[国家]</code></strong></li></ol><ol><li>返回<strong>错误信息</strong>，<code>返回格式：['error','错误明细']</code>。其中错误明细有如下枚举：</li></ol><pre><code>1. InvalidParameter // 非法参数：包含字母、特殊符号、空格、空字符串等。。。。
+2. FormatError：// 电话号码格式错误
+// 一方面：未通过正则校验(国内手机号：^[1-9]\\d{10}$)(国外手机号："^\\+\\d+$"),在做正则校验时，会将国内手机号"若包含则去除 +86/+0086/0086"，国外手机号 "将"00"或"+00"替换为+"
+// 另一方面：未通过GoogleJar的格式校验
+3. MissingRegionCode // 非法区号（由于数据不全，部分合法区号此Jar包无法解析）
+4. NotActiveNumber // 根据区号，且用该国家的手机号规则校验手机号时，校验失败</code></pre></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>

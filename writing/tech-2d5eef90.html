@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>常见面试题(下)-泛型、I/O、反射、多路复用、布隆过滤器 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">44</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-异常">1.异常</a><a class="tl l2" href="#2-反射">2.反射</a><a class="tl l3" href="#1-什么是反射">1.什么是反射</a><a class="tl l3" href="#2-应用场景">2.应用场景</a><a class="tl l3" href="#3-为何框架需要反射-你如何理解反射">3.为何框架需要反射(你如何理解反射？)</a><a class="tl l3" href="#4-反射使用的四种方式">4.反射使用的四种方式</a><a class="tl l2" href="#3-注解">3.注解</a><a class="tl l2" href="#4-泛型">4.泛型</a><a class="tl l3" href="#1-什么是泛型">1.什么是泛型</a><a class="tl l3" href="#2-为啥出现了泛型">2.为啥出现了泛型？</a><a class="tl l3" href="#3-泛型的使用方式">3.泛型的使用方式</a><a class="tl l4" href="#1-泛型类">1.泛型类</a><a class="tl l4" href="#2-泛型接口">2.泛型接口</a><a class="tl l4" href="#3-泛型方法">3.泛型方法</a><a class="tl l3" href="#4-项目中哪里用到泛型">4.项目中哪里用到泛型？</a><a class="tl l3" href="#5-泛型擦除机制-为啥要擦除">5.泛型擦除机制？为啥要擦除？</a><a class="tl l4" href="#1-泛型擦除机制">1.泛型擦除机制：</a><a class="tl l4" href="#2-为何要用类型擦除机制实现泛型">2.为何要用类型擦除机制实现泛型？</a><a class="tl l4" href="#3-泛型擦除的缺点">3.泛型擦除的缺点</a><a class="tl l3" href="#6-桥方法">6.桥方法</a><a class="tl l2" href="#5-通配符">5.通配符</a><a class="tl l3" href="#1-什么是通配符-有什么作用">1.什么是通配符，有什么作用？</a><a class="tl l3" href="#协变">协变</a><a class="tl l3" href="#2-通配符-和泛型T有啥区别">2.通配符？和泛型T有啥区别</a><a class="tl l3" href="#3-什么是无界通配符">3.什么是无界通配符？</a><a class="tl l3" href="#4-上-下边界通配符">4.上/下边界通配符</a><a class="tl l2" href="#5-序列化与反序列化">5.序列化与反序列化</a><a class="tl l3" href="#1-什么是序列化">1.什么是序列化</a><a class="tl l3" href="#2-序列化协议对应于-TCP-IP-4-层模型的哪一层">2.序列化协议对应于 TCP/IP 4 层模型的哪一层？</a><a class="tl l3" href="#3-有些字段不想序列化">3.有些字段不想序列化？</a><a class="tl l2" href="#6-JAVA-I-O">6.JAVA I/O</a><a class="tl l3" href="#1-为什么-I-O-流操作要分为字节流操作和字符流操作">1.为什么 I/O 流操作要分为字节流操作和字符流操作?</a><a class="tl l3" href="#2-Java中三种常见的I-O模型">2.Java中三种常见的I/O模型</a><a class="tl l3" href="#3-剩下的两种IO模型">3.剩下的两种IO模型：</a><a class="tl l3" href="#总结图">总结图</a><a class="tl l3" href="#4-select-和epoll-的区别">4.select(）和epoll（）的区别</a><a class="tl l3" href="#5-什么是选择器">5.什么是选择器？</a><a class="tl l3" href="#6-select为什么最大文件描述符数量是1024">6.select为什么最大文件描述符数量是1024</a><a class="tl l3" href="#7-epoll-是怎么实现的-文件描述符是怎么做的">7.epoll()是怎么实现的？文件描述符是怎么做的？</a><a class="tl l2" href="#7-布隆过滤器">7.布隆过滤器</a><a class="tl l3" href="#1-什么是布隆过滤器">1.什么是布隆过滤器？</a><a class="tl l3" href="#2-数据结构与原理">2.数据结构与原理</a><a class="tl l3" href="#3-添加元素与查询元素">3.添加元素与查询元素</a><a class="tl l3" href="#4-布隆过滤器支持删除操作吗">4.布隆过滤器支持删除操作吗？</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>常见面试题(下)-泛型、I/O、反射、多路复用、布隆过滤器</h1><div class="meta">2024-05-09 · <a class="src-link" href="https://flowus.cn/2d5eef90-e89e-4411-a1b7-2588071d2eb6" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h2 id="1-异常">1.异常</h2>
+<h2 id="2-反射">2.反射</h2>
+<h3 id="1-什么是反射">1.什么是反射</h3>
+<p>反射之所以被称为<strong>框架的灵魂</strong>，主要是因为它<strong>赋予了我们在运行时分析类以及执行类中方法的能力</strong>。</p>
+<p>通过反射你可以<strong>获取任意一个类的所有属性和方法</strong>，你还可以<strong>调用这些方法和属性</strong>。</p>
+<ul><li><strong>优点</strong>：反射可以让我们的<strong>代码更加灵活</strong>、为各种框架提供开箱即用的功能提供了便利。</li></ul>
+<ul><li><strong>缺点</strong>：</li></ul>
+<ol><li>反射让我们在运行时有了分析操作类的能力的同时，也<strong>增加了安全问题</strong>，因为它<strong>缺乏编译时检查</strong>，比如可以<strong>无视泛型参数的安全检查</strong>（泛型参数的安全检查发生在编译时）。</li></ol>
+<ol><li>另外，反射的<strong>性能也要稍差点</strong>，不过，对于框架来说实际是影响不大的。因为它<strong>涉及到运行时的类信息的检查和解释.</strong>反射通常比直接调用方法或访问字段更加昂贵。</li></ol>
+<ol><li><strong>限制某些优化和工具的使用：</strong> 一些编译器优化和工具可能无法适用于使用反射的代码，因为它们无法在编译时获取足够的信息。</li></ol>
+<h3 id="2-应用场景">2.应用场景</h3>
+<p>正是因为反射，你才能这么轻松地使用各种框架。像 Spring/Spring Boot、MyBatis 等等框架中都大量使用了反射机制。</p>
+<p><strong>这些框架中也大量使用了动态代理，而动态代理的实现也依赖反射。</strong></p>
+<p>另外，像 Java 中的一大利器 <strong>注解 的实现也用到了反射</strong>。</p>
+<p>为什么你使用 Spring 的时候 ，一个<code>@Component</code>注解就声明了一个类为 Spring Bean 呢？为什么你通过一个 <code>@Value</code>注解就读取到配置文件中的值呢？究竟是怎么起作用的呢？</p>
+<p>这些都是因为你可以<strong>基于反射分析类</strong>，然后<strong>获取到类/属性/方法/方法的参数上的注解</strong>。你获取到注解之后，就可以做进一步的处理.</p>
+<h3 id="3-为何框架需要反射-你如何理解反射">3.为何框架需要反射(你如何理解反射？)</h3>
+<p>反射是一种计算机科学中的概念，指的是在运行时检查、探索和修改程序结构和行为的能力。在很多编程语言中，包括Java、C#和Python等，都有反射机制。</p>
+<p>框架通常需要反射的主要原因有几个：</p>
+<ol><li><strong>动态加载类和资源：</strong> 反射使得框架可以<strong>在运行时加载并实例化类</strong>，<strong>而不是在编译时确定</strong>。这使得框架更加灵活，可以<strong>根据需要动态地加载和卸载类</strong>，从而实现更高级的功能。</li></ol>
+<ol><li><strong>检查和操作类的结构：</strong> 反射允许框架检查类的结构，包括字段、方法、注解等。这使得<strong>框架可以在运行时根据类的结构进行动态操作</strong>，比如<strong>动态调用方法、获取或修改字段的值</strong>等。</li></ol>
+<ol><li><strong>动态配置和扩展：</strong> 反射使得程序<strong>可以在运行时动态地加载和解析配置信息</strong>，从而实现动态配置和扩展功能。这使得<strong>程序可以在不重新编译的情况下适应不同的配置和需求</strong>，具有更强的适应性和灵活性。</li></ol>
+<ol><li><strong>实现框架自身的抽象和扩展机制：</strong> 反射使得框架可以定义和实现抽象接口或基类，并在运行时动态地实例化和调用具体的实现类。这种机制使得框架可以更容易地<strong>实现可插拔的组件和扩展点。</strong></li></ol>
+<ol><li><strong>支持注解和元数据：</strong> 注解和元数据是很多框架中常用的技术，用于在代码中添加额外的信息和标记。反射可以让框架在运行时获取和解释这些注解和元数据，从而实现各种高级功能，比如依赖注入、配置解析等。</li></ol>
+<hr>
+<h3 id="4-反射使用的四种方式">4.反射使用的四种方式</h3>
+<p>Java 提供了四种方式获取 Class 对象:</p>
+<p><strong>1. 知道具体类</strong>的情况下可以使用<strong>：<code>类名.class</code></strong></p>
+<pre><code>Class alunbarClass = TargetObject.class;</code></pre>
+<p>但是我们一般是不知道具体类的，基本都是通过遍历包下面的类来获取 Class 对象，通过此方式获取 Class 对象不会进行初始化</p>
+<p><strong>2. 通过 <code>Class.forName()</code>传入类的全路径获取：</strong></p>
+<pre><code>Class alunbarClass1 = Class.forName(&quot;cn.javaguide.TargetObject&quot;);</code></pre>
+<p><strong>3. 通过对象实例<code>instance.getClass()</code>获取：</strong></p>
+<pre><code>TargetObject o = new TargetObject();
+Class alunbarClass2 = o.getClass();</code></pre>
+<p><strong>4. 通过类加载器<code>xxxClassLoader.loadClass()</code>传入类路径获取:</strong></p>
+<pre><code>ClassLoader.getSystemClassLoader().loadClass(&quot;cn.javaguide.TargetObject&quot;);</code></pre>
+<p>通过类加载器获取 Class 对象不会进行初始化，意味着不进行包括初始化等一系列步骤，静态代码块和静态对象不会得到执行</p>
+<h2 id="3-注解">3.注解</h2>
+<p><code>Annotation</code> （注解） 是 Java5 开始引入的新特性，可以看作是<strong>一种特殊的注释</strong>，主要用于<strong>修饰类、方法或者变量</strong>，提供某些信息供程序在编译或者运行时使用。</p>
+<p>注解本质是<strong>一个继承了<code>Annotation</code> 的特殊接口。</strong></p>
+<p>JDK 提供了很多内置的注解（比如 <code>@Override</code>、<code>@Deprecated</code>），同时，我们还可以自定义注解。</p>
+<p><strong>注解只有被解析之后才会生效</strong>，常见的解析方法有两种：</p>
+<ul><li><strong>编译期直接扫描</strong>：编译器在编译 Java 代码的时候扫描对应的注解并处理，比如某个方法使用<code>@Override</code> 注解，编译器在编译的时候就会检测当前的方法是否重写了父类对应的方法。</li></ul>
+<ul><li><strong>运行期通过反射处理</strong>：像框架中自带的注解(比如 Spring 框架的 <code>@Value</code>、<code>@Component</code>)都是通过反射来进行处理的。</li></ul>
+<h2 id="4-泛型">4.泛型</h2>
+<h3 id="1-什么是泛型">1.什么是泛型</h3>
+<blockquote><p>😍 泛型的本质是 <strong><a href="https://so.csdn.net/so/search?q=%E5%8F%82%E6%95%B0%E5%8C%96&amp;spm=1001.2101.3001.7020">参数化</a>类型的应用</strong>，也就是说<strong>把所操作的数据类型指定为一个参数</strong>。</p></blockquote>
+<p>以前我们定义一个属性或者方法的时候，我们都会明确具体的类型，比如int、String、void等等，但泛型不同，泛型是一个参数化类型，即<strong>不明确类型</strong>，<strong>只有在具体调用对象的时候，才传递实际类型实参</strong>。<strong>指定了泛型参数的类型就是一个具体化了的类型。</strong></p>
+<p>一般常用的<a href="https://so.csdn.net/so/search?q=%E6%B3%9B%E5%9E%8B%E7%B1%BB&amp;spm=1001.2101.3001.7020">泛型类</a>型定义是有<strong><code>T</code>、<code>E</code>、<code>K</code>、<code>V</code></strong>。</p>
+<p><strong>Java 泛型（Generics）</strong> 是 JDK 5 中引入的一个新特性。使用泛型参数，可以<strong>增强代码的可读性以及稳定性</strong>。</p>
+<p>比如 <code>ArrayList&amp;lt;Person&amp;gt; persons = new ArrayList&amp;lt;Person&amp;gt;()</code> 这行代码就指明了该 <code>ArrayList</code> 对象只能传入 <code>Person</code> 对象，如果传入其他类型的对象就会报错。并且，原生 <code>List</code> 返回类型是 <code>Object</code> ，需要手动转换类型才能使用，使用泛型后编译器自动转换。</p>
+<h3 id="2-为啥出现了泛型">2.为啥出现了泛型？</h3>
+<p>还没引进泛型的时候，类似的需求，就是通过2个技术点来实现类型泛化。</p>
+<ol><li>java.lang.Object是所有类型的父类，所以转型成任何对象都是有可能的。</li></ol>
+<ol><li><strong>类型支持强制转换。</strong></li></ol>
+<p>但是呢，这种转换关系，<strong>只能在运行期间才能被验证是否正确，ClassCastException异常出现的概率就大大提高</strong>，而且只能通过人力避免。</p>
+<p>显然这种机制是有风险且很难改善的。所以<strong>就需要一个在编译期间就能保证类型安全的机制出现</strong>，所以就出现了泛型机制。</p>
+<hr>
+<h3 id="3-泛型的使用方式">3.泛型的使用方式</h3>
+<p>泛型一般有三种使用方式:<strong>泛型类</strong>、<strong>泛型接口</strong>、<strong>泛型方法</strong>。</p>
+<blockquote><p>💡 注意: <code>public static &amp;lt; E &amp;gt; void printArray( E[] inputArray )</code> 一般被称为静态泛型方法;</p></blockquote>
+<blockquote><p>💡 在 java 中<strong>泛型只是一个占位符</strong>，必须<strong>在传递类型后才能使用</strong>。</p></blockquote>
+<blockquote><p>💡 类在实例化时才能真正的传递类型参数，由于<strong>静态方法的加载先于类的实例化</strong>，也就是说<strong>类中的泛型还没有传递真正的类型参数，静态的方法的加载就已经完成了</strong>，所以<strong>静态泛型方法是没有办法使用类上声明的泛型的。只能使用自己声明的 <code>&amp;lt;E&amp;gt;</code></strong></p></blockquote>
+<h4 id="1-泛型类">1.泛型类</h4>
+<pre><code>//此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型
+//在实例化泛型类时，必须指定T的具体类型
+public class Generic&lt;T&gt;{ 
+    //key这个成员变量的类型为T,T的类型由外部指定  
+    private T key;
+    public Generic(T key) { //泛型构造方法形参key的类型也为T，T的类型由外部指定
+        this.key = key;
+    }
+    public T getKey(){ //泛型方法getKey的返回值类型为T，T的类型由外部指定
+        return key;
+    }
+}</code></pre>
+<h4 id="2-泛型接口">2.泛型接口</h4>
+<p><strong>实现泛型接口</strong>时，<strong>指定或不指定类型都可以</strong>。</p>
+<ol><li>定义泛型接口：</li></ol>
+<p>```Java //定义一个泛型接口 public interface Generator&lt;T&gt; { public T next(); } ```</p>
+<ol><li>实现泛型接口的类，<strong>未传入泛型实参：</strong></li></ol>
+<p>```Java /**</p>
+<ul><li>未传入泛型实参时，与泛型类的定义相同，在声明类的时候，需将泛型的声明也一起加到类中</li><li>即：class FruitGenerator&lt;T&gt; implements Generator&lt;T&gt;{</li><li>如果不声明泛型，如：class FruitGenerator implements Generator&lt;T&gt;，编译器会报错："Unknown class"</li></ul>
+<p>*/ class FruitGenerator&lt;T&gt; implements Generator&lt;T&gt;{ @Override public T next() { return null; } } ```</p>
+<ol><li>实现泛型接口的类，<strong>传入泛型实参：</strong></li></ol>
+<p>```Java /**</p>
+<ul><li>传入泛型实参时：</li><li>定义一个生产器实现这个接口,虽然我们只创建了一个泛型接口Generator&lt;T&gt;</li><li>但是我们可以为T传入无数个实参，形成无数种类型的Generator接口。</li><li>在实现类实现泛型接口时，如已将泛型类型传入实参类型，则所有使用泛型的地方都要替换成传入的实参类型</li><li>即：Generator&lt;T&gt;，public T next();中的的T都要替换成传入的String类型。</li></ul>
+<p>*/ public class FruitGenerator implements Generator&lt;String&gt; {</p>
+<p>private String[] fruits = new String[]{"Apple", "Banana", "Pear"};</p>
+<p>@Override public String next() { Random rand = new Random(); return fruits[rand.nextInt(3)]; } } ```</p>
+<h4 id="3-泛型方法">3.泛型方法</h4>
+<p>在java中,泛型类的定义非常简单，但是泛型方法就比较复杂了。</p>
+<pre><code>尤其是我们见到的大多数泛型类中的成员方法也都使用了泛型，有的甚至泛型类中也包含着泛型方法，这样在初学者中非常容易将泛型方法理解错了。</code></pre>
+<p><strong>泛型类</strong>，是在<strong>实例化类的时候指明泛型的具体类型</strong>；<strong>泛型方法</strong>，是在<strong>调用方法的时候指明泛型的具体类型</strong> 。</p>
+<pre><code>/**
+ * 泛型方法的基本介绍
+ * @param tClass 传入的泛型实参
+ * @return T 返回值为T类型
+ * 说明：
+ *     1）public 与 返回值中间&lt;T&gt;非常重要，可以理解为声明此方法为泛型方法。
+ *     2）只有声明了&lt;T&gt;的方法才是泛型方法，泛型类中的使用了泛型的成员方法并不是泛型方法。
+ *     3）&lt;T&gt;表明该方法将使用泛型类型T，此时才可以在方法中使用泛型类型T。
+ *     4）与泛型类的定义一样，此处T可以随便写为任意标识，常见的如T、E、K、V等形式的参数常用于表示泛型。
+ */
+public &lt;T&gt; T genericMethod(Class&lt;T&gt; tClass)throws InstantiationException ,
+  IllegalAccessException{
+        T instance = tClass.newInstance();
+        return instance;
+}</code></pre>
+<hr>
+<h3 id="4-项目中哪里用到泛型">4.项目中哪里用到泛型？</h3>
+<ul><li><strong>自定义接口通用返回结果</strong> <code>CommonResult&amp;lt;T&amp;gt;</code> 通过参数 <code>T</code> 可根据具体的返回类型动态指定结果的数据类型</li></ul>
+<ul><li>定义 <code>Excel</code> 处理类 <code>ExcelUtil&amp;lt;T&amp;gt;</code> 用于动态指定 <code>Excel</code> 导出的数据类型</li></ul>
+<ul><li>构建集合工具类（参考 <code>Collections</code> 中的 <code>sort</code>, <code>binarySearch</code> 方法）。</li></ul>
+<h3 id="5-泛型擦除机制-为啥要擦除">5.泛型擦除机制？为啥要擦除？</h3>
+<h4 id="1-泛型擦除机制">1.泛型擦除机制：</h4>
+<p>擦除机制过程可以理解为<strong>将<a href="https://so.csdn.net/so/search?q=%E6%B3%9B%E5%9E%8B%E7%B1%BB&amp;spm=1001.2101.3001.7020">泛型类</a>变成普通Java代码的过程</strong>。</p>
+<blockquote><p>😍 🍊Java在编译后的字节码（.class）文件中是<strong>不包含<a href="https://so.csdn.net/so/search?q=%E6%B3%9B%E5%9E%8B&amp;spm=1001.2101.3001.7020">泛型</a>中的类型信息的</strong>，使<strong>用泛型的时候加上的类型参数，会在编译的时候被擦除</strong>，这个过程就叫做<strong>泛型擦除机制</strong>。</p></blockquote>
+<p>在编译成.class文件的时机，编译器擦除了泛型类型相关的信息，所以在<strong>运行时不存在任何泛型类型相关的信息</strong>。这样Java就不需要产生新的类型字节码。</p>
+<p><strong>所有的泛型类型最终都是一种原始类型</strong>，在<strong>Java运行时根本就不存在泛型信息</strong>，所以说泛型技术实际上是java语言的一颗语法糖，Java实现的是一种<strong>伪泛型机制。</strong></p>
+<p>一般包括两个步骤:</p>
+<ol><li>将所有的泛型参数用其<strong>最左边界（最顶级的父类型）类型替换</strong>，默认则是<strong>Object（泛型擦除的本质）</strong>。</li></ol>
+<ol><li><strong>擦除泛型</strong></li></ol>
+<p>实例：</p>
+<p><img alt="image.png" src="/assets/img/flowus-4eb110214b716aad.png"></p>
+<p><img alt="image.png" src="/assets/img/flowus-17695e3ffc086333.png"></p>
+<h4 id="2-为何要用类型擦除机制实现泛型">2.为何要用类型擦除机制实现泛型？</h4>
+<p>这个涉及到泛型引入的历史。</p>
+<p>Java的泛型是在 jdk 1.5 引入的，在此之前已经过去了 10年，已经存在大量没有使用泛型的代码，所以<strong>为了能够让这些代码和泛型兼容</strong>，所以采取了这种方式。</p>
+<p>总结来说，就是<strong>新功能考虑到移植兼容性，所做的决定</strong>。</p>
+<h4 id="3-泛型擦除的缺点">3.泛型擦除的缺点</h4>
+<p>上面也说了类型擦除机制的实现原理-类型擦除指的是通过类型参数合并，将泛型实例关联到同一份字节码上，在运行期间类型参数丢失。就单单只有一份字节码这个事上就会出现许多匪夷所思的问题。</p>
+<ol><li><strong>不能用同一个泛型类的实例区分方法签名</strong></li></ol>
+<p>栗子🌰：</p>
+<p>```Java public class Test { public void test(List&lt;String&gt; a){ System.out.println("String"); } public void test(List&lt;Integer&gt; b){ System.out.println("Integer"); } }</p>
+<p>⭐️ 编译会出现错误，因为List&lt; String &gt;和List&lt; Integeer &gt;在类型擦除后都变成了List，那么两个方法的签名就一模一样了，编译器就会直接报错。 ```</p>
+<ol><li><strong>不能同时catch同一个泛型异常类的多个实例</strong></li></ol>
+<ol><li><strong>不支持基本类型</strong>。</li></ol>
+<p>原因是由于泛型类型擦除后，变成了java.lang.Object类型，这种方式对于基本类型如int/long/float等八种基本类型来说，就比较麻烦，因为<strong>Java无法实现基本类型到Object类型的强制转换</strong>。</p>
+<ol><li><strong>泛型类对象无法被抛出或捕获</strong></li></ol>
+<p>因为泛型类不能继承或实现Throwable接口及其子类。</p>
+<h3 id="6-桥方法">6.桥方法</h3>
+<p>桥方法(Bridge Method)用于<strong>继承泛型类时保证多态</strong>。</p>
+<blockquote><p>😍 桥方法为<strong>编译器自动生成，非手写</strong>。</p></blockquote>
+<p><img alt="image.png" src="/assets/img/flowus-f16b8e8c3157e287.png"></p>
+<h2 id="5-通配符">5.通配符</h2>
+<h3 id="1-什么是通配符-有什么作用">1.什么是通配符，有什么作用？</h3>
+<p>顾名思义是指通用的字符，指“<strong>？</strong>”。一种用于泛型类型的语法结构，通常用于<strong>表示某种未知类型或不确定类型的情况。</strong></p>
+<ol><li>通配符<strong>允许类型参数变化</strong>，<strong>解决泛型无法协变的问题</strong>。</li></ol>
+<blockquote><p>💡 Q1：什么是<strong>协变？</strong></p></blockquote>
+<p>协变指的就是<strong>如果Child是Parent的子类</strong>，那么<strong>List&lt;Child&gt; 也应该是List&lt;Parent&gt; 的子类</strong>，但是<strong>泛型是不支持</strong>的。</p>
+<ol><li>泛型T是确定的类型，一旦你传了我就定下来了，而通配符则更为灵活或者说是不确定，更多的是用于扩充参数的范围 。</li></ol>
+<ol><li>通配符不是类型参数变量，或者说<strong>通配符和类型参数变量T压根就不是一个东西</strong>。</li></ol>
+<p>你可以理解成；</p>
+<ul><li><strong>泛型T就像是个变量</strong>，等着你将来传一个具体的类型拿来用的。</li></ul>
+<ul><li>而<strong>通配符则是一种规定</strong>，<strong>规定你能传哪些参数</strong>。</li></ul>
+<h3 id="协变">协变</h3>
+<p>协变描述的是<strong>继承关系的传递特性</strong>。</p>
+<p>协变的<strong>简单定义</strong>：如果A是B的子类，那么F(A)是F(B) 的子类。F表示的是一种类型变换。</p>
+<p>比如：猫是动物，表示为Cat &lt; Animal，那么一群猫是一群动物，表示为List[Cat] &lt; List[Aniaml]。</p>
+<p>所以，协变可以这样表示：</p>
+<p><strong>A &lt; B ⇒ F(A) &lt; F(B)</strong>。在猫的例子中，<strong>F表示集合</strong>。</p>
+<p>那么<strong>如果F是函数呢</strong>？</p>
+<p>我们定义函数F=Provider，函数的类型定义包括入参和出参，简单地考虑入参为空，出参为Animal和Cat的情况。简单理解为<strong>方法F定义为获取猫或动物</strong>。</p>
+<p>那么Supplier作用Cat和Animal上，原来的类型关系保持吗？</p>
+<p>答案是<strong>保持</strong>，<strong>Supplier[Cat] &lt; Supplier[Animal]</strong>。也就是说获取一只猫就是获取一只动物。转换成面向对象的语言，<strong>Supplier[Cat]是Supplier[Animal]的子类</strong>。</p>
+<h3 id="2-通配符-和泛型T有啥区别">2.通配符？和泛型T有啥区别</h3>
+<p><img alt="image.png" src="/assets/img/flowus-93c1c6b3161c46c6.png"></p>
+<h3 id="3-什么是无界通配符">3.什么是无界通配符？</h3>
+<p>无界通配符<strong>可以接收任何泛型类型数据</strong>。</p>
+<p>用于实现：<strong>不依赖于具体类型参数的简单方法，</strong>可以捕获参数类型并交由泛型方法进行处理。</p>
+<p><img alt="image.png" src="/assets/img/flowus-36c5d1de2427a920.png"></p>
+<h3 id="4-上-下边界通配符">4.上/下边界通配符</h3>
+<p>在<strong>使用泛型</strong>的时候，还可以<strong>为传入的泛型类型实参</strong>进行<strong>上下边界的限制</strong>。</p>
+<p>例如：类型实参<strong>只准传入某种类型的 子类 或父类</strong>。</p>
+<ol><li><strong>上边界通配符</strong>：<strong>extends</strong>，只准传入某种类型的<strong>子类</strong></li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-5ff2f088c3100520.png"></p>
+<ol><li><strong>下边界</strong>通配符：<strong>super</strong>，只准传入某种类型的<strong>父类</strong></li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-2be98c3d26c2d8db.png"></p>
+<h2 id="5-序列化与反序列化">5.序列化与反序列化</h2>
+<h3 id="1-什么是序列化">1.什么是序列化</h3>
+<p>如果我们需要<strong>持久化 Java 对象，</strong>比如将 Java 对象保存在文件中，或者在网络传输 Java 对象，这些场景都需要用到序列化。</p>
+<p>简单来说：</p>
+<ul><li><strong>序列化</strong>：将数据结构或对象转换成<strong>二进制字节流</strong>的过程。</li></ul>
+<ul><li><strong>反序列化</strong>：将在序列化过程中所生成的二进制字节流转换成数据结构或者对象的过程。</li></ul>
+<p>综上：<strong>序列化的主要目的是通过网络传输对象或者说是将对象存储到文件系统、数据库、内存中。</strong></p>
+<h3 id="2-序列化协议对应于-TCP-IP-4-层模型的哪一层"><strong>2.序列化协议对应于 TCP/IP 4 层模型的哪一层？</strong></h3>
+<p>网络通信的双方必须要采用和遵守相同的协议.</p>
+<ul><li><strong>OSI标准：</strong></li></ul>
+<p><img alt="image.png" src="/assets/img/flowus-18a4171b9c29b7d4.png"></p>
+<p><strong>表示层</strong>做的事情主要就是<strong>对应用层的用户数据进行处理转换为二进制流</strong>。</p>
+<p>反过来的话，就是将二进制流转换成应用层的用户数据。这不就对应的是序列化和反序列化么？</p>
+<p>因为，OSI 七层协议模型中的应用层、表示层和会话层对应的都是 <strong>TCP/IP 四层模型中的应用层</strong>，所以序列化协议属于 TCP/IP 协议应用层的一部分。</p>
+<h3 id="3-有些字段不想序列化">3.有些字段不想序列化？</h3>
+<p>对于不想进行序列化的变量，使用 <strong><code>transient</code> 关键字</strong>修饰。</p>
+<p><code>transient</code> 关键字的作用是：阻止实例中那些用此关键字修饰的的变量序列化；当对象被反序列化时，被 <code>transient</code> 修饰的变量值不会被持久化和恢复。</p>
+<p>关于 <code>transient</code> 还有几点注意：</p>
+<ul><li><code>transient</code> 只能修饰变量，不能修饰类和方法。</li></ul>
+<ul><li><code>transient</code> 修饰的变量，在反序列化后变量值将会被置成类型的默认值。例如，如果是修饰 <code>int</code> 类型，那么反序列后结果就是 <code>0</code>。</li></ul>
+<ul><li><code>static</code> 变量因为不属于任何对象(Object)，所以无论有没有 <code>transient</code> 关键字修饰，均不会被序列化</li></ul>
+<hr>
+<h2 id="6-JAVA-I-O">6.JAVA I/O</h2>
+<p><a href="https://www.yuque.com/snailclimb/mf2z3k/qcyq7f#kD9cm">https://www.yuque.com/snailclimb/mf2z3k/qcyq7f#kD9cm</a></p>
+<p>Java IO 流的 40 多个类都是从如下 4 个抽象类基类中派生出来的。</p>
+<ul><li><strong><code>InputStream</code>/<code>Reader</code></strong>: 所有的输入流的基类，前者是<strong>字节输入流</strong>，后者是<strong>字符输入流</strong>。</li></ul>
+<ul><li><strong><code>OutputStream</code>/<code>Writer</code></strong>: 所有输出流的基类，前者是<strong>字节输出流</strong>，后者是<strong>字符输出流</strong></li></ul>
+<hr>
+<h3 id="1-为什么-I-O-流操作要分为字节流操作和字符流操作"><strong>1.为什么 I/O 流操作要分为字节流操作和字符流操作?</strong></h3>
+<blockquote><p>💡 <strong>即：不管是文件读写还是网络发送接收，信息的最小存储单元都是字节，那为什么 I/O 流操作要分为字节流操作和字符流操作呢？</strong></p></blockquote>
+<p>个人认为主要有两点原因：</p>
+<ul><li><strong>字符流</strong>是由 Java 虚拟机将字节转换得到的，这个过程还算是比较耗时；</li></ul>
+<ul><li>如果我们<strong>不知道编码类型</strong>的话，使用<strong>字节流的过程中很容易出现乱码问题</strong></li></ul>
+<h3 id="2-Java中三种常见的I-O模型">2.Java中三种常见的I/O模型</h3>
+<ol><li><strong>BIO(Blocking IO)— 同步阻塞IO模型</strong></li></ol>
+<p>应用程序在<strong>发起read调用后，会一直阻塞</strong>，直到<strong>内核将IO收到的数据拷贝到用户空间</strong>。</p>
+<p><img alt="image.png" src="/assets/img/flowus-42892b8aa7f03774.png"></p>
+<ol><li><strong>NIO(Non-Blocking/New IO)- IO多路复用模型</strong></li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-ffbcdb9569e0e482.png"></p>
+<p><img alt="image.png" src="/assets/img/flowus-a33ecf43f8d8c209.png"></p>
+<p><img alt="image.png" src="/assets/img/flowus-2fbf08267dd4b90c.png"></p>
+<ol><li><strong>AIO(Asynchronous IO)-异步IO</strong></li></ol>
+<p>异步IO基于<strong>事件和回调机制</strong>实现，也就是<strong>应用程序操作后会直接返回，不会阻塞在那里</strong>。当<strong>后台处理完成，操作系统会通知相应的线程进行后续的操作。</strong></p>
+<p><img alt="image.png" src="/assets/img/flowus-fe01fbf420467319.png"></p>
+<h3 id="3-剩下的两种IO模型">3.剩下的两种IO模型：</h3>
+<p>Unix系统下，IO模型共有五种：<strong>同步阻塞IO</strong> -BIO、<strong>同步非阻塞IO</strong> -NIO、<strong>IO多路复用、信号驱动IO、异步IO -AIO。</strong></p>
+<p>上边讲了三种，补充另外两种：</p>
+<ol><li><strong>同步非阻塞IO</strong> -NIO</li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-be80cc24603a7cfd.png"></p>
+<p><img alt="image.png" src="/assets/img/flowus-8b0c2f01656a4ab0.png"></p>
+<p>这个时候，<strong>IO多路复用模型</strong>就上场了。</p>
+<h3 id="总结图">总结图</h3>
+<p><img alt="image.png" src="/assets/img/flowus-2e609787f9117b2c.png"></p>
+<h3 id="4-select-和epoll-的区别">4.select(）和epoll（）的区别</h3>
+<ol><li><strong>select</strong>==&gt;<strong>时间复杂度O(n)</strong></li></ol>
+<p>它仅仅知道了，有I/O事件发生了，却并不知道是哪那几个流（可能有一个，多个，甚至全部），我们<strong>只能无差别轮询所有流</strong>，找出能读出数据，或者写入数据的流，对他们进行操作。</p>
+<p>所以<strong>select具有O(n)的无差别轮询复杂度</strong>，同时<strong>处理的流越多，无差别轮询时间就越长</strong>。</p>
+<p><code>select()</code> 函数通常使用<strong>位图（bitmask）来存储数据</strong>。这种存储方式可以有效地表示大量的文件描述符，并且在每次调用 <code>select()</code> 函数时都会将这些位图作为参数传递给内核，让内核根据位图中设置的位来进行事件监听。</p>
+<p>在 Linux 中，<code>select</code> 函数使用 <strong><code>fd_set</code></strong> 数据结构来保存文件描述符。<strong><code>fd_set</code> 是一个位图（bitmask），用于表示一组文件描述符</strong>。通常情况下，<code>fd_set</code> 中的每一位对应一个文件描述符，当相应的文件描述符可读、可写或发生错误时，对应的位会被设置为 1。</p>
+<blockquote><p>💡 <strong>位图</strong>是一种数据结构，用于<strong>表示一组二进制位或者位数组</strong>。每个位可以被设置为 0 或 1，用于表示某种状态或者标记。</p></blockquote>
+<ol><li><strong>poll</strong>==&gt;<strong>时间复杂度O(n)</strong></li></ol>
+<p>poll本质上和select没有区别，它将用户传入的数组拷贝到内核空间，然后查询每个fd对应的设备状态， <strong>但是它没有最大连接数的限制</strong>，原因是它是<strong>基于链表来存储</strong>的.</p>
+<ol><li><strong>epoll</strong>==&gt;<strong>时间复杂度O(1)</strong></li></ol>
+<p><strong>epoll可以理解为event poll</strong>，不同于忙轮询和无差别轮询，epoll会把哪个流发生了怎样的I/O事件通知我们</p>
+<p>。所以我们说epoll实际上是<strong>事件驱动（每个事件关联上fd）</strong>的，此时我们对这些流的操作都是有意义的。<strong>（复杂度降低到了O(1)）</strong></p>
+<p>select，poll，epoll都是IO多路复用的机制。I/O多路复用就通过一种机制，可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。</p>
+<blockquote><p>💡 <strong>但select，poll，epoll本质上都是同步I/O：因为他们都需要在读写事件就绪后自己负责进行读写，也就是说这个读写过程是阻塞的</strong>，</p></blockquote>
+<p>而<strong>异步I/O则无需自己负责进行读写</strong>，异步I/O的实现会负责把数据从内核拷贝到用户空间。</p>
+<h3 id="5-什么是选择器">5.什么是选择器？</h3>
+<p>选择器（Selector）是一种<strong>用于管理多个通道（Channel）的对象</strong>，通常用于非阻塞 I/O 操作中的事件监听和事件分发。</p>
+<p>选择器<strong>允许一个单独的线程来监视多个通道的事件</strong>，当其中一个或多个通道有事件发生时，可以立即进行相应的处理，而<strong>无需为每个通道创建一个线程</strong>。</p>
+<h3 id="6-select为什么最大文件描述符数量是1024">6.select为什么最大文件描述符数量是1024</h3>
+<p>select 函数在 Linux 系统中<strong>使用文件描述符集合来表示要监听的文件描述符</strong>，并且<strong>这个集合的大小是有限的</strong>。</p>
+<p>在早期的实现中，这个大小通常是固定的，并且在很多系统中默认是 1024。这个限制主要是由于 select 函数的实现方式导致的。</p>
+<p>在 select 函数的实现中，<strong>内核需要遍历所有要监听的文件描述符</strong>，并<strong>检查它们是否就绪</strong>，这会带来一定的性能开销。为了减小这个开销，内核会分配一个固定大小的数据结构来存储文件描述符集合，<strong>而这个大小通常是由 select 函数的实现者决定的</strong>。1024 是一个常见的默认值，因为<strong>它可以满足大多数应用程序的需求。</strong></p>
+<p>当然，随着系统的发展和内核的优化，一些系统已经可以支持更大的文件描述符数量了。例如，在一些现代的 Linux 内核中，可以通过修改系统参数或者重新编译内核来调整文件描述符集合的大小。</p>
+<h3 id="7-epoll-是怎么实现的-文件描述符是怎么做的">7.epoll()是怎么实现的？文件描述符是怎么做的？</h3>
+<p>poll()和epoll()都针对select()做了一些优化。</p>
+<ol><li><strong>poll()</strong>针对select()的<strong>最大文件描述符数的限制</strong>，做了优化=》<strong>将位图改为链表</strong>。</li></ol>
+<p>poll 只是基于链表的结构解决了最大文件描述符限制的问题，其他 select 性能差的问题依然没有解决；终极的解决方案是 epoll，解决了 select 的前三个缺点；</p>
+<ol><li><strong>epoll()针对select()的三个缺点</strong>做了优化。</li></ol>
+<ol><li>调用 select 时会陷入内核，这时需要将参数中的 fd_set 从用户空间拷贝到内核空间，高并发场景下这样的拷贝会消耗极大资源；<strong>（epoll 优化为不拷贝）</strong></li></ol>
+<ol><li>进程被唤醒后，不知道哪些连接已就绪即收到了数据，需要遍历传递进来的所有 fd_set 的每一位，不管它们是否就绪；（<strong>epoll 优化为异步事件通知</strong>）</li></ol>
+<ol><li>select 只返回就绪文件的个数，具体哪个文件可读还需要遍历；（<strong>epoll 优化为只返回就绪的文件描述符，无需做无效的遍历</strong>）</li></ol>
+<ol><li><strong>epoll 的实现</strong>：注意<strong>两个回调函数的使用</strong>：</li></ol>
+<ol><li><strong>回调函数 ep_poll_callback：</strong>数据到达 socket 的等待队列时，通过<strong>回调函数 ep_poll_callback</strong> 找到 eventpoll 对象中红黑树的 epitem 节点，并将其加入就绪列队 rdllist。</li></ol>
+<ol><li><strong>回调函数 default_wake_function：</strong>然后通过<strong>回调函数 default_wake_function</strong> 唤醒用户进程 ，并将 rdllist 传递给用户进程，让用户进程准确读取就绪的 socket 的数据。这种回调机制能够定向准确的通知程序要处理的事件，而不需要每次都循环遍历检查数据是否到达以及数据该由哪个进程处理，日常开发中可以学习借鉴下这种思想。</li></ol>
+<h2 id="7-布隆过滤器">7.布隆过滤器</h2>
+<h3 id="1-什么是布隆过滤器">1.什么是布隆过滤器？</h3>
+<p>本质上布隆过滤器<strong>是一种数据结构</strong>，比较巧妙的<strong>概率型数据结构</strong>（probabilistic data structure），</p>
+<ol><li>特点：<strong>高效地插入和查询</strong></li></ol>
+<ol><li>作用：<strong>判断一个元素是否可能存在于一个集合中</strong></li></ol>
+<ol><li>优点：相比于传统的 List、Set、Map 等数据结构，它<strong>更高效、占用空间更少</strong>。</li></ol>
+<ol><li>缺点：是其<strong>返回的结果是概率性的，而不是确切</strong>的。</li></ol>
+<h3 id="2-数据结构与原理">2.数据结构与原理</h3>
+<ol><li>布隆过滤器是一个  <strong>bit 数组。</strong></li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-85e453d79a2f78ef.png"></p>
+<ol><li>使用<strong>多个不同的哈希函数</strong>生成<strong>多个哈希值：</strong></li></ol>
+<p>如果我们要映射一个值到布隆过滤器中，我们需要使用<strong>多个不同的哈希函数</strong>生成<strong>多个哈希值，</strong>并对每个生成的哈希值指向的 bit 位置变为 1，例如针对值 “baidu” 和三个不同的哈希函数分别生成了哈希值 1、4、7，则上图转变为：</p>
+<p><img alt="image.png" src="/assets/img/flowus-f626674dae43f042.png"></p>
+<blockquote><p>💡 <strong>Q1：为何要用多个不同的哈希函数？</strong></p></blockquote>
+<ol><li>多个哈希函数有助于<strong>减少哈希冲突</strong>，从而<strong>降低误判的概率，提高过滤器的性能</strong>。</li></ol>
+<ol><li><strong>增加布隆过滤器的稳定性</strong></li></ol>
+<p>即使某一个哈希函数的计算结果发生了变化（比如哈希冲突的变化），其他哈希函数的结果仍然能够保持一定的稳定性，从而降低了过滤器的不稳定性，提高了其可靠性。</p>
+<h3 id="3-添加元素与查询元素">3.添加元素与查询元素</h3>
+<ol><li><strong>添加</strong>：将该元素<strong>经过多个哈希函数计算得到的位置全部设置为 1</strong></li></ol>
+<p>当向布隆过滤器中添加一个元素时，将该元素经过多个哈希函数计算得到的位置设置为 1。</p>
+<ol><li><strong>查询</strong>：<strong>查询所有的哈希位置</strong>。</li></ol>
+<p>当查询一个元素是否存在于布隆过滤器中时，将该元素经过多个哈希函数计算得到的位置进行查询。</p>
+<ol><li>如果<strong>所有位置上的值都为 1</strong>，则说明该元素<strong>可能存在于集合中</strong>；</li></ol>
+<ol><li>如果<strong>有任意一个位置的值为 0</strong>，则说明该元素<strong>一定不存在于集合中</strong>。</li></ol>
+<p>这是因为我们在插入的时候，会将映射到的所有位置都置为1呀。而<strong>布隆过滤器是不支持删除操作的。</strong></p>
+<h3 id="4-布隆过滤器支持删除操作吗">4.布隆过滤器支持删除操作吗？</h3>
+<p><strong>传统的布隆过滤器并不支持删除操作</strong>。</p>
+<blockquote><p>💡 但是名为 Counting Bloom filter 的变种可以用来测试元素计数个数是否绝对小于某个阈值，它支持元素删除。</p></blockquote></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>

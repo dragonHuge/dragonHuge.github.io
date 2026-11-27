@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>MCP开发指北(Java) - 组内 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">11</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">一、MCP 三种通讯模式</a><a class="tl l1" href="#sec-2">二、Java MCP 开发速成</a><a class="tl l2" href="#sec-3">Server 配置</a><a class="tl l2" href="#sec-4">核心注解 @Tool</a><a class="tl l2" href="#sec-5">将Tool注册到MCP Server</a><a class="tl l2" href="#sec-6">在客户端使用MCP Tool</a><a class="tl l2" href="#sec-7">结果</a><a class="tl l1" href="#sec-8">三、原理拓展</a><a class="tl l3" href="#sec-9">大模型如何识别 并 使用MCP Tool？</a><a class="tl l1" href="#sec-10">拓展</a><a class="tl l1" href="#sec-11">参考资料</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="ai/index.html">AI</a></div><article><h1>MCP开发指北(Java) - 组内</h1><div class="meta">2026-09-20 · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<blockquote><p><strong>写在前边：</strong></p><p>本文探讨「用Java开发MCP服务」，打通Java开发与AI开发的业务壁垒，初步实现从「AI使用者」-&gt;「AI开发者」的身份转变。</p><p>在读此文章之前，首先阅读文章：<span class="fs-mention">@AI 发展-自顶向下</span>。帮助你对AI领域有宏观认识，同时对MCP有初步认知。</p></blockquote><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>什么是MCP？</strong></p><p>答：<u>一个协议</u>，旨在为大型语言模型（LLMs）应用提供一个<u>标准化的接口</u>，使其能够连接和交互外部数据源和工具。</p></div></div><h1 id="sec-1">一、MCP 三种通讯模式</h1><blockquote><p>请跳转：<span class="fs-mention">@AI 发展-自顶向下</span>的MCP模块，这里不再做MCP的详细介绍。</p></blockquote><p>MCP目前有以下三种通讯模式。</p><table><tr><th><p>通讯模式</p></th><th><p>特点</p></th><th><p>通俗理解</p></th></tr><tr><td><p><strong>STDIO</strong> </p><p>(Standard Input/Output)</p></td><td><p><strong>标准输入输出，进程级通信，本地运行</strong>。适合开发者。</p></td><td><p>Mcp Client和Mcp Server部署在同一台机器上，通过标准输入输出通信的方式就是STDIO模式。</p><p>因为在<strong>本地运行</strong>，是<strong>绝对安全</strong>的；</p></td></tr><tr><td><p><strong>SSE </strong></p><p>（Server-Sent Events）</p></td><td><p><u><strong>单向</strong></u><strong>流式 HTTP传输</strong>，浏览器/远端都能连，适合生产发布。</p><blockquote><p>服务端通过SSE主动推送数据，客户端通过HTTP POST发送请求。</p></blockquote></td><td><p>部署在不同机器，通过Http请求通信，就是SSE模式和StreamableHttp模式。</p><p>若暴露连接方式，<strong>可能会有安全问题</strong>。</p></td></tr><tr><td><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>Stream able Http⭐️</strong></mark></p><p>（remote http）</p></td><td><p><u><strong>双向</strong></u><strong>流式 HTTP传输</strong>，官方最新推荐，云原生友好。</p><blockquote><p>部署在不同机器，通过Http请求通信就是SSE模式和StreamableHttp模式。</p></blockquote></td><td></td></tr><tr><td><p><span style="color:#8f959e"><strong>Studio 模式</strong></span></p></td><td><p><span style="color:#8f959e"><strong>可视化客户端。</strong></span></p></td><td><p><span style="color:#8f959e">官方文档里并没有叫 Studio 模式 的术语，社区一般把 Cherry Studio等带 GUI 的客户端统称为 “Studio 模式”，与之对应的是 纯命令行/代码级 的 STDIO 模式。</span></p></td></tr></table><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>2025.03.26,Anthropic在MCP规范中正式弃用SSE传输，全面转向StreamableHttp。为什么？</strong></p><p><strong>答</strong>：</p><p><u>SSE的原理</u>是MCP Client与MCP Server通过HTTP建立SSE长链接，之后MCP Server就可以不断向Client发送数据，而不需要每次都进行三次握手，而MCP Client可以主动关闭SSE长链接。</p><p><u>问题就在于：</u><span style="color:#3370ff"><u>SSE传输的MCP Server无法感知到数据的丢失。</u></span>整个通讯过程都需要依赖SSE长链接，一旦出现网络异常波动（短暂中断），那么MCP Server向MCP Client发送的数据就会丢失，并且MCP Server无法感知到丢失的发生。</p><p>而<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><u>StreamableHttp 模式中，MCP Server可以感知到数据丢失</u></mark>，连接恢复时可以持续地将没有发送给MCP Client的数据再次发送，保证长链接的高可用性。</p></div></div><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>那么在Streamable Http中，是如何感知到数据丢失的？</strong></p><p><strong>答</strong>：</p><p>在 StreamableHttp中，数据丢失通过 <u>“块级序列号 + 客户端重连续传</u>” 机制来感知与修复，核心流程如下：</p><ol><li>服务端打标：每条数据块下发前由 MCP Server 生成 全局递增序列号 <code>seq</code> 或 时间戳 <code>ts</code>，随块一起发给客户端。</li></ol><ol><li>客户端记录：客户端维护 <code>last_ack_seq</code>（或 <code>last_ack_ts</code>），表示已成功接收到的最新块。</li></ol><ol><li>断线重连续传：当连接因网络异常断开时，客户端重新发起 <code>GET /stream?resume_seq={last_ack_seq}</code>，服务器根据 resume_seq 跳过已发块，只发送 未确认数据。</li></ol><ol><li>零感知恢复：客户端收到 不连续 seq 即可立即判定“丢失”，并触发重连续传；整个过程对业务代码透明。</li></ol><blockquote><p>一句话总结：<mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">“StreamableHttp 用序列号标记块，断线后 </mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"><code>resume_seq</code></mark><mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px"> 续传，客户端靠 seq 不连续 感知并自动补全数据。”</mark></p></blockquote></div></div><h1 id="sec-2">二、Java MCP 开发速成</h1><blockquote><p>接下来我们一起完成1个MCP server的开发，go go go ~</p></blockquote><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>开发环境：</strong></p><p><span style="color:#d83931"><strong>JDK ≥ 17，Spring Boot ≥ 3.2，Spring AI</strong></span>。</p></div></div><h2 id="sec-3">Server 配置</h2><ol><li><pre><code>&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;3.4.3&lt;/version&gt;
+&lt;/parent&gt;
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.ai&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-ai-mcp-server-spring-boot-starter&lt;/artifactId&gt;
+        &lt;version&gt;${1.0.0-M6}&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre></li></ol><ol><li><pre><code>spring:
+  main:
+    web-application-type: none   # 必须关 web
+    banner-mode: off
+  ai:
+    mcp:
+      server:
+        stdio: true              # 本地调试用，因此开启stdio模式。
+        name: mcp-server
+        version: 0.0.1</code></pre></li><li><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>为何必须关闭web模式呢？</strong></p><p><strong>答</strong>：因为 Spring Boot 默认会启动内嵌 Web 容器（Tomcat/Netty），即使你没有任何 Controller，也会：</p><ol><li>申请端口（默认 8080 或配置值）。</li></ol><ol><li>占用系统端口资源 → 如果端口被占或配置为 0，直接抛 <code>PortInUseException</code>/<code>IllegalArgumentException</code>，导致整个 Spring 上下文启动失败。</li></ol><p>把 <code>web-application-type: none</code> 就是告诉框架：“别给我起 Web 容器，我只做纯 CLI（STDIO MCP Server）。”</p><p>因此 必须关 web，否则若 端口冲突 → 启动失败。</p></div></div></li></ol><h2 id="sec-4">核心注解 <mark style="background:#fff3bf;color:inherit;padding:0 2px;border-radius:3px">@Tool</mark></h2><p><strong>作用</strong>：将普通 Java 方法标记成「<u>可被 AI 大模型调用的工具函数</u>」，让大模型在对话里<u>自动识别并执行它</u>。</p><blockquote><p>通俗理解：“给 <code>@Tool</code> 写一句口语化描述(description)，模型就能根据提示里的同义词自动触发 MCP 调用。”</p></blockquote><p>示例：</p><pre><code>@Component
+public class MoodTool {
+@Tool(
+    name        = "moodImprove",               // 工具名（默认方法名）
+    description = "根据人物心情，返回安慰语" )     // 关键！模型用这句话决定何时触发public 
+    public String moodImprove(String mood) {
+        return "不要再"+ mood + "啦！小龙祝你一路暴富！事业长虹！永远年轻！";
+    }
+}</code></pre><h2 id="sec-5">将Tool注册到MCP Server</h2><p>把带有 <code>@Tool</code> 注解的类“注册”到 MCP Server，让大模型真正能够发现并调用这些工具方法。</p><pre><code>@Configuration
+public class McpConfig {
+    @Bean
+    public ToolCallbackProvider tools(WeatherTool tool) {
+        return MethodToolCallbackProvider.builder()
+                .toolObjects(tool)
+                .build();
+    }
+}</code></pre><h2 id="sec-6">在客户端使用MCP Tool</h2><p>在Cherry Studio等客户端使用MCP时，需要进行两方面的配置。</p><ol><li>客户端环境配置，详情参考官网：https://docs.cherry-ai.com/advanced-basic/mcp/config</li></ol><ol><li>MCP server配置，参考如下。</li></ol><pre><code>{ // 服务配置
+  "mcpServers": {
+    "mcp-sxl-server": {
+      "command": "/opt/homebrew/opt/openjdk@17/bin/java",
+      "args": [
+        "-Dspring.ai.mcp.server.stdio=true",
+        "-Dspring.main.web-application-type=none",
+        "-Dlogging.pattern.console=",
+        "-jar",
+        "/Users/your-account/IdeaProjects/sxl-mcp/mcp-server/target/mcp-server-1.0-SNAPSHOT.jar"
+      ],
+      "env": {
+        "PATH": "/opt/homebrew/opt/openjdk@17/bin"
+      }
+    }
+  }
+}
+
+要点解释：
+1.command：定义启动服务的可执行文件路径，这里指定的是 Java 可执行文件的位置：表示使用本地安装的 OpenJDK 17 版本来运行后续的 Java 程序（.jar文件）。
+2.env：定义启动服务时的环境变量，这里只配置了PATH：确保启动服务时，系统能在指定路径下找到 Java 相关的可执行文件（与command中的 Java 路径呼应，避免因环境变量问题导致找不到 Java 命令）。</code></pre><h2 id="sec-7">结果</h2><p>可以看到确实调用了我们开发的MCP server。</p><h1 id="sec-8">三、原理拓展</h1><h3 id="sec-9"><strong>大模型如何识别 并 使用MCP Tool？</strong></h3><div class="fs-callout" style="background:#ffe8cc;border-left-color:#f5a623"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>一句话总结：</strong>
+大模型自己并不会直接“识别” Java 方法，而是靠 MCP 运行时，把 “1个Tool” 包装成一条 “工具清单”。</p><p>当用户提问触发条件时，客户端先让大模型“看见”这条工具，再由客户端反向调用你的 Java 方法，把结果回传给模型。</p></div></div><table><tr><th><p>角色</p></th><th><p>承担任务</p></th></tr><tr><td><p><strong>Java 方法</strong></p></td><td><p>提供业务逻辑</p></td></tr><tr><td><p><strong>Spring AI + MCP Server</strong></p></td><td><p>把方法转成JSON Schema、反序列化参数、执行方法。</p></td></tr><tr><td><p><strong>大模型</strong></p></td><td><p><strong>只负责“判断何时调用”以及“把结果融入自然语言”。</strong></p></td></tr><tr><td><p><strong>客户端</strong></p></td><td><p>负责连接、转发、回传</p></td></tr></table><p>以本文代码为例，将完整链路拆开研究：</p><ol><li><pre><code>{ // MCP在“tools”阶段返回的工具清单
+  "tools": [{
+    "name": "moodImprove",
+    "description": "根据人物心情，返回安慰语",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "mood": { "type": "string" }
+      },
+      "required": ["mood"]
+    }
+  }]
+}</code></pre></li></ol><ol><li><p>将MCP注册到Cherry Studio、Claude Desktop等客户端之后，这些客户端会拿到MCP Server中所有Tool的 JSON schema。</p></li></ol><ol><li><p>此时当<u>大模型看到有用户情绪词 “沮丧”</u>，并且 <u>与</u><u><code>moodImprove</code></u><u> Tool中“根据人物心情，返回安慰语”的description匹配成功</u>。</p></li><li><p>于是<u>大模型决定调用</u><u><code>moodImprove</code></u><u> Tool</u>，最后返回一个 工具调用指令：</p></li><li><pre><code>{
+  "type": "tool_call",
+  "name": "moodImprove",
+  "arguments": { "mood": "沮丧" }
+}</code></pre></li></ol><ol><li><p>客户端收到工具调用指令后，通过 STDIO/SSE 向 MCP Server 发请求，<u>JSON-RPC 2.0 规范的请求</u>：</p></li><li><pre><code>{
+    "method": "tools/call",
+    "params":
+    {
+        "name": "moodImprove",
+        "arguments":
+        {
+            "mood": "沮丧"
+        }
+    }
+}</code></pre></li><li><p>Spring AI 的 <code>McpToolCallback</code> 把 <code>{"mood":"沮丧"}</code> 反序列化成 <code>String mood</code> 参数，真正执行Java方法：</p></li><li><pre><code>moodImprove("沮丧") → return "不要再沮丧啦！小龙祝你一路暴富！..."</code></pre></li></ol><ol><li><pre><code>{
+  "params": {
+    "mood": "糟糕"
+  },
+  "response": {
+    "content": [
+      {
+        "type": "text",
+        "text": "\"不要再糟糕啦！小龙祝你一路暴富！事业长虹！永远年轻！\""
+      }
+    ],
+    "isError": false
+  }
+}</code></pre></li></ol><h1 id="sec-10">拓展</h1><p>agent的本质还是概率游戏，它并不是万能的，千万不要把任何场景问题都一股脑全部丢给agent，期望它可以给出一个完美的结果。</p><p>现阶段的最优策略是将agent与工程<strong>结合使用</strong>，扬长避短。</p><p>在做技术方案时，要充分考虑每一环适合用什么工具解决。在具体实践时，若发现方向不对且尝试调整过后仍然得不到比较好的结果，就<strong>及时更换方向</strong>，不要死磕。只有准确理解各种技术的边界和长处，才能构建出真正高效、稳健的解决方案。</p><h1 id="sec-11">参考资料</h1><p>MCP官方文档：https://modelcontextprotocol.io/docs/develop/build-server</p><p>参考文章：https://mp.weixin.qq.com/s/acY7hbmGofkwb81BMRt36A</p><p>代码参考：https://github.com/yuyuanweb/mcp-mianshiya-server?tab=readme-ov-file</p><p>各AI studio工具优缺点速览：</p><table><tr><th><p>工具名称</p></th><th><p>简介</p></th><th><p>优点</p></th><th><p>缺点</p></th><th><p>模型支持</p></th><th><p>目标用户</p></th><th><p>关键特性</p></th></tr><tr><td><p>OpenWebUI</p></td><td><p>用户友好的Web图形用户界面，用于与多种AI模型进行交互</p></td><td><p>用户界面友好，安装和配置简单，支持多种模型服务</p></td><td><p>不支持模型训练和微调，功能相对简单</p></td><td><p>Ollama、OpenAI API，理论上可扩展支持其他API兼容的模型服务</p></td><td><p>通用用户，希望拥有简洁易用的Web界面来与各种LLM交互</p></td><td><p>插件扩展、工作空间、聊天功能、代码执行、RAG、可定制Banner等</p></td></tr><tr><td><p>AnythingLLM</p></td><td><p>一体化的AI应用平台，支持多种LLM、文档和代理</p></td><td><p>功能全面，支持多种模型和云端API，适合构建复杂AI应用</p></td><td><p>功能复杂，可能需要一定的学习成本</p></td><td><p>多种本地LLM和云端API（如Ollama、LM Studio、LocalAI、OpenAI等）</p></td><td><p>需要构建AI应用的开发者和企业，以及希望拥有全功能、私有化AI解决方案的用户</p></td><td><p>文档问答、AI代理、工具集成、知识库、多用户管理等</p></td></tr><tr><td><p><strong>Ollama</strong></p></td><td><p>专注于本地运行LLM，简化模型管理，适合开发者和AI爱好者</p></td><td><p>安装极其简便，模型库丰富，对新手友好</p></td><td><p>主要支持开源模型，扩展性相对有限</p></td><td><p>开源模型，支持超过1700个模型，模型格式主要为GGUF</p></td><td><p>开发者、学生和AI爱好者，希望在本地便捷地体验和使用各种开源LLM</p></td><td><p>模型管理、易于分发、REST API、兼容llama.cpp等</p></td></tr><tr><td><p><strong>Cherry Studio</strong></p></td><td><p>强大的AI客户端，集成多种大模型服务商的API，提供丰富的功能</p></td><td><p>可视化界面友好，操作便捷，内置丰富功能</p></td><td><p>主要支持大模型服务商的API，自定义功能有限</p></td><td><p>国内外众多大模型服务商（如DeepSeek、OpenAI等）</p></td><td><p>追求极致AI客户端体验的用户，以及需要便捷使用国内外多种大模型API的用户</p></td><td><p>内置多模型服务商、提示词库、文生图、文档处理、插件扩展等</p></td></tr><tr><td><p>LM Studio</p></td><td><p>面向开发者和技术爱好者，提供本地模型运行、实验和微调平台</p></td><td><p>功能强大，支持多种模型格式和硬件平台，适合技术背景用户</p></td><td><p>操作相对复杂，需要一定的技术背景</p></td><td><p>多种开源模型格式（如GGUF等），支持从Hugging Face下载模型</p></td><td><p>开发者、技术爱好者和研究人员，希望在本地进行LLM实验、微调和二次开发</p></td><td><p>本地模型运行、模型微调、OpenAI兼容API服务器、性能分析等</p></td></tr><tr><td><p><strong>Dify</strong></p></td><td><p>专注于AI原生应用的定义和构建，提供低代码/无代码操作界面</p></td><td><p>功能强大，提供低代码/无代码操作界面，适合快速构建复杂AI应用</p></td><td><p>功能复杂，初学者可能需要适应</p></td><td><p>多模型配置，可以集成OpenAI、Ollama等多种模型</p></td><td><p>企业和开发者，希望快速构建和部署复杂的AI原生应用，并进行LLMOps管理</p></td><td><p>AI应用编排、RAG流水线、工具集成、应用监控、知识库管理、多用户协作等</p></td></tr><tr><td><p>FastGPT</p></td><td><p>基于LLM的知识库问答系统，适合快速搭建智能客服和文档问答应用</p></td><td><p>专注于知识库问答，操作相对友好，适合快速搭建应用</p></td><td><p>配置过程可能较复杂，主要支持OpenAI模型</p></td><td><p>主要支持OpenAI模型，可通过代理支持其他大型模型</p></td><td><p>企业和开发者，希望快速搭建知识库问答系统，例如智能客服、文档助手等</p></td><td><p>知识库构建、数据预处理、向量化、QA分割、工作流编排、可视化界面等</p></td></tr></table></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>Maven多模块项目 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">3</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-为何要多模块项目">1.为何要多模块项目？</a><a class="tl l2" href="#2-怎么构建Maven多模块项目">2.怎么构建Maven多模块项目？</a><a class="tl l2" href="#3-如何启动多模块项目">3.如何启动多模块项目？</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>Maven多模块项目</h1><div class="meta">2024-07-23 · <a class="src-link" href="https://flowus.cn/5ef7c01c-2613-4e48-9c3d-aac3e77894e7" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h2 id="1-为何要多模块项目">1.为何要多模块项目？</h2>
+<p>Maven多模块项目（也称为Maven聚合项目）提供了一种组织和管理大型项目的方式，它将一个大项目分解为多个更小、更易于管理的模块。</p>
+<p>好处有：</p>
+<ul><li>组织结构清晰，易于管理</li></ul>
+<ul><li>复用性强</li></ul>
+<ul><li>独立性，并行开发</li></ul>
+<ul><li>易于维护</li></ul>
+<ul><li>支持持续集成</li></ul>
+<ul><li>包容性强，更容易适应项目需求的变化</li></ul>
+<p>对于多模块Maven工程，其拆分规则应根据具体情况和项目需求来确定。以下是一些常用的拆分规则：</p>
+<ol><li><strong>按业务模块划分：</strong> 将一个大型系统按照不同的业务模块进行划分，每个模块可以独立开发、测试、部署和维护。比如，对于一个电商系统，可以将商品管理、订单管理、用户管理等业务模块单独拆分成不同的子模块。</li></ol>
+<ol><li><strong>按功能模块划分：</strong> 将一个系统按照不同的功能模块进行划分，每个模块负责完成一个特定的功能，比如认证、授权、缓存、搜索等。</li></ol>
+<ol><li><strong>按技术组件划分：</strong> 将一个系统按照不同的技术组件进行划分，每个模块可以包含一个或多个技术组件，比如数据库连接、消息队列、缓存框架等。</li></ol>
+<ol><li><strong>按层次划分：</strong> 将一个系统按照不同的层次进行划分，每个模块可以包含一个或多个层次，比如数据访问层、服务层、控制层等。</li></ol>
+<ol><li><strong>混合划分：</strong> 可以将上述的任意两种或多种方式结合起来使用，以达到更好的代码复用、可维护性和可扩展性。</li></ol>
+<blockquote><p>🤯 <strong>无论采用何种拆分规则，都需要注意以下几点：</strong></p></blockquote>
+<ol><li>拆分后的子模块应该具有独立的功能和职责，能够单独进行测试、构建和部署。</li></ol>
+<ol><li><strong><code>子模块之间应该避免出现循环依赖，否则会导致构建失败和部署异常。</code></strong></li></ol>
+<ol><li>子模块之间的接口应该设计良好，遵守面向接口编程的原则，以提高代码的复用性和灵活性。</li></ol>
+<h2 id="2-怎么构建Maven多模块项目">2.怎么构建Maven多模块项目？</h2>
+<p>使用 IntelliJ IDEA 开发 Spring Boot 多模块项目并使用 Maven 进行构建，一般需要遵循以下步骤：</p>
+<ol><li><strong>创建父模块</strong>：在 IDEA 中创建一个 Maven 项目，并在根目录下创建一个父模块。可以通过 “File” -&gt; “New” -&gt; “Module” -&gt; “Maven” 来创建新的 Maven 模块，然后选择 “Empty Project” 选项即可创建空的 Maven 项目结构。在 pom.xml 文件中定义所有子模块的名称。</li></ol>
+<ol><li><strong>创建子模块</strong>：在父模块下创建多个子模块，每个子模块对应一个功能或组件。可以通过 “File” -&gt; “New” -&gt; “Module” -&gt; “Maven” 来创建新的 Maven 模块，并选择 “Java” 或者 “Spring Boot” 选项来创建对应类型的子模块。每个子模块都有自己的构建脚本（如 pom.xml 文件）和源代码目录（如 src/main/java 和 src/test/java 目录）。</li></ol>
+<ol><li><strong>配置依赖关系</strong>：为了让子模块能够相互调用和共享代码，需要在父模块中配置依赖关系。可以通过右键单击父模块，选择 “Open Module Settings” -&gt; “Dependencies”，然后添加子模块之间的依赖关系。也可以通过 dependencies 标签来定义子模块之间的依赖关系，具体可以参考 Spring Boot 官方文档。</li></ol>
+<ol><li><strong>配置构建任务</strong>：在每个子模块的构建脚本中，需要添加适当的任务和插件，以便对应的子模块能够正确编译、测试和打包。可以通过右键单击父模块或子模块，选择 “Open Module Settings” -&gt; “Build, Execution, Deploy” -&gt; “Maven”，然后添加对应的任务和插件，也可以直接编辑 pom.xml 文件进行配置。</li></ol>
+<ol><li><strong>运行测试和打包</strong>：在完成各个子模块的开发和配置后，可以使用 Maven 命令来运行测试和打包应用程序。在 IDEA 中，可以通过右键单击父模块或子模块，选择 “Run” 或者 “Debug”，然后选择相应的 Maven 任务即可。</li></ol>
+<p>总之，在使用 IntelliJ IDEA 开发 Spring Boot 多模块项目时，需要注意 Maven 的相关配置和使用方式，以及 IDEA 对 Maven 的集成和支持。同时，还需要熟悉 Spring Boot 和 Maven 的相关文档和最佳实践，并根据实际项目需求进行合理配置和扩展。</p>
+<h2 id="3-如何启动多模块项目">3.如何启动多模块项目？</h2>
+<ol><li><strong>打开终端或命令提示符</strong>：在项目的根目录下打开终端或命令提示符。</li></ol>
+<ol><li><strong>清理并构建项目</strong>：运行以下命令来清理之前的构建结果并重新构建整个项目：</li></ol>
+<p>```Shell mvn clean install ```</p>
+<p>这会编译、测试并安装所有模块到本地仓库。</p>
+<ol><li><strong>确定启动模块</strong>：如果项目中有一个或多个模块需要首先启动，<strong>确定这些模块的顺序和依赖关系。</strong></li></ol>
+<ol><li><strong>使用Maven Spring Boot插件</strong>：如果项目是基于Spring Boot的，可以使用<code>spring-boot-maven-plugin</code>来启动应用。在父pom.xml或需要启动的子模块的pom.xml中配置该插件：</li></ol>
+<p>```XML &lt;build&gt; &lt;plugins&gt; &lt;plugin&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt; &lt;version&gt;你的Spring Boot版本&lt;/version&gt; &lt;configuration&gt; &lt;mainClass&gt;com.example.MainApplication&lt;/mainClass&gt; &lt;!-- 你的主类 --&gt; &lt;/configuration&gt; &lt;executions&gt; &lt;execution&gt; &lt;goals&gt; &lt;goal&gt;repackage&lt;/goal&gt; &lt;!-- 重新打包应用 --&gt; &lt;/goals&gt; &lt;/execution&gt; &lt;/executions&gt; &lt;/plugin&gt; &lt;/plugins&gt; &lt;/build&gt; ```</p>
+<p>然后使用以下命令启动应用：</p>
+<p>```Shell shell mvn spring-boot:run ```</p>
+<ol><li><strong>启动顺序</strong>：如果<strong>项目中某些模块依赖于其他模块，确保按照正确的顺序启动它们</strong>。</li></ol>
+<blockquote><p>🤯 在Maven中，可以通过<strong>配置<code>&amp;lt;module&amp;gt;</code>标签的顺序来控制构建的顺序</strong>，但启动顺序可能需要手动管理。</p></blockquote>
+<ol><li><strong>使用Maven Profiles</strong>：如果项目配置了不同的环境（如开发、测试、生产），可以使用Maven Profiles来指定不同的配置：</li></ol>
+<p>```Shell mvn clean install -PprofileName ```</p>
+<p>其中<code>profileName</code>是pom.xml中定义的profile名称。</p>
+<ol><li><strong>监控日志输出</strong>：启动过程中，监控控制台输出和日志文件，以确保所有模块都按预期启动，并且没有错误或异常。</li></ol>
+<ol><li><strong>使用IDE</strong>：如果你使用的是IDE，如IntelliJ IDEA或Eclipse，通常可以配置运行配置来启动整个项目或特定的模块。</li></ol>
+<ol><li><strong>检查依赖关系</strong>：确保所有模块的依赖关系都已经正确解析，并且没有版本冲突。</li></ol></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>

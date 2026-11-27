@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>GC垃圾回收 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">32</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-堆空间的基本结构">1.堆空间的基本结构</a><a class="tl l2" href="#2-内存分配和回收原则">2.内存分配和回收原则</a><a class="tl l3" href="#1-主要进行GC的区域">1.主要进行GC的区域</a><a class="tl l3" href="#2-空间分配担保">2.空间分配担保</a><a class="tl l2" href="#2-死亡对象的判断方法">2.死亡对象的判断方法</a><a class="tl l3" href="#1-引用计数法">1.引用计数法</a><a class="tl l3" href="#2-可达性分析算法">2.可达性分析算法</a><a class="tl l4" href="#1-哪些对象可以作为-GC-Roots-呢">1.哪些对象可以作为 GC Roots 呢？</a><a class="tl l4" href="#2-对象可以被回收-就代表一定会被回收吗">2.对象可以被回收，就代表一定会被回收吗？</a><a class="tl l3" href="#3-引用类型总结">3.引用类型总结</a><a class="tl l3" href="#4-如何判断一个常量是废弃常量">4.如何判断一个常量是废弃常量？</a><a class="tl l3" href="#5-如何判断一个类是无用类">5.如何判断一个类是无用类？</a><a class="tl l2" href="#3-垃圾收集算法">3.垃圾收集算法</a><a class="tl l3" href="#1-标记-清除算法">1.标记-清除算法</a><a class="tl l3" href="#2-复制算法">2.复制算法</a><a class="tl l3" href="#3-标记-整理算法">3.标记-整理算法</a><a class="tl l3" href="#4-分代收集算法">4.分代收集算法</a><a class="tl l2" href="#4-垃圾收集器">4.垃圾收集器</a><a class="tl l3" href="#1-Serial-串行-收集器">1.Serial（串行）收集器</a><a class="tl l3" href="#2-ParNew收集器">2.ParNew收集器</a><a class="tl l3" href="#3-Parallel-Scavenge收集器">3.Parallel Scavenge收集器</a><a class="tl l3" href="#4-Serial-old收集器">4.Serial old收集器</a><a class="tl l3" href="#5-Parallel-old收集器">5.Parallel old收集器</a><a class="tl l3" href="#6-CMS收集器">6.CMS收集器</a><a class="tl l3" href="#7-G1收集器">7.G1收集器</a><a class="tl l2" href="#5-JVM频繁进行ygc-且每次ygc时间变长-怎么分析-怎么解决">5.JVM频繁进行ygc，且每次ygc时间变长，怎么分析、怎么解决？</a><a class="tl l2" href="#6-FullGC什么时候发生-发生的时间">6.FullGC什么时候发生、发生的时间</a><a class="tl l2" href="#7-MinorGC时具体做了什么事">7.MinorGC时具体做了什么事？</a><a class="tl l2" href="#8-GC调优">8.GC调优</a><a class="tl l3" href="#1-GC调优原则">1.GC调优原则</a><a class="tl l3" href="#2-GC的目的">2.GC的目的</a><a class="tl l3" href="#3-GC调优的常见策略">3.GC调优的常见策略</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>GC垃圾回收</h1><div class="meta">2024-05-11 · <a class="src-link" href="https://flowus.cn/945d4491-270e-4a64-bacd-b24cdce4373b" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h2 id="1-堆空间的基本结构">1.堆空间的基本结构</h2>
+<p>Java 堆是垃圾收集器管理的主要区域，因此也被称作 <strong>GC 堆（Garbage Collected Heap）</strong>。</p>
+<p>从垃圾回收的角度来说，由于现在收集器基本都采用<strong>分代垃圾收集算法</strong>，所以 Java 堆被划分为了几个不同的区域，这样我们就可以根据各个区域的特点选择合适的垃圾收集算法。</p>
+<p>在 JDK 7 版本及 JDK 7 版本之前，堆内存被通常分为下面三部分：</p>
+<ol><li><strong>新生代内存</strong>(Young Generation)：<strong>Eden 区、两个 Survivor 区 S0 和 S1</strong></li></ol>
+<ol><li><strong>老生代</strong>(Old Generation)</li></ol>
+<ol><li><strong>永久代</strong>(Permanent Generation)：<strong>JDK 8 版本之后 PermGen(永久) 已被 Metaspace(元空间) 取代</strong></li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-049cb07117875820.png"></p>
+<h2 id="2-内存分配和回收原则">2.内存分配和回收原则</h2>
+<ol><li><strong>对象优先在Eden区分配</strong></li></ol>
+<p>大多数情况下，对象在新生代中 Eden 区分配。<strong>当 Eden 区没有足够空间进行分配</strong>时，虚拟机将发起一次 <strong>Minor GC</strong>。</p>
+<ol><li><strong>大对象直接进入老年代</strong></li></ol>
+<p><strong>大对象</strong>就是<strong>需要大量连续内存空间的对象</strong>（比如：<strong>字符串、数组</strong>）。</p>
+<p>大对象直接进入老年代的行为是<strong>由虚拟机动态决定</strong>的，它与具体使用的垃圾回收器和相关参数有关。</p>
+<p>大对象直接进入老年代是一种<strong>优化策略</strong>，旨在<strong>避免将大对象放入新生代</strong>，从而<strong>减少新生代的垃圾回收频率和成本</strong>。</p>
+<ol><li><strong>长期存活的对象进入老年代</strong></li></ol>
+<p>既然虚拟机采用了分代收集的思想来管理内存，那么内存回收时就必须能识别哪些对象应放在新生代，哪些对象应放在老年代中。</p>
+<p>为了做到这一点，虚拟机给每个对象一个<strong>对象年龄（Age）计数器</strong>。</p>
+<p>大部分情况，对象都会首先在 Eden 区域分配。</p>
+<p>如果对象在 Eden 出生并<strong>经过第一次 Minor GC 后仍然能够存活</strong>，并且<strong>能被 Survivor 容纳的话</strong>，将被移动到 <strong>Survivor 空间（s0 或者 s1）</strong>中，并<strong>将对象年龄设为 1</strong>(Eden 区-&gt;Survivor 区后对象的初始年龄变为 1)。</p>
+<p><strong>对象在 Survivor 中每熬过一次 MinorGC,年龄就增加 1 岁</strong>，当它的年龄增加到一定程度（默认为 15 岁），就会被晋升到老年代中。</p>
+<p>对象晋升到老年代的<strong>年龄阈值</strong>，可以通过参数 <code>-XX:MaxTenuringThreshold</code> 来设置。</p>
+<h3 id="1-主要进行GC的区域">1.主要进行GC的区域</h3>
+<p>针对 HotSpot VM 的实现，它里面的 GC 其实<strong>准确分类只有两大种</strong>：</p>
+<ol><li><strong>部分收集 (Partial GC)</strong>：</li></ol>
+<ul><li>新生代收集（Minor GC / <strong>Young GC</strong>）：<strong>只对新生代</strong>进行垃圾收集；</li></ul>
+<ul><li>老年代收集（Major GC / <strong>Old GC</strong>）：<strong>只对老年代</strong>进行垃圾收集。需要注意的是 Major GC 在有的语境中也用于指代整堆收集；</li></ul>
+<ul><li>混合收集（<strong>Mixed GC</strong>）：对<strong>整个新生代和部分老年代</strong>进行垃圾收集。</li></ul>
+<ol><li><strong>整堆收集 (Full GC)</strong>：收集<strong>整个 Java 堆和方法区</strong>。</li></ol>
+<h3 id="2-空间分配担保">2.空间分配担保</h3>
+<p>空间分配担保是为了<strong>确保在 Minor GC 之前，老年代本身还有容纳新生代所有对象的剩余空间</strong>。</p>
+<p>JDK 6 Update 24 之前，在发生 Minor GC 之前，虚拟机必须先检查老年代最大可用的连续空间是否大于新生代所有对象总空间，如果这个条件成立，<strong>那这一次 Minor GC 可以确保是安全的</strong>。如果不成立，则虚拟机会先查看 <code>-XX:HandlePromotionFailure</code> 参数的设置值是否允许担保失败(Handle Promotion Failure);如果允许，那会继续检查老年代最大可用的连续空间是否大于历次晋升到老年代对象的平均大小，如果大于，将尝试进行一次 Minor GC，尽管这次 Minor GC 是有风险的;如果小于，或者 <code>-XX: HandlePromotionFailure</code> 设置不允许冒险，那这时就要改为进行一次 Full GC。</p>
+<p>JDK 6 Update 24 之后的规则变为只要老年代的连续空间大于新生代对象总大小或者历次晋升的平均大小，就会进行 Minor GC，否则将进行 Full GC</p>
+<h2 id="2-死亡对象的判断方法">2.死亡对象的判断方法</h2>
+<p>堆中几乎放着所有的对象实例，对堆垃圾回收前的第一步就是要判断哪些对象已经死亡（即不能再被任何途径使用的对象）。</p>
+<h3 id="1-引用计数法">1.引用计数法</h3>
+<p>给对象中添加一个<strong>引用计数器</strong>：</p>
+<ul><li>每当有一个地方引用它，计数器就加 1；</li></ul>
+<ul><li>当引用失效，计数器就减 1；</li></ul>
+<ul><li>任何时候计数器为 0 的对象就是不可能再被使用的。</li></ul>
+<p><strong>这个方法实现简单，效率高，但是目前主流的虚拟机中并没有选择这个算法来管理内存，其最主要的原因是它很难解决对象之间循环引用的问题。</strong></p>
+<p><img alt="object-circular-reference.png" src="/assets/img/flowus-b827a13ecd1e6960.png"></p>
+<ul><li><strong>对象之间循环引用</strong></li></ul>
+<p>所谓对象之间的相互引用问题，指除两个对象相互引用着对方之外，这两个对象之间再无任何引用。</p>
+<p>但是他们因为互相引用对方，导致它们的引用计数器都不为 0，于是引用计数算法无法通知 GC 回收器回收他们。</p>
+<h3 id="2-可达性分析算法">2.可达性分析算法</h3>
+<ol><li>基本思想：通过一系列的称为 <strong>“GC Roots”</strong> 的<strong>对象作为起点</strong>，从这些节点开始<strong>向下搜索</strong>，<strong>节点所走过的路径</strong>称为<strong>引用链。</strong></li></ol>
+<ol><li><strong>当一个对象到 GC Roots 没有任何引用链相连</strong>的话，则证明此对象是不可用的，<strong>需要被回收</strong>。</li></ol>
+<p>下图中的 <code>Object 6 ~ Object 10</code> 之间虽有引用关系，但它们到 GC Roots 不可达，因此为需要被回收的对象。</p>
+<p><img alt="jvm-gc-roots.png" src="/assets/img/flowus-663f4d0e9dd55d36.png"></p>
+<h4 id="1-哪些对象可以作为-GC-Roots-呢"><strong>1.哪些对象可以作为 GC Roots 呢？</strong></h4>
+<ol><li><strong>虚拟机栈</strong>：<strong>栈帧中的局部变量表中引用的对象</strong></li></ol>
+<ol><li><strong>本地方法栈</strong>：Native 方法中引用的对象</li></ol>
+<ol><li><strong>方法区</strong>中：</li></ol>
+<ol><li><strong>类静态属性引用的对象</strong></li></ol>
+<ol><li><strong>常量引用的对象</strong></li></ol>
+<ol><li><strong>所有被同步锁持有的对象</strong></li></ol>
+<ol><li><strong>JNI（Java Native Interface）引用的对象</strong></li></ol>
+<h4 id="2-对象可以被回收-就代表一定会被回收吗">2.<strong>对象可以被回收，就代表一定会被回收吗？</strong></h4>
+<p><strong>不一定。</strong></p>
+<p>即使在可达性分析法中不可达的对象，也并非是“非死不可”的，这时候它们暂时处于“<strong>缓刑阶段</strong>”。</p>
+<p>要<strong>真正宣告一个对象死亡</strong>，<strong>至少要经历两次标记过程：</strong></p>
+<ol><li><strong>可达性分析法中不可达的对象</strong>被<strong>第一次标记</strong>并且进行<strong>一次筛选</strong>。</li></ol>
+<p>筛选的条件是此对象是否有必要执行 <code>finalize</code> 方法。当对象没有覆盖 <code>finalize</code> 方法，或 <code>finalize</code> 方法已经被虚拟机调用过时，虚拟机将这两种情况视为没有必要执行。</p>
+<ol><li><strong>被判定为需要执行的对象</strong>将会被放在一个队列中<strong>进行第二次标记</strong>，<strong>除非这个对象与引用链上的任何一个对象建立关联</strong>，否则就会被真的回收。</li></ol>
+<h3 id="3-引用类型总结">3.引用类型总结</h3>
+<p>无论是通过引用计数法判断对象引用数量，还是通过可达性分析法判断对象的引用链是否可达，判定对象的存活都与“引用”有关。</p>
+<ul><li><strong>JDK1.2 之前</strong>，Java 中引用的定义很传统：如果 reference 类型的数据存储的数值<strong>代表的是另一块内存的起始地址</strong>，就称<strong>这块内存代表一个引用</strong>。</li></ul>
+<ul><li><strong>JDK1.2 以后</strong>，Java 对引用的概念进行了扩充，将引用分为<strong>强引用、软引用、弱引用、虚引用</strong>四种（引用强度逐渐减弱）</li></ul>
+<p><img alt="image.png" src="/assets/img/flowus-933ea614a3bdabe9.png"></p>
+<ol><li><strong>强引用（StrongReference）：</strong>常常 <strong>new 出来的对象就是强引用类型，不回收！</strong></li></ol>
+<p>以前我们使用的大部分引用实际上都是强引用，这是使用最普遍的引用。</p>
+<p>如果一个对象具有强引用，那就类似于<strong>必不可少的生活用品</strong>，<strong>垃圾回收器绝不会回收它</strong>。</p>
+<p><strong>当内存空间不足，Java 虚拟机宁愿抛出 OutOfMemoryError 错误</strong>，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足问题。</p>
+<ol><li><strong>软引用（SoftReference）：</strong>软引用指向的对象<strong>在内存要溢出的时候被回收</strong></li></ol>
+<p>如果一个对象只具有软引用，那就类似于<strong>可有可无的生活用品</strong>。</p>
+<p>如果<strong>内存空间足够，垃圾回收器就不会回收</strong>它，如果<strong>内存空间不足了，就会回收</strong>这些对象的内存。只要垃圾回收器没有回收它，该对象就可以被程序使用。软引用可用来实现内存敏感的高速缓存。</p>
+<p>软引用可以和一个引用队列（ReferenceQueue）联合使用，如果软引用所引用的对象被垃圾回收，JAVA 虚拟机就会把这个软引用加入到与之关联的引用队列中。</p>
+<ol><li><strong>弱引用（WeakReference）只要发生垃圾回收</strong>，<strong>若这个对象只被弱引用指向</strong>，那么就<strong>会被回收</strong></li></ol>
+<p>如果一个对象只具有弱引用，那就类似于<strong>可有可无的生活用品</strong>。</p>
+<p>弱引用与软引用的区别在于：<strong>只具有弱引用的对象拥有更短暂的生命周期</strong>。</p>
+<p>在垃圾回收器线程扫描它所管辖的内存区域的过程中，一旦发现了<strong>只具有弱引用的对象</strong>，<strong>不管当前内存空间足够与否，都会回收它的内存</strong>。不过，由于垃圾回收器是一个优先级很低的线程， 因此不一定会很快发现那些只具有弱引用的对象。</p>
+<p>弱引用可以和一个引用队列（ReferenceQueue）联合使用，如果弱引用所引用的对象被垃圾回收，Java 虚拟机就会把这个弱引用加入到与之关联的引用队列中。</p>
+<ol><li><strong>虚引用（PhantomReference）</strong>虚引用中唯一的作用就是<strong>用队列接收对象即将死亡的通知</strong></li></ol>
+<p>"虚引用"顾名思义，就是形同虚设，与其他几种引用都不同，<strong>虚引用并不会决定对象的生命周期</strong>。如果一个对象仅持有虚引用，那么它就和没有任何引用一样，在<strong>任何时候都可能被垃圾回收</strong>。</p>
+<p><strong>虚引用主要用来跟踪对象被垃圾回收的活动</strong>。</p>
+<p><strong>虚引用与软引用和弱引用的一个区别在于：</strong> <strong>虚引用必须和引用队列（ReferenceQueue）联合使用</strong>。</p>
+<p>当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象的内存之前，把这个虚引用加入到与之关联的引用队列中。程序可以通过判断引用队列中是否已经加入了虚引用，来了解被引用的对象是否将要被垃圾回收。程序如果发现某个虚引用已经被加入到引用队列，那么就可以在所引用的对象的内存被回收之前采取必要的行动。</p>
+<blockquote><p>💡 <strong>特别注意：</strong></p></blockquote>
+<p>在程序设计中一般很少使用弱引用与虚引用，使用<strong>软引用的情况较多</strong>，这是因为；</p>
+<ol><li><strong>软引用可以加速 JVM 对垃圾内存的回收速度，</strong></li></ol>
+<ol><li><strong>可以维护系统的运行安全，</strong></li></ol>
+<ol><li><strong>防止内存溢出（OutOfMemory）等问题的产生</strong>。</li></ol>
+<h3 id="4-如何判断一个常量是废弃常量">4.如何判断一个常量是废弃常量？</h3>
+<p><strong>运行时常量池主要回收的是废弃的常量</strong>。那么，我们如何判断一个常量是废弃常量呢？</p>
+<p><strong>方法：</strong></p>
+<p>假如在字符串常量池中存在字符串 "abc"，如果当前<strong>没有任何 String 对象引用该字符串常量</strong>的话，就说明常量 "abc" 就是废弃常量，如果这时发生内存回收的话而且有必要的话，"abc" 就会被系统清理出常量池了。</p>
+<h3 id="5-如何判断一个类是无用类">5.如何判断一个类是无用类？</h3>
+<p><strong>方法区</strong>主要<strong>回收的是无用的类</strong>，那么如何判断一个类是无用的类的呢？</p>
+<p>判定一个常量是否是“废弃常量”比较简单，而要判定一个类是否是“无用的类”的条件则相对苛刻许多。</p>
+<p>类需要<strong>同时满足下面 3 个条件</strong>才能算是 <strong>“无用的类”</strong>：</p>
+<ol><li>该<strong>类所有的实例都已经被回收</strong>，也就是 Java 堆中不存在该类的任何实例。</li></ol>
+<ol><li><strong>加载该类的 <code>ClassLoader</code> 已经被回收</strong>。</li></ol>
+<ol><li>该<strong>类对应的 <code>java.lang.Class</code> 对象没有在任何地方被引用</strong>，<strong>无法在任何地方通过反射访问该类</strong>的方法。</li></ol>
+<p>虚拟机可以对满足上述 3 个条件的无用类进行回收，这里说的仅仅是“<strong>可以</strong>”，而并不是和对象一样不使用了就会必然被回收</p>
+<h2 id="3-垃圾收集算法">3.垃圾收集算法</h2>
+<p>新生代和老年代采用不同的垃圾回收算法主要是因为它们的特点和优劣势不同。</p>
+<ol><li><strong>新生代采用标记-复制算法</strong>：<strong>新生代中的对象生命周期较短</strong>，因此采用标记-复制算法能够更好地满足新生代的特点。</li></ol>
+<p>这个算法将新生代分为两个相等的区域，一部分为<strong>From区，一部分为To区</strong>。</p>
+<p><strong>当From区的对象被标记为存活时，将这些对象复制到To区</strong>，并且<strong>对它们进行压缩</strong>。</p>
+<p>这样一来，From区中的垃圾对象就被清除了，而To区中的对象则是存活的。标记-复制算法的优点是简单高效，适用于新生代中存活对象较少的情况。</p>
+<ol><li><strong>老年代采用标记-整理算法</strong>：<strong>老年代中的对象生命周期较长</strong>，<strong>可能存在大量的存活对象和垃圾对象混杂在一起</strong>。</li></ol>
+<p>采用标记-整理算法可以将存活的对象向一端移动，然后<strong>清理掉边界外的垃圾对象</strong>，从而<strong>实现内存的压缩和整理。</strong>这样可以减少内存碎片的产生，提高内存的利用率。标记-整理算法适用于老年代中存活对象较多、内存碎片较多的情况。</p>
+<h3 id="1-标记-清除算法">1.标记-清除算法</h3>
+<ol><li><strong>两个阶段</strong>：</li></ol>
+<ol><li><strong>标记（Mark）：</strong>首先<strong>标记出所有不需要回收的对象</strong>，</li></ol>
+<ol><li><strong>清除（Sweep）：</strong>在<strong>标记完成后统一回收掉所有没有被标记的对象</strong>。</li></ol>
+<ol><li><strong>两个明显的问题</strong>：</li></ol>
+<ol><li><strong>效率问题</strong>：标记和清除两个过程<strong>效率都不高</strong>。</li></ol>
+<ol><li><strong>空间问题</strong>：标记清除后会产生<strong>大量不连续的内存碎片</strong>。</li></ol>
+<p>它是最基础的收集算法，后续的算法都是对其不足进行改进得到。</p>
+<p><img alt="image.png" src="/assets/img/flowus-6b051df5b55a1b7f.png"></p>
+<h3 id="2-复制算法">2.复制算法</h3>
+<p>为了解决标记-清除算法的效率和内存碎片问题，复制（Copying）收集算法出现了。</p>
+<ol><li><strong>算法思想</strong>：它可以<strong>将内存分为大小相同的两块，每次使用其中的一块</strong>。</li></ol>
+<p>当这一块的内存使用完后，就将还存活的对象复制到另一块去，然后再把使用的空间一次清理掉。这样就使<strong>每次的内存回收都是对内存区间的一半进行回收</strong>。</p>
+<ol><li><strong>问题</strong>：</li></ol>
+<ol><li><strong>可用内存变小</strong>：可用内存<strong>缩小为原来的一半</strong>。</li></ol>
+<ol><li><strong>不适合老年代</strong>：如果存活对象数量比较大，复制性能会变得很差</li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-f77ff9b3b78d5f7c.png"></p>
+<h3 id="3-标记-整理算法">3.标记-整理算法</h3>
+<p>标记-整理（Mark-and-Compact）算法是<strong>根据老年代的特点提出的一种标记算法。</strong></p>
+<ol><li><strong>算法思路</strong>：<strong>标记过程仍然与“标记-清除”算法一样</strong>，但<strong>后续步骤不是直接对可回收对象回收</strong>，而是<strong>让所有存活的对象向一端移动</strong>，然后<strong>直接清理掉端边界以外的内存。</strong></li></ol>
+<ol><li>问题：<strong>多了整理这一步</strong>，因此<strong>效率也不高</strong>，<strong>适合老年代这种垃圾回收频率不是很高的场景</strong>。</li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-5a5ddac116a99ccf.png"></p>
+<h3 id="4-分代收集算法">4.分代收集算法</h3>
+<p>当前虚拟机的垃圾收集都采用分代收集算法，这种算法没有什么新的思想，<strong>只是根据对象存活周期的不同将内存分为几块</strong>。</p>
+<ol><li><strong>核心思想</strong>：可以<strong>根据各个年代的特点选择合适的垃圾收集算法</strong>。</li></ol>
+<p>比如：</p>
+<ol><li>在<strong>新生代中</strong>，<strong>每次收集都会有大量对象死去</strong>，所以可以选择”<strong>标记-复制</strong>“算法，只需要付出少量对象的复制成本就可以完成每次垃圾收集。</li></ol>
+<ol><li>而<strong>老年代</strong>的对象<strong>存活几率是比较高</strong>的，而且没有额外的空间对它进行分配担保，所以我们必须选择“<strong>标记-清除</strong>”或“<strong>标记-整理</strong>”算法进行垃圾收集。</li></ol>
+<h2 id="4-垃圾收集器">4.垃圾收集器</h2>
+<p><strong>如果说收集算法是内存回收的方法论，那么垃圾收集器就是内存回收的具体实现。</strong></p>
+<p>虽然我们对各个收集器进行比较，但并非要挑选出一个最好的收集器。因为直到现在为止还没有最好的垃圾收集器出现，更加没有万能的垃圾收集器，<strong>我们能做的就是根据具体应用场景选择适合自己的垃圾收集器</strong>。试想一下：如果有一种四海之内、任何场景下都适用的完美收集器存在，那么我们的 HotSpot 虚拟机就不会实现那么多不同的垃圾收集器了。</p>
+<p>默认收集器：</p>
+<ul><li><strong>JDK 8</strong>：<strong>Parallel Scavenge（新生代）+ Parallel Old（老年代）</strong></li></ul>
+<ul><li>JDK 9 ~ JDK20: <strong>G1</strong></li></ul>
+<h3 id="1-Serial-串行-收集器">1.Serial（串行）收集器</h3>
+<p>Serial（串行）收集器是最基本、历史最悠久的垃圾收集器了。大家看名字就知道这个收集器是一个<strong>单线程收集器</strong>了。</p>
+<ol><li><strong>特点</strong>：</li></ol>
+<ol><li>它的 <strong>“单线程”</strong> 的意义不仅仅意味着它只会<strong>使用一条垃圾收集线程去完成垃圾收集工作</strong></li></ol>
+<ol><li>它<strong>在进行垃圾收集工作的时候必须暂停其他所有的工作线程</strong>（ <strong>"Stop The World"</strong> ），直到它收集结束。</li></ol>
+<ol><li><strong>算法：新生代采用标记-复制算法，老年代采用标记-整理算法。</strong></li></ol>
+<ol><li>优点：</li></ol>
+<p><strong>简单而高效（与其他收集器的单线程相比）</strong></p>
+<h3 id="2-ParNew收集器">2.ParNew收集器</h3>
+<p>ParNew 收集器其实就是 <strong>Serial 收集器的多线程版本</strong>，除了使用多线程进行垃圾收集外，其余行为（控制参数、收集算法、回收策略等等）和 Serial 收集器完全一样。</p>
+<p><strong>新生代采用标记-复制算法，老年代采用标记-整理算法。</strong></p>
+<p>它是许多运行在 Server 模式下的虚拟机的首要选择，除了 Serial 收集器外，<strong>只有它能与 CMS 收集器</strong>（真正意义上的并发收集器，后面会介绍到）<strong>配合工作</strong>。</p>
+<h3 id="3-Parallel-Scavenge收集器">3.Parallel Scavenge收集器</h3>
+<p>Parallel Scavenge 收集器也是<strong>使用标记-复制算法</strong>的<strong>多线程收集器。</strong></p>
+<p>Parallel Scavenge 收集器<strong>关注点</strong>是<strong>吞吐量（高效率的利用 CPU）</strong>。CMS 等垃圾收集器的关注点更多的是用户线程的停顿时间（提高用户体验）。所谓吞吐量就是 CPU 中用于运行用户代码的时间与 CPU 总消耗时间的比值。 Parallel Scavenge 收集器提供了很多参数供用户找到最合适的停顿时间或最大吞吐量，如果对于收集器运作不太了解，手工优化存在困难的时候，使用 Parallel Scavenge 收集器配合自适应调节策略，把内存管理优化交给虚拟机去完成也是一个不错的选择。</p>
+<p><strong>新生代采用标记-复制算法，老年代采用标记-整理算法。</strong></p>
+<h3 id="4-Serial-old收集器">4.<strong>Serial old收集器</strong></h3>
+<p><strong>Serial 收集器的老年代版本</strong>，它同样是一个<strong>单线程收集器</strong>。</p>
+<p>它主要有两大用途：</p>
+<ol><li>在 JDK1.5 以及以前的版本中与 Parallel Scavenge 收集器搭配使用</li></ol>
+<ol><li>作为 <strong>CMS 收集器的后备方案</strong>。</li></ol>
+<h3 id="5-Parallel-old收集器">5.Parallel old收集器</h3>
+<p><strong>Parallel Scavenge 收集器的老年代版本</strong>。</p>
+<p>使用多线程和“标记-整理”算法。在注重吞吐量以及 CPU 资源的场合，都可以优先考虑 Parallel Scavenge 收集器和 Parallel Old 收集器。</p>
+<h3 id="6-CMS收集器">6.CMS收集器</h3>
+<p><strong>CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。它非常符合在注重用户体验的应用上使用。</strong></p>
+<p><strong>CMS（Concurrent Mark Sweep）收集器是 HotSpot 虚拟机第一款真正意义上的并发收集器，它第一次实现了让垃圾收集线程与用户线程（基本上）同时工作。</strong></p>
+<p>从名字中的<strong>Mark Sweep</strong>这两个词可以看出，CMS 收集器是一种 <strong>“标记-清除”算法</strong>实现的，它的运作过程相比于前面几种垃圾收集器来说更加复杂一些。</p>
+<ol><li>整个过程分为<strong>四个步骤</strong>：</li></ol>
+<ol><li><strong>初始标记：</strong> 暂停所有的其他线程，并<strong>记录下直接与 root 相连的对象</strong>，速度很快 ；</li></ol>
+<ol><li><strong>并发标记：</strong> <strong>同时开启 GC 和用户线程</strong>，用一个闭包结构去记录可达对象。但在这个阶段结束，这个闭包结构并不能保证包含当前所有的可达对象。因为用户线程可能会不断的更新引用域，所以 GC 线程无法保证可达性分析的实时性。所以这个算法里会跟踪记录这些发生引用更新的地方。</li></ol>
+<ol><li><strong>重新标记：</strong> 重新标记阶段就是为了修正并发标记期间因为用户程序继续运行而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间一般会比初始标记阶段的时间稍长，远远比并发标记阶段时间短</li></ol>
+<ol><li><strong>并发清除：</strong> 开启用户线程，同时 GC 线程开始对未标记的区域做清扫。</li></ol>
+<ol><li><strong>主要优点</strong>：<strong>并发收集、低停顿</strong>。</li></ol>
+<ol><li><strong>三个缺点</strong>：</li></ol>
+<ul><li><strong>对 CPU 资源敏感；</strong></li></ul>
+<ul><li><strong>无法处理浮动垃圾；</strong></li></ul>
+<ul><li><strong>它使用的回收算法-“标记-清除”算法会导致收集结束时会有大量空间碎片产生。</strong></li></ul>
+<p><strong>从 JDK9 开始，CMS 收集器已被弃用</strong></p>
+<h3 id="7-G1收集器">7.G1收集器</h3>
+<p><strong>G1 (Garbage-First) 是一款面向服务器的垃圾收集器,主要针对配备多颗处理器及大容量内存的机器.</strong></p>
+<p><strong>以极高概率满足 GC 停顿时间要求的同时,还具备高吞吐量性能特征.</strong></p>
+<ol><li><strong>特点</strong>：</li></ol>
+<ul><li><strong>并行与并发</strong>：G1 能充分利用 CPU、多核环境下的硬件优势，使用多个 CPU（CPU 或者 CPU 核心）来缩短 Stop-The-World 停顿时间。部分其他收集器原本需要停顿 Java 线程执行的 GC 动作，G1 收集器仍然可以通过并发的方式让 java 程序继续执行。</li></ul>
+<ul><li><strong>分代收集</strong>：虽然 G1 可以不需要其他收集器配合就能独立管理整个 GC 堆，但是还是保留了分代的概念。</li></ul>
+<ul><li><strong>空间整合</strong>：与 CMS 的“标记-清除”算法不同，G1 从整体来看是基于“标记-整理”算法实现的收集器；从局部上来看是基于“标记-复制”算法实现的。</li></ul>
+<ul><li><strong>可预测的停顿</strong>：这是 G1 相对于 CMS 的另一个大优势，降低停顿时间是 G1 和 CMS 共同的关注点，但 G1 除了追求低停顿外，还能建立可预测的停顿时间模型，能让使用者明确指定在一个长度为 M 毫秒的时间片段内，消耗在垃圾收集上的时间不得超过 N 毫秒。</li></ul>
+<ol><li><strong>运作步骤</strong>：</li></ol>
+<ul><li><strong>初始标记</strong></li></ul>
+<ul><li><strong>并发标记</strong></li></ul>
+<ul><li><strong>最终标记</strong></li></ul>
+<ul><li><strong>筛选回收</strong></li></ul>
+<p><strong>G1 收集器在后台维护了一个优先列表，每次根据允许的收集时间，优先选择回收价值最大的 Region(这也就是它的名字 Garbage-First 的由来)</strong> 。</p>
+<p>这种使用 Region 划分内存空间以及有优先级的区域回收方式，保证了 G1 收集器在有限时间内可以尽可能高的收集效率（把内存化整为零）。</p>
+<p><strong>从 JDK9 开始，G1 垃圾收集器成为了默认的垃圾收集器。</strong></p>
+<h2 id="5-JVM频繁进行ygc-且每次ygc时间变长-怎么分析-怎么解决">5.JVM频繁进行ygc，且每次ygc时间变长，怎么分析、怎么解决？</h2>
+<p>频繁进行年轻代垃圾回收（YGC），且每次 YGC 时间逐渐变长可能是因为<strong>新生代中对象的生命周期变长</strong>，<strong>导致垃圾收集器需要更长的时间来回收这些对象</strong>。这可能是由于<strong>内存泄漏、对象创建速度过快</strong>等问题引起的。下面是一些分析和解决这个问题的常见方法：</p>
+<ol><li><strong>分析：</strong></li></ol>
+<ol><li><strong>收集GC日志</strong>：启用 JVM 的 GC 日志，并分析 YGC 的频率和持续时间。GC 日志中会记录 YGC 的发生时间、持续时间、回收对象的数量等信息。</li></ol>
+<ol><li><strong>GC日志分析工具</strong>：使用 GC 日志分析工具（如 GCViewer、<strong>VisualVM</strong>、<strong>GCEasy</strong> 等）对 GC 日志进行分析，以了解 YGC 时间变长的原因，例如<strong>对象分配速度、对象存活时间</strong>等。</li></ol>
+<ol><li><strong>内存分析工具</strong>：使用内存分析工具（如 Eclipse Memory Analyzer、MAT）检查内存快照，寻找内存泄漏或者对象持有时间过长的情况。</li></ol>
+<ol><li><strong>代码审查</strong>：检查代码，查找是否存在对象创建过快、无用对象未及时释放等问题。</li></ol>
+<ol><li><strong>解决：</strong></li></ol>
+<ol><li><strong>代码优化</strong>：优化代码，<strong>减少对象的创建和持有时间</strong>，尽量避免创建大量临时对象或者长期缓存对象。</li></ol>
+<ol><li><strong>调整堆内存大小</strong>：<strong>增加新生代的大小</strong>，给垃圾收集器更多的空间来存放对象，从而<strong>减少 YGC 的频率和时间</strong>。</li></ol>
+<ol><li><strong>调整垃圾收集器参数</strong>：根据分析结果，调整垃圾收集器的参数，如<strong>增加新生代的晋升阈值</strong>、调整 Eden 区和 Survivor 区的比例等。</li></ol>
+<ol><li><strong>内存泄漏修复</strong>：修复内存泄漏问题，<strong>释放长期持有的对象引用</strong>，确保不再需要的对象能够被正确释放。</li></ol>
+<ol><li><strong>性能测试和监控</strong>：对应用程序进行性能测试，评估优化效果。监控 GC 行为和内存使用情况，及时发现并解决性能问题。</li></ol>
+<blockquote><p>💡 <strong>内存泄漏</strong>：程序分配了一块内存，但<strong>在不再需要时没有正确释放</strong>，导致这块内存<strong>无法被垃圾回收器回收。</strong></p></blockquote>
+<h2 id="6-FullGC什么时候发生-发生的时间">6.<strong>FullGC什么时候发生</strong>、<strong>发生的时间</strong></h2>
+<p>Full GC（Full Garbage Collection）是指<strong>对整个堆内存（包括年轻代和老年代）进行垃圾回收的过程</strong>。相对于年轻代垃圾回收（YGC）只清理年轻代的部分内存，Full GC 则会<strong>清理整个堆内存</strong>，包括年轻代和老年代。</p>
+<ol><li><strong>FullGC何时发生</strong>：</li></ol>
+<ol><li><strong>老年代空间不足</strong>：当老年代的内存空间不足以存放新分配的对象时，会触发 Full GC。这种情况通常是由于大对象分配、长期存活的对象或者老年代空间不足引起的。</li></ol>
+<ol><li><strong>永久代空间不足</strong>：在 JDK 7 及之前的版本中，永久代（PermGen）用于存放类的元数据、常量池等数据，如果永久代的空间不足，会触发 Full GC。在 JDK 8 及之后的版本中，永久代被元空间（Metaspace）所取代，<strong>但仍然可能存在类的元数据过多导致的 Full GC</strong> 情况。</li></ol>
+<ol><li><strong>手动触发</strong>：在某些情况下，开发人员可能会手动触发 Full GC，以释放内存或者对内存进行整理。例如，通过调用 <code>System.gc()</code> 方法来触发垃圾回收。</li></ol>
+<p>调用 <code>System.gc()</code> 方法<strong>并不会立即触发垃圾回收</strong>。虽然该方法会<strong>向虚拟机建议进行垃圾回收</strong>，但是具体是否进行回收以及何时回收是由虚拟机来决定的，虚拟机可以选择忽略该建议。</p>
+<p>虚拟机是否执行垃圾回收取决于多个因素，包括当前堆内存的使用情况、垃圾回收策略、系统资源等。在某些情况下，虚拟机可能会根据自身的算法和策略选择在某个时刻进行垃圾回收，而在另一些情况下，可能会忽略 <code>System.gc()</code> 方法的建议，延迟或者不执行垃圾回收。</p>
+<p>因此，不应该依赖于 <code>System.gc()</code> 方法来精确地控制垃圾回收的时机，而是应该通过优化代码和合理配置虚拟机参数等方式来尽可能地减少垃圾回收的次数和影响。</p>
+<ol><li><strong>发生时间</strong>：</li></ol>
+<p>Full GC 的<strong>发生时间不是固定的</strong>，它<strong>取决于垃圾收集器的配置、堆内存的使用情况</strong>以及<strong>应用程序的运行状态</strong>等因素。</p>
+<p>通常情况下，Full GC 的发生时间相对于 YGC 来说会比较长，因为它需要清理整个堆内存，包括老年代的内存空间。一般情况下，Full GC 的发生会导致较长的停顿时间，影响应用程序的性能和响应速度，因此需要尽量避免频繁触发 Full GC。</p>
+<h2 id="7-MinorGC时具体做了什么事">7.MinorGC时具体做了什么事？</h2>
+<p>具体来说，Minor GC 主要做了以下几件事情：</p>
+<ol><li><strong>标记存活对象</strong>：首先，从根对象（通常是虚拟机栈、本地方法栈、程序计数器等）出发，对年轻代中的存活对象进行标记。这个标记过程通常采用的是<strong>基于可达性分析</strong>算法。</li></ol>
+<ol><li><strong>清除垃圾对象</strong>：然后，将没有被标记的对象视为垃圾对象，进行清除。清除过程通常采用的是一种称为“<strong>复制</strong>”的方式，即将存活对象复制到另一个空间，并且按照一定规则进行压缩排列，然后将原来的内存空间全部清空，以便后续的对象分配。</li></ol>
+<ol><li><strong>对象晋升</strong>：在年轻代的一次垃圾回收过程中，可能会有一些对象经过多次垃圾回收仍然存活，这些对象会被晋升到老年代。<strong>晋升的条件通常是对象年龄达到一定阈值</strong>，或者年轻代的空间不足以容纳存活的对象。</li></ol>
+<ol><li><strong>处理引用</strong>：在清除垃圾对象之后，可能需要对一些引用进行调整，以保证引用的正确性。</li></ol>
+<ol><li><strong>更新引用</strong>：更新相关引用的指向，使得存活的对象能够正确地被引用。</li></ol>
+<p>Minor GC 通常发生在年轻代的 <strong>Eden 区和 Survivor 区之间</strong>，其目标是<strong>尽快地清理掉大部分短时间存活的对象</strong>，从而<strong>尽可能地提高年轻代的空间利用率和性能</strong>。</p>
+<p>因为大部分对象的生命周期比较短暂，所以 Minor GC 的频率通常比较高，但是每次回收的空间通常比较小。</p>
+<h2 id="8-GC调优">8.GC调优</h2>
+<ul><li>调优的<strong>核心思路</strong>：尽可能<strong>降低Full GC的频率。</strong></li></ul>
+<ul><li>核心操作就是：<strong>根据不同的场景，调JVM的参数</strong>。</li></ul>
+<table><thead><tr><th>参数</th><th></th></tr></thead><tbody><tr><td>-Xmx</td><td>Memory Maxumaximum 理解为max的缩写mx  堆的最大内存值</td></tr><tr><td>-Xms</td><td>Memory Start-up   JVM启动时，堆的初始化大小</td></tr><tr><td>-Xmn</td><td>Memory new         新生代初始化大小</td></tr><tr><td>-Xss</td><td>Stack size                每个线程的栈大小</td></tr></tbody></table>
+<p><img alt="image.png" src="/assets/img/flowus-6c84726b4a4b7b20.png"></p>
+<h3 id="1-GC调优原则">1.GC调优原则</h3>
+<p>1、多数的Java应用不需要在服务器上进行GC优化；</p>
+<p>2、多数导致GC问题的情况，都不是因为设置参数错误造成的，而是代码问题；</p>
+<p>3、在应用上线之前，先考虑将机器的JVM参数设置到最合适（最优）；</p>
+<p>4、<strong>减少使用全局变量和大对象</strong>；</p>
+<p>如果迫不得已创建了很多大对象，在不使用时，应该手动赋予null（在公司有过实际经历）；</p>
+<p>5、GC优化是最后不得已才采用的手段</p>
+<h3 id="2-GC的目的">2.GC的目的</h3>
+<ol><li><strong>将转移到老年代的对象数量降低到最小</strong></li></ol>
+<p>因为old GC的成本很大（比起Minor GC）</p>
+<ol><li><strong>减少GC的执行时间</strong></li></ol>
+<h3 id="3-GC调优的常见策略">3.GC调优的常见策略</h3>
+<ol><li><strong>将新对象预留在新生代：</strong><code>-Xmn</code> 命令来<strong>调节新生代大小</strong>，最大限度降低新对象进入老年代的情况。</li></ol>
+<p>由于<code>Full GC</code>的成本远高于<code>Minor GC</code> ，因此<strong>尽量将对象分配在新生代</strong>是明智的做法，实际项目中根据GC日志分析新生代空间是否分配合理，适当通过<code>-Xmn</code> 命令来调节新生代大小，最大限度降低新对象进入老年代的情况。</p>
+<ol><li><strong>大对象进入老年代</strong></li></ol>
+<p>虽然大部分情况下，将对象分配在新生代是合理。但是对于大对象这种做法却是不太好的，大对象如果<strong>首次在新生代分配可能会出现空间不足导致很多年龄不够的小对象被分配到老年代</strong>，破坏了新生代的结构，可能<strong>出现频繁的Full GC</strong>。因此，对于大对象，可以设置直接进入老年代；</p>
+<p>-XX:PretenureSizeThreshold 可以设置直接进入老年代的对象大小。</p>
+<ol><li><strong>合理调整进入老年代的年龄阈值</strong></li></ol>
+<p>减少老年代的内存占用，降低发生<code>Full GC</code>的频率。</p>
+<ol><li><strong>监控和分析 GC 日志</strong></li></ol>
+<ol><li><strong>选择合适的垃圾回收器</strong></li></ol></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>

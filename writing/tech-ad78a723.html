@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>SpringBoot、Spring常见面试题 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">26</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l3" href="#2-Spring-MVC-SpringBoot-Spring的区别">2.Spring MVC、SpringBoot、Spring的区别</a><a class="tl l2" href="#1-Spring">1.Spring</a><a class="tl l3" href="#1-什么是Spring">1.什么是Spring</a><a class="tl l3" href="#2-Spring-IOC">2.Spring IOC</a><a class="tl l4" href="#1-谈谈对IOC的理解">1.谈谈对IOC的理解？</a><a class="tl l4" href="#2-什么是SpringBean">2.什么是SpringBean？</a><a class="tl l4" href="#3-将一个类注入为Bean的注解有哪些">3.将一个类注入为Bean的注解有哪些？</a><a class="tl l4" href="#4-Compoent和-Bean的区别">4.@Compoent和@Bean的区别</a><a class="tl l4" href="#5-注入Bean的注解有哪些">5.注入Bean的注解有哪些？</a><a class="tl l4" href="#6-Bean的作用域">6.Bean的作用域</a><a class="tl l4" href="#7-Bean线程安全吗">7.@Bean线程安全吗？</a><a class="tl l4" href="#8-Bean的生命周期">8.Bean的生命周期</a><a class="tl l4" href="#9-IOC的好处">9.IOC的好处</a><a class="tl l4" href="#10-Sprinf-IOC如何解决循环依赖">10.Sprinf IOC如何解决循环依赖？</a><a class="tl l3" href="#3-Spring-AOP">3.Spring AOP</a><a class="tl l4" href="#1-谈谈对AOP的理解">1.谈谈对AOP的理解</a><a class="tl l4" href="#2-为什么叫面向切面编程">2.为什么叫面向切面编程？</a><a class="tl l4" href="#3-AOP应用场景">3.AOP应用场景</a><a class="tl l4" href="#4-Spring-AOP的实现方式">4.Spring AOP的实现方式</a><a class="tl l2" href="#2-SpringBoot">2.SpringBoot</a><a class="tl l3" href="#1-SpringBoot的主要优点">1.SpringBoot的主要优点</a><a class="tl l3" href="#2-SpringBootApplication注解">2.@SpringBootApplication注解</a><a class="tl l3" href="#3-SpringBoot如何实现自动配置">3.SpringBoot如何实现自动配置？</a><a class="tl l3" href="#4-SpringBoot配置文件的优先级">4.SpringBoot配置文件的优先级</a><a class="tl l3" href="#5-如何实现全局异常处理">5.如何实现全局异常处理？</a><a class="tl l3" href="#6-SpringBoot的启动流程">6.SpringBoot的启动流程</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>SpringBoot、Spring常见面试题</h1><div class="meta">2024-05-09 · <a class="src-link" href="https://flowus.cn/ad78a723-10fb-48e5-ba3c-e28e0f150b4a" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><p>Spring 是一款开源的轻量级 Java 开发框架，旨在提高开发人员的开发效率以及系统的可维护性。</p>
+<p>Spring 框架指的都是 Spring Framework，它是<strong>很多模块的集合</strong></p>
+<h3 id="2-Spring-MVC-SpringBoot-Spring的区别">2.Spring MVC、SpringBoot、Spring的区别</h3>
+<h2 id="1-Spring">1.Spring</h2>
+<h3 id="1-什么是Spring">1.什么是Spring</h3>
+<p>Spring 包含了多个功能模块（上面刚刚提到过），其中<strong>最重要的是 Spring-Core（主要提供 IoC 依赖注入功能的支持） 模块</strong>， Spring 中的其他模块（比如 Spring MVC）的功能实现基本都需要依赖于该模块。</p>
+<p><strong>Spring MVC</strong> 是 Spring 中的一个很重要的模块，主要赋予 Spring <strong>快速构建 MVC 架构的 Web 程序的能力</strong>。</p>
+<p>MVC 是<strong>模型(Model)、视图(View)、控制器(Controller)</strong>的简写，其核心思想是通过将 业务逻辑、数据、显示 分离来组织代码。</p>
+<p><img alt="image-20210809181452421.png" src="/assets/img/flowus-9b4c0e5c75cd6db6.png"></p>
+<p>使用 Spring 进行开发各种配置过于麻烦比如开启某些 Spring 特性时，需要用 XML 或 Java 进行显式配置。于是，Spring Boot 诞生了！</p>
+<p>Spring 旨在简化 J2EE 企业应用程序开发。Spring Boot 旨在简化 Spring 开发（减少配置文件，开箱即用！）。</p>
+<p><strong>Spring Boot 只是简化了配置</strong>，如果你需要构建 MVC 架构的 Web 程序，你还是需要使用 Spring MVC 作为 MVC 框架，只是说 Spring Boot 帮你简化了 Spring MVC 的很多配置，真正做到开箱即用</p>
+<h3 id="2-Spring-IOC">2.Spring IOC</h3>
+<h4 id="1-谈谈对IOC的理解">1.谈谈对IOC的理解？</h4>
+<p><strong>IoC（Inversion of Control:控制反转）</strong> 是一种<strong>设计思想</strong>，而不是一个具体的技术实现。</p>
+<p>IoC 的思想就是<strong>将原本在程序中手动创建对象的控制权</strong>，<strong>交由 Spring 框架来管理</strong>。不过， IoC 并非 Spring 特有，在其他语言中也有应用。</p>
+<p><strong>为什么叫控制反转？</strong></p>
+<ul><li><strong>控制</strong>：指的是对象创建（实例化、管理）的权力</li></ul>
+<ul><li><strong>反转</strong>：控制权交给外部环境（Spring 框架、<strong>IoC 容器</strong>）</li></ul>
+<p><img alt="frc-365faceb5697f04f31399937c059c162.png" src="/assets/img/flowus-87c1b71152cf7533.png"></p>
+<p>将对象之间的相互依赖关系交给 IoC 容器来管理，并由 IoC 容器完成对象的注入。这样可以很大程度上简化应用的开发，把应用从复杂的依赖关系中解放出来。 IoC 容器就像是一个工厂一样，当我们需要创建一个对象的时候，只需要配置好配置文件/注解即可，完全不用考虑对象是如何被创建出来的。</p>
+<p>在实际项目中一个 Service 类可能依赖了很多其他的类，假如我们需要实例化这个 Service，你可能要每次都要搞清这个 Service 所有底层类的构造函数，这可能会把人逼疯。如果利用 IoC 的话，你只需要配置好，然后在需要的地方引用就行了，这大大增加了项目的可维护性且降低了开发难度。</p>
+<p>在 Spring 中， IoC 容器是 Spring 用来实现 IoC 的载体， <strong>IoC 容器实际上就是个 Map（key，value），Map 中存放的是各种对象</strong>。</p>
+<p>Spring 时代我们一般通过 XML 文件来配置 Bean，后来开发人员觉得 XML 文件来配置不太好，于是 SpringBoot 注解配置就慢慢开始流行起来。</p>
+<hr>
+<h4 id="2-什么是SpringBean">2.什么是SpringBean？</h4>
+<p>Bean 代指的就是那些<strong>被 IoC 容器所管理的对象</strong>。</p>
+<p>我们需要告诉 IoC 容器帮助我们管理哪些对象，这个是<strong>通过配置元数据来定义的</strong>。配置元数据可以是 <strong>XML 文件</strong>、<strong>注解</strong>或者 <strong>Java 配置类</strong>。</p>
+<h4 id="3-将一个类注入为Bean的注解有哪些">3.将一个类注入为Bean的注解有哪些？</h4>
+<p><code>@Component</code>：通用的注解，可<strong>标注任意类为 <code>Spring</code> 组件</strong>。如果一个 Bean 不知道属于哪个层，可以使用<code>@Component</code> 注解标注。</p>
+<p><code>@Repository</code> : 对应<strong>持久层即 Dao 层</strong>，主要用于数据库相关操作。</p>
+<p><code>@Service</code> : 对应<strong>服务层</strong>，主要涉及一些复杂的逻辑，需要用到 Dao 层。</p>
+<p><strong><code>@Controller</code></strong> : 对应 Spring MVC <strong>控制层</strong>，主要用于接受用户请求并调用service层返回数据给前端页面。</p>
+<h4 id="4-Compoent和-Bean的区别">4.@Compoent和@Bean的区别</h4>
+<p><code>@Bean</code>注解的作用：告诉Spring容器，需要<strong>将被注解的方法返回的对象注册为一个Bean</strong>，Spring容器将负责实例化、配置和管理这个Bean。</p>
+<ol><li><code>@Component</code> 注解作用于类，而<strong><code>@Bean</code>注解作用于方法</strong>。</li></ol>
+<ol><li><code>@Component</code>通常是通过类路径扫描来自动侦测以及自动装配到 Spring 容器中（我们可以使用 <code>@ComponentScan</code> 注解定义要扫描的路径从中找出标识了需要装配的类自动装配到 Spring 的 bean 容器中）。</li></ol>
+<p><code>@Bean</code> 注解通常是<strong>我们在标有该注解的方法中定义产生这个 bean</strong>,<strong><code>@Bean</code>告诉了 Spring 这是某个类的实例，当我需要用它的时候还给我。</strong></p>
+<ol><li><strong><code>@Bean</code> 注解比 <code>@Component</code> 注解的自定义性更强</strong>，而且很多地方我们只能通过 <code>@Bean</code> 注解来注册 bean。比如当我们<strong>引用第三方库中的类需要装配到 <code>Spring</code>容器时，则只能通过 <code>@Bean</code>来实现。</strong></li></ol>
+<h4 id="5-注入Bean的注解有哪些">5.注入Bean的注解有哪些？</h4>
+<p><strong>@AutoWired、@Resource、@Inject</strong></p>
+<p><img alt="image.png" src="/assets/img/flowus-4f25123783657c83.png"></p>
+<ol><li><strong>@Autowired：先byType、再byName</strong></li></ol>
+<p>默认的注入方式为<code>byType</code>（根据类型进行匹配），也就是说会优先根据接口类型去匹配并注入 Bean （接口的实现类）。</p>
+<p><strong>这会有什么问题呢？</strong> 当<strong>一个接口存在多个实现类</strong>的话，<code>byType</code>这种方式就无法正确注入对象了，因为这个时候 Spring 会同时找到多个满足条件的选择，默认情况下它自己不知道选择哪一个。</p>
+<p>这种情况下，注入方式会变为 <code>byName</code>（根据名称进行匹配），这个<strong>名称通常就是类名</strong>（首字母小写）。就比如说下面代码中的 <code>smsService</code> 就是我这里所说的名称，这样应该比较好理解了吧。</p>
+<p>在byName时，需要<strong>@Qualifier</strong>注解<strong>指明注入的具体类</strong>。</p>
+<p>```Java // 正确注入  SmsServiceImpl1 对象对应的 bean // smsServiceImpl1 就是我们上面所说的名称 @Autowired @Qualifier(value = "smsServiceImpl1") private SmsService smsService; ```</p>
+<ol><li><strong>@Resource：先byName、再byType</strong></li></ol>
+<p>如果仅指定 <code>name</code> 属性则注入方式为<code>byName</code>，如果仅指定<code>type</code>属性则注入方式为<code>byType</code>，如果同时指定<code>name</code> 和<code>type</code>属性（不建议这么做）则注入方式为<code>byType</code>+<code>byName</code>。</p>
+<p>```Java // 报错，byName 和 byType 都无法匹配到 bean @Resource private SmsService smsService; // 正确注入 SmsServiceImpl1 对象对应的 bean @Resource private SmsService smsServiceImpl1; // 正确注入 SmsServiceImpl1 对象对应的 bean（比较推荐这种方式） @Resource(name = "smsServiceImpl1") private SmsService smsService; ```</p>
+<ol><li><strong>两者的对比</strong>：</li></ol>
+<ul><li><code>@Autowired</code> 是 Spring 提供的注解，<code>@Resource</code> 是 JDK 提供的注解。</li></ul>
+<ul><li><code>Autowired</code> 默认的注入方式为<code>byType</code>（根据类型进行匹配），<code>@Resource</code>默认注入方式为 <code>byName</code>（根据名称进行匹配）。</li></ul>
+<ul><li>当<strong>一个接口存在多个实现类的情况</strong>下，<code>@Autowired</code> 和<code>@Resource</code><strong>都需要通过名称才能正确匹配到对应的 Bean</strong>。</li></ul>
+<p><code>Autowired</code> 可以通过 <code>@Qualifier</code> 注解来显式指定名称，<code>@Resource</code>可以通过 <code>name</code> 属性来显式指定名称。</p>
+<ul><li><code>@Autowired</code> 支持在构造函数、方法、字段和参数上使用。<code>@Resource</code> 主要用于字段和方法上的注入，不支持在构造函数或参数上使用</li></ul>
+<h4 id="6-Bean的作用域">6.Bean的作用域</h4>
+<ol><li><strong>singleton</strong> : IoC 容器中<strong>只有唯一的 bean 实例</strong>。</li></ol>
+<p>Spring 中的 bean 默认都是单例的，是<strong>对单例设计模式的应用</strong>。</p>
+<p>几乎所有场景的 Bean 作用域都是使用默认的 singleton</p>
+<ol><li><strong>prototype</strong> : <strong>每次获取都会创建一个新的 bean</strong> 实例。</li></ol>
+<p>也就是说，连续 <code>getBean()</code> 两次，得到的是不同的 Bean 实例。</p>
+<ol><li><strong>request</strong> （仅 Web 应用可用）: <strong>每一次 HTTP 请求都会产生一个新的 bean</strong>（请求 bean）。</li></ol>
+<p>该 bean 仅在当前 HTTP request 内有效。</p>
+<ol><li><strong>session</strong> （仅 Web 应用可用） : <strong>每一次来自新 session 的 HTTP 请求都会产生一个新的 bean</strong>（会话 bean）。</li></ol>
+<p>该 bean 仅在当前 HTTP session 内有效。</p>
+<ol><li><strong>application/global-session</strong> （仅 Web 应用可用）：<strong>每个 Web 应用在启动时创建一个 Bean</strong>（应用 Bean），该 bean 仅在当前应用启动时间内有效。</li></ol>
+<ol><li><strong>websocket</strong> （仅 Web 应用可用）：<strong>每一次 WebSocket 会话产生一个新的 bean</strong>。</li></ol>
+<blockquote><p>💡 <strong>Q1：如何配置Bean的作用域？</strong></p></blockquote>
+<ol><li><strong>xml 方式</strong>：<strong>scope参数</strong></li></ol>
+<p>```XML &lt;bean id="..." class="..." scope="singleton"&gt;&lt;/bean&gt; ```</p>
+<ol><li><strong>注解方式：@Scope</strong></li></ol>
+<p>```Java @Bean @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE) public Person personPrototype() { return new Person(); } ```</p>
+<h4 id="7-Bean线程安全吗">7.@Bean线程安全吗？</h4>
+<p>Spring 框架中的 Bean 是否线程安全，<strong>取决于其作用域和状态</strong>。</p>
+<ol><li><strong>prototype</strong> 作用域：<strong>安全</strong>。</li></ol>
+<p><strong>每次获取都会创建一个新的 bean 实例</strong>，不存在资源竞争问题，所以不存在线程安全问题。</p>
+<ol><li><strong>singleton</strong> 作用域下：<strong>有状态不安全、无状态安全</strong></li></ol>
+<p>IoC 容器中只有唯一的 bean 实例，可能会存在资源竞争问题（取决于 Bean 是否有状态）。</p>
+<p>如果这个 bean 是有状态的话，那就存在线程安全问题（<strong>有状态的 Bean 是指包含可变的成员变量 的对象</strong>）。</p>
+<p>不过，大部分 Bean 实际都是无状态（没有定义可变的成员变量）的（比如 Dao、Service），这种情况下， Bean 是线程安全的。</p>
+<blockquote><p>💡 Q1：<strong>对于有状态单例 Bean 的线程安全问题，常见的有两种解决办法</strong>：</p></blockquote>
+<ol><li>在 <strong>Bean 中尽量避免定义可变的成员变量</strong>。</li></ol>
+<ol><li>在类中定义一个 <strong><code>ThreadLocal</code> 成员变量</strong>，将需要的可变成员变量保存在 <code>ThreadLocal</code> 中（推荐的一种方式）</li></ol>
+<h4 id="8-Bean的生命周期">8.Bean的生命周期</h4>
+<p>简单分为四步：<strong>实例化 —&gt; 属性赋值 —&gt; 初始化 —&gt; 销毁</strong>。</p>
+<ol><li><strong>创建Bean实例</strong></li></ol>
+<p>Bean 容器首先会找到<strong>配置文件中的 Bean 定义</strong>，然后使用 J<strong>ava 反射 API</strong> 来创建 Bean 的实例。</p>
+<ol><li><strong>Bean属性赋值</strong></li></ol>
+<p>为 Bean <strong>设置相关属性和依赖</strong>，例如<code>@Autowired</code> 等注解注入的对象、<code>@Value</code> 注入的值、<code>setter</code>方法或构造函数注入依赖和值、<code>@Resource</code>注入的各种资源。</p>
+<ol><li><strong>Bean初始化</strong></li></ol>
+<ol><li><strong>销毁Bean</strong></li></ol>
+<h4 id="9-IOC的好处">9.IOC的好处</h4>
+<ol><li><strong>对象之间的耦合度</strong>或者说依赖程度<strong>降低</strong>；</li></ol>
+<ol><li><strong>资源变的容易管理</strong>；比如你用 Spring 容器提供的话很容易就可以实现一个单例。</li></ol>
+<h4 id="10-Sprinf-IOC如何解决循环依赖">10.Sprinf IOC如何解决循环依赖？</h4>
+<blockquote><p>💡 <strong>Q1：什么是循环依赖？</strong></p></blockquote>
+<p>循环依赖通常指的是<strong>两个或多个对象之间相互依赖</strong>，形成了一个闭环，<strong>导致无法完成初始化或者初始化导致错误的情况。</strong></p>
+<p>Spring IOC（Inversion of Control，控制反转）容器在<strong>解决循环依赖问题时</strong>采取了一种特殊的策略，称为"<strong>提前暴露</strong>"。这种策略使得容器在处理循环依赖时能够破坏循环依赖的环，确保 Bean 的依赖关系能够正确建立，从而<strong>避免了死锁或无限递归</strong>的问题。</p>
+<p>具体步骤如下：</p>
+<ol><li><strong>首先，容器会创建第一个 Bean 的实例，但是不会完全初始化。</strong></li></ol>
+<ol><li><strong>接着，容器会将这个尚未完全初始化的 Bean 实例提前暴露给其他 Bean。</strong></li></ol>
+<ol><li><strong>然后，容器继续创建其他 Bean 的实例，并注入已经提前暴露的 Bean。</strong></li></ol>
+<p>也就是将引用注入。</p>
+<ol><li><strong>最后，容器回头来完成第一个 Bean 的初始化。</strong></li></ol>
+<p>通过这种方式，Spring IOC 容器<strong>能够在循环依赖时保证所有 Bean 的依赖关系能够正确地建立和注入</strong>，而不会因为循环依赖而陷入死锁或无限递归的情况。</p>
+<blockquote><p>💡 需要注意的是：Spring IOC 容器能够解决的循环依赖是指构造器注入或 setter 注入的循环依赖，即 <strong>Bean A 依赖 Bean B，同时 Bean B 也依赖 Bean A</strong>。</p></blockquote>
+<p>但是，如果是<strong>方法之间的循环依赖（如 A 中的方法调用了 B，而 B 中的方法又调用了 A）</strong>，<strong>Spring IOC 容器是无法解决的</strong>，这种情况会导致程序运行时的死锁或递归调用。</p>
+<p>因此，在设计 Bean 之间的依赖关系时，需要特别注意避免方法之间的循环依赖。</p>
+<h3 id="3-Spring-AOP">3.Spring AOP</h3>
+<h4 id="1-谈谈对AOP的理解">1.谈谈对AOP的理解</h4>
+<p><strong>AOP(Aspect-Oriented Programming:面向切面编程</strong>)。</p>
+<p><strong>作用</strong>：能够<strong>将那些与业务无关</strong>，<strong>却为业务模块所共同调用的逻辑或责任</strong>（例如事务处理、日志管理、权限控制等）<strong>封装起来</strong>，便于减少系统的重复代码，<strong>降低模块间的耦合度</strong>，并有利于未来的可拓展性和可维护性。</p>
+<p>Spring AOP 就是<strong>基于动态代理</strong>的，如果要代理的对象，实现了某个接口，那么 Spring AOP 会使用 <strong>JDK Proxy</strong>，去创建代理对象</p>
+<h4 id="2-为什么叫面向切面编程">2.为什么叫面向切面编程？</h4>
+<p>AOP 之所以叫面向切面编程，是因为它的<strong>核心思想</strong>就是<strong>将横切关注点从核心业务逻辑中分离出来</strong>，形成一个个的<strong>切面（Aspect）</strong>。</p>
+<p>AOP的关键术语：</p>
+<ol><li><strong>横切关注点（cross-cutting concerns）</strong> ：<strong>多个类或对象中的公共行为</strong>（如日志记录、事务管理、权限控制、接口限流、接口幂等等）。</li></ol>
+<ol><li><strong>切面（Aspect）</strong>：<strong>对横切关注点进行封装的类</strong>，<strong>一个切面是一个类</strong>。切面可以定义多个通知，用来实现具体的功能。</li></ol>
+<ol><li><strong>连接点（JoinPoint）</strong>：连接点是方法调用或者<strong>方法执行时的某个特定时刻</strong>（如方法调用、异常抛出等）。</li></ol>
+<ol><li><strong>通知（Advice）</strong>：通知就是<strong>切面在某个连接点要执行的操作</strong>。</li></ol>
+<p>通知有五种类型，分别是前置通知（Before）、后置通知（After）、返回通知（AfterReturning）、异常通知（AfterThrowing）和环绕通知（Around）。前四种通知都是在目标方法的前后执行，而环绕通知可以控制目标方法的执行过程。</p>
+<ol><li><strong>切点（Pointcut）</strong>：<strong>一个切点是一个表达式。</strong></li></ol>
+<p>它用来<strong>匹配哪些连接点需要被切面所增强</strong>。</p>
+<p>切点可以通过注解、正则表达式、逻辑运算等方式来定义。比如 <code>execution(* com.xyz.service..*(..))</code>匹配 <code>com.xyz.service</code> 包及其子包下的类或接口。</p>
+<ol><li><strong>织入（Weaving）</strong>：织入是<strong>将切面和目标对象连接起来的过程</strong>，也就是将通知应用到切点匹配的连接点上。</li></ol>
+<p>常见的织入时机有两种，分别是编译期织入（AspectJ）和运行期织入（AspectJ）</p>
+<h4 id="3-AOP应用场景">3.AOP应用场景</h4>
+<p><strong>日志记录</strong>：自定义日志记录注解，利用 AOP，一行代码即可实现日志记录。</p>
+<p><strong>性能统计</strong>：利用 AOP 在目标方法的执行前后统计方法的执行时间，方便优化和分析。</p>
+<p><strong>事务管理</strong>：<code>@Transactional</code> 注解可以让 Spring 为我们进行事务管理比如回滚异常操作，免去了重复的事务管理逻辑。<code>@Transactional</code>注解就是基于 AOP 实现的。</p>
+<p><strong>权限控制</strong>：利用 AOP 在目标方法执行前判断用户是否具备所需要的权限，如果具备，就执行目标方法，否则就不执行。例如，SpringSecurity 利用<code>@PreAuthorize</code> 注解一行代码即可自定义权限校验。</p>
+<p><strong>接口限流</strong>：利用 AOP 在目标方法执行前通过具体的限流算法和实现对请求进行限流处理。</p>
+<p><strong>缓存管理</strong>：利用 AOP 在目标方法执行前后进行缓存的读取和更新。</p>
+<h4 id="4-Spring-AOP的实现方式">4.Spring AOP的实现方式</h4>
+<p>AOP 的常见实现方式有<strong>动态代理、字节码操作</strong>两种方式。</p>
+<p><strong>Spring AOP 就是基于动态代理的</strong>。并且<strong>动态代理有两种方式</strong>：<strong>JDK动态代理</strong> 和 <strong>Cflib动态代理。</strong></p>
+<ol><li><strong>JDK动态代理</strong>：<strong>JDK内置的代理模式</strong>，所以我们<strong>不需要引入</strong>任何依赖，可以直接使用。</li></ol>
+<p>DK动态代理是JDK内置的一种动态代理模式，<strong>使用反射来接受被代理的类</strong>，但是<strong>被代理的类必须实现一个接口。</strong></p>
+<ol><li><strong>Cglib动态代理：</strong>需要<strong>引入外部依赖。</strong></li></ol>
+<p>Cglib是一个代码生成的类库，可以<strong>在运行时动态生成某个类的子类</strong>，所以如果需要被Cglib动态代理，那么就需要<strong>被代理类不能被final修饰</strong>。</p>
+<blockquote><p>💡 <strong>Q1：AOP的一个实现逻辑：</strong></p></blockquote>
+<ol><li>在Spring AOP中，<strong>如果一个类实现了接口，那么就使用JDK动态代理</strong>的方式进行AOP实现。</li></ol>
+<ol><li>而如果<strong>这个类没有实现接口</strong>，且<strong>不被final修饰</strong>，则<strong>使用Cglib动态代理</strong>的方式进行AOP实现。</li></ol>
+<ol><li>如果一个类<strong>既没有接口，同时又被final修饰</strong>，那么这个类<strong>不能进行AOP动态代理</strong>。</li></ol>
+<p>题外话：</p>
+<blockquote><p>💡 当然你也可以使用 <strong>AspectJ</strong> ！Spring AOP 已经集成了 AspectJ ，AspectJ 应该算的上是 Java 生态系统中最完整的 AOP 框架了。</p></blockquote>
+<p><strong>Spring AOP 属于运行时增强，而 AspectJ 是编译时增强。</strong> Spring AOP 基于代理(Proxying)，而 AspectJ 基于字节码操作(Bytecode Manipulation)。</p>
+<p>Spring AOP 已经集成了 AspectJ ，AspectJ 应该算的上是 Java 生态系统中最完整的 AOP 框架了。AspectJ 相比于 Spring AOP 功能更加强大，但是 Spring AOP 相对来说更简单，</p>
+<p>如果我们的切面比较少，那么两者性能差异不大。但是，当切面太多的话，最好选择 AspectJ ，它比 Spring AOP 快很多。</p>
+<h2 id="2-SpringBoot">2.SpringBoot</h2>
+<h3 id="1-SpringBoot的主要优点">1.SpringBoot的主要优点</h3>
+<ol><li><strong>不需编写大量样板代码、XML配置和注释。</strong></li></ol>
+<ol><li><strong>“约定大于配置”</strong></li></ol>
+<p>Spring Boot中大量配置都是默认的，这样能够快速构建一个项目，同时如果有额外的需求，也可以修改默认配置。</p>
+<ol><li>SpringBoot的应用程序<strong>提供嵌入式HTTP服务器：Tomcat、Jetty</strong></li></ol>
+<p>Spring Boot的起步依赖中就有Tomcat服务器的jar包，不需要我们手动与Tomcat打交道。只要像运行普通Java程序一样就能运行Spring Boot Web项目。</p>
+<ol><li><strong>集成了多种插件</strong>：JUnit测试单元等</li></ol>
+<p><img alt="image.png" src="/assets/img/flowus-6b650b0296d26f11.png"></p>
+<h3 id="2-SpringBootApplication注解">2.@SpringBootApplication注解</h3>
+<p>是<strong>@Configuration、@EnableAutoConfiguration、@ComponentScan</strong>这三个注解的集合。</p>
+<ol><li><strong>@EnableAutoConfiguration：启动Spring的自动配置机制。</strong></li></ol>
+<ol><li><strong>@ComponentScan</strong>：<strong>扫描被@Component注入的Bean</strong>，且默认<strong>扫描该类所在包下的所有类</strong>。</li></ol>
+<ol><li><strong>@Configuration</strong>：允许<strong>在上下文中注册额外的bean</strong>或<strong>导入其他配置类</strong>。</li></ol>
+<p>@Configuration就是用来直接或间接注册Bean到IOC容器中的</p>
+<p><img alt="image.png" src="/assets/img/flowus-2b55d96d2860e1c8.png"></p>
+<h3 id="3-SpringBoot如何实现自动配置">3.SpringBoot如何实现自动配置？</h3>
+<p><strong>因为@SpringBootApplication注解，见上文。</strong></p>
+<p><img alt="image.png" src="/assets/img/flowus-3eea3cba3f70f56e.png"></p>
+<h3 id="4-SpringBoot配置文件的优先级">4.SpringBoot配置文件的优先级</h3>
+<p><img alt="image.png" src="/assets/img/flowus-060f553fc7545b5b.png"></p>
+<h3 id="5-如何实现全局异常处理">5.如何实现全局异常处理？</h3>
+<p>两个注解：<strong>@ExceptionHandler(RuntimeException.class) + @ControllerAdvice</strong></p>
+<ol><li><strong>用法：</strong></li></ol>
+<p>假设定义了很多运行时异常的子类。</p>
+<p><strong>新建一个类，假设命名为ExceptionHandler，并用@ControllerAdvice标注</strong>。在其内部创建exceptionHandler方法，参数是上面定义的异常，返回值可以是自定义的响应类，例如Response&lt;String&gt;。不要忘记使用@ExceptionHandler（XxxException.class)标注。</p>
+<ol><li><strong>实例</strong>：</li></ol>
+<p>```Java /*全局异常捕获我们需要用到spring-boot-starter-web中的@ControllerAdvice注解， ControllerAdvice本质上是一个Component，因此也会被当成组件扫描</p>
+<p>使用@ControllerAdvice可以将所有的@ExceptionHandler方法都集中在一个类中，统一处理 1、@ControllerAdvice默认拦截所有控制器 2、@ControllerAdvice（annotaions={UserController.class}）配置指定需要拦截的控制器 3、ControllerAdvice(basePackages = “com.demo”) 配置需要拦截的指定路径下的控制器 所以要是用@ControllerAdvice必须引入springboot-web依赖 */ @ControllerAdvice public class GlobalExceptionHandler { /**</p>
+<ul><li>@ExceptionHandler相当于controller的@RequestMapping</li><li>如果抛出的的是RuntimeException，就会自动调用该方法</li><li>统一抛出“服务器异常”</li><li>@param</li><li>@return</li></ul>
+<p>*/ @ExceptionHandler(RuntimeException.class) @ResponseBody public DragonResult handleRuntimeException(RuntimeException e){ //          log.error(e.toString(), e); //日志输出 e.printStackTrace(); //控制台输出 System.out.println("运行时异常捕获成功！"); return DragonResult.fail("服务器异常"); } } ```</p>
+<h3 id="6-SpringBoot的启动流程">6.SpringBoot的启动流程</h3>
+<p>Spring Boot的启动流程可以简要概括如下：</p>
+<ol><li><strong>加载应用主类：</strong> Spring Boot应用程序的入口是一个包含<code>main()</code>方法的主类。在启动时，JVM会加载这个主类。</li></ol>
+<ol><li><strong>启动Spring应用上下文：</strong> Spring Boot会创建并启动一个Spring应用上下文（<strong>ApplicationContext</strong>），这是整个Spring应用程序的核心。</li></ol>
+<p>应用上下文会<strong>负责加载所有的配置、Bean以及组件</strong>。</p>
+<ol><li><strong>扫描并加载Bean：</strong> Spring Boot会自动扫描并加载应用程序中标记了特定注解（如<code>@Component</code>、<code>@Service</code>、<code>@Repository</code>等）的类，将它们注册为Spring的Bean。</li></ol>
+<ol><li><strong>执行自动配置：</strong> Spring Boot会根据应用程序的classpath、依赖关系以及已有的配置来自动配置应用程序。自动配置会根据一系列的条件来确定应该启用或禁用特定的功能，以简化应用程序的配置。</li></ol>
+<ol><li><strong>加载外部配置：</strong> Spring Boot会加载应用程序中的<strong>外部配置文件</strong>，例如<strong><code>application.properties</code>或<code>application.yml</code></strong>。这些配置文件中的属性会被加载到Spring的Environment中，供应用程序使用。</li></ol>
+<ol><li><strong>启动嵌入式Web服务器：</strong> 如果应用程序是一个Web应用程序，Spring Boot会启动一个嵌入式的Web服务器（如Tomcat、Jetty或Undertow）。这个嵌入式的Web服务器会监听指定的端口，并处理HTTP请求。</li></ol>
+<ol><li><strong>执行各种回调：</strong> Spring Boot会在启动过程中执行各种回调方法，如<code>ApplicationRunner</code>和<code>CommandLineRunner</code>接口中定义的<code>run()</code>方法，这些方法可以在Spring Boot应用程序启动后立即执行一些特定的任务。</li></ol>
+<ol><li><strong>应用程序启动完成：</strong> 当所有必要的组件都已加载和配置完成后，Spring Boot会触发一个应用程序启动完成的事件，这时应用程序可以开始处理请求或执行其他任务了。</li></ol></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>实时风控 · 通用离线处罚能力建设（MYSQL+Redis） · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">23</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l1" href="#sec-1">痛点拆解归类</a><a class="tl l1" href="#sec-2">目标</a><a class="tl l1" href="#sec-3">实现方案</a><a class="tl l2" href="#sec-4">系统分层架构</a><a class="tl l2" href="#sec-5">流程架构</a><a class="tl l3" href="#sec-6">前端考虑</a><a class="tl l3" href="#sec-7">后端考虑</a><a class="tl l2" href="#sec-8">兜底考虑，定时补偿</a><a class="tl l2" href="#sec-9">欧洲数据隔离需求</a><a class="tl l2" href="#sec-10">全局成功处罚豁免</a><a class="tl l1" href="#sec-11">关键模块设计</a><a class="tl l2" href="#sec-12">子任务切分模块</a><a class="tl l2" href="#sec-13">处罚执行模块</a><a class="tl l2" href="#sec-14">锁设计</a><a class="tl l2" href="#sec-15">任务取消机制</a><a class="tl l2" href="#sec-16">处罚日志落库</a><a class="tl l1" href="#sec-17">元数据结构</a><a class="tl l2" href="#sec-18">元数据结构</a><a class="tl l2" href="#sec-19">MYSQL</a><a class="tl l3" href="#sec-20">处罚动作表(task_table)</a><a class="tl l3" href="#sec-21">父任务表(task_table)</a><a class="tl l3" href="#sec-22">子任务表(task_table)</a><a class="tl l2" href="#sec-23">Redis set</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="solution/index.html">平台方案架构设计</a></div><article><h1>实时风控 · 通用离线处罚能力建设（MYSQL+Redis）</h1><div class="meta">2025-11-27<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;飞书工作积累 · 我主导的设计&quot;</em> · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<blockquote><p>需要解决的痛点：<span class="fs-mention">@风控痛点总结 &amp; 能力规划建设</span></p></blockquote><h1 id="sec-1">痛点拆解归类</h1><p>痛点整体可划分为两类问题：</p><ol><li><strong>处罚型</strong>。属于危险操作，如：账号密码重置、账号处置、账号恢复等。因此此类操作注重「操作幂等、可追溯、失败精准重试」，能力建设需考虑更多。</li></ol><ol><li><strong>分析型</strong>。属于日常操作，用于辅助风险分析，如：账号风险分批量查询。此类操作则无需考虑过细，失败可全部重试、操作可不幂等，当前可用脚本做临时平替。</li></ol><p>而<strong>通用离线处罚能力建设就针对</strong><mark style="background:#fde2e2;color:inherit;padding:0 2px;border-radius:3px"><strong>「处罚型</strong></mark><strong>」问题，建设通用能力。</strong></p><table><tr><th><p>问题分类</p></th><th><p>预建设能力</p></th><th><p>解决痛点</p></th><th><p>插件</p></th><th><p>备注</p></th></tr><tr><td><p><strong>处罚型</strong></p></td><td><p><strong>标签库批量添加</strong></p></td><td><ol><li><strong>风控平台 批量养号批量登录善后</strong>：<strong>「回溯打标」</strong>。回溯打标是指，当规则进行标签库打标时，那么在规则配置前的名单，是无法输入到标签库的，因此就需要将这部分名单回溯，输入到标签库中。</li></ol><ol><li><strong>批量账号成功用户ID持久化存储</strong>。提供一个csv文件，借用标签库能力，将批量账号成功用户ID存入标签库中。</li></ol></td><td><p>addTags（RPC接口）</p></td><td></td></tr><tr><td></td><td><p><strong>用户ID强制修改密码</strong></p></td><td><ol><li><strong>批量账号成功账号，强制修改密码</strong>。每一次密码重置是调用RPC接口，每次提交一个csv文件，其中包含若干个账号，每个账号密码重置需调一次RPC接口，并且每个账号执行失败可重试、全部的最终执行结果(成功、失败)可查看。</li></ol></td><td><p>密码重置(RPC接口)</p></td><td></td></tr><tr><td></td><td><p>其它预拓展能力：<strong>账号批量处置、账号批量恢复、账号批量处置</strong>。。。。</p></td><td></td><td></td><td></td></tr><tr><td><p><strong>分析型</strong></p></td><td><p><strong>标签库批量查询</strong></p></td><td><p>输入一批名单，指定标签Code后，查询命中标签的名单、命中比例等。解决以下问题：</p><ol><li><strong>批量账号成功用户ID在历史批量账号事件中的覆盖率计算</strong>。借用标签库能力，提供一个csv文件，查询标签库，计算这批账号在标签库-批量账号账号标签中的比例、以及账号详情。</li></ol></td><td><p>queryTags（RPC接口）</p></td><td></td></tr><tr><td></td><td><p><strong>账号风险分批量查询</strong></p></td><td><ol><li><strong>查询10w个用户中账号风险=0、2、4的分别占比多少</strong>。查用户账号风险分的接口是个HTTP接口。依旧是接收csv文件，对每个账号进行账号风险分的查询，最终返回结果。</li></ol></td><td><p>getAccountRiskScore（RPC接口）</p></td><td></td></tr><tr><td></td><td><p><strong>IP信息、风险信息批量查询</strong></p></td><td><ol><li><strong>查询一批IP的风险信息、IP归属地等信息</strong>。查IP风险情况的接口是调用IP信誉库的RPC接口。依旧是接收csv文件，对每一个IP进行风险分的查询，最终返回全部结果。</li></ol></td><td><ul><li>IP信誉库接口（RPC接口）</li></ul><ul><li>IPInfo接口（HTTP接口）</li></ul></td><td></td></tr></table><h1 id="sec-2">目标</h1><p>建设风控-通用处罚能力，将账号批量处置、账号批量处置、账号密码重置等<strong>高危操作收敛到通用任务中心</strong>，做到操作提效、降低高危操作成本，并且保证操作留痕可追溯。</p><h1 id="sec-3">实现方案</h1><blockquote><p>设计目标：</p><ol><li>可溯源：任务元数据持久化保存，支持查看/下载，如：原文件、失败明细、执行人、执行时间、执行结果。</li></ol><ol><li>高可用：支持任务终止、状态查看、失败重试。同时保证同一子任务执行幂等。</li></ol></blockquote><h2 id="sec-4">系统分层架构</h2><figure class="fs-board" data-doc="[内部链接]" data-board="Vm0kwuHqjhrnY6bNnABcdNZ4nah"><div class="board-ph">正在加载画板…</div></figure><h2 id="sec-5">流程架构</h2><figure class="fs-board" data-doc="[内部链接]" data-board="VI7Dw20K0hUX7zbJ1hMc0cYpnOe"><div class="board-ph">正在加载画板…</div></figure><p><mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><s><strong>还有一种方案</strong></s></mark><s>：</s><s><strong>「Select Limit 1 + MYSQL乐观锁」 替换 「Redis队列+子任务锁」的逻辑，其它机制不变。</strong></s></p><blockquote><p><s>select limit1 -&gt; update -&gt; update 成功开始执行处罚。</s></p><p><s>缺点是：可能会出现大量无效select limit 1，极端情况会出现</s></p></blockquote><h3 id="sec-6"><strong>前端考虑</strong></h3><ol><li><p><strong>细节</strong>：在「处罚动作配置时」中配置锁的过期时间，过期时间作为1个插件参数，加锁逻辑内置在插件中执行。</p></li><li><p><strong>目的</strong>：将离线/在线两种处罚场景关联起来，保证「全局处罚锁」在两个场景生效。</p></li></ol><ol><li><blockquote><ul><li>文本输入时，前端通过 JS 实时去重并提示去重数量；</li></ul><ul><li>CSV 上传时，校验列格式（如 用户ID 列需符合格式规则），标记错误行并提示用户修正。</li></ul></blockquote></li></ol><ol><li><p>失败可看明细，并提供失败部分的原数据下载，以便精准重试。</p></li><li><blockquote><p>下载源文件或失败数据时，扫描 任务MYSQL表 ，在前端组装成csv文件即可。</p></blockquote></li></ol><ol><li><s>支持一键重试（强改等高危处罚除外）、失败数据精准重试。</s></li></ol><ol><li>提交任务后可实时查看任务状态，或伪实时，前端手动刷新页面后，去拉取一次主任务的最新状态。</li></ol><ol><li><strong>支持「取消-CANCELED」操作。</strong></li></ol><ol><li>页面1：提交处罚、查看主任务处罚状态。</li><li>页面2：查看处罚日志（成功、失败、失败原因等。。。）</li></ol><h3 id="sec-7"><strong>后端考虑</strong></h3><ol><li><strong>数据预处理</strong>：清洗脏数据、个别处罚需进行数据去重（默认或可配置），在业务逻辑上保证处罚幂等。</li></ol><ol><li><strong>统一子任务划分方式</strong>，最细粒度子任务仅处理一条数据(1个用户ID强改、1个用户ID冻结等..)</li></ol><ol><li><strong>定时任务统一使用Miplan管理。</strong></li></ol><h2 id="sec-8"><strong>兜底考虑，定时补偿</strong></h2><table><tr><th><p>模块</p></th><th><p>故障&amp;兜底考虑</p></th><th><p>解决方式（补偿机制）</p></th></tr><tr><td><p><strong>数据处理模块</strong></p></td><td><p><strong>子任务切分worker保证切分结果幂等</strong></p></td><td><p>子任务<strong><code>sub_task_code</code></strong>作为全局唯一标识，保证幂等切分。(<code>sub_task_code=#{父任务id}_#{处罚值}</code>)</p><p><strong>保证切分结果幂等</strong>(即：1个父任务始终被切分为固定N个子任务)。</p></td></tr><tr><td></td><td><p><strong>「子任务切分中」故障。</strong></p><p>切分到一半，容器故障：此时1部分子任务CREATED(写入了MYSQL)、另一部分被丢弃。</p></td><td><p><strong>work1</strong>：定时扫描处于 CREATED状态的父任务，切分子任务并同步推送到Redis。</p></td></tr><tr><td></td><td><p><strong>「父任务状态更新」保证</strong></p></td><td><p><strong>worker2</strong>：定时扫描处于RUNNING状态的父任务，若其下子任务全部已完成，更新主任务状态为已完成。</p></td></tr><tr><td><p><strong>处罚执行模块</strong></p></td><td><p><strong>「try子任务获得锁成功后，子任务成功处罚状态判定前 故障」</strong></p></td><td><p><strong>work3</strong>：定时扫描处于RUNNING状态的子任务，若<u>长时间</u>未状态更新，则重新推送到Redis。</p><p><mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><strong>细节考虑</strong></mark>：</p><ul><li><u>长时间</u>应设计为多久？略高于子任务锁的过期时间。目的：保证在二次推送后，能再次处罚。</li></ul><ul><li>若此时 <u>父任务redis队列中的子任务数&gt;0（</u><u><strong>Redis用set、直接判断set数量</strong></u><u>） ，不重新推送</u>。目的：排除任务数据量较大时，还在等待执行的子任务。</li></ul></td></tr><tr><td></td><td><p><strong>「子任务成功处罚状态判定后，执行处罚前 故障」</strong></p></td><td><p><strong>同理用worker3.</strong></p></td></tr><tr><td></td><td><p><strong>「执行处罚完成后，子任务状态更新前 故障」</strong></p></td><td><p><strong>同理用worker3.</strong></p></td></tr><tr><td><p><strong>任务取消机制</strong></p></td><td><p>前端触发任务取消机制后，首先将父任务状态更改为<strong>CANCELLING</strong>，然后在<u>每一次处罚执行前</u>，检查该子任务的父任务状态：若CANCELLING，则终止处罚，并更新子任务状态为CANCELED。</p></td><td><p><strong>任务取消时的父任务状态更新 - work4</strong>：定期扫描状态为CANCELLING的父任务，若其下子任务全部完成(包括：SUCCEED、FAILED、CANCELLED)，则更新父任务为CANCELLED。</p></td></tr></table><h2 id="sec-9">欧洲数据隔离需求</h2><p><mark style="background:#d3f9d8;color:inherit;padding:0 2px;border-radius:3px"><strong>任务中心</strong></mark><span class="fs-mention">@引用</span><span class="fs-mention">@引用</span></p><p class="fs-todo"><span class="fs-cb">☐</span> <s>新加坡不允许处置欧洲账号。账号已经做了</s><s>。</s></p><p class="fs-todo"><span class="fs-cb">☐</span> 欧洲区域数据隔离，单独申请资源（MYSQL、Redis）。</p><p class="fs-todo"><span class="fs-cb">☐</span> 欧洲区域输入密文后，自动解析为明文处罚。（新建任务select是否为密文，后端便捷判定，仅欧洲区域做这个操作）</p><p class="fs-todo"><span class="fs-cb">☐</span> 国内用户查询处罚日志时：脱敏展示，明文存储。</p><p class="fs-todo"><span class="fs-cb">☐</span> 国内用户禁止下载欧洲csv文件。</p><h2 id="sec-10">全局成功处罚豁免</h2><p>豁免时间配置在规则处置动作中，Redis 中存储本次处罚时间，豁免判断时，在代码中比较「当前时间与Redis处罚时间的差值」 与  「该处罚类型的豁免时间」。</p><p>豁免维度是<mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>「插件名-处置值」</strong></mark>。</p><h1 id="sec-11">关键模块设计</h1><h2 id="sec-12">子任务切分模块</h2><p><strong>切分逻辑</strong>：</p><ol><li><p><strong>如何保证切分结果幂等：</strong>子任务<strong><code>sub_task_code</code></strong>作为全局唯一标识，保证幂等切分。(<code>sub_task_code=#{父任务id}_#{处罚值}</code>)。</p></li></ol><ol><li>同步将子任务信息LPush到Redis 队列。</li></ol><ol><li>切分并推送全部完成后，更新父任务状态为RUNNING。</li></ol><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>定时补偿worker</strong></mark>：</p><ol><li><strong>「切分中故障」- work1</strong>：定时扫描处于 CREATED状态的父任务，切分子任务并同步推送到Redis。</li></ol><ol><li><strong>「父任务状态更新」-worker2</strong>：定时扫描处于RUNNING状态的父任务，若其下子任务全部已完成，更新主任务状态为已完成。</li></ol><h2 id="sec-13">处罚执行模块</h2><blockquote><p>处罚执行复用插件中心能力，参考：：<span class="fs-mention">@规则处置-需求实现记录</span>。</p></blockquote><p>从Redis消费子任务并执行处罚步骤：</p><ol><li>Redis LPOP，某个worker拿到子任务，然后拿「<strong>子任务获得锁-set nx ex</strong>」。</li></ol><ol><li>成功，则继续判断「<strong>子任务成功处罚状态</strong>」已处罚，则终止流程。</li></ol><ol><li><p>细节：<span style="color:#8f959e">重试机制，默认3次，处罚执行复用风控插件中心能力。</span></p></li><li>进行「<strong>全局成功处罚豁免</strong>」判断<strong>：</strong><ul><li>豁免成功（已被处罚）-&gt;打日志，return 处罚成功；</li></ul><ul><li>豁免失败（未被处罚）-&gt;开始处罚。处罚结果：error-&gt;打日志，return 失败；成功-&gt;更改「全局成功处罚豁免状态」为已处罚，更新「子任务成功处罚状态」为已处罚。</li></ul></li></ol><ol><li>结果更新，将子任务状态更新为 「已完成」。</li></ol><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>定时补偿worker：</strong></mark></p><ol><li><p><mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><strong>细节考虑</strong></mark>：</p></li><li><u>长时间</u>应设计为多久？略高于子任务锁的过期时间。目的：保证在二次推送后，能再次处罚。</li><li>若此时 <u>父任务redis队列中的子任务数&gt;0 ，不重新推送</u>。目的：排除任务数据量较大时，还在等待执行的子任务。</li></ol><ol><li><strong>「判断子任务成功处罚状态后，执行处罚前故障」- 同理用worker3.</strong></li></ol><ol><li></li></ol><h2 id="sec-14">锁设计</h2><table><tr><th><p>锁</p></th><th><p>作用</p></th><th><p>过期时间</p></th></tr><tr><td><p><strong>子任务获得锁</strong></p></td><td><p>保证即使故障情况，1条消息仅能被1个worker拿到并消费。</p><blockquote><p>正常情况下，Redis set pop的消费机制已初步解决「同一时间仅一条消息被1个worker消费」的情况。</p><p>但考虑<strong>极端情况(Redis set无法处理的情况)</strong>：</p><ul><li>work1拿到msg1时，msg1被兜底逻辑重新push到Redis中，worker2又拿到msg1，若无子任务获得锁，那么msg1会被重复处罚。</li></ul></blockquote></td><td><p>30s。</p></td></tr></table><h2 id="sec-15">任务取消机制</h2><p>前端触发任务取消机制后，首先将父任务状态更改为CANCELLING，然后在<u>每一次处罚执行前</u>，检查该子任务的父任务状态：若CANCELLING，则终止处罚，并更新子任务状态为CANCELED。</p><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>定时补偿任务：</strong></mark></p><ul><li><strong>任务取消时的父任务状态更新 - work4</strong>：定期扫描状态为CANCELLING的父任务，若其下子任务全部完成(包括：SUCCEED、FAILED、CANCELLED)，则更新父任务为CANCELLED。</li></ul><h2 id="sec-16">处罚日志落库</h2><p>Talos-&gt;Iceberg。</p><p>打日志需覆盖情况：</p><ol><li>正常处罚完成。</li></ol><ol><li>处罚失败原因（N天内已被处罚，被豁免）</li></ol><h1 id="sec-17">元数据结构</h1><h2 id="sec-18">元数据结构</h2><h2 id="sec-19">MYSQL</h2><p>MYSQL用于持久化存储主任务、子任务以及处罚方式。</p><h3 id="sec-20"><s>处罚动作表(task_table)</s></h3><p><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><strong>这里直接复用规则处置配置即可，参考文档：</strong></mark><span class="fs-mention">@规则处置-需求实现记录</span></p><p><s>用于存储所有处罚方式。如：密码重置、账号冻结。。</s></p><blockquote><p><s>task_action所使用的插件中，保持一个expiredTs参数，作为全局处罚成功锁的过期时间。</s></p></blockquote><pre><code>CREATE TABLE `task_table` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `name` varchar(256) NOT NULL DEFAULT '' COMMENT '处罚动作名称',
+  `plugin` varchar(128) NOT NULL DEFAULT '' COMMENT '具体执行处罚插件',
+  `params` json DEFAULT NULL COMMENT '处罚参数',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0: offline, 1: online',
+  `created_by` varchar(64) NOT NULL DEFAULT 'risk' COMMENT '创建人',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` varchar(64) NOT NULL DEFAULT 'risk' COMMENT '更新人',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUEKEY `uk_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</code></pre><h3 id="sec-21">父任务表(task_table)</h3><p>用于存储父任务元信息，与子任务是1对多的关系。</p><ol><li>有<strong>一个大key存储父任务的所有原数据</strong>(即：传入的csv文件)，后续在切分时，根据此csv文件数据，做子任务切分即可。</li></ol><ol><li><strong>csv文件包含表头，且保证仅有1列有效数据，且</strong><strong><code>表头字段=csv_header</code></strong>。csv_header需要前端配置此字段，且若是csv文件方式上传。</li></ol><ol><li><strong>游标先干掉，子任务唯一索引保证切分结果幂等。</strong></li></ol><pre><code>拟字段有：id、main_task_code、task_action_id、status、reason、created_by、create_at、
+-- 父任务表：存储主任务元信息（1:N 子任务）
+CREATE TABLE `task_table` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `task_action_id` int(11) unsigned NOT NULL COMMENT '关联处罚动作ID（外键，关联task_action.id，标识执行哪种处罚）',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '任务状态',
+  `reason` varchar(256) NOT NULL DEFAULT '' COMMENT '处罚原因',
+  `csv_file` LONGBLOB COMMENT 'CSV文件二进制内容（最大支持4GB）',
+  `csv_header` varchar(256) NOT NULL DEFAULT '' COMMENT 'CSV表头（如"ip,用户ID"，用于解析字段映射）',
+  -- 游标机制核心字段
+  `split_cursor` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '切分游标：记录已切分到的数据条数',
+  `total_records` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'CSV总记录数（不含表头，解析CSV后更新）',
+  `splited_records` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '已切分的记录数（每次切分成功后累加，最终应等于total_records）',
+  `split_batch_size` int(11) NOT NULL DEFAULT 1000 COMMENT '每批切分大小',
+  
+  `created_by` varchar(64) NOT NULL DEFAULT 'risk',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_by` varchar(64) NOT NULL DEFAULT 'risk',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='含原始CSV文件的父任务表';</code></pre><h3 id="sec-22">子任务表(task_table)</h3><p>用于存储子任务元信息。</p><ul><li><blockquote><p>如：{"用户ID":"123"}、{"ip":"1.1.1.1"}。</p></blockquote></li></ul><ul><li><mark style="background:#ffd8a8;color:inherit;padding:0 2px;border-radius:3px"><strong>sub_task_code</strong></mark><strong>：</strong>基于 “父任务编码 + 行号” 生成，唯一键确保同一行号不会被重复插入子任务（即使多个 worker 同时处理，数据库会阻止重复）。</li></ul><pre><code>CREATE TABLE `task_table` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '子任务主键ID',
+  `main_task_id` bigint(20) unsigned NOT NULL COMMENT '关联父任务ID（关联task_main_task.id）',
+  `task_action_id` int(11) unsigned NOT NULL COMMENT '关联处罚动作ID（关联task_action.id）',
+  `sub_task_code` varchar(64) NOT NULL UNIQUE COMMENT '唯一编码：SUB_{main_task_code}_{row_num}',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '子任务状态：0-待执行，1-执行中，2-成功，3-失败，4-重试中，5-已取消',
+  -- CSV相关字段（对应父任务CSV中的一行数据）
+  `biz_params` json NOT NULL COMMENT '业务参数（如{"user_id":"123"}，用于处罚执行和留痕）',
+  `start_time` datetime DEFAULT NULL COMMENT '开始执行时间',
+  `finish_time` datetime DEFAULT NULL COMMENT '执行完成时间',
+  `reason` varchar(512) NOT NULL DEFAULT '' COMMENT '备注（如失败原因："账号不存在"）',
+  `created_by` varchar(64) NOT NULL DEFAULT 'risk' COMMENT '创建人',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_by` varchar(64) NOT NULL DEFAULT 'risk' COMMENT '更新人',
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_sub_task_code` (`sub_task_code`) COMMENT '子任务编码唯一，避免重复创建',
+  KEY `idx_main_task_id` (`main_task_id`) COMMENT '按父任务ID查询所有子任务',
+  KEY `idx_status` (`status`) COMMENT '筛选待执行/失败的子任务',
+  KEY `idx_task_action_id` (`task_action_id`) COMMENT '按处罚动作类型统计',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='子任务表：关联父任务CSV中的单行数据，存储处罚执行信息';
+</code></pre><h2 id="sec-23">Redis set</h2><p>消息队列、锁。这两者的结构设计。</p><p>msg数据结构设计：</p><pre><code>{
+    "properties": {
+            "用户ID":"123456",
+            "Ip":"1.1.1.1"
+    },
+    "penality_action_id": "",
+    "sub_task_id": "",
+    "sub_task_code":"",
+    "created": ""
+}</code></pre><p>此种设计，就需要在「数据处理模块」中，首先读取处罚动作的数据结构，解析出其params中，有哪些是"事件属性"，<u>理论上有1个，</u>实际处罚值类型(如：用户ID、ip)，即csv_header，其值就是需要我们从csv中读到的数据。</p><p><u>最终将其塞入properties中</u>，投递到MQ，之后在处罚执行模块，就可实现单次处罚。</p></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>

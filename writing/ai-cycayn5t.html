@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>OpenCode + OMO 多层 Agent 架构与 Fallback 配置实践 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">39</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#sec-1">背景</a><a class="tl l2" href="#sec-2">SubAgent 调用机制详解</a><a class="tl l3" href="#sec-3">调用流程</a><a class="tl l3" href="#sec-4">SubAgent 之间不能互调</a><a class="tl l2" href="#sec-5">多 Agent 通信架构：主从 vs Peer vs Mailbox</a><a class="tl l3" href="#sec-6">主从架构 vs Peer 架构</a><a class="tl l3" href="#sec-7">SubAgent 的触发时机（各系统对比）</a><a class="tl l3" href="#sec-8">Agent Teams 的通信机制：Mailbox 模式</a><a class="tl l2" href="#sec-9">结论先行 ⭐️</a><a class="tl l3" href="#sec-10">全局与项目级 SubAgent 叠加机制</a><a class="tl l2" href="#sec-11">为什么这么设计？</a><a class="tl l3" href="#sec-12">OpenCode 原生不够用</a><a class="tl l3" href="#sec-13">OMO 默认太重</a><a class="tl l2" href="#sec-14">整体架构</a><a class="tl l3" href="#sec-15">全局层</a><a class="tl l3" href="#sec-16">项目层</a><a class="tl l2" href="#sec-17">第一层：全局配置</a><a class="tl l3" href="#sec-18">两个主 Agent 打底</a><a class="tl l3" href="#sec-19">SubAgent 池</a><a class="tl l3" href="#sec-20">SubAgent 详解</a><a class="tl l4" href="#sec-21">sisyphus — 复杂多步任务执行者</a><a class="tl l4" href="#sec-22">hephaestus — 工程构建专家</a><a class="tl l4" href="#sec-23">oracle — 深度推理顾问</a><a class="tl l4" href="#sec-24">prometheus — 战略规划架构师</a><a class="tl l4" href="#sec-25">metis — 问题分析解决者</a><a class="tl l4" href="#sec-26">momus — 代码评审员</a><a class="tl l4" href="#sec-27">explore — 快速代码搜索</a><a class="tl l4" href="#sec-28">librarian — 代码研究员</a><a class="tl l4" href="#sec-29">multimodal-looker — 多模态视觉分析</a><a class="tl l4" href="#sec-30">atlas — 文档知识导航</a><a class="tl l3" href="#sec-31">Fallback 链</a><a class="tl l3" href="#sec-32">Category 任务分类</a><a class="tl l3" href="#sec-33">Category 与 Agent 的关系</a><a class="tl l2" href="#sec-34">第二层：项目级配置</a><a class="tl l2" href="#sec-35">配置文件参考</a><a class="tl l3" href="#sec-36">全局 opencode.json</a><a class="tl l3" href="#sec-37">全局 oh-my-openagent.json（Fallback 链）</a><a class="tl l3" href="#sec-38">项目级 opencode.json</a><a class="tl l3" href="#sec-39">项目级 Agent 定义示例</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="ai/index.html">AI</a></div><article><h1>OpenCode + OMO 多层 Agent 架构与 Fallback 配置实践</h1><div class="meta">2026-04-28 · <a class="src-link" href="[内部链接]" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md">
+<style>
+.fs-callout{display:flex;gap:10px;padding:12px 14px;border-radius:8px;margin:14px 0;border-left:4px solid #c9cdd4}
+.fs-callout-e{font-size:18px;line-height:1.5;flex:none}
+.fs-callout-b{flex:1;min-width:0}
+.fs-callout-b>p:first-child{margin-top:0}
+.fs-callout-b>p:last-child{margin-bottom:0}
+.fs-grid{display:grid;gap:12px;margin:14px 0}
+.fs-col{min-width:0}
+.fs-todo .fs-cb{color:#3370ff;font-weight:700;margin-right:4px}
+.fs-mention{color:#3370ff;background:rgba(51,112,255,.08);border-radius:4px;padding:0 3px}
+.fs-img{margin:14px 0;text-align:center}
+.art-page .fs-img{margin-left:-16px;margin-right:-16px}
+.fs-img img{max-width:100%;height:auto;border-radius:8px;display:block;margin:0 auto}
+.fs-board{position:relative;margin:16px 0;border:1px solid #e2e2da;border-radius:10px;
+  background:#fafafa;height:clamp(320px,52vh,520px);overflow:hidden}
+.art-page .fs-board{margin-left:-16px;margin-right:-16px;border-radius:8px}
+.board-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:#8f959e;font-size:12.5px}
+.fs-embed{padding:10px 12px;border:1px dashed #c9cdd4;border-radius:8px;color:#8f959e;font-size:13px;margin:12px 0}
+.md mark{padding:0 2px;border-radius:3px}
+@media(max-width:640px){.fs-grid{grid-template-columns:1fr!important}}
+</style>
+<blockquote><p>FallBack 链参考文档：<span class="fs-mention">@OpenCode 配置与 Oh-My-OpenCode Fallback </span>。<span class="fs-mention">@引用</span></p><p>插个广告：<span class="fs-mention">@聊聊AI-Coding、AI提效、AI底层认知 - 研发效能与工程化探索</span></p></blockquote><h2 id="sec-1">背景</h2><p>个人日常用 <strong>OpenCode + OMO(Oh-My-OpenAgent) </strong>做 AI 辅助编程，用了一段时间后碰到两个问题：</p><div class="fs-callout" style="background:#fff3bf;border-left-color:#c9cdd4"><div class="fs-callout-e">⚠️</div><div class="fs-callout-b"><p><span style="color:#f5a623"><strong>OpenCode 原生 Agent 太少</strong></span><strong>。</strong> </p><p>自带的 Plan + Builder 两个主 Agent 能处理通用编码任务，但碰到架构设计、代码评审、多模态分析这些场景就不够用了。你得不停地在 prompt 里补角色描述，效率很低。</p></div></div><div class="fs-callout" style="background:#fff3bf;border-left-color:#c9cdd4"><div class="fs-callout-e">⚠️</div><div class="fs-callout-b"><p><span style="color:#f5a623"><strong>OMO（Oh-My-OpenAgent）插件自带的 Agent 又太重</strong></span><strong>。</strong> </p><p>OMO 默认把 sisyphus、oracle 这些都配成独立主 Agent，每个都有完整的工具集和系统提示。实际用的时候你需要手动切换 Agent，而且不同项目的需求差异很大，全局统一配置经常不合适。</p></div></div><p><strong>两者如何权衡呢？</strong></p><p>这篇文档讲我怎么把两者拆开重组 —— <strong>全局只保留两个主 Agent，OMO 的所有角色降级为 SubAgent 按需调用，项目目录里再按领域定制专属 Agent</strong>。</p><h2 id="sec-2">SubAgent 调用机制详解</h2><div class="fs-callout" style="background:#d0ebff;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>核心机制</strong>：主 Agent（Plan / Builder）通过 opencode 的 <strong>Task tool</strong> 委派任务给 SubAgent。</p><p>SubAgent 在<strong>独立 context</strong> 中执行，只有最终 summary 返回主 Agent，中间的工具调用和推理过程<strong>不进入</strong>主 Agent 的 context window。</p></div></div><h3 id="sec-3">调用流程</h3><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"><figure class="fs-board" data-doc="[内部链接]" data-board="YqWdwwCdvhaD1pbdWV0c4When7d"><div class="board-ph">正在加载画板…</div></figure></div><div class="fs-col"><p>主 Agent 看到所有已注册 SubAgent 的 <strong>description 字段</strong>，根据当前任务与 description 的匹配度决定调用哪个 SubAgent。</p><p>这就是为什么每个 SubAgent 的 description 要写得精准——它直接影响调度准确率。</p></div></div><h3 id="sec-4">SubAgent 之间不能互调</h3><div class="fs-callout" style="background:#fff3bf;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>重要限制</strong>：10 个 SubAgent 之间<strong>不能直接通信</strong>。</p><p>oracle 不能调 momus，explore 不能调 librarian。所有协作都必须经过主 Agent 中转——这是 opencode 主从架构的固有限制。</p><p>如果需要 SubAgent 间协作（如 oracle 做完分析后让 momus 评审），流程是：</p><ol><li>主 Agent 调 oracle → 拿到 summary</li></ol><ol><li>主 Agent 把 summary 作为 context 传给 momus → 拿到评审结果</li></ol><ol><li>主 Agent 综合两份 summary 决定下一步</li></ol><p>每一步都经过主 Agent，SubAgent 互相看不到彼此的存在。</p></div></div><p>这与 Claude Code 的 <strong>Agent Teams</strong> 模式形成对比——Agent Teams 支持成员间通过 <code>message</code> 工具直接点对点通信，不需要中心 Agent 中转。</p><p>但 opencode 目前没有 peer 通信能力。</p><h2 id="sec-5">多 Agent 通信架构：主从 vs Peer vs Mailbox</h2><div class="fs-callout" style="background:#d0ebff;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>理解本文架构前的必备知识</strong>：opencode 的 SubAgent 属于「主从架构」，而 Claude Code 还支持「Agent Teams（Peer 架构）」。两者的通信机制、触发方式、上下文管理完全不同。本节先讲清这些概念，再看具体配置。</p></div></div><h3 id="sec-6">主从架构 vs Peer 架构</h3><table><tr><th><p><strong>维度</strong></p></th><th><p><strong>主从架构（Hub-Spoke）</strong></p></th><th><p><strong>Peer 架构（对等通信）</strong></p></th></tr><tr><td><p>结构</p></td><td><p>一个主 Agent 指挥 N 个子 Agent</p></td><td><p>N 个 Agent 地位平等，无中心控制者</p></td></tr><tr><td><p>信息流</p></td><td><p>主→子→主（单向漏斗）</p></td><td><p>任意→任意（多向网状）</p></td></tr><tr><td><p>控制权</p></td><td><p>主 Agent 全权决定分派和汇总</p></td><td><p>协商式推进</p></td></tr><tr><td><p>类比</p></td><td><p>老板派活给下属</p></td><td><p>同事</p></td></tr><tr><td><p>谁在用</p></td><td><p><strong>opencode</strong> / Claude Code Subagent / Hermes / Kimi Swarm</p></td><td><p><strong>仅 Claude Code Agent Teams</strong></p></td></tr><tr><td><p>适合场景</p></td><td><p>确定性任务分解（"你去查X，你去写Y"）</p></td><td><p>开放式讨论（"一起评审这个方案"）</p></td></tr></table><figure class="fs-board" data-doc="[内部链接]" data-board="MTCYwDj0ZhY6k2br2J5cgZDvnEc"><div class="board-ph">正在加载画板…</div></figure><p><strong>本文的 opencode + OMO 架构属于主从模式</strong>：Plan / Builder 是主 Agent，10 个 OMO 角色是 SubAgent，主 Agent 通过 Task tool 单向委派，SubAgent 之间不能互调。</p><h3 id="sec-7">SubAgent 的触发时机（各系统对比）</h3><table><tr><th><p><strong>系统</strong></p></th><th><p><strong>触发方式</strong></p></th><th><p><strong>谁决定"该不该分"</strong></p></th><th><p><strong>触发时机</strong></p></th></tr><tr><td><p><strong>Kimi Swarm</strong></p></td><td><p>模型权重自主决定</p></td><td><p>模型本身（RL 训练进去的）</p></td><td><p>推理过程中自动判断，无显式工具调用</p></td></tr><tr><td><p><strong>Claude Code</strong></p></td><td><p>主 Agent 调 <code>Agent tool</code></p></td><td><p>主 Agent（Prompt 引导）</p></td><td><p>判断子任务独立性足够高时显式调用</p></td></tr><tr><td><p><strong>opencode</strong></p></td><td><p>主 Agent 调 <code>Task tool</code></p></td><td><p>主 Agent（Prompt 引导）</p></td><td><p>根据 SubAgent 的 description 匹配度决定调谁</p></td></tr><tr><td><p><strong>Hermes</strong></p></td><td><p>主 Agent 调 <code>delegate_task</code></p></td><td><p>主 Agent（Prompt + 角色约束）</p></td><td><p>leaf 角色物理上调不起 delegate（工具被剥夺）</p></td></tr><tr><td><p><strong>OpenClaw</strong></p></td><td><p>Gateway bindings 规则</p></td><td><p>静态路由规则（不经过 LLM）</p></td><td><p>消息进来时确定性匹配，路由阶段零 LLM 参与</p></td></tr></table><div class="fs-callout" style="background:#fff3bf;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>opencode 的触发关键</strong>：主 Agent 通过 Task tool 委派时，匹配依据是 SubAgent 的 <strong>description 字段</strong>——这就是为什么本文每个 SubAgent 的 description 都写得很精准，它直接影响调度准确率。</p></div></div><h3 id="sec-8">Agent Teams 的通信机制：Mailbox 模式</h3><p>Claude Code 的 Agent Teams 采用的是 <strong>Actor Model 的 Mailbox</strong> 通信模式：</p><figure class="fs-board" data-doc="[内部链接]" data-board="LxXQwupYnhXdNWb0Fztc1wFznSb"><div class="board-ph">正在加载画板…</div></figure><table><tr><th><p><strong>特征</strong></p></th><th><p><strong>说明</strong></p></th></tr><tr><td><p>异步投递</p></td><td><p>A 往 B 的 mailbox 写完就继续自己的事，不阻塞等 B 回复</p></td></tr><tr><td><p>独立 inbox</p></td><td><p>每个成员有自己的 mailbox，只看到发给自己的消息</p></td></tr><tr><td><p>非广播</p></td><td><p>A 发给 B 的消息，C 看不到（除非 A 也发一份给 C）</p></td></tr><tr><td><p>轮转消费</p></td><td><p>成员按 turn 轮转，轮到谁谁就消费自己 inbox 里的消息</p></td></tr><tr><td><p>持久化</p></td><td><p>Team 状态（含 mailbox 历史）持久化到 JSON</p></td></tr></table><p><strong>为什么选 Mailbox 而不是共享黑板？</strong> 核心原因是<strong>防 context 爆炸</strong>——共享黑板模式下 3 个 Agent 每轮都看全局消息，context 增长是 O(n²)；Mailbox 点对点投递，增长是 O(n)。</p><div class="fs-callout" style="background:#d3f9d8;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>本文 opencode 架构没有 Mailbox / Peer 能力</strong>。所有 SubAgent 间的"协作"必须经过主 Agent 中转：主 Agent 先调 oracle 拿到分析结论 → 再把结论作为 context 传给 momus 做评审 → 最终汇总。这是主从架构的固有限制，也是主从架构 context 更可控的原因。</p></div></div><hr><h2 id="sec-9">结论先行 ⭐️</h2><div class="fs-callout" style="background:#ffe8cc;border-left-color:#c9cdd4"><div class="fs-callout-e">🔥</div><div class="fs-callout-b"><p><strong>三句话概括整套架构：</strong></p><ol><li><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>全局两个主 Agent 打底</strong></span></mark> — Plan 拆任务，Builder 干活，所有项目共享.</li></ol><ol><li><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>OMO 角色全部降为 SubAgent</strong></span></mark> — 10 个通用角色挂在全局，各自绑定模型和 Fallback 链，主 Agent 按需调用.</li></ol><ol><li><mark style="background:#ffe066;color:inherit;padding:0 2px;border-radius:3px"><span style="color:#d83931"><strong>专家主 Agent，区分项目目录，按需定制</strong></span></mark> — 最少配置切换主 Agent，追加领域 SubAgent，和全局 SubAgent 池叠加使用.</li></ol></div></div><h3 id="sec-10">全局与项目级 SubAgent 叠加机制</h3><p>进入项目目录后，主 Agent 能看到<strong>全局 10 个 + 项目级 N 个</strong> SubAgent 的 description，按 description 匹配度决定调谁。同名 Agent 项目级覆盖全局，不同名的追加叠加。</p><p>举例：电商项目定义了 <code>api-architect</code> 和 <code>order-expert</code>，运行时主 Agent 的 SubAgent 池 = 全局 10 个 + 这 2 个 = <strong>12 个可调用角色</strong>。</p><h2 id="sec-11">为什么这么设计？</h2><h3 id="sec-12">OpenCode 原生不够用</h3><p>OpenCode 开箱只有 Plan 和 Builder。写代码够了，但你想让它做代码评审（momus）、深度推理（oracle）、图片分析（multimodal-looker）就得自己写 prompt 或手动定义 Agent。每个项目重复一遍这个过程很烦。</p><h3 id="sec-13">OMO 默认太重</h3><p>OMO 插件提供了 sisyphus、hephaestus、oracle 等十几个预定义 Agent，覆盖面广。</p><p>但默认配置下它们都是独立主 Agent，互相之间不会自动协作。你想用 oracle 做推理，得手动切过去；用完再切回来继续编码。</p><h2 id="sec-14">整体架构</h2><p>整套配置分两层，加载时全局先加载，项目级再覆盖叠加。</p><div class="fs-grid" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="fs-col"><h3 id="sec-15">全局层</h3><p><code>~/.config/opencode/</code></p><ul><li><code>opencode.json</code> — 模型 Provider（8 家）、插件、主 Agent</li></ul><ul><li><code>oh-my-openagent.json</code> — SubAgent 池（10 个）、Category（8 类）、Fallback 链</li></ul><ul><li><code>GATEWAY_API_KEY</code> — 密钥文件，统一引用</li></ul></div><div class="fs-col"><h3 id="sec-16">项目层</h3><p><code>./项目目录/</code></p><ul><li><code>opencode.json</code> — 覆盖 default\_agent + 加载指令</li></ul><ul><li><code>.opencode/agents/*.md</code> — 领域 Agent 定义</li></ul><ul><li><code>AGENTS.md</code> — 项目专属系统指令</li></ul></div></div><div class="fs-callout" style="background:#e9ecef;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>加载顺序：</strong> 全局 <code>~/.config/opencode/</code> 先加载（Provider、插件、OMO SubAgent）→ 项目级 <code>./opencode.json</code> + <code>.opencode/agents/</code> 覆盖上去。同名 Agent 被替换，新增 Agent 被追加。最终运行时两层叠加。</p></div></div><figure class="fs-board" data-doc="[内部链接]" data-board="J8vawrs6ZhPncYbftBic0EPHnPe"><div class="board-ph">正在加载画板…</div></figure><hr><h2 id="sec-17">第一层：全局配置</h2><h3 id="sec-18">两个主 Agent 打底</h3><p>全局 <code>default_agent</code> 设为 <code>plan</code>。日常只跟两个角色打交道：</p><table><tr><th><p>角色</p></th><th><p>职责</p></th></tr><tr><td><p>Plan</p></td><td><p>拆解任务、规划步骤</p></td></tr><tr><td><p>Builder</p></td><td><p>执行编码、文件操作</p></td></tr></table><h3 id="sec-19">SubAgent 池</h3><p>所有 OMO 角色统一设为 <code>mode: "subagent"</code>，Plan/Builder 按需调用，不用手动切换。</p><div class="fs-callout" style="background:#ffe8cc;border-left-color:#c9cdd4"><div class="fs-callout-e">🔥</div><div class="fs-callout-b"><p>调整后 10 个 Agent 覆盖了 <span style="color:#d83931"><strong>6 个不同的模型/家族</strong></span>（Opus / Sonnet / GPT-5.4-Pro / GPT-5.4 / Codex / Gemini / model / Kimi），单一厂商故障最多影响 2-3 个角色，不会全挂。</p></div></div><div class="fs-callout" style="background:#d0ebff;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>选模型的逻辑：</strong></p><ul><li><span style="color:#d83931"><strong>Opus</strong></span> 给需要全局视野和长链路不跑偏的角色（sisyphus、prometheus）</li></ul><ul><li><span style="color:#d83931"><strong>GPT-5.4-Pro</strong></span> 给推理天花板场景（oracle）</li></ul><ul><li><span style="color:#d83931"><strong>GPT-5.4</strong></span> 给逻辑拆解和分析（metis）</li></ul><ul><li><span style="color:#d83931"><strong>Sonnet</strong></span> 给需要严谨理解但不需要最强推理的角色（momus 评审、librarian 研究）</li></ul><ul><li><span style="color:#d83931"><strong>Codex</strong></span> 给纯代码生成（hephaestus）</li></ul><ul><li><span style="color:#d83931"><strong>Gemini</strong></span> 给多模态（multimodal-looker）</li></ul><ul><li><span style="color:#d83931"><strong>model Flash</strong></span> 给低延迟轻量任务（explore）</li></ul><ul><li><span style="color:#d83931"><strong>Kimi</strong></span> 给大窗口文档场景（atlas）</li></ul></div></div><h3 id="sec-20">SubAgent 详解</h3><h4 id="sec-21">sisyphus — 复杂多步任务执行者</h4><p><strong>主模型</strong> Claude Opus 4-6 | <strong>temperature</strong> 默认 | <strong>Fallback</strong> Opus 4.5 → Sonnet 4-6 → Sonnet 4.5 → Kimi → GLM</p><blockquote>Executes complex multi-step tasks that require sequential operations with dependencies. Use when a task involves multiple stages that build upon each other, such as refactoring across files, setting up environments, or implementing features with multiple interdependent components.</blockquote><p><strong>什么时候用：</strong> 多步骤串行执行、步骤间有依赖关系的任务。跨文件重构、搭建开发环境、实现涉及多组件的功能。</p><hr><h4 id="sec-22">hephaestus — 工程构建专家</h4><p><strong>主模型</strong> Codex-9 | <strong>temperature</strong> 默认 | <strong>Fallback</strong> Codex-8 → Codex-7 → Codex-6</p><blockquote>Engineering and build system specialist. Expert in build configurations, compilation issues, dependency management, CI/CD pipelines, and tooling setup.</blockquote><p><strong>什么时候用：</strong> webpack/vite 配置、package.json 依赖冲突、CI/CD 调试、编译失败。<strong>Codex 系列专精代码生成。</strong></p><hr><h4 id="sec-23">oracle — 深度推理顾问</h4><p><strong>主模型</strong> GPT-5.4-Pro | <strong>temperature</strong> 0.3 | <strong>Fallback</strong> GPT-5.4 → Codex-9 → Kimi → Grok</p><blockquote>Deep reasoning and precise question answering expert. Provides thoughtful analysis of complex technical problems, architectural decisions, and nuanced questions requiring careful consideration.</blockquote><p><strong>什么时候用：</strong> <span style="color:#d83931"><strong>架构决策、技术方案权衡、复杂 bug 根因分析。</strong></span> 基于信息做推理和判断，不只是检索。</p><hr><h4 id="sec-24">prometheus — 战略规划架构师</h4><p><strong>主模型</strong> Claude Opus 4-6 | <strong>temperature</strong> 0.2 | <strong>Fallback</strong> Opus 4.5 → Sonnet 4-6 → Sonnet 4.5 → Kimi → Grok</p><blockquote>Strategic planner and software architect. Designs high-level architecture, evaluates technical approaches, makes technology selections, and creates implementation roadmaps.</blockquote><p><strong>什么时候用：</strong> 系统架构设计、技术选型、路线图规划。<strong>prometheus 偏规划（输出方案），oracle 偏分析（输出结论）。</strong></p><hr><h4 id="sec-25">metis — 问题分析解决者</h4><p><strong>主模型</strong> GPT-5.4 | <strong>temperature</strong> 0.5 | <strong>Fallback</strong> Codex-9 → Kimi → Sonnet 4-6 → Grok</p><blockquote>Intelligent problem solver and analytical thinker. Breaks down complex problems into manageable parts, identifies root causes, proposes solutions, and weighs tradeoffs.</blockquote><p><strong>什么时候用：</strong> 性能瓶颈分析、复杂 bug 调试、系统行为分析。metis 偏动手拆解，oracle 偏权威判断。</p><hr><h4 id="sec-26">momus — 代码评审员</h4><p><strong>主模型</strong> Claude Sonnet 4-6 | <strong>temperature</strong> 0.6 | <strong>Fallback</strong> Sonnet 4.5 → Kimi → Gemini Pro → Grok</p><blockquote>Code reviewer and quality auditor. Reviews code for bugs, security issues, performance problems, maintainability concerns, and adherence to best practices.</blockquote><p><strong>什么时候用：</strong> <span style="color:#d83931"><strong>代码合并前的质量检查。</strong></span> Claude 偏保守，做评审是优点——宁可多报不漏报。</p><hr><h4 id="sec-27">explore — 快速代码搜索</h4><p><strong>主模型</strong> model v2 Flash | <strong>temperature</strong> 0.7 | <strong>Fallback</strong> model Pro → MiniMax → Haiku</p><blockquote>Fast read-only codebase explorer. Quickly finds files by patterns, searches for code snippets, identifies function locations, and answers questions about code structure.</blockquote><p><strong>什么时候用：</strong> 快速找东西：搜文件、定位函数、查结构。只读不写。<strong>explore 求快（侦察），librarian 求深（研究）。</strong></p><hr><h4 id="sec-28">librarian — 代码研究员</h4><p><strong>主模型</strong> Claude Sonnet 4-6 | <strong>temperature</strong> 0.2 | <strong>max_tokens</strong> 8192 | <strong>Fallback</strong> Sonnet 4.5 → Kimi → model Pro → Gemini Flash</p><blockquote>Comprehensive codebase researcher and documentation specialist. Performs deep analysis of code structure, patterns, dependencies, and historical context.</blockquote><p><strong>什么时候用：</strong> 深度代码研究：理解大型代码库结构、追踪数据流、分析依赖、编写技术文档。</p><hr><h4 id="sec-29">multimodal-looker — 多模态视觉分析</h4><p><strong>主模型</strong> Gemini 3 Pro | <strong>temperature</strong> 0.4 | <strong>Fallback</strong> Kimi → Gemini Flash</p><blockquote>Visual content analyzer for images, diagrams, screenshots, PDFs, and design mockups. Extracts information from visual materials, describes UI layouts, reads diagrams, and analyzes design specifications.</blockquote><p><strong>什么时候用：</strong> 看截图、读架构图、分析设计稿、提取 PDF。<span style="color:#d83931"><strong>Gemini 多模态能力最好。</strong></span></p><hr><h4 id="sec-30">atlas — 文档知识导航</h4><p><strong>主模型</strong> Kimi K2.5 | <strong>temperature</strong> 0.3 | <strong>Fallback</strong> GLM → MiniMax → Grok</p><blockquote>Knowledge navigator and technical reference expert. Searches documentation, finds API references, retrieves code examples, and locates relevant information from knowledge bases.</blockquote><p><strong>什么时候用：</strong> 查框架 API、语言特性、第三方库文档。explore 搜代码库内部，atlas 搜外部知识。Kimi 260K context 窗口大、中文好。</p><hr><h3 id="sec-31">Fallback 链</h3><div class="fs-callout" style="background:#fde2e2;border-left-color:#c9cdd4"><div class="fs-callout-e">🔥</div><div class="fs-callout-b"><p><span style="color:#d83931"><strong>每个 Agent 绑 4-6 级 Fallback，模型挂了自动降级，不中断工作。</strong></span> 三条降级规则：</p><ol><li><strong>同厂同系列</strong> — Opus 4-6 → Opus 4.5 → Sonnet 4-6</li></ol><ol><li><strong>跨厂同级</strong> — GPT-5.4-Pro → GPT-5.4 → Codex-9</li></ol><ol><li><strong>兜底低成本</strong> — Kimi K2.5、GLM-5</li></ol></div></div><p><strong>成本策略：</strong> 轻量任务（explore、quick）用 model Flash 省钱，重量任务（oracle、ultrabrain）用旗舰模型保质量。Fallback 链跨越多家厂商，单一厂商故障不影响整体。</p><h3 id="sec-32">Category 任务分类</h3><p>除了 Agent 维度，还能按任务类型自动选模型：</p><table><tr><th><p>Category</p></th><th><p>主模型</p></th><th><p>适用场景</p></th></tr><tr><td><p>visual-engineering</p></td><td><p>Gemini 3 Pro</p></td><td><p>前端/UI</p></td></tr><tr><td><p>ultrabrain</p></td><td><p>GPT-5.4-Pro</p></td><td><p>硬核逻辑</p></td></tr><tr><td><p>deep</p></td><td><p>Codex-9</p></td><td><p>深度自治编码</p></td></tr><tr><td><p>artistry</p></td><td><p>Gemini 3 Pro</p></td><td><p>创意文案</p></td></tr><tr><td><p>quick</p></td><td><p>model v2 Flash</p></td><td><p>快速任务</p></td></tr><tr><td><p>writing</p></td><td><p>Kimi K2.5</p></td><td><p>文档写作</p></td></tr><tr><td><p>unspecified-high</p></td><td><p>Kimi K2.5</p></td><td><p>通用偏重</p></td></tr><tr><td><p>unspecified-low</p></td><td><p>model v2 Flash</p></td><td><p>通用偏轻</p></td></tr></table><hr><h3 id="sec-33">Category 与 Agent 的关系</h3><div class="fs-callout" style="background:#d0ebff;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p><strong>两套路由是正交的</strong>：</p><ul><li><strong>Agent</strong> 是<strong>角色级路由</strong> — 按角色分配模型（oracle 用 GPT-5.4-Pro，explore 用 model Flash）</li></ul><ul><li><strong>Category</strong> 是<strong>任务级路由</strong> — 按任务类型选模型（ultrabrain 场景用 GPT-5.4-Pro，quick 场景用 model Flash）</li></ul><p>Category 影响的是<strong>主 Agent 自己用什么模型处理当前任务</strong>，Agent 影响的是<strong>委派给谁执行</strong>。两者不冲突，可以叠加生效。</p></div></div><h2 id="sec-34">第二层：项目级配置</h2><p>进到具体项目目录，项目级 <code>opencode.json</code> 只写最少的东西——声明 <code>default_agent</code> 和指令文件。</p><p>以电商后台项目为例</p><table><tr><th><p>Agent</p></th><th><p>模式</p></th><th><p>职责</p></th></tr><tr><td><p>ecom-main</p></td><td><p>primary</p></td><td><p>主控，需求管理与开发协调</p></td></tr><tr><td><p>api-architect</p></td><td><p>subagent</p></td><td><p>接口设计与微服务拆分</p></td></tr><tr><td><p>db-advisor</p></td><td><p>subagent</p></td><td><p>数据库建模与查询优化</p></td></tr><tr><td><p>biz-analyst</p></td><td><p>subagent</p></td><td><p>业务逻辑校验与规则梳理</p></td></tr><tr><td><p>perf-tuner</p></td><td><p>subagent</p></td><td><p>性能调优与压测分析</p></td></tr></table><hr><h2 id="sec-35">配置文件参考</h2><h3 id="sec-36">全局 opencode.json</h3><p>路径：<code>~/.config/opencode/opencode.json</code></p><pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "oh-my-openagent@latest",
+    "superpowers@git+https://github.com/obra/superpowers.git"
+  ],
+  "default_agent": "plan",
+  "server": { "hostname": "0.0.0.0", "cors": ["*"] },
+  "mcp": {},
+  "provider": {
+    "Gateway-Claude": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "{file:./GATEWAY_API_KEY}"
+      },
+      "models": {
+        "pa/claude-opus-4-6": {
+          "name": "pa/claude-opus-4-6",
+          "headers": { "X-Model-Provider-Id": "ppio" }
+        },
+        "pa/claude-opus-4-5-20251101": { "...": "同上" },
+        "pa/claude-sonnet-4-6": { "...": "同上" },
+        "pa/claude-sonnet-4-5-20250929": { "...": "同上" },
+        "pa/claude-haiku-4-5-20251001": { "...": "同上" }
+      }
+    },
+    "Gateway-OpenAI": {
+      "npm": "@ai-sdk/openai",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "{file:./GATEWAY_API_KEY}"
+      },
+      "models": {
+        "azure_openai/gpt-5.4-pro": {},
+        "azure_openai/gpt-5.4": {},
+        "azure_openai/gpt-5.3-codex-9": {},
+        "azure_openai/gpt-5.3-codex-8": {},
+        "azure_openai/gpt-5.3-codex-7": {},
+        "azure_openai/gpt-5.3-codex-6": {}
+      }
+    },
+    "Gateway-Google": {
+      "npm": "@ai-sdk/google",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "{file:./GATEWAY_API_KEY}"
+      },
+      "models": {
+        "gemini-3-pro-preview-pt": {
+          "name": "gemini-3-pro",
+          "limit": { "context": 1000000, "output": 128000 }
+        },
+        "gemini-3-flash-preview": { "...": "同上" }
+      }
+    },
+    "Gateway-公司": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "{file:./GATEWAY_API_KEY}"
+      },
+      "models": {
+        "公司/model-v2-flash": {},
+        "公司/model-v2-pro": {},
+        "公司/model-v2-omni": {}
+      }
+    },
+    "Gateway-Kimi": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "{file:./GATEWAY_API_KEY}"
+      },
+      "models": {
+        "Pro/moonshotai/Kimi-K2.5": {
+          "name": "Kimi-K2.5",
+          "headers": { "X-Model-Provider-Id": "siliconflow" },
+          "limit": { "context": 260000, "output": 128000 }
+        }
+      }
+    },
+    "Gateway-Zhipu": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "{file:./GATEWAY_API_KEY}"
+      },
+      "models": { "zhipuai/glm-5": {} }
+    },
+    "minimax": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "{file:./GATEWAY_API_KEY}"
+      },
+      "models": { "MiniMax-M2.5": {} }
+    },
+    "Gateway-Grok": {
+      "npm": "@ai-sdk/openai-compatible",
+      "options": {
+        "baseURL": "[内部链接]",
+        "apiKey": "{file:./GATEWAY_API_KEY}"
+      },
+      "models": {
+        "ppio/grok-4": {
+          "name": "ppio/grok-4",
+          "headers": { "X-Model-Provider-Id": "ppio" }
+        }
+      }
+    }
+  }
+}</code></pre><div class="fs-callout" style="background:#e9ecef;border-left-color:#c9cdd4"><div class="fs-callout-e">💡</div><div class="fs-callout-b"><p>密钥统一存放在 <code>~/.config/opencode/GATEWAY_API_KEY</code> 文件，配置里用 <code>{file:./GATEWAY_API_KEY}</code> 引用。换密钥只改一个文件，8 个 Provider 同步生效。</p></div></div><h3 id="sec-37">全局 oh-my-openagent.json（Fallback 链）</h3><p>路径：<code>~/.config/opencode/oh-my-openagent.json</code></p><pre><code>{
+  "sisyphus_agent": {
+    "default_builder_enabled": true,
+    "replace_plan": false
+  },
+  "agents": {
+    "sisyphus": {
+      "mode": "subagent",
+      "model": "Gateway-Claude/pa/claude-opus-4-6",
+      "fallback_chain": [
+        { "model": "Gateway-Claude/pa/claude-opus-4-5-20251101" },
+        { "model": "Gateway-Claude/pa/claude-sonnet-4-6" },
+        { "model": "Gateway-Claude/pa/claude-sonnet-4-5-20250929" },
+        { "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5" },
+        { "model": "Gateway-Zhipu/zhipuai/glm-5" }
+      ]
+    },
+    "hephaestus": {
+      "mode": "subagent",
+      "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-9",
+      "fallback_chain": [
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-8" },
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-7" },
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-6" }
+      ]
+    },
+    "oracle": {
+      "mode": "subagent",
+      "model": "Gateway-OpenAI/azure_openai/gpt-5.4-pro",
+      "fallback_chain": [
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.4" },
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-9" },
+        { "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5" },
+        { "model": "Gateway-Grok/ppio/grok-4" }
+      ]
+    },
+    "librarian": {
+      "mode": "subagent",
+      "model": "Gateway-Claude/pa/claude-sonnet-4-6",
+      "fallback_chain": [
+        { "model": "Gateway-Claude/pa/claude-sonnet-4-5-20250929" },
+        { "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5" },
+        { "model": "Gateway-公司/公司/model-v2-pro" },
+        { "model": "Gateway-Google/gemini-3-flash-preview" }
+      ]
+    },
+    "explore": {
+      "mode": "subagent",
+      "model": "Gateway-公司/公司/model-v2-flash",
+      "fallback_chain": [
+        { "model": "Gateway-公司/公司/model-v2-pro" },
+        { "model": "minimax/MiniMax-M2.5" },
+        { "model": "Gateway-Claude/pa/claude-haiku-4-5-20251001" }
+      ]
+    },
+    "multimodal-looker": {
+      "mode": "subagent",
+      "model": "Gateway-Google/gemini-3-pro-preview-pt",
+      "fallback_chain": [
+        { "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5" },
+        { "model": "Gateway-Google/gemini-3-flash-preview" }
+      ]
+    },
+    "prometheus": {
+      "mode": "subagent",
+      "model": "Gateway-Claude/pa/claude-opus-4-6",
+      "fallback_chain": [
+        { "model": "Gateway-Claude/pa/claude-opus-4-5-20251101" },
+        { "model": "Gateway-Claude/pa/claude-sonnet-4-6" },
+        { "model": "Gateway-Claude/pa/claude-sonnet-4-5-20250929" },
+        { "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5" },
+        { "model": "Gateway-Grok/ppio/grok-4" }
+      ]
+    },
+    "metis": {
+      "mode": "subagent",
+      "model": "Gateway-OpenAI/azure_openai/gpt-5.4",
+      "fallback_chain": [
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-9" },
+        { "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5" },
+        { "model": "Gateway-Claude/pa/claude-sonnet-4-6" },
+        { "model": "Gateway-Grok/ppio/grok-4" }
+      ]
+    },
+    "momus": {
+      "mode": "subagent",
+      "model": "Gateway-Claude/pa/claude-sonnet-4-6",
+      "fallback_chain": [
+        { "model": "Gateway-Claude/pa/claude-sonnet-4-5-20250929" },
+        { "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5" },
+        { "model": "Gateway-Google/gemini-3-pro-preview-pt" },
+        { "model": "Gateway-Grok/ppio/grok-4" }
+      ]
+    },
+    "atlas": {
+      "mode": "subagent",
+      "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5",
+      "fallback_chain": [
+        { "model": "Gateway-Zhipu/zhipuai/glm-5" },
+        { "model": "minimax/MiniMax-M2.5" },
+        { "model": "Gateway-Grok/ppio/grok-4" }
+      ]
+    }
+  },
+  "categories": {
+    "visual-engineering": {
+      "model": "Gateway-Google/gemini-3-pro-preview-pt",
+      "fallback_chain": [
+        { "model": "Gateway-Google/gemini-3-flash-preview" },
+        { "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5" },
+        { "model": "Gateway-Zhipu/zhipuai/glm-5" }
+      ]
+    },
+    "ultrabrain": {
+      "model": "Gateway-OpenAI/azure_openai/gpt-5.4-pro",
+      "fallback_chain": [
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.4" },
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-9" },
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-8" },
+        { "model": "Gateway-Grok/ppio/grok-4" },
+        { "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5" }
+      ]
+    },
+    "deep": {
+      "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-9",
+      "fallback_chain": [
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-7" },
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-6" },
+        { "model": "Gateway-OpenAI/azure_openai/gpt-5.3-codex-8" }
+      ]
+    },
+    "quick": {
+      "model": "Gateway-公司/公司/model-v2-flash",
+      "fallback_chain": [
+        { "model": "Gateway-公司/公司/model-v2-pro" },
+        { "model": "minimax/MiniMax-M2.5" },
+        { "model": "Gateway-Claude/pa/claude-haiku-4-5-20251001" }
+      ]
+    },
+    "writing": {
+      "model": "Gateway-Kimi/Pro/moonshotai/Kimi-K2.5",
+      "fallback_chain": [
+        { "model": "Gateway-Zhipu/zhipuai/glm-5" },
+        { "model": "Gateway-Google/gemini-3-flash-preview" },
+        { "model": "minimax/MiniMax-M2.5" }
+      ]
+    }
+  }
+}</code></pre><h3 id="sec-38">项目级 opencode.json</h3><p>路径：<code>./项目目录/opencode.json</code></p><pre><code>{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"],
+  "default_agent": "ecom-main"
+}</code></pre><p>三行配置。<code>default_agent</code> 覆盖全局，<code>instructions</code> 加载项目指令。</p><h3 id="sec-39">项目级 Agent 定义示例</h3><p>每个 <code>.md</code> 文件的 frontmatter 声明 mode 和参数，文件名即 Agent 名。<code>mode: primary</code> 是主 Agent，<code>mode: subagent</code> 被主 Agent 按需调用。</p><p>路径：<code>.opencode/agents/ecom-main.md</code></p><pre><code>---
+description: 电商后台主控Agent，聚焦需求管理与开发协调
+mode: primary
+temperature: 0.3
+
+---</code></pre><p>路径：<code>.opencode/agents/api-architect.md</code></p><pre><code>---
+description: 接口设计与微服务拆分专家，负责 API 规范和服务边界划分
+mode: subagent
+temperature: 0.2
+
+---</code></pre></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>

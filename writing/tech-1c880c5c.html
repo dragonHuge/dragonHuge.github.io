@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>事务 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">11</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-四种隔离级别具体是如何实现的">1.四种隔离级别具体是如何实现的？</a><a class="tl l2" href="#2-如何解决幻读">2.如何解决幻读？</a><a class="tl l3" href="#1-快照读如何避免幻读">1.快照读如何避免幻读？</a><a class="tl l3" href="#2-当前读是如何避免幻读的">2.当前读是如何避免幻读的？</a><a class="tl l3" href="#3-幻读被完全解决了吗">3.幻读被完全解决了吗?</a><a class="tl l3" href="#4-总结">4.总结</a><a class="tl l2" href="#3-各隔离级别都用到了什么锁">3.各隔离级别都用到了什么锁？</a><a class="tl l2" href="#4-Read-View在MVCC里是怎么工作的">4.Read View在MVCC里是怎么工作的？</a><a class="tl l3" href="#1-什么是MVCC">1.什么是MVCC？</a><a class="tl l3" href="#2-什么是Read-View-快照">2.什么是Read View(快照)？</a><a class="tl l3" href="#3-聚簇索引记录中的两个隐藏列">3.聚簇索引记录中的两个隐藏列</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="tech/index.html">技术</a></div><article><h1>事务</h1><div class="meta">2024-10-30 · <a class="src-link" href="https://flowus.cn/1c880c5c-f86f-4d0f-aaa3-656a436fcc8e" target="_blank" rel="noopener">飞书原文 ↗</a></div><div class="md"><h2 id="1-四种隔离级别具体是如何实现的">1.四种隔离级别具体是如何实现的？</h2>
+<ul><li>对于「<strong>读未提交</strong>」隔离级别的事务来说，因为可以读到未提交事务修改的数据，所以<strong>直接读取最新的数据</strong>就好了；</li></ul>
+<ul><li>对于「<strong>串行化</strong>」隔离级别的事务来说，通过<strong>加读写锁的方式</strong>来避免并行访问；</li></ul>
+<ul><li>对于「读提交」和「可重复读」隔离级别的事务来说，它们是通过 <strong>Read View 来实现的，它们的区别在于创建 Read View 的时机不同，大家可以把 Read View 理解成一个数据快照，就像相机拍照那样，定格某一时刻的风景。</strong></li></ul>
+<ul><li><strong>1.「读提交」隔离级别是在「每个语句执行前」都会重新生成一个 Read View。</strong></li></ul>
+<ul><li>这个读视图用于确保<strong>在执行语句期间只能看到已经提交的事务所做的更改</strong>，而<strong>不会看到未提交的事务所做的更改</strong>。生成读视图的过程包括记录当前事务开始时的数据库状态以及检查已提交事务的版本号或时间戳。这样，当当前事务执行查询或读取数据时，它只能看到在它开始之前已经提交的事务所做的更改，而对于未提交的事务所做的更改则不可见。</li></ul>
+<ul><li>那么因此对数据的修改就是在这个Read View上，而不是对真正的数据修改。那么在事务成功提交后，才将真正的修改提交到数据库。</li></ul>
+<ul><li><strong>2.「可重复读」隔离级别是「启动事务时」生成一个 Read View，然后整个事务期间都在用这个 Read View</strong>。</li></ul>
+<blockquote><p>😍 注意，<strong>执行「开始事务」命令，并不意味着启动了事务</strong>。</p></blockquote>
+<p>在 MySQL 有两种开启事务的命令，分别是：</p>
+<ul><li>第一种：<strong>begin/start</strong> transaction 命令； </li></ul>
+<ul><li>第二种：<strong>start transaction with consistent snapshot</strong> 命令</li></ul>
+<p>这两种开启事务的命令，<strong>事务的启动时机是不同</strong>的：</p>
+<ul><li>执行了 <strong>begin/start transaction</strong> 命令后，并不代表事务启动了。只有在执行这个命令后，执行了第一条 select 语句，才是事务真正启动的时机；</li></ul>
+<p>即：<strong>在执行第一条select语句后，才将此时的数据库数据作为Read View中的内容</strong>。</p>
+<ul><li>执行了 <strong>start transaction with consistent snapshot</strong> 命令，就会马上启动事务。</li></ul>
+<p>确保了<strong>事务中访问的数据在整个执行过程中保持一致</strong>，即使其他事务同时修改了数据。也就是说，如果执行了这条命令，那么就已经将当前的数据作为Read View，进行后续的操作。</p>
+<p>而启动时机不同，也就<strong>意味着对于数据读取的时间不同</strong>。</p>
+<h2 id="2-如何解决幻读">2.如何解决幻读？</h2>
+<p><strong>产生幻读的原因是：行锁只能锁住行，但是新插入记录这个动作，要更新的是记录之间的“间隙”。因此，为了解决幻读问题，InnoDB只好引入新的锁，也就是间隙锁(Gap Lock)</strong>。</p>
+<p>MySQL 在「可重复读」隔离级别下，可以很大程度上避免幻读现象的发生（注意是很大程度避免，并不是彻底避免），所以 MySQL 并不会使用「串行化」隔离级别来避免幻读现象的发生，因为使用「串行化」隔离级别会影响性能。</p>
+<p><strong>MySQL InnoDB 引擎的默认隔离级别虽然是「可重复读」，但是它很大程度上避免幻读现象</strong>，解决的方案有两种：</p>
+<ul><li>针对<strong>快照读</strong>（普通 select 语句），是<strong>通过 MVCC 方式解决了幻读</strong>，因为可重复读隔离级别下，事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的，即使中途有其他事务插入了一条数据，是查询不出来这条数据的，所以就很好了避免幻读问题。</li></ul>
+<ul><li>针对<strong>当前读</strong>（select ... for update 等语句），是<strong>通过 next-key lock（记录锁+间隙锁）方式解决了幻读</strong>，因为当执行 select ... for update 语句的时候，会加上 next-key lock，如果有其他事务在 next-key lock 锁范围内插入了一条记录，那么这个插入语句就会被阻塞，无法成功插入，所以就很好了避免幻读问题。</li></ul>
+<blockquote><p>😍 <strong>快照读：读</strong>取的是记录的<strong>可见版本(有可能是历史版本)</strong>，不用加锁。</p></blockquote>
+<p><strong>当前读</strong>：<strong>读</strong>取的是<strong>最新版本</strong>，并且对<strong>读</strong>取的记录加锁，保证其他事务不会再并发修改这条记录，避免出现安全问题。</p>
+<p>这两个解决方案是很大程度上解决了幻读现象，但是还是有个别的情况造成的幻读现象是无法解决的。</p>
+<p>这次，就跟大家好好聊这个问题。</p>
+<h3 id="1-快照读如何避免幻读">1.快照读如何避免幻读？</h3>
+<p><strong>可重复读隔离级是由 MVCC（多版本并发控制）实现</strong>的，实现的方式是：开始事务后（执行 begin 语句后），在执行第一个查询语句后，会创建一个 Read View，<strong>后续的查询语句利用这个 Read View，通过这个 Read View 就可以在 undo log 版本链找到事务开始时的数据，所以事务过程中每次查询的数据都是一样的</strong>，即使中途有其他事务插入了新纪录，是查询不出来这条数据的，所以就很好了避免幻读问题。</p>
+<h3 id="2-当前读是如何避免幻读的">2.当前读是如何避免幻读的？</h3>
+<p>MySQL 里除了普通查询是快照读，其他都是<strong>当前读</strong>，比如 update、insert、delete，这些语句执行前都会<strong>查询最新版本的数据</strong>，然后再做进一步的操作。</p>
+<p>这很好理解，假设你要 update 一个记录，另一个事务已经 delete 这条记录并且提交事务了，这样不是会产生冲突吗，所以 update 的时候肯定要知道最新的数据。</p>
+<p>另外，<strong><code>select ... for update</code> 这种查询语句是当前读</strong>，每次执行的时候都是读取最新的数据。</p>
+<p>解决方法： <strong>next-key lock（记录锁+间隙锁）</strong></p>
+<p>假设，表中有一个范围 id 为（3，5）间隙锁，那么其他事务就无法插入 id = 4 这条记录了，这样就有效的防止幻读现象的发生。</p>
+<p><img alt="gap%E9%94%81.drawio.png" src="/assets/img/flowus-963067ef9754b256.png"></p>
+<p>举个具体例子，场景如下：</p>
+<p><img alt="3af285a8e70f4d4198318057eb955520.png" src="/assets/img/flowus-4feea8f095288d9c.png"></p>
+<p>事务 A 执行了这条锁定读语句后，就在对表中的记录加上 id 范围为 (2, +∞] 的 next-key lock（next-key lock 是间隙锁+记录锁的组合）。</p>
+<p>然后，事务 B 在执行插入语句的时候，判断到插入的位置被事务 A 加了 next-key lock，于是事物 B 会生成一个<strong>插入意向锁</strong>，同时进入等待状态，直到事务 A 提交了事务。这就避免了由于事务 B 插入新记录而导致事务 A 发生幻读的现象。</p>
+<h3 id="3-幻读被完全解决了吗">3.幻读被完全解决了吗?</h3>
+<p><strong>可重复读隔离级别下虽然很大程度上避免了幻读，但是还是没有能完全解决幻读.</strong></p>
+<p>举例：</p>
+<ol><li>第一个例子：对于<strong>快照读</strong>， MVCC 并不能完全避免幻读现象。</li></ol>
+<p>因为<strong>当事务 A 更新了一条事务 B 插入的记录</strong>，<strong>那么事务 A 前后两次查询的记录条目就不一样了</strong>，所以就发生幻读。</p>
+<ul><li><strong>核心原因：</strong></li></ul>
+<p>在可重复读隔离级别下，事务 A 第一次执行普通的 select 语句时生成了一个 ReadView，之后事务 B 向表中新插入了一条 id = 5 的记录并提交。接着，事务 A 对 id = 5 这条记录进行了更新操作，在这个时刻，这条<strong>新记录的 trx_id 隐藏列的值就变成了事务 A 的事务 id</strong>，之后事务 A 再使用普通 select 语句去查询这条记录时就可以看到这条记录了，于是就发生了幻读。</p>
+<ul><li>那么问题又来了，按理来说，事务A的Read View中是读不到id=5的数据的，为啥还能对其进行Update操作？</li></ul>
+<p>因为，<strong>增删改(insert、delete、update)语句是当前读，也就是直接读最新的数据，不会走版本链(不会说undo log回滚段去读以前的版本)</strong>。</p>
+<ol><li>第二个例子：对于<strong>当前读</strong>，如果<strong>事务开启后，并没有执行当前读，而是先快照读，然后这期间如果其他事务插入了一条记录</strong>，那么事务后续使用当前读进行查询的时候，就会发现两次查询的记录条目就不一样了，所以就发生幻读。即：</li></ol>
+<ul><li>T1 时刻：事务 A 先执行「快照读语句」：select * from t_test where id &gt; 100 得到了 3 条记录。</li></ul>
+<ul><li>T2 时刻：事务 B 往插入一个 id= 200 的记录并提交；</li></ul>
+<ul><li>T3 时刻：事务 A 再执行「当前读语句」 select * from t_test where id &gt; 100 for update 就会得到 4 条记录，此时也发生了幻读现象。</li></ul>
+<p><strong>要避免这类特殊场景下发生幻读的现象的话，就是尽量在开启事务之后，马上执行 select ... for update 这类当前读的语句</strong>，因为<strong>它会对记录加 next-key lock</strong>，从而避免其他事务插入一条新记录。</p>
+<h3 id="4-总结">4.总结</h3>
+<p>MySQL InnoDB 引擎的可重复读隔离级别（默认隔离级），根据不同的查询方式，分别提出了避免幻读的方案：</p>
+<ul><li>针对<strong>快照读</strong>（普通 select 语句），是通过 MVCC 方式解决了幻读。</li></ul>
+<ul><li>针对<strong>当前读</strong>（select ... for update 等语句），是通过 next-key lock（记录锁+间隙锁）方式解决了幻读。</li></ul>
+<p>我举例了两个发生幻读场景的例子。</p>
+<p>第一个例子：对于快照读， MVCC 并不能完全避免幻读现象。因为<strong>当事务 A 更新了一条事务 B 插入的记录</strong>，<strong>那么事务 A 前后两次查询的记录条目就不一样了</strong>，所以就发生幻读。</p>
+<p>第二个例子：对于当前读，如果事务开启后，并没有执行当前读，而是先快照读，然后这期间如果其他事务插入了一条记录，那么事务后续使用当前读进行查询的时候，就会发现两次查询的记录条目就不一样了，所以就发生幻读。</p>
+<p>所以，<strong>MySQL 可重复读隔离级别并没有彻底解决幻读，只是很大程度上避免了幻读现象的发生。</strong></p>
+<p>要避免这类特殊场景下发生幻读的现象的话，就是尽量在开启事务之后，马上执行 select ... for update 这类当前读的语句，因为它会对记录加 next-key lock，从而避免其他事务插入一条新记录。</p>
+<h2 id="3-各隔离级别都用到了什么锁">3.各隔离级别都用到了什么锁？</h2>
+<p>对于<strong>任何隔离级别</strong>，表级别的表锁、元数据锁、意向锁都是会使用的，但<strong>对于行级别的锁则会有些许差别。</strong></p>
+<ul><li><strong>「读未提交」和「读已提交」：</strong> 都<strong>只会使用记录锁</strong>，不会用间隙锁，当然也不会有 Next-Key 锁了。</li></ul>
+<ul><li>「<strong>可重复读</strong>」隔离级别来说，<strong>会使用记录锁、间隙锁和 Next-Key 锁</strong>。</li></ul>
+<blockquote><p>💡 <strong>Q1</strong>：<strong>为啥读提交不使用间隙锁</strong>？</p></blockquote>
+<p>这是因为<strong>间隙锁的主要目的是防止幻读</strong>（Phantom Reads），而读提交和读未提交隔离级别通常不需要解决幻读的问题。</p>
+<p>读提交和读未提交隔离级别通常通过记录锁来实现并发控制，因为<strong>它们更注重数据的读取和修改的一致性，而不是防止幻读。</strong></p>
+<h2 id="4-Read-View在MVCC里是怎么工作的">4.Read View在MVCC里是怎么工作的？</h2>
+<h3 id="1-什么是MVCC">1.什么是MVCC？</h3>
+<p><strong>通过「版本链」来控制并发事务访问同一个记录时的行为就叫 MVCC（多版本并发控制）。</strong></p>
+<p>我们需要了解两个知识：</p>
+<ul><li>Read View 中四个字段作用；</li></ul>
+<ul><li>聚簇索引记录中两个跟事务有关的隐藏列；</li></ul>
+<h3 id="2-什么是Read-View-快照">2.什么是Read View(快照)？</h3>
+<p>Read View 有<strong>四个重要的字段</strong>：</p>
+<ul><li><strong>m_ids</strong> ：指的是在创建 Read View 时，当前数据库中「活跃事务」的<strong>事务 id 列表</strong>，注意是一个列表，<strong>“活跃事务”指的就是，启动了但还没提交的事务</strong>。</li></ul>
+<ul><li><strong>min_trx_id</strong> ：指的是在创建 Read View 时，当前数据库中「活跃事务」中事务 <strong>id 最小的事务</strong>，也就是 m_ids 的最小值。</li></ul>
+<ul><li><strong>max_trx_id</strong> ：这个并不是 m_ids 的最大值，而是<strong>创建 Read View 时当前数据库中应该给下一个事务的 id 值</strong>，也就是<strong>全局事务中最大的事务 id 值 + 1</strong>；</li></ul>
+<ul><li><strong>creator_trx_id</strong> ：指的是<strong>创建该 Read View 的事务的事务 id</strong>。</li></ul>
+<p><img alt="image.png" src="/assets/img/flowus-86774ee8aa4644df.png"></p>
+<h3 id="3-聚簇索引记录中的两个隐藏列">3.聚簇索引记录中的两个隐藏列</h3>
+<p>假设在账户余额表插入一条小林余额为 100 万的记录，然后我把这两个隐藏列也画出来，该记录的整个示意图如下：</p>
+<p><img alt="f595d13450878acd04affa82731f76c5.png" src="/assets/img/flowus-f51d9f703f035622.png"></p>
+<p>对于使用 InnoDB 存储引擎的数据库表，它的聚簇索引记录中都<strong>包含下面两个隐藏列</strong>：</p>
+<ul><li><strong>trx_id</strong>，当一个事务对某条聚簇索引记录进行改动时，就会<strong>把该事务的事务 id 记录在 trx_id 隐藏列里</strong>；</li></ul>
+<ul><li><strong>roll_pointer</strong>，每次对某条聚簇索引记录进行改动时，都会<strong>把旧版本的记录写入到 undo 日志中</strong>，然后<strong>这个隐藏列是个指针，指向每一个旧版本记录</strong>，于是就可以通过它找到修改前的记录。</li></ul>
+<p>因此，在创建 Read View 后，我们可以将记录中的 trx_id 划分这<strong>三种情况</strong>：</p>
+<p><img alt="image.png" src="/assets/img/flowus-817a9243ad1d8e07.png"></p>
+<p><strong>一个事务去访问记录的时候，除了自己的更新记录总是可见之外，还有这几种情况</strong>：</p>
+<ul><li>如果<strong>记录的 trx_id 值小于 Read View 中的 <code>min_trx_id</code> 值</strong>，表示这个版本的记录是<strong>在创建 Read View 前已经提交的事务</strong>生成的，所以该版本的记录对当前事务<strong>可见</strong>。</li></ul>
+<ul><li>如果<strong>记录的 trx_id 值大于等于 Read View 中的 <code>max_trx_id</code> 值</strong>，表示这个版本的记录是<strong>在创建 Read View 后才启动的事务</strong>生成的，所以该版本的记录对当前事务<strong>不可见</strong>。</li></ul>
+<ul><li>如果<strong>记录的 trx_id 值在 Read View 的 <code>min_trx_id</code> 和 <code>max_trx_id</code> 之间</strong>，需要<strong>判断 trx_id 是否在 m_ids 列表</strong>中：</li></ul>
+<ul><li>如果记录的 trx_id <strong>在 <code>m_ids</code> 列表中</strong>，表示生成该版本记录的活跃事务依然活跃着（还没提交事务），所以该版本的记录对当前事务<strong>不可见</strong>。</li></ul>
+<ul><li>如果记录的 trx_id <strong>不在</strong> <code>m_ids</code>列表中，表示<strong>生成该版本记录的活跃事务已经被提交</strong>，所以该版本的记录对当前事务<strong>可见</strong>。</li></ul>
+<p><strong>解惑</strong>，这句话不严谨，严格来说：<strong>如果是读已提交， 是可见的， 如果是可重复读， 是不可见的。</strong></p>
+<p>因为 <strong>读提交</strong>=&gt;<strong>每一次查询都会生成一个Read View</strong>；而<strong>可重复读</strong>=&gt;<strong>只有在开始事务时，才会生成一个Read View</strong>。</p>
+<p>并且在读提交中，这个判定针对的是以下这种情况：</p>
+<blockquote><p>😍 <strong>「如果事务B后启动，事务A读取记录c，事务B修改记录c，事务B提交，此时事务A再读取记录c。就会出现记录的 trx_id 不在 m_ids列表中这种情况。</strong></p></blockquote></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>

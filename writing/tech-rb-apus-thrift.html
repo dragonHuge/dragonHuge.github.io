@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<title>apus thrift Server / Client 规则 · DragonHuge · 知识花园</title>
+<link rel="stylesheet" href="../assets/style.css?v=1795365815">
+</head>
+<body>
+
+  <a class="skip-link" href="#main">跳到正文</a>
+  <header class="topbar">
+    <button class="menu-btn" id="menuBtn" aria-label="打开导航" aria-expanded="false" aria-controls="sidebar">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="brand" href="../index.html">
+      <span class="brand-name">DragonHuge</span><span class="brand-sub">知识花园</span>
+    </a>
+    <button class="mode-switch" id="modeSwitch" type="button" title="切换到 App 版">App 版</button>
+    <a class="search-m" href="../search.html" aria-label="搜索"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></a>
+    <div class="searchbox">
+      <input type="search" id="topq" placeholder="搜索文章…" autocomplete="off" aria-label="搜索全站">
+            <kbd class="qk">/</kbd>
+            <div class="sug" id="sug" hidden></div>
+    </div>
+  </header>
+<div class="layout">
+  <aside class="sidebar" id="sidebar" aria-label="站点导航"><div class="sidebar-head"><span>站点导航</span><button class="sidebar-close" id="sidebarClose" aria-label="关闭导航">×</button></div>
+<nav class="primary-nav" aria-label="主导航">
+<div class="nav-group"><div class="nav-label">浏览</div>
+<a class="nav-link" href="../index.html"><span>首页</span></a>
+<a class="nav-link" href="../search.html"><span>全站搜索</span></a>
+<a class="nav-link" href="../aihot.html"><span>AI 热点</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">知识</div>
+<a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">19</span></a>
+<a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
+<a class="nav-link active" href="../writing/index.html" aria-current="page"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">463</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
+</div>
+<div class="nav-group"><div class="nav-label">工作</div>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
+</div></nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">17</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#1-适用范围">1. 适用范围</a><a class="tl l2" href="#2-版本-依赖">2. 版本 / 依赖</a><a class="tl l2" href="#3-Server-标准骨架">3. Server 标准骨架</a><a class="tl l3" href="#3-1-Application-Spring-Boot-main">3.1 Application（Spring Boot main）</a><a class="tl l3" href="#3-2-Server-ApplicationRunner-启动-apus">3.2 Server（ApplicationRunner 启动 apus）</a><a class="tl l3" href="#3-3-ServiceImpl-thrift-Iface-实现">3.3 ServiceImpl（thrift Iface 实现）</a><a class="tl l3" href="#3-4-BeanConfiguration-装配-与-springboot-md-3-3-联动">3.4 BeanConfiguration 装配（与 springboot.md §3.3 联动）</a><a class="tl l2" href="#4-Client-标准骨架-BVT-脚本-下游调用">4. Client 标准骨架（BVT 脚本 / 下游调用）</a><a class="tl l2" href="#5-配置项">5. 配置项</a><a class="tl l2" href="#6-监控与日志">6. 监控与日志</a><a class="tl l2" href="#7-常见踩坑">7. 常见踩坑</a><a class="tl l3" href="#7-1-Bootstrap-start-写在-main">7.1 🔴 Bootstrap.start() 写在 main()</a><a class="tl l3" href="#7-2-ZONE-环境变量丢失但-env-staging">7.2 🔴 ${ZONE} 环境变量丢失但 env != staging</a><a class="tl l3" href="#7-3-thrift-IDL-改了但-Server-Client-没同步">7.3 🟠 thrift IDL 改了但 Server / Client 没同步</a><a class="tl l3" href="#7-4-RequestValidator-漏掉某字段">7.4 🟠 RequestValidator 漏掉某字段</a><a class="tl l3" href="#7-5-下游-fail-open-误用">7.5 🟢 下游 fail-open 误用</a><a class="tl l2" href="#8-边界">8. 边界</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="../index.html">我的知识体系</a> / <a href="exp/index.html">经验沉淀</a></div><article><h1>apus thrift Server / Client 规则</h1><div class="meta">2026-07-09<em class="fs-tag" style="display:inline-block;font-size:10.5px;line-height:1;padding:3px 7px;border-radius:99px;background:rgba(51,112,255,.10);color:#3370ff;margin-left:6px;vertical-align:1px;font-style:normal">&quot;本地沉淀 · 风控工程知识库&quot;</em></div><div class="md"><blockquote><p>本文是工程<strong>规则</strong>（团队约定 + 踩坑结论），不是入门教程： 适合「已经知道要做什么，只想知道怎么做才不出事」的场景。</p></blockquote>
+<h2 id="1-适用范围">1. 适用范围</h2>
+<p>风控服务对外暴露 thrift RPC（Server），以及风控服务 / Spark 离线 / BVT 脚本调下游 thrift（Client）。</p>
+<p><strong>不</strong>覆盖：HTTP API（不用）、gRPC（不用）、Dubbo（不用）。</p>
+<hr>
+<h2 id="2-版本-依赖">2. 版本 / 依赖</h2>
+<table><thead><tr><th>坐标</th><th>备注</th></tr></thead><tbody><tr><td><code>com.example:apus-server</code></td><td>Server 侧</td></tr><tr><td><code>com.example:apus-client</code></td><td>Client 侧</td></tr><tr><td><code>com.example:apus-registry-zookeeper</code></td><td>ZK 服务注册/发现</td></tr><tr><td><code>com.example:公司-common-zookeeper</code></td><td>ZKFacade / EnvironmentType（单 ZK + ZONE 用）</td></tr><tr><td><code>org.apache.thrift:thrift</code></td><td>apus 编译期依赖的公司 fork（含 <code>TBinaryProtocol$Factory(long,long)</code>）</td></tr></tbody></table>
+<p>版本号通过 <code>${apusVersion}</code> 在根 pom 统一管理；新项目对齐同版本。</p>
+<p>thrift IDL 单独 module（如 <code>${artifactPrefix}-thrift</code>），<strong>不在 reactor 内</strong>，独立发包，避免循环依赖。</p>
+<hr>
+<h2 id="3-Server-标准骨架">3. Server 标准骨架</h2>
+<h3 id="3-1-Application-Spring-Boot-main">3.1 Application（Spring Boot main）</h3>
+<pre><code>@SpringBootApplication
+public class ${serviceApplicationClass} {
+    static { System.setProperty(&quot;logging.config&quot;, &quot;classpath:logback-spring.xml&quot;); }
+    public static void main(String[] args) {
+        SpringApplication.run(${serviceApplicationClass}.class, args);
+    }
+}</code></pre>
+<h3 id="3-2-Server-ApplicationRunner-启动-apus">3.2 Server（ApplicationRunner 启动 apus）</h3>
+<p><strong>铁律</strong>：<code>Bootstrap.start()</code> <strong>必须</strong>在 <code>ApplicationRunner.run()</code> 里，<strong>不能</strong>写在 <code>main()</code> —— 否则 Spring 还没装配完 BeanConfiguration，apus 拿不到 RPC impl。</p>
+<pre><code>@Slf4j
+public class ${apusServerClass} implements ApplicationRunner {
+
+    @Value(&quot;${apus.port}&quot;)
+    private int port;
+
+    private final Environment env;
+    private final ${serviceImplClass} serviceImpl;
+
+    public ${apusServerClass}(Environment env, ${serviceImplClass} serviceImpl) {
+        this.env = env;
+        this.serviceImpl = serviceImpl;
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        String zkEnv = resolveZkEnv();
+        if (isBlank(zkEnv)) {
+            PerfCounter.setMeterCount(&quot;${metricPrefix}.startup.zk_env_missing&quot;, 1);
+            log.error(&quot;zkEnv is empty, shutting down&quot;);
+            System.exit(1);
+        }
+
+        EnvironmentType currentEnv = EnvironmentType.valueOf(zkEnv);
+        ServerConfig&lt;${serviceImplClass}&gt; config = new ServerConfig.Builder&lt;&gt;(${serviceImplClass}.class)
+                .registryFactory(new ZookeeperRegistryFactory&lt;&gt;(${serviceImplClass}.class,
+                        () -&gt; ZKFacade.getZKSettings().getZKServers(currentEnv)))
+                .port(port)
+                .threadPoolsize(2000)
+                .build();
+
+        Bootstrap&lt;${serviceImplClass}&gt; bootstrap = new Bootstrap&lt;&gt;(config, serviceImpl);
+        try {
+            bootstrap.start();
+        } catch (Exception e) {
+            PerfCounter.setMeterCount(&quot;${metricPrefix}.startup.apus_failed&quot;, 1);
+            log.error(&quot;bootstrap failed, zkEnv={}, port={}&quot;, zkEnv, port, e);
+            throw e;
+        }
+        PerfCounter.setMeterCount(&quot;${metricPrefix}.startup.apus_started&quot;, 1);
+        log.info(&quot;${apusServerClass} started, zkEnv={}, port={}&quot;, zkEnv, port);
+    }
+
+    private String resolveZkEnv() {
+        // staging: 直接读 zookeeper.host.staging
+        // 生产: 读 env[ZONE] -&gt; zookeeper.host.{zone}
+        // ...
+    }
+}</code></pre>
+<p>完整 <code>resolveZkEnv</code> 实现见 <code>recipes/apus-thrift-server-client/templates/server/${apusServerClass}.java.tpl</code>。</p>
+<h3 id="3-3-ServiceImpl-thrift-Iface-实现">3.3 ServiceImpl（thrift Iface 实现）</h3>
+<pre><code>@Slf4j
+public class ${serviceImplClass} implements ${ServiceName}.Iface {
+
+    private static final int BATCH_LIMIT = 100;
+
+    private final ${dependencyA} depA;
+    private final ${dependencyB} depB;
+
+    public ${serviceImplClass}(${dependencyA} depA, ${dependencyB} depB) {
+        this.depA = depA;
+        this.depB = depB;
+    }
+
+    @Override
+    public ${RespType} ${methodName}(${ReqType} r) throws ${ExceptionType} {
+        long start = System.currentTimeMillis();
+        try {
+            // 1) 入参校验
+            RequestValidator.requireNonEmpty(r.get${BusinessKey}(), &quot;${businessKeyField}&quot;);
+            // 2) 业务逻辑（可调下游）
+            try {
+                return doWork(r);
+            } catch (${ExceptionType} e) {
+                if (e.getCode() == 50301) {  // 下游不可用 → fail-open
+                    PerfCounter.setMeterCount(&quot;${metricPrefix}.service.${methodName}.fail_open&quot;, 1);
+                    return default${RespType}();
+                }
+                PerfCounter.setMeterCount(&quot;${metricPrefix}.service.${methodName}.failed&quot;, 1);
+                throw e;
+            }
+        } finally {
+            PerfCounter.setTimerValue(&quot;${metricPrefix}.service.${methodName}.all&quot;,
+                System.currentTimeMillis() - start);
+        }
+    }
+}</code></pre>
+<h3 id="3-4-BeanConfiguration-装配-与-springboot-md-3-3-联动">3.4 BeanConfiguration 装配（与 <a href="springboot.md">springboot.md</a> §3.3 联动）</h3>
+<pre><code>@Bean
+public ${serviceImplClass} serviceImpl(${dependencyA} a, ${dependencyB} b) {
+    return new ${serviceImplClass}(a, b);
+}
+
+@Bean
+public ${apusServerClass} apusServer(Environment env, ${serviceImplClass} serviceImpl) {
+    return new ${apusServerClass}(env, serviceImpl);
+}</code></pre>
+<hr>
+<h2 id="4-Client-标准骨架-BVT-脚本-下游调用">4. Client 标准骨架（BVT 脚本 / 下游调用）</h2>
+<pre><code>private static ${ServiceName}.Iface newRpcClient(String zkEnvName) {
+    EnvironmentType env = EnvironmentType.valueOf(zkEnvName);
+    ClientConfig&lt;${ServiceName}.Iface&gt; cfg =
+            new ClientConfig.ClientConfigBuilder&lt;&gt;(${ServiceName}.Iface.class)
+                    .registryFactory(new ZookeeperRegistryFactory&lt;&gt;(${ServiceName}.Iface.class,
+                            () -&gt; ZKFacade.getZKSettings().getZKServers(env)))
+                    .build();
+    return new SwiftClientManager&lt;&gt;(cfg).createClient(3000L);
+}</code></pre>
+<p>调用：</p>
+<pre><code>${ServiceName}.Iface client = newRpcClient(&quot;STAGING&quot;);
+${RespType} resp = client.${methodName}(new ${ReqType}().set${BusinessKey}(&quot;...&quot;));</code></pre>
+<hr>
+<h2 id="5-配置项">5. 配置项</h2>
+<table><thead><tr><th>key</th><th>来源</th><th>说明</th></tr></thead><tbody><tr><td><code>apus.port</code></td><td>yml</td><td>服务监听端口</td></tr><tr><td><code>threadPoolsize</code></td><td>代码内</td><td>业务线程池大小，默认 2000</td></tr><tr><td>ZK env 名</td><td>maven profile 注入 + <code>${ZONE}</code> 环境变量</td><td>多 region 路由</td></tr></tbody></table>
+<p>ZK env 解析逻辑：</p>
+<ul><li><code>env=staging</code>：直接读 <code>zookeeper.host.staging</code></li><li>其他：读 <code>${ZONE}</code> 环境变量（c3/sgp/ind/rus/eur）→ <code>zookeeper.host.{zone}</code></li><li>都缺：<code>zookeeper.default</code></li></ul>
+<hr>
+<h2 id="6-监控与日志">6. 监控与日志</h2>
+<ul><li><strong>必备指标</strong>：</li><ul><li><code>${metricPrefix}.startup.apus_started</code> / <code>apus_failed</code></li><li><code>${metricPrefix}.startup.zk_env_missing</code> / <code>zone_missing</code> / <code>zone_unmapped</code></li><li><code>${metricPrefix}.service.{method}.all</code> (timer)</li><li><code>${metricPrefix}.service.{method}.failed</code> (meter)</li><li><code>${metricPrefix}.service.{method}.fail_open</code> (meter，下游降级)</li></ul><li><strong>日志</strong>：启动日志固定 <code>${apusServerClass} started, zkEnv={}, port={}</code>，便于运维排查</li></ul>
+<hr>
+<h2 id="7-常见踩坑">7. 常见踩坑</h2>
+<h3 id="7-1-Bootstrap-start-写在-main">7.1 🔴 <code>Bootstrap.start()</code> 写在 <code>main()</code></h3>
+<p>后果：Spring 还没装配 RPC impl，apus 直接拿 null，启动后调用 NPE。 正确：<code>ApplicationRunner.run()</code> 里启动（§3.2）。</p>
+<h3 id="7-2-ZONE-环境变量丢失但-env-staging">7.2 🔴 <code>${ZONE}</code> 环境变量丢失但 env != staging</h3>
+<p>后果：生产环境跑 staging 配置或者根本起不来。 正确：<code>resolveZkEnv</code> 在 <code>${ZONE}</code> 缺失时 <code>System.exit(1)</code>，触发上游 K8s 重拉。</p>
+<h3 id="7-3-thrift-IDL-改了但-Server-Client-没同步">7.3 🟠 thrift IDL 改了但 Server / Client 没同步</h3>
+<p>后果：序列化错位，运行时报 <code>TProtocolException</code>。 正确：thrift module 改后<strong>先发包</strong>，再让 service / client 模块更新版本号引用。</p>
+<h3 id="7-4-RequestValidator-漏掉某字段">7.4 🟠 RequestValidator 漏掉某字段</h3>
+<p>后果：业务方传错参数，Server 内部 NPE / 数据脏。 正确：每个 thrift 方法首行<strong>必须</strong>有 <code>requireNonEmpty</code> / <code>requireBatchLimit</code>。</p>
+<h3 id="7-5-下游-fail-open-误用">7.5 🟢 下游 fail-open 误用</h3>
+<p>fail-open 只在"下游短暂不可用 + 业务允许返回默认值"时用（如缓存查不到返回未命中）。 <strong>写操作 / 强一致场景</strong>不能 fail-open，应直接抛错。</p>
+<hr>
+<h2 id="8-边界">8. 边界</h2>
+<ul><li><strong>Spring Boot 启动顺序</strong>：<a href="springboot.md">springboot.md</a> §3</li><li><strong>Talos 异步通知</strong>：调用方写完 Redis 后 <code>producer.asyncSend()</code>，见 <a href="talos.md">talos.md</a> §4</li><li><strong>fail-open 来源</strong>：Redis 不可用 → <a href="redis.md">redis.md</a> §6</li></ul>
+<hr>
+<blockquote><p>引用约束见 <a href="../CONSTRAINTS.md">../CONSTRAINTS.md</a>。</p></blockquote></div></article></div></main>
+</div>
+<script src="../assets/app.js?v=1795449805"></script>
+<script src="../assets/search.js?v=1793900983"></script>
+<script src="../assets/article-lightbox.js?v=1795502341"></script><script src="../assets/board-viewer.js?v=1795669802"></script>
+</body>
+</html>
