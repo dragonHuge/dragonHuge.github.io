@@ -40,15 +40,15 @@
 <div class="nav-group"><div class="nav-label">知识</div>
 <a class="nav-link active" href="../daily/index.html" aria-current="page"><span>日常沉淀</span><span class="nav-count">20</span></a>
 <a class="nav-link" href="../tech/index.html"><span>学习笔记</span><span class="nav-count">22</span></a>
-<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">0</span></a>
 <a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
-<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">468</span></a>
-<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">472</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">9</span></a>
 <a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
 </div>
 <div class="nav-group"><div class="nav-label">工作</div>
-<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
-<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">12</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">30</span></a>
 <a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
 </div></nav>
 <nav class="context-nav" aria-label="当前栏目目录">
@@ -83,8 +83,10 @@
 <div class="context-group">2026 · Q2 · 第4周(04.20-04.26)</div>
 <a class="art" href="../daily/d020.html">第4周(04.20-04.26) 周报</a>
 </nav></aside><button class="mask" id="mask" aria-label="关闭导航"></button>
-  <main class="content art-page" id="main"><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">日常知识库沉淀</a> / 灵感火花</div><article><h1>2026-11-29</h1><div class="meta">2026-11-29 · <span class="m-src">灵感/2026/2026-11-29.md</span></div><div class="md"><h2 id="22-23-NAT-出口-IP-高聚集场景的风险分析思路-IP-model-账号三特征双策略">22:23 · NAT 出口 IP 高聚集场景的风险分析思路（IP/model/账号三特征双策略）</h2>
-<ul><li><strong>原文</strong>：IP、model、账号——NAT 出口 IP 高聚集场景下的风险分析思路（和兵哥聊的宝贵经验）：挖掘 IP 聚集下的确认风险账号，不能只对 IP 聚集做分析，要引入第三特征（如 model），本质是做指纹的过程。从「IP、model、账号」三类特征出发有两类策略思路：第一类（双因子比值量化）：识别混杂在 NAT 出口 IP 中的小恶意团伙团伙——先按 IP 聚集捞出对应账号，再看这些账号在 model 上是否有聚集性；若 IP 高聚集的账号 &gt;90% 都聚集在某几个 model 上（用比值量化，正常 model 应较离散），则认为有问题。识别特征=「IP 下多账号聚集」&amp;「model 下多账号聚集」双因子。第二类（单因子阈值）：特征「IP+model 下账号聚集个数」是单因子特征，无法用比值量化，只能用绝对阈值衡量。两类策略有根本区别，尽管属性因子都是那三个。blueDevice 同理。</li><li><strong>总结</strong>：NAT 出口 IP 高聚集风控：引入 model 第三特征做指纹，双因子比值量化识别混杂恶意团伙 vs 单因子绝对阈值，两类策略本质不同。</li></ul></div></article></div></main>
+  <main class="content art-page with-toc" id="main"><aside class="toc-wrap"><details class="toc" id="tocBox" open><summary>本篇目录<span class="toc-n">2</span></summary><nav class="toc-list" aria-label="本篇目录"><a class="tl l2" href="#22-23-NAT-出口-IP-高聚集场景的风险分析思路-IP-model-账号三特征双策略">22:23 · NAT 出口 IP 高聚集场景的风险分析思路（IP/model/账号三特征双策略）</a><a class="tl l1" href="#本周汇总">本周汇总</a></nav></details></aside><div class="art-col"><div class="crumb"><a href="../index.html">首页</a> / <a href="index.html">日常知识库沉淀</a> / 灵感火花</div><article><h1>2026-11-29</h1><div class="meta">2026-11-29 · <span class="m-src">灵感/2026/2026-11-29.md</span></div><div class="md"><h2 id="22-23-NAT-出口-IP-高聚集场景的风险分析思路-IP-model-账号三特征双策略">22:23 · NAT 出口 IP 高聚集场景的风险分析思路（IP/model/账号三特征双策略）</h2>
+<ul><li><strong>原文</strong>：IP、model、账号——NAT 出口 IP 高聚集场景下的风险分析思路（和兵哥聊的宝贵经验）：挖掘 IP 聚集下的确认风险账号，不能只对 IP 聚集做分析，要引入第三特征（如 model），本质是做指纹的过程。从「IP、model、账号」三类特征出发有两类策略思路：第一类（双因子比值量化）：识别混杂在 NAT 出口 IP 中的小黑产团伙——先按 IP 聚集捞出对应账号，再看这些账号在 model 上是否有聚集性；若 IP 高聚集的账号 &gt;90% 都聚集在某几个 model 上（用比值量化，正常 model 应较离散），则认为有问题。识别特征=「IP 下多账号聚集」&amp;「model 下多账号聚集」双因子。第二类（单因子阈值）：特征「IP+model 下账号聚集个数」是单因子特征，无法用比值量化，只能用绝对阈值衡量。两类策略有根本区别，尽管属性因子都是那三个。blueDevice 同理。</li><li><strong>总结</strong>：NAT 出口 IP 高聚集风控：引入 model 第三特征做指纹，双因子比值量化识别混杂黑产 vs 单因子绝对阈值，两类策略本质不同。</li></ul>
+<h1 id="本周汇总">本周汇总</h1>
+<ul><li>本周 1 条</li><li>主题分布：风控风险分析 1 条</li><li>值得深挖的线索：</li><ul><li>NAT 出口 IP 高聚集场景的风控思路：引入 model 作为第三特征做指纹化；「双因子比值量化」与「单因子绝对阈值」两类策略的适用边界与区别；blueDevice 可同理推广</li></ul><li>待办：</li><ul><li>无明确待办（本周仅 1 条，暂无可执行项）</li></ul></ul></div></article></div></main>
 </div>
 <script src="../assets/app.js?v=1795449805"></script>
 <script src="../assets/search.js?v=1793900983"></script>

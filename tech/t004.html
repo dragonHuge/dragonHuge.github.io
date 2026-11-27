@@ -40,15 +40,15 @@
 <div class="nav-group"><div class="nav-label">知识</div>
 <a class="nav-link" href="../daily/index.html"><span>日常沉淀</span><span class="nav-count">20</span></a>
 <a class="nav-link active" href="../tech/index.html" aria-current="page"><span>学习笔记</span><span class="nav-count">22</span></a>
-<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">116</span></a>
+<a class="nav-link" href="../writing/index.html"><span>我的知识体系</span><span class="nav-count">0</span></a>
 <a class="nav-link" href="../mindmap/index.html"><span>知识导图</span><span class="nav-count">125</span></a>
-<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">468</span></a>
-<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">8</span></a>
+<a class="nav-link" href="../ext/index.html"><span>外部沉淀</span><span class="nav-count">472</span></a>
+<a class="nav-link" href="../qa/index.html"><span>问答沉淀</span><span class="nav-count">9</span></a>
 <a class="nav-link" href="../deals/index.html"><span>羊毛线报</span><span class="nav-count">15</span></a>
 </div>
 <div class="nav-group"><div class="nav-label">工作</div>
-<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">11</span></a>
-<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">28</span></a>
+<a class="nav-link" href="../requirements/index.html"><span>需求推进</span><span class="nav-count">12</span></a>
+<a class="nav-link" href="../docs/index.html"><span>飞书文档</span><span class="nav-count">30</span></a>
 <a class="nav-link" href="../media/index.html"><span>自媒体</span><span class="nav-count">0</span></a>
 </div></nav>
 <nav class="context-nav" aria-label="当前栏目目录">
@@ -126,7 +126,7 @@
 <p>一句话：<strong>上下文与授权彻底分离</strong>。看到 ≠ 被授权；一个 Ticket 永远只在自己的 Mandate 范围内活动。</p>
 <h3 id="4-2-Gate-三维准入表">4.2 Gate：三维准入表</h3>
 <p>一个消息是否成为「明确请求」，由三格交叉决定：</p>
-<table><thead><tr><th>维度</th><th>取值</th></tr></thead><tbody><tr><td>发件人是否在该 Source 白名单</td><td>在 / 不在</td></tr><tr><td>是否直接对 Agent 说话（@同事 / 私聊）</td><td>是 / 否</td></tr><tr><td>消息落在哪个接收范围（群/私聊/新Issue/PR评论/CI）</td><td>每个范围一行</td></tr></tbody></table>
+<table><thead><tr><th>维度</th><th>取值</th></tr></thead><tbody><tr><td>发件人是否在该 Source 白名单</td><td>在 / 不在</td></tr><tr><td>是否直接对 Agent 说话（@机器人 / 私聊）</td><td>是 / 否</td></tr><tr><td>消息落在哪个接收范围（群/私聊/新Issue/PR评论/CI）</td><td>每个范围一行</td></tr></tbody></table>
 <p>三个格子的合法取值（默认值保守）：</p>
 <ul><li>白名单内、没 @ → 默认 <code>inferred</code>（可进研判）</li><li>白名单外、@了 → 默认 <code>ignore</code>（陌生人 @ 默认不理，可改成 explicit 用于专属支持群）</li><li>白名单外、没 @ → 默认 <code>ignore</code></li></ul>
 <h3 id="4-3-强度与接受模式-影子上线机制">4.3 强度与接受模式（影子上线机制）</h3>
@@ -181,7 +181,7 @@
 <hr>
 <h2 id="10-落地-映射到龙跃集团-Agent-团队管理">10. 落地：映射到龙跃集团 Agent 团队管理</h2>
 <h3 id="10-1-概念对照表-我们已经有什么">10.1 概念对照表（我们已经有什么）</h3>
-<table><thead><tr><th>dsh-superagent 概念</th><th>龙跃集团现状</th><th>差距</th></tr></thead><tbody><tr><td>Router（Main Session）</td><td>小墨（集团主助理，分派+路由）</td><td>已具备；需守住「只路由、不等待、少说话」纪律</td></tr><tr><td>Worker（Executor）</td><td>小月（定时归档）、小黎（免费问答）、delegate_task 子代理</td><td>已具备；子代理的「交回」机制缺失</td></tr><tr><td>Source / Trigger</td><td>飞书消息（总群 @）、cron 触发、监控脚本输出</td><td>已具备</td></tr><tr><td>Thread / 订阅直通</td><td>飞书话题群（一需求一会话）+ 任务板 done 回执</td><td>半具备：群里追问仍会走全局路由</td></tr><tr><td>Eval / 准入</td><td>总群「必须被 @ 才回应，免@同事」+ 名录准入流程</td><td>有流程无表：没有三维准入表，靠 SOUL 文本</td></tr><tr><td>Mandate（授权票据）</td><td>名录「新任务准入与任务契约」的最小字段</td><td><strong>缺授权强度、策略版本、复活校验</strong></td></tr><tr><td>Ticket / Assignment</td><td>需求台账 REQ-*.md + 01-需求推进</td><td>已具备；状态机比它的 7 阶段粗</td></tr><tr><td>Policy version</td><td>名录 SSOT + 变更纪律（废止标已废止不删历史）</td><td>有版本意识，无自动影响面通知</td></tr><tr><td>Effects 队列 / Outbox</td><td>任务板 pending→done 单向流 + cron 重试纪律（max_retries=1，失败不自动重试）</td><td>已具备雏形</td></tr><tr><td>Passes（轮次）+ monitor</td><td>巡检 cron + monitor 模式（输出没变就不唤醒 agent）</td><td>已具备，正是它的「需要介入才说话」</td></tr><tr><td>健康板/面板</td><td>service-health-check + 资源巡检卡 + 需求台账 PANEL</td><td>已具备</td></tr><tr><td>Worker 一票一目录</td><td>REQ 文档 + 话题群隔离</td><td>已具备</td></tr></tbody></table>
+<table><thead><tr><th>dsh-superagent 概念</th><th>龙跃集团现状</th><th>差距</th></tr></thead><tbody><tr><td>Router（Main Session）</td><td>小墨（集团主助理，分派+路由）</td><td>已具备；需守住「只路由、不等待、少说话」纪律</td></tr><tr><td>Worker（Executor）</td><td>小月（定时归档）、小黎（免费问答）、delegate_task 子代理</td><td>已具备；子代理的「交回」机制缺失</td></tr><tr><td>Source / Trigger</td><td>飞书消息（总群 @）、cron 触发、监控脚本输出</td><td>已具备</td></tr><tr><td>Thread / 订阅直通</td><td>飞书话题群（一需求一会话）+ 任务板 done 回执</td><td>半具备：群里追问仍会走全局路由</td></tr><tr><td>Eval / 准入</td><td>总群「必须被 @ 才回应，免@归主助理」+ 名录准入流程</td><td>有流程无表：没有三维准入表，靠 SOUL 文本</td></tr><tr><td>Mandate（授权票据）</td><td>名录「新任务准入与任务契约」的最小字段</td><td><strong>缺授权强度、策略版本、复活校验</strong></td></tr><tr><td>Ticket / Assignment</td><td>需求台账 REQ-*.md + 01-需求推进</td><td>已具备；状态机比它的 7 阶段粗</td></tr><tr><td>Policy version</td><td>名录 SSOT + 变更纪律（废止标已废止不删历史）</td><td>有版本意识，无自动影响面通知</td></tr><tr><td>Effects 队列 / Outbox</td><td>任务板 pending→done 单向流 + cron 重试纪律（max_retries=1，失败不自动重试）</td><td>已具备雏形</td></tr><tr><td>Passes（轮次）+ monitor</td><td>巡检 cron + monitor 模式（输出没变就不唤醒 agent）</td><td>已具备，正是它的「需要介入才说话」</td></tr><tr><td>健康板/面板</td><td>service-health-check + 资源巡检卡 + 需求台账 PANEL</td><td>已具备</td></tr><tr><td>Worker 一票一目录</td><td>REQ 文档 + 话题群隔离</td><td>已具备</td></tr></tbody></table>
 <h3 id="10-2-三条最值得抄的机制-本次落地-v1">10.2 三条最值得抄的机制（本次落地 v1）</h3>
 <ol><li><strong>Mandate 入任务卡</strong>：任务板每张任务卡头部强制写「授权依据 / 授权范围 / 强度（explicit/inferred）/ 策略版本 / 失效条件」，替代散在群聊里的口头派单。防越权、防「没人让我干但我顺手干了」。</li><li><strong>observe 影子模式</strong>：巡检类自动补做先跑 observe——发现问题先生成「建议补做」记录，不直接动手；连续 7 天判断全对再切 auto。对应我们现在「巡检发现问题直接补跑」的激进做法。</li><li><strong>上下文与授权分离</strong>：追问/后续消息进原话题群即可直达（订阅直通），但<strong>不产生新授权</strong>；超出原任务范围必须回主助理重新分派（handback 语义），禁止 Worker 在老工单里顺手接新活。</li></ol>
 <h3 id="10-3-分阶段路线">10.3 分阶段路线</h3>
